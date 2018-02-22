@@ -1,9 +1,7 @@
-#	rustup target add x86_64-pc-windows-gnu
-#	rustup target add i686-pc-windows-gnu
-win32:
-	cargo build --release --target=i686-pc-windows-gnu
 linux:
 	cargo build --release
+win32:
+	cargo build --release --target=i686-pc-windows-gnu
 dist: linux win32
 	mkdir -p dist
 	cp target/i686-pc-windows-gnu/release/hulc2envolventecte.exe dist/
