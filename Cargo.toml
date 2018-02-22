@@ -1,0 +1,14 @@
+[package]
+name = "hulc2envolventecte"
+version = "0.1.0"
+authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+
+[dependencies]
+encoding = "0.2"
+failure = "0.1.1"
+glob = "0.2"
+regex = "0.2"
+serde = "1.0.27"
+serde_json = "1.0.9"
+serde_derive = "1.0.27"
+uuid = { version = "0.6.0", features = ["v4"] }
