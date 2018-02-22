@@ -6,7 +6,7 @@ Esta aplicación permite exportar los datos de un proyecto de la `Herramienta un
 
 ## Uso
 
-Desde la línea de comandos indique como parámetro el directorio del proyecto de HULC que desea exportar, redirigiendo la salida a un archivo:
+Esta aplicación se utiliza desde la línea de comandos, y debe inidicar como parámetro el directorio del proyecto de HULC que desea exportar, redirigiendo la salida a un archivo para su posterior importación desde la interfaz web de EnvolventeCTE:
 
 ```
     $ hulc2envolventecte datos/proyecto/hulc > salida.json
@@ -14,7 +14,9 @@ Desde la línea de comandos indique como parámetro el directorio del proyecto d
 
 ## Licencia
 
-Esta aplicación se distribuye bajo una licencia MIT. Consulte el archivo LICENSE para el texto completo.
+Esta aplicación es software libre y se distribuye bajo una licencia MIT. Consulte el archivo LICENSE para el texto completo.
+
+El código está disponible en http://github.com/pachi/hulc2envolventecte
 
 ## Autores
 
