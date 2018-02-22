@@ -30,7 +30,6 @@ use encoding::all::ISO_8859_1;
 use failure::Error;
 use failure::ResultExt;
 use uuid::Uuid;
-use regex::Regex;
 
 #[derive(Debug, Serialize)]
 pub struct Hueco {
@@ -100,8 +99,8 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
     //let rg_comment = Regex::new(r"^###")?;
     //let rg_kcoef = Regex::new(r"^\s*Coeficiente K")?;
     //let rg_qsolunknown = Regex::new(r"^\s*\d+;\s*[+-]?[0-9]*\.?[0-9]+\s*$")?;
-    let rg_kelem = Regex::new(r"^\s*Muro|Ventana|PPTT")?;
-    let rg_qsolwindow = Regex::new(r#"^\s*".*"\s*;"#)?;
+    //let rg_kelem = Regex::new(r"^\s*Muro|Ventana|PPTT")?;
+    //let rg_qsolwindow = Regex::new(r#"^\s*".*"\s*;"#)?;
 
     let buf = {
         let mut buf = Vec::new();
@@ -122,7 +121,8 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
     let mut qsolvalues: HashMap<String, f32> = HashMap::new();
 
     while let Some(line) = lines.next() {
-        if rg_kelem.is_match(line) {
+        // Datos de elemento
+        if line.starts_with("Muro") || line.starts_with("Ventana") || line.starts_with("PPTT") {
             let vv: Vec<&str> = line.split(';').map(|e| e.trim()).collect();
             let tipo = vv[0];
             match tipo {
@@ -175,7 +175,8 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
                     },
                 _ => println!("Desconocido")
             };
-        } else if rg_qsolwindow.is_match(line) {
+        // Ganancias solares de hueco
+        } else if line.starts_with('"') {
             let vv: Vec<&str> = line.split(';').map(|e| e.trim()).collect();
             if vv.len() < 8 {
                 bail!("Línea de datos de ganancias solares de hueco con formato desconocido")

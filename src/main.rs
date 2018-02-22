@@ -25,7 +25,6 @@ extern crate encoding;
 #[macro_use]
 extern crate failure;
 extern crate glob;
-extern crate regex;
 extern crate serde;
 extern crate serde_json;
 #[macro_use]

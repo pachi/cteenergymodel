@@ -31,12 +31,11 @@ use encoding::all::ISO_8859_1;
 use encoding::{Encoding, DecoderTrap};
 use failure::Error;
 use failure::ResultExt;
-use regex::Regex;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
 pub fn findgglshwi(path: &str) -> Result<HashMap<String, f32>, Error> {
-    let rg_window = Regex::new(r#".*"(.*)"\s*=\sWINDOW\s*$"#).unwrap();
-    let rg_wprop = Regex::new(r#".*transmisividadJulio\s*=\s*([\d.]+)"#).unwrap();
+    //let rg_window = Regex::new(r#".*"(.*)"\s*=\sWINDOW\s*$"#).unwrap();
+    //let rg_wprop = Regex::new(r#".*transmisividadJulio\s*=\s*([\d.]+)"#).unwrap();
 
     let buf = {
         let mut buf = Vec::new();
@@ -49,19 +48,17 @@ pub fn findgglshwi(path: &str) -> Result<HashMap<String, f32>, Error> {
         _ => bail!("Error de codificación del archivo {}", path)
     };
     let mut lines = utf8buf.split("\r\n")
-        .filter(|l| rg_window.is_match(l) || rg_wprop.is_match(l))
+        .filter(|l| (l.contains(" = WINDOW") && !l.contains("WINDOW-FRAME")) || l.contains("transmisividadJulio"))
         .collect::<Vec<&str>>().into_iter();
 
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
 
     while let Some(line) = lines.next() {
-        if rg_window.is_match(line) {
-            let windowname = rg_window.captures(line)
-                .unwrap().get(1).unwrap().as_str();
+        if line.contains(" = WINDOW") {
+            let windowname = line.split("=").map(|e| e.trim().trim_matches('"')).collect::<Vec<&str>>()[0];
             let nextline = lines.next().unwrap();
-            if rg_wprop.is_match(nextline) {
-                let gglshwivalue: f32 = rg_wprop.captures(nextline)
-                    .unwrap().get(1).unwrap().as_str().parse()?;
+            if nextline.contains("transmisividadJulio") {
+                let gglshwivalue: f32 = nextline.split("=").map(|e| e.trim()).collect::<Vec<&str>>()[1].parse()?;
                 gglshwi.insert(windowname.to_owned(), gglshwivalue);
             }
         }
