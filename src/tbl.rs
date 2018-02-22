@@ -155,7 +155,7 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
         _ => bail!("Error de codificación del archivo {}", path)
     };
     // Líneas, eliminando dos primeras líneas de comentarios iniciales
-    let mut lines = utf8buf.split("\r\n").collect::<Vec<&str>>().into_iter().skip(2);
+    let mut lines = utf8buf.lines().collect::<Vec<&str>>().into_iter().skip(2);
 
     // Número de elementos y espacios
     let nums: Vec<&str> = lines.next()
