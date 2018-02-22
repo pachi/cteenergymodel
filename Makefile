@@ -10,4 +10,7 @@ dist: linux win32
 	cp target/release/hulc2envolventecte dist/
 	strip dist/hulc2envolventecte.exe
 	strip dist/hulc2envolventecte
-
+bloat:
+	cargo bloat --release -n 10
+	cargo bloat --release --crates -n 10
+	# cargo bloat --release --crates --split-std -n 10
