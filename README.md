@@ -18,6 +18,4 @@ Esta aplicación se distribuye bajo una licencia MIT. Consulte el archivo LICENS
 
 ## Autores
 
-Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
-                   Daniel Jiménez González <danielj@ietcc.csic.es>
-                   Marta Sorribes Gil <msorribes@ietcc.csic.es>
+Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>,  Daniel Jiménez González <danielj@ietcc.csic.es>, Marta Sorribes Gil <msorribes@ietcc.csic.es>
