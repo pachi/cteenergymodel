@@ -112,7 +112,7 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
         Ok(utf8buf) => utf8buf,
         _ => bail!("Error de codificación del archivo {}", path)
     };
-    let mut lines = utf8buf.split("\r\n")
+    let mut lines = utf8buf.lines()
         .map(|e| e.trim()).collect::<Vec<&str>>().into_iter();
 
     let mut huecos: Vec<Hueco> = Vec::new();

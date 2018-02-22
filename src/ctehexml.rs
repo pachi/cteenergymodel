@@ -47,7 +47,7 @@ pub fn findgglshwi(path: &str) -> Result<HashMap<String, f32>, Error> {
         Ok(utf8buf) => utf8buf,
         _ => bail!("Error de codificación del archivo {}", path)
     };
-    let mut lines = utf8buf.split("\r\n")
+    let mut lines = utf8buf.lines()
         .filter(|l| (l.contains(" = WINDOW") && !l.contains("WINDOW-FRAME")) || l.contains("transmisividadJulio"))
         .collect::<Vec<&str>>().into_iter();
 
