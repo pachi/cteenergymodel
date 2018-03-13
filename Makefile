@@ -13,5 +13,5 @@ bloat:
 	cargo bloat --release --crates -n 10
 	# cargo bloat --release --crates --split-std -n 10
 perf:
-	perf record -g target/release/hulc2envolventecte src/data
+	perf record -g target/release/hulc2envolventecte tests/data
 	perf report -f --sort comm,dso
