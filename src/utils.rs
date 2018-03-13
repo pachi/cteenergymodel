@@ -23,9 +23,14 @@ SOFTWARE.
 
 // Utilidades varias
 
+use std::fs::File;
+use std::io::prelude::*;
 use std::path::PathBuf;
 
+use encoding::all::ISO_8859_1;
+use encoding::{DecoderTrap, Encoding};
 use failure::Error;
+use failure::ResultExt;
 use glob::glob;
 
 #[derive(Debug)]
@@ -68,4 +73,20 @@ pub fn find_hulc_files(basedir: &str) -> Result<HulcFiles, Error> {
         tbl: tblpath.to_string_lossy().into_owned(),
         kyg: kygpath.to_string_lossy().into_owned()
     })
+}
+
+// Lee archivo en latin1
+pub fn read_latin1_file(path: &str) -> Result<String, Error> {
+    let buf = {
+        let mut buf = Vec::new();
+        File::open(path)?
+            .read_to_end(&mut buf)
+            .context("No se ha podido leer el archivo")?;
+        buf
+    };
+
+    match ISO_8859_1.decode(&buf, DecoderTrap::Replace) {
+        Ok(utf8buf) => Ok(utf8buf),
+        _ => bail!("Error de codificación del archivo {}", path),
+    }
 }

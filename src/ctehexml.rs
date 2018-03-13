@@ -24,41 +24,37 @@ SOFTWARE.
 // Funciones relacionadas con la interpretación de archivos .ctehexml
 
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::prelude::*;
 
-use encoding::all::ISO_8859_1;
-use encoding::{Encoding, DecoderTrap};
 use failure::Error;
-use failure::ResultExt;
+
+use utils::read_latin1_file;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
 pub fn findgglshwi(path: &str) -> Result<HashMap<String, f32>, Error> {
+    let utf8buf = read_latin1_file(path)?;
+
+    // Localiza datos de huecos para extraer gglshwi
     //let rg_window = Regex::new(r#".*"(.*)"\s*=\sWINDOW\s*$"#).unwrap();
     //let rg_wprop = Regex::new(r#".*transmisividadJulio\s*=\s*([\d.]+)"#).unwrap();
-
-    let buf = {
-        let mut buf = Vec::new();
-        File::open(path)?.read_to_end(&mut buf).context("No se ha podido leer el archivo")?;
-        buf
-    };
-
-    let utf8buf = match ISO_8859_1.decode(&buf, DecoderTrap::Replace) {
-        Ok(utf8buf) => utf8buf,
-        _ => bail!("Error de codificación del archivo {}", path)
-    };
-    let mut lines = utf8buf.lines()
-        .filter(|l| (l.contains(" = WINDOW") && !l.contains("WINDOW-FRAME")) || l.contains("transmisividadJulio"))
-        .collect::<Vec<&str>>().into_iter();
+    let mut window_lines = utf8buf
+        .lines()
+        .filter(|l| {
+            (l.contains(" = WINDOW") && !l.contains("WINDOW-FRAME"))
+                || l.contains("transmisividadJulio")
+        })
+        .collect::<Vec<&str>>()
+        .into_iter();
 
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
-
-    while let Some(line) = lines.next() {
+    while let Some(line) = window_lines.next() {
         if line.contains(" = WINDOW") {
-            let windowname = line.split("=").map(|e| e.trim().trim_matches('"')).collect::<Vec<&str>>()[0];
-            let nextline = lines.next().unwrap();
+            let windowname = line.split("=")
+                .map(|e| e.trim().trim_matches('"'))
+                .collect::<Vec<&str>>()[0];
+            let nextline = window_lines.next().unwrap();
             if nextline.contains("transmisividadJulio") {
-                let gglshwivalue: f32 = nextline.split("=").map(|e| e.trim()).collect::<Vec<&str>>()[1].parse()?;
+                let gglshwivalue: f32 =
+                    nextline.split("=").map(|e| e.trim()).collect::<Vec<&str>>()[1].parse()?;
                 gglshwi.insert(windowname.to_owned(), gglshwivalue);
             }
         }

@@ -22,14 +22,11 @@ SOFTWARE.
 */
 
 use std::collections::HashMap;
-use std::io::prelude::*;
-use std::fs::File;
 
-use encoding::{Encoding, DecoderTrap};
-use encoding::all::ISO_8859_1;
 use failure::Error;
-use failure::ResultExt;
 use uuid::Uuid;
+
+use utils::read_latin1_file;
 
 #[derive(Debug, Serialize)]
 pub struct Hueco {
@@ -102,16 +99,8 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
     //let rg_kelem = Regex::new(r"^\s*Muro|Ventana|PPTT")?;
     //let rg_qsolwindow = Regex::new(r#"^\s*".*"\s*;"#)?;
 
-    let buf = {
-        let mut buf = Vec::new();
-        File::open(path)?.read_to_end(&mut buf).context("No se ha podido leer el archivo")?;
-        buf
-    };
+    let utf8buf = read_latin1_file(path)?;
 
-    let utf8buf = match ISO_8859_1.decode(&buf, DecoderTrap::Replace) {
-        Ok(utf8buf) => utf8buf,
-        _ => bail!("Error de codificación del archivo {}", path)
-    };
     let mut lines = utf8buf.lines()
         .map(|e| e.trim()).collect::<Vec<&str>>().into_iter();
 

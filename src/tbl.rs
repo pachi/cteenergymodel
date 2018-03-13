@@ -21,16 +21,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-use std::io::prelude::*;
-use std::fs::File;
 use std::str::FromStr;
-//use std::io::Read;
 
-use encoding::{Encoding, DecoderTrap};
-use encoding::all::ISO_8859_1;
 use failure::Error;
-//use failure::err_msg;
 use failure::ResultExt;
+
+use utils::read_latin1_file;
 
 #[derive(Debug)]
 pub enum ElemType {
@@ -58,11 +54,13 @@ pub struct Element {
 }
 
 impl FromStr for Element {
-    type Err = ();
+    type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let data: Vec<&str> = s.split_whitespace().collect();
-        if data.len() < 10 { return Err(())}
+        if data.len() < 10 {
+            return Err(format_err!("Número de datos insuficiente. Se esperaban 10 y se encontraron {}", data.len()))
+        }
         let name = data[0].to_owned();
         let area = data[1].parse().unwrap();
         let u = data[2].parse().unwrap();
@@ -79,7 +77,7 @@ impl FromStr for Element {
             -3 => ElemType::FLOORGND,
             -4 => ElemType::WALLINT,
             -5 => ElemType::FLOORINT,
-            _ => return Err(())
+            _ => return Err(format_err!("Tipo de elemento desconocido"))
         };
         let id_surf = data[9].parse().unwrap();
         let id_space = data[10].parse().unwrap();
@@ -97,11 +95,13 @@ pub struct Space {
 }
 
 impl FromStr for Space {
-    type Err = ();
+    type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let data: Vec<&str> = s.split_whitespace().collect();
-        if data.len() < 5 { return Err(())}
+        if data.len() < 5 {
+            return Err(format_err!("Número de datos insuficiente. Se esperaban 5 y se encontraron {}", data.len()))
+        }
         let name = data[0].to_owned();
         let id_space = data[1].parse().unwrap();
         let mult = data[2].parse().unwrap();
@@ -144,27 +144,19 @@ impl Tbl {
 //
 // path: ruta del archivo .tbl
 pub fn parse(path: &str) -> Result<Tbl, Error> {
-    let buf = {
-        let mut buf = Vec::new();
-        File::open(path)?.read_to_end(&mut buf).context("No se ha podido leer el archivo")?;
-        buf
-    };
+    let utf8buf = read_latin1_file(path)?;
 
-    let utf8buf = match ISO_8859_1.decode(&buf, DecoderTrap::Replace) {
-        Ok(utf8buf) => utf8buf,
-        _ => bail!("Error de codificación del archivo {}", path)
-    };
     // Líneas, eliminando dos primeras líneas de comentarios iniciales
     let mut lines = utf8buf.lines().collect::<Vec<&str>>().into_iter().skip(2);
 
     // Número de elementos y espacios
     let nums: Vec<&str> = lines.next()
-        .expect("No se ha encontrado la línea de número de elementos y espacios")
+        .ok_or(format_err!("No se ha encontrado la línea de número de elementos y espacios"))?
         .split_whitespace().collect();
-    let numelements: i32 = nums[0].parse()
-        .expect("No se ha podido determinar el número de elementos");
-    let numspaces: i32 = nums[1].parse()
-        .expect("No se ha podido determinar el número de espacios");
+    let numelements = nums[0].parse::<i32>()
+        .context("No se ha podido determinar el número de elementos")?;
+    let numspaces = nums[1].parse::<i32>()
+        .context("No se ha podido determinar el número de espacios")?;
 
     // Datos de elementos
     let mut elements: Vec<Element> = Vec::new();
@@ -172,9 +164,9 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
     while let Some(line) = lines.next() {
         let name = line.trim_matches('"').trim();
         let values = lines.next()
-            .expect(&format!("No se ha encontrado la línea de propiedades del elemento {}", name));
-        let element = (name.to_owned() + " " + values).parse()
-            .expect(&format!("Formato desconocido del elemento {}", name));
+            .ok_or(format_err!("No se ha encontrado la línea de propiedades del elemento {}", name))?;
+        let element = (name.to_owned() + " " + values).parse::<Element>()
+            .context(format!("Formato desconocido del elemento {}", name))?;
         elements.push(element);
         idxelem += 1;
         if idxelem == numelements { break };
@@ -186,9 +178,9 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
     while let Some(line) = lines.next() {
         let name = line.trim_matches('"');
         let values = lines.next()
-            .expect(&format!("No se ha encontrado la línea de propiedades del espacio {}", name));
-        let space = (name.to_owned() + " " + values).parse()
-            .expect(&format!("Formato desconocido del espacio {}", name));
+            .ok_or(format_err!("No se ha encontrado la línea de propiedades del espacio {}", name))?;
+        let space = (name.to_owned() + " " + values).parse::<Space>()
+            .context(format!("Formato desconocido del espacio {}", name))?;
         spaces.push(space);
         idxspc += 1;
         if idxspc == numspaces { break };
