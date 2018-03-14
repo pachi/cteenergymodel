@@ -40,6 +40,7 @@ mod utils;
 struct EnvolventeCteData {
     #[serde(rename(serialize = "Autil"))]
     autil: f32,
+    clima: String,
     envolvente: kyg::ElementosEnvolvente,
 }
 
@@ -95,8 +96,8 @@ Publicado bajo licencia MIT
     eprintln!("- {}", hulcfiles.tbl);
     eprintln!("- {}", hulcfiles.kyg);
 
-    let gglshwimap = match ctehexml::findgglshwi(&hulcfiles.ctehexml){
-        Ok(gglshwimap) => gglshwimap,
+    let ctehexmldata = match ctehexml::parse(&hulcfiles.ctehexml){
+        Ok(data) => data,
         Err(e) => {
             eprintln!("Error: {}", e);
             for e in e.causes().skip(1) {
@@ -105,7 +106,25 @@ Publicado bajo licencia MIT
             exit(1);
         }
     };
+
+    let gglshwimap = match ctehexmldata.get("gglshwi") {
+        Some(&ctehexml::DataValue::HashMap(ref map)) => map.clone(),
+        _ => {
+            eprintln!("Error: No se ha encontrado los factores g_gl;sh;wi");
+            exit(1);
+        }
+    };
     eprintln!("Localizados coeficientes de transmisión de energía solar g_gl;sh;wi");
+
+    let climate = match ctehexmldata.get("climate") {
+        Some(&ctehexml::DataValue::String(ref climate)) => climate.clone(),
+        _ => {
+            eprintln!("Error: No se ha encontrado la zona climática");
+            exit(1);
+        }
+    };
+    eprintln!("Localizada la zona climática, {}", climate);
+
 
     let tbl = match tbl::parse(&hulcfiles.tbl) {
         Ok(value) => value,
@@ -131,7 +150,7 @@ Publicado bajo licencia MIT
     eprintln!("Area útil: {} m2", area_util);
 
     // Salida en JSON
-    let envolvente_data = EnvolventeCteData { autil: area_util, envolvente: elementos_envolvente };
+    let envolvente_data = EnvolventeCteData { autil: area_util, clima: climate, envolvente: elementos_envolvente };
     match serde_json::to_string_pretty(&envolvente_data) {
         Ok(json) => {
             eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");

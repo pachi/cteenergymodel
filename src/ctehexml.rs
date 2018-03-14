@@ -29,8 +29,13 @@ use failure::Error;
 
 use utils::read_latin1_file;
 
+pub enum DataValue {
+    String(String),
+    HashMap(HashMap<String, f32>)
+}
+
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn findgglshwi(path: &str) -> Result<HashMap<String, f32>, Error> {
+pub fn parse(path: &str) -> Result<HashMap<String, DataValue>, Error> {
     let utf8buf = read_latin1_file(path)?;
 
     // Localiza datos de huecos para extraer gglshwi
@@ -59,5 +64,16 @@ pub fn findgglshwi(path: &str) -> Result<HashMap<String, f32>, Error> {
             }
         }
     }
-    Ok(gglshwi)
+
+    // TODO: mejorar manejo de errores
+    let climate = utf8buf.lines()
+        .find(|l| l.contains("zonaClimatica")).unwrap()
+        .split(">").nth(1).unwrap()
+        .split("<").nth(0).unwrap().to_owned();
+
+    let mut data: HashMap<String, DataValue> = HashMap::new();
+    data.insert("gglshwi".to_owned(), DataValue::HashMap(gglshwi));
+    data.insert("climate".to_owned(), DataValue::String(climate));
+
+    Ok(data)
 }
