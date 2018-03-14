@@ -1,8 +1,10 @@
+run:
+	time cargo run tests/data/ > salida.json
 linux:
 	cargo build --release
 win32:
 	cargo build --release --target=i686-pc-windows-gnu
-dist: linux win32
+build: linux win32
 	mkdir -p dist
 	cp target/i686-pc-windows-gnu/release/hulc2envolventecte.exe dist/
 	cp target/release/hulc2envolventecte dist/
