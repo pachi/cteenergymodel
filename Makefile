@@ -17,3 +17,7 @@ bloat:
 perf:
 	perf record -g target/release/hulc2envolventecte tests/data
 	perf report -f --sort comm,dso
+count:
+	cargo count -a src/
+outdated:
+	cargo outdated -R
