@@ -2,6 +2,12 @@
 name = "hulc2envolventecte"
 version = "0.1.0"
 authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+description = "Export data from a HULC project to the EnvolventeCTE JSON format"
+repository = "https://github.com/pachi/hulc2envolventecte"
+readme = "README.md"
+keywords = ["buildings", "energy", "ISO EN 52000", "CTE", "EnvolventeCTE"]
+categories = ["command-line-utilities", "science"]
+license = "MIT"
 
 [dependencies]
 encoding = "0.2"

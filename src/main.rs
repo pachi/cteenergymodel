@@ -44,39 +44,44 @@ struct EnvolventeCteData {
     envolvente: kyg::ElementosEnvolvente,
 }
 
-const PROGNAME: &str = "hulc2envolventecte"; 
-const VERSION: &str = "1.0";
+const PROGNAME: &str = env!("CARGO_PKG_NAME");
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 fn main() {
     use std::process::exit;
 
-    let help = format!("Uso: {} DIRECTORIO
+    let help = format!("Uso:
+    {} DIRECTORIO
 
 Argumentos:
-    DIRECTORIO     Directorio en el que se localizarán los archivos de datos de HULC
+    DIRECTORIO     Directorio del proyecto de HULC
 
 Descripción:
+    Exporta al formato JSON de EnvolventeCTE los datos de un proyecto HULC.
 
-    Emite en formato JSON de EnvolventeCTE los datos de un proyecto HULC.
-    Puede redirigir la salida de resultados a un archivo para su uso posterior:
-        hulc2envolventecte DIRECTORIO > archivo_salida.json
-", PROGNAME);
+    Para su uso posterior, redirija la salida de resultados a un archivo:
+        $ {} DIRECTORIO > archivo_salida.json
+", PROGNAME, PROGNAME);
 
-    let copy = format!("{} {} - Exportación de datos de HULC a EnvolventeCTE
-
-Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
-                   Daniel Jiménez González <danielj@ietcc.csic.es>
-                   Marta Sorribes Gil <msorribes@ietcc.csic.es>
-
-Publicado bajo licencia MIT
-", PROGNAME, VERSION);
+    let copy = format!("{} v{} - Exportación de datos de HULC a EnvolventeCTE
+    Copyright (c) 2018 {}
+    Publicado bajo licencia MIT
+", PROGNAME, VERSION, env!("CARGO_PKG_AUTHORS"));
 
     eprintln!("{}\n", copy);
-    let dir = match std::env::args().nth(1) {
-        Some(dir) => dir,
+    let dir: String = match std::env::args().nth(1) {
+        Some(dir) => {
+            match dir.as_ref() {
+                "--version" => {
+                    eprintln!("{}\n", help);
+                    exit(1);
+                },
+                _ => dir
+            }
+        },
         None => {
             eprintln!("{}\n", help);
-            exit(1)
+            exit(1);
         }
     };
 
