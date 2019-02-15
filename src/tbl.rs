@@ -26,7 +26,7 @@ use std::str::FromStr;
 use failure::Error;
 use failure::ResultExt;
 
-use utils::read_latin1_file;
+use crate::utils::read_latin1_file;
 
 #[derive(Debug)]
 pub enum ElemType {

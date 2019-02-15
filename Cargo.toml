@@ -2,6 +2,7 @@
 name = "hulc2envolventecte"
 version = "0.1.0"
 authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+edition = "2018"
 
 [dependencies]
 encoding = "0.2"

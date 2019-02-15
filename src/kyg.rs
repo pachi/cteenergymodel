@@ -26,7 +26,7 @@ use std::collections::HashMap;
 use failure::Error;
 use uuid::Uuid;
 
-use utils::read_latin1_file;
+use crate::utils::read_latin1_file;
 
 #[derive(Debug, Serialize)]
 pub struct Hueco {
