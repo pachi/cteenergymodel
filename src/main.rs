@@ -21,20 +21,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-
 #[macro_use]
 extern crate failure;
-
 
 use serde_json;
 #[macro_use]
 extern crate serde_derive;
 
-
 mod ctehexml;
 mod kyg;
 mod tbl;
 mod utils;
+
+#[cfg(windows)]
+mod wingui;
 
 #[derive(Debug, Serialize)]
 struct EnvolventeCteData {
@@ -46,6 +46,17 @@ struct EnvolventeCteData {
 
 const PROGNAME: &str = "hulc2envolventecte";
 const VERSION: &str = "1.0";
+
+#[cfg(windows)]
+fn get_dir() -> String {
+    let dir = wingui::run_wingui();
+    "Dir".to_string()
+}
+
+#[cfg(not(windows))]
+fn get_dir() -> String {
+    String::new()
+}
 
 fn main() {
     use std::process::exit;
@@ -81,8 +92,13 @@ Publicado bajo licencia MIT
     let dir = match std::env::args().nth(1) {
         Some(dir) => dir,
         None => {
-            eprintln!("{}\n", help);
-            exit(1)
+            let guidir = get_dir();
+            if guidir.is_empty() {
+                eprintln!("{}\n", help);
+                exit(1)
+            } else {
+                guidir
+            }
         }
     };
 
@@ -93,7 +109,7 @@ Publicado bajo licencia MIT
             for e in e.causes().skip(1) {
                 eprintln!("Debido a: {}", e);
             }
-            exit(1);
+            exit(1)
         }
     };
 
