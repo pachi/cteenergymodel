@@ -53,13 +53,13 @@ pub fn parse(path: &str) -> Result<HashMap<String, DataValue>, Error> {
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
     while let Some(line) = window_lines.next() {
         if line.contains(" = WINDOW") {
-            let windowname = line.split("=")
+            let windowname = line.split('=')
                 .map(|e| e.trim().trim_matches('"'))
                 .collect::<Vec<&str>>()[0];
             let nextline = window_lines.next().unwrap();
             if nextline.contains("transmisividadJulio") {
                 let gglshwivalue: f32 =
-                    nextline.split("=").map(|e| e.trim()).collect::<Vec<&str>>()[1].parse()?;
+                    nextline.split('=').map(|e| e.trim()).collect::<Vec<&str>>()[1].parse()?;
                 gglshwi.insert(windowname.to_owned(), gglshwivalue);
             }
         }
@@ -68,8 +68,8 @@ pub fn parse(path: &str) -> Result<HashMap<String, DataValue>, Error> {
     // TODO: mejorar manejo de errores
     let climate = utf8buf.lines()
         .find(|l| l.contains("zonaClimatica")).unwrap()
-        .split(">").nth(1).unwrap()
-        .split("<").nth(0).unwrap().to_owned();
+        .split('>').nth(1).unwrap()
+        .split('<').nth(0).unwrap().to_owned();
 
     let mut data: HashMap<String, DataValue> = HashMap::new();
     data.insert("gglshwi".to_owned(), DataValue::HashMap(gglshwi));

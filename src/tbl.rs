@@ -151,7 +151,7 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
 
     // Número de elementos y espacios
     let nums: Vec<&str> = lines.next()
-        .ok_or(format_err!("No se ha encontrado la línea de número de elementos y espacios"))?
+        .ok_or_else(|| format_err!("No se ha encontrado la línea de número de elementos y espacios"))?
         .split_whitespace().collect();
     let numelements = nums[0].parse::<i32>()
         .context("No se ha podido determinar el número de elementos")?;
@@ -164,7 +164,7 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
     while let Some(line) = lines.next() {
         let name = line.trim_matches('"').trim();
         let values = lines.next()
-            .ok_or(format_err!("No se ha encontrado la línea de propiedades del elemento {}", name))?;
+            .ok_or_else(|| format_err!("No se ha encontrado la línea de propiedades del elemento {}", name))?;
         let element = (name.to_owned() + " " + values).parse::<Element>()
             .context(format!("Formato desconocido del elemento {}", name))?;
         elements.push(element);
@@ -178,7 +178,7 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
     while let Some(line) = lines.next() {
         let name = line.trim_matches('"');
         let values = lines.next()
-            .ok_or(format_err!("No se ha encontrado la línea de propiedades del espacio {}", name))?;
+            .ok_or_else(|| format_err!("No se ha encontrado la línea de propiedades del espacio {}", name))?;
         let space = (name.to_owned() + " " + values).parse::<Space>()
             .context(format!("Formato desconocido del espacio {}", name))?;
         spaces.push(space);

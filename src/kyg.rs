@@ -101,7 +101,7 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
 
     let utf8buf = read_latin1_file(path)?;
 
-    let mut lines = utf8buf.lines()
+    let lines = utf8buf.lines()
         .map(|e| e.trim()).collect::<Vec<&str>>().into_iter();
 
     let mut huecos: Vec<Hueco> = Vec::new();
@@ -109,7 +109,7 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
     let mut pts: Vec<PT> = Vec::new();
     let mut qsolvalues: HashMap<String, f32> = HashMap::new();
 
-    while let Some(line) = lines.next() {
+    for line in lines {
         // Datos de elemento
         if line.starts_with("Muro") || line.starts_with("Ventana") || line.starts_with("PPTT") {
             let vv: Vec<&str> = line.split(';').map(|e| e.trim()).collect();
