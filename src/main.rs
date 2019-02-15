@@ -21,15 +21,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-extern crate encoding;
+
 #[macro_use]
 extern crate failure;
-extern crate glob;
-extern crate serde;
-extern crate serde_json;
+
+
+use serde_json;
 #[macro_use]
 extern crate serde_derive;
-extern crate uuid;
+
 
 mod ctehexml;
 mod kyg;
