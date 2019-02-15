@@ -44,13 +44,14 @@ struct EnvolventeCteData {
     envolvente: kyg::ElementosEnvolvente,
 }
 
-const PROGNAME: &str = "hulc2envolventecte"; 
+const PROGNAME: &str = "hulc2envolventecte";
 const VERSION: &str = "1.0";
 
 fn main() {
     use std::process::exit;
 
-    let help = format!("Uso: {} DIRECTORIO
+    let help = format!(
+        "Uso: {} DIRECTORIO
 
 Argumentos:
     DIRECTORIO     Directorio en el que se localizarán los archivos de datos de HULC
@@ -60,16 +61,21 @@ Descripción:
     Emite en formato JSON de EnvolventeCTE los datos de un proyecto HULC.
     Puede redirigir la salida de resultados a un archivo para su uso posterior:
         hulc2envolventecte DIRECTORIO > archivo_salida.json
-", PROGNAME);
+",
+        PROGNAME
+    );
 
-    let copy = format!("{} {} - Exportación de datos de HULC a EnvolventeCTE
+    let copy = format!(
+        "{} {} - Exportación de datos de HULC a EnvolventeCTE
 
 Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
                    Daniel Jiménez González <danielj@ietcc.csic.es>
                    Marta Sorribes Gil <msorribes@ietcc.csic.es>
 
 Publicado bajo licencia MIT
-", PROGNAME, VERSION);
+",
+        PROGNAME, VERSION
+    );
 
     eprintln!("{}\n", copy);
     let dir = match std::env::args().nth(1) {
@@ -80,7 +86,7 @@ Publicado bajo licencia MIT
         }
     };
 
-    let hulcfiles = match utils::find_hulc_files(&dir){
+    let hulcfiles = match utils::find_hulc_files(&dir) {
         Ok(hulcfiles) => hulcfiles,
         Err(e) => {
             eprintln!("Error: {}", e);
@@ -96,7 +102,7 @@ Publicado bajo licencia MIT
     eprintln!("- {}", hulcfiles.tbl);
     eprintln!("- {}", hulcfiles.kyg);
 
-    let ctehexmldata = match ctehexml::parse(&hulcfiles.ctehexml){
+    let ctehexmldata = match ctehexml::parse(&hulcfiles.ctehexml) {
         Ok(data) => data,
         Err(e) => {
             eprintln!("Error: {}", e);
@@ -125,7 +131,6 @@ Publicado bajo licencia MIT
     };
     eprintln!("Localizada la zona climática, {}", climate);
 
-
     let tbl = match tbl::parse(&hulcfiles.tbl) {
         Ok(value) => value,
         Err(e) => {
@@ -133,7 +138,11 @@ Publicado bajo licencia MIT
             exit(1);
         }
     };
-    eprintln!("Localizados {} espacios y {} elementos", tbl.spaces.len(), tbl.elements.len());
+    eprintln!(
+        "Localizados {} espacios y {} elementos",
+        tbl.spaces.len(),
+        tbl.elements.len()
+    );
 
     let elementos_envolvente = match kyg::parse(&hulcfiles.kyg, Some(gglshwimap)) {
         Ok(elementos) => elementos,
@@ -150,12 +159,16 @@ Publicado bajo licencia MIT
     eprintln!("Area útil: {} m2", area_util);
 
     // Salida en JSON
-    let envolvente_data = EnvolventeCteData { autil: area_util, clima: climate, envolvente: elementos_envolvente };
+    let envolvente_data = EnvolventeCteData {
+        autil: area_util,
+        clima: climate,
+        envolvente: elementos_envolvente,
+    };
     match serde_json::to_string_pretty(&envolvente_data) {
         Ok(json) => {
             eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");
             println!("{}", json);
-        },
+        }
         _ => {
             eprintln!("Error al guardar la información en formato JSON de EnvolventeCTE");
             exit(1);
