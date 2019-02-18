@@ -23,12 +23,15 @@ SOFTWARE.
 
 #[macro_use]
 extern crate failure;
-
 use serde_json;
 #[macro_use]
 extern crate serde_derive;
 
+#[cfg(not(windows))]
 use exitfailure::ExitFailure;
+#[cfg(not(windows))]
+use std::process::exit;
+
 mod ctehexml;
 mod kyg;
 mod tbl;
@@ -48,21 +51,8 @@ struct EnvolventeCteData {
 const PROGNAME: &str = "hulc2envolventecte";
 const VERSION: &str = "1.0";
 
-#[cfg(windows)]
-fn get_dir() -> String {
-    let dir = wingui::run_wingui();
-    "Dir".to_string()
-}
-
-#[cfg(not(windows))]
-fn get_dir() -> String {
-    String::new()
-}
-
-fn main() {
-    use std::process::exit;
-
-    let help = format!(
+fn get_help() -> String {
+    format!(
         "Uso: {} DIRECTORIO
 
 Argumentos:
@@ -75,9 +65,11 @@ Descripción:
         hulc2envolventecte DIRECTORIO > archivo_salida.json
 ",
         PROGNAME
-    );
+    )
+}
 
-    let copy = format!(
+fn get_copy() -> String {
+    format!(
         "{} {} - Exportación de datos de HULC a EnvolventeCTE
 
 Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
@@ -87,33 +79,24 @@ Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
 Publicado bajo licencia MIT
 ",
         PROGNAME, VERSION
-    );
+    )
+}
 
-    eprintln!("{}\n", copy);
-    let dir = match std::env::args().nth(1) {
-        Some(dir) => dir,
-        None => {
-            let guidir = get_dir();
-            if guidir.is_empty() {
-                eprintln!("{}\n", help);
-                exit(1)
-            } else {
-                guidir
-            }
-        }
-    };
+#[cfg(windows)]
+fn main() {
+    wingui::run_wingui();
+}
 
-    let hulcfiles = match utils::find_hulc_files(&dir) {
-        Ok(hulcfiles) => hulcfiles,
-        Err(e) => {
-            eprintln!("Error: {}", e);
-            for e in e.causes().skip(1) {
-                eprintln!("Debido a: {}", e);
-            }
-            exit(1)
-        }
-    };
+#[cfg(not(windows))]
 fn main() -> Result<(), ExitFailure> {
+    eprintln!("{}\n", get_copy());
+
+    let dir = std::env::args().nth(1).unwrap_or_else(|| {
+        eprintln!("{}\n", get_help());
+        exit(1)
+    });
+
+    let hulcfiles = utils::find_hulc_files(&dir)?;
 
     eprintln!("Localizados archivos de datos en '{}'", dir);
     eprintln!("- {}", hulcfiles.ctehexml);
@@ -126,13 +109,7 @@ fn main() -> Result<(), ExitFailure> {
         ctehexmldata.climate
     );
 
-    let tbl = match tbl::parse(&hulcfiles.tbl) {
-        Ok(value) => value,
-        Err(e) => {
-            eprintln!("Error al leer el archivo .tbl: {}", e.cause());
-            exit(1);
-        }
-    };
+    let tbl = tbl::parse(&hulcfiles.tbl)?;
     eprintln!(
         "Localizados {} espacios y {} elementos",
         tbl.spaces.len(),
@@ -160,4 +137,5 @@ fn main() -> Result<(), ExitFailure> {
             exit(1);
         }
     }
+    Ok(())
 }
