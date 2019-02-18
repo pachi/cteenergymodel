@@ -28,6 +28,7 @@ use serde_json;
 #[macro_use]
 extern crate serde_derive;
 
+use exitfailure::ExitFailure;
 mod ctehexml;
 mod kyg;
 mod tbl;
@@ -112,6 +113,7 @@ Publicado bajo licencia MIT
             exit(1)
         }
     };
+fn main() -> Result<(), ExitFailure> {
 
     eprintln!("Localizados archivos de datos en '{}'", dir);
     eprintln!("- {}", hulcfiles.ctehexml);

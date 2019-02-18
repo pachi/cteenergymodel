@@ -6,6 +6,7 @@ edition = "2018"
 
 [dependencies]
 encoding = "0.2"
+exitfailure = "0.5.1"
 failure = "0.1.5"
 glob = "0.2"
 serde = "1.0.88"
