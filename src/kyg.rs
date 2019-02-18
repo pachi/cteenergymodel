@@ -122,7 +122,7 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
                     let (nombre, a, u, orienta, ff) = (vv[1], vv[2], vv[3], vv[4], vv[5]);
                     huecos.push(
                         Hueco {
-                            id: (Uuid::new_v4()).hyphenated().to_string(),
+                            id: (Uuid::new_v4()).to_hyphenated().to_string(),
                             nombre: nombre.to_string(),
                             orientacion: orienta.replace("O", "W").to_string(),
                             a: a.parse()?,
@@ -140,7 +140,7 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
                     let (nombre, a, u, btrx) = (vv[1], vv[2], vv[3], vv[4]);
                     opacos.push(
                         Opaco {
-                            id: (Uuid::new_v4()).hyphenated().to_string(),
+                            id: (Uuid::new_v4()).to_hyphenated().to_string(),
                             nombre: nombre.to_string(),
                             a: a.parse()?,
                             u: u.parse()?,
@@ -155,7 +155,7 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
                     let (l, psi, nombre) = (vv[1], vv[2], vv[3]);
                     pts.push(
                         PT {
-                            id: (Uuid::new_v4()).hyphenated().to_string(),
+                            id: (Uuid::new_v4()).to_hyphenated().to_string(),
                             nombre: nombre.to_string(),
                             l: l.parse()?,
                             psi: psi.parse()?
