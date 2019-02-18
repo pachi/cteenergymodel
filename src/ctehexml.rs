@@ -29,13 +29,13 @@ use failure::Error;
 
 use crate::utils::read_latin1_file;
 
-pub enum DataValue {
-    String(String),
-    HashMap(HashMap<String, f32>)
+pub struct CtehexmlData {
+    pub climate: String,
+    pub gglshwi: HashMap<String, f32>,
 }
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse(path: &str) -> Result<HashMap<String, DataValue>, Error> {
+pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
     let utf8buf = read_latin1_file(path)?;
 
     // Localiza datos de huecos para extraer gglshwi
@@ -53,7 +53,8 @@ pub fn parse(path: &str) -> Result<HashMap<String, DataValue>, Error> {
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
     while let Some(line) = window_lines.next() {
         if line.contains(" = WINDOW") {
-            let windowname = line.split('=')
+            let windowname = line
+                .split('=')
                 .map(|e| e.trim().trim_matches('"'))
                 .collect::<Vec<&str>>()[0];
             let nextline = window_lines.next().unwrap();
@@ -66,14 +67,17 @@ pub fn parse(path: &str) -> Result<HashMap<String, DataValue>, Error> {
     }
 
     // TODO: mejorar manejo de errores
-    let climate = utf8buf.lines()
-        .find(|l| l.contains("zonaClimatica")).unwrap()
-        .split('>').nth(1).unwrap()
-        .split('<').nth(0).unwrap().to_owned();
+    let climate = utf8buf
+        .lines()
+        .find(|l| l.contains("zonaClimatica"))
+        .unwrap()
+        .split('>')
+        .nth(1)
+        .unwrap()
+        .split('<')
+        .nth(0)
+        .unwrap()
+        .to_owned();
 
-    let mut data: HashMap<String, DataValue> = HashMap::new();
-    data.insert("gglshwi".to_owned(), DataValue::HashMap(gglshwi));
-    data.insert("climate".to_owned(), DataValue::String(climate));
-
-    Ok(data)
+    Ok(CtehexmlData { gglshwi, climate })
 }

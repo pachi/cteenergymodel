@@ -120,34 +120,11 @@ fn main() -> Result<(), ExitFailure> {
     eprintln!("- {}", hulcfiles.tbl);
     eprintln!("- {}", hulcfiles.kyg);
 
-    let ctehexmldata = match ctehexml::parse(&hulcfiles.ctehexml) {
-        Ok(data) => data,
-        Err(e) => {
-            eprintln!("Error: {}", e);
-            for e in e.causes().skip(1) {
-                eprintln!("Debido a: {}", e);
-            }
-            exit(1);
-        }
-    };
-
-    let gglshwimap = match ctehexmldata.get("gglshwi") {
-        Some(&ctehexml::DataValue::HashMap(ref map)) => map.clone(),
-        _ => {
-            eprintln!("Error: No se ha encontrado los factores g_gl;sh;wi");
-            exit(1);
-        }
-    };
-    eprintln!("Localizados coeficientes de transmisión de energía solar g_gl;sh;wi");
-
-    let climate = match ctehexmldata.get("climate") {
-        Some(&ctehexml::DataValue::String(ref climate)) => climate.clone(),
-        _ => {
-            eprintln!("Error: No se ha encontrado la zona climática");
-            exit(1);
-        }
-    };
-    eprintln!("Localizada la zona climática, {}", climate);
+    let ctehexmldata = ctehexml::parse(&hulcfiles.ctehexml)?;
+    eprintln!(
+        "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
+        ctehexmldata.climate
+    );
 
     let tbl = match tbl::parse(&hulcfiles.tbl) {
         Ok(value) => value,
@@ -162,16 +139,7 @@ fn main() -> Result<(), ExitFailure> {
         tbl.elements.len()
     );
 
-    let elementos_envolvente = match kyg::parse(&hulcfiles.kyg, Some(gglshwimap)) {
-        Ok(elementos) => elementos,
-        Err(e) => {
-            eprintln!("Error: {}", e);
-            for e in e.causes().skip(1) {
-                eprintln!("Debido a: {}", e);
-            }
-            exit(1);
-        }
-    };
+    let elementos_envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
 
     let area_util = tbl.compute_autil(&elementos_envolvente.claves());
     eprintln!("Area útil: {} m2", area_util);
@@ -179,7 +147,7 @@ fn main() -> Result<(), ExitFailure> {
     // Salida en JSON
     let envolvente_data = EnvolventeCteData {
         autil: area_util,
-        clima: climate,
+        clima: ctehexmldata.climate,
         envolvente: elementos_envolvente,
     };
     match serde_json::to_string_pretty(&envolvente_data) {
