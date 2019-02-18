@@ -30,27 +30,27 @@ use crate::utils::read_latin1_file;
 
 #[derive(Debug)]
 pub enum ElemType {
-    WALL = 0, // muro
-    WINDOW = 1, // hueco
-    WALLADB = -2, // muro adiabático
+    WALL = 0,      // muro
+    WINDOW = 1,    // hueco
+    WALLADB = -2,  // muro adiabático
     FLOORGND = -3, // solera con el terreno
-    WALLINT = -4, // tabique interior                                          
-    FLOORINT = -5 // forjado interior
+    WALLINT = -4,  // tabique interior
+    FLOORINT = -5, // forjado interior
 }
 
 #[derive(Debug)]
 pub struct Element {
-  pub name: String, // Nombre del elemento
-  pub area: f32, // Área del elemento en m2
-  pub u: f32, // Transmitancia térmica en W/m2K
-  pub w_or_inf: f32, // Peso en kg/m2 (opacos) o permeabilidad a 100 Pa en m3/hm2 (huecos)
-  pub g_winter: f32, // 0.000000 (opacos) o factor solar en invierno (huecos)
-  pub g_summer: f32, // 0.000000 (opacos) o factor solar en verano (huecos)
-  pub ang_north: f32, // Ángulo formado con el norte
-  pub tilt: f32, // Inclinación (respecto a la horizontal. 90=vertical, 0=horizontal)
-  pub type_: ElemType, // Tipo de elemento
-  pub id_surf: i32, // Código de la superficie
-  pub id_space: i32, // Código del espacio  
+    pub name: String,    // Nombre del elemento
+    pub area: f32,       // Área del elemento en m2
+    pub u: f32,          // Transmitancia térmica en W/m2K
+    pub w_or_inf: f32,   // Peso en kg/m2 (opacos) o permeabilidad a 100 Pa en m3/hm2 (huecos)
+    pub g_winter: f32,   // 0.000000 (opacos) o factor solar en invierno (huecos)
+    pub g_summer: f32,   // 0.000000 (opacos) o factor solar en verano (huecos)
+    pub ang_north: f32,  // Ángulo formado con el norte
+    pub tilt: f32,       // Inclinación (respecto a la horizontal. 90=vertical, 0=horizontal)
+    pub type_: ElemType, // Tipo de elemento
+    pub id_surf: i32,    // Código de la superficie
+    pub id_space: i32,   // Código del espacio
 }
 
 impl FromStr for Element {
@@ -59,7 +59,10 @@ impl FromStr for Element {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let data: Vec<&str> = s.split_whitespace().collect();
         if data.len() < 10 {
-            return Err(format_err!("Número de datos insuficiente. Se esperaban 10 y se encontraron {}", data.len()))
+            return Err(format_err!(
+                "Número de datos insuficiente. Se esperaban 10 y se encontraron {}",
+                data.len()
+            ));
         }
         let name = data[0].to_owned();
         let area = data[1].parse().unwrap();
@@ -77,21 +80,33 @@ impl FromStr for Element {
             -3 => ElemType::FLOORGND,
             -4 => ElemType::WALLINT,
             -5 => ElemType::FLOORINT,
-            _ => return Err(format_err!("Tipo de elemento desconocido"))
+            _ => return Err(format_err!("Tipo de elemento desconocido")),
         };
         let id_surf = data[9].parse().unwrap();
         let id_space = data[10].parse().unwrap();
-        Ok(Element { name, area, u, w_or_inf, g_winter, g_summer, ang_north, tilt, type_, id_surf, id_space })
+        Ok(Element {
+            name,
+            area,
+            u,
+            w_or_inf,
+            g_winter,
+            g_summer,
+            ang_north,
+            tilt,
+            type_,
+            id_surf,
+            id_space,
+        })
     }
 }
 
 #[derive(Debug)]
 pub struct Space {
-    pub name: String, // Nombre del espacio
+    pub name: String,  // Nombre del espacio
     pub id_space: i32, // Código de la zona
-    pub mult: i32, // Multiplicador de la zona
-    pub area: f32, // Superficie de la zona en m2
-    pub qint: f32 // Fuentes internas medias en W/m2
+    pub mult: i32,     // Multiplicador de la zona
+    pub area: f32,     // Superficie de la zona en m2
+    pub qint: f32,     // Fuentes internas medias en W/m2
 }
 
 impl FromStr for Space {
@@ -100,21 +115,30 @@ impl FromStr for Space {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let data: Vec<&str> = s.split_whitespace().collect();
         if data.len() < 5 {
-            return Err(format_err!("Número de datos insuficiente. Se esperaban 5 y se encontraron {}", data.len()))
+            return Err(format_err!(
+                "Número de datos insuficiente. Se esperaban 5 y se encontraron {}",
+                data.len()
+            ));
         }
         let name = data[0].to_owned();
         let id_space = data[1].parse().unwrap();
         let mult = data[2].parse().unwrap();
         let area = data[3].parse().unwrap();
         let qint = data[4].parse().unwrap();
-        Ok(Space { name, id_space, mult, area, qint })
+        Ok(Space {
+            name,
+            id_space,
+            mult,
+            area,
+            qint,
+        })
     }
 }
 
 #[derive(Debug)]
 pub struct Tbl {
     pub elements: Vec<Element>,
-    pub spaces: Vec<Space>
+    pub spaces: Vec<Space>,
 }
 
 impl Tbl {
@@ -150,13 +174,19 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
     let mut lines = utf8buf.lines().collect::<Vec<&str>>().into_iter().skip(2);
 
     // Número de elementos y espacios
-    let nums: Vec<&str> = lines.next()
-        .ok_or_else(|| format_err!("No se ha encontrado la línea de número de elementos y espacios"))?
-        .split_whitespace().collect();
-    let numelements = nums[0].parse::<i32>()
-        .context("No se ha podido determinar el número de elementos")?;
-    let numspaces = nums[1].parse::<i32>()
-        .context("No se ha podido determinar el número de espacios")?;
+    let nums: Vec<&str> = lines
+        .next()
+        .ok_or_else(|| {
+            format_err!("Error al leer el archivo .tbl: no se ha encontrado la línea de número de elementos y espacios")
+        })?
+        .split_whitespace()
+        .collect();
+    let numelements = nums[0].parse::<i32>().context(
+        "Error al leer el archivo .tbl: no se ha podido determinar el número de elementos",
+    )?;
+    let numspaces = nums[1].parse::<i32>().context(
+        "Error al leer el archivo .tbl: no se ha podido determinar el número de espacios",
+    )?;
 
     // Datos de elementos
     let mut elements: Vec<Element> = Vec::new();
@@ -164,12 +194,18 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
     while let Some(line) = lines.next() {
         let name = line.trim_matches('"').trim();
         let values = lines.next()
-            .ok_or_else(|| format_err!("No se ha encontrado la línea de propiedades del elemento {}", name))?;
-        let element = (name.to_owned() + " " + values).parse::<Element>()
-            .context(format!("Formato desconocido del elemento {}", name))?;
+            .ok_or_else(|| format_err!("Error al leer el archivo .tbl: no se ha encontrado la línea de propiedades del elemento {}", name))?;
+        let element = (name.to_owned() + " " + values)
+            .parse::<Element>()
+            .context(format!(
+                "Error al leer el archivo .tbl: formato desconocido del elemento {}",
+                name
+            ))?;
         elements.push(element);
         idxelem += 1;
-        if idxelem == numelements { break };
+        if idxelem == numelements {
+            break;
+        };
     }
 
     // Datos de espacios
@@ -177,13 +213,23 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
     let mut idxspc: i32 = 0;
     while let Some(line) = lines.next() {
         let name = line.trim_matches('"');
-        let values = lines.next()
-            .ok_or_else(|| format_err!("No se ha encontrado la línea de propiedades del espacio {}", name))?;
-        let space = (name.to_owned() + " " + values).parse::<Space>()
-            .context(format!("Formato desconocido del espacio {}", name))?;
+        let values = lines.next().ok_or_else(|| {
+            format_err!(
+                "Error al leer el archivo .tbl: no se ha encontrado la línea de propiedades del espacio {}",
+                name
+            )
+        })?;
+        let space = (name.to_owned() + " " + values)
+            .parse::<Space>()
+            .context(format!(
+                "Error al leer el archivo .tbl: formato desconocido del espacio {}",
+                name
+            ))?;
         spaces.push(space);
         idxspc += 1;
-        if idxspc == numspaces { break };
+        if idxspc == numspaces {
+            break;
+        };
     }
 
     Ok(Tbl { elements, spaces })
