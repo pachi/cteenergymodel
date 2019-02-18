@@ -112,6 +112,7 @@ pub unsafe extern "system" fn window_proc(
                         ))
                         .as_ptr(),
                     );
+                    do_convert();
                 }
                 _ => {
                     // dbg!(("id: ", wm_id, "wm_event:", wm_event));
@@ -371,6 +372,89 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
             }
         }
     }
+}
+
+fn do_convert() {
+    use crate::{ utils, ctehexml, tbl, kyg, EnvolventeCteData, serde_json};
+    let dir_in = unsafe { MODEL.dir_in.clone() };
+
+    let hulcfiles = match utils::find_hulc_files(&dir_in) {
+        Ok(hulcfiles) => {
+            eprintln!("Localizados archivos de datos en '{}'", dir_in);
+            eprintln!("- {}", hulcfiles.ctehexml);
+            eprintln!("- {}", hulcfiles.tbl);
+            eprintln!("- {}", hulcfiles.kyg);
+            hulcfiles
+        }
+        _ => {
+            // TODO: Mostrar error
+            eprintln!("No se han encontrado los archivos .ctehexml, .tbl o .kyg en el directorio de proyecto.");
+            return
+        }
+    };
+
+    let ctehexmldata = match ctehexml::parse(&hulcfiles.ctehexml) {
+        Ok(ctehexmldata) => {
+            eprintln!(
+                "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
+                ctehexmldata.climate
+            );
+            ctehexmldata
+        }
+        _ => {
+            // TODO: Mostrar error
+            eprintln!("No se ha encontrado la zona climática o los coeficientes de transmisión de energía solar g_gl;sh;wi");
+            return
+        }
+    };
+
+    let tbl = match tbl::parse(&hulcfiles.tbl) {
+        Ok(tbl) => {
+            eprintln!(
+                "Localizados {} espacios y {} elementos",
+                tbl.spaces.len(),
+                tbl.elements.len()
+            );
+            tbl
+        }
+        _ => {
+            // TODO: Mostrar error
+            eprintln!("No se ha localizado la definición de espacios y elementos en el archivo .tbl");
+            return
+        }
+    };
+
+    let elementos_envolvente = match kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi)) {
+        Ok(elementos_envolvente) => {
+            eprintln!("Encontrados elementos de la envolvente");
+            elementos_envolvente
+        }
+        _ => {
+            // TODO: Mostrar error
+            eprintln!("Error al interpretar el archivo .kyg de elementos de la envolvente");
+            return
+        }
+    };
+
+    let area_util = tbl.compute_autil(&elementos_envolvente.claves());
+    eprintln!("Area útil: {} m2", area_util);
+
+    // Salida en JSON
+    let envolvente_data = EnvolventeCteData {
+        autil: area_util,
+        clima: ctehexmldata.climate,
+        envolvente: elementos_envolvente,
+    };
+    match serde_json::to_string_pretty(&envolvente_data) {
+        Ok(json) => {
+            eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");
+            println!("{}", json);
+        }
+        _ => {
+            eprintln!("Error al guardar la información en formato JSON de EnvolventeCTE");
+            return
+        }
+    };
 }
 
 pub fn run_wingui() {
