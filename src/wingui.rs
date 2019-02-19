@@ -29,7 +29,7 @@ struct Model {
     h_btn_prj_out: HWND,
     h_label_prj_out: HWND,
     h_btn_run: HWND,
-    h_label_msg: HWND,
+    h_edit_msg: HWND,
 }
 
 static mut MODEL: Model = Model {
@@ -41,7 +41,7 @@ static mut MODEL: Model = Model {
     h_btn_prj_out: 0 as HWND,
     h_label_prj_out: 0 as HWND,
     h_btn_run: 0 as HWND,
-    h_label_msg: 0 as HWND,
+    h_edit_msg: 0 as HWND,
 };
 
 // Control IDs
@@ -104,14 +104,10 @@ pub unsafe extern "system" fn window_proc(
                 }
                 IDC_BUTTON_RUN => {
                     // Clicked button 3
-                    SetWindowTextW(
-                        MODEL.h_label_msg,
-                        to_wstring(&format!(
+                    append_to_edit(&format!(
                             "Generando archivo EnvolventeCTE del proyecto HULC: '{}'. Guardando resultados en '{}\\envolventecte.json'",
                             &MODEL.dir_in, &MODEL.dir_out
-                        ))
-                        .as_ptr(),
-                    );
+                        ));
                     do_convert();
                 }
                 _ => {
@@ -122,6 +118,16 @@ pub unsafe extern "system" fn window_proc(
         _ => return DefWindowProcW(hwnd, msg, wparam, lparam),
     }
     0
+}
+
+// Apend text to the edit control
+fn append_to_edit(txt: &str) {
+    unsafe {
+        let h_edit = MODEL.h_edit_msg;
+        let tlen = GetWindowTextLengthW(h_edit);
+        SendMessageW(h_edit, EM_SETSEL.into(), tlen as WPARAM, tlen as LPARAM); // Select the end pos
+        SendMessageW(h_edit, EM_REPLACESEL.into(), 0, to_wstring(txt).as_ptr() as LPARAM); // Append text to current pos and scroll down
+    }
 }
 
 // Declare class and instantiate window
@@ -169,7 +175,7 @@ fn create_main_window(name: &str, title: &str) -> Result<HWND, Box<dyn Error>> {
             CW_USEDEFAULT,                    // Int x
             CW_USEDEFAULT,                    // Int y
             630,                              // Int nWidth
-            270,                              // Int nHeight
+            510,                              // Int nHeight
             null_mut(),                       // hWndParent
             null_mut(),                       // hMenu
             hinstance,                        // hInstance
@@ -219,7 +225,7 @@ unsafe fn create_gui(hparent: HWND) {
     MODEL.h_label_prj_in = CreateWindowExW(
         0,
         to_wstring("static").as_ptr(),
-        to_wstring("/home/pachi/").as_ptr(),
+        to_wstring(MODEL.dir_in).as_ptr(),
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_LEFT,
         320, // x
         10,  // y
@@ -249,7 +255,7 @@ unsafe fn create_gui(hparent: HWND) {
     MODEL.h_label_prj_out = CreateWindowExW(
         0,
         to_wstring("static").as_ptr(),
-        to_wstring("/home/pachi/").as_ptr(),
+        to_wstring(MODEL.dir_out).as_ptr(),
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_LEFT,
         320, // x
         50,  // y
@@ -276,15 +282,15 @@ unsafe fn create_gui(hparent: HWND) {
         null_mut(),
     );
 
-    MODEL.h_label_msg = CreateWindowExW(
+    MODEL.h_edit_msg = CreateWindowExW(
         0,
-        to_wstring("static").as_ptr(),
-        to_wstring("Convertir proyecto HULC a EnvolventeCTE").as_ptr(),
-        WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_LEFT,
+        to_wstring("edit").as_ptr(),
+        to_wstring(&crate::get_copy()).as_ptr(),
+        WS_VSCROLL | WS_BORDER | WS_CHILD | ES_MULTILINE | ES_READONLY | WS_VISIBLE | WS_TABSTOP | SS_LEFT,
         10,  // x
         160, // y
         600, // w
-        60,  // h
+        300,  // h
         hparent,
         IDC_LABEL_MSG as HMENU,
         hinstance,
@@ -377,67 +383,67 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
 fn do_convert() {
     use crate::{ utils, ctehexml, tbl, kyg, EnvolventeCteData, serde_json};
     let dir_in = unsafe { MODEL.dir_in.clone() };
+    let dir_out = unsafe { MODEL.dir_out.clone() };
+
+    append_to_edit(&format!("\n\nUsando como directorio de proyecto de HULC: '{}'", dir_in));
+    append_to_edit(&format!("\nUsando como directorio de salida: '{}'", dir_out));
 
     let hulcfiles = match utils::find_hulc_files(&dir_in) {
         Ok(hulcfiles) => {
-            eprintln!("Localizados archivos de datos en '{}'", dir_in);
-            eprintln!("- {}", hulcfiles.ctehexml);
-            eprintln!("- {}", hulcfiles.tbl);
-            eprintln!("- {}", hulcfiles.kyg);
+            append_to_edit(&format!("\nLocalizados archivos de datos en '{}'", dir_in));
+            append_to_edit(&format!("\n  - {}", hulcfiles.ctehexml));
+            append_to_edit(&format!("\n  - {}", hulcfiles.tbl));
+            append_to_edit(&format!("\n  - {}", hulcfiles.kyg));
             hulcfiles
         }
         _ => {
-            // TODO: Mostrar error
-            eprintln!("No se han encontrado los archivos .ctehexml, .tbl o .kyg en el directorio de proyecto.");
+            append_to_edit("\nERROR: No se han encontrado los archivos .ctehexml, .tbl o .kyg en el directorio de proyecto.");
             return
         }
     };
 
     let ctehexmldata = match ctehexml::parse(&hulcfiles.ctehexml) {
         Ok(ctehexmldata) => {
-            eprintln!(
-                "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
+            append_to_edit(&format!(
+                "\nLocalizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
                 ctehexmldata.climate
-            );
+            ));
             ctehexmldata
         }
         _ => {
-            // TODO: Mostrar error
-            eprintln!("No se ha encontrado la zona climática o los coeficientes de transmisión de energía solar g_gl;sh;wi");
+            append_to_edit("\nERROR: No se ha encontrado la zona climática o los coeficientes de transmisión de energía solar g_gl;sh;wi");
             return
         }
     };
 
     let tbl = match tbl::parse(&hulcfiles.tbl) {
         Ok(tbl) => {
-            eprintln!(
-                "Localizados {} espacios y {} elementos",
+            append_to_edit(&format!(
+                "\nLocalizados {} espacios y {} elementos",
                 tbl.spaces.len(),
                 tbl.elements.len()
-            );
+            ));
             tbl
         }
         _ => {
-            // TODO: Mostrar error
-            eprintln!("No se ha localizado la definición de espacios y elementos en el archivo .tbl");
+            append_to_edit("\nERROR: No se ha localizado la definición de espacios y elementos en el archivo .tbl");
             return
         }
     };
 
     let elementos_envolvente = match kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi)) {
         Ok(elementos_envolvente) => {
-            eprintln!("Encontrados elementos de la envolvente");
+            append_to_edit("\nEncontrada descripción de elementos de la envolvente");
             elementos_envolvente
         }
         _ => {
-            // TODO: Mostrar error
-            eprintln!("Error al interpretar el archivo .kyg de elementos de la envolvente");
+            append_to_edit("\nERROR: No se ha podido interpretar correctamente el archivo .kyg de elementos de la envolvente");
             return
         }
     };
 
     let area_util = tbl.compute_autil(&elementos_envolvente.claves());
-    eprintln!("Area útil: {} m2", area_util);
+    append_to_edit(&format!("\nArea útil: {} m2", area_util));
 
     // Salida en JSON
     let envolvente_data = EnvolventeCteData {
@@ -447,17 +453,20 @@ fn do_convert() {
     };
     match serde_json::to_string_pretty(&envolvente_data) {
         Ok(json) => {
-            eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");
+            append_to_edit("\n\nSe ha generado el archivo de resultados en formato JSON de EnvolventeCTE:");
+            append_to_edit(&format!("    {}\\envolventecte.json", dir_out));
             println!("{}", json);
+            // TODO: escribir resultados en archivo de texto
         }
         _ => {
-            eprintln!("Error al guardar la información en formato JSON de EnvolventeCTE");
+            append_to_edit("\nERROR: no se ha podido guardar la información en formato JSON de EnvolventeCTE");
             return
         }
     };
 }
 
 pub fn run_wingui() {
+    setup_folders();
     let hwnd = create_main_window("hulc2envolventecte_gui", "Conversión de HULC a EnvolventeCTE")
         .expect("Error al crear la ventana principal!");
     run_message_loop(hwnd);
