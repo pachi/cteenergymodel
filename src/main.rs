@@ -51,23 +51,6 @@ struct EnvolventeCteData {
 const PROGNAME: &str = "hulc2envolventecte";
 const VERSION: &str = "1.0";
 
-fn get_help() -> String {
-    format!(
-        "Uso: {} DIRECTORIO
-
-Argumentos:
-    DIRECTORIO     Directorio en el que se localizarán los archivos de datos de HULC
-
-Descripción:
-
-    Emite en formato JSON de EnvolventeCTE los datos de un proyecto HULC.
-    Puede redirigir la salida de resultados a un archivo para su uso posterior:
-        hulc2envolventecte DIRECTORIO > archivo_salida.json
-",
-        PROGNAME
-    )
-}
-
 fn get_copy() -> String {
     format!(
         "{} {} - Exportación de datos de HULC a EnvolventeCTE
@@ -92,7 +75,20 @@ fn main() -> Result<(), ExitFailure> {
     eprintln!("{}\n", get_copy());
 
     let dir = std::env::args().nth(1).unwrap_or_else(|| {
-        eprintln!("{}\n", get_help());
+        eprintln!(
+            "Uso: {} DIRECTORIO
+
+Argumentos:
+    DIRECTORIO     Directorio en el que se localizarán los archivos de datos de HULC
+
+Descripción:
+
+    Emite en formato JSON de EnvolventeCTE los datos de un proyecto HULC.
+    Puede redirigir la salida de resultados a un archivo para su uso posterior:
+        hulc2envolventecte DIRECTORIO > archivo_salida.json
+",
+            PROGNAME
+        );
         exit(1)
     });
 
@@ -117,6 +113,7 @@ fn main() -> Result<(), ExitFailure> {
     );
 
     let elementos_envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
+    eprintln!("Localizada definición de elementos de la envolvente");
 
     let area_util = tbl.compute_autil(&elementos_envolvente.claves());
     eprintln!("Area útil: {} m2", area_util);
