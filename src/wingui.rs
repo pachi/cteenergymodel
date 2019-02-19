@@ -44,6 +44,26 @@ static mut MODEL: Model = Model {
     h_edit_msg: 0 as HWND,
 };
 
+// Configura carpetas de entrada a directorio por defecto de HULC2018 y de salida al HOME
+fn setup_folders() {
+    use winapi::shared::winerror::SUCCEEDED;
+    use winapi::um::shlobj::{SHGetFolderPathW, CSIDL_PROFILE};
+
+    unsafe {
+        // Dir in
+        MODEL.dir_in = Box::leak("C:\\ProyectosCTEyCEE\\CTEHE2018\\Proyectos".to_string().into_boxed_str());
+        // Dir out
+        let mut buffer = [0; MAX_PATH];
+        if SUCCEEDED(SHGetFolderPathW(null_mut(), CSIDL_PROFILE, null_mut(), 0, buffer.as_mut_ptr())) {
+            let len = (0_usize..MAX_PATH)
+            .find(|&n| buffer[n] == 0)
+            .expect("Couldn't find null terminator");
+            MODEL.dir_out = Box::leak(String::from_utf16_lossy(&buffer[..len]).into_boxed_str());
+            eprintln!("Fijado dir_out a {}", MODEL.dir_out);
+        }
+    }
+}
+
 // Control IDs
 const IDC_BUTTON_DIRIN: WORD = 101;
 const IDC_LABEL_DIRIN: WORD = 102;
