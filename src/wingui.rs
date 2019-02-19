@@ -51,15 +51,24 @@ fn setup_folders() {
 
     unsafe {
         // Dir in
-        MODEL.dir_in = Box::leak("C:\\ProyectosCTEyCEE\\CTEHE2018\\Proyectos".to_string().into_boxed_str());
+        MODEL.dir_in = Box::leak(
+            "C:\\ProyectosCTEyCEE\\CTEHE2018\\Proyectos"
+                .to_string()
+                .into_boxed_str(),
+        );
         // Dir out
         let mut buffer = [0; MAX_PATH];
-        if SUCCEEDED(SHGetFolderPathW(null_mut(), CSIDL_PROFILE, null_mut(), 0, buffer.as_mut_ptr())) {
+        if SUCCEEDED(SHGetFolderPathW(
+            null_mut(),
+            CSIDL_PROFILE,
+            null_mut(),
+            0,
+            buffer.as_mut_ptr(),
+        )) {
             let len = (0_usize..MAX_PATH)
-            .find(|&n| buffer[n] == 0)
-            .expect("Couldn't find null terminator");
+                .find(|&n| buffer[n] == 0)
+                .expect("Couldn't find null terminator");
             MODEL.dir_out = Box::leak(String::from_utf16_lossy(&buffer[..len]).into_boxed_str());
-            eprintln!("Fijado dir_out a {}", MODEL.dir_out);
         }
     }
 }
@@ -146,7 +155,12 @@ fn append_to_edit(txt: &str) {
         let h_edit = MODEL.h_edit_msg;
         let tlen = GetWindowTextLengthW(h_edit);
         SendMessageW(h_edit, EM_SETSEL.into(), tlen as WPARAM, tlen as LPARAM); // Select the end pos
-        SendMessageW(h_edit, EM_REPLACESEL.into(), 0, to_wstring(txt).as_ptr() as LPARAM); // Append text to current pos and scroll down
+        SendMessageW(
+            h_edit,
+            EM_REPLACESEL.into(),
+            0,
+            to_wstring(txt).as_ptr() as LPARAM,
+        ); // Append text to current pos and scroll down
     }
 }
 
@@ -293,7 +307,7 @@ unsafe fn create_gui(hparent: HWND) {
         to_wstring("3. ¡Convertir a EnvolventeCTE!").as_ptr(),
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON | BS_TEXT,
         10,  // x
-        90, // y
+        90,  // y
         300, // w
         60,  // h
         hparent,
@@ -306,11 +320,18 @@ unsafe fn create_gui(hparent: HWND) {
         0,
         to_wstring("edit").as_ptr(),
         to_wstring(&crate::get_copy()).as_ptr(),
-        WS_VSCROLL | WS_BORDER | WS_CHILD | ES_MULTILINE | ES_READONLY | WS_VISIBLE | WS_TABSTOP | SS_LEFT,
+        WS_VSCROLL
+            | WS_BORDER
+            | WS_CHILD
+            | ES_MULTILINE
+            | ES_READONLY
+            | WS_VISIBLE
+            | WS_TABSTOP
+            | SS_LEFT,
         10,  // x
         160, // y
         600, // w
-        300,  // h
+        300, // h
         hparent,
         IDC_LABEL_MSG as HMENU,
         hinstance,
@@ -401,12 +422,18 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
 }
 
 fn do_convert() {
-    use crate::{ utils, ctehexml, tbl, kyg, EnvolventeCteData, serde_json};
+    use crate::{ctehexml, kyg, serde_json, tbl, utils, EnvolventeCteData};
     let dir_in = unsafe { MODEL.dir_in.clone() };
     let dir_out = unsafe { MODEL.dir_out.clone() };
 
-    append_to_edit(&format!("\n\nUsando como directorio de proyecto de HULC: '{}'", dir_in));
-    append_to_edit(&format!("\nUsando como directorio de salida: '{}'", dir_out));
+    append_to_edit(&format!(
+        "\n\nUsando como directorio de proyecto de HULC: '{}'",
+        dir_in
+    ));
+    append_to_edit(&format!(
+        "\nUsando como directorio de salida: '{}'",
+        dir_out
+    ));
 
     let hulcfiles = match utils::find_hulc_files(&dir_in) {
         Ok(hulcfiles) => {
@@ -418,7 +445,7 @@ fn do_convert() {
         }
         _ => {
             append_to_edit("\nERROR: No se han encontrado los archivos .ctehexml, .tbl o .kyg en el directorio de proyecto.");
-            return
+            return;
         }
     };
 
@@ -432,7 +459,7 @@ fn do_convert() {
         }
         _ => {
             append_to_edit("\nERROR: No se ha encontrado la zona climática o los coeficientes de transmisión de energía solar g_gl;sh;wi");
-            return
+            return;
         }
     };
 
@@ -447,7 +474,7 @@ fn do_convert() {
         }
         _ => {
             append_to_edit("\nERROR: No se ha localizado la definición de espacios y elementos en el archivo .tbl");
-            return
+            return;
         }
     };
 
@@ -458,7 +485,7 @@ fn do_convert() {
         }
         _ => {
             append_to_edit("\nERROR: No se ha podido interpretar correctamente el archivo .kyg de elementos de la envolvente");
-            return
+            return;
         }
     };
 
@@ -487,7 +514,10 @@ fn do_convert() {
 
 pub fn run_wingui() {
     setup_folders();
-    let hwnd = create_main_window("hulc2envolventecte_gui", "Conversión de HULC a EnvolventeCTE")
-        .expect("Error al crear la ventana principal!");
+    let hwnd = create_main_window(
+        "hulc2envolventecte_gui",
+        "Conversión de HULC a EnvolventeCTE",
+    )
+    .expect("Error al crear la ventana principal!");
     run_message_loop(hwnd);
 }
