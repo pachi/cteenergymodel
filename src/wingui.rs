@@ -500,16 +500,38 @@ fn do_convert() {
     };
     match serde_json::to_string_pretty(&envolvente_data) {
         Ok(json) => {
-            append_to_edit("\n\nSe ha generado el archivo de resultados en formato JSON de EnvolventeCTE:");
-            append_to_edit(&format!("    {}\\envolventecte.json", dir_out));
-            println!("{}", json);
-            // TODO: escribir resultados en archivo de texto
+            use std::path::Path;
+            use uuid::Uuid;
+            // No podemos hacer un hash repetible así que usamos uuid
+            // Esto es porque los uuid de los elementos se regeneran en cada conversión
+            let suuid = &(Uuid::new_v4()).to_hyphenated().to_string()[..8];
+            let path = Path::new(dir_out).join(&format!("envolventecte-{}.json", &suuid));
+            if let Err(_) = write_file(&path, &json) {
+                append_to_edit(
+                    &format!("\nERROR: no se ha podido escribir en la ruta {}", path.display())
+                );
+            }
+            append_to_edit(
+                "\n\nSe ha guardado el archivo de resultados en formato JSON de EnvolventeCTE:",
+            );
+            append_to_edit(&format!("    {}", path.display()));
         }
         _ => {
-            append_to_edit("\nERROR: no se ha podido guardar la información en formato JSON de EnvolventeCTE");
-            return
+            append_to_edit(
+                "\nERROR: no se ha podido generar la información en formato JSON de EnvolventeCTE",
+            );
+            return;
         }
     };
+}
+
+// Guarda archivo a disco
+fn write_file(path: &std::path::Path, data: &str) -> std::io::Result<()> {
+    use std::fs::File;
+    use std::io::prelude::*;
+
+    let mut file = File::create(path)?;
+    file.write_all(data.as_bytes())
 }
 
 pub fn run_wingui() {
