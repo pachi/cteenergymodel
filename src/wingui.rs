@@ -12,7 +12,10 @@
 /// See Tomaka's error handling strategy for HRESULT (check_result): https://github.com/tomaka/cpal/blob/master/src/wasapi/mod.rs
 /// See retep998's string handling in https://users.rust-lang.org/t/tidy-pattern-to-work-with-lpstr-mutable-char-array/2976
 use std::error::Error;
+use std::path::Path;
 use std::ptr::null_mut;
+use uuid::Uuid;
+
 use winapi::shared::minwindef::*;
 use winapi::shared::ntdef::*;
 use winapi::shared::windef::*;
@@ -48,13 +51,7 @@ fn setup_folders() {
     use winapi::um::shlobj::{SHGetFolderPathW, CSIDL_PROFILE};
 
     unsafe {
-        // Dir in
-        MODEL.dir_in = Box::leak(
-            "C:\\ProyectosCTEyCEE\\CTEHE2018\\Proyectos"
-                .to_string()
-                .into_boxed_str(),
-        );
-        // Dir out
+        // Dir out - por defecto es el home del usuario
         let mut buffer = [0; MAX_PATH];
         if SUCCEEDED(SHGetFolderPathW(
             null_mut(),
@@ -68,6 +65,15 @@ fn setup_folders() {
                 .expect("Couldn't find null terminator");
             MODEL.dir_out = Box::leak(String::from_utf16_lossy(&buffer[..len]).into_boxed_str());
         }
+
+        // Dir in - por defecto es el directorio de proyectos de CTEHE2018 o el Home
+        const DEFAULT_DIR_IN: &str = "C:\\ProyectosCTEyCEE\\CTEHE2018\\Proyectos";
+        let out_dir = match Path::new(DEFAULT_DIR_IN).is_dir() {
+            true => DEFAULT_DIR_IN,
+            false => MODEL.dir_out.clone(),
+        };
+
+        MODEL.dir_in = Box::leak(out_dir.to_string().into_boxed_str());
     }
 }
 
@@ -498,8 +504,6 @@ fn do_convert() {
     };
     match serde_json::to_string_pretty(&envolvente_data) {
         Ok(json) => {
-            use std::path::Path;
-            use uuid::Uuid;
             // No podemos hacer un hash repetible así que usamos uuid
             // Esto es porque los uuid de los elementos se regeneran en cada conversión
             let suuid = &(Uuid::new_v4()).to_hyphenated().to_string()[..8];
