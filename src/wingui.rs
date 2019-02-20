@@ -23,7 +23,6 @@ use winapi::um::winuser::*;
 struct Model {
     dir_in: &'static str,
     dir_out: &'static str,
-    // file_out: &'static str,
     h_btn_prj_in: HWND,
     h_label_prj_in: HWND,
     h_btn_prj_out: HWND,
@@ -35,7 +34,6 @@ struct Model {
 static mut MODEL: Model = Model {
     dir_in: "",
     dir_out: "",
-    // file_out: "",
     h_btn_prj_in: 0 as HWND,
     h_label_prj_in: 0 as HWND,
     h_btn_prj_out: 0 as HWND,
@@ -507,9 +505,10 @@ fn do_convert() {
             let suuid = &(Uuid::new_v4()).to_hyphenated().to_string()[..8];
             let path = Path::new(dir_out).join(&format!("envolventecte-{}.json", &suuid));
             if let Err(_) = write_file(&path, &json) {
-                append_to_edit(
-                    &format!("\nERROR: no se ha podido escribir en la ruta {}", path.display())
-                );
+                append_to_edit(&format!(
+                    "\nERROR: no se ha podido escribir en la ruta {}",
+                    path.display()
+                ));
             }
             append_to_edit(
                 "\n\nSe ha guardado el archivo de resultados en formato JSON de EnvolventeCTE:",
