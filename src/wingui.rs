@@ -365,11 +365,13 @@ unsafe fn get_folder_path() -> String {
     };
     let mut sel_dir: String = "".to_string();
 
+    // Inicializar COM
     let mut hr = CoInitializeEx(
         null_mut(),
         COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE,
     );
     if SUCCEEDED(hr) {
+        // Crear diálogo
         let mut pfd: *mut IFileDialog = std::mem::uninitialized();
         hr = CoCreateInstance(
             &CLSID_FileOpenDialog,
@@ -379,6 +381,7 @@ unsafe fn get_folder_path() -> String {
             &mut pfd as *mut *mut IFileDialog as *mut _,
         );
         if SUCCEEDED(hr) {
+            // Fijar opciones del selector
             let mut fop: FILEOPENDIALOGOPTIONS = std::mem::zeroed();
             if SUCCEEDED((*pfd).GetOptions(&mut fop)) {
                 (*pfd).SetOptions(
@@ -388,7 +391,10 @@ unsafe fn get_folder_path() -> String {
                         | FOS_FORCEFILESYSTEM,
                 );
             }
+
+            // Mostrar diálogo
             if SUCCEEDED((*pfd).Show(null_mut())) {
+                // Recoger resultados
                 let mut psi: *mut IShellItem = std::mem::zeroed();
                 if SUCCEEDED((*pfd).GetResult(&mut psi)) {
                     // Provide a pointer to a buffer so windows can swap it for its own buffer
@@ -403,6 +409,7 @@ unsafe fn get_folder_path() -> String {
             }
             (*pfd).Release();
         }
+        // Cerrar COM
         CoUninitialize();
     }
     sel_dir
