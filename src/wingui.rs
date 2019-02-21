@@ -25,22 +25,16 @@ use winapi::um::winuser::*;
 // Global Model to keep state
 struct Model {
     dir_in: &'static str,
-    dir_out: &'static str,
     h_btn_prj_in: HWND,
     h_label_prj_in: HWND,
-    h_btn_prj_out: HWND,
-    h_label_prj_out: HWND,
     h_btn_run: HWND,
     h_edit_msg: HWND,
 }
 
 static mut MODEL: Model = Model {
     dir_in: "",
-    dir_out: "",
     h_btn_prj_in: 0 as HWND,
     h_label_prj_in: 0 as HWND,
-    h_btn_prj_out: 0 as HWND,
-    h_label_prj_out: 0 as HWND,
     h_btn_run: 0 as HWND,
     h_edit_msg: 0 as HWND,
 };
@@ -51,37 +45,34 @@ fn setup_folders() {
     use winapi::um::shlobj::{SHGetFolderPathW, CSIDL_PROFILE};
 
     unsafe {
-        // Dir out - por defecto es el home del usuario
-        let mut buffer = [0; MAX_PATH];
-        if SUCCEEDED(SHGetFolderPathW(
-            null_mut(),
-            CSIDL_PROFILE,
-            null_mut(),
-            0,
-            buffer.as_mut_ptr(),
-        )) {
+        // Dir out - por defecto es el directorio de proyectos de CTEHE2018 o el home del usuario
+        const DEFAULT_DIR_IN: &str = "C:\\ProyectosCTEyCEE\\CTEHE2018\\Proyectos";
+
+        let dir_in = if Path::new(DEFAULT_DIR_IN).is_dir() {
+            DEFAULT_DIR_IN.to_string()
+        } else {
+             let mut buffer = [0; MAX_PATH];
+            if !SUCCEEDED(SHGetFolderPathW(
+                null_mut(),
+                CSIDL_PROFILE,
+                null_mut(),
+                0,
+                buffer.as_mut_ptr(),
+            )) {
+                return; // TODO: sacar error
+            }
             let len = (0_usize..MAX_PATH)
                 .find(|&n| buffer[n] == 0)
                 .expect("Couldn't find null terminator");
-            MODEL.dir_out = Box::leak(String::from_utf16_lossy(&buffer[..len]).into_boxed_str());
-        }
-
-        // Dir in - por defecto es el directorio de proyectos de CTEHE2018 o el Home
-        const DEFAULT_DIR_IN: &str = "C:\\ProyectosCTEyCEE\\CTEHE2018\\Proyectos";
-        let out_dir = match Path::new(DEFAULT_DIR_IN).is_dir() {
-            true => DEFAULT_DIR_IN,
-            false => MODEL.dir_out.clone(),
+            String::from_utf16_lossy(&buffer[..len])
         };
-
-        MODEL.dir_in = Box::leak(out_dir.to_string().into_boxed_str());
+        MODEL.dir_in = Box::leak(dir_in.into_boxed_str());
     }
 }
 
 // Control IDs
 const IDC_BUTTON_DIRIN: WORD = 101;
 const IDC_LABEL_DIRIN: WORD = 102;
-const IDC_BUTTON_DIROUT: WORD = 111;
-const IDC_LABEL_DIROUT: WORD = 112;
 const IDC_BUTTON_RUN: WORD = 114;
 const IDC_LABEL_MSG: WORD = 115;
 
@@ -130,17 +121,9 @@ pub unsafe extern "system" fn window_proc(
                         SetWindowTextW(MODEL.h_label_prj_in, to_wstring(&MODEL.dir_in).as_ptr());
                     }
                 }
-                IDC_BUTTON_DIROUT => {
-                    // Clicked button 2
-                    MODEL.dir_out = Box::leak(get_folder_path().into_boxed_str());
-                    SetWindowTextW(MODEL.h_label_prj_out, to_wstring(&MODEL.dir_out).as_ptr());
-                }
                 IDC_BUTTON_RUN => {
                     // Clicked button 3
-                    append_to_edit(&format!(
-                            "Generando archivo EnvolventeCTE del proyecto HULC: '{}'. Guardando resultados en '{}\\envolventecte.json'",
-                            &MODEL.dir_in, &MODEL.dir_out
-                        ));
+                    append_to_edit("\n\n**Generando archivo EnvolventeCTE**\n");
                     do_convert();
                 }
                 _ => {
@@ -213,7 +196,7 @@ fn create_main_window(name: &str, title: &str) -> Result<HWND, Box<dyn Error>> {
             CW_USEDEFAULT,                    // Int x
             CW_USEDEFAULT,                    // Int y
             630,                              // Int nWidth
-            510,                              // Int nHeight
+            470,                              // Int nHeight
             null_mut(),                       // hWndParent
             null_mut(),                       // hMenu
             hinstance,                        // hInstance
@@ -275,43 +258,13 @@ unsafe fn create_gui(hparent: HWND) {
         null_mut(),
     );
 
-    MODEL.h_btn_prj_out = CreateWindowExW(
-        0,
-        to_wstring("button").as_ptr(),
-        to_wstring("2. Directorio de salida").as_ptr(),
-        WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON | BS_TEXT,
-        10,  // x
-        50,  // y
-        300, // w
-        30,  // h
-        hparent,
-        IDC_BUTTON_DIROUT as HMENU,
-        hinstance,
-        null_mut(),
-    );
-
-    MODEL.h_label_prj_out = CreateWindowExW(
-        0,
-        to_wstring("static").as_ptr(),
-        to_wstring(MODEL.dir_out).as_ptr(),
-        WS_CHILD | WS_VISIBLE | WS_TABSTOP | SS_LEFT,
-        320, // x
-        50,  // y
-        300, // w
-        30,  // h
-        hparent,
-        IDC_LABEL_DIROUT as HMENU,
-        hinstance,
-        null_mut(),
-    );
-
     MODEL.h_btn_run = CreateWindowExW(
         0,
         to_wstring("button").as_ptr(),
-        to_wstring("3. ¡Convertir a EnvolventeCTE!").as_ptr(),
+        to_wstring("¡Generar archivo de EnvolventeCTE!").as_ptr(),
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON | BS_TEXT,
         10,  // x
-        90,  // y
+        50,  // y
         300, // w
         60,  // h
         hparent,
@@ -333,7 +286,7 @@ unsafe fn create_gui(hparent: HWND) {
             | WS_TABSTOP
             | SS_LEFT,
         10,  // x
-        160, // y
+        120, // y
         600, // w
         300, // h
         hparent,
@@ -434,17 +387,7 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
 
 fn do_convert() {
     use crate::{ctehexml, kyg, serde_json, tbl, utils, EnvolventeCteData};
-    let dir_in = unsafe { MODEL.dir_in.clone() };
-    let dir_out = unsafe { MODEL.dir_out.clone() };
-
-    append_to_edit(&format!(
-        "\n\nUsando como directorio de proyecto de HULC: '{}'",
-        dir_in
-    ));
-    append_to_edit(&format!(
-        "\nUsando como directorio de salida: '{}'",
-        dir_out
-    ));
+    let dir_in = unsafe { MODEL.dir_in };
 
     let hulcfiles = match utils::find_hulc_files(&dir_in) {
         Ok(hulcfiles) => {
@@ -514,8 +457,8 @@ fn do_convert() {
             // No podemos hacer un hash repetible así que usamos uuid
             // Esto es porque los uuid de los elementos se regeneran en cada conversión
             let suuid = &(Uuid::new_v4()).to_hyphenated().to_string()[..8];
-            let path = Path::new(dir_out).join(&format!("envolventecte-{}.json", &suuid));
-            if let Err(_) = write_file(&path, &json) {
+            let path = Path::new(dir_in).join(&format!("envolventecte-{}.json", &suuid));
+            if write_file(&path, &json).is_err() {
                 append_to_edit(&format!(
                     "\nERROR: no se ha podido escribir en la ruta {}",
                     path.display()
