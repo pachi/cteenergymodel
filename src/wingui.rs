@@ -248,7 +248,7 @@ unsafe fn create_gui(hparent: HWND) {
     MODEL.h_btn_prj_in = CreateWindowExW(
         0,
         to_wstring("Button").as_ptr(),
-        to_wstring("1. Directorio de proyecto de HULC").as_ptr(),
+        to_wstring("Directorio de proyecto de HULC").as_ptr(),
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_DEFPUSHBUTTON | BS_TEXT,
         10,  // x
         10,  // y
@@ -455,7 +455,7 @@ fn do_convert() {
             hulcfiles
         }
         _ => {
-            append_to_edit("\nERROR: No se han encontrado los archivos .ctehexml, .tbl o .kyg en el directorio de proyecto.");
+            append_to_edit(&format!("\nERROR: No se han encontrado los archivos .ctehexml, .tbl o .kyg en el directorio de proyecto {}.", dir_in));
             return;
         }
     };
@@ -522,7 +522,7 @@ fn do_convert() {
                 ));
             }
             append_to_edit(
-                "\n\nSe ha guardado el archivo de resultados en formato JSON de EnvolventeCTE:",
+                "\n\nSe ha guardado el archivo de resultados en formato JSON de EnvolventeCTE:\n",
             );
             append_to_edit(&format!("    {}", path.display()));
         }
