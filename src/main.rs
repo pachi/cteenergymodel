@@ -48,8 +48,8 @@ struct EnvolventeCteData {
     envolvente: kyg::ElementosEnvolvente,
 }
 
-const PROGNAME: &str = "hulc2envolventecte";
-const VERSION: &str = "1.0";
+const PROGNAME: &str = env!("CARGO_PKG_NAME");
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 fn get_copy() -> String {
     format!(
@@ -79,15 +79,16 @@ fn main() -> Result<(), ExitFailure> {
             "Uso: {} DIRECTORIO
 
 Argumentos:
-    DIRECTORIO     Directorio en el que se localizarán los archivos de datos de HULC
+    DIRECTORIO     Directorio del proyecto de HULC
 
 Descripción:
+    Exporta al formato JSON de EnvolventeCTE los datos de un proyecto HULC.
 
     Emite en formato JSON de EnvolventeCTE los datos de un proyecto HULC.
     Puede redirigir la salida de resultados a un archivo para su uso posterior:
-        hulc2envolventecte DIRECTORIO > archivo_salida.json
+        {} DIRECTORIO > archivo_salida.json
 ",
-            PROGNAME
+            PROGNAME, PROGNAME
         );
         exit(1)
     });
