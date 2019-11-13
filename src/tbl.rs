@@ -38,6 +38,22 @@ pub enum ElemType {
     FLOORINT = -5, // forjado interior
 }
 
+impl FromStr for ElemType {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "0" => Ok(ElemType::WALL),
+            "1" => Ok(ElemType::WINDOW),
+            "-2" => Ok(ElemType::WALLADB),
+            "-3" => Ok(ElemType::FLOORGND),
+            "-4" => Ok(ElemType::WALLINT),
+            "-5" => Ok(ElemType::FLOORINT),
+            _ => Err(format_err!("Tipo de elemento desconocido")),
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct Element {
     pub name: String,    // Nombre del elemento
@@ -58,44 +74,21 @@ impl FromStr for Element {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let data: Vec<&str> = s.split_whitespace().collect();
-        if data.len() < 10 {
-            return Err(format_err!(
-                "Número de datos insuficiente. Se esperaban 10 y se encontraron {}",
-                data.len()
-            ));
+        if data.len() != 11 {
+            return Err(format_err!("Formato incorrecto del elemento: {}", s));
         }
-        let name = data[0].to_owned();
-        let area = data[1].parse().unwrap();
-        let u = data[2].parse().unwrap();
-        let w_or_inf = data[3].parse().unwrap();
-        let g_winter = data[4].parse().unwrap();
-        let g_summer = data[5].parse().unwrap();
-        let ang_north = data[6].parse().unwrap();
-        let tilt = data[7].parse().unwrap();
-        let type_i32 = data[8].parse::<i32>().unwrap();
-        let type_ = match type_i32 {
-            0 => ElemType::WALL,
-            1 => ElemType::WINDOW,
-            -2 => ElemType::WALLADB,
-            -3 => ElemType::FLOORGND,
-            -4 => ElemType::WALLINT,
-            -5 => ElemType::FLOORINT,
-            _ => return Err(format_err!("Tipo de elemento desconocido")),
-        };
-        let id_surf = data[9].parse().unwrap();
-        let id_space = data[10].parse().unwrap();
         Ok(Element {
-            name,
-            area,
-            u,
-            w_or_inf,
-            g_winter,
-            g_summer,
-            ang_north,
-            tilt,
-            type_,
-            id_surf,
-            id_space,
+            name: data[0].to_owned(),
+            area: data[1].parse()?,
+            u: data[2].parse()?,
+            w_or_inf: data[3].parse()?,
+            g_winter: data[4].parse()?,
+            g_summer: data[5].parse()?,
+            ang_north: data[6].parse()?,
+            tilt: data[7].parse()?,
+            type_: data[8].parse()?,
+            id_surf: data[9].parse()?,
+            id_space: data[10].parse()?,
         })
     }
 }
@@ -114,23 +107,15 @@ impl FromStr for Space {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let data: Vec<&str> = s.split_whitespace().collect();
-        if data.len() < 5 {
-            return Err(format_err!(
-                "Número de datos insuficiente. Se esperaban 5 y se encontraron {}",
-                data.len()
-            ));
+        if data.len() != 5 {
+            return Err(format_err!("Formato incorrecto del espacio: {}", s));
         }
-        let name = data[0].to_owned();
-        let id_space = data[1].parse().unwrap();
-        let mult = data[2].parse().unwrap();
-        let area = data[3].parse().unwrap();
-        let qint = data[4].parse().unwrap();
         Ok(Space {
-            name,
-            id_space,
-            mult,
-            area,
-            qint,
+            name: data[0].to_owned(),
+            id_space: data[1].parse()?,
+            mult: data[2].parse()?,
+            area: data[3].parse()?,
+            qint: data[4].parse()?,
         })
     }
 }
@@ -171,22 +156,25 @@ pub fn parse(path: &str) -> Result<Tbl, Error> {
     let utf8buf = read_latin1_file(path)?;
 
     // Líneas, eliminando dos primeras líneas de comentarios iniciales
-    let mut lines = utf8buf.lines().collect::<Vec<&str>>().into_iter().skip(2);
+    let mut lines = utf8buf.lines().skip(2); //.collect::<Vec<&str>>().into_iter();
 
     // Número de elementos y espacios
-    let nums: Vec<&str> = lines
+    let nums = lines
         .next()
         .ok_or_else(|| {
-            format_err!("Error al leer el archivo .tbl: no se ha encontrado la línea de número de elementos y espacios")
+            format_err!("Error al leer el archivo .tbl: no se ha localizado el número de elementos y espacios")
         })?
         .split_whitespace()
-        .collect();
-    let numelements = nums[0].parse::<i32>().context(
-        "Error al leer el archivo .tbl: no se ha podido determinar el número de elementos",
-    )?;
-    let numspaces = nums[1].parse::<i32>().context(
-        "Error al leer el archivo .tbl: no se ha podido determinar el número de espacios",
-    )?;
+        .map(|s|
+            s.parse::<i32>()
+                .context("Error al leer el archivo .tbl: no se ha podido determinar el número de elementos")
+        )
+        .collect::<Result<Vec<i32>,_>>()?;
+    if nums.len() < 2 {
+        bail!("Error al leer el archivo .tbl: formato incorrecto del número de elementos")
+    };
+    let numelements = nums[0];
+    let numspaces = nums[1];
 
     // Datos de elementos
     let mut elements: Vec<Element> = Vec::new();
