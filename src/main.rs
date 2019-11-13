@@ -23,9 +23,8 @@ SOFTWARE.
 
 #[macro_use]
 extern crate failure;
+use serde::Serialize;
 use serde_json;
-#[macro_use]
-extern crate serde_derive;
 
 #[cfg(not(windows))]
 use exitfailure::ExitFailure;

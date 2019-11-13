@@ -24,6 +24,7 @@ SOFTWARE.
 use std::collections::HashMap;
 
 use failure::Error;
+use serde::Serialize;
 use uuid::Uuid;
 
 use crate::utils::read_latin1_file;
