@@ -28,6 +28,10 @@ use failure::ResultExt;
 
 use crate::utils::read_latin1_file;
 
+// XXX: esta no puede ser la lista completa ya que faltan al menos:
+// - suelos en contacto con el aire
+// - cubiertas y muros en contacto con el terreno
+// aunque no se han documentado otros en el Archivo.tbl.comentado
 #[derive(Debug)]
 pub enum ElemType {
     WALL = 0,      // muro
