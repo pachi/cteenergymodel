@@ -31,45 +31,45 @@ use crate::utils::read_latin1_file;
 
 #[derive(Debug, Serialize)]
 pub struct Hueco {
-  id: String,
-  nombre: String,
-  orientacion: String,
-  #[serde(rename(serialize = "A"))]
-  a: f32,
-  #[serde(rename(serialize = "U"))]
-  u: f32,
-  #[serde(rename(serialize = "Ff"))]
-  ff: f32,
-  gglshwi: f32,
-  #[serde(rename(serialize = "Fshobst"))]
-  fshobst: f32
+    id: String,
+    nombre: String,
+    orientacion: String,
+    #[serde(rename(serialize = "A"))]
+    a: f32,
+    #[serde(rename(serialize = "U"))]
+    u: f32,
+    #[serde(rename(serialize = "Ff"))]
+    ff: f32,
+    gglshwi: f32,
+    #[serde(rename(serialize = "Fshobst"))]
+    fshobst: f32,
 }
 
 #[derive(Debug, Serialize)]
 pub struct Opaco {
-  id: String,
-  nombre: String,
-  #[serde(rename(serialize = "A"))]
-  a: f32,
-  #[serde(rename(serialize = "U"))]
-  u: f32,
-  btrx: f32 // 0 | 1
+    id: String,
+    nombre: String,
+    #[serde(rename(serialize = "A"))]
+    a: f32,
+    #[serde(rename(serialize = "U"))]
+    u: f32,
+    btrx: f32, // 0 | 1
 }
 
 #[derive(Debug, Serialize)]
 pub struct PT {
-  id: String,
-  nombre: String,
-  #[serde(rename(serialize = "L"))]
-  l: f32,
-  psi: f32
+    id: String,
+    nombre: String,
+    #[serde(rename(serialize = "L"))]
+    l: f32,
+    psi: f32,
 }
 
 #[derive(Debug, Serialize)]
 pub struct ElementosEnvolvente {
-  pub huecos: Vec<Hueco>,
-  pub opacos: Vec<Opaco>,
-  pub pts: Vec<PT>
+    pub huecos: Vec<Hueco>,
+    pub opacos: Vec<Opaco>,
+    pub pts: Vec<PT>,
 }
 
 impl ElementosEnvolvente {
@@ -92,8 +92,10 @@ impl ElementosEnvolvente {
 }
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<ElementosEnvolvente, Error> {
-
+pub fn parse(
+    path: &str,
+    gglshwimap: Option<HashMap<String, f32>>,
+) -> Result<ElementosEnvolvente, Error> {
     //let rg_comment = Regex::new(r"^###")?;
     //let rg_kcoef = Regex::new(r"^\s*Coeficiente K")?;
     //let rg_qsolunknown = Regex::new(r"^\s*\d+;\s*[+-]?[0-9]*\.?[0-9]+\s*$")?;
@@ -102,8 +104,11 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
 
     let utf8buf = read_latin1_file(path)?;
 
-    let lines = utf8buf.lines()
-        .map(|e| e.trim()).collect::<Vec<&str>>().into_iter();
+    let lines = utf8buf
+        .lines()
+        .map(|e| e.trim())
+        .collect::<Vec<&str>>()
+        .into_iter();
 
     let mut huecos: Vec<Hueco> = Vec::new();
     let mut opacos: Vec<Opaco> = Vec::new();
@@ -121,49 +126,43 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
                         bail!("Línea de datos de hueco con formato desconocido")
                     }
                     let (nombre, a, u, orienta, ff) = (vv[1], vv[2], vv[3], vv[4], vv[5]);
-                    huecos.push(
-                        Hueco {
-                            id: (Uuid::new_v4()).to_hyphenated().to_string(),
-                            nombre: nombre.to_string(),
-                            orientacion: orienta.replace("O", "W").to_string(),
-                            a: a.parse()?,
-                            u: u.parse()?,
-                            ff: ff.parse::<f32>()? / 100.0_f32,
-                            gglshwi: 1.0, // Se completa a posteriori con datos del .ctehexml
-                            fshobst: 1.0 // Se completa a posteriori con datos de los campos qsolwindow
-                        }
-                    );
-                    },
+                    huecos.push(Hueco {
+                        id: (Uuid::new_v4()).to_hyphenated().to_string(),
+                        nombre: nombre.to_string(),
+                        orientacion: orienta.replace("O", "W").to_string(),
+                        a: a.parse()?,
+                        u: u.parse()?,
+                        ff: ff.parse::<f32>()? / 100.0_f32,
+                        gglshwi: 1.0, // Se completa a posteriori con datos del .ctehexml
+                        fshobst: 1.0, // Se completa a posteriori con datos de los campos qsolwindow
+                    });
+                }
                 "Muro" => {
                     if vv.len() < 5 {
                         bail!("Línea de datos de opaco con formato desconocido")
                     }
                     let (nombre, a, u, btrx) = (vv[1], vv[2], vv[3], vv[4]);
-                    opacos.push(
-                        Opaco {
-                            id: (Uuid::new_v4()).to_hyphenated().to_string(),
-                            nombre: nombre.to_string(),
-                            a: a.parse()?,
-                            u: u.parse()?,
-                            btrx: btrx.parse()?
-                        }
-                    );
-                    },
+                    opacos.push(Opaco {
+                        id: (Uuid::new_v4()).to_hyphenated().to_string(),
+                        nombre: nombre.to_string(),
+                        a: a.parse()?,
+                        u: u.parse()?,
+                        btrx: btrx.parse()?,
+                    });
+                }
                 "PPTT" => {
                     if vv.len() < 4 {
                         bail!("Línea de datos de hueco con formato desconocido")
                     }
                     let (l, psi, nombre) = (vv[1], vv[2], vv[3]);
-                    pts.push(
-                        PT {
-                            id: (Uuid::new_v4()).to_hyphenated().to_string(),
-                            nombre: nombre.to_string(),
-                            l: l.parse()?,
-                            psi: psi.parse()?
-                        }
-                    )
-                    },
-                _ => println!("Desconocido")
+                    pts.push(PT {
+                        id: (Uuid::new_v4()).to_hyphenated().to_string(),
+                        nombre: nombre.to_string(),
+                        l: l.parse()?,
+                        psi: psi.parse()?,
+                    })
+                }
+                _ => println!("Desconocido"),
             };
         // Ganancias solares de hueco
         } else if line.starts_with('"') {
@@ -171,12 +170,14 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
             if vv.len() < 8 {
                 bail!("Línea de datos de ganancias solares de hueco con formato desconocido")
             }
-            let (namequot, _azim, _a, htot, _h1, h2, _h3, _ganancia) = (vv[0], vv[1], vv[2], vv[3], vv[4], vv[5], vv[6], vv[7]);
+            let (namequot, _azim, _a, htot, _h1, h2, _h3, _ganancia) =
+                (vv[0], vv[1], vv[2], vv[3], vv[4], vv[5], vv[6], vv[7]);
             let name = namequot.trim_matches('"').to_string();
             let fshobst_nornd = h2.parse::<f32>()? / htot.parse::<f32>()?;
             let fshobst = (fshobst_nornd * 100.0).round() / 100.0;
             qsolvalues.insert(name, fshobst);
-        } else { //  rg_comment || rg_kcoef || rg_qsolunknown
+        } else {
+            //  rg_comment || rg_kcoef || rg_qsolunknown
             continue;
         }
     }
@@ -190,9 +191,13 @@ pub fn parse(path: &str, gglshwimap: Option<HashMap<String, f32>>) -> Result<Ele
     if let Some(gglshwimap) = gglshwimap {
         for mut hueco in &mut huecos {
             if let Some(val) = gglshwimap.get(&hueco.nombre) {
-            hueco.gglshwi = *val;
+                hueco.gglshwi = *val;
             }
         }
     }
-    Ok(ElementosEnvolvente { huecos, opacos, pts })
+    Ok(ElementosEnvolvente {
+        huecos,
+        opacos,
+        pts,
+    })
 }
