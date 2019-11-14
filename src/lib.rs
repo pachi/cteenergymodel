@@ -24,87 +24,36 @@ SOFTWARE.
 #[macro_use]
 extern crate failure;
 use serde::Serialize;
-use serde_json;
-
-#[cfg(not(windows))]
-use exitfailure::ExitFailure;
-#[cfg(not(windows))]
-use std::process::exit;
 
 mod ctehexml;
 mod kyg;
 mod tbl;
 mod utils;
 
-#[cfg(windows)]
-mod wingui;
-
 #[derive(Debug, Serialize)]
-struct EnvolventeCteData {
+pub struct EnvolventeCteData {
     #[serde(rename(serialize = "Autil"))]
-    autil: f32,
-    clima: String,
-    envolvente: kyg::ElementosEnvolvente,
+    pub autil: f32,
+    pub clima: String,
+    pub envolvente: kyg::ElementosEnvolvente,
 }
 
-const PROGNAME: &str = env!("CARGO_PKG_NAME");
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-
-fn get_copy() -> String {
-    format!(
-        "{} {} - Exportación de datos de HULC a EnvolventeCTE
-
-Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
-                   Daniel Jiménez González <danielj@ietcc.csic.es>
-                   Marta Sorribes Gil <msorribes@ietcc.csic.es>
-
-Publicado bajo licencia MIT
-",
-        PROGNAME, VERSION
-    )
-}
-
-#[cfg(windows)]
-fn main() {
-    wingui::run_wingui();
-}
-
-#[cfg(not(windows))]
-fn main() -> Result<(), ExitFailure> {
-    eprintln!("{}\n", get_copy());
-
-    let dir = std::env::args().nth(1).unwrap_or_else(|| {
-        eprintln!(
-            "Uso: {} DIRECTORIO
-
-Argumentos:
-    DIRECTORIO     Directorio del proyecto de HULC
-
-Descripción:
-    Exporta al formato JSON de EnvolventeCTE los datos de un proyecto HULC.
-
-    Emite en formato JSON de EnvolventeCTE los datos de un proyecto HULC.
-    Puede redirigir la salida de resultados a un archivo para su uso posterior:
-        {} DIRECTORIO > archivo_salida.json
-",
-            PROGNAME, PROGNAME
-        );
-        exit(1)
-    });
-
+pub fn convert_project_dir(dir: &str) -> Result<EnvolventeCteData, failure::Error> {
+    // Localiza archivos
     let hulcfiles = utils::find_hulc_files(&dir)?;
-
     eprintln!("Localizados archivos de datos en '{}'", dir);
     eprintln!("- {}", hulcfiles.ctehexml);
     eprintln!("- {}", hulcfiles.tbl);
     eprintln!("- {}", hulcfiles.kyg);
 
+    // Interpreta .ctehexml
     let ctehexmldata = ctehexml::parse(&hulcfiles.ctehexml)?;
     eprintln!(
         "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
         ctehexmldata.climate
     );
 
+    // Interpreta .tbl
     let tbl = tbl::parse(&hulcfiles.tbl)?;
     eprintln!(
         "Localizados {} espacios y {} elementos",
@@ -112,27 +61,19 @@ Descripción:
         tbl.elements.len()
     );
 
+    // Interpreta .kyg
     let elementos_envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
     eprintln!("Localizada definición de elementos de la envolvente");
 
+    // Calcula área útil
     let area_util = tbl.compute_autil(&elementos_envolvente.claves());
     eprintln!("Area útil: {} m2", area_util);
 
-    // Salida en JSON
-    let envolvente_data = EnvolventeCteData {
+    // Salida de datos
+    let data = EnvolventeCteData {
         autil: area_util,
         clima: ctehexmldata.climate,
         envolvente: elementos_envolvente,
     };
-    match serde_json::to_string_pretty(&envolvente_data) {
-        Ok(json) => {
-            eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");
-            println!("{}", json);
-        }
-        _ => {
-            eprintln!("Error al guardar la información en formato JSON de EnvolventeCTE");
-            exit(1);
-        }
-    }
-    Ok(())
+    Ok(data)
 }
