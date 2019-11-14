@@ -21,14 +21,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#[macro_use]
-extern crate failure;
-use serde::Serialize;
-
 mod ctehexml;
 mod kyg;
 mod tbl;
 mod utils;
+
+#[macro_use]
+extern crate failure;
+
+use failure::Error;
+use serde::Serialize;
+use serde_json;
+use std::path::PathBuf;
+
+use utils::find_first_file;
+
+#[derive(Debug)]
+pub struct HulcFiles {
+    pub ctehexml: String,
+    pub tbl: String,
+    pub kyg: String,
+}
 
 #[derive(Debug, Serialize)]
 pub struct EnvolventeCteData {
@@ -38,14 +51,48 @@ pub struct EnvolventeCteData {
     pub envolvente: kyg::ElementosEnvolvente,
 }
 
-pub fn convert_project_dir(dir: &str) -> Result<EnvolventeCteData, failure::Error> {
-    // Localiza archivos
-    let hulcfiles = utils::find_hulc_files(&dir)?;
-    eprintln!("Localizados archivos de datos en '{}'", dir);
-    eprintln!("- {}", hulcfiles.ctehexml);
-    eprintln!("- {}", hulcfiles.tbl);
-    eprintln!("- {}", hulcfiles.kyg);
+impl EnvolventeCteData {
+    pub fn as_json(&self) -> Result<String, Error> {
+        let json = serde_json::to_string_pretty(&self)?;
+        Ok(json)
+    }
+}
 
+// Localiza los archivos relevantes
+pub fn find_hulc_files(basedir: &str) -> Result<HulcFiles, Error> {
+    if !PathBuf::from(basedir).exists() {
+        bail!("No se ha localizado el directorio base {}", basedir);
+    }
+
+    let ctehexmlpattern = [basedir, "*.ctehexml"]
+        .iter()
+        .collect::<PathBuf>()
+        .to_string_lossy()
+        .into_owned();
+    let ctehexmlpath = find_first_file(&ctehexmlpattern)?;
+
+    let tblpattern = [basedir, "NewBDL_O.tbl"]
+        .iter()
+        .collect::<PathBuf>()
+        .to_string_lossy()
+        .into_owned();
+    let tblpath = find_first_file(&tblpattern)?;
+
+    let kygpattern = [basedir, "KyGananciasSolares.txt"]
+        .iter()
+        .collect::<PathBuf>()
+        .to_string_lossy()
+        .into_owned();
+    let kygpath = find_first_file(&kygpattern)?;
+
+    Ok(HulcFiles {
+        ctehexml: ctehexmlpath.to_string_lossy().into_owned(),
+        tbl: tblpath.to_string_lossy().into_owned(),
+        kyg: kygpath.to_string_lossy().into_owned(),
+    })
+}
+
+pub fn collect_project_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
     // Interpreta .ctehexml
     let ctehexmldata = ctehexml::parse(&hulcfiles.ctehexml)?;
     eprintln!(
@@ -76,4 +123,22 @@ pub fn convert_project_dir(dir: &str) -> Result<EnvolventeCteData, failure::Erro
         envolvente: elementos_envolvente,
     };
     Ok(data)
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_test_data() {
+        let hulcfiles = find_hulc_files("tests/data").unwrap();
+        let data = collect_project_data(&hulcfiles).unwrap();
+        assert_eq!(data.autil, 1673.92);
+        assert_eq!(data.clima, "D3");
+        assert_eq!(data.envolvente.huecos.len(), 92);
+        assert_eq!(data.envolvente.opacos.len(), 68);
+        assert_eq!(data.envolvente.pts.len(), 6);
+    }
+
 }

@@ -27,9 +27,8 @@ use exitfailure::ExitFailure;
 use std::process::exit;
 #[cfg(windows)]
 mod wingui;
-use serde_json;
 
-use hulc2envolventecte::convert_project_dir;
+use hulc2envolventecte::{collect_project_data, find_hulc_files};
 
 const PROGNAME: &str = env!("CARGO_PKG_NAME");
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -76,9 +75,18 @@ Descripción:
         exit(1)
     });
 
-    let envolvente_data = convert_project_dir(&dir)?;
+    // Localiza archivos
+    let hulcfiles = find_hulc_files(&dir)?;
+    eprintln!("Localizados archivos de datos en '{}'", dir);
+    eprintln!("- {}", hulcfiles.ctehexml);
+    eprintln!("- {}", hulcfiles.tbl);
+    eprintln!("- {}", hulcfiles.kyg);
 
-    match serde_json::to_string_pretty(&envolvente_data) {
+    // Lee datos
+    let data = collect_project_data(&hulcfiles)?;
+
+    // Convierte a JSON
+    match data.as_json() {
         Ok(json) => {
             eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");
             println!("{}", json);

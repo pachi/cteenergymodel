@@ -33,13 +33,6 @@ use failure::Error;
 use failure::ResultExt;
 use glob::glob;
 
-#[derive(Debug)]
-pub struct HulcFiles {
-    pub ctehexml: String,
-    pub tbl: String,
-    pub kyg: String
-}
-
 // Busca el primer archivo que coincida con el patrón dado
 pub fn find_first_file(pattern: &str) -> Result<PathBuf, Error> {
     let globiter = glob(pattern)?;
@@ -48,31 +41,6 @@ pub fn find_first_file(pattern: &str) -> Result<PathBuf, Error> {
         bail!("No se ha encontrado ningún archivo {}", pattern);
     }
     Ok(results[0].clone())
-}
-
-// Localiza los archivos relevantes
-pub fn find_hulc_files(basedir: &str) -> Result<HulcFiles, Error> {
-    if !PathBuf::from(basedir).exists() {
-        bail!("No se ha localizado el directorio base {}", basedir);
-    }
-
-    let ctehexmlpattern = [basedir, "*.ctehexml"].iter().collect::<PathBuf>()
-        .to_string_lossy().into_owned();
-    let ctehexmlpath = find_first_file(&ctehexmlpattern)?;
-
-    let tblpattern = [basedir, "NewBDL_O.tbl"].iter().collect::<PathBuf>()
-        .to_string_lossy().into_owned();
-    let tblpath = find_first_file(&tblpattern)?;
-
-    let kygpattern = [basedir, "KyGananciasSolares.txt"].iter().collect::<PathBuf>()
-        .to_string_lossy().into_owned();
-    let kygpath = find_first_file(&kygpattern)?;
-
-    Ok(HulcFiles {
-        ctehexml: ctehexmlpath.to_string_lossy().into_owned(),
-        tbl: tblpath.to_string_lossy().into_owned(),
-        kyg: kygpath.to_string_lossy().into_owned()
-    })
 }
 
 // Lee archivo en latin1
