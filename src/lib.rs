@@ -21,11 +21,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+mod bdl;
 mod ctehexml;
 mod kyg;
 mod tbl;
 mod utils;
-mod bdl;
 #[cfg(windows)]
 pub mod wingui;
 
@@ -145,7 +145,6 @@ pub fn collect_project_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, 
     Ok(data)
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -161,4 +160,15 @@ mod tests {
         assert_eq!(data.envolvente.pts.len(), 6);
     }
 
+    #[test]
+    fn parse_test_data2() {
+        let hulcfiles = find_hulc_files("tests/ejemplopmt_HuecosOK").unwrap();
+        // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
+        let data = collect_project_data(&hulcfiles).unwrap();
+        assert_eq!(data.autil, 1673.92);
+        assert_eq!(data.clima, "D3");
+        assert_eq!(data.envolvente.huecos.len(), 92);
+        assert_eq!(data.envolvente.opacos.len(), 68);
+        assert_eq!(data.envolvente.pts.len(), 6);
+    }
 }

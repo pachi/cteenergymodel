@@ -130,9 +130,9 @@ pub fn parse(
                         id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         nombre: nombre.to_string(),
                         orientacion: orienta.replace("O", "W").to_string(),
-                        a: a.parse()?,
-                        u: u.parse()?,
-                        ff: ff.parse::<f32>()? / 100.0_f32,
+                        a: a.replace(",", ".").parse()?,
+                        u: u.replace(",", ".").parse()?,
+                        ff: ff.replace(",", ".").parse::<f32>()? / 100.0_f32,
                         gglshwi: 1.0, // Se completa a posteriori con datos del .ctehexml
                         fshobst: 1.0, // Se completa a posteriori con datos de los campos qsolwindow
                     });
@@ -145,9 +145,9 @@ pub fn parse(
                     opacos.push(Opaco {
                         id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         nombre: nombre.to_string(),
-                        a: a.parse()?,
-                        u: u.parse()?,
-                        btrx: btrx.parse()?,
+                        a: a.replace(",", ".").parse()?,
+                        u: u.replace(",", ".").parse()?,
+                        btrx: btrx.replace(",", ".").parse()?,
                     });
                 }
                 "PPTT" => {
@@ -158,8 +158,8 @@ pub fn parse(
                     pts.push(PT {
                         id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         nombre: nombre.to_string(),
-                        l: l.parse()?,
-                        psi: psi.parse()?,
+                        l: l.replace(",", ".").parse()?,
+                        psi: psi.replace(",", ".").parse()?,
                     })
                 }
                 _ => println!("Desconocido"),
