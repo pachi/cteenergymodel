@@ -29,7 +29,13 @@ use failure::Error;
 
 use crate::utils::read_latin1_file;
 
+#[derive(Debug)]
 pub struct CtehexmlData {
+    // Datos buenos
+    pub datos_generales: String,
+    pub entrada_grafica_lider: String,
+    pub definicion_sistemas: String,
+    // Datos legacy - a eliminar en refactorización
     pub climate: String,
     pub gglshwi: HashMap<String, f32>,
 }
@@ -38,10 +44,35 @@ pub struct CtehexmlData {
 pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
     let utf8buf = read_latin1_file(path)?;
 
+    // Localiza datos en XML
+    let doc = roxmltree::Document::parse(&utf8buf).unwrap();
+    // TODO: solución temporal sin descender en elementos
+    let datos_generales = doc
+        .descendants()
+        .find(|n| n.tag_name().name() == "DatosGenerales")
+        .and_then(|e| e.text())
+        .unwrap_or("")
+        .trim()
+        .to_string();
+    let entrada_grafica_lider = doc
+        .descendants()
+        .find(|n| n.tag_name().name() == "EntradaGraficaLIDER")
+        .and_then(|e| e.text())
+        .unwrap_or("")
+        .trim()
+        .to_string();
+    // TODO: solución temporal sin descender en elementos
+    let definicion_sistemas = doc
+        .descendants()
+        .find(|n| n.tag_name().name() == "Definicion_Sistema")
+        .and_then(|e| e.text())
+        .unwrap_or("")
+        .trim()
+        .to_string();
     // Localiza datos de huecos para extraer gglshwi
     //let rg_window = Regex::new(r#".*"(.*)"\s*=\sWINDOW\s*$"#).unwrap();
     //let rg_wprop = Regex::new(r#".*transmisividadJulio\s*=\s*([\d.]+)"#).unwrap();
-    let mut window_lines = utf8buf
+    let mut window_lines = entrada_grafica_lider
         .lines()
         .filter(|l| {
             (l.contains(" = WINDOW") && !l.contains("WINDOW-FRAME"))
@@ -79,5 +110,11 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .unwrap()
         .to_owned();
 
-    Ok(CtehexmlData { gglshwi, climate })
+    Ok(CtehexmlData {
+        datos_generales,
+        entrada_grafica_lider,
+        definicion_sistemas,
+        gglshwi,
+        climate,
+    })
 }

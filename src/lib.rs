@@ -25,6 +25,7 @@ mod ctehexml;
 mod kyg;
 mod tbl;
 mod utils;
+mod bdl;
 
 #[macro_use]
 extern crate failure;
