@@ -26,6 +26,8 @@ mod kyg;
 mod tbl;
 mod utils;
 mod bdl;
+#[cfg(windows)]
+pub mod wingui;
 
 #[macro_use]
 extern crate failure;
@@ -36,6 +38,23 @@ use serde_json;
 use std::path::PathBuf;
 
 use utils::find_first_file;
+
+pub const PROGNAME: &str = env!("CARGO_PKG_NAME");
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+pub fn get_copytxt() -> String {
+    format!(
+        "{} {} - Exportación de datos de HULC a EnvolventeCTE
+
+Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
+                   Daniel Jiménez González <danielj@ietcc.csic.es>
+                   Marta Sorribes Gil <msorribes@ietcc.csic.es>
+
+Publicado bajo licencia MIT
+",
+        PROGNAME, VERSION
+    )
+}
 
 #[derive(Debug)]
 pub struct HulcFiles {

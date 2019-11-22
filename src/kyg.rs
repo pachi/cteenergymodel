@@ -195,6 +195,7 @@ pub fn parse(
             }
         }
     }
+
     Ok(ElementosEnvolvente {
         huecos,
         opacos,

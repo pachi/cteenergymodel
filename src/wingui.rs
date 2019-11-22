@@ -276,7 +276,7 @@ unsafe fn create_gui(hparent: HWND) {
     MODEL.h_edit_msg = CreateWindowExW(
         0,
         to_wstring("edit").as_ptr(),
-        to_wstring(&crate::get_copy()).as_ptr(),
+        to_wstring(&crate::get_copytxt()).as_ptr(),
         WS_VSCROLL
             | WS_BORDER
             | WS_CHILD
@@ -389,7 +389,7 @@ fn do_convert() {
     use crate::{ctehexml, kyg, serde_json, tbl, utils, EnvolventeCteData};
     let dir_in = unsafe { MODEL.dir_in };
 
-    let hulcfiles = match utils::find_hulc_files(&dir_in) {
+    let hulcfiles = match crate::find_hulc_files(&dir_in) {
         Ok(hulcfiles) => {
             append_to_edit(&format!("\nLocalizados archivos de datos en '{}'", dir_in));
             append_to_edit(&format!("\n  - {}", hulcfiles.ctehexml));

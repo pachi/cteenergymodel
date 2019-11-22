@@ -115,7 +115,7 @@ impl Material {
 pub struct Floor {
     /// nombre de la planta
     pub name: String,
-    /// cota de la planta
+    /// cota de la planta, salvo que no se indique planta y se usa la del edificio
     pub z: f32,
     /// nombres de los espacios que pertenecen a la planta
     pub spaces: Vec<String>,
@@ -291,6 +291,7 @@ impl BdlData {
                 _ => panic!("Error en la estructura de datos. No se han encontrado los datos de LIDER y de USARIO")
             };
 
+        // Parsea bloques
         for block in bdl_part.split("..").map(str::trim) {
             let stanza: Vec<_> = block.splitn(2, '\n').map(str::trim).collect();
             let (bheadline, bdata) = match stanza.as_slice() {
@@ -299,7 +300,7 @@ impl BdlData {
                 _ => panic!("Error al parsear el bloque: '{:?}'", stanza),
             };
 
-            let (bname, btype) = match bheadline.splitn(2, '=').collect::<Vec<_>>().as_slice() {
+            let (bname, btype) = match bheadline.rsplitn(2, '=').collect::<Vec<_>>().as_slice() {
                 [bname, btype] => (bname.trim_matches(|c| c == ' ' || c == '"'), btype.trim()),
                 _ => panic!("Error al parsear encabezado: {}", bheadline),
             };

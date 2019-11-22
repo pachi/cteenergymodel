@@ -25,27 +25,10 @@ SOFTWARE.
 use exitfailure::ExitFailure;
 #[cfg(not(windows))]
 use std::process::exit;
+
 #[cfg(windows)]
-mod wingui;
-
-use hulc2envolventecte::{collect_project_data, find_hulc_files};
-
-const PROGNAME: &str = env!("CARGO_PKG_NAME");
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-
-fn get_copy() -> String {
-    format!(
-        "{} {} - Exportación de datos de HULC a EnvolventeCTE
-
-Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
-                   Daniel Jiménez González <danielj@ietcc.csic.es>
-                   Marta Sorribes Gil <msorribes@ietcc.csic.es>
-
-Publicado bajo licencia MIT
-",
-        PROGNAME, VERSION
-    )
-}
+use hulc2envolventecte::wingui;
+use hulc2envolventecte::{collect_project_data, find_hulc_files, get_copytxt, PROGNAME};
 
 #[cfg(windows)]
 fn main() {
@@ -54,7 +37,7 @@ fn main() {
 
 #[cfg(not(windows))]
 fn main() -> Result<(), ExitFailure> {
-    eprintln!("{}\n", get_copy());
+    eprintln!("{}\n", get_copytxt());
 
     let dir = std::env::args().nth(1).unwrap_or_else(|| {
         eprintln!(
