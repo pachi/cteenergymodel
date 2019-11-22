@@ -3,6 +3,9 @@
 //! Referencias:
 //! - http://doe2.com/DOE2/
 //! - http://doe2.com/download/DOE-22/DOE22Vol2-Dictionary.pdf
+//! - http://doe2.com/download/doe-23/DOE23Vol3-Topics_50h.pdf (ver Building Description Language)
+//! 
+//! Curioso: https://github.com/protodave/bdl_viz
 
 use failure::bail;
 use failure::Error;
@@ -116,8 +119,10 @@ pub struct Floor {
     /// nombre de la planta
     pub name: String,
     /// cota de la planta, salvo que no se indique planta y se usa la del edificio
+    /// TODO: deberíamos acceder a esto a través de una función que consulte la planta y el edificio
     pub z: f32,
     /// nombres de los espacios que pertenecen a la planta
+    /// TODO: podríamos eliminarlo y marcar en el espacio la planta a la que pertenece
     pub spaces: Vec<String>,
     // Resto de propiedades
     pub attrs: AttrMap,
@@ -161,6 +166,7 @@ pub struct Space {
     /// Nombre del espacio
     pub name: String,
     /// Altura del espacio, si difiere de la de la planta
+    /// TODO: deberíamos acceder a esto a través de una función que consulte el espacio y la planta
     pub height: Option<f32>,
     /// Nombre de polígono que define el espacio
     /// XXX: con SHAPE = POLIGON este valor tiene el polígono
