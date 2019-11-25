@@ -306,7 +306,7 @@ impl BdlData {
                 _ => panic!("Error al parsear el bloque: '{:?}'", stanza),
             };
 
-            let (bname, btype) = match bheadline.rsplitn(2, '=').collect::<Vec<_>>().as_slice() {
+            let (bname, btype) = match bheadline.splitn(2, '=').collect::<Vec<_>>().as_slice() {
                 [bname, btype] => (bname.trim_matches(|c| c == ' ' || c == '"'), btype.trim()),
                 _ => panic!("Error al parsear encabezado: {}", bheadline),
             };
