@@ -288,22 +288,6 @@ impl Window {
     }
 }
 
-/// Elementos del modelo BDL
-#[derive(Debug)]
-pub enum BdlType {
-    /// Material
-    Material(Material),
-    // Layers,
-    /// Espacio
-    Space(Space),
-    /// Planta
-    Floor(Floor),
-    /// Polígono
-    Polygon(Polygon),
-    /// Ventana
-    Element(BdlElementType)
-}
-
 /// Elementos de envolvente
 #[derive(Debug)]
 pub enum BdlElementType {
