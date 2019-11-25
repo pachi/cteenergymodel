@@ -42,20 +42,7 @@ impl AttrMap {
     }
 }
 
-// Objetos
-
-#[derive(Debug)]
-pub enum BdlType {
-    /// Material
-    Material,
-    // Layers,
-    /// Espacio
-    Space,
-    /// Planta
-    Floor,
-    /// Polígono
-    Polygon,
-}
+// Objetos ----------------------------------------------------------------
 
 /// Material definido por sus propiedades térmicas o por resistencia
 ///
@@ -155,6 +142,7 @@ impl Floor {
 ///     MULTIPLIED        = 0
 ///     PILLARS-NUMBERS   = 0
 ///     FactorSuperficieUtil   = 1.0
+///     perteneceALaEnvolventeTermica   = SI
 ///     INTERIOR-RADIATION  = FIXED
 ///     POWER     = 4.4
 ///     VEEI-OBJ  = 7.000000
@@ -251,6 +239,70 @@ impl std::str::FromStr for Vector {
     }
 }
 
+/// Material definido por sus propiedades térmicas o por resistencia
+///
+/// Ejemplo en BDL:
+/// ```text
+///     "FR Entrevigado de EPS moldeado descolgado -Canto 450 mm" = MATERIAL
+///     TYPE              = PROPERTIES
+///     THICKNESS         =           0.45
+///     THICKNESS_CHANGE         = YES
+///     THICKNESS_MAX         =              2
+///     THICKNESS_MIN         =          0.001
+///     CONDUCTIVITY      =      0.4787234
+///     DENSITY           =           1280
+///     SPECIFIC-HEAT     =           1000
+///     VAPOUR-DIFFUSIVITY-FACTOR =             60
+///     NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 450 mm"
+///     GROUP         = "Forjados reticulares"
+///     IMAGE          = "ladrillo.bmp"
+///     NAME_CALENER   = "oldeado descolgado -Canto 450 "
+///     LIBRARY       = NO
+///     UTIL          =  NO
+///     OBSOLETE      = NO
+///     ..
+/// ```
+#[derive(Debug, Clone, Default)]
+pub struct Window {
+    /// Nombre del material
+    pub name: String,
+    // Resto de propiedades
+    pub attrs: AttrMap,
+}
+
+impl Window {
+    pub fn new<N: ToString>(name: N) -> Self {
+        Self {
+            name: name.to_string(),
+            ..Default::default()
+        }
+    }
+}
+
+/// Elementos del modelo BDL
+#[derive(Debug)]
+pub enum BdlType {
+    /// Material
+    Material(Material),
+    // Layers,
+    /// Espacio
+    Space(Space),
+    /// Planta
+    Floor(Floor),
+    /// Polígono
+    Polygon(Polygon),
+    /// Ventana
+    Element(BdlElementType)
+}
+
+/// Elementos de envolvente
+#[derive(Debug)]
+pub enum BdlElementType {
+    Window(Window),
+    // ExteriorWall(ExteriorWall),
+    // InteriorWall(InteriorWall),
+}
+
 // ------------------------- BDL ----------------------------
 
 pub struct Block {
@@ -273,8 +325,8 @@ pub struct BdlBuildingData {
     pub polygons: HashMap<String, Polygon>,
     /// Materiales
     pub materials: Vec<Material>,
-    // Construcciones
-    // pub constructions: Vec<Construction>
+    // Elementos de la envolvente
+    pub elements: Vec<BdlElementType>
 }
 
 /// Datos del archivo BDL
@@ -349,14 +401,16 @@ impl BdlData {
                     bdldata.floors.push(parse_floor(block)?);
                 }
                 "SPACE" => {
-                    let name = block.name.clone();
-                    bdldata.spaces.push(parse_space(block)?);
                     // Asigna el espacio a la planta actual
-                    // TODO: ¿mejor guardar floor en espacio?
-                    if let Some(mut lastfloor) = bdldata.floors.pop() {
-                        lastfloor.spaces.push(name);
-                        bdldata.floors.push(lastfloor);
+                    // Genera planta por defecto si no hay una
+                    if bdldata.floors.len() == 0 {
+                        bdldata.floors.push(Floor::new("Default"));
                     };
+                    bdldata
+                        .floors
+                        .last_mut()
+                        .map(|f| f.spaces.push(block.name.clone()));
+                    bdldata.spaces.push(parse_space(block)?);
                 }
                 "POLYGON" => {
                     bdldata
@@ -366,9 +420,10 @@ impl BdlData {
                 // "CONSTRUCTION" => {
                 //     eprintln!("CONSTRUCTION. bname: {}, btype: {}", bname, btype);
                 // }
-                // "WINDOW" => {
-                //     eprintln!("WINDOW. bname: {}, btype: {}", bname, btype);
-                // }
+                "WINDOW" => {
+                    // TODO: no asigna la ventana a un muro y a su vez este a un espacio
+                    bdldata.elements.push(parse_window(block)?);
+                }
                 // "EXTERIOR-WALL" => {
                 //     eprintln!("EXTERIOR-WALL. bname: {}, btype: {}", bname, btype);
                 // }
@@ -408,7 +463,7 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
                 }
                 values.join("").to_string()
             } else {
-                value.to_string()
+                value.trim_matches('"').to_string()
             };
             attributes.insert(key, value);
         } else {
@@ -435,12 +490,21 @@ fn parse_floor(block: Block) -> Result<Floor, Error> {
 }
 
 fn parse_space(block: Block) -> Result<Space, Error> {
+    //TODO: falta el contexto para asignar el espacio a la planta
     let attrs = block.attrs;
     let mut space = Space::new(block.name);
     space.polygon = attrs.get("POLYGON")?;
     space.height = attrs.get_f32("HEIGHT").ok();
     space.attrs = attrs;
     Ok(space)
+}
+
+fn parse_window(block: Block) -> Result<BdlElementType, Error> {
+    //TODO: falta el contexto para asignar la ventana a un muro
+    let attrs = block.attrs;
+    let mut window = Window::new(block.name);
+    window.attrs = attrs;
+    Ok(BdlElementType::Window(window))
 }
 
 fn parse_polygon(block: Block) -> Result<Polygon, Error> {
