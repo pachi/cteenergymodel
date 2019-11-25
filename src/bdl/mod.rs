@@ -492,6 +492,7 @@ impl BdlData {
                 // "UNDERGROUND-WALL" => {
                 //     eprintln!("UNDERGROUND-WALL. bname: {}, btype: {}", bname, btype);
                 // }
+                // THERMAL-BRIDGE, WEEK-SCHEDULE-PD, DAY-SCHEDULE-PD, 
                 _ => {
                     eprintln!(
                         "Tipo desconocido. bname: {}, btype: {}",
