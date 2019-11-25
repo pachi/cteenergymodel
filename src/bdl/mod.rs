@@ -136,9 +136,10 @@ impl BdlData {
                     // TODO: no asigna la ventana a un muro y a su vez este a un espacio
                     bdldata.elements.push(parse_window(block)?);
                 }
-                // "EXTERIOR-WALL" => {
-                //     eprintln!("EXTERIOR-WALL. bname: {}, btype: {}", bname, btype);
-                // }
+                "EXTERIOR-WALL" => {
+                    // TODO: no asigna la ventana a un muro y a su vez este a un espacio
+                    bdldata.elements.push(parse_exteriorwall(block)?);
+                }
                 // "INTERIOR-WALL" => {
                 //     eprintln!("INTERIOR-WALL. bname: {}, btype: {}", bname, btype);
                 // }
@@ -218,6 +219,14 @@ fn parse_window(block: Block) -> Result<BdlElementType, Error> {
     let mut window = Window::new(block.name);
     window.attrs = attrs;
     Ok(BdlElementType::Window(window))
+}
+
+fn parse_exteriorwall(block: Block) -> Result<BdlElementType, Error> {
+    //TODO: falta el contexto para asignar el muro al espacio
+    let attrs = block.attrs;
+    let mut wall = ExteriorWall::new(block.name);
+    wall.attrs = attrs;
+    Ok(BdlElementType::ExteriorWall(wall))
 }
 
 fn parse_polygon(block: Block) -> Result<Polygon, Error> {
