@@ -165,10 +165,10 @@ mod tests {
         let hulcfiles = find_hulc_files("tests/ejemplopmt_HuecosOK").unwrap();
         // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
         let data = collect_project_data(&hulcfiles).unwrap();
-        assert_eq!(data.autil, 1673.92);
-        assert_eq!(data.clima, "D3");
-        assert_eq!(data.envolvente.huecos.len(), 92);
-        assert_eq!(data.envolvente.opacos.len(), 68);
-        assert_eq!(data.envolvente.pts.len(), 6);
+        assert_eq!(data.autil, 1073.76);
+        assert_eq!(data.clima, "B3");
+        assert_eq!(data.envolvente.huecos.len(), 29);
+        assert_eq!(data.envolvente.opacos.len(), 60);
+        assert_eq!(data.envolvente.pts.len(), 7);
     }
 }
