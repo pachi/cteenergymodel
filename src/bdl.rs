@@ -221,7 +221,6 @@ impl std::str::FromStr for Vector {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Vector, Self::Err> {
-        dbg!("Vector: {}", s);
         let x: &[_] = &[' ', '(', ')'];
         if let [x, y] = s
             .split(',')
