@@ -27,6 +27,7 @@ use std::collections::HashMap;
 
 use failure::Error;
 
+use crate::bdl::{BdlData, BdlElementType};
 use crate::utils::read_latin1_file;
 
 #[derive(Debug)]
@@ -69,32 +70,19 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .unwrap_or("")
         .trim()
         .to_string();
-    // Localiza datos de huecos para extraer gglshwi
-    //let rg_window = Regex::new(r#".*"(.*)"\s*=\sWINDOW\s*$"#).unwrap();
-    //let rg_wprop = Regex::new(r#".*transmisividadJulio\s*=\s*([\d.]+)"#).unwrap();
-    let mut window_lines = entrada_grafica_lider
-        .lines()
-        .filter(|l| {
-            (l.contains(" = WINDOW") && !l.contains("WINDOW-FRAME"))
-                || l.contains("transmisividadJulio")
-        })
-        .collect::<Vec<&str>>()
-        .into_iter();
 
+    // gglshwi de huecos
+    let bdldata = BdlData::new(&entrada_grafica_lider).unwrap();
+    let windows = bdldata.building.elements.iter().filter(|e| match e {
+        BdlElementType::Window(_) => true,
+        _ => false,
+    });
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
-    while let Some(line) = window_lines.next() {
-        if line.contains(" = WINDOW") {
-            let windowname = line
-                .split('=')
-                .map(|e| e.trim().trim_matches('"'))
-                .collect::<Vec<&str>>()[0];
-            let nextline = window_lines.next().unwrap();
-            if nextline.contains("transmisividadJulio") {
-                let gglshwivalue: f32 =
-                    nextline.split('=').map(|e| e.trim()).collect::<Vec<&str>>()[1].parse()?;
-                gglshwi.insert(windowname.to_owned(), gglshwivalue);
-            }
-        }
+    for BdlElementType::Window(w) in windows {
+        gglshwi.insert(
+            w.name.to_string(),
+            w.attrs.get_f32("transmisividadJulio").unwrap(),
+        );
     }
 
     // TODO: mejorar manejo de errores
