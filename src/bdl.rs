@@ -4,7 +4,7 @@
 //! - http://doe2.com/DOE2/
 //! - http://doe2.com/download/DOE-22/DOE22Vol2-Dictionary.pdf
 //! - http://doe2.com/download/doe-23/DOE23Vol3-Topics_50h.pdf (ver Building Description Language)
-//! 
+//!
 //! Curioso: https://github.com/protodave/bdl_viz
 
 use failure::bail;
@@ -129,7 +129,7 @@ pub struct Floor {
 }
 
 impl Floor {
-    pub fn new(name: &str) -> Self {
+    pub fn new<N: ToString>(name: N) -> Self {
         Self {
             name: name.to_string(),
             ..Default::default()
@@ -177,7 +177,7 @@ pub struct Space {
 }
 
 impl Space {
-    pub fn new(name: &str) -> Self {
+    pub fn new<N: ToString>(name: N) -> Self {
         Self {
             name: name.to_string(),
             ..Default::default()
@@ -207,7 +207,7 @@ pub struct Polygon {
 }
 
 impl Polygon {
-    pub fn new(name: &str) -> Self {
+    pub fn new<N: ToString>(name: N) -> Self {
         Self {
             name: name.to_string(),
             ..Default::default()
@@ -248,10 +248,19 @@ impl std::str::FromStr for Vector {
         } else {
             bail!("Fallo al generar vector")
         }
-    }    
+    }
 }
 
 // ------------------------- BDL ----------------------------
+
+pub struct Block {
+    /// Tipo de bloque
+    pub btype: String,
+    /// Nombre del material
+    pub name: String,
+    // Conjunto de propiedades
+    pub attrs: AttrMap,
+}
 
 /// Datos del edificio
 #[derive(Debug, Default)]
@@ -275,7 +284,7 @@ pub struct BdlData {
 }
 
 impl BdlData {
-    pub fn new(input: &str) -> Self {
+    pub fn new(input: &str) -> Result<Self, Error> {
         // Datos
         let mut bdldata: BdlBuildingData = Default::default();
 
@@ -297,98 +306,147 @@ impl BdlData {
                 _ => panic!("Error en la estructura de datos. No se han encontrado los datos de LIDER y de USARIO")
             };
 
-        // Parsea bloques
-        for block in bdl_part.split("..").map(str::trim) {
+        let mut blocks = Vec::<Block>::new();
+
+        for block in bdl_part
+            .split("..")
+            .map(str::trim)
+            .filter(|v| !v.is_empty())
+        {
             let stanza: Vec<_> = block.splitn(2, '\n').map(str::trim).collect();
-            let (bheadline, bdata) = match stanza.as_slice() {
-                [bheadline, bdata] => (bheadline, bdata),
-                [""] => continue,
-                _ => panic!("Error al parsear el bloque: '{:?}'", stanza),
+
+            let bdlblock = if let [bheadline, bdata] = stanza.as_slice() {
+                if let [name, btype] = bheadline
+                    .splitn(2, '=')
+                    .map(str::trim)
+                    .map(|s| s.trim_matches('"'))
+                    .collect::<Vec<_>>()
+                    .as_slice()
+                {
+                    let attrs = parse_attributes(bdata)?;
+                    Block {
+                        name: name.to_string(),
+                        btype: btype.to_string(),
+                        attrs,
+                    }
+                } else {
+                    panic!("Error al parsear encabezado: {}", bheadline);
+                }
+            } else {
+                panic!("Error al parsear el bloque: '{:?}'", stanza);
             };
 
-            let (bname, btype) = match bheadline.splitn(2, '=').collect::<Vec<_>>().as_slice() {
-                [bname, btype] => (bname.trim_matches(|c| c == ' ' || c == '"'), btype.trim()),
-                _ => panic!("Error al parsear encabezado: {}", bheadline),
-            };
+            blocks.push(bdlblock);
+        }
 
-            match btype {
+        // Parsea bloques
+        for block in blocks {
+            match block.btype.as_ref() {
                 "MATERIAL" => {
-                    bdldata
-                        .materials
-                        .push(parse_material(bname, bdata).unwrap());
+                    bdldata.materials.push(parse_material(block)?);
                 }
                 "FLOOR" => {
-                    bdldata.floors.push(parse_floor(bname, bdata).unwrap());
+                    bdldata.floors.push(parse_floor(block)?);
                 }
                 "SPACE" => {
-                    bdldata.spaces.push(parse_space(bname, bdata).unwrap());
+                    let name = block.name.clone();
+                    bdldata.spaces.push(parse_space(block)?);
                     // Asigna el espacio a la planta actual
+                    // TODO: ¿mejor guardar floor en espacio?
                     if let Some(mut lastfloor) = bdldata.floors.pop() {
-                        lastfloor.spaces.push(bname.to_string());
+                        lastfloor.spaces.push(name);
                         bdldata.floors.push(lastfloor);
                     };
                 }
                 "POLYGON" => {
                     bdldata
                         .polygons
-                        .insert(bname.to_string(), parse_polygon(bname, bdata).unwrap());
+                        .insert(block.name.clone(), parse_polygon(block)?);
                 }
+                // "CONSTRUCTION" => {
+                //     eprintln!("CONSTRUCTION. bname: {}, btype: {}", bname, btype);
+                // }
+                // "WINDOW" => {
+                //     eprintln!("WINDOW. bname: {}, btype: {}", bname, btype);
+                // }
+                // "EXTERIOR-WALL" => {
+                //     eprintln!("EXTERIOR-WALL. bname: {}, btype: {}", bname, btype);
+                // }
+                // "INTERIOR-WALL" => {
+                //     eprintln!("INTERIOR-WALL. bname: {}, btype: {}", bname, btype);
+                // }
+                // "UNDERGROUND-WALL" => {
+                //     eprintln!("UNDERGROUND-WALL. bname: {}, btype: {}", bname, btype);
+                // }
                 _ => {
-                    eprintln!("Tipo desconocido");
+                    eprintln!(
+                        "Tipo desconocido. bname: {}, btype: {}",
+                        block.name, block.btype
+                    );
                 }
             };
         }
 
-        Self { building: bdldata }
+        Ok(Self { building: bdldata })
     }
 }
 
-fn parse_attributes(data: &str) -> AttrMap {
+fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
     let mut attributes = AttrMap::new();
-    data.lines().for_each(|l| {
+    let mut lines = data.lines();
+    while let Some(l) = lines.next() {
         if let [key, value] = l.split('=').map(str::trim).collect::<Vec<_>>().as_slice() {
+            // Valores simples o con paréntesis
+            let value = if value.starts_with('(') && !value.ends_with(')') {
+                let mut values = vec![*value];
+                while let Some(newvalueline) = lines.next() {
+                    let val = newvalueline.trim();
+                    values.push(val);
+                    if val.ends_with(')') {
+                        break;
+                    };
+                }
+                values.join("").to_string()
+            } else {
+                value.to_string()
+            };
             attributes.insert(key, value);
+        } else {
+            bail!("No se ha podido extraer clave y atributo de '{}'", l)
         }
-    });
-    attributes
+    }
+    Ok(attributes)
 }
 
-fn parse_material(name: &str, data: &str) -> Result<Material, Error> {
-    dbg!("Material: {}", name);
-    let attr = parse_attributes(data);
-
-    let name = attr.get("NAME")?;
-    let mtype = attr.get("TYPE")?;
-
-    let mut material = Material::new(name, mtype);
-    material.group = attr.get("GROUP")?;
-    material.attrs = attr;
+fn parse_material(block: Block) -> Result<Material, Error> {
+    let attrs = block.attrs;
+    let mut material = Material::new(block.name, block.btype);
+    material.group = attrs.get("GROUP")?;
+    material.attrs = attrs;
     Ok(material)
 }
 
-fn parse_floor(name: &str, data: &str) -> Result<Floor, Error> {
-    dbg!("Floor: {}", name);
-    let mut floor = Floor::new(name);
-    let attr = parse_attributes(data);
-    floor.z = attr.get_f32("Z").unwrap_or_default();
-    floor.attrs = attr;
+fn parse_floor(block: Block) -> Result<Floor, Error> {
+    let attrs = block.attrs;
+    let mut floor = Floor::new(block.name);
+    floor.z = attrs.get_f32("Z").unwrap_or_default();
+    floor.attrs = attrs;
     Ok(floor)
 }
 
-fn parse_space(name: &str, data: &str) -> Result<Space, Error> {
-    dbg!(name);
-    let mut space = Space::new(name);
-    let attr = parse_attributes(data);
-    space.polygon = attr.get("POLYGON")?;
-    space.height = attr.get_f32("HEIGHT").ok();
-    space.attrs = attr;
+fn parse_space(block: Block) -> Result<Space, Error> {
+    let attrs = block.attrs;
+    let mut space = Space::new(block.name);
+    space.polygon = attrs.get("POLYGON")?;
+    space.height = attrs.get_f32("HEIGHT").ok();
+    space.attrs = attrs;
     Ok(space)
 }
 
-fn parse_polygon(name: &str, data: &str) -> Result<Polygon, Error> {
-    dbg!("Polygon: {}", name);
-    let mut polygon = Polygon::new(name);
-    for (_k, v) in &parse_attributes(data).0 {
+fn parse_polygon(block: Block) -> Result<Polygon, Error> {
+    let attrs = block.attrs;
+    let mut polygon = Polygon::new(block.name);
+    for (_k, v) in &attrs.0 {
         let vec = v.parse()?;
         polygon.vectors.push(vec)
     }
@@ -403,7 +461,7 @@ mod tests {
     #[test]
     fn test_bdl() {
         let data = parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
-        let bdldata = BdlData::new(&data.entrada_grafica_lider);
+        let bdldata = BdlData::new(&data.entrada_grafica_lider).unwrap();
         println!("{:#?}", bdldata.building);
     }
 }
