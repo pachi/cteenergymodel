@@ -288,11 +288,77 @@ impl Window {
     }
 }
 
+
+/// Muro exterior
+///
+/// Ejemplo en BDL:
+/// ```text
+///    "P01_E02_PE006" = EXTERIOR-WALL
+///    ABSORPTANCE   =            0.6
+///    COMPROBAR-REQUISITOS-MINIMOS = YES
+///    TYPE_ABSORPTANCE    = 1
+///    COLOR_ABSORPTANCE   = 0
+///    DEGREE_ABSORPTANCE   = 2
+///    CONSTRUCCION_MURO  = "muro_opaco"  
+///    CONSTRUCTION  = "muro_opaco0.60"  
+///    LOCATION      = SPACE-V11  
+///        ..
+///    "muro_opaco0.60" =  CONSTRUCTION
+///        TYPE   = LAYERS  
+///        LAYERS = "muro_opaco" 
+///        ABSORPTANCE = 0.600000
+///        ..
+///    "P01_E02_PE006_V" = WINDOW
+///        X              =            3.3
+///        Y              =            0.1
+///        SETBACK        =              0
+///        HEIGHT         =            2.6
+///        WIDTH          =              5
+///        GAP            = "muro_cortina_controlsolar"
+///        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+///        transmisividadJulio        = 0.220000
+///        GLASS-TYPE     = "Doble baja emisividad argon"
+///        FRAME-WIDTH   =      0.1329403
+///        FRAME-CONDUCT =       5.299999
+///        FRAME-ABS     =            0.7
+///        INF-COEF       =              9
+///        OVERHANG-A     =              0
+///        OVERHANG-B     =              0
+///        OVERHANG-W     =              0
+///        OVERHANG-D     =              0
+///        OVERHANG-ANGLE =              0
+///        LEFT-FIN-A     =              0
+///        LEFT-FIN-B     =              0
+///        LEFT-FIN-H     =              0
+///        LEFT-FIN-D     =              0
+///        RIGHT-FIN-A    =              0
+///        RIGHT-FIN-B    =              0
+///        RIGHT-FIN-H    =              0
+///        RIGHT-FIN-D    =              0
+///        ..
+/// ```
+#[derive(Debug, Clone, Default)]
+pub struct ExteriorWall {
+    /// Nombre del material
+    pub name: String,
+    // Resto de propiedades
+    pub attrs: AttrMap,
+}
+
+impl ExteriorWall {
+    pub fn new<N: ToString>(name: N) -> Self {
+        Self {
+            name: name.to_string(),
+            ..Default::default()
+        }
+    }
+}
+
 /// Elementos de envolvente
 #[derive(Debug)]
 pub enum BdlElementType {
     Window(Window),
-    // ExteriorWall(ExteriorWall),
+    ExteriorWall(ExteriorWall),
     // InteriorWall(InteriorWall),
 }
 

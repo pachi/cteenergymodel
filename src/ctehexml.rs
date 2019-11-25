@@ -73,16 +73,14 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
 
     // gglshwi de huecos
     let bdldata = BdlData::new(&entrada_grafica_lider).unwrap();
-    let windows = bdldata.building.elements.iter().filter(|e| match e {
-        BdlElementType::Window(_) => true,
-        _ => false,
-    });
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
-    for BdlElementType::Window(w) in windows {
-        gglshwi.insert(
-            w.name.to_string(),
-            w.attrs.get_f32("transmisividadJulio").unwrap(),
-        );
+    for el in bdldata.building.elements {
+        if let BdlElementType::Window(w) = el {
+            gglshwi.insert(
+                w.name.to_string(),
+                w.attrs.get_f32("transmisividadJulio").unwrap(),
+            );
+        }
     }
 
     // TODO: mejorar manejo de errores
