@@ -238,27 +238,37 @@ impl std::str::FromStr for Vector {
     }
 }
 
-/// Material definido por sus propiedades térmicas o por resistencia
+/// Hueco
 ///
 /// Ejemplo en BDL:
 /// ```text
-///     "FR Entrevigado de EPS moldeado descolgado -Canto 450 mm" = MATERIAL
-///     TYPE              = PROPERTIES
-///     THICKNESS         =           0.45
-///     THICKNESS_CHANGE         = YES
-///     THICKNESS_MAX         =              2
-///     THICKNESS_MIN         =          0.001
-///     CONDUCTIVITY      =      0.4787234
-///     DENSITY           =           1280
-///     SPECIFIC-HEAT     =           1000
-///     VAPOUR-DIFFUSIVITY-FACTOR =             60
-///     NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 450 mm"
-///     GROUP         = "Forjados reticulares"
-///     IMAGE          = "ladrillo.bmp"
-///     NAME_CALENER   = "oldeado descolgado -Canto 450 "
-///     LIBRARY       = NO
-///     UTIL          =  NO
-///     OBSOLETE      = NO
+///     "P01_E02_PE005_V" = WINDOW
+///     X              =            0.2
+///     Y              =            0.1
+///     SETBACK        =              0
+///     HEIGHT         =            2.6
+///     WIDTH          =              5
+///     GAP            = "muro_cortina_controlsolar"
+///     COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+///     transmisividadJulio        = 0.220000
+///     GLASS-TYPE     = "Doble baja emisividad argon"
+///     FRAME-WIDTH   =      0.1329403
+///     FRAME-CONDUCT =       5.299999
+///     FRAME-ABS     =            0.7
+///     INF-COEF       =              9
+///     OVERHANG-A     =              0
+///     OVERHANG-B     =              0
+///     OVERHANG-W     =              0
+///     OVERHANG-D     =              0
+///     OVERHANG-ANGLE =              0
+///     LEFT-FIN-A     =              0
+///     LEFT-FIN-B     =              0
+///     LEFT-FIN-H     =              0
+///     LEFT-FIN-D     =              0
+///     RIGHT-FIN-A    =              0
+///     RIGHT-FIN-B    =              0
+///     RIGHT-FIN-H    =              0
+///     RIGHT-FIN-D    =              0
 ///     ..
 /// ```
 #[derive(Debug, Clone, Default)]
