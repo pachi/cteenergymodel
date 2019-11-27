@@ -129,24 +129,31 @@ impl BdlData {
                         .polygons
                         .insert(block.name.clone(), parse_polygon(block)?);
                 }
-                // "CONSTRUCTION" => {
-                //     eprintln!("CONSTRUCTION. bname: {}, btype: {}", bname, btype);
-                // }
                 "WINDOW" => {
                     // TODO: no asigna la ventana a un muro y a su vez este a un espacio
                     bdldata.elements.push(parse_window(block)?);
                 }
                 "EXTERIOR-WALL" => {
-                    // TODO: no asigna la ventana a un muro y a su vez este a un espacio
+                    // TODO: no asigna el muro a un espacio
                     bdldata.elements.push(parse_exteriorwall(block)?);
                 }
-                // "INTERIOR-WALL" => {
-                //     eprintln!("INTERIOR-WALL. bname: {}, btype: {}", bname, btype);
-                // }
-                // "UNDERGROUND-WALL" => {
-                //     eprintln!("UNDERGROUND-WALL. bname: {}, btype: {}", bname, btype);
-                // }
-                // THERMAL-BRIDGE, WEEK-SCHEDULE-PD, DAY-SCHEDULE-PD, 
+                "INTERIOR-WALL" => {
+                    // TODO: no asigna el muro a un espacio
+                    bdldata.elements.push(parse_interiorwall(block)?);
+                }
+                "UNDERGROUND-WALL" => {
+                    // TODO: no asigna el muro a un espacio
+                    bdldata.elements.push(parse_undergroundwall(block)?);
+                }
+                "LAYERS" => {
+                    bdldata.elements.push(parse_layers(block)?);
+                }
+                "CONSTRUCTION" => {
+                    bdldata.elements.push(parse_construction(block)?);
+                }
+                // ROOF, BUILDING-SHADE, GAP, GLASS-TYPE, NAME-FRAME, WORK-SPACE,
+                // SPACE-CONDITIONS, SYSTEM-CONDITIONS, THERMAL-BRIDGE,
+                // WEEK-SCHEDULE-PD, DAY-SCHEDULE-PD, SCHEDULE-PD
                 _ => {
                     eprintln!(
                         "Tipo desconocido. bname: {}, btype: {}",
@@ -188,45 +195,69 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
 }
 
 fn parse_material(block: Block) -> Result<Material, Error> {
-    let attrs = block.attrs;
-    let mut material = Material::new(block.name, block.btype);
-    material.group = attrs.get("GROUP")?;
-    material.attrs = attrs;
-    Ok(material)
+    let mut el = Material::new(block.name, block.btype);
+    el.attrs = block.attrs;
+    el.group = el.attrs.get("GROUP")?;
+    Ok(el)
 }
 
 fn parse_floor(block: Block) -> Result<Floor, Error> {
-    let attrs = block.attrs;
-    let mut floor = Floor::new(block.name);
-    floor.z = attrs.get_f32("Z").unwrap_or_default();
-    floor.attrs = attrs;
-    Ok(floor)
+    let mut el = Floor::new(block.name);
+    el.attrs = block.attrs;
+    el.z = el.attrs.get_f32("Z").unwrap_or_default();
+    Ok(el)
 }
 
 fn parse_space(block: Block) -> Result<Space, Error> {
     //TODO: falta el contexto para asignar el espacio a la planta
-    let attrs = block.attrs;
-    let mut space = Space::new(block.name);
-    space.polygon = attrs.get("POLYGON")?;
-    space.height = attrs.get_f32("HEIGHT").ok();
-    space.attrs = attrs;
-    Ok(space)
+    let mut el = Space::new(block.name);
+    el.attrs = block.attrs;
+    el.polygon = el.attrs.get("POLYGON")?;
+    el.height = el.attrs.get_f32("HEIGHT").ok();
+    Ok(el)
 }
 
 fn parse_window(block: Block) -> Result<BdlElementType, Error> {
     //TODO: falta el contexto para asignar la ventana a un muro
-    let attrs = block.attrs;
-    let mut window = Window::new(block.name);
-    window.attrs = attrs;
-    Ok(BdlElementType::Window(window))
+    let mut el = Window::new(block.name);
+    el.attrs = block.attrs;
+    Ok(BdlElementType::Window(el))
 }
 
 fn parse_exteriorwall(block: Block) -> Result<BdlElementType, Error> {
     //TODO: falta el contexto para asignar el muro al espacio
-    let attrs = block.attrs;
-    let mut wall = ExteriorWall::new(block.name);
-    wall.attrs = attrs;
-    Ok(BdlElementType::ExteriorWall(wall))
+    let mut el = ExteriorWall::new(block.name);
+    el.attrs = block.attrs;
+    Ok(BdlElementType::ExteriorWall(el))
+}
+
+
+fn parse_interiorwall(block: Block) -> Result<BdlElementType, Error> {
+    //TODO: falta el contexto para asignar el muro al espacio
+    let mut el = InteriorWall::new(block.name);
+    el.attrs = block.attrs;
+    Ok(BdlElementType::InteriorWall(el))
+}
+
+fn parse_undergroundwall(block: Block) -> Result<BdlElementType, Error> {
+    //TODO: falta el contexto para asignar el muro al espacio
+    let mut el = UndergroundWall::new(block.name);
+    el.attrs = block.attrs;
+    Ok(BdlElementType::UndergroundWall(el))
+}
+
+fn parse_construction(block: Block) -> Result<BdlElementType, Error> {
+    //TODO: falta el contexto para asignar el muro al espacio
+    let mut el = Construction::new(block.name);
+    el.attrs = block.attrs;
+    Ok(BdlElementType::Construction(el))
+}
+
+fn parse_layers(block: Block) -> Result<BdlElementType, Error> {
+    //TODO: falta el contexto para asignar el muro al espacio
+    let mut el = Layers::new(block.name);
+    el.attrs = block.attrs;
+    Ok(BdlElementType::Layers(el))
 }
 
 fn parse_polygon(block: Block) -> Result<Polygon, Error> {

@@ -44,6 +44,8 @@ impl AttrMap {
 
 // Objetos ----------------------------------------------------------------
 
+// TODO: definir BDLObject genérico y evitar redefinir tantos bloques iguales
+
 /// Material definido por sus propiedades térmicas o por resistencia
 ///
 /// Ejemplo en BDL:
@@ -84,6 +86,67 @@ impl Material {
         Self {
             name: name.to_string(),
             mtype: mtype.to_string(),
+            ..Default::default()
+        }
+    }
+}
+
+/// Construcción
+/// 
+/// Ejemplo:
+/// ```text
+///     "muro_opaco0.40" =  CONSTRUCTION
+///     TYPE   = LAYERS  
+///     LAYERS = "muro_opaco" 
+///     ABSORPTANCE = 0.400000
+///     ..
+/// ```
+#[derive(Debug, Clone, Default)]
+pub struct Construction {
+    /// Nombre
+    pub name: String,
+    // Resto de propiedades
+    pub attrs: AttrMap,
+}
+
+impl Construction {
+    pub fn new<N: ToString>(name: N) -> Self {
+        Self {
+            name: name.to_string(),
+            ..Default::default()
+        }
+    }
+}
+
+/// Definición de capas
+/// 
+/// Ejemplo:
+/// ```text
+///     "muro_opaco" = LAYERS
+///         GROUP        = "envolvente"
+///         NAME_CALENER = ""
+///         NAME         = "muro_opaco"
+///         TYPE-DEFINITION = 1
+///         MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250","EPS Poliestireno Expandido [ 0.029 W/[mK]]","1/2 pie LP métrico o catalán 80 mm< G < 100 mm","MW Lana mineral [0.031 W/[mK]]","Placa de yeso laminado [PYL] 750 < d < 900")
+///         THICKNESS = (          0.015,           0.06,          0.115,           0.04,           0.02)
+///         LIBRARY       =  NO
+///         UTIL          =  YES
+///         IMAGE = ""
+///         DEFAULT = NO
+///     ..
+/// ```
+#[derive(Debug, Clone, Default)]
+pub struct Layers {
+    /// Nombre
+    pub name: String,
+    // Resto de propiedades
+    pub attrs: AttrMap,
+}
+
+impl Layers {
+    pub fn new<N: ToString>(name: N) -> Self {
+        Self {
+            name: name.to_string(),
             ..Default::default()
         }
     }
@@ -339,7 +402,7 @@ impl Window {
 /// ```
 #[derive(Debug, Clone, Default)]
 pub struct ExteriorWall {
-    /// Nombre del material
+    /// Nombre del muro
     pub name: String,
     // Resto de propiedades
     pub attrs: AttrMap,
@@ -354,10 +417,80 @@ impl ExteriorWall {
     }
 }
 
+/// Muro interior
+///
+/// Ejemplo en BDL:
+/// ```text
+///    "P01_E02_Med001" = INTERIOR-WALL
+///     INT-WALL-TYPE = STANDARD  
+///     NEXT-TO       = "P01_E07"  
+///     COMPROBAR-REQUISITOS-MINIMOS = NO
+///     CONSTRUCTION  = "tabique"  
+///     LOCATION      = SPACE-V1  
+///           ..
+///     "tabique" =  CONSTRUCTION
+///           TYPE   = LAYERS  
+///           LAYERS = "tabique" 
+///           ..
+/// ```
+#[derive(Debug, Clone, Default)]
+pub struct InteriorWall {
+    /// Nombre del muro
+    pub name: String,
+    // Resto de propiedades
+    pub attrs: AttrMap,
+}
+
+impl InteriorWall {
+    pub fn new<N: ToString>(name: N) -> Self {
+        Self {
+            name: name.to_string(),
+            ..Default::default()
+        }
+    }
+}
+
+/// Muro o soleras en contacto con el terreno
+///
+/// Ejemplo en BDL:
+/// ```text
+///    "P01_E01_FTER001" = UNDERGROUND-WALL
+///     Z-GROUND      =              0
+///     COMPROBAR-REQUISITOS-MINIMOS = YES
+///                    CONSTRUCTION  = "solera tipo"  
+///                    LOCATION      = BOTTOM  
+///                     AREA          =        418.4805
+///                     PERIMETRO     =        65.25978
+///                          ..
+///                    "solera tipo" =  CONSTRUCTION
+///                          TYPE   = LAYERS  
+///                          LAYERS = "solera tipo" 
+///                          ..
+/// ```
+#[derive(Debug, Clone, Default)]
+pub struct UndergroundWall {
+    /// Nombre del muro o solera
+    pub name: String,
+    // Resto de propiedades
+    pub attrs: AttrMap,
+}
+
+impl UndergroundWall {
+    pub fn new<N: ToString>(name: N) -> Self {
+        Self {
+            name: name.to_string(),
+            ..Default::default()
+        }
+    }
+}
+
 /// Elementos de envolvente
 #[derive(Debug)]
 pub enum BdlElementType {
     Window(Window),
     ExteriorWall(ExteriorWall),
-    // InteriorWall(InteriorWall),
+    InteriorWall(InteriorWall),
+    UndergroundWall(UndergroundWall),
+    Construction(Construction),
+    Layers(Layers),
 }
