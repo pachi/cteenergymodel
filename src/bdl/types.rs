@@ -7,12 +7,57 @@
 //!
 //! Curioso: https://github.com/protodave/bdl_viz
 
-use failure::bail;
-use failure::Error;
 use std::collections::HashMap;
 
+use failure::bail;
+use failure::Error;
+
+#[derive(Debug, Clone)]
+pub enum BdlValue {
+    String(String),
+    Number(f32),
+}
+
+impl From<String> for BdlValue {
+    fn from(val: String) -> Self {
+        BdlValue::String(val.to_string())
+    }
+}
+
+impl From<&str> for BdlValue {
+    fn from(val: &str) -> Self {
+        BdlValue::String(val.to_string())
+    }
+}
+
+impl From<f32> for BdlValue {
+    fn from(val: f32) -> Self {
+        BdlValue::Number(val)
+    }
+}
+
+impl std::fmt::Display for BdlValue {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match &*self {
+            BdlValue::String(val) => write!(f, "{}", val),
+            BdlValue::Number(val) => write!(f, "{}", val),
+        }
+    }
+}
+
+impl std::convert::TryFrom<BdlValue> for f32 {
+    type Error = Error;
+
+    fn try_from(value: BdlValue) -> Result<Self, Self::Error> {
+        match value {
+            BdlValue::Number(num) => Ok(num),
+            _ => bail!("Valor numérico incorrecto: {:?}", value),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Default)]
-pub struct AttrMap(pub HashMap<String, String>);
+pub struct AttrMap(pub HashMap<String, BdlValue>);
 
 impl AttrMap {
     /// Constructor
@@ -21,15 +66,19 @@ impl AttrMap {
     }
 
     /// Inserta valor v en la clave k y devuelve el valor existente o None
-    pub fn insert<K: ToString, V: ToString>(&mut self, k: K, v: V) -> Option<String> {
-        self.0.insert(k.to_string(), v.to_string())
+    pub fn insert<K: ToString>(&mut self, k: K, v: &str) -> Option<BdlValue> {
+        let val: BdlValue = match v.parse::<f32>() {
+            Ok(num) => BdlValue::Number(num),
+            _ => BdlValue::String(v.trim().to_string()),
+        };
+        self.0.insert(k.to_string(), val)
     }
 
-    /// Devuelve valor como cadena
-    pub fn get(&self, attr: &str) -> Result<String, Error> {
+    /// Devuelve valor
+    pub fn get(&self, attr: &str) -> Result<BdlValue, Error> {
         self.0
             .get(attr)
-            .map(|v| v.trim().to_string())
+            .map(|v| v.to_owned())
             .ok_or_else(|| format_err!("Atributo inexistente: {}", attr))
     }
 
@@ -37,14 +86,29 @@ impl AttrMap {
     pub fn get_f32(&self, attr: &str) -> Result<f32, Error> {
         self.0
             .get(attr)
-            .and_then(|v| v.parse::<f32>().ok())
+            .and_then(|v| match v {
+                BdlValue::Number(num) => Some(*num),
+                _ => None,
+            })
             .ok_or_else(|| format_err!("Atributo inexistente o con valor incorrecto: {}", attr))
     }
 }
 
 // Objetos ----------------------------------------------------------------
 
-// TODO: definir BDLObject genérico y evitar redefinir tantos bloques iguales
+// TODO: definir BdlBlock genérico y evitar redefinir tantos bloques iguales
+
+#[derive(Clone, Debug, Default)]
+pub struct BdlBlock {
+    /// Tipo de bloque
+    pub btype: String,
+    /// Nombre del material
+    pub name: String,
+    // Elemento madre, referenciado por nombre
+    pub parent: Option<String>,
+    /// Conjunto de propiedades
+    pub attrs: AttrMap,
+}
 
 /// Material definido por sus propiedades térmicas o por resistencia
 ///
@@ -92,12 +156,12 @@ impl Material {
 }
 
 /// Construcción
-/// 
+///
 /// Ejemplo:
 /// ```text
 ///     "muro_opaco0.40" =  CONSTRUCTION
 ///     TYPE   = LAYERS  
-///     LAYERS = "muro_opaco" 
+///     LAYERS = "muro_opaco"
 ///     ABSORPTANCE = 0.400000
 ///     ..
 /// ```
@@ -119,7 +183,7 @@ impl Construction {
 }
 
 /// Definición de capas
-/// 
+///
 /// Ejemplo:
 /// ```text
 ///     "muro_opaco" = LAYERS
@@ -301,196 +365,131 @@ impl std::str::FromStr for Vector {
     }
 }
 
-/// Hueco
-///
-/// Ejemplo en BDL:
-/// ```text
-///     "P01_E02_PE005_V" = WINDOW
-///     X              =            0.2
-///     Y              =            0.1
-///     SETBACK        =              0
-///     HEIGHT         =            2.6
-///     WIDTH          =              5
-///     GAP            = "muro_cortina_controlsolar"
-///     COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-///     transmisividadJulio        = 0.220000
-///     GLASS-TYPE     = "Doble baja emisividad argon"
-///     FRAME-WIDTH   =      0.1329403
-///     FRAME-CONDUCT =       5.299999
-///     FRAME-ABS     =            0.7
-///     INF-COEF       =              9
-///     OVERHANG-A     =              0
-///     OVERHANG-B     =              0
-///     OVERHANG-W     =              0
-///     OVERHANG-D     =              0
-///     OVERHANG-ANGLE =              0
-///     LEFT-FIN-A     =              0
-///     LEFT-FIN-B     =              0
-///     LEFT-FIN-H     =              0
-///     LEFT-FIN-D     =              0
-///     RIGHT-FIN-A    =              0
-///     RIGHT-FIN-B    =              0
-///     RIGHT-FIN-H    =              0
-///     RIGHT-FIN-D    =              0
-///     ..
-/// ```
-#[derive(Debug, Clone, Default)]
-pub struct Window {
-    /// Nombre del material
-    pub name: String,
-    // Resto de propiedades
-    pub attrs: AttrMap,
-}
+// Hueco
+//
+// Ejemplo en BDL:
+// ```text
+//     "P01_E02_PE005_V" = WINDOW
+//     X              =            0.2
+//     Y              =            0.1
+//     SETBACK        =              0
+//     HEIGHT         =            2.6
+//     WIDTH          =              5
+//     GAP            = "muro_cortina_controlsolar"
+//     COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+//     transmisividadJulio        = 0.220000
+//     GLASS-TYPE     = "Doble baja emisividad argon"
+//     FRAME-WIDTH   =      0.1329403
+//     FRAME-CONDUCT =       5.299999
+//     FRAME-ABS     =            0.7
+//     INF-COEF       =              9
+//     OVERHANG-A     =              0
+//     OVERHANG-B     =              0
+//     OVERHANG-W     =              0
+//     OVERHANG-D     =              0
+//     OVERHANG-ANGLE =              0
+//     LEFT-FIN-A     =              0
+//     LEFT-FIN-B     =              0
+//     LEFT-FIN-H     =              0
+//     LEFT-FIN-D     =              0
+//     RIGHT-FIN-A    =              0
+//     RIGHT-FIN-B    =              0
+//     RIGHT-FIN-H    =              0
+//     RIGHT-FIN-D    =              0
+//     ..
+// ```
 
-impl Window {
-    pub fn new<N: ToString>(name: N) -> Self {
-        Self {
-            name: name.to_string(),
-            ..Default::default()
-        }
-    }
-}
+// Muro exterior
+//
+// Ejemplo en BDL:
+// ```text
+//    "P01_E02_PE006" = EXTERIOR-WALL
+//    ABSORPTANCE   =            0.6
+//    COMPROBAR-REQUISITOS-MINIMOS = YES
+//    TYPE_ABSORPTANCE    = 1
+//    COLOR_ABSORPTANCE   = 0
+//    DEGREE_ABSORPTANCE   = 2
+//    CONSTRUCCION_MURO  = "muro_opaco"
+//    CONSTRUCTION  = "muro_opaco0.60"
+//    LOCATION      = SPACE-V11
+//        ..
+//    "muro_opaco0.60" =  CONSTRUCTION
+//        TYPE   = LAYERS
+//        LAYERS = "muro_opaco"
+//        ABSORPTANCE = 0.600000
+//        ..
+//    "P01_E02_PE006_V" = WINDOW
+//        X              =            3.3
+//        Y              =            0.1
+//        SETBACK        =              0
+//        HEIGHT         =            2.6
+//        WIDTH          =              5
+//        GAP            = "muro_cortina_controlsolar"
+//        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+//        transmisividadJulio        = 0.220000
+//        GLASS-TYPE     = "Doble baja emisividad argon"
+//        FRAME-WIDTH   =      0.1329403
+//        FRAME-CONDUCT =       5.299999
+//        FRAME-ABS     =            0.7
+//        INF-COEF       =              9
+//        OVERHANG-A     =              0
+//        OVERHANG-B     =              0
+//        OVERHANG-W     =              0
+//        OVERHANG-D     =              0
+//        OVERHANG-ANGLE =              0
+//        LEFT-FIN-A     =              0
+//        LEFT-FIN-B     =              0
+//        LEFT-FIN-H     =              0
+//        LEFT-FIN-D     =              0
+//        RIGHT-FIN-A    =              0
+//        RIGHT-FIN-B    =              0
+//        RIGHT-FIN-H    =              0
+//        RIGHT-FIN-D    =              0
+//        ..
+// ```
 
+// Muro interior
+//
+// Ejemplo en BDL:
+// ```text
+//    "P01_E02_Med001" = INTERIOR-WALL
+//     INT-WALL-TYPE = STANDARD
+//     NEXT-TO       = "P01_E07"
+//     COMPROBAR-REQUISITOS-MINIMOS = NO
+//     CONSTRUCTION  = "tabique"
+//     LOCATION      = SPACE-V1
+//           ..
+//     "tabique" =  CONSTRUCTION
+//           TYPE   = LAYERS
+//           LAYERS = "tabique"
+//           ..
+// ```
 
-/// Muro exterior
-///
-/// Ejemplo en BDL:
-/// ```text
-///    "P01_E02_PE006" = EXTERIOR-WALL
-///    ABSORPTANCE   =            0.6
-///    COMPROBAR-REQUISITOS-MINIMOS = YES
-///    TYPE_ABSORPTANCE    = 1
-///    COLOR_ABSORPTANCE   = 0
-///    DEGREE_ABSORPTANCE   = 2
-///    CONSTRUCCION_MURO  = "muro_opaco"  
-///    CONSTRUCTION  = "muro_opaco0.60"  
-///    LOCATION      = SPACE-V11  
-///        ..
-///    "muro_opaco0.60" =  CONSTRUCTION
-///        TYPE   = LAYERS  
-///        LAYERS = "muro_opaco" 
-///        ABSORPTANCE = 0.600000
-///        ..
-///    "P01_E02_PE006_V" = WINDOW
-///        X              =            3.3
-///        Y              =            0.1
-///        SETBACK        =              0
-///        HEIGHT         =            2.6
-///        WIDTH          =              5
-///        GAP            = "muro_cortina_controlsolar"
-///        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-///        transmisividadJulio        = 0.220000
-///        GLASS-TYPE     = "Doble baja emisividad argon"
-///        FRAME-WIDTH   =      0.1329403
-///        FRAME-CONDUCT =       5.299999
-///        FRAME-ABS     =            0.7
-///        INF-COEF       =              9
-///        OVERHANG-A     =              0
-///        OVERHANG-B     =              0
-///        OVERHANG-W     =              0
-///        OVERHANG-D     =              0
-///        OVERHANG-ANGLE =              0
-///        LEFT-FIN-A     =              0
-///        LEFT-FIN-B     =              0
-///        LEFT-FIN-H     =              0
-///        LEFT-FIN-D     =              0
-///        RIGHT-FIN-A    =              0
-///        RIGHT-FIN-B    =              0
-///        RIGHT-FIN-H    =              0
-///        RIGHT-FIN-D    =              0
-///        ..
-/// ```
-#[derive(Debug, Clone, Default)]
-pub struct ExteriorWall {
-    /// Nombre del muro
-    pub name: String,
-    // Resto de propiedades
-    pub attrs: AttrMap,
-}
-
-impl ExteriorWall {
-    pub fn new<N: ToString>(name: N) -> Self {
-        Self {
-            name: name.to_string(),
-            ..Default::default()
-        }
-    }
-}
-
-/// Muro interior
-///
-/// Ejemplo en BDL:
-/// ```text
-///    "P01_E02_Med001" = INTERIOR-WALL
-///     INT-WALL-TYPE = STANDARD  
-///     NEXT-TO       = "P01_E07"  
-///     COMPROBAR-REQUISITOS-MINIMOS = NO
-///     CONSTRUCTION  = "tabique"  
-///     LOCATION      = SPACE-V1  
-///           ..
-///     "tabique" =  CONSTRUCTION
-///           TYPE   = LAYERS  
-///           LAYERS = "tabique" 
-///           ..
-/// ```
-#[derive(Debug, Clone, Default)]
-pub struct InteriorWall {
-    /// Nombre del muro
-    pub name: String,
-    // Resto de propiedades
-    pub attrs: AttrMap,
-}
-
-impl InteriorWall {
-    pub fn new<N: ToString>(name: N) -> Self {
-        Self {
-            name: name.to_string(),
-            ..Default::default()
-        }
-    }
-}
-
-/// Muro o soleras en contacto con el terreno
-///
-/// Ejemplo en BDL:
-/// ```text
-///    "P01_E01_FTER001" = UNDERGROUND-WALL
-///     Z-GROUND      =              0
-///     COMPROBAR-REQUISITOS-MINIMOS = YES
-///                    CONSTRUCTION  = "solera tipo"  
-///                    LOCATION      = BOTTOM  
-///                     AREA          =        418.4805
-///                     PERIMETRO     =        65.25978
-///                          ..
-///                    "solera tipo" =  CONSTRUCTION
-///                          TYPE   = LAYERS  
-///                          LAYERS = "solera tipo" 
-///                          ..
-/// ```
-#[derive(Debug, Clone, Default)]
-pub struct UndergroundWall {
-    /// Nombre del muro o solera
-    pub name: String,
-    // Resto de propiedades
-    pub attrs: AttrMap,
-}
-
-impl UndergroundWall {
-    pub fn new<N: ToString>(name: N) -> Self {
-        Self {
-            name: name.to_string(),
-            ..Default::default()
-        }
-    }
-}
+// Muro o soleras en contacto con el terreno
+//
+// Ejemplo en BDL:
+// ```text
+//    "P01_E01_FTER001" = UNDERGROUND-WALL
+//     Z-GROUND      =              0
+//     COMPROBAR-REQUISITOS-MINIMOS = YES
+//                    CONSTRUCTION  = "solera tipo"
+//                    LOCATION      = BOTTOM
+//                     AREA          =        418.4805
+//                     PERIMETRO     =        65.25978
+//                          ..
+//                    "solera tipo" =  CONSTRUCTION
+//                          TYPE   = LAYERS
+//                          LAYERS = "solera tipo"
+//                          ..
+// ```
 
 /// Elementos de envolvente
 #[derive(Debug)]
 pub enum BdlElementType {
-    Window(Window),
-    ExteriorWall(ExteriorWall),
-    InteriorWall(InteriorWall),
-    UndergroundWall(UndergroundWall),
+    Window(BdlBlock),
+    ExteriorWall(BdlBlock),
+    InteriorWall(BdlBlock),
+    UndergroundWall(BdlBlock),
     Construction(Construction),
     Layers(Layers),
 }
