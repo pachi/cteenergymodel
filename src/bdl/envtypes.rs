@@ -60,6 +60,9 @@ pub enum BdlEnvType {
 
 // Muro exterior (EXTERIOR-WALL) -----------------------------------
 //
+// ROOF es igual pero cambia la inclinación por defecto
+// (90 para EXTERIOR-WALL y 0 para ROOF)
+//
 // Ejemplo en BDL:
 // ```text
 //    "P01_E02_PE006" = EXTERIOR-WALL
