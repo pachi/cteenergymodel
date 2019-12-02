@@ -47,14 +47,14 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
 
     // Localiza datos en XML
     let doc = roxmltree::Document::parse(&utf8buf).unwrap();
-    // TODO: solución temporal sin descender en elementos
+    
     let datos_generales = doc
         .descendants()
         .find(|n| n.tag_name().name() == "DatosGenerales")
-        .and_then(|e| e.text())
-        .unwrap_or("")
-        .trim()
-        .to_string();
+        .ok_or_else(|| format_err!("Etiqueta <DatosGenerales> no encontrada en el XML"))?;
+
+    let datos_generales_txt = datos_generales.text().unwrap_or("").trim().to_string();
+
     let entrada_grafica_lider = doc
         .descendants()
         .find(|n| n.tag_name().name() == "EntradaGraficaLIDER")
@@ -62,6 +62,7 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .unwrap_or("")
         .trim()
         .to_string();
+    
     // TODO: solución temporal sin descender en elementos
     let definicion_sistemas = doc
         .descendants()
@@ -83,21 +84,16 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         }
     }
 
-    // TODO: mejorar manejo de errores
-    let climate = utf8buf
-        .lines()
-        .find(|l| l.contains("zonaClimatica"))
-        .unwrap()
-        .split('>')
-        .nth(1)
-        .unwrap()
-        .split('<')
-        .nth(0)
-        .unwrap()
-        .to_owned();
+    let climate = datos_generales
+        .descendants()
+        .find(|n| n.tag_name().name() == "zonaClimatica")
+        .and_then(|e| e.text())
+        .unwrap_or("")
+        .trim()
+        .to_string();
 
     Ok(CtehexmlData {
-        datos_generales,
+        datos_generales: datos_generales_txt,
         entrada_grafica_lider,
         definicion_sistemas,
         gglshwi,
