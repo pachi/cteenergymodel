@@ -190,13 +190,11 @@ impl BdlData {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::ctehexml::parse;
 
     #[test]
     fn test_bdl() {
         let data = parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
-        let bdldata = BdlData::new(&data.entrada_grafica_lider).unwrap();
-        println!("{:#?}", bdldata);
+        println!("{:#?}", data.bdldata);
     }
 }

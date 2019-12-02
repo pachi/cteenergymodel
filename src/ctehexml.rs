@@ -34,7 +34,7 @@ use crate::utils::read_latin1_file;
 pub struct CtehexmlData {
     // Datos buenos
     pub datos_generales: String,
-    pub entrada_grafica_lider: String,
+    pub bdldata: BdlData,
     pub definicion_sistemas: String,
     // Datos legacy - a eliminar en refactorización
     pub climate: String,
@@ -46,14 +46,12 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
     let utf8buf = read_latin1_file(path)?;
 
     // Localiza datos en XML
-    let doc = roxmltree::Document::parse(&utf8buf).unwrap();
-    
+    let doc = roxmltree::Document::parse(&utf8buf)?;
+
     let datos_generales = doc
         .descendants()
         .find(|n| n.tag_name().name() == "DatosGenerales")
         .ok_or_else(|| format_err!("Etiqueta <DatosGenerales> no encontrada en el XML"))?;
-
-    let datos_generales_txt = datos_generales.text().unwrap_or("").trim().to_string();
 
     let entrada_grafica_lider = doc
         .descendants()
@@ -62,7 +60,7 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .unwrap_or("")
         .trim()
         .to_string();
-    
+
     // TODO: solución temporal sin descender en elementos
     let definicion_sistemas = doc
         .descendants()
@@ -72,18 +70,21 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .trim()
         .to_string();
 
+    let datos_generales_txt = datos_generales.text().unwrap_or("").trim().to_string();
+    let bdldata = BdlData::new(&entrada_grafica_lider)?;
+
     // gglshwi de huecos
-    let bdldata = BdlData::new(&entrada_grafica_lider).unwrap();
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
-    for el in bdldata.env {
+    for el in &bdldata.env {
         if let BdlEnvType::Window(w) = el {
             gglshwi.insert(
                 w.name.to_string(),
-                w.attrs.get_f32("transmisividadJulio").unwrap(),
+                w.attrs.get_f32("transmisividadJulio")?,
             );
         }
     }
 
+    // Zona climática
     let climate = datos_generales
         .descendants()
         .find(|n| n.tag_name().name() == "zonaClimatica")
@@ -94,7 +95,7 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
 
     Ok(CtehexmlData {
         datos_generales: datos_generales_txt,
-        entrada_grafica_lider,
+        bdldata,
         definicion_sistemas,
         gglshwi,
         climate,
