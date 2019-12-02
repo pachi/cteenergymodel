@@ -27,7 +27,7 @@ use std::collections::HashMap;
 
 use failure::Error;
 
-use crate::bdl::{BdlData, BdlElementType};
+use crate::bdl::{BdlData, BdlEnvType};
 use crate::utils::read_latin1_file;
 
 #[derive(Debug)]
@@ -74,8 +74,8 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
     // gglshwi de huecos
     let bdldata = BdlData::new(&entrada_grafica_lider).unwrap();
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
-    for el in bdldata.building.elements {
-        if let BdlElementType::Window(w) = el {
+    for el in bdldata.env {
+        if let BdlEnvType::Window(w) = el {
             gglshwi.insert(
                 w.name.to_string(),
                 w.attrs.get_f32("transmisividadJulio").unwrap(),

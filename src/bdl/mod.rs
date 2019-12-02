@@ -8,42 +8,57 @@
 //! Curioso: https://github.com/protodave/bdl_viz
 
 use std::collections::HashMap;
+use std::convert::TryFrom;
 
-use failure::bail;
 use failure::Error;
 
+mod blocks;
+mod constypes;
+mod envtypes;
+mod geomtypes;
 mod types;
+
+pub use blocks::*;
+pub use constypes::*;
+pub use envtypes::BdlEnvType;
+pub use geomtypes::*;
 pub use types::*;
 
 // ------------------------- BDL ----------------------------
 
-/// Datos del edificio
+/// Datos del archivo BDL
 #[derive(Debug, Default)]
-pub struct BdlBuildingData {
+pub struct BdlData {
+    /// Base de datos de materiales, productos y composiciones constructivas
+    pub db: Vec<BdlDB>,
+    /// Espacio de trabajo
+    pub workspace: Option<BdlBlock>,
+    /// Edificio, parámetros generales del edificio
+    pub building: Option<BdlBlock>,
     /// Lista de plantas
     pub floors: Vec<Floor>,
     /// Lista de espacios
     pub spaces: Vec<Space>,
+    /// Elementos de la envolvente
+    pub env: Vec<BdlEnvType>,
+    // Sombras exteriores del edificio
+    pub shadings: Vec<BdlBlock>,
     /// Lista de polígonos
     pub polygons: HashMap<String, Polygon>,
-    /// Materiales
-    pub materials: Vec<Material>,
-    // Construcciones (de huecos y opacos)
-    // TODO:
-    /// Elementos de la envolvente
-    pub elements: Vec<BdlElementType>,
-}
-
-/// Datos del archivo BDL
-#[derive(Debug, Default)]
-pub struct BdlData {
-    pub building: BdlBuildingData,
+    /// Construcciones de elementos de la envolvente
+    pub constructions: HashMap<String, Construction>,
+    /// Condiciones de uso de los espacios
+    pub spaceconds: HashMap<String, BdlBlock>,
+    /// Consignas de los sistemas
+    pub systemconds: HashMap<String, BdlBlock>,
+    /// Horarios
+    pub schedules: HashMap<String, BdlBlock>,
 }
 
 impl BdlData {
     pub fn new(input: &str) -> Result<Self, Error> {
         // Datos
-        let mut bdldata: BdlBuildingData = Default::default();
+        let mut bdldata: Self = Default::default();
 
         // Elimina líneas en blanco y comentarios, y luego separa por bloques
         let cleanlines = input
@@ -63,124 +78,118 @@ impl BdlData {
                 _ => panic!("Error en la estructura de datos. No se han encontrado los datos de LIDER y de USARIO")
             };
 
-        let mut blocks = Vec::<BdlBlock>::new();
-
-        for block in bdl_part
-            .split("..")
-            .map(str::trim)
-            .filter(|v| !v.is_empty())
-        {
-            let stanza: Vec<_> = block.splitn(2, '\n').map(str::trim).collect();
-
-            let bdlblock = if let [bheadline, bdata] = stanza.as_slice() {
-                if let [name, btype] = bheadline
-                    .splitn(2, '=')
-                    .map(str::trim)
-                    .map(|s| s.trim_matches('"'))
-                    .collect::<Vec<_>>()
-                    .as_slice()
-                {
-                    let attrs = parse_attributes(bdata)?;
-                    BdlBlock {
-                        name: name.to_string(),
-                        btype: btype.to_string(),
-                        parent: None,
-                        attrs,
-                    }
-                } else {
-                    panic!("Error al parsear encabezado: {}", bheadline);
-                }
-            } else {
-                panic!("Error al parsear el bloque: '{:?}'", stanza);
-            };
-
-            blocks.push(bdlblock);
-        }
-
         // Parsea bloques
-        for block in blocks {
+        for block in build_blocks(bdl_part)? {
             match block.btype.as_ref() {
-                // Elementos globales =========================
-                // WEEK-SCHEDULE-PD
-                // DAY-SCHEDULE-PD
-                // SCHEDULE-PD
-                // WORK-SPACE (global)
-                // SPACE-CONDITIONS (para los espacios)
-                // SYSTEM-CONDITIONS (para los espacios)
+                // Elementos generales =========================
+                // DEFECTOS // Valores por defecto
+                // DATOS-GENERALES // Datos generales
+
+                // Espacio de trabajo -------------
+                "WORK-SPACE" => {
+                    bdldata.workspace = Some(block);
+                }
+                // Edificio -----------------------
+                "BUILD-PARAMETERS" => {
+                    bdldata.building = Some(block);
+                }
+                // Horarios ----------
+                "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
+                    bdldata.schedules.insert(block.name.clone(), block);
+                }
+                // Condiciones de uso y ocupación ----------
+                "SPACE-CONDITIONS" => {
+                    bdldata.spaceconds.insert(block.name.clone(), block);
+                }
+                // Consignas y horarios de sistemas ----------
+                "SYSTEM-CONDITIONS" => {
+                    bdldata.systemconds.insert(block.name.clone(), block);
+                }
 
                 // Componentes de la envolvente ===============
                 // Materiales y construcciones ----------------
                 "MATERIAL" => {
-                    bdldata.materials.push(parse_material(block)?);
+                    bdldata.db.push(BdlDB::Material(Material::try_from(block)?));
                 }
                 "LAYERS" => {
-                    bdldata.elements.push(parse_layers(block)?);
+                    bdldata.db.push(BdlDB::Layers(Layers::try_from(block)?));
                 }
-                "CONSTRUCTION" => {
-                    bdldata.elements.push(parse_construction(block)?);
+                "GAP" => {
+                    bdldata.db.push(BdlDB::Gap(Gap::try_from(block)?));
                 }
-                // GAP -> equivalente a construction pero para WINDOW (infiltraciones, tipo de marco y vidrio)
-                // NAME-FRAME -> Marco (GAP) (conductividad y absortividad)
-                // GLASS-TYPE -> tipo de vidrio en WINDOW o GAP (factor de sombra y conductividad)
+                "NAME-FRAME" => {
+                    bdldata.db.push(BdlDB::Frame(Frame::try_from(block)?));
+                }
+                "GLASS-TYPE" => {
+                    bdldata.db.push(BdlDB::Glass(Glass::try_from(block)?));
+                }
+                "THERMAL-BRIDGE" => {
+                    bdldata
+                        .db
+                        .push(BdlDB::ThermalBridge(ThermalBridge::try_from(block)?));
+                }
 
                 // Elementos geométricos y espacios -----------
+                // Plantas
                 "FLOOR" => {
-                    bdldata.floors.push(parse_floor(block)?);
+                    bdldata.floors.push(Floor::try_from(block)?);
                 }
+                // Espacios
                 "SPACE" => {
                     // Asigna el espacio a la planta actual
                     // Genera planta por defecto si no hay una
+                    // TODO: hacer asignando como .parent el nombre de la planta en lugar de esto
                     if bdldata.floors.len() == 0 {
-                        bdldata.floors.push(Floor::new("Default"));
+                        bdldata.floors.push(Floor {
+                            name: "Default".to_string(),
+                            ..Default::default()
+                        });
                     };
                     bdldata
                         .floors
                         .last_mut()
                         .map(|f| f.spaces.push(block.name.clone()));
-                    bdldata.spaces.push(parse_space(block)?);
+                    bdldata.spaces.push(Space::try_from(block)?);
                 }
-                // Polígonos. Definen la geometría, mediante el atributo POLYGON de:
-                // - EXTERIOR-WALL, INTERIOR-WALL, UNDERGROUND-WALL
-                // - FLOOR y SPACE
+                // Polígonos
                 "POLYGON" => {
                     bdldata
                         .polygons
-                        .insert(block.name.clone(), parse_polygon(block)?);
+                        .insert(block.name.clone(), Polygon::try_from(block)?);
+                }
+                // Construcciones
+                "CONSTRUCTION" => {
+                    bdldata
+                        .constructions
+                        .insert(block.name.clone(), Construction::try_from(block)?);
                 }
 
                 // Elementos opacos de la envolvente -----------
                 "EXTERIOR-WALL" => {
                     // TODO: no asigna el muro a un espacio
-                    bdldata.elements.push(BdlElementType::ExteriorWall(block));
+                    bdldata.env.push(BdlEnvType::ExteriorWall(block));
                 }
                 "INTERIOR-WALL" => {
                     // TODO: no asigna el muro a un espacio
-                    bdldata.elements.push(BdlElementType::InteriorWall(block));
+                    bdldata.env.push(BdlEnvType::InteriorWall(block));
                 }
                 "UNDERGROUND-WALL" => {
                     // TODO: no asigna el muro a un espacio
-                    bdldata
-                        .elements
-                        .push(BdlElementType::UndergroundWall(block));
+                    bdldata.env.push(BdlEnvType::UndergroundWall(block));
                 }
-                // "ROOF" => {
-                //     // TODO: no asigna la cubierta a un espacio
-                //     bdldata.elements.push(parse_roof(block)?);
-                // }
-                // "THERMAL-BRIDGE" => {
-                //     // TODO: no asigna el elemento a un espacio
-                //     bdldata.elements.push(parse_thermalbridge(block)?);
-                // }
-                // BUILDING-SHADE
+                "ROOF" => {
+                    // TODO: no asigna la cubierta a un espacio
+                    bdldata.env.push(BdlEnvType::Roof(block));
+                }
+                "BUILDING-SHADE" => {
+                    bdldata.shadings.push(block);
+                }
 
                 // Elementos transparentes de la envolvente -----
-                // Ventana.
-                // Puede definirse con GLASS-TYPE, WINDOW-LAYER o GAP
-                // y puede pertenecer a un INTERIOR-WALL o EXTERIOR-WALL
-                // (trasnmisividadJulio)
+                // Hueco
                 "WINDOW" => {
                     // TODO: no asigna la ventana a un muro y a su vez este a un espacio
-                    bdldata.elements.push(BdlElementType::Window(block));
+                    bdldata.env.push(BdlEnvType::Window(block));
                 }
                 _ => {
                     eprintln!(
@@ -191,90 +200,8 @@ impl BdlData {
             };
         }
 
-        Ok(Self { building: bdldata })
+        Ok(bdldata)
     }
-}
-
-/// Lee atributos de bloque BDL
-fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
-    let mut attributes = AttrMap::new();
-    let mut lines = data.lines();
-    while let Some(l) = lines.next() {
-        if let [key, value] = l.split('=').map(str::trim).collect::<Vec<_>>().as_slice() {
-            // Valores simples o con paréntesis
-            let value = if value.starts_with('(') && !value.ends_with(')') {
-                let mut values = vec![*value];
-                while let Some(newvalueline) = lines.next() {
-                    let val = newvalueline.trim();
-                    values.push(val);
-                    if val.ends_with(')') {
-                        break;
-                    };
-                }
-                values.join("").to_string()
-            } else {
-                value.trim_matches('"').to_string()
-            };
-            attributes.insert(key, &value);
-        } else {
-            bail!("No se ha podido extraer clave y atributo de '{}'", l)
-        }
-    }
-    Ok(attributes)
-}
-
-fn parse_material(block: BdlBlock) -> Result<Material, Error> {
-    let mut el = Material::new(block.name, block.btype);
-    el.attrs = block.attrs;
-    el.group = el.attrs.get("GROUP")?.to_string();
-    Ok(el)
-}
-
-fn parse_floor(block: BdlBlock) -> Result<Floor, Error> {
-    let mut el = Floor::new(block.name);
-    el.attrs = block.attrs;
-    el.z = el.attrs.get_f32("Z").unwrap_or_default();
-    Ok(el)
-}
-
-fn parse_space(block: BdlBlock) -> Result<Space, Error> {
-    //TODO: falta el contexto para asignar el espacio a la planta
-    let mut el = Space::new(block.name);
-    el.attrs = block.attrs;
-    el.polygon = el.attrs.get("POLYGON")?.to_string();
-    el.height = el.attrs.get_f32("HEIGHT").ok();
-    Ok(el)
-}
-
-// fn parse_exteriorwall(block: BdlBlock) -> Result<BdlElementType, Error> {
-//     //TODO: falta el contexto para asignar el muro al espacio
-//     let mut el = ExteriorWall::new(block.name);
-//     el.attrs = block.attrs;
-//     Ok(BdlElementType::ExteriorWall(el))
-// }
-
-fn parse_construction(block: BdlBlock) -> Result<BdlElementType, Error> {
-    //TODO: falta el contexto para asignar el muro al espacio
-    let mut el = Construction::new(block.name);
-    el.attrs = block.attrs;
-    Ok(BdlElementType::Construction(el))
-}
-
-fn parse_layers(block: BdlBlock) -> Result<BdlElementType, Error> {
-    //TODO: falta el contexto para asignar el muro al espacio
-    let mut el = Layers::new(block.name);
-    el.attrs = block.attrs;
-    Ok(BdlElementType::Layers(el))
-}
-
-fn parse_polygon(block: BdlBlock) -> Result<Polygon, Error> {
-    let attrs = block.attrs;
-    let mut polygon = Polygon::new(block.name);
-    for (_k, v) in &attrs.0 {
-        let vec = v.to_string().parse()?;
-        polygon.vectors.push(vec)
-    }
-    Ok(polygon)
 }
 
 #[cfg(test)]
@@ -286,6 +213,6 @@ mod tests {
     fn test_bdl() {
         let data = parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
         let bdldata = BdlData::new(&data.entrada_grafica_lider).unwrap();
-        println!("{:#?}", bdldata.building);
+        println!("{:#?}", bdldata);
     }
 }
