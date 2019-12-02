@@ -2,7 +2,7 @@
 //!
 //! Bloques genéricos de BDL
 
-use super::types::{AttrMap};
+use super::types::AttrMap;
 
 use failure::bail;
 use failure::Error;
@@ -47,7 +47,11 @@ pub fn build_blocks(bdl_part: &str) -> Result<Vec<BdlBlock>, Error> {
                     attrs,
                 }
             } else {
-                bail!("Error al parsear encabezado: {}", bheadline);
+                bail!(
+                    "Error al parsear el encabezado '{}'\ndel bloque:\n{:?}",
+                    bheadline,
+                    stanza
+                );
             }
         } else {
             bail!("Error al parsear el bloque: '{:?}'", stanza);
@@ -57,7 +61,6 @@ pub fn build_blocks(bdl_part: &str) -> Result<Vec<BdlBlock>, Error> {
     }
     Ok(blocks)
 }
-
 
 /// Lee atributos de bloque BDL
 fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
