@@ -31,10 +31,8 @@ pub use types::*;
 pub struct BdlData {
     /// Base de datos de materiales, productos y composiciones constructivas
     pub db: Vec<BdlDB>,
-    /// Espacio de trabajo
-    pub workspace: Option<BdlBlock>,
-    /// Edificio, parámetros generales del edificio
-    pub building: Option<BdlBlock>,
+    /// Metadatos: espacio de trabajo, parámetros de edificio, construcciones por defecto y datos generales
+    pub meta: HashMap<String, BdlBlock>,
     /// Lista de plantas
     pub floors: Vec<Floor>,
     /// Lista de espacios
@@ -66,33 +64,37 @@ impl BdlData {
             .lines()
             .map(str::trim)
             .filter(|l| *l != "" && !l.starts_with("$"))
+            // Eliminamos la línea TEMPLARY = USER que separa la parte
+            // propia de LIDER del BDL "estándar"
+            .filter(|l| !l.starts_with("TEMPLARY"))
             .collect::<Vec<&str>>()
             .join("\n");
 
-        // TODO: parsear y guardar _lider_part en algún lado
-        let [_lider_part, bdl_part] = match cleanlines
-            .splitn(2, "TEMPLARY = USER")
-            .collect::<Vec<_>>()
-            .as_slice() {
-                [lider_part, bdl_part] => [*lider_part, *bdl_part],
-                _ => panic!("Error en la estructura de datos. No se han encontrado los datos de LIDER y de USARIO")
-            };
+        // Separamos una parte inicial de atributos sueltos, sin bloque,
+        // del resto que es BDL válido:
+        // CAMBIO = SI
+        // CAMBIO-CALENER = NO
+        // EEGeneradaAutoconsumida        = "0"
+        // PANELFOTOVOLTAICOAUTOCONSUMIDO =              0
+        // CONTRIBUCIONRESACS             =           1800
+        // ENERGIAGT  = YES
+        let (_lider_part, bdl_part) = if let Some(pos) =
+            cleanlines.find("\"DATOS GENERALES\" = GENERAL-DATA")
+        {
+            cleanlines.split_at(pos)
+        } else {
+            panic!("Error en la estructura de datos. No se han encontrado los datos de LIDER y de USARIO")
+        };
 
         // Parsea bloques
         for block in build_blocks(bdl_part)? {
             match block.btype.as_ref() {
                 // Elementos generales =========================
-                // DEFECTOS // Valores por defecto
-                // DATOS-GENERALES // Datos generales
+                // Valores por defecto, Datos generales, espacio de trabajo y edificio
+                "DEFECTOS" | "GENERAL-DATA" | "WORK-SPACE" | "BUILD-PARAMETERS" => {
+                    bdldata.meta.insert(block.name.clone(), block);
+                }
 
-                // Espacio de trabajo -------------
-                "WORK-SPACE" => {
-                    bdldata.workspace = Some(block);
-                }
-                // Edificio -----------------------
-                "BUILD-PARAMETERS" => {
-                    bdldata.building = Some(block);
-                }
                 // Horarios ----------
                 "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
                     bdldata.schedules.insert(block.name.clone(), block);
