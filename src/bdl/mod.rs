@@ -187,14 +187,3 @@ impl BdlData {
         Ok(bdldata)
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::ctehexml::parse;
-
-    #[test]
-    fn test_bdl() {
-        let data = parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
-        println!("{:#?}", data.bdldata);
-    }
-}
