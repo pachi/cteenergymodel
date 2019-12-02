@@ -57,12 +57,12 @@ pub fn build_blocks(bdl_part: &str) -> Result<Vec<BdlBlock>, Error> {
                     }
                     // Los muros cuelgan de los espacios
                     "EXTERIOR-WALL" | "INTERIOR-WALL" | "ROOF" | "UNDERGROUND-WALL"
-                    | "UNDERGROUND-FLOOR" | "DOOR" => {
+                    | "UNDERGROUND-FLOOR" => {
                         currentwall = name.clone();
                         Some(currentspace.clone())
                     }
                     // Las construcciones y ventanas cuelgan de los muros
-                    "CONSTRUCTION" | "WINDOW" => Some(currentwall.clone()),
+                    "CONSTRUCTION" | "WINDOW" | "DOOR" => Some(currentwall.clone()),
                     _ => None,
                 };
 
