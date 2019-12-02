@@ -23,6 +23,9 @@ pub struct BdlBlock {
 
 pub fn build_blocks(bdl_part: &str) -> Result<Vec<BdlBlock>, Error> {
     let mut blocks = Vec::<BdlBlock>::new();
+    let mut currentfloor = "Default".to_string();
+    let mut currentspace = String::new();
+    let mut currentwall = String::new();
 
     for block in bdl_part
         .split("..")
@@ -40,10 +43,33 @@ pub fn build_blocks(bdl_part: &str) -> Result<Vec<BdlBlock>, Error> {
                 .as_slice()
             {
                 let attrs = parse_attributes(bdata)?;
+                let name = name.to_string();
+                let parent = match *btype {
+                    // Las plantas no cuelgan de ningún elemento
+                    "FLOOR" => {
+                        currentfloor = name.clone();
+                        None
+                    }
+                    // Los espacios cuelgan de las plantas
+                    "SPACE" => {
+                        currentspace = name.clone();
+                        Some(currentfloor.clone())
+                    }
+                    // Los muros cuelgan de los espacios
+                    "EXTERIOR-WALL" | "INTERIOR-WALL" | "ROOF" | "UNDERGROUND-WALL"
+                    | "UNDERGROUND-FLOOR" | "DOOR" => {
+                        currentwall = name.clone();
+                        Some(currentspace.clone())
+                    }
+                    // Las construcciones y ventanas cuelgan de los muros
+                    "CONSTRUCTION" | "WINDOW" => Some(currentwall.clone()),
+                    _ => None,
+                };
+
                 BdlBlock {
-                    name: name.to_string(),
+                    name: name.clone(),
                     btype: btype.to_string(),
-                    parent: None,
+                    parent,
                     attrs,
                 }
             } else {

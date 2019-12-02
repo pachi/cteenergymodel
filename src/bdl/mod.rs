@@ -78,6 +78,7 @@ impl BdlData {
         // PANELFOTOVOLTAICOAUTOCONSUMIDO =              0
         // CONTRIBUCIONRESACS             =           1800
         // ENERGIAGT  = YES
+        // TODO: guardar datos de esta parte
         let (_lider_part, bdl_part) = if let Some(pos) =
             cleanlines.find("\"DATOS GENERALES\" = GENERAL-DATA")
         {
@@ -94,7 +95,6 @@ impl BdlData {
                 "DEFECTOS" | "GENERAL-DATA" | "WORK-SPACE" | "BUILD-PARAMETERS" => {
                     bdldata.meta.insert(block.name.clone(), block);
                 }
-
                 // Horarios ----------
                 "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
                     bdldata.schedules.insert(block.name.clone(), block);
@@ -138,19 +138,6 @@ impl BdlData {
                 }
                 // Espacios
                 "SPACE" => {
-                    // Asigna el espacio a la planta actual
-                    // Genera planta por defecto si no hay una
-                    // TODO: hacer asignando como .parent el nombre de la planta en lugar de esto
-                    if bdldata.floors.len() == 0 {
-                        bdldata.floors.push(Floor {
-                            name: "Default".to_string(),
-                            ..Default::default()
-                        });
-                    };
-                    bdldata
-                        .floors
-                        .last_mut()
-                        .map(|f| f.spaces.push(block.name.clone()));
                     bdldata.spaces.push(Space::try_from(block)?);
                 }
                 // Polígonos
@@ -168,19 +155,15 @@ impl BdlData {
 
                 // Elementos opacos de la envolvente -----------
                 "EXTERIOR-WALL" => {
-                    // TODO: no asigna el muro a un espacio
                     bdldata.env.push(BdlEnvType::ExteriorWall(block));
                 }
                 "INTERIOR-WALL" => {
-                    // TODO: no asigna el muro a un espacio
                     bdldata.env.push(BdlEnvType::InteriorWall(block));
                 }
                 "UNDERGROUND-WALL" => {
-                    // TODO: no asigna el muro a un espacio
                     bdldata.env.push(BdlEnvType::UndergroundWall(block));
                 }
                 "ROOF" => {
-                    // TODO: no asigna la cubierta a un espacio
                     bdldata.env.push(BdlEnvType::Roof(block));
                 }
                 "BUILDING-SHADE" => {
@@ -190,7 +173,6 @@ impl BdlData {
                 // Elementos transparentes de la envolvente -----
                 // Hueco
                 "WINDOW" => {
-                    // TODO: no asigna la ventana a un muro y a su vez este a un espacio
                     bdldata.env.push(BdlEnvType::Window(block));
                 }
                 _ => {

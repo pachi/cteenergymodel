@@ -88,6 +88,8 @@ pub struct Space {
     /// Altura del espacio, si difiere de la de la planta
     /// TODO: deberíamos acceder a esto a través de una función que consulte el espacio y la planta
     pub height: Option<f32>,
+    /// Planta a la que pertenece el espacio
+    pub floor: String,
     /// Nombre de polígono que define el espacio
     /// XXX: con SHAPE = POLIGON este valor tiene el polígono
     /// con SHAPE = BOX o BOX = NO-SHAPE se usan otras propiedades
@@ -100,12 +102,25 @@ impl TryFrom<BdlBlock> for Space {
     type Error = Error;
 
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock { name, attrs, .. } = value;
+        let BdlBlock {
+            name,
+            attrs,
+            parent,
+            ..
+        } = value;
         let height = attrs.get_f32("HEIGHT").ok();
         let polygon = attrs.get("POLYGON")?.to_string();
+        let floor = match parent {
+            Some(floor) => floor,
+            _ => bail!(
+                "No se encuentra la referencia de la planta en el espacio {}",
+                name
+            ),
+        };
         Ok(Self {
             name,
             height,
+            floor,
             polygon,
             attrs,
         })
@@ -113,7 +128,7 @@ impl TryFrom<BdlBlock> for Space {
 }
 
 /// Polígono
-/// 
+///
 /// Define la geometría, mediante el atributo POLYGON de:
 /// - EXTERIOR-WALL, INTERIOR-WALL, UNDERGROUND-WALL
 /// - FLOOR y SPACE
@@ -219,6 +234,8 @@ pub struct Construction {
     pub name: String,
     /// Tipo de definición de la construcción (LAYERS o U-VALUE)
     pub ctype: String,
+    /// Elemento vinculado (muro, etc)
+    pub parent: String,
     /// Definición de capas
     pub layers: Option<String>,
     // Resto de propiedades
@@ -229,9 +246,22 @@ impl TryFrom<BdlBlock> for Construction {
     type Error = Error;
 
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock { name, attrs, .. } = value;
+        let BdlBlock { name, attrs, parent, .. } = value;
         let ctype = attrs.get("TYPE")?.to_string();
         let layers = attrs.get("LAYERS").ok().map(|v| v.to_string());
-        Ok(Self { name, ctype, layers, attrs })
+        let parent = match parent {
+            Some(parent) => parent,
+            _ => bail!(
+                "No se encuentra la referencia al elemento asociado de la construcción {}",
+                name
+            ),
+        };
+        Ok(Self {
+            name,
+            ctype,
+            parent,
+            layers,
+            attrs,
+        })
     }
 }
