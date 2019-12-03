@@ -9,7 +9,7 @@
 use std::convert::TryFrom;
 
 use super::blocks::BdlBlock;
-use super::types::AttrMap;
+use super::AttrMap;
 
 use failure::bail;
 use failure::Error;
@@ -37,7 +37,7 @@ pub struct Floor {
     /// nombres de los espacios que pertenecen a la planta
     /// TODO: podríamos eliminarlo y marcar en el espacio la planta a la que pertenece
     pub spaces: Vec<String>,
-    // Resto de propiedades
+    /// Resto de propiedades
     pub attrs: AttrMap,
 }
 
@@ -45,8 +45,10 @@ impl TryFrom<BdlBlock> for Floor {
     type Error = Error;
 
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock { name, attrs, .. } = value;
-        let z = attrs.get_f32("Z").unwrap_or_default();
+        let BdlBlock {
+            name, mut attrs, ..
+        } = value;
+        let z = attrs.remove_f32("Z").unwrap_or_default();
         Ok(Self {
             name,
             z,
@@ -85,17 +87,37 @@ impl TryFrom<BdlBlock> for Floor {
 pub struct Space {
     /// Nombre del espacio
     pub name: String,
-    /// Altura del espacio, si difiere de la de la planta
-    /// TODO: deberíamos acceder a esto a través de una función que consulte el espacio y la planta
+    /// Tipo de espacio (CONDITIONED, ¿UNCONDITIONED?, ¿PLENUM?)
+    pub stype: String,
+    /// Nombre de polígono que define el espacio
+    /// XXX: Solo vale para SHAPE = POLIGON (no vale con BOX o NO-SHAPE)
+    pub polygon: String,
+    /// Altura del espacio
+    /// TODO: Es none si difiere de la altura de la planta
     pub height: Option<f32>,
+    /// Pertenencia a la envolvente térmica
+    pub insidete: bool,
     /// Planta a la que pertenece el espacio
     pub floor: String,
-    /// Nombre de polígono que define el espacio
-    /// XXX: con SHAPE = POLIGON este valor tiene el polígono
-    /// con SHAPE = BOX o BOX = NO-SHAPE se usan otras propiedades
-    pub polygon: String,
+    /// TODO: Potencia de equipos (o de iluminación???)
+    pub power: f32,
+    /// VEEI del edificio objeto W/100lx
+    pub veeiobj: f32,
+    /// VEEI del edificio de referencia W/100lx
+    pub veeiref: f32,
+    /// Tipo de espacio
+    pub spacetype: String,
+    /// Condiciones de uso del espacio
+    pub spaceconds: String,
+    /// Condiciones de operación de los sistemas
+    pub systemconds: String,
+    /// Multiplicador
+    pub multiplier: f32,
+    /// ¿Está multiplicado?
+    pub multiplied: f32,
     // Resto de propiedades
-    pub attrs: AttrMap,
+    // PILLARS-NUMBERS, FactorSuperficieUtil, INTERIOR-RADIATION, nCompleto, FLOOR-WEIGHT
+    // pub attrs: AttrMap,
 }
 
 impl TryFrom<BdlBlock> for Space {
@@ -104,25 +126,52 @@ impl TryFrom<BdlBlock> for Space {
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
-            attrs,
+            mut attrs,
             parent,
             ..
         } = value;
-        let height = attrs.get_f32("HEIGHT").ok();
-        let polygon = attrs.get("POLYGON")?.to_string();
-        let floor = match parent {
-            Some(floor) => floor,
-            _ => bail!(
+        // TODO: por ahora solo soportamos este tipo. ¿Usa HULC alguno más?
+        if &attrs.remove_str("SHAPE")? != "POLYGON" {
+            bail!("Tipo de espacio desconocido (no definido por polígno): {}", name)
+        };
+
+        let stype = attrs.remove_str("TYPE")?;
+        let polygon = attrs.remove_str("POLYGON")?;
+        let height = attrs.remove_f32("HEIGHT").ok();
+        let insidete = attrs
+            .remove_str("perteneceALaEnvolventeTermica")
+            .and(Ok(true))
+            .unwrap_or(false);
+        let floor = parent.ok_or_else(|| {
+            format_err!(
                 "No se encuentra la referencia de la planta en el espacio {}",
                 name
-            ),
-        };
+            )
+        })?;
+        let power = attrs.remove_f32("POWER")?;
+        let veeiobj = attrs.remove_f32("VEEI-OBJ")?;
+        let veeiref = attrs.remove_f32("VEEI-REF")?;
+        let spacetype = attrs.remove_str("SPACE-TYPE")?;
+        let spaceconds = attrs.remove_str("SPACE-CONDITIONS")?;
+        let systemconds = attrs.remove_str("SYSTEM-CONDITIONS")?;
+        let multiplier = attrs.remove_f32("MULTIPLIER")?;
+        let multiplied = attrs.remove_f32("MULTIPLIED")?;
+
         Ok(Self {
             name,
-            height,
-            floor,
+            stype,
             polygon,
-            attrs,
+            height,
+            insidete,
+            floor,
+            power,
+            veeiobj,
+            veeiref,
+            spacetype,
+            spaceconds,
+            systemconds,
+            multiplier,
+            multiplied,
         })
     }
 }
@@ -144,6 +193,7 @@ impl TryFrom<BdlBlock> for Space {
 ///     V6   =( 14.97, 9.04 )
 ///     ..
 /// ```
+/// TODO: ver sisgen/libreria_sisgen/claseEdificio.py para áreas, normal, etc.
 #[derive(Debug, Clone, Default)]
 pub struct Polygon {
     /// Nombre del polígono
@@ -177,7 +227,9 @@ impl TryFrom<BdlBlock> for Polygon {
 /// ```
 #[derive(Debug, Clone, Default)]
 pub struct Vertex {
+    /// Vértice
     name: String,
+    /// Coordenadas del vértice
     vector: Vector,
 }
 
@@ -236,32 +288,49 @@ pub struct Construction {
     pub ctype: String,
     /// Elemento vinculado (muro, etc)
     pub parent: String,
-    /// Definición de capas
+    /// Definición de capas, cuando ctype es LAYERS
     pub layers: Option<String>,
-    // Resto de propiedades
-    pub attrs: AttrMap,
+    /// Transmitancia, cuando ctype es U-VALUE
+    pub uvalue: Option<f32>,
+    /// Absortividad (a la radiación solar)
+    pub absorptance: Option<f32>,
+    /// Rugosidad (1 a 6)
+    pub roughness: Option<f32>,
+    /// Nombre de parámetros de muro (WALL-PARAMETERS)
+    pub wallparameters: Option<String>,
 }
 
 impl TryFrom<BdlBlock> for Construction {
     type Error = Error;
 
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock { name, attrs, parent, .. } = value;
-        let ctype = attrs.get("TYPE")?.to_string();
-        let layers = attrs.get("LAYERS").ok().map(|v| v.to_string());
-        let parent = match parent {
-            Some(parent) => parent,
-            _ => bail!(
-                "No se encuentra la referencia al elemento asociado de la construcción {}",
+        let BdlBlock {
+            name,
+            mut attrs,
+            parent,
+            ..
+        } = value;
+        let ctype = attrs.remove_str("TYPE")?;
+        let layers = attrs.remove_str("LAYERS").ok();
+        let uvalue = attrs.remove_f32("U-VALUE").ok();
+        let absorptance = attrs.remove_f32("ABSORPTANCE").ok();
+        let roughness = attrs.remove_f32("ROUGHNESS").ok();
+        let wallparameters = attrs.remove_str("WALL-PARAMETERS").ok();
+        let parent = parent.ok_or_else(|| {
+            format_err!(
+                "No se encuentra la referencia al elemento en la construcción {}",
                 name
-            ),
-        };
+            )
+        })?;
         Ok(Self {
             name,
             ctype,
             parent,
             layers,
-            attrs,
+            uvalue,
+            absorptance,
+            roughness,
+            wallparameters,
         })
     }
 }

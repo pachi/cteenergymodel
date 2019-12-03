@@ -20,6 +20,8 @@ pub enum BdlEnvType {
     Roof(BdlBlock),
 }
 
+// TODO: ver sisten/libreria_sisgen/claseEdificio.py
+
 // Hueco (WINDOW) -------------------------------------------------
 //
 // Puede definirse con GLASS-TYPE, WINDOW-LAYER o GAP
@@ -57,6 +59,8 @@ pub enum BdlEnvType {
 //     RIGHT-FIN-D    =              0
 //     ..
 // ```
+
+// height, width, glasstype, gap, transmisividadjulio,
 
 // Muro exterior (EXTERIOR-WALL) -----------------------------------
 //

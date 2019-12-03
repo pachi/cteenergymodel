@@ -30,12 +30,12 @@ impl AttrMap {
         self.0.insert(k.to_string(), val)
     }
 
-    /// Devuelve valor
+    /// Devuelve valor como BdlValue
     pub fn get(&self, attr: &str) -> Result<BdlValue, Error> {
         self.0
             .get(attr)
             .map(|v| v.to_owned())
-            .ok_or_else(|| format_err!("Atributo inexistente: {}", attr))
+            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
     }
 
     /// Devuelve valor como número
@@ -46,7 +46,47 @@ impl AttrMap {
                 BdlValue::Number(num) => Some(*num),
                 _ => None,
             })
-            .ok_or_else(|| format_err!("Atributo inexistente o con valor incorrecto: {}", attr))
+            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+    }
+
+    /// Devuelve valor como String
+    pub fn get_str(&self, attr: &str) -> Result<String, Error> {
+        self.0
+            .get(attr)
+            .and_then(|v| match v {
+                BdlValue::String(string) => Some(string.to_string()),
+                _ => None,
+            })
+            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+    }
+
+    /// Elimina un valor del diccionario y devuelve como BdlValue
+    pub fn remove(&mut self, attr: &str) -> Result<BdlValue, Error> {
+        self.0
+            .remove(attr)
+            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+    }
+
+    /// Elimina valor y devuelve como número
+    pub fn remove_f32(&mut self, attr: &str) -> Result<f32, Error> {
+        self.0
+            .remove(attr)
+            .and_then(|v| match v {
+                BdlValue::Number(num) => Some(num),
+                _ => None,
+            })
+            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+    }
+
+    /// Elimina valor y devuelve como String
+    pub fn remove_str(&mut self, attr: &str) -> Result<String, Error> {
+        self.0
+            .remove(attr)
+            .and_then(|v| match v {
+                BdlValue::String(string) => Some(string.to_string()),
+                _ => None,
+            })
+            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
     }
 }
 

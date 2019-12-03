@@ -13,16 +13,16 @@ use std::convert::TryFrom;
 use failure::Error;
 
 mod blocks;
-mod constypes;
-mod envtypes;
-mod geomtypes;
-mod types;
+mod common;
+mod cons;
+mod env;
+mod geom;
 
 pub use blocks::*;
-pub use constypes::*;
-pub use envtypes::BdlEnvType;
-pub use geomtypes::*;
-pub use types::*;
+pub use common::*;
+pub use cons::*;
+pub use env::BdlEnvType;
+pub use geom::*;
 
 // ------------------------- BDL ----------------------------
 

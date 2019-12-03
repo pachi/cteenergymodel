@@ -2,7 +2,7 @@
 //!
 //! Bloques genéricos de BDL
 
-use super::types::AttrMap;
+use super::AttrMap;
 
 use failure::bail;
 use failure::Error;
