@@ -132,7 +132,10 @@ impl TryFrom<BdlBlock> for Space {
         } = value;
         // TODO: por ahora solo soportamos este tipo. ¿Usa HULC alguno más?
         if &attrs.remove_str("SHAPE")? != "POLYGON" {
-            bail!("Tipo de espacio desconocido (no definido por polígno): {}", name)
+            bail!(
+                "Tipo de espacio desconocido (no definido por polígno): {}",
+                name
+            )
         };
 
         let stype = attrs.remove_str("TYPE")?;
@@ -251,10 +254,9 @@ impl std::str::FromStr for Vector {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Vector, Self::Err> {
-        let x: &[_] = &[' ', '(', ')'];
         if let [x, y] = s
             .split(',')
-            .map(|v| v.trim_matches(x))
+            .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
             .collect::<Vec<_>>()
             .as_slice()
         {

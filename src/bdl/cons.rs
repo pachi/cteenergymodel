@@ -15,6 +15,33 @@ use failure::Error;
 use super::blocks::BdlBlock;
 use super::AttrMap;
 
+/// Interpreta lista de nombres con formato "("mat1", "mat2", "mat3", ...)"
+fn extract_namesvec<S: AsRef<str>>(input: S) -> Vec<String> {
+    input
+        .as_ref()
+        .trim_matches(&[' ', '(', ')'] as &[_])
+        .split('"')
+        .map(str::trim)
+        .filter(|v| *v != "," && *v != "")
+        .map(|v| v.to_string())
+        .collect::<Vec<_>>()
+}
+
+/// Interpreta lista de valores con formato "(num1, num2, num3, ...)"
+fn extract_f32vec<S: AsRef<str> + std::fmt::Debug>(input: S) -> Result<Vec<f32>, Error> {
+    input
+        .as_ref()
+        .trim_matches(&[' ', '(', ')'] as &[_])
+        .split(',')
+        .map(|v| {
+            v.trim()
+                .parse::<f32>()
+                .map_err(|_| format_err!("Error al convertir {}", v))
+        })
+        .collect::<Result<Vec<f32>, _>>()
+        .map_err(|_| format_err!("Error en la conversión numérica de {:?}", input))
+}
+
 /// BBDD
 /// - Opacos
 ///      - Materiales y productos (MATERIAL (tipo PROPERTIES o RESISTANCE) -> group)
@@ -168,11 +195,9 @@ pub struct Layers {
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
     /// Lista de nombres de materiales de las capas
-    /// TODO: convertir a Vec<String>
-    pub material: String,
+    pub material: Vec<String>,
     /// Lista de espesores de las capas
-    /// TODO: convertir a Vec<f32>
-    pub thickness: String,
+    pub thickness: Vec<f32>,
     // Resto de propiedades
     // IMAGE, NAME_CALENER, LIBRARY, UTIL, TYPE-DEFINITION, DEFAULT
     // pub attrs: AttrMap,
@@ -186,8 +211,8 @@ impl TryFrom<BdlBlock> for Layers {
             name, mut attrs, ..
         } = value;
         let group = attrs.remove_str("GROUP")?;
-        let material = attrs.remove_str("MATERIAL")?;
-        let thickness = attrs.remove_str("THICKNESS")?;
+        let material = extract_namesvec(attrs.remove_str("MATERIAL")?);
+        let thickness = extract_f32vec(attrs.remove_str("THICKNESS")?)?;
         Ok(Self {
             name,
             group,
