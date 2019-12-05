@@ -459,16 +459,48 @@ impl TryFrom<BdlBlock> for Glass {
 pub struct ThermalBridge {
     /// Nombre
     pub name: String,
-    /// Definición: por defecto (1), usuario (2), catálogo (3) ???
-    pub definition: String,
     /// Longitud total (m)
     pub length: f32,
+    /// Tipo de puente térmico
+    /// PILLAR, WINDOW-FRAME
+    /// SLAB: Cubierta con forjado (anglemin, anglemax, partition)
+    /// MASONRY: Encuentros entre muros (anglemin, anglemax, partition)
+    /// UNDER-EXT: Solera con pared exterior (anglemin, anglemax, partition)
+    pub tbtype: String,
     /// Transmitancia térmica W/mK
-    pub psi: Option<f32>,
-    /// Tipo de puente térmico (SLAB, ...)
-    pub tbtype: Option<String>,
-    /// Resto de propiedades
-    pub attrs: AttrMap,
+    pub psi: f32,
+    /// Fractor de resistencia superficial frsi (condensaciones)
+    pub frsi: f32,
+    /// Propiedades geométricas de los encuentros (anglemin, anglemax, partition)
+    pub geometry: Option<TBGeometry>,
+    /// Datos para definición por catálogo (tipo 3)
+    pub catalog: Option<TBByCatalog>,
+}
+
+/// Definición por usuario (definition 2)
+#[derive(Debug, Clone, Default)]
+pub struct TBGeometry {
+    /// Tipo de encuentro entre elementos:
+    /// - YES -> frente de forjado
+    /// - BOTH -> encuentros entre dos particiones exteriores
+    pub partition: String,
+    /// Ángulo mínimo ??
+    pub anglemin: f32,
+    /// Ángulo máximo ??
+    pub anglemax: f32,
+}
+
+/// Definición por catálogo (definition 3)
+#[derive(Debug, Clone, Default)]
+pub struct TBByCatalog {
+    /// Lista de tipos
+    pub classes: Vec<String>,
+    /// Lista de porcentajes de la longitud total
+    pub pcts: Vec<f32>,
+    /// Lista de transmitancias del primer elemento del encuentro (muro) W/m2k
+    pub firstelems: Vec<f32>,
+    /// Lista de transmitancias del segundo elemento del encuentro (muro) W/m2k
+    pub secondelems: Option<Vec<f32>>,
 }
 
 impl TryFrom<BdlBlock> for ThermalBridge {
@@ -478,18 +510,48 @@ impl TryFrom<BdlBlock> for ThermalBridge {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
-        let definition = attrs.remove_str("DEFINICION").unwrap_or_default();
         let length = attrs.remove_f32("LONG-TOTAL")?;
-        let psi = attrs.remove_f32("TTL").ok();
-        let tbtype = attrs.remove_str("TYPE").ok();
+        let (psi, frsi) = if name == "LONGITUDES_CALCULADAS" {
+            (0.0, 0.0)
+        } else {
+            (attrs.remove_f32("TTL")?, attrs.remove_f32("FRSI")?)
+        };
+        let tbtype = attrs.remove_str("TYPE").ok().unwrap_or_default();
+        let geometry = match tbtype.as_str() {
+            "WINDOW-FRAME" | "PILLAR" | "" => None,
+            _ => Some(TBGeometry {
+                anglemin: attrs.remove_f32("ANGLE-MIN")?,
+                anglemax: attrs.remove_f32("ANGLE-MAX")?,
+                partition: attrs.remove_str("PARTITION")?,
+            }),
+        };
+
+        let defn = attrs.remove_f32("DEFINICION")? as i32;
+
+        let catalog = match defn {
+            // Definido con valor por defecto o por el usuario
+            1 | 2 => None,
+            // Definido por catálogo de PTs
+            3 => Some(TBByCatalog {
+                classes: extract_namesvec(attrs.remove_str("LISTA-N")?),
+                pcts: extract_f32vec(attrs.remove_str("LISTA-L")?)?,
+                firstelems: extract_f32vec(attrs.remove_str("LISTA-MURO")?)?,
+                secondelems: if let Some(list) = attrs.remove_str("LISTA-MARCO").ok() {
+                    Some(extract_f32vec(list)?)
+                } else {
+                    None
+                },
+            }),
+            _ => bail!("Puente térmico '{}' con tipo desconocido ({})", name, defn),
+        };
         Ok(Self {
             name,
-            // group,
-            definition,
             length,
-            psi,
             tbtype,
-            attrs,
+            psi,
+            frsi,
+            geometry,
+            catalog
         })
     }
 }
