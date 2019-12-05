@@ -9,7 +9,6 @@
 use std::convert::TryFrom;
 
 use super::blocks::BdlBlock;
-use super::AttrMap;
 
 use failure::bail;
 use failure::Error;
@@ -33,11 +32,14 @@ pub struct Floor {
     /// Cota de la planta en el sistema coordenado del edificio
     /// XXX: podría no aparecer y ser la de la del edificio
     pub z: f32,
-    /// nombres de los espacios que pertenecen a la planta
-    /// TODO: podríamos eliminarlo y marcar en el espacio la planta a la que pertenece
-    pub spaces: Vec<String>,
-    /// Resto de propiedades
-    pub attrs: AttrMap,
+    /// Polígono que define la geometría
+    pub polygon: String,
+    /// Altura suelo a suelo, incluyendo los plenum
+    pub floorheight: f32,
+    /// Altura libre (la altura de los espacios de tipo PLENUM es floorheight - spaceheight)
+    pub spaceheight: f32,
+    /// Planta anterior (inferior)
+    pub previous: String,
 }
 
 impl TryFrom<BdlBlock> for Floor {
@@ -47,12 +49,23 @@ impl TryFrom<BdlBlock> for Floor {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
+        // De los tipos de definición de la geometría: POLYGON, BOX, NO-SHAPE
+        // solamente manejamos definiciones por polígono
+        if attrs.remove_str("SHAPE")? != "POLYGON" {
+            bail!("Planta '{}' de tipo distinto a POLYGON, no soportado");
+        };
         let z = attrs.remove_f32("Z").unwrap_or_default();
+        let polygon = attrs.remove_str("POLYGON")?;
+        let floorheight = attrs.remove_f32("FLOOR-HEIGHT")?;
+        let spaceheight = attrs.remove_f32("SPACE-HEIGHT")?;
+        let previous = attrs.remove_str("PREVIOUS")?;
         Ok(Self {
             name,
             z,
-            attrs,
-            ..Default::default()
+            polygon,
+            floorheight,
+            spaceheight,
+            previous,
         })
     }
 }
