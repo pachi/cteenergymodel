@@ -440,6 +440,20 @@ impl TryFrom<BdlBlock> for Glass {
 ///            TYPE        = SLAB
 ///            PARTITION   = YES
 ///          ..
+///     "UNION_CUBIERTA" = THERMAL-BRIDGE
+///         LONG-TOTAL = 148.341034
+///         DEFINICION = 3
+///         TTL    = 0.226667
+///         LISTA-N   = ( "Cubiertas planas - Forjado no interrumpe el aislamiento en fachada")
+///         LISTA-L   = ( 100)
+///         LISTA-MURO   = ( 0.230000)
+///         LISTA-MARCO   = ( 0.200000)
+///         FRSI        = 0.28
+///         ANGLE-MIN   = 0
+///         ANGLE-MAX   = 135
+///         TYPE        = SLAB
+///         PARTITION   = BOTH
+///         ..
 /// ```
 #[derive(Debug, Clone, Default)]
 pub struct ThermalBridge {

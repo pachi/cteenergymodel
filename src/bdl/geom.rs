@@ -14,7 +14,7 @@ use super::AttrMap;
 use failure::bail;
 use failure::Error;
 
-/// Planta
+/// Planta (agrupación de espacios)
 ///
 /// Ejemplo:
 /// ```text
@@ -28,11 +28,10 @@ use failure::Error;
 /// ```
 #[derive(Debug, Clone, Default)]
 pub struct Floor {
-    /// nombre de la planta
+    /// Nombre de la planta
     pub name: String,
-    /// cota de la planta, salvo que no se indique planta y se usa la del edificio
-    /// TODO: deberíamos acceder a esto a través de una función que consulte la planta y el edificio
-    /// TODO: usar parent en su lugar
+    /// Cota de la planta en el sistema coordenado del edificio
+    /// XXX: podría no aparecer y ser la de la del edificio
     pub z: f32,
     /// nombres de los espacios que pertenecen a la planta
     /// TODO: podríamos eliminarlo y marcar en el espacio la planta a la que pertenece
@@ -130,8 +129,8 @@ impl TryFrom<BdlBlock> for Space {
             parent,
             ..
         } = value;
-        // TODO: por ahora solo soportamos este tipo. ¿Usa HULC alguno más?
-        if &attrs.remove_str("SHAPE")? != "POLYGON" {
+        // XXX: por ahora solo soportamos definición del espacios por polígono
+        if attrs.remove_str("SHAPE")? != "POLYGON" {
             bail!(
                 "Tipo de espacio desconocido (no definido por polígno): {}",
                 name
@@ -182,8 +181,7 @@ impl TryFrom<BdlBlock> for Space {
 /// Polígono
 ///
 /// Define la geometría, mediante el atributo POLYGON de:
-/// - EXTERIOR-WALL, INTERIOR-WALL, UNDERGROUND-WALL
-/// - FLOOR y SPACE
+/// - EXTERIOR-WALL, INTERIOR-WALL, UNDERGROUND-WALL, FLOOR y SPACE
 ///
 /// Ejemplo:
 /// ```text
@@ -230,7 +228,7 @@ impl TryFrom<BdlBlock> for Polygon {
 /// ```
 #[derive(Debug, Clone, Default)]
 pub struct Vertex {
-    /// Vértice
+    /// Nombre del vértice
     name: String,
     /// Coordenadas del vértice
     vector: Vector,
@@ -244,9 +242,9 @@ pub struct Vertex {
 /// ```
 #[derive(Debug, Copy, Clone, Default)]
 pub struct Vector {
-    /// x
+    /// Coordenada x
     pub x: f32,
-    /// y
+    /// Coordenada y
     pub y: f32,
 }
 
