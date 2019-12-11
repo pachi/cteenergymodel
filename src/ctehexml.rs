@@ -77,10 +77,7 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
     for el in &bdldata.env {
         if let BdlEnvType::Window(w) = el {
-            gglshwi.insert(
-                w.name.to_string(),
-                w.attrs.get_f32("transmisividadJulio")?,
-            );
+            gglshwi.insert(w.name.to_string(), w.gglshwi);
         }
     }
 
