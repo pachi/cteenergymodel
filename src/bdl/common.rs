@@ -134,3 +134,31 @@ impl std::convert::TryFrom<BdlValue> for f32 {
         }
     }
 }
+
+
+/// Interpreta lista de nombres con formato "("mat1", "mat2", "mat3", ...)"
+pub fn extract_namesvec<S: AsRef<str>>(input: S) -> Vec<String> {
+    input
+        .as_ref()
+        .trim_matches(&[' ', '(', ')'] as &[_])
+        .split('"')
+        .map(str::trim)
+        .filter(|v| *v != "," && *v != "")
+        .map(|v| v.to_string())
+        .collect::<Vec<_>>()
+}
+
+/// Interpreta lista de valores con formato "(num1, num2, num3, ...)"
+pub fn extract_f32vec<S: AsRef<str> + std::fmt::Debug>(input: S) -> Result<Vec<f32>, Error> {
+    input
+        .as_ref()
+        .trim_matches(&[' ', '(', ')'] as &[_])
+        .split(',')
+        .map(|v| {
+            v.trim()
+                .parse::<f32>()
+                .map_err(|_| format_err!("Error al convertir {}", v))
+        })
+        .collect::<Result<Vec<f32>, _>>()
+        .map_err(|_| format_err!("Error en la conversión numérica de {:?}", input))
+}

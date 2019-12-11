@@ -18,21 +18,21 @@ mod cons;
 mod env;
 mod geom;
 
-pub use blocks::*;
-pub use common::*;
-pub use cons::*;
-pub use env::BdlEnvType;
-pub use geom::*;
+pub use blocks::{build_blocks, BdlBlock};
+pub use common::{extract_f32vec, extract_namesvec, AttrMap};
+pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
+pub use env::{BdlEnvType, Window};
+pub use geom::{Construction, Floor, Polygon, Space};
 
 // ------------------------- BDL ----------------------------
 
 /// Datos del archivo BDL
 #[derive(Debug, Default)]
 pub struct BdlData {
-    /// Base de datos de materiales, productos y composiciones constructivas
-    pub db: Vec<BdlDB>,
     /// Metadatos: espacio de trabajo, parámetros de edificio, construcciones por defecto y datos generales
     pub meta: HashMap<String, BdlBlock>,
+    /// Base de datos de materiales, productos y composiciones constructivas
+    pub db: Vec<BdlDB>,
     /// Lista de plantas
     pub floors: Vec<Floor>,
     /// Lista de espacios
@@ -173,7 +173,9 @@ impl BdlData {
                 // Elementos transparentes de la envolvente -----
                 // Hueco
                 "WINDOW" => {
-                    bdldata.env.push(BdlEnvType::Window(block));
+                    bdldata
+                        .env
+                        .push(BdlEnvType::Window(Window::try_from(block)?));
                 }
                 _ => {
                     eprintln!(

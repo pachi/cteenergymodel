@@ -14,17 +14,6 @@ use failure::bail;
 use failure::Error;
 
 /// Planta (agrupación de espacios)
-///
-/// Ejemplo:
-/// ```text
-///     "P01" = FLOOR
-///     POLYGON       =  "P01_Poligono1"
-///     FLOOR-HEIGHT  =            3.5
-///     SPACE-HEIGHT  =            3.5
-///     SHAPE         =  POLYGON
-///     PREVIOUS      =  "Ninguna"
-///     ..
-/// ```
 #[derive(Debug, Clone, Default)]
 pub struct Floor {
     /// Nombre de la planta
@@ -45,6 +34,18 @@ pub struct Floor {
 impl TryFrom<BdlBlock> for Floor {
     type Error = Error;
 
+    /// Convierte bloque BDL a planta (agrupación de espacios)
+    ///
+    /// Ejemplo:
+    /// ```text
+    ///     "P01" = FLOOR
+    ///     POLYGON       =  "P01_Poligono1"
+    ///     FLOOR-HEIGHT  =            3.5
+    ///     SPACE-HEIGHT  =            3.5
+    ///     SHAPE         =  POLYGON
+    ///     PREVIOUS      =  "Ninguna"
+    ///     ..
+    /// ```
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name, mut attrs, ..
@@ -71,30 +72,6 @@ impl TryFrom<BdlBlock> for Floor {
 }
 
 /// Espacio
-///
-/// Ejemplo:
-/// ```text
-///     "P01_E01" = SPACE
-///     nCompleto = "P01_E01"
-///     HEIGHT        =            3.5
-///     SHAPE             = POLYGON
-///     POLYGON           = "P01_E01_Pol2"
-///     TYPE              = CONDITIONED
-///     SPACE-TYPE        = "Residencial"
-///     SYSTEM-CONDITIONS = "Residencial"
-///     SPACE-CONDITIONS  = "Residencial"
-///     FLOOR-WEIGHT      =              0
-///     MULTIPLIER        = 1
-///     MULTIPLIED        = 0
-///     PILLARS-NUMBERS   = 0
-///     FactorSuperficieUtil   = 1.0
-///     perteneceALaEnvolventeTermica   = SI
-///     INTERIOR-RADIATION  = FIXED
-///     POWER     = 4.4
-///     VEEI-OBJ  = 7.000000
-///     VEEI-REF  = 10.000000
-///     ..
-/// ```
 #[derive(Debug, Clone, Default)]
 pub struct Space {
     /// Nombre del espacio
@@ -111,11 +88,11 @@ pub struct Space {
     pub insidete: bool,
     /// Planta a la que pertenece el espacio
     pub floor: String,
-    /// TODO: Potencia de equipos (o de iluminación???)
+    /// Potencia de iluminación (W/m2)
     pub power: f32,
-    /// VEEI del edificio objeto W/100lx
+    /// VEEI del edificio objeto W/m2/100lux
     pub veeiobj: f32,
-    /// VEEI del edificio de referencia W/100lx
+    /// VEEI del edificio de referencia W/m2/100lux
     pub veeiref: f32,
     /// Tipo de espacio
     pub spacetype: String,
@@ -125,16 +102,41 @@ pub struct Space {
     pub systemconds: String,
     /// Multiplicador
     pub multiplier: f32,
-    /// ¿Está multiplicado?
-    pub multiplied: f32,
-    // Resto de propiedades
-    // PILLARS-NUMBERS, FactorSuperficieUtil, INTERIOR-RADIATION, nCompleto, FLOOR-WEIGHT
-    // pub attrs: AttrMap,
+    /// Si es un espacio multiplicado
+    pub ismultiplied: bool,
 }
 
 impl TryFrom<BdlBlock> for Space {
     type Error = Error;
 
+    /// Convierte de Bloque BDL a espacio
+    ///
+    /// Ejemplo:
+    /// ```text
+    ///     "P01_E01" = SPACE
+    ///     nCompleto = "P01_E01"
+    ///     HEIGHT        =            3.5
+    ///     SHAPE             = POLYGON
+    ///     POLYGON           = "P01_E01_Pol2"
+    ///     TYPE              = CONDITIONED
+    ///     SPACE-TYPE        = "Residencial"
+    ///     SYSTEM-CONDITIONS = "Residencial"
+    ///     SPACE-CONDITIONS  = "Residencial"
+    ///     FLOOR-WEIGHT      =              0
+    ///     MULTIPLIER        = 1
+    ///     MULTIPLIED        = 0
+    ///     PILLARS-NUMBERS   = 0
+    ///     FactorSuperficieUtil   = 1.0
+    ///     perteneceALaEnvolventeTermica   = SI
+    ///     INTERIOR-RADIATION  = FIXED
+    ///     POWER     = 4.4
+    ///     VEEI-OBJ  = 7.000000
+    ///     VEEI-REF  = 10.000000
+    ///     ..
+    /// ```
+    /// TODO: propiedades no convertidas:
+    /// TODO: PILLARS-NUMBERS (número de pilares en el espacio, como PTs),
+    /// TODO: FactorSuperficieUtil, INTERIOR-RADIATION, nCompleto, FLOOR-WEIGHT
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
@@ -170,7 +172,11 @@ impl TryFrom<BdlBlock> for Space {
         let spaceconds = attrs.remove_str("SPACE-CONDITIONS")?;
         let systemconds = attrs.remove_str("SYSTEM-CONDITIONS")?;
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
-        let multiplied = attrs.remove_f32("MULTIPLIED")?;
+        let ismultiplied = if attrs.remove_f32("MULTIPLIED")? == 1.0 {
+            true
+        } else {
+            false
+        };
 
         Ok(Self {
             name,
@@ -186,27 +192,12 @@ impl TryFrom<BdlBlock> for Space {
             spaceconds,
             systemconds,
             multiplier,
-            multiplied,
+            ismultiplied,
         })
     }
 }
 
 /// Polígono
-///
-/// Define la geometría, mediante el atributo POLYGON de:
-/// - EXTERIOR-WALL, INTERIOR-WALL, UNDERGROUND-WALL, FLOOR y SPACE
-///
-/// Ejemplo:
-/// ```text
-///     "P01_E01_Pol2" = POLYGON
-///     V1   =( 14.97, 11.39 )
-///     V2   =( 10.84, 11.39 )
-///     V3   =( 10.86, 0 )
-///     V4   =( 18.22, 0 )
-///     V5   =( 18.22, 9.04 )
-///     V6   =( 14.97, 9.04 )
-///     ..
-/// ```
 /// TODO: ver sisgen/libreria_sisgen/claseEdificio.py para áreas, normal, etc.
 #[derive(Debug, Clone, Default)]
 pub struct Polygon {
@@ -219,6 +210,22 @@ pub struct Polygon {
 impl TryFrom<BdlBlock> for Polygon {
     type Error = Error;
 
+    /// Convierte de bloque BDL a polígono
+    ///
+    /// Define la geometría, mediante el atributo POLYGON de:
+    /// - EXTERIOR-WALL, INTERIOR-WALL, UNDERGROUND-WALL, FLOOR y SPACE
+    ///
+    /// Ejemplo:
+    /// ```text
+    ///     "P01_E01_Pol2" = POLYGON
+    ///     V1   =( 14.97, 11.39 )
+    ///     V2   =( 10.84, 11.39 )
+    ///     V3   =( 10.86, 0 )
+    ///     V4   =( 18.22, 0 )
+    ///     V5   =( 18.22, 9.04 )
+    ///     V6   =( 14.97, 9.04 )
+    ///     ..
+    /// ```
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock { name, attrs, .. } = value;
         let mut vertices = Vec::new();
@@ -234,11 +241,6 @@ impl TryFrom<BdlBlock> for Polygon {
 }
 
 /// Vertex - Vértice, conjunto de nombre y vector
-///
-/// Ejemplo:
-/// ```text
-///     V1   =( 14.97, 11.39 )
-/// ```
 #[derive(Debug, Clone, Default)]
 pub struct Vertex {
     /// Nombre del vértice
@@ -248,11 +250,6 @@ pub struct Vertex {
 }
 
 /// Vector
-///
-/// Ejemplo:
-/// ```text
-///     ( 14.97, 11.39 )
-/// ```
 #[derive(Debug, Copy, Clone, Default)]
 pub struct Vector {
     /// Coordenada x
@@ -264,6 +261,12 @@ pub struct Vector {
 impl std::str::FromStr for Vector {
     type Err = Error;
 
+    /// Convierte de cadena a vector de coordenadas
+    ///
+    /// Ejemplo:
+    /// ```text
+    ///     ( 14.97, 11.39 )
+    /// ```
     fn from_str(s: &str) -> Result<Vector, Self::Err> {
         if let [x, y] = s
             .split(',')
@@ -284,15 +287,6 @@ impl std::str::FromStr for Vector {
 // - Composición de cerramiento (CONSTRUCTION) =================
 
 /// Construcción - Remite a LAYERS (¿y otras opciones?)
-///
-/// Ejemplo:
-/// ```text
-///     "muro_opaco0.40" =  CONSTRUCTION
-///     TYPE   = LAYERS  
-///     LAYERS = "muro_opaco"
-///     ABSORPTANCE = 0.400000
-///     ..
-/// ```
 #[derive(Debug, Clone, Default)]
 pub struct Construction {
     /// Nombre
@@ -316,6 +310,16 @@ pub struct Construction {
 impl TryFrom<BdlBlock> for Construction {
     type Error = Error;
 
+    /// Convierte de bloque BDL a construcción - Remite a LAYERS (¿y otras opciones?)
+    ///
+    /// Ejemplo:
+    /// ```text
+    ///     "muro_opaco0.40" =  CONSTRUCTION
+    ///     TYPE   = LAYERS  
+    ///     LAYERS = "muro_opaco"
+    ///     ABSORPTANCE = 0.400000
+    ///     ..
+    /// ```
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,

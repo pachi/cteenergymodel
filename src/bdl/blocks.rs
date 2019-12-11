@@ -9,6 +9,7 @@ use failure::Error;
 
 // Objetos ----------------------------------------------------------------
 
+/// Bloque de datos de BDL
 #[derive(Clone, Debug, Default)]
 pub struct BdlBlock {
     /// Tipo de bloque
