@@ -21,7 +21,7 @@ mod geom;
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
-pub use env::{BdlEnvType, Window};
+pub use env::{BdlEnvType, InteriorWall, Shade, UndergroundWall, Wall, Window};
 pub use geom::{Construction, Floor, Polygon, Space};
 
 // ------------------------- BDL ----------------------------
@@ -40,7 +40,7 @@ pub struct BdlData {
     /// Elementos de la envolvente
     pub env: Vec<BdlEnvType>,
     // Sombras exteriores del edificio
-    pub shadings: Vec<BdlBlock>,
+    pub shadings: Vec<Shade>,
     /// Lista de polígonos
     pub polygons: HashMap<String, Polygon>,
     /// Construcciones de elementos de la envolvente
@@ -155,19 +155,27 @@ impl BdlData {
 
                 // Elementos opacos de la envolvente -----------
                 "EXTERIOR-WALL" => {
-                    bdldata.env.push(BdlEnvType::ExteriorWall(block));
+                    bdldata
+                        .env
+                        .push(BdlEnvType::ExteriorWall(Wall::try_from(block)?));
                 }
                 "INTERIOR-WALL" => {
-                    bdldata.env.push(BdlEnvType::InteriorWall(block));
+                    bdldata
+                        .env
+                        .push(BdlEnvType::InteriorWall(InteriorWall::try_from(block)?));
                 }
                 "UNDERGROUND-WALL" => {
-                    bdldata.env.push(BdlEnvType::UndergroundWall(block));
+                    bdldata
+                        .env
+                        .push(BdlEnvType::UndergroundWall(UndergroundWall::try_from(
+                            block,
+                        )?));
                 }
                 "ROOF" => {
-                    bdldata.env.push(BdlEnvType::Roof(block));
+                    bdldata.env.push(BdlEnvType::Roof(Wall::try_from(block)?));
                 }
                 "BUILDING-SHADE" => {
-                    bdldata.shadings.push(block);
+                    bdldata.shadings.push(Shade::try_from(block)?);
                 }
 
                 // Elementos transparentes de la envolvente -----

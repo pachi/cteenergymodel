@@ -1,0 +1,9 @@
+BDL:
+
+- Revisar conversión de SHADING-COEF a factor solar (Fw = 0.90? Ahora es 0.85)
+- Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL.
+    Seguir con horarios, condiciones operacionales y de consigna, horarios...
+- Hacer un exportador basado en datos de bdl nada más (y llevar espacios)
+- Hacer cálculos de áreas, normales, etc para polígonos (ver lib_sisgen/claseEdificio.py)
+- Implementar cálculo de U para los distintos elementos y así no usar kyg
+- Seguir definiendo objetos para datos generales del edificio

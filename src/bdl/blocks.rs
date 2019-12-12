@@ -14,7 +14,7 @@ use failure::Error;
 pub struct BdlBlock {
     /// Tipo de bloque
     pub btype: String,
-    /// Nombre del material
+    /// Nombre del elemento o material
     pub name: String,
     // Elemento madre, referenciado por nombre
     pub parent: Option<String>,

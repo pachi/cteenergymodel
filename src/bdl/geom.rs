@@ -81,13 +81,12 @@ pub struct Space {
     /// Nombre de polígono que define el espacio
     /// XXX: Solo vale para SHAPE = POLIGON (no vale con BOX o NO-SHAPE)
     pub polygon: String,
-    /// Altura del espacio
-    /// TODO: Es none si difiere de la altura de la planta
+    /// Altura del espacio, (o None si es la de la planta)
     pub height: Option<f32>,
     /// Pertenencia a la envolvente térmica
     pub insidete: bool,
     /// Planta a la que pertenece el espacio
-    pub floor: String,
+    pub parent: String,
     /// Potencia de iluminación (W/m2)
     pub power: f32,
     /// VEEI del edificio objeto W/m2/100lux
@@ -159,7 +158,7 @@ impl TryFrom<BdlBlock> for Space {
             .remove_str("perteneceALaEnvolventeTermica")
             .and(Ok(true))
             .unwrap_or(false);
-        let floor = parent.ok_or_else(|| {
+        let parent = parent.ok_or_else(|| {
             format_err!(
                 "No se encuentra la referencia de la planta en el espacio {}",
                 name
@@ -184,7 +183,7 @@ impl TryFrom<BdlBlock> for Space {
             polygon,
             height,
             insidete,
-            floor,
+            parent,
             power,
             veeiobj,
             veeiref,

@@ -24,7 +24,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{extract_f32vec, extract_namesvec, AttrMap, BdlBlock};
+use super::{extract_f32vec, extract_namesvec, BdlBlock};
 
 /// Elementos constructivos y de materiales pertenecientes a la base de datos
 /// Se organizan por nombre y grupo (tipo)
@@ -60,22 +60,22 @@ pub struct Material {
 /// Definición de propiedades termofísicas y grosor
 #[derive(Debug, Copy, Clone, Default)]
 pub struct MaterialProperties {
-    /// Grosor (m)
+    /// Espesor, d (m)
     pub thickness: f32,
-    /// Conductividad térmica
+    /// Conductividad térmica, lambda (W/mK)
     pub conductivity: f32,
-    /// Densidad
+    /// Densidad, rho (kg/m3)
     pub density: f32,
-    /// Calor específico
+    /// Calor específico, C_p (J/kg K)
     pub specificheat: f32,
-    /// Factor de difusividad al vapor de agua
+    /// Factor de difusividad al vapor de agua, mu (-)
     pub vapourdiffusivity: f32,
 }
 
 /// Definición por resistencia térmica
 #[derive(Debug, Copy, Clone, Default)]
 pub struct MaterialResistance {
-    /// Resistencia térmica ???
+    /// Resistencia térmica R (m2K/W)
     pub resistance: f32,
 }
 
@@ -153,7 +153,7 @@ pub struct Layers {
     pub group: String,
     /// Lista de nombres de materiales de las capas
     pub material: Vec<String>,
-    /// Lista de espesores de las capas
+    /// Lista de espesores de las capas ([m, m, ...])
     pub thickness: Vec<f32>,
 }
 
@@ -216,8 +216,6 @@ pub struct Gap {
     pub infcoef: f32,
     /// Porcentaje de U debido a intercalarios y cajón de persiana (%)
     pub deltau: f32,
-    /// Resto de propiedades
-    pub attrs: AttrMap,
 }
 
 impl TryFrom<BdlBlock> for Gap {
@@ -253,7 +251,9 @@ impl TryFrom<BdlBlock> for Gap {
     ///           DEFAULT           = NO
     ///          ..
     /// ```
-    /// TODO: atributos no trasladados: ISDOOR,
+    /// TODO: atributos no trasladados: ISDOOR, TRANSMITANCIA, SHADING-COEF
+    /// TODO: SHADE-COEF-SUMMER, SHADE-COEF-WINTER, MARKER-SUMMER,  MARKER-WINTER,
+    /// TODO: LIBRARY, UTIL, DEFAULT
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name, mut attrs, ..
@@ -278,7 +278,6 @@ impl TryFrom<BdlBlock> for Gap {
             framepct,
             infcoef,
             deltau,
-            attrs,
         })
     }
 }
@@ -290,15 +289,12 @@ pub struct Frame {
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
-    /// Conductividad W/m2K
+    /// Transmitancia térmica, U (W/m2K)
     pub conductivity: f32,
-    /// Absortividad del marco -
+    /// Absortividad del marco, alpha (-)
     pub absorptivity: f32,
-    /// Ancho del marco
+    /// Ancho del marco (m)
     pub width: f32,
-    // Resto de propiedades
-    // NAME-CALENER, LIBRRARY, UTIL
-    // pub attrs: AttrMap,
 }
 
 impl TryFrom<BdlBlock> for Frame {
@@ -321,6 +317,7 @@ impl TryFrom<BdlBlock> for Frame {
     ///      UTIL          =  NO
     ///      ..
     /// ```
+    /// TODO: Propiedades no trasladadas: NAME-CALENER, LIBRRARY, UTIL
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name, mut attrs, ..
@@ -350,8 +347,6 @@ pub struct Glass {
     pub conductivity: f32,
     /// Factor solar a incidencia normal - (SHADING-COEF)
     pub shadingcoef: f32,
-    // Resto de propiedades
-    // pub attrs: AttrMap,
 }
 
 impl TryFrom<BdlBlock> for Glass {
@@ -405,12 +400,12 @@ pub struct ThermalBridge {
     pub name: String,
     /// Longitud total (m)
     pub length: f32,
-    /// Tipo de puente térmico
-    /// PILLAR: pilar en fachada,
-    /// WINDOW-FRAME: borde de hueco,
-    /// SLAB: Cubierta con forjado (¿o cubierta con suelo al aire?) (anglemin, anglemax, partition)
-    /// MASONRY: Encuentros entre muros (anglemin, anglemax, partition)
-    /// UNDER-EXT: Solera con pared exterior (anglemin, anglemax, partition)
+    /// Tipo de puente térmico:
+    /// - PILLAR: pilar en fachada,
+    /// - WINDOW-FRAME: borde de hueco,
+    /// - SLAB: Forjado con cubierta o con suelo en contacto con el aire (anglemin, anglemax, partition)
+    /// - MASONRY: Encuentros entre muros (anglemin, anglemax, partition)
+    /// - UNDER-EXT: Solera con pared exterior (anglemin, anglemax, partition)
     pub tbtype: String,
     /// Transmitancia térmica W/mK
     pub psi: f32,
@@ -429,9 +424,9 @@ pub struct TBGeometry {
     /// - YES -> frente de forjado
     /// - BOTH -> encuentros entre dos particiones exteriores
     pub partition: String,
-    /// Ángulo mínimo ??
+    /// Ángulo mínimo (grados sexagesimales)
     pub anglemin: f32,
-    /// Ángulo máximo ??
+    /// Ángulo máximo (grados sexagesimales)
     pub anglemax: f32,
 }
 
