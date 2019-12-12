@@ -203,7 +203,7 @@ pub struct Polygon {
     /// Nombre del polígono
     pub name: String,
     /// Lista de vectores que definen el polígono
-    pub vertices: Vec<Vertex>,
+    pub vertices: Vec<Vertex2D>,
 }
 
 impl TryFrom<BdlBlock> for Polygon {
@@ -230,7 +230,7 @@ impl TryFrom<BdlBlock> for Polygon {
         let mut vertices = Vec::new();
         for (name, vals) in &attrs.0 {
             let vector = vals.to_string().parse()?;
-            vertices.push(Vertex {
+            vertices.push(Vertex2D {
                 name: name.clone(),
                 vector,
             })
@@ -239,25 +239,34 @@ impl TryFrom<BdlBlock> for Polygon {
     }
 }
 
-/// Vertex - Vértice, conjunto de nombre y vector
+/// Vertex2D - Vértice, conjunto de nombre y vector 2d (x, y)
 #[derive(Debug, Clone, Default)]
-pub struct Vertex {
+pub struct Vertex2D {
     /// Nombre del vértice
-    name: String,
+    pub name: String,
     /// Coordenadas del vértice
-    vector: Vector,
+    pub vector: Vector2D,
 }
 
-/// Vector
+/// Vertex3D - Vértice, conjunto de nombre y vector 3d (x, y, z)
+#[derive(Debug, Clone, Default)]
+pub struct Vertex3D {
+    /// Nombre del vértice
+    pub name: String,
+    /// Coordenadas del vértice
+    pub vector: Vector3D,
+}
+
+/// Vector 2D (x,y)
 #[derive(Debug, Copy, Clone, Default)]
-pub struct Vector {
+pub struct Vector2D {
     /// Coordenada x
     pub x: f32,
     /// Coordenada y
     pub y: f32,
 }
 
-impl std::str::FromStr for Vector {
+impl std::str::FromStr for Vector2D {
     type Err = Error;
 
     /// Convierte de cadena a vector de coordenadas
@@ -266,23 +275,60 @@ impl std::str::FromStr for Vector {
     /// ```text
     ///     ( 14.97, 11.39 )
     /// ```
-    fn from_str(s: &str) -> Result<Vector, Self::Err> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         if let [x, y] = s
             .split(',')
             .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
             .collect::<Vec<_>>()
             .as_slice()
         {
-            Ok(Vector {
+            Ok(Self {
                 x: x.parse::<f32>()?,
                 y: y.parse::<f32>()?,
             })
         } else {
-            bail!("Fallo al generar vector")
+            bail!("Fallo al generar vector 2D con los datos '{}'", s)
         }
     }
 }
 
+/// Vector 3D (x,y,z)
+#[derive(Debug, Copy, Clone, Default)]
+pub struct Vector3D {
+    /// Coordenada x
+    pub x: f32,
+    /// Coordenada y
+    pub y: f32,
+    /// Coordenada z
+    pub z: f32,
+}
+
+impl std::str::FromStr for Vector3D {
+    type Err = Error;
+
+    /// Convierte de cadena a vector de coordenadas
+    ///
+    /// Ejemplo:
+    /// ```text
+    ///     ( 14.97, 11.39, 2.0 )
+    /// ```
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if let [x, y, z] = s
+            .split(',')
+            .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
+            .collect::<Vec<_>>()
+            .as_slice()
+        {
+            Ok(Self {
+                x: x.parse::<f32>()?,
+                y: y.parse::<f32>()?,
+                z: z.parse::<f32>()?,
+            })
+        } else {
+            bail!("Fallo al generar vector 3D con los datos '{}'", s)
+        }
+    }
+}
 // - Composición de cerramiento (CONSTRUCTION) =================
 
 /// Construcción - Remite a LAYERS (¿y otras opciones?)

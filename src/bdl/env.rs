@@ -7,14 +7,14 @@
 //! - cubiertas (ROOF)
 //!
 //! Todos menos el hueco tienen una construcción y pertenecen a un espacio (location)
-//! 
+//!
 //! Otros elementos:
 //! - Sombra (BUILDING-SHADE)
 
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{extract_f32vec, BdlBlock};
+use super::{extract_f32vec, geom::Vertex3D, BdlBlock};
 
 /// Elementos de envolvente
 #[derive(Debug)]
@@ -468,15 +468,9 @@ impl TryFrom<BdlBlock> for UndergroundWall {
 
 // Muro o soleras en contacto con el terreno (UNDERGROUND-WALL) --------
 
-/// Sombra (BUILDING-SHADE)
+/// Defininición de gometría de sombra como rectángulo
 #[derive(Debug, Clone, Default)]
-pub struct Shade {
-    /// Nombre
-    pub name: String,
-    /// Transmisividad de la radiación solar de la superficie (-)
-    pub tran: f32,
-    /// Reflectividad visible de la superficie (-)
-    pub refl: f32,
+pub struct ShadeGeometry {
     /// Coordenada X de la esquina inferior izquierda
     pub x: f32,
     /// Coordenada Y de la esquina inferior izquierda
@@ -493,6 +487,21 @@ pub struct Shade {
     /// Inclinación (grados sexagesimales)
     /// Ángulo entre el eje Z del edificio y la proyección de la normal exterior del plano
     pub tilt: f32,
+}
+
+/// Sombra (BUILDING-SHADE)
+#[derive(Debug, Clone, Default)]
+pub struct Shade {
+    /// Nombre
+    pub name: String,
+    /// Transmisividad de la radiación solar de la superficie (-)
+    pub tran: f32,
+    /// Reflectividad visible de la superficie (-)
+    pub refl: f32,
+    /// Geometría por rectángulos
+    pub geometry: Option<ShadeGeometry>,
+    /// Geometría por vértices
+    pub vertices: Option<Vec<Vertex3D>>,
 }
 
 impl TryFrom<BdlBlock> for Shade {
@@ -515,6 +524,16 @@ impl TryFrom<BdlBlock> for Shade {
     ///         TILT     = 90.000000
     ///         AZIMUTH  = 180.000000
     ///         ..
+    ///     "Sombra016" = BUILDING-SHADE
+    ///         BULB-TRA = "Default.bulb"
+    ///         BULB-REF = "Default.bulb"
+    ///         TRAN     =              0
+    ///         REFL     =            0.7
+    ///         V1       =( 9.11, 25.7901, 12.5 )
+    ///         V2       =( 9.11, 27.04, 12.5 )
+    ///         V3       =( 6, 27.04, 12.5 )
+    ///         V4       =( 6, 25.7901, 12.5 )
+    ///         ..
     /// ```
     /// TODO: atributos no trasladados:
     /// TODO: BULB-TRA, BULB-REF
@@ -524,24 +543,43 @@ impl TryFrom<BdlBlock> for Shade {
         } = value;
         let tran = attrs.remove_f32("TRAN")?;
         let refl = attrs.remove_f32("REFL")?;
-        let x = attrs.remove_f32("X")?;
-        let y = attrs.remove_f32("Y")?;
-        let z = attrs.remove_f32("Z")?;
-        let height = attrs.remove_f32("HEIGHT")?;
-        let width = attrs.remove_f32("WIDTH")?;
-        let azimuth = attrs.remove_f32("AZIMUTH")?;
-        let tilt = attrs.remove_f32("TILT")?;
+        let (geometry, vertices) = if attrs.get_f32("X").is_ok() {
+            // Definición por rectángulo
+            (
+                Some(ShadeGeometry {
+                    x: attrs.remove_f32("X")?,
+                    y: attrs.remove_f32("Y")?,
+                    z: attrs.remove_f32("Z")?,
+                    height: attrs.remove_f32("HEIGHT")?,
+                    width: attrs.remove_f32("WIDTH")?,
+                    azimuth: attrs.remove_f32("AZIMUTH")?,
+                    tilt: attrs.remove_f32("TILT")?,
+                }),
+                None,
+            )
+        } else {
+            // Definición por vértices
+            let mut verts = Vec::new();
+            for i in 1.. {
+                let name = format!("V{}", i);
+                if let Some(vdata) = attrs.remove_str(&name).ok() {
+                    verts.push(Vertex3D {
+                        name,
+                        vector: vdata.parse()?,
+                    });
+                } else {
+                    break;
+                }
+            }
+            (None, Some(verts))
+        };
+
         Ok(Self {
             name,
             tran,
             refl,
-            x,
-            y,
-            z,
-            height,
-            width,
-            azimuth,
-            tilt,
+            geometry,
+            vertices,
         })
     }
 }
