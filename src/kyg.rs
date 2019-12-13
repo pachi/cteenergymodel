@@ -24,84 +24,16 @@ SOFTWARE.
 use std::collections::HashMap;
 
 use failure::Error;
-use serde::Serialize;
 use uuid::Uuid;
 
-use crate::utils::read_latin1_file;
-
-#[derive(Debug, Serialize)]
-pub struct Hueco {
-    id: String,
-    nombre: String,
-    orientacion: String,
-    #[serde(rename(serialize = "A"))]
-    a: f32,
-    #[serde(rename(serialize = "U"))]
-    u: f32,
-    #[serde(rename(serialize = "Ff"))]
-    ff: f32,
-    gglshwi: f32,
-    #[serde(rename(serialize = "Fshobst"))]
-    fshobst: f32,
-}
-
-#[derive(Debug, Serialize)]
-pub struct Opaco {
-    id: String,
-    nombre: String,
-    #[serde(rename(serialize = "A"))]
-    a: f32,
-    #[serde(rename(serialize = "U"))]
-    u: f32,
-    btrx: f32, // 0 | 1
-}
-
-#[derive(Debug, Serialize)]
-pub struct PT {
-    id: String,
-    nombre: String,
-    #[serde(rename(serialize = "L"))]
-    l: f32,
-    psi: f32,
-}
-
-#[derive(Debug, Serialize)]
-pub struct ElementosEnvolvente {
-    pub huecos: Vec<Hueco>,
-    pub opacos: Vec<Opaco>,
-    pub pts: Vec<PT>,
-}
-
-impl ElementosEnvolvente {
-    pub fn claves(&self) -> Vec<&str> {
-        let mut out = Vec::new();
-        for hueco in &self.huecos {
-            let nombre: &str = &hueco.nombre;
-            out.push(nombre);
-        }
-        for opaco in &self.opacos {
-            let nombre: &str = &opaco.nombre;
-            out.push(nombre);
-        }
-        for pt in &self.pts {
-            let nombre: &str = &pt.nombre;
-            out.push(nombre);
-        }
-        out
-    }
-}
+use super::envolventetypes::{ElementosEnvolvente, Hueco, Opaco, PT};
+use super::utils::read_latin1_file;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
 pub fn parse(
     path: &str,
     gglshwimap: Option<HashMap<String, f32>>,
 ) -> Result<ElementosEnvolvente, Error> {
-    //let rg_comment = Regex::new(r"^###")?;
-    //let rg_kcoef = Regex::new(r"^\s*Coeficiente K")?;
-    //let rg_qsolunknown = Regex::new(r"^\s*\d+;\s*[+-]?[0-9]*\.?[0-9]+\s*$")?;
-    //let rg_kelem = Regex::new(r"^\s*Muro|Ventana|PPTT")?;
-    //let rg_qsolwindow = Regex::new(r#"^\s*".*"\s*;"#)?;
-
     let utf8buf = read_latin1_file(path)?;
 
     let lines = utf8buf

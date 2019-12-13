@@ -26,8 +26,9 @@ use std::str::FromStr;
 use failure::Error;
 use failure::ResultExt;
 
-use crate::utils::read_latin1_file;
+use super::utils::read_latin1_file;
 
+// TODO: Comprobar con los casos tipo cómo se codifican los caso que se desconocen
 // XXX: esta no puede ser la lista completa ya que faltan al menos:
 // - suelos en contacto con el aire
 // - cubiertas y muros en contacto con el terreno
@@ -58,6 +59,7 @@ impl FromStr for ElemType {
     }
 }
 
+// Elemento opaco o transparente en archivo .tbl
 #[derive(Debug)]
 pub struct Element {
     pub name: String,    // Nombre del elemento
@@ -97,6 +99,7 @@ impl FromStr for Element {
     }
 }
 
+// Espacio en archivo .tbl
 #[derive(Debug)]
 pub struct Space {
     pub name: String,  // Nombre del espacio
@@ -124,33 +127,11 @@ impl FromStr for Space {
     }
 }
 
+/// Conjunto de elementos y espacios interpretados de un archivo .tbl
 #[derive(Debug)]
 pub struct Tbl {
     pub elements: Vec<Element>,
     pub spaces: Vec<Space>,
-}
-
-impl Tbl {
-    // Calcula la superficie útil sumando la de los espacios asociados a elementos
-    pub fn compute_autil(&self, claves: &[&str]) -> f32 {
-        let mut a_util = 0.0_f32;
-        let mut spaces = Vec::new();
-        for &clave in claves.iter() {
-            if let Some(elem) = self.elements.iter().find(|e| e.name == clave) {
-                spaces.push(elem.id_space);
-            };
-        }
-        spaces.sort();
-        spaces.dedup();
-        for space_id in spaces {
-            if let Some(space) = self.spaces.iter().find(|s| s.id_space == space_id) {
-                a_util += space.area * (space.mult as f32);
-            } else {
-                println!("Espacio con id {} no encontrado!!", space_id);
-            }
-        }
-        (a_util * 100.0).round() / 100.0
-    }
 }
 
 // Interpreta archivo .tbl de datos de elementos y espacios del modelo

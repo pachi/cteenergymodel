@@ -24,8 +24,10 @@ SOFTWARE.
 use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, find_hulc_files};
 
 #[test]
-fn test_bdl() {
-    let data = ctehexml::parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
+fn test_bdl_parse() {
+    let _data = ctehexml::parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
+    let _data = ctehexml::parse("tests/casoA/casoa.ctehexml").unwrap();
+    let data = ctehexml::parse("tests/casoC/casoc.ctehexml").unwrap();
     let bdl::BdlData {
         meta: _,
         db,
@@ -40,11 +42,34 @@ fn test_bdl() {
         schedules: _,
     } = &data.bdldata;
     println!("{:#?}", db);
+    println!("{:#?}", constructions);
     println!("{:#?}", floors);
     println!("{:#?}", spaces);
     println!("{:#?}", env);
     println!("{:#?}", shadings);
     println!("{:#?}", polygons);
+}
+
+#[test]
+fn test_test_caso_a() {
+    let hulcfiles = find_hulc_files("tests/casoA").unwrap();
+    let data = collect_hulc_data(&hulcfiles).unwrap();
+    assert_eq!(data.autil, 400.0);
+    assert_eq!(data.clima, "D3");
+    assert_eq!(data.envolvente.huecos.len(), 10);
+    assert_eq!(data.envolvente.opacos.len(), 23);
+    assert_eq!(data.envolvente.pts.len(), 7);
+}
+
+#[test]
+fn test_test_caso_c() {
+    let hulcfiles = find_hulc_files("tests/casoC").unwrap();
+    let data = collect_hulc_data(&hulcfiles).unwrap();
+    assert_eq!(data.autil, 400.0);
+    assert_eq!(data.clima, "D3");
+    assert_eq!(data.envolvente.huecos.len(), 10);
+    assert_eq!(data.envolvente.opacos.len(), 29);
+    assert_eq!(data.envolvente.pts.len(), 7);
 }
 
 #[test]

@@ -23,6 +23,7 @@ SOFTWARE.
 
 pub mod bdl;
 pub mod ctehexml;
+pub mod envolventetypes;
 mod kyg;
 mod tbl;
 mod utils;
@@ -33,10 +34,10 @@ pub mod wingui;
 extern crate failure;
 
 use failure::Error;
-use serde::Serialize;
-use serde_json;
 use std::path::PathBuf;
 
+use envolventetypes::{ElementosEnvolvente, EnvolventeCteData};
+use tbl::Tbl;
 use utils::find_first_file;
 
 pub const PROGNAME: &str = env!("CARGO_PKG_NAME");
@@ -61,21 +62,6 @@ pub struct HulcFiles {
     pub ctehexml: String,
     pub tbl: String,
     pub kyg: String,
-}
-
-#[derive(Debug, Serialize)]
-pub struct EnvolventeCteData {
-    #[serde(rename(serialize = "Autil"))]
-    pub autil: f32,
-    pub clima: String,
-    pub envolvente: kyg::ElementosEnvolvente,
-}
-
-impl EnvolventeCteData {
-    pub fn as_json(&self) -> Result<String, Error> {
-        let json = serde_json::to_string_pretty(&self)?;
-        Ok(json)
-    }
 }
 
 // Localiza los archivos relevantes
@@ -132,8 +118,8 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
     let elementos_envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
     eprintln!("Localizada definición de elementos de la envolvente");
 
-    // Calcula área útil
-    let area_util = tbl.compute_autil(&elementos_envolvente.claves());
+    // Calcula área útil con datos de tbl y kyg
+    let area_util = compute_autil(&tbl, &elementos_envolvente);
     eprintln!("Area útil: {} m2", area_util);
 
     // Salida de datos
@@ -143,4 +129,45 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         envolvente: elementos_envolvente,
     };
     Ok(data)
+}
+
+// Calcula la superficie útil sumando la de los espacios asociados a elementos
+pub fn compute_autil(tbl_data: &Tbl, elementos_envolvente: &ElementosEnvolvente) -> f32 {
+    // Claves de los elementos de la envolvente
+    let mut claves = Vec::new();
+    for hueco in &elementos_envolvente.huecos {
+        let nombre: &str = &hueco.nombre;
+        claves.push(nombre);
+    }
+    for opaco in &elementos_envolvente.opacos {
+        let nombre: &str = &opaco.nombre;
+        claves.push(nombre);
+    }
+    for pt in &elementos_envolvente.pts {
+        let nombre: &str = &pt.nombre;
+        claves.push(nombre);
+    }
+
+    // Espacios asociados a esos elementos de la envolvente
+    let mut spaces = Vec::new();
+    for &clave in claves.iter() {
+        if let Some(elem) = tbl_data.elements.iter().find(|e| e.name == clave) {
+            spaces.push(elem.id_space);
+        };
+    }
+    spaces.sort();
+    spaces.dedup();
+
+    // Suma, con multiplicador, de las áreas de los elementos
+    // El multiplicador es cero para espacios no habitables
+    // TODO: comprobar qué ocurre para espacios no acondicionados
+    let mut a_util = 0.0_f32;
+    for space_id in spaces {
+        if let Some(space) = tbl_data.spaces.iter().find(|s| s.id_space == space_id) {
+            a_util += space.area * (space.mult as f32);
+        } else {
+            println!("Espacio con id {} no encontrado!!", space_id);
+        }
+    }
+    (a_util * 100.0).round() / 100.0
 }

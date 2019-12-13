@@ -443,7 +443,7 @@ fn do_convert() {
         }
     };
 
-    let area_util = tbl.compute_autil(&elementos_envolvente.claves());
+    let area_util = tbl.compute_autil(&elementos_envolvente);
     append_to_edit(&format!("\nArea útil: {} m2", area_util));
 
     // Salida en JSON

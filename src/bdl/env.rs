@@ -179,7 +179,8 @@ pub struct WallGeometry {
     /// Inclinación
     /// Ángulo entre el eje Z y la normal exterior del muro
     /// Por defecto es 90 para ExteriorWall y 0 (hacia arriba) para Roof
-    pub tilt: f32,
+    /// Puede no definirse cuando location es: TOP, BOTTOM, ¿?
+    pub tilt: Option<f32>,
 }
 
 impl WallGeometry {
@@ -190,7 +191,8 @@ impl WallGeometry {
             let z = attrs.remove_f32("Z")?;
             let azimuth = attrs.remove_f32("AZIMUTH")?;
             // XXX: se podría identificar la inclinación por defecto según el btype
-            let tilt = attrs.remove_f32("TILT")?;
+            // XXX: Si se define location (p.e. TOP) no se define la inclinación
+            let tilt = attrs.remove_f32("TILT").ok();
             Ok(Some(WallGeometry {
                 name,
                 x,
