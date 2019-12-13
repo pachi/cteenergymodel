@@ -226,14 +226,18 @@ impl TryFrom<BdlBlock> for Polygon {
     ///     ..
     /// ```
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock { name, attrs, .. } = value;
+        let BdlBlock { name, mut attrs, .. } = value;
         let mut vertices = Vec::new();
-        for (name, vals) in &attrs.0 {
-            let vector = vals.to_string().parse()?;
-            vertices.push(Vertex2D {
-                name: name.clone(),
-                vector,
-            })
+        for i in 1.. {
+            let name = format!("V{}", i);
+            if let Some(vdata) = attrs.remove_str(&name).ok() {
+                vertices.push(Vertex2D {
+                    name,
+                    vector: vdata.parse()?,
+                });
+            } else {
+                break;
+            }
         }
         Ok(Self { name, vertices })
     }
@@ -342,9 +346,9 @@ pub struct Construction {
     pub parent: String,
     /// Definición de capas, cuando ctype es LAYERS
     pub layers: Option<String>,
-    /// Transmitancia, cuando ctype es U-VALUE
+    /// Transmitancia, cuando ctype es U-VALUE (W/m2K)
     pub uvalue: Option<f32>,
-    /// Absortividad (a la radiación solar)
+    /// Absortividad (a la radiación solar) (-)
     pub absorptance: Option<f32>,
     /// Rugosidad (1 a 6)
     pub roughness: Option<f32>,
