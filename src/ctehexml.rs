@@ -70,9 +70,7 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .trim()
         .to_string();
 
-    let datos_generales_txt = datos_generales.text().unwrap_or("").trim().to_string();
     let bdldata = BdlData::new(&entrada_grafica_lider)?;
-
     // gglshwi de huecos
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
     for el in &bdldata.env {
@@ -91,7 +89,7 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .to_string();
 
     Ok(CtehexmlData {
-        datos_generales: datos_generales_txt,
+        datos_generales: datos_generales.text().unwrap_or("").trim().to_string(),
         bdldata,
         definicion_sistemas,
         gglshwi,
