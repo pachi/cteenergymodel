@@ -28,7 +28,7 @@ use std::process::exit;
 
 #[cfg(windows)]
 use hulc2envolventecte::wingui;
-use hulc2envolventecte::{collect_project_data, find_hulc_files, get_copytxt, PROGNAME};
+use hulc2envolventecte::{collect_hulc_data, find_hulc_files, get_copytxt, PROGNAME};
 
 #[cfg(windows)]
 fn main() {
@@ -66,7 +66,7 @@ Descripción:
     eprintln!("- {}", hulcfiles.kyg);
 
     // Lee datos
-    let data = collect_project_data(&hulcfiles)?;
+    let data = collect_hulc_data(&hulcfiles)?;
 
     // Convierte a JSON
     match data.as_json() {
