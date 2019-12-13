@@ -160,7 +160,7 @@ pub fn compute_autil(tbl_data: &Tbl, elementos_envolvente: &ElementosEnvolvente)
 
     // Suma, con multiplicador, de las áreas de los elementos
     // El multiplicador es cero para espacios no habitables
-    // TODO: comprobar qué ocurre para espacios no acondicionados
+    // TODO: comprobar qué ocurre en el cálculo de área para espacios no acondicionados
     let mut a_util = 0.0_f32;
     for space_id in spaces {
         if let Some(space) = tbl_data.spaces.iter().find(|s| s.id_space == space_id) {

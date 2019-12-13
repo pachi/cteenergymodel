@@ -25,6 +25,8 @@ use failure::Error;
 use serde::Serialize;
 use serde_json;
 
+// ---------- Estructura general de datos --------------
+
 #[derive(Debug, Serialize)]
 pub struct EnvolventeCteData {
     #[serde(rename(serialize = "Autil"))]
@@ -39,6 +41,15 @@ impl EnvolventeCteData {
         let json = serde_json::to_string_pretty(&self)?;
         Ok(json)
     }
+}
+
+// ---------- Elementos de la envolvente --------------
+
+#[derive(Debug, Serialize)]
+pub struct ElementosEnvolvente {
+    pub huecos: Vec<Hueco>,
+    pub opacos: Vec<Opaco>,
+    pub pts: Vec<PT>,
 }
 
 #[derive(Debug, Serialize)]
@@ -75,11 +86,4 @@ pub struct PT {
     #[serde(rename(serialize = "L"))]
     pub l: f32,
     pub psi: f32,
-}
-
-#[derive(Debug, Serialize)]
-pub struct ElementosEnvolvente {
-    pub huecos: Vec<Hueco>,
-    pub opacos: Vec<Opaco>,
-    pub pts: Vec<PT>,
 }
