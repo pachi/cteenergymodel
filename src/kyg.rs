@@ -26,7 +26,7 @@ use std::collections::HashMap;
 use failure::Error;
 use uuid::Uuid;
 
-use super::envolventetypes::{ElementosEnvolvente, Hueco, Opaco, PT};
+use super::envolventetypes::{ElementosEnvolvente, Window, Opaque, TB};
 use super::utils::read_latin1_file;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
@@ -42,9 +42,9 @@ pub fn parse(
         .collect::<Vec<&str>>()
         .into_iter();
 
-    let mut huecos: Vec<Hueco> = Vec::new();
-    let mut opacos: Vec<Opaco> = Vec::new();
-    let mut pts: Vec<PT> = Vec::new();
+    let mut huecos: Vec<Window> = Vec::new();
+    let mut opacos: Vec<Opaque> = Vec::new();
+    let mut pts: Vec<TB> = Vec::new();
     let mut qsolvalues: HashMap<String, f32> = HashMap::new();
 
     for line in lines {
@@ -58,7 +58,7 @@ pub fn parse(
                         bail!("Línea de datos de hueco con formato desconocido")
                     }
                     let (nombre, a, u, orienta, ff) = (vv[1], vv[2], vv[3], vv[4], vv[5]);
-                    huecos.push(Hueco {
+                    huecos.push(Window {
                         id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         nombre: nombre.to_string(),
                         orientacion: orienta.replace("O", "W").to_string(),
@@ -74,7 +74,7 @@ pub fn parse(
                         bail!("Línea de datos de opaco con formato desconocido")
                     }
                     let (nombre, a, u, btrx) = (vv[1], vv[2], vv[3], vv[4]);
-                    opacos.push(Opaco {
+                    opacos.push(Opaque {
                         id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         nombre: nombre.to_string(),
                         a: a.replace(",", ".").parse()?,
@@ -87,7 +87,7 @@ pub fn parse(
                         bail!("Línea de datos de hueco con formato desconocido")
                     }
                     let (l, psi, nombre) = (vv[1], vv[2], vv[3]);
-                    pts.push(PT {
+                    pts.push(TB {
                         id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         nombre: nombre.to_string(),
                         l: l.replace(",", ".").parse()?,

@@ -47,13 +47,25 @@ impl EnvolventeCteData {
 
 #[derive(Debug, Serialize)]
 pub struct ElementosEnvolvente {
-    pub huecos: Vec<Hueco>,
-    pub opacos: Vec<Opaco>,
-    pub pts: Vec<PT>,
+    pub huecos: Vec<Window>,
+    pub opacos: Vec<Opaque>,
+    pub pts: Vec<TB>,
 }
 
 #[derive(Debug, Serialize)]
-pub struct Hueco {
+pub enum ElementTypes {
+    Roof,
+    Wall,
+    Floor,
+    Ground,
+    Interior,
+    Adiabatic,
+    // Window,
+    // ThermalBridge,
+}
+
+#[derive(Debug, Serialize)]
+pub struct Window {
     pub id: String,
     pub nombre: String,
     pub orientacion: String,
@@ -69,7 +81,7 @@ pub struct Hueco {
 }
 
 #[derive(Debug, Serialize)]
-pub struct Opaco {
+pub struct Opaque {
     pub id: String,
     pub nombre: String,
     #[serde(rename(serialize = "A"))]
@@ -77,10 +89,13 @@ pub struct Opaco {
     #[serde(rename(serialize = "U"))]
     pub u: f32,
     pub btrx: f32, // 0 | 1
+    // Tipo - Muro, cubierta, suelo, terreno, adiabático, partición interior
+    // Orientación - azimuth criterio 52016 (distinto en BDL) ->(0 -> sur)
+    // Inclinación - respecto a la horizontal y hacia arriba (0 -> suelo, 180 -> techo)
 }
 
 #[derive(Debug, Serialize)]
-pub struct PT {
+pub struct TB {
     pub id: String,
     pub nombre: String,
     #[serde(rename(serialize = "L"))]
