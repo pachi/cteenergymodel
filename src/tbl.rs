@@ -35,12 +35,18 @@ use super::utils::read_latin1_file;
 // aunque no se han documentado otros en el Archivo.tbl.comentado
 #[derive(Debug)]
 pub enum ElemType {
-    WALL = 0,      // muro
-    WINDOW = 1,    // hueco
-    WALLADB = -2,  // muro adiabático
-    FLOORGND = -3, // solera con el terreno
-    WALLINT = -4,  // tabique interior
-    FLOORINT = -5, // forjado interior
+    /// Elemento opaco (muro o cubierta) en contacto con el exterior
+    EXTWALL = 0,
+    /// Hueco
+    WINDOW = 1,
+    /// Muro adiabático
+    ADBWALL = -2,
+    /// Muro o suelo en contacto con el terreno
+    GNDWALL = -3,
+    /// Muro interior
+    INTWALL = -4,
+    /// Forjado interior
+    INTFLOOR = -5,
 }
 
 impl FromStr for ElemType {
@@ -48,12 +54,12 @@ impl FromStr for ElemType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "0" => Ok(ElemType::WALL),
+            "0" => Ok(ElemType::EXTWALL),
             "1" => Ok(ElemType::WINDOW),
-            "-2" => Ok(ElemType::WALLADB),
-            "-3" => Ok(ElemType::FLOORGND),
-            "-4" => Ok(ElemType::WALLINT),
-            "-5" => Ok(ElemType::FLOORINT),
+            "-2" => Ok(ElemType::ADBWALL),
+            "-3" => Ok(ElemType::GNDWALL),
+            "-4" => Ok(ElemType::INTWALL),
+            "-5" => Ok(ElemType::INTFLOOR),
             _ => Err(format_err!("Tipo de elemento desconocido")),
         }
     }
