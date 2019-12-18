@@ -156,7 +156,14 @@ impl TryFrom<BdlBlock> for Space {
         let height = attrs.remove_f32("HEIGHT").ok();
         let insidete = attrs
             .remove_str("perteneceALaEnvolventeTermica")
-            .and(Ok(true))
+            .ok()
+            .and_then(|v| if v == "SI" { Some(true) } else { Some(false) })
+            // TODO: En archivos antiguos, sin ese parámetro miramos si es acondicionado
+            // TODO: En teoría también podría haber habitables no acondicionados
+            .or_else(|| match stype.as_ref() {
+                "CONDITIONED" => Some(true),
+                _ => Some(false),
+            })
             .unwrap_or(false);
         let parent = parent.ok_or_else(|| {
             format_err!(
