@@ -36,7 +36,7 @@ extern crate failure;
 use failure::Error;
 use std::path::PathBuf;
 
-use envolventetypes::{ElementosEnvolvente, EnvolventeCteData};
+use envolventetypes::{ElementosEnvolvente, EnvolventeCteData, Space};
 use tbl::Tbl;
 use utils::find_first_file;
 
@@ -114,6 +114,15 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         tbl.elements.len()
     );
 
+    let espacios = tbl
+        .spaces
+        .iter()
+        .map(|s| Space {
+            nombre: s.name.clone(),
+            area: s.area,
+        })
+        .collect();
+
     // Interpreta .kyg
     let elementos_envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
     eprintln!("Localizada definición de elementos de la envolvente");
@@ -127,6 +136,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         autil: area_util,
         clima: ctehexmldata.climate,
         envolvente: elementos_envolvente,
+        espacios,
     };
     Ok(data)
 }

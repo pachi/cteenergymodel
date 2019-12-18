@@ -33,7 +33,7 @@ pub struct EnvolventeCteData {
     pub autil: f32,
     pub clima: String,
     pub envolvente: ElementosEnvolvente,
-    // pub spaces: Vec<Spaces>,
+    pub espacios: Vec<Space>,
 }
 
 impl EnvolventeCteData {
@@ -127,4 +127,13 @@ pub struct TB {
     pub l: f32,
     /// Transmitancia térmica lineal del puente térmic (W/mK)
     pub psi: f32,
+}
+
+/// Espacio
+#[derive(Debug, Serialize)]
+pub struct Space {
+    /// Nombre del espacio
+    pub nombre: String,
+    /// Superficie de la zona en m2
+    pub area: f32,
 }
