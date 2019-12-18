@@ -136,4 +136,6 @@ pub struct Space {
     pub nombre: String,
     /// Superficie de la zona en m2
     pub area: f32,
+    /// Pertenencia al interior de la envolvente térmica
+    pub dentroet: bool,
 }

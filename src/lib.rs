@@ -106,6 +106,25 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         ctehexmldata.climate
     );
 
+    let bdl = &ctehexmldata.bdldata;
+    let spaces = &bdl.spaces;
+    let polygons = &bdl.polygons;
+
+    let espacios = spaces
+        .iter()
+        .map(|s| {
+            let area = polygons
+                .get(&s.polygon)
+                .ok_or_else(|| format_err!("Polígono no encontrado {}", &s.polygon))?
+                .area();
+            Ok(Space {
+                nombre: s.name.clone(),
+                area,
+                dentroet: s.insidete,
+            })
+        })
+        .collect::<Result<Vec<Space>, Error>>()?;
+
     // Interpreta .tbl
     let tbl = tbl::parse(&hulcfiles.tbl)?;
     eprintln!(
@@ -113,15 +132,6 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         tbl.spaces.len(),
         tbl.elements.len()
     );
-
-    let espacios = tbl
-        .spaces
-        .iter()
-        .map(|s| Space {
-            nombre: s.name.clone(),
-            area: s.area,
-        })
-        .collect();
 
     // Interpreta .kyg
     let elementos_envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
