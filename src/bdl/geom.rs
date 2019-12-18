@@ -233,7 +233,9 @@ impl TryFrom<BdlBlock> for Polygon {
     ///     ..
     /// ```
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock { name, mut attrs, .. } = value;
+        let BdlBlock {
+            name, mut attrs, ..
+        } = value;
         let mut vertices = Vec::new();
         for i in 1.. {
             let name = format!("V{}", i);
