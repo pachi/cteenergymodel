@@ -131,19 +131,11 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         })
         .collect::<Result<Vec<Space>, Error>>()?;
 
-    // Interpreta .tbl
-    let tbl = tbl::parse(&hulcfiles.tbl)?;
-    eprintln!(
-        "Localizados {} espacios y {} elementos",
-        tbl.spaces.len(),
-        tbl.elements.len()
-    );
-
     // Interpreta .kyg
     let elementos_envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
     eprintln!("Localizada definición de elementos de la envolvente");
 
-    // Calcula área útil con datos de tbl y kyg
+    // Calcula área útil
     let area_util = compute_autil(&espacios);
     eprintln!("Area útil: {} m2", area_util);
 
