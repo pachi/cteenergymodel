@@ -21,6 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+//! Funciones de interpretación de archivos KyGananciasSolares.txt
+
 use std::collections::HashMap;
 
 use failure::Error;
@@ -73,6 +75,7 @@ pub fn parse(
                     if vv.len() < 5 {
                         bail!("Línea de datos de opaco con formato desconocido")
                     }
+                    // En versiones más recientes hay dos datos más, construcción y orientación
                     let (nombre, a, u, btrx) = (vv[1], vv[2], vv[3], vv[4]);
                     opacos.push(Opaque {
                         id: (Uuid::new_v4()).to_hyphenated().to_string(),
@@ -86,6 +89,7 @@ pub fn parse(
                     if vv.len() < 4 {
                         bail!("Línea de datos de hueco con formato desconocido")
                     }
+                    // En versiones más recientes se añade el sistema dimensional como dato extra
                     let (l, psi, nombre) = (vv[1], vv[2], vv[3]);
                     pts.push(TB {
                         id: (Uuid::new_v4()).to_hyphenated().to_string(),

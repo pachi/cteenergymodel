@@ -53,7 +53,7 @@ pub struct ElementosEnvolvente {
 }
 
 #[derive(Debug, Serialize)]
-pub enum ElementTypes {
+pub enum OpaqueTypes {
     Roof,
     Wall,
     Floor,
@@ -64,41 +64,67 @@ pub enum ElementTypes {
     // ThermalBridge,
 }
 
+/// Hueco
 #[derive(Debug, Serialize)]
 pub struct Window {
+    /// UID del hueco
     pub id: String,
+    /// Nombre del hueco
     pub nombre: String,
+    /// Orientación del hueco (N, S, E, W, H...)
     pub orientacion: String,
+    /// Superficie del hueco (m2)
     #[serde(rename(serialize = "A"))]
     pub a: f32,
+    /// Transmitancia térmica (W/m2K)
     #[serde(rename(serialize = "U"))]
     pub u: f32,
+    /// Fracción de marco
     #[serde(rename(serialize = "Ff"))]
     pub ff: f32,
+    /// Factor solar del hueco con la protección solar activada
     pub gglshwi: f32,
+    /// Factor de obstáculos remotos
     #[serde(rename(serialize = "Fshobst"))]
     pub fshobst: f32,
 }
 
+/// Elemento opaco (muro, cubierta, suelo, partición)
 #[derive(Debug, Serialize)]
 pub struct Opaque {
+    /// UID del elemento opaco
     pub id: String,
+    /// Nombre del elemento opaco
     pub nombre: String,
+    /// Superficie del elemento opaco (m2)
     #[serde(rename(serialize = "A"))]
     pub a: f32,
+    /// Transmitancia térmica (W/m2K)
     #[serde(rename(serialize = "U"))]
     pub u: f32,
+    /// Coeficiente de transmisión del elemento opaco (-)
     pub btrx: f32, // 0 | 1
+
+    // TODO: propiedades que se podrían incorporar
+    // Orientación del elemento opaco (N, S, E, W, H...)
+    // pub orientacion: String,
+    // Absortividad del elemento opaco (-)
+    //pub abs: f32,
     // Tipo - Muro, cubierta, suelo, terreno, adiabático, partición interior
     // Orientación - azimuth criterio 52016 (distinto en BDL) ->(0 -> sur)
     // Inclinación - respecto a la horizontal y hacia arriba (0 -> suelo, 180 -> techo)
 }
 
+/// Puente térmico
 #[derive(Debug, Serialize)]
 pub struct TB {
+    /// UID del puente térmico
     pub id: String,
+    /// Nombre del puente térmico
     pub nombre: String,
+    /// Longitud del puente térmico (m)
     #[serde(rename(serialize = "L"))]
     pub l: f32,
+    /// Transmitancia térmica lineal del puente térmic (W/mK)
     pub psi: f32,
 }
