@@ -76,7 +76,7 @@ impl TryFrom<BdlBlock> for Floor {
 pub struct Space {
     /// Nombre del espacio
     pub name: String,
-    /// Tipo de espacio (CONDITIONED, ¿UNCONDITIONED?, ¿PLENUM?)
+    /// Tipo de espacio (CONDITIONED, UNHABITED, ¿UNCONDITIONED?, ¿PLENUM?)
     pub stype: String,
     /// Nombre de polígono que define el espacio
     /// XXX: Solo vale para SHAPE = POLIGON (no vale con BOX o NO-SHAPE)
@@ -178,11 +178,7 @@ impl TryFrom<BdlBlock> for Space {
         let spaceconds = attrs.remove_str("SPACE-CONDITIONS")?;
         let systemconds = attrs.remove_str("SYSTEM-CONDITIONS")?;
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
-        let ismultiplied = if attrs.remove_f32("MULTIPLIED")? == 1.0 {
-            true
-        } else {
-            false
-        };
+        let ismultiplied = attrs.remove_f32("MULTIPLIED")? == 1.0;
 
         Ok(Self {
             name,
