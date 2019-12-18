@@ -24,8 +24,8 @@ SOFTWARE.
 pub mod bdl;
 pub mod ctehexml;
 pub mod envolventetypes;
-mod kyg;
-mod tbl;
+pub mod kyg;
+pub mod tbl;
 mod utils;
 #[cfg(windows)]
 pub mod wingui;
