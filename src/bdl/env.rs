@@ -412,10 +412,12 @@ pub struct UndergroundWall {
     pub construction: String,
     /// Profundidad del elemento (m)
     pub zground: f32,
+    // XXX: esto parece algo que guarda HULC pero se puede calcular
     /// Superficie (m2)
-    pub area: f32,
+    pub area: Option<f32>,
+    // XXX: esto parece algo que guarda HULC pero se puede calcular
     /// Perímetro (m)
-    pub perimeter: f32,
+    pub perimeter: Option<f32>,
     /// Posición respecto al espacio asociado (TOP, BOTTOM, nombreespacio)
     pub location: Option<String>,
     /// Posición definida por polígono
@@ -425,7 +427,7 @@ pub struct UndergroundWall {
 impl TryFrom<BdlBlock> for UndergroundWall {
     type Error = Error;
 
-    /// Conversión de bloque BDL a muro exterior (o cubierta)
+    /// Conversión de bloque BDL a muro exterior, suelo o cubierta enterrado
     ///
     /// Ejemplo en BDL:
     /// ```text
@@ -436,6 +438,12 @@ impl TryFrom<BdlBlock> for UndergroundWall {
     ///         LOCATION      = BOTTOM
     ///         AREA          =        418.4805
     ///         PERIMETRO     =        65.25978
+    ///         ..
+    ///    "P01_E01_TER002" = UNDERGROUND-WALL
+    ///         Z-GROUND      =              0
+    ///         COMPROBAR-REQUISITOS-MINIMOS = YES
+    ///         CONSTRUCTION  = "Solera"  
+    ///         LOCATION      = SPACE-V2  
     ///         ..
     /// ```
     /// TODO: atributos no trasladados:
@@ -448,8 +456,8 @@ impl TryFrom<BdlBlock> for UndergroundWall {
             ..
         } = value;
         let zground = attrs.remove_f32("Z-GROUND")?;
-        let area = attrs.remove_f32("AREA")?;
-        let perimeter = attrs.remove_f32("PERIMETRO")?;
+        let area = attrs.remove_f32("AREA").ok();
+        let perimeter = attrs.remove_f32("PERIMETRO").ok();
         let parent =
             parent.ok_or_else(|| format_err!("Muro interior sin espacio asociado '{}'", &name))?;
         let construction = attrs.remove_str("CONSTRUCTION")?;
