@@ -21,6 +21,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
+//! Funciones de interpretación de archivos .tbl (NewBDL_O.tbl)
+//!
+//! Formato documentado en HULC:
+//!
+//! ```text
+//!     #Línea de comentarios
+//!     #Línea de comentarios
+//!     Número de elementos [ESPACIO] Número de zonas
+//!     "Nombre del elemento"
+//!     #NOTA: en caso de ser un elemento opaco
+//!     Area en m2 [ESPACIO] Transmitancia térmica en W/m2K [ESPACIO] Peso en kg/m2 [ESPACIO] 0.000000 [ESPACIO] 0.000000 [ESPACIO] Ángulo formado con el norte [ESPACIO] Inclinación [ESPACIO] Tipo de elemento (0 muro, 1 hueco, -2 muro interior adiabático, -3 forjado con el terreno, -4 tabique, -5 forjado interior) [ESPACIO] Código de la superficie [ESPACIO] Código del espacio [ESPACIO]
+//!     #NOTA: en caso de ser un elemento semitransparente
+//!     Area en m2 [ESPACIO] Transmitancia térmica en W/m2K [ESPACIO] Infiltración a 100 Pa en m3/hm2 [ESPACIO] Factor solar en invierno [ESPACIO] Factor solar en verano [ESPACIO] Ángulo formado con el norte [ESPACIO] Inclinación [ESPACIO] Tipo de elemento [ESPACIO] Código de la superficie [ESPACIO] Código del espacio [ESPACIO]
+//!     #NOTA: Las líneas 6 y 8 se repiten tantas veces como elementos tenga el edificio
+//!     "Nombre de la zona"
+//!     Código de la zona [ESPACIO] Multiplicador de la zona [ESPACIO] Superficie de la zona en m2 [ESPACIO] Fuentes internas medias en W/m2
+//!     #NOTA: Las líneas 10 y 11 se repiten tantas veces como zonas tenga el edificio
+//! ```
+
 use std::str::FromStr;
 
 use failure::Error;
@@ -28,14 +47,10 @@ use failure::ResultExt;
 
 use super::utils::read_latin1_file;
 
-// TODO: Comprobar con los casos tipo cómo se codifican los caso que se desconocen
-// XXX: esta no puede ser la lista completa ya que faltan al menos:
-// - suelos en contacto con el aire
-// - cubiertas y muros en contacto con el terreno
-// aunque no se han documentado otros en el Archivo.tbl.comentado
+/// Tipos de elementos definidos en archivo .tbl
 #[derive(Debug)]
 pub enum ElemType {
-    /// Elemento opaco (muro o cubierta) en contacto con el exterior
+    /// Elemento opaco (muro, suelo o cubierta) en contacto con el aire exterior
     EXTWALL = 0,
     /// Hueco
     WINDOW = 1,
@@ -65,20 +80,31 @@ impl FromStr for ElemType {
     }
 }
 
-// Elemento opaco o transparente en archivo .tbl
+// Elemento opaco o transparente definido en archivo .tbl
 #[derive(Debug)]
 pub struct Element {
-    pub name: String,    // Nombre del elemento
-    pub area: f32,       // Área del elemento en m2
-    pub u: f32,          // Transmitancia térmica en W/m2K
-    pub w_or_inf: f32,   // Peso en kg/m2 (opacos) o permeabilidad a 100 Pa en m3/hm2 (huecos)
-    pub g_winter: f32,   // 0.000000 (opacos) o factor solar en invierno (huecos)
-    pub g_summer: f32,   // 0.000000 (opacos) o factor solar en verano (huecos)
-    pub ang_north: f32,  // Ángulo formado con el norte
-    pub tilt: f32,       // Inclinación (respecto a la horizontal. 90=vertical, 0=horizontal)
-    pub type_: ElemType, // Tipo de elemento
-    pub id_surf: i32,    // Código de la superficie
-    pub id_space: i32,   // Código del espacio
+    /// Nombre del elemento
+    pub name: String,
+    /// Área del elemento en m2
+    pub area: f32,
+    /// Transmitancia térmica en W/m2K
+    pub u: f32,
+    /// Peso en kg/m2 (opacos) o permeabilidad a 100 Pa en m3/hm2 (huecos)
+    pub w_or_inf: f32,
+    /// 0.000000 (opacos) o factor solar en invierno (huecos)
+    pub g_winter: f32,
+    /// 0.000000 (opacos) o factor solar en verano (huecos)
+    pub g_summer: f32,
+    /// Ángulo formado con el norte
+    pub ang_north: f32,
+    /// Inclinación (respecto a la horizontal. 90=vertical, 0=horizontal)
+    pub tilt: f32,
+    /// Tipo de elemento
+    pub type_: ElemType,
+    /// Código de la superficie
+    pub id_surf: i32,
+    /// Código del espacio
+    pub id_space: i32,
 }
 
 impl FromStr for Element {
@@ -105,14 +131,19 @@ impl FromStr for Element {
     }
 }
 
-// Espacio en archivo .tbl
+/// Espacio definido en archivo .tbl
 #[derive(Debug)]
 pub struct Space {
-    pub name: String,  // Nombre del espacio
-    pub id_space: i32, // Código de la zona
-    pub mult: i32,     // Multiplicador de la zona
-    pub area: f32,     // Superficie de la zona en m2
-    pub qint: f32,     // Fuentes internas medias en W/m2
+    /// Nombre del espacio
+    pub name: String,
+    /// Código de la zona
+    pub id_space: i32,
+    /// Multiplicador de la zona
+    pub mult: i32,
+    /// Superficie de la zona en m2
+    pub area: f32,
+    /// Fuentes internas medias en W/m2   
+    pub qint: f32,
 }
 
 impl FromStr for Space {
@@ -136,13 +167,15 @@ impl FromStr for Space {
 /// Conjunto de elementos y espacios interpretados de un archivo .tbl
 #[derive(Debug)]
 pub struct Tbl {
+    /// Lista de elementos
     pub elements: Vec<Element>,
+    /// Lista de espacios (zonas térmicas)
     pub spaces: Vec<Space>,
 }
 
-// Interpreta archivo .tbl de datos de elementos y espacios del modelo
-//
-// path: ruta del archivo .tbl
+/// Interpreta archivo .tbl de datos de elementos y espacios del modelo
+///
+/// path: ruta del archivo .tbl
 pub fn parse(path: &str) -> Result<Tbl, Error> {
     let utf8buf = read_latin1_file(path)?;
 
