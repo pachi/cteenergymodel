@@ -1,9 +1,8 @@
 ###;Datos para Factor de Pérdidas
-Muro;P01_E01_PE001;15,00;0,30;1,00;Muro Exterior;S 
-Muro;P01_E01_PE002;30,00;0,30;1,00;Muro Exterior;E 
-Muro;P01_E01_PE003;15,00;0,30;1,00;Muro Exterior;N 
-Muro;P01_E01_Med001;30,00;0,86;0,00;Separación No Habitable;O 
-Muro;P01_E01_FTER001;50,00;0,55;1,00;Suelo;H 
+Muro;P01_E01_ME001;30,00;0,30;1,00;Muro Exterior;E 
+Muro;P01_E01_Med001;30,00;0,71;0,00;Separación No Habitable;O 
+Muro;P01_E01_FTER001;50,00;0,47;1,00;Suelo;H 
+Muro;P01_E01_TER002;15,00;0,07;1,00;Suelo;H 
 Ventana;P02_E01_PE001_V;2,00;1,26;O ;10,00;0,79;-1,00;1,00;50,00
 Muro;P02_E01_PE001;28,00;0,30;1,00;Muro Exterior;O 
 Ventana;P02_E01_PE002_V;2,00;1,26;S ;10,00;0,79;-1,00;1,00;50,00
@@ -11,9 +10,8 @@ Ventana;P02_E01_PE002_V_1;2,00;1,26;S ;10,00;0,79;-1,00;1,00;50,00
 Muro;P02_E01_PE002;41,00;0,30;1,00;Muro Exterior;S 
 Ventana;P02_E01_PE003_V;2,00;1,26;E ;10,00;0,79;-1,00;1,00;50,00
 Muro;P02_E01_PE003;28,00;0,30;1,00;Muro Exterior;E 
-Muro;P02_E01_PE004;45,00;0,30;1,00;Muro Exterior;N 
-Muro;P02_E01_FE005;50,00;0,34;1,00;Muro Exterior;E 
-Muro;P02_E01_FI002;50,00;0,73;0,00;Separación No Habitable;E 
+Muro;P02_E01_ME001;50,00;0,34;1,00;Muro Exterior;E 
+Muro;P02_E01_FI002;50,00;0,65;0,00;Separación No Habitable;E 
 Ventana;P03_E01_PE006_V;2,00;1,26;O ;10,00;0,79;-1,00;1,00;50,00
 Muro;P03_E01_PE006;28,00;0,30;1,00;Muro Exterior;O 
 Ventana;P03_E01_PE007_V;2,00;1,26;S ;10,00;0,79;-1,00;1,00;50,00
@@ -21,15 +19,13 @@ Ventana;P03_E01_PE007_V_1;2,00;1,26;S ;10,00;0,79;-1,00;1,00;50,00
 Muro;P03_E01_PE007;41,00;0,30;1,00;Muro Exterior;S 
 Ventana;P03_E01_PE008_V;2,00;1,26;E ;10,00;0,79;-1,00;1,00;50,00
 Muro;P03_E01_PE008;28,00;0,30;1,00;Muro Exterior;E 
-Muro;P03_E01_PE009;45,00;0,30;1,00;Muro Exterior;N 
 Muro;P03_E01_FE004;50,00;0,34;1,00;Cubierta;H 
-Muro;P03_E01_FI001;50,00;0,84;0,00;Separación No Habitable;H 
+Muro;P03_E01_FI001;50,00;0,77;0,00;Separación No Habitable;H 
 Ventana;P04_E01_PE001_V;1,00;1,26;S ;10,00;0,79;-1,00;1,00;50,00
 Muro;P04_E01_PE001;14,00;0,30;1,00;Muro Exterior;S 
 Ventana;P04_E01_PE002_V;2,00;1,26;E ;10,00;0,79;-1,00;1,00;50,00
 Muro;P04_E01_PE002;28,00;0,30;1,00;Muro Exterior;E 
-Muro;P04_E01_PE003;15,00;0,30;1,00;Muro Exterior;N 
-Muro;P04_E01_Med001;30,00;0,74;0,00;Separación No Habitable;O 
+Muro;P04_E01_Med001;30,00;0,68;0,00;Separación No Habitable;O 
 Muro;P04_E01C003;25,00;0,30;1,00;Cubierta;H 
 Muro;P04_E01C004;25,00;0,30;1,00;Cubierta;H 
 PPTT;110,00;0,000;FRENTE_FORJADO;SDINT
@@ -39,7 +35,7 @@ PPTT;48,00;0,060;ESQUINA_CONVEXA_CERRAMIENTO;SDINT
 PPTT;1,00;0,000;PILAR;SDINT
 PPTT;40,00;0,398;UNION_SOLERA_PAREDEXT;SDINT
 PPTT;48,00;0,053;HUECO_VENTANA;SDINT
-Coeficiente K = ;0,469
+Coeficiente K = ;0,514
 ###;Datos para Factor de Insolación
 0 ; 61.031345
 1 ; 91.267944

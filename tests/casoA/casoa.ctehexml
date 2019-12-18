@@ -1,127 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CTE-HE-XML>
-	<DatosGenerales>
-		<refCatastral>ninguno</refCatastral>
-		<tipoVivienda>Bloque</tipoVivienda>
-		<anio/>
-		<tipoDefinicion>Nuevo</tipoDefinicion>
-		<comunidad>Madrid</comunidad>
-		<provincia>Madrid</provincia>
-		<poblacion>Madrid</poblacion>
-		<zonaClimatica>D3</zonaClimatica>
-		<altitud>600</altitud>
-		<tipoUso>Residencial</tipoUso>
-		<claseHigrometria>3</claseHigrometria>
-		<numRenovacionesHS3>1</numRenovacionesHS3>
-		<ventilacionPorDefecto>NO</ventilacionPorDefecto>
-		<numViviendasBloque>5</numViviendasBloque>
-		<valorImpulsionAire>66.67</valorImpulsionAire>
-		<valorExtraccionAireCocina>1.00</valorExtraccionAireCocina>
-		<valorExtraccionAireBanos>1.00</valorExtraccionAireBanos>
-		<valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos>
-		<vent_p1>25.00</vent_p1>
-		<vent_p2>25.00</vent_p2>
-		<vent_p3>25.00</vent_p3>
-		<vent_p4>25.00</vent_p4>
-		<nomPro>Nombre del Proyecto</nomPro>
-		<usoPro>- Seleccione de la lista -</usoPro>
-		<usoProOtros/>
-		<comunidadPro>Madrid</comunidadPro>
-		<proPro>Madrid</proPro>
-		<locPro>Madrid</locPro>
-		<cpPro>Código Postal</cpPro>
-		<tipoViaPro>Calle</tipoViaPro>
-		<viaPro>C/</viaPro>
-		<tipoNPro>Num</tipoNPro>
-		<nPro>-</nPro>
-		<blqPro>-</blqPro>
-		<portalPro>-</portalPro>
-		<escPro>-</escPro>
-		<pisoPro>-</pisoPro>
-		<puertaPro>-</puertaPro>
-		<datosAdicPro>-</datosAdicPro>
-		<normativaEdificacion>- Seleccione de la lista -</normativaEdificacion>
-		<normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones>
-		<normativaOtros>- Seleccione de la lista -</normativaOtros>
-		<normativaEdificacionOtros/>
-		<normativaInstalacionesOtros/>
-		<normativaOtrosOtros/>
-		<superficieConstruida>0.00</superficieConstruida>
-		<SupConsCubierta>0.00</SupConsCubierta>
-		<supOcupada>0.00</supOcupada>
-		<alturaTotal>0.00</alturaTotal>
-		<plantaSobreRasante>0</plantaSobreRasante>
-		<plantaBajoRasante>0</plantaBajoRasante>
-		<EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida>
-		<panelFotoVoltaicoAutoConsumido>0</panelFotoVoltaicoAutoConsumido>
-		<contribucionResACS>0</contribucionResACS>
-		<puertaPro>-</puertaPro>
-		<cifAut>CIF</cifAut>
-		<nomAut>Nombres</nomAut>
-		<apellido1Aut>Apellido1</apellido1Aut>
-		<apellido2Aut>Apellido2</apellido2Aut>
-		<razAut>Razón Social</razAut>
-		<NIFEntidad/>
-		<comunidadAut>- Seleccione de la lista -</comunidadAut>
-		<proAut>- Seleccione de la lista -</proAut>
-		<locAut>Localidad</locAut>
-		<cpAut>Codigo postal</cpAut>
-		<tipoViaAut>Calle</tipoViaAut>
-		<viaAut>Nombre calle</viaAut>
-		<tipoNAut>Num</tipoNAut>
-		<nAut>-</nAut>
-		<blqAut>-</blqAut>
-		<portalAut>-</portalAut>
-		<escAut>-</escAut>
-		<pisoAut>-</pisoAut>
-		<puertaAut>-</puertaAut>
-		<datosAdicAut>-</datosAdicAut>
-		<correoAut>-</correoAut>
-		<telAut>-</telAut>
-		<titulacionAut>- Seleccione de la lista -</titulacionAut>
-		<titulacionOtrosAut>-</titulacionOtrosAut>
-		<colegioAut>- Seleccione de la lista -</colegioAut>
-		<colegioOtrosAut>-</colegioOtrosAut>
-		<numeroColegiadoAut>-</numeroColegiadoAut>
-		<fechaVisita>13/11/19</fechaVisita>
-		<extInfo>SI</extInfo>
-		<VentNoct>SI</VentNoct>
-		<pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado>
-		<imgEdif>Especifique imagen para el edificio</imgEdif>
-		<imgPlano>Especifique imagen para el plano de situación del edificio</imgPlano>
-		<MesIniPerSom>Junio</MesIniPerSom>
-		<MesFinPerSom>Septiembre</MesFinPerSom>
-		<energiaGT>true</energiaGT>
-		<directoCALENERGT>NO</directoCALENERGT>
-		<valMenELE>NO</valMenELE>
-		<valMenACS>NO</valMenACS>
-		<valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE>
-		<valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS>
-		<datoGeneralNuevo>0</datoGeneralNuevo>
-		<potenciaFVInstalada>0</potenciaFVInstalada>
-		<IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu>
-		<estimacionConsumoACSGT>0.00</estimacionConsumoACSGT>
-		<bajaPermeabilidad>SI</bajaPermeabilidad>
-		<ensayoPermeabilidad>SI</ensayoPermeabilidad>
-		<ValorN50Medido>5.32</ValorN50Medido>
-		<datosVentilacion>1;240.000;0.00;0;0.00;0.00;0.000;0.00;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;240.000;0.00;0.00;0.0000</datosVentilacion>
-		<venPotEC>0.000</venPotEC>
-		<recEFC>-1.000</recEFC>
-		<cambios>NO</cambios>
-		<cambioscalener>NO</cambioscalener>
-		<RED1>RED1  <precioEnergia>0.0</precioEnergia>
-			<conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria>
-			<conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable>
-			<conversionEmisionesCO2>1.000</conversionEmisionesCO2>
-		</RED1>
-		<RED2>RED2  <precioEnergia>0.0</precioEnergia>
-			<conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria>
-			<conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable>
-			<conversionEmisionesCO2>1.000</conversionEmisionesCO2>
-		</RED2>
-	</DatosGenerales>
-	<EntradaGraficaLIDER>
-		<![CDATA[$ +----------------------------------------------------+
+<?xml version="1.0"?>
+<CTE-HE-XML><DatosGenerales><refCatastral>ninguno</refCatastral><tipoVivienda>Bloque</tipoVivienda><anio/><tipoDefinicion>Nuevo</tipoDefinicion><comunidad>Madrid</comunidad><provincia>Madrid</provincia><poblacion>Madrid</poblacion><zonaClimatica>D3</zonaClimatica><altitud>600</altitud><tipoUso>Residencial</tipoUso><claseHigrometria>3</claseHigrometria><numRenovacionesHS3>1</numRenovacionesHS3><ventilacionPorDefecto>NO</ventilacionPorDefecto><numViviendasBloque>5</numViviendasBloque><valorImpulsionAire>66.67</valorImpulsionAire><valorExtraccionAireCocina>1.00</valorExtraccionAireCocina><valorExtraccionAireBanos>1.00</valorExtraccionAireBanos><valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos><vent_p1>25.00</vent_p1><vent_p2>25.00</vent_p2><vent_p3>25.00</vent_p3><vent_p4>25.00</vent_p4><nomPro>Nombre del Proyecto</nomPro><usoPro>- Seleccione de la lista -</usoPro><usoProOtros/><comunidadPro>Madrid</comunidadPro><proPro>Madrid</proPro><locPro>Madrid</locPro><cpPro>C&#xF3;digo Postal</cpPro><tipoViaPro>Calle</tipoViaPro><viaPro>C/</viaPro><tipoNPro>Num</tipoNPro><nPro>-</nPro><blqPro>-</blqPro><portalPro>-</portalPro><escPro>-</escPro><pisoPro>-</pisoPro><puertaPro>-</puertaPro><datosAdicPro>-</datosAdicPro><normativaEdificacion>- Seleccione de la lista -</normativaEdificacion><normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones><normativaOtros>- Seleccione de la lista -</normativaOtros><normativaEdificacionOtros/><normativaInstalacionesOtros/><normativaOtrosOtros/><superficieConstruida>0.00</superficieConstruida><SupConsCubierta>0.00</SupConsCubierta><supOcupada>0.00</supOcupada><alturaTotal>0.00</alturaTotal><plantaSobreRasante>0</plantaSobreRasante><plantaBajoRasante>0</plantaBajoRasante><EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida><panelFotoVoltaicoAutoConsumido>0</panelFotoVoltaicoAutoConsumido><contribucionResACS>0</contribucionResACS><puertaPro>-</puertaPro><cifAut>CIF</cifAut><nomAut>Nombres</nomAut><apellido1Aut>Apellido1</apellido1Aut><apellido2Aut>Apellido2</apellido2Aut><razAut>Raz&#xF3;n Social</razAut><NIFEntidad/><comunidadAut>- Seleccione de la lista -</comunidadAut><proAut>- Seleccione de la lista -</proAut><locAut>Localidad</locAut><cpAut>Codigo postal</cpAut><tipoViaAut>Calle</tipoViaAut><viaAut>Nombre calle</viaAut><tipoNAut>Num</tipoNAut><nAut>-</nAut><blqAut>-</blqAut><portalAut>-</portalAut><escAut>-</escAut><pisoAut>-</pisoAut><puertaAut>-</puertaAut><datosAdicAut>-</datosAdicAut><correoAut>-</correoAut><telAut>-</telAut><titulacionAut>- Seleccione de la lista -</titulacionAut><titulacionOtrosAut>-</titulacionOtrosAut><colegioAut>- Seleccione de la lista -</colegioAut><colegioOtrosAut>-</colegioOtrosAut><numeroColegiadoAut>-</numeroColegiadoAut><fechaVisita>13/11/19</fechaVisita><extInfo>SI</extInfo><VentNoct>SI</VentNoct><pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado><imgEdif>Especifique imagen para el edificio</imgEdif><imgPlano>Especifique imagen para el plano de situaci&#xF3;n del edificio</imgPlano><MesIniPerSom>Junio</MesIniPerSom><MesFinPerSom>Septiembre</MesFinPerSom><energiaGT>true</energiaGT><directoCALENERGT>NO</directoCALENERGT><valMenELE>NO</valMenELE><valMenACS>NO</valMenACS><valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE><valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS><datoGeneralNuevo>0</datoGeneralNuevo><potenciaFVInstalada>0</potenciaFVInstalada><IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu><estimacionConsumoACSGT>0.00</estimacionConsumoACSGT><bajaPermeabilidad>SI</bajaPermeabilidad><ensayoPermeabilidad>SI</ensayoPermeabilidad><ValorN50Medido>5.32</ValorN50Medido><datosVentilacion>1;240.000;0.00;0;0.00;0.00;0.000;0.00;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;240.000;0.00;0.00;0.0000</datosVentilacion><venPotEC>0.000</venPotEC><recEFC>-1.000</recEFC><cambios>NO</cambios><cambioscalener>NO</cambioscalener><RED1>RED1  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED1><RED2>RED2  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED2></DatosGenerales><EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
 $ |         FICHERO GENERADO CON CTE-HE 2018           |
 $ +----------------------------------------------------+
 $
@@ -265,168 +143,6 @@ TEMPLARY = USER
 $ ++++++++++++++++++++++++++++++
 $           MATERIALES
 $ ++++++++++++++++++++++++++++++
-"Material_Base" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =          0.075
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =              1
-    DENSITY           =           3000
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             10
-    NAME          = "Material_Base"
-    GROUP         = "Otro"
-    IMAGE          = "C:\ProgramasCTEyCEE\CTEHE2018\Imagenes\Ladrillo.bmp"
-    NAME_CALENER   = ""
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"Teja cerámica-porcelana" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.02
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =            1.3
-    DENSITY           =           2300
-    SPECIFIC-HEAT     =            840
-    VAPOUR-DIFFUSIVITY-FACTOR =             30
-    NAME          = "Teja cerámica-porcelana"
-    GROUP         = "Cerámicos"
-    IMAGE          = "arcilla.bmp"
-    NAME_CALENER   = "Teja cerámica-porcelana"
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FU Entrevigado de EPS moldeado descolgado -Canto 250 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.25
-    THICKNESS_CHANGE         = NO
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.1760563
-    DENSITY           =            710
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 250 mm"
-    GROUP         = "Forjados unidireccionales"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 250 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FU Entrevigado de EPS moldeado descolgado -Canto 300 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =            0.3
-    THICKNESS_CHANGE         = NO
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =            0.2
-    DENSITY           =            670
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 300 mm"
-    GROUP         = "Forjados unidireccionales"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 30 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FU Entrevigado de EPS moldeado descolgado -Canto 350 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.35
-    THICKNESS_CHANGE         = NO
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.2229299
-    DENSITY           =            640
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 350 mm"
-    GROUP         = "Forjados unidireccionales"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 35 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FR Entrevigado de EPS moldeado descolgado -Canto 300 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =            0.3
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.3571429
-    DENSITY           =           1330
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 300 mm"
-    GROUP         = "Forjados reticulares"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 300 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FR Entrevigado de EPS moldeado descolgado -Canto 350 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.35
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.4022988
-    DENSITY           =           1310
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 350 mm"
-    GROUP         = "Forjados reticulares"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 350 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FR Entrevigado de EPS moldeado descolgado -Canto 400 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =            0.4
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.4395604
-    DENSITY           =           1290
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 400 mm"
-    GROUP         = "Forjados reticulares"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 400 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FR Entrevigado de EPS moldeado descolgado -Canto 450 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.45
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.4787234
-    DENSITY           =           1280
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 450 mm"
-    GROUP         = "Forjados reticulares"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 450 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
 "Material_Base" = MATERIAL
     TYPE              = PROPERTIES
     THICKNESS         =          0.075
@@ -863,33 +579,6 @@ $ ++++++++++++++++++++++++++++++
                 LIBRARY       = NO
     UTIL          =  NO
 ..
- "Met - Gris claro" = NAME-FRAME
-      GROUP         = "Marcos"
-      FRAME-WIDTH   =            0.1
-      FRAME-CONDUCT =            5.7
-      FRAME-ABS     =            0.4
-      NAME_CALENER  = ""
-                LIBRARY       = NO
-    UTIL          =  NO
-..
- "Mrpt - Gris claro" = NAME-FRAME
-      GROUP         = "Marcos"
-      FRAME-WIDTH   =            0.1
-      FRAME-CONDUCT =            3.2
-      FRAME-ABS     =            0.4
-      NAME_CALENER  = ""
-                LIBRARY       = NO
-    UTIL          =  NO
-..
- "Mpvc o mad - Gris claro" = NAME-FRAME
-      GROUP         = "Marcos"
-      FRAME-WIDTH   =            0.1
-      FRAME-CONDUCT =            2.2
-      FRAME-ABS     =            0.4
-      NAME_CALENER  = ""
-                LIBRARY       = NO
-    UTIL          =  NO
-..
 $ ++++++++++++++++++++++++++++++
 $             HUECOS
 $ ++++++++++++++++++++++++++++++
@@ -1191,6 +880,12 @@ $
     V2   =( 10, 0 )
     V3   =( 10, 5 )
     ..
+"P03_E01_FI001_Poligono1" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 5, 0 )
+    V3   =( 5, 10 )
+    V4   =( 0, 10 )
+    ..
 $
 $ +-------------------+
 $ | DATOS GEOMÉTRICOS |
@@ -1259,22 +954,7 @@ $          TYPE-OPER = "Acondicionado"
            VEEI-OBJ  = 7.000000
            VEEI-REF  = 10.000000
             ..
-            "P01_E01_PE001" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 1
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V2  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
-            "P01_E01_PE002" = EXTERIOR-WALL
+            "P01_E01_ME001" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
                   TYPE_ABSORPTANCE    = 1
@@ -1283,21 +963,6 @@ $          TYPE-OPER = "Acondicionado"
                   CONSTRUCCION_MURO  = "SATE"  
                   CONSTRUCTION  = "SATE0.60"  
                   LOCATION      = SPACE-V3  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
-            "P01_E01_PE003" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 1
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V4  
                         ..
                   "SATE0.60" =  CONSTRUCTION
                         TYPE   = LAYERS  
@@ -1315,13 +980,33 @@ $          TYPE-OPER = "Acondicionado"
                         TYPE   = LAYERS  
                         LAYERS = "Placas de yeso" 
                         ..
+            "P01_E01_MED002" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "SATE"  
+                  LOCATION      = SPACE-V4  
+                        ..
+                  "SATE" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
+                        ..
             "P01_E01_FTER001" = UNDERGROUND-WALL
-                  Z-GROUND      =              0
+                  Z-GROUND      =  -4.468579e-07
    COMPROBAR-REQUISITOS-MINIMOS = YES
                   CONSTRUCTION  = "Solera"  
                   LOCATION      = BOTTOM  
                    AREA          =             100
-                   PERIMETRO     =              40
+                   PERIMETRO     =              30
+                        ..
+                  "Solera" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Solera" 
+                        ..
+            "P01_E01_TER002" = UNDERGROUND-WALL
+                  Z-GROUND      =              0
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Solera"  
+                  LOCATION      = SPACE-V2  
                         ..
                   "Solera" =  CONSTRUCTION
                         TYPE   = LAYERS  
@@ -1332,10 +1017,10 @@ $          TYPE-OPER = "Acondicionado"
               HEIGHT        =              3
             SHAPE             = POLYGON 
             POLYGON           = "P01_E02_Poligono3"
-            TYPE              = CONDITIONED
+            TYPE              = UNHABITED
             SPACE-TYPE        = "Residencial"
-            SYSTEM-CONDITIONS = "Residencial"
-            SPACE-CONDITIONS  = "Residencial"
+            SYSTEM-CONDITIONS = "NIVEL_ESTANQUEIDAD_1"
+            SPACE-CONDITIONS  = "NIVEL_ESTANQUEIDAD_1"
             FLOOR-WEIGHT      =              0
             MULTIPLIER        = 1
             MULTIPLIED        = 0
@@ -1348,58 +1033,43 @@ $          TYPE-OPER = "Acondicionado"
            VEEI-OBJ  = 7.000000
            VEEI-REF  = 10.000000
             ..
-            "P01_E02_PE001" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 1
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
+            "P01_E02_MED002" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "SATE"  
                   LOCATION      = SPACE-V1  
                         ..
-                  "SATE0.60" =  CONSTRUCTION
+                  "SATE" =  CONSTRUCTION
                         TYPE   = LAYERS  
                         LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
                         ..
-            "P01_E02_PE002" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 1
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V2  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
-            "P01_E02_PE003" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 1
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
+            "P01_E02_TER001" = UNDERGROUND-WALL
+                  Z-GROUND      =              0
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Solera"  
                   LOCATION      = SPACE-V3  
                         ..
-                  "SATE0.60" =  CONSTRUCTION
+                  "Solera" =  CONSTRUCTION
                         TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
+                        LAYERS = "Solera" 
                         ..
-            "P01_E02_FTER002" = UNDERGROUND-WALL
+            "P01_E02_TER002" = UNDERGROUND-WALL
                   Z-GROUND      =              0
    COMPROBAR-REQUISITOS-MINIMOS = YES
                   CONSTRUCTION  = "Solera"  
                   LOCATION      = BOTTOM  
                    AREA          =             100
-                   PERIMETRO     =              40
+                   PERIMETRO     =              30
+                        ..
+                  "Solera" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Solera" 
+                        ..
+            "P01_E02_TER003" = UNDERGROUND-WALL
+                  Z-GROUND      =              0
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Solera"  
+                  LOCATION      = SPACE-V2  
                         ..
                   "Solera" =  CONSTRUCTION
                         TYPE   = LAYERS  
@@ -1590,22 +1260,7 @@ $          TYPE-OPER = "Acondicionado"
                         RIGHT-FIN-H    =              0
                         RIGHT-FIN-D    =              0
                         ..
-            "P02_E01_PE004" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 1
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V4  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
-            "P02_E01_FE005" = EXTERIOR-WALL
+            "P02_E01_ME001" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
                   TYPE_ABSORPTANCE    = 0
@@ -1656,6 +1311,16 @@ $          TYPE-OPER = "Acondicionado"
                   "Forjado interior" =  CONSTRUCTION
                         TYPE   = LAYERS  
                         LAYERS = "Forjado interior" 
+                        ..
+            "P02_E01_MED001" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "SATE"  
+                  LOCATION      = SPACE-V4  
+                        ..
+                  "SATE" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
                         ..
 "P03" = FLOOR
       Z             =               6
@@ -1847,21 +1512,6 @@ $          TYPE-OPER = "Acondicionado"
                         RIGHT-FIN-H    =              0
                         RIGHT-FIN-D    =              0
                         ..
-            "P03_E01_PE009" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 1
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V4  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
             "P03_E01_FE004" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
@@ -1888,6 +1538,32 @@ $          TYPE-OPER = "Acondicionado"
    COMPROBAR-REQUISITOS-MINIMOS = NO
                   CONSTRUCTION  = "Forjado interior"  
                   LOCATION      = BOTTOM  
+                        ..
+                  "Forjado interior" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado interior" 
+                        ..
+            "P03_E01_MED001" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "SATE"  
+                  LOCATION      = SPACE-V4  
+                        ..
+                  "SATE" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
+                        ..
+            "P03_E01_FI001" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P04_E02"  
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Forjado interior"  
+                  X             =      -2.503992
+                  Y             =       5.111458
+                  Z             =              3
+                  AZIMUTH       =              0
+                  TILT          =              0
+                  POLYGON       = "P03_E01_FI001_Poligono1"
                         ..
                   "Forjado interior" =  CONSTRUCTION
                         TYPE   = LAYERS  
@@ -2007,21 +1683,6 @@ $          TYPE-OPER = "Acondicionado"
                         RIGHT-FIN-H    =              0
                         RIGHT-FIN-D    =              0
                         ..
-            "P04_E01_PE003" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 0
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V4  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
             "P04_E01_Med001" = INTERIOR-WALL
                   INT-WALL-TYPE = STANDARD  
                   NEXT-TO       = "P04_E02"  
@@ -2048,6 +1709,16 @@ $          TYPE-OPER = "Acondicionado"
                   "Forjado interior" =  CONSTRUCTION
                         TYPE   = LAYERS  
                         LAYERS = "Forjado interior" 
+                        ..
+            "P04_E01_MED001" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "SATE"  
+                  LOCATION      = SPACE-V4  
+                        ..
+                  "SATE" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
                         ..
             "P04_E01C003" = ROOF
                   ABSORPTANCE   =            0.6
@@ -2090,10 +1761,10 @@ $          TYPE-OPER = "Acondicionado"
               HEIGHT        =              3
             SHAPE             = POLYGON 
             POLYGON           = "P04_E02_Poligono2"
-            TYPE              = CONDITIONED
+            TYPE              = UNHABITED
             SPACE-TYPE        = "Residencial"
-            SYSTEM-CONDITIONS = "Residencial"
-            SPACE-CONDITIONS  = "Residencial"
+            SYSTEM-CONDITIONS = "NIVEL_ESTANQUEIDAD_1"
+            SPACE-CONDITIONS  = "NIVEL_ESTANQUEIDAD_1"
             FLOOR-WEIGHT      =              0
             MULTIPLIER        = 1
             MULTIPLIED        = 0
@@ -2106,21 +1777,6 @@ $          TYPE-OPER = "Acondicionado"
            VEEI-OBJ  = 7.000000
            VEEI-REF  = 10.000000
             ..
-            "P04_E02_PE001" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 0
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V1  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
             "P04_E02_PE002" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
@@ -2151,16 +1807,15 @@ $          TYPE-OPER = "Acondicionado"
                         LAYERS = "SATE" 
                         ABSORPTANCE = 0.600000
                         ..
-            "P04_E02_FI002" = INTERIOR-WALL
-                  INT-WALL-TYPE = STANDARD  
-                  NEXT-TO       = "P03_E01"  
+            "P04_E02_MED001" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
    COMPROBAR-REQUISITOS-MINIMOS = NO
-                  CONSTRUCTION  = "Forjado interior"  
-                  LOCATION      = BOTTOM  
+                  CONSTRUCTION  = "SATE"  
+                  LOCATION      = SPACE-V1  
                         ..
-                  "Forjado interior" =  CONSTRUCTION
+                  "SATE" =  CONSTRUCTION
                         TYPE   = LAYERS  
-                        LAYERS = "Forjado interior" 
+                        LAYERS = "SATE" 
                         ..
             "P04_E02C001" = ROOF
                   ABSORPTANCE   =            0.6
@@ -2241,6 +1896,52 @@ $
     COOLING-SCHEDULE   = "Funcionam-Residencia"
     FLOW/AREA          = 0
     FAN-SCHEDULE       = "Funcionam-Residencia"
+    SEASON-SCH         = "SSHA"
+    OUTSIDE-AIR-FLOW   = 0
+    RECOV-TEMP         = 0
+    RECOV-KW           = 0
+    RECOV-EFF          = 0
+    THROTTLING-RANGE   = 0
+    OA-CONTROL         = TEMP
+            ..
+"NIVEL_ESTANQUEIDAD_1" = SPACE-CONDITIONS
+    NAME               = "NIVEL_ESTANQUEIDAD_1"
+    TEMPERATURE        = 22.5
+    PEOPLE-SCHEDULE    = "Anual-No-Habitable"
+    PEOPLE-HG-LAT      =              0
+    PEOPLE-HG-SENS     =              0
+    PEOPLE-SPLIT-CR    = 0
+    LIGHTING-SCHEDULE  = "Anual-No-Habitable"
+    AREA/PERSON        =              0
+    LIGHTING-TYPE      = SUS-FLUOR
+    LIGHTING-W/AREA    =              0
+    LIGHTING-SPLIT-CR =             0.5
+    EQUIP-SCHEDULE        = "Anual-No-Habitable"
+    EQUIP-SENSIBLE        =             90
+    EQUIP-LATENT          =             10
+    EQUIPMENT-SPLIT-CR    =              0
+    EQUIPMENT-W/AREA      =              0
+    FURN-FRACTION         =              0
+    FURN-WEIGHT           =              0
+    FRACCION-SOLAR-SUELO  =              0
+    INF-SCHEDULE          = "Anual-No-habitable-Inf"
+    INF-FLOW/AREA         =              0
+    INF-METHOD            = AIR-CHANGE
+    PEAK-LOAD-TYPE        = CONDITIONED
+    MET-LEVEL           = 1
+      ..
+"NIVEL_ESTANQUEIDAD_1" = SYSTEM-CONDITIONS
+    NAME               = "NIVEL_ESTANQUEIDAD_1"
+    ZONAL-ZONE-METHOD  = FULLY-MIXED
+    HEAT-TEMP-SCH      = "Horario-Calefaccion"
+    COOL-TEMP-SCH      = "Horario-Refrigeracion"
+    TYPE               = UNHABITED
+    MAX-HEAT-RATE      = 0
+    MAX-COOL-RATE      = 0
+    HEATING-SCHEDULE   = "Anual-No-habitable-Func"
+    COOLING-SCHEDULE   = "Anual-No-habitable-Func"
+    FLOW/AREA          = 0
+    FAN-SCHEDULE       = "Anual-No-habitable-Func"
     SEASON-SCH         = "SSHA"
     OUTSIDE-AIR-FLOW   = 0
     RECOV-TEMP         = 0
@@ -2952,7 +2653,7 @@ $
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 1
-    VALUES  = ( 19.07, 19.07, 19.07, 19.07, 19.07, 19.07, 19.07, 19.07, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    VALUES  = ( 14.98, 14.98, 14.98, 14.98, 14.98, 14.98, 14.98, 14.98, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
   "HA19_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
@@ -3203,12 +2904,4 @@ $
 $ +-----------------------------------------------------------------+
 $ |                        Final del fichero                        |
 $ +-----------------------------------------------------------------+
-]]>
-	</EntradaGraficaLIDER>
-	<Definicion_Sistema>
-		<elementos>
-			<FactoresDeCorreccion/>
-			<Sistemas/>
-		</elementos>
-	</Definicion_Sistema>
-</CTE-HE-XML>
+]]></EntradaGraficaLIDER><Definicion_Sistema><elementos><FactoresDeCorreccion/><Sistemas/></elementos></Definicion_Sistema></CTE-HE-XML>

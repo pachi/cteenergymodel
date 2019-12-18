@@ -93,7 +93,8 @@ fn test_test_caso_a() {
     assert_eq!(data.autil, 400.0);
     assert_eq!(data.clima, "D3");
     assert_eq!(data.envolvente.huecos.len(), 10);
-    assert_eq!(data.envolvente.opacos.len(), 23);
+    eprintln!("XXXX: {:?}", data.envolvente.opacos);
+    assert_eq!(data.envolvente.opacos.len(), 19);
     assert_eq!(data.envolvente.pts.len(), 7);
 }
 
@@ -108,6 +109,7 @@ fn test_test_caso_c() {
     assert_eq!(data.envolvente.pts.len(), 7);
 }
 
+// Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
 #[test]
 fn parse_test_data() {
     let hulcfiles = find_hulc_files("tests/data").unwrap();
