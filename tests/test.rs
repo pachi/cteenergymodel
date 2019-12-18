@@ -21,7 +21,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, find_hulc_files};
+use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, find_hulc_files, tbl};
+use std::convert::TryFrom;
+
+#[test]
+fn test_polygon() {
+    use bdl::Polygon;
+    use hulc2envolventecte::bdl::build_blocks;
+    let polblk = build_blocks(
+        r#"\"P01_E01_Pol2\" = POLYGON                                             
+    V1   =( 14.97, 11.39 )
+    V2   =( 10.84, 11.39 )
+    V3   =( 10.86, 0 )
+    V4   =( 18.22, 0 )
+    V5   =( 18.22, 9.04 )
+    V6   =( 14.97, 9.04 )
+    .."#,
+    )
+    .unwrap()
+    .pop()
+    .unwrap();
+    let pol: Polygon = Polygon::try_from(polblk).unwrap();
+    assert_eq!(pol.area(), 76.306793);
+}
+
+#[test]
+fn test_test_spaces_caso_a() {
+    let hulcfiles = find_hulc_files("tests/casoA").unwrap();
+    let tbl = tbl::parse(&hulcfiles.tbl).unwrap();
+    let xmldata = ctehexml::parse(&hulcfiles.ctehexml).unwrap();
+    let bdl = xmldata.bdldata;
+
+    for s in tbl.spaces {
+        let spc = bdl.spaces.iter().find(|ss| &ss.name == &s.name).unwrap();
+        let poly = bdl.polygons.get(&spc.polygon).unwrap();
+        assert_eq!(s.area, poly.area())
+    }
+}
 
 #[test]
 fn test_bdl_parse() {

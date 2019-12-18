@@ -213,6 +213,27 @@ pub struct Polygon {
     pub vertices: Vec<Vertex2D>,
 }
 
+impl Polygon {
+    /// Calcula área del polígono definido por vértices
+    pub fn area(&self) -> f32 {
+        // https://www.mathopenref.com/coordpolygonarea2.html
+        // https://www.mathopenref.com/coordpolygonarea.html
+        // 0.5 * ( \SUM( x_i * y_i+1 - y_i * x_i+1)_(i = de 1 a n) + (x_n * y_1 - y_n * x_1) )
+        let vertices = &self.vertices;
+        let nverts = vertices.len();
+
+        let mut area = 0.0;
+        for i in 0..nverts {
+            let nexti = (i+1) % nverts; // el último vértice vuelve a cero
+            let vi = &vertices[i].vector;
+            let vj = &vertices[nexti].vector;
+            area += vi.x * vj.y - vi.y * vj.x;
+        }
+
+        f32::abs(0.5 * area)
+    }
+}
+
 impl TryFrom<BdlBlock> for Polygon {
     type Error = Error;
 
