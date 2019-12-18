@@ -22,6 +22,8 @@ SOFTWARE.
 */
 
 //! Funciones de interpretación de archivos KyGananciasSolares.txt
+//! 
+//! En este archivo no aparecen los elementos adiabáticos entre los cerramientos
 
 use std::collections::HashMap;
 
