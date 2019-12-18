@@ -138,4 +138,8 @@ pub struct Space {
     pub area: f32,
     /// Pertenencia al interior de la envolvente térmica
     pub dentroet: bool,
+    /// Multiplicador
+    pub mult: f32,
+    // Tipo de espacio (ACONDICIONADO, NOACONDICIONADO, NOHABITABLE)
+    pub tipo: String
 }

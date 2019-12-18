@@ -36,8 +36,7 @@ extern crate failure;
 use failure::Error;
 use std::path::PathBuf;
 
-use envolventetypes::{ElementosEnvolvente, EnvolventeCteData, Space};
-use tbl::Tbl;
+use envolventetypes::{EnvolventeCteData, Space};
 use utils::find_first_file;
 
 pub const PROGNAME: &str = env!("CARGO_PKG_NAME");
@@ -121,6 +120,13 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
                 nombre: s.name.clone(),
                 area,
                 dentroet: s.insidete,
+                mult: s.multiplier,
+                tipo: match s.stype.as_ref() {
+                    "CONDITIONED" => "ACONDICIONADO",
+                    "UNHABITED" => "NOHABITABLE",
+                    _ => "NOACONDICIONADO",
+                }
+                .to_string(),
             })
         })
         .collect::<Result<Vec<Space>, Error>>()?;
@@ -138,7 +144,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
     eprintln!("Localizada definición de elementos de la envolvente");
 
     // Calcula área útil con datos de tbl y kyg
-    let area_util = compute_autil(&tbl, &elementos_envolvente);
+    let area_util = compute_autil(&espacios);
     eprintln!("Area útil: {} m2", area_util);
 
     // Salida de datos
@@ -151,43 +157,17 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
     Ok(data)
 }
 
-// Calcula la superficie útil sumando la de los espacios asociados a elementos
-pub fn compute_autil(tbl_data: &Tbl, elementos_envolvente: &ElementosEnvolvente) -> f32 {
-    // Claves de los elementos de la envolvente
-    let mut claves = Vec::new();
-    for hueco in &elementos_envolvente.huecos {
-        let nombre: &str = &hueco.nombre;
-        claves.push(nombre);
-    }
-    for opaco in &elementos_envolvente.opacos {
-        let nombre: &str = &opaco.nombre;
-        claves.push(nombre);
-    }
-    for pt in &elementos_envolvente.pts {
-        let nombre: &str = &pt.nombre;
-        claves.push(nombre);
-    }
-
-    // Espacios asociados a esos elementos de la envolvente
-    let mut spaces = Vec::new();
-    for &clave in claves.iter() {
-        if let Some(elem) = tbl_data.elements.iter().find(|e| e.name == clave) {
-            spaces.push(elem.id_space);
-        };
-    }
-    spaces.sort();
-    spaces.dedup();
-
-    // Suma, con multiplicador, de las áreas de los elementos
-    // El multiplicador es cero para espacios no habitables
-    // TODO: comprobar qué ocurre en el cálculo de área para espacios no acondicionados
-    let mut a_util = 0.0_f32;
-    for space_id in spaces {
-        if let Some(space) = tbl_data.spaces.iter().find(|s| s.id_space == space_id) {
-            a_util += space.area * (space.mult as f32);
-        } else {
-            println!("Espacio con id {} no encontrado!!", space_id);
-        }
-    }
+/// Calcula la superficie útil de los espacios habitables interiores a la envolvente térmica
+pub fn compute_autil(espacios: &Vec<Space>) -> f32 {
+    let a_util: f32 = espacios
+        .iter()
+        .map(|s| {
+            if s.dentroet && s.tipo.as_str() != "NOHABITABLE" {
+                s.area * s.mult
+            } else {
+                0.0
+            }
+        })
+        .sum();
     (a_util * 100.0).round() / 100.0
 }
