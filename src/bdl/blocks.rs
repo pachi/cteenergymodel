@@ -22,68 +22,129 @@ pub struct BdlBlock {
     pub attrs: AttrMap,
 }
 
-pub fn build_blocks(bdl_part: &str) -> Result<Vec<BdlBlock>, Error> {
+impl std::str::FromStr for BdlBlock {
+    type Err = Error;
+    /// Convierte de cadena a bloque
+    ///
+    /// Ejemplo:
+    /// ```text
+    ///     "P01_E01_Pol2" = POLYGON
+    ///     V1   =( 14.97, 11.39 )
+    ///     V2   =( 10.84, 11.39 )
+    ///     V3   =( 10.86, 0 )
+    ///     V4   =( 18.22, 0 )
+    ///     V5   =( 18.22, 9.04 )
+    ///     V6   =( 14.97, 9.04 )
+    ///     ..
+    /// ```
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        // Separa encabezado del resto
+        let stanza: Vec<_> = s
+            .splitn(2, '\n')
+            .map(str::trim)
+            .collect();
+        let [bheadline, bdata] = if let [bheadline, bdata] = stanza.as_slice() {
+            [bheadline, bdata]
+        } else {
+            bail!("Error al interpretar el bloque: '{:?}'", s);
+        };
+        // Interpreta encabezado como nombre = tipo
+        let headlineparts = bheadline
+            .splitn(2, '=')
+            .map(str::trim)
+            .map(|s| s.trim_matches('"'))
+            .collect::<Vec<_>>();
+        let [name, btype] = if let [name, btype] = headlineparts.as_slice() {
+            [name, btype]
+        } else {
+            bail!(
+                "Error al parsear el encabezado '{}'\ndel bloque:\n{:?}",
+                bheadline,
+                s
+            );
+        };
+        // Lee atributos
+        let attrs = parse_attributes(bdata)?;
+        let name = name.to_string();
+        // Construye el objeto
+        Ok(BdlBlock {
+            name: name.clone(),
+            btype: btype.to_string(),
+            parent: None,
+            attrs,
+        })
+    }
+}
+
+pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
+    // Elimina líneas en blanco y comentarios, y luego separa por bloques
+    let cleanlines = input
+        .replace("\r\n", "\n")
+        .lines()
+        .map(str::trim)
+        .filter(|l| *l != "" && !l.starts_with("$"))
+        // Eliminamos la línea TEMPLARY = USER que separa la parte
+        // propia de LIDER del BDL "estándar"
+        .filter(|l| !l.starts_with("TEMPLARY"))
+        .collect::<Vec<&str>>()
+        .join("\n");
+
+    // Separamos una parte inicial de atributos sueltos, sin bloque,
+    // del resto que es BDL válido:
+    // CAMBIO = SI
+    // CAMBIO-CALENER = NO
+    // EEGeneradaAutoconsumida        = "0"
+    // PANELFOTOVOLTAICOAUTOCONSUMIDO =              0
+    // CONTRIBUCIONRESACS             =           1800
+    // ENERGIAGT  = YES
+    let (_lider_part, bdl_part) =
+        if let Some(pos) = cleanlines.find("\"DATOS GENERALES\" = GENERAL-DATA") {
+            cleanlines.split_at(pos)
+        } else {
+            panic!(
+            "Error en la estructura de datos. No se han encontrado los datos de LIDER y de USARIO"
+        )
+        };
+    let new_bdl_part = format!(
+        "\"PARTELIDER\" = PARTELIDER\n{}\n..\n{}",
+        _lider_part, bdl_part
+    );
+
+    let blockstrs = new_bdl_part
+        .split("..")
+        .map(str::trim)
+        .filter(|v| !v.is_empty());
+
     let mut blocks = Vec::<BdlBlock>::new();
     let mut currentfloor = "Default".to_string();
     let mut currentspace = String::new();
     let mut currentwall = String::new();
 
-    for block in bdl_part
-        .split("..")
-        .map(str::trim)
-        .filter(|v| !v.is_empty())
-    {
-        let stanza: Vec<_> = block.splitn(2, '\n').map(str::trim).collect();
-
-        let bdlblock = if let [bheadline, bdata] = stanza.as_slice() {
-            if let [name, btype] = bheadline
-                .splitn(2, '=')
-                .map(str::trim)
-                .map(|s| s.trim_matches('"'))
-                .collect::<Vec<_>>()
-                .as_slice()
-            {
-                let attrs = parse_attributes(bdata)?;
-                let name = name.to_string();
-                let parent = match *btype {
-                    // Las plantas no cuelgan de ningún elemento
-                    "FLOOR" => {
-                        currentfloor = name.clone();
-                        None
-                    }
-                    // Los espacios cuelgan de las plantas
-                    "SPACE" => {
-                        currentspace = name.clone();
-                        Some(currentfloor.clone())
-                    }
-                    // Los muros cuelgan de los espacios
-                    "EXTERIOR-WALL" | "INTERIOR-WALL" | "ROOF" | "UNDERGROUND-WALL"
-                    | "UNDERGROUND-FLOOR" => {
-                        currentwall = name.clone();
-                        Some(currentspace.clone())
-                    }
-                    // Las construcciones y ventanas cuelgan de los muros
-                    "CONSTRUCTION" | "WINDOW" | "DOOR" => Some(currentwall.clone()),
-                    _ => None,
-                };
-
-                BdlBlock {
-                    name: name.clone(),
-                    btype: btype.to_string(),
-                    parent,
-                    attrs,
-                }
-            } else {
-                bail!(
-                    "Error al parsear el encabezado '{}'\ndel bloque:\n{:?}",
-                    bheadline,
-                    stanza
-                );
+    for block in blockstrs {
+        let mut bdlblock: BdlBlock = block.parse()?;
+        // Corrige el elemento madre
+        let parent = match bdlblock.btype.as_str() {
+            // Las plantas no cuelgan de ningún elemento
+            "FLOOR" => {
+                currentfloor = bdlblock.name.clone();
+                None
             }
-        } else {
-            bail!("Error al parsear el bloque: '{:?}'", stanza);
+            // Los espacios cuelgan de las plantas
+            "SPACE" => {
+                currentspace = bdlblock.name.clone();
+                Some(currentfloor.clone())
+            }
+            // Los muros cuelgan de los espacios
+            "EXTERIOR-WALL" | "INTERIOR-WALL" | "ROOF" | "UNDERGROUND-WALL"
+            | "UNDERGROUND-FLOOR" => {
+                currentwall = bdlblock.name.clone();
+                Some(currentspace.clone())
+            }
+            // Las construcciones y ventanas cuelgan de los muros
+            "CONSTRUCTION" | "WINDOW" | "DOOR" => Some(currentwall.clone()),
+            _ => None,
         };
-
+        bdlblock.parent = parent;
         blocks.push(bdlblock);
     }
     Ok(blocks)
@@ -92,8 +153,9 @@ pub fn build_blocks(bdl_part: &str) -> Result<Vec<BdlBlock>, Error> {
 /// Lee atributos de bloque BDL
 fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
     let mut attributes = AttrMap::new();
-    let mut lines = data.lines();
+    let mut lines = data.lines().map(str::trim);
     while let Some(l) = lines.next() {
+        if l == ".." { continue };
         if let [key, value] = l.split('=').map(str::trim).collect::<Vec<_>>().as_slice() {
             // Valores simples o con paréntesis
             let value = if value.starts_with('(') && !value.ends_with(')') {

@@ -27,8 +27,8 @@ use std::convert::TryFrom;
 #[test]
 fn test_polygon() {
     use bdl::Polygon;
-    use hulc2envolventecte::bdl::build_blocks;
-    let polblk = build_blocks(
+    use hulc2envolventecte::bdl::BdlBlock;
+    let polblk: BdlBlock = 
         r#"\"P01_E01_Pol2\" = POLYGON                                             
     V1   =( 14.97, 11.39 )
     V2   =( 10.84, 11.39 )
@@ -36,11 +36,7 @@ fn test_polygon() {
     V4   =( 18.22, 0 )
     V5   =( 18.22, 9.04 )
     V6   =( 14.97, 9.04 )
-    .."#,
-    )
-    .unwrap()
-    .pop()
-    .unwrap();
+    .."#.parse().unwrap();
     let pol: Polygon = Polygon::try_from(polblk).unwrap();
     assert_eq!(pol.area(), 76.306793);
 }

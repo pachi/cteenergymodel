@@ -55,40 +55,8 @@ pub struct BdlData {
 
 impl BdlData {
     pub fn new(input: &str) -> Result<Self, Error> {
-        // Datos
         let mut bdldata: Self = Default::default();
-
-        // Elimina líneas en blanco y comentarios, y luego separa por bloques
-        let cleanlines = input
-            .replace("\r\n", "\n")
-            .lines()
-            .map(str::trim)
-            .filter(|l| *l != "" && !l.starts_with("$"))
-            // Eliminamos la línea TEMPLARY = USER que separa la parte
-            // propia de LIDER del BDL "estándar"
-            .filter(|l| !l.starts_with("TEMPLARY"))
-            .collect::<Vec<&str>>()
-            .join("\n");
-
-        // Separamos una parte inicial de atributos sueltos, sin bloque,
-        // del resto que es BDL válido:
-        // CAMBIO = SI
-        // CAMBIO-CALENER = NO
-        // EEGeneradaAutoconsumida        = "0"
-        // PANELFOTOVOLTAICOAUTOCONSUMIDO =              0
-        // CONTRIBUCIONRESACS             =           1800
-        // ENERGIAGT  = YES
-        // TODO: guardar datos de esta parte
-        let (_lider_part, bdl_part) = if let Some(pos) =
-            cleanlines.find("\"DATOS GENERALES\" = GENERAL-DATA")
-        {
-            cleanlines.split_at(pos)
-        } else {
-            panic!("Error en la estructura de datos. No se han encontrado los datos de LIDER y de USARIO")
-        };
-
-        // Parsea bloques
-        for block in build_blocks(bdl_part)? {
+        for block in build_blocks(input)? {
             match block.btype.as_ref() {
                 // Elementos generales =========================
                 // Valores por defecto, Datos generales, espacio de trabajo y edificio
