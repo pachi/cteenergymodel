@@ -253,7 +253,7 @@ impl TryFrom<BdlBlock> for Gap {
     /// ```
     /// TODO: atributos no trasladados: ISDOOR, TRANSMITANCIA, SHADING-COEF
     /// TODO: SHADE-COEF-SUMMER, SHADE-COEF-WINTER, MARKER-SUMMER,  MARKER-WINTER,
-    /// TODO: LIBRARY, UTIL, DEFAULT
+    /// TODO: LIBRARY (proviene de la biblioteca?), UTIL (se utiliza?), DEFAULT
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name, mut attrs, ..

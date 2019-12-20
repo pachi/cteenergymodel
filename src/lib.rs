@@ -148,6 +148,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
 }
 
 /// Calcula la superficie útil de los espacios habitables interiores a la envolvente térmica
+/// TODO: llevar como método de EnvolventeCteData
 pub fn compute_autil(espacios: &Vec<Space>) -> f32 {
     let a_util: f32 = espacios
         .iter()

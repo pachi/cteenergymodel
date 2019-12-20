@@ -29,6 +29,7 @@ use serde_json;
 
 #[derive(Debug, Serialize)]
 pub struct EnvolventeCteData {
+    // TODO: Eliminar, ya que se puede calcular a partir de los espacios
     #[serde(rename(serialize = "Autil"))]
     pub autil: f32,
     pub clima: String,

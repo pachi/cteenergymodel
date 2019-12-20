@@ -262,7 +262,7 @@ impl Polygon {
 
         let mut area = 0.0;
         for i in 0..nverts {
-            let nexti = (i+1) % nverts; // el último vértice vuelve a cero
+            let nexti = (i + 1) % nverts; // el último vértice vuelve a cero
             let vi = &vertices[i].vector;
             let vj = &vertices[nexti].vector;
             area += vi.x * vj.y - vi.y * vj.x;
