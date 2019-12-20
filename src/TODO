@@ -7,6 +7,11 @@ general:
 
 envolventetypes:
 
+- EnvolventeCteData: eliminar autil y trasladar a método calcula_autil (con datos de espacios)
+- Métodos de envolventectedata:
+    - autil -> area_et
+    - volumen_et
+    - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
 - definir tipos de opacos (muros ext, muros int, muros terreno, cubiertas, suelos, suelos terreno?)
 
 BDL:
