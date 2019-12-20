@@ -16,7 +16,7 @@ exitfailure = "0.5.1"
 failure = "0.1.6"
 glob = "0.3"
 roxmltree = "0.7.3"
-serde = { version = "1.0.103", features = ["derive"] }
+serde = { version = "1.0.104", features = ["derive"] }
 serde_json = "1.0.44"
 uuid = { version = "0.8.1", features = ["v4"] }
 winapi = { version = "0.3.8", features = ["wingdi", "winuser", "libloaderapi", "combaseapi", "objbase", "shobjidl", "shlobj", "winerror"] }
