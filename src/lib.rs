@@ -107,18 +107,16 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
 
     let bdl = &ctehexmldata.bdldata;
     let spaces = &bdl.spaces;
-    let polygons = &bdl.polygons;
 
     let espacios = spaces
         .iter()
         .map(|s| {
-            let area = polygons
-                .get(&s.polygon)
-                .ok_or_else(|| format_err!("Polígono no encontrado {}", &s.polygon))?
-                .area();
+            let area = s.area(&bdl)?;
+            let altura = s.height(&bdl)?;
             Ok(Space {
                 nombre: s.name.clone(),
                 area,
+                altura,
                 dentroet: s.insidete,
                 mult: s.multiplier,
                 tipo: match s.stype.as_ref() {

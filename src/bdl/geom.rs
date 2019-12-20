@@ -9,6 +9,7 @@
 use std::convert::TryFrom;
 
 use super::blocks::BdlBlock;
+use super::BdlData;
 
 use failure::bail;
 use failure::Error;
@@ -103,6 +104,47 @@ pub struct Space {
     pub multiplier: f32,
     /// Si es un espacio multiplicado
     pub ismultiplied: bool,
+}
+
+impl Space {
+    /// Calcula la altura del espacio
+    ///
+    /// Usa el valor definido como propiedad o la altura por defecto para los espacios
+    /// definida en la planta
+    pub fn height(&self, db: &BdlData) -> Result<f32, Error> {
+        if let Some(height) = self.height {
+            Ok(height)
+        } else {
+            Ok(db.floors
+                .iter()
+                .find(|f| f.name == self.parent)
+                .and_then(|f| Some(f.spaceheight))
+                .ok_or_else(|| {
+                    format_err!(
+                        "Polígono del espacio {} no encontrado {}. No se puede calcular la superficie",
+                        self.name,
+                        self.polygon
+                    )
+                })?)
+        }
+    }
+
+    /// Calcula el área del espacio
+    ///
+    /// Usa el área del polígono que define el espacio
+    pub fn area(&self, db: &BdlData) -> Result<f32, Error> {
+        Ok(db
+            .polygons
+            .get(&self.polygon)
+            .ok_or_else(|| {
+                format_err!(
+                    "Polígono del espacio {} no encontrado {}. No se puede calcular la superficie",
+                    self.name,
+                    self.polygon
+                )
+            })?
+            .area())
+    }
 }
 
 impl TryFrom<BdlBlock> for Space {
