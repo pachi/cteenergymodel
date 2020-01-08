@@ -7,9 +7,7 @@ general:
 
 envolventetypes:
 
-- EnvolventeCteData: eliminar autil y trasladar a método calcula_autil (con datos de espacios)
 - Métodos de envolventectedata:
-    - autil -> area_et
     - volumen_et
     - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
 - definir tipos de opacos (muros ext, muros int, muros terreno, cubiertas, suelos, suelos terreno?)
@@ -27,3 +25,6 @@ BDL:
     - volúmenes y alturas de espacios (usando datos de pisos, etc)
 - Implementar cálculo de U para los distintos elementos y así no usar kyg
   (O al menos calcular con suma de las resistencias superficiales)
+
+EnvolventeCTE:
+- Eliminar uso de data.autil y usar data.a_util_ref()

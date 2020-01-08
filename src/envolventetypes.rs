@@ -29,9 +29,6 @@ use serde_json;
 
 #[derive(Debug, Serialize)]
 pub struct EnvolventeCteData {
-    // TODO: Eliminar, ya que se puede calcular a partir de los espacios
-    #[serde(rename(serialize = "Autil"))]
-    pub autil: f32,
     pub clima: String,
     pub envolvente: ElementosEnvolvente,
     pub espacios: Vec<Space>,
@@ -41,6 +38,23 @@ impl EnvolventeCteData {
     pub fn as_json(&self) -> Result<String, Error> {
         let json = serde_json::to_string_pretty(&self)?;
         Ok(json)
+    }
+
+    /// Calcula la superficie útil [m²]
+    /// Computa únicamente los espacios habitables dentro de la envolvente térmica
+    pub fn a_util_ref(&self) -> f32 {
+        let a_util: f32 = self
+            .espacios
+            .iter()
+            .map(|s| {
+                if s.dentroet && s.tipo.as_str() != "NOHABITABLE" {
+                    s.area * s.mult
+                } else {
+                    0.0
+                }
+            })
+            .sum();
+        (a_util * 100.0).round() / 100.0
     }
 }
 
@@ -106,14 +120,14 @@ pub struct Opaque {
     /// Coeficiente de transmisión del elemento opaco (-)
     pub btrx: f32, // 0 | 1
 
-    // TODO: propiedades que se podrían incorporar
-    // Orientación del elemento opaco (N, S, E, W, H...)
-    // pub orientacion: String,
-    // Absortividad del elemento opaco (-)
-    //pub abs: f32,
-    // Tipo - Muro, cubierta, suelo, terreno, adiabático, partición interior
-    // Orientación - azimuth criterio 52016 (distinto en BDL) ->(0 -> sur)
-    // Inclinación - respecto a la horizontal y hacia arriba (0 -> suelo, 180 -> techo)
+                   // TODO: propiedades que se podrían incorporar
+                   // Orientación del elemento opaco (N, S, E, W, H...)
+                   // pub orientacion: String,
+                   // Absortividad del elemento opaco (-)
+                   //pub abs: f32,
+                   // Tipo - Muro, cubierta, suelo, terreno, adiabático, partición interior
+                   // Orientación - azimuth criterio 52016 (distinto en BDL) ->(0 -> sur)
+                   // Inclinación - respecto a la horizontal y hacia arriba (0 -> suelo, 180 -> techo)
 }
 
 /// Puente térmico
@@ -144,5 +158,5 @@ pub struct Space {
     /// Multiplicador
     pub mult: f32,
     // Tipo de espacio (ACONDICIONADO, NOACONDICIONADO, NOHABITABLE)
-    pub tipo: String
+    pub tipo: String,
 }

@@ -86,7 +86,7 @@ fn test_bdl_parse() {
 fn test_test_caso_a() {
     let hulcfiles = find_hulc_files("tests/casoA").unwrap();
     let data = collect_hulc_data(&hulcfiles).unwrap();
-    assert_eq!(data.autil, 400.0);
+    assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.clima, "D3");
     assert_eq!(data.envolvente.huecos.len(), 10);
     eprintln!("XXXX: {:?}", data.envolvente.opacos);
@@ -98,7 +98,7 @@ fn test_test_caso_a() {
 fn test_test_caso_c() {
     let hulcfiles = find_hulc_files("tests/casoC").unwrap();
     let data = collect_hulc_data(&hulcfiles).unwrap();
-    assert_eq!(data.autil, 400.0);
+    assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.clima, "D3");
     assert_eq!(data.envolvente.huecos.len(), 10);
     assert_eq!(data.envolvente.opacos.len(), 29);
@@ -110,7 +110,7 @@ fn test_test_caso_c() {
 fn parse_test_data() {
     let hulcfiles = find_hulc_files("tests/data").unwrap();
     let data = collect_hulc_data(&hulcfiles).unwrap();
-    assert_eq!(data.autil, 1673.92);
+    assert_eq!(data.a_util_ref(), 1673.92);
     assert_eq!(data.clima, "D3");
     assert_eq!(data.envolvente.huecos.len(), 92);
     assert_eq!(data.envolvente.opacos.len(), 68);
@@ -122,7 +122,7 @@ fn parse_test_data2() {
     let hulcfiles = find_hulc_files("tests/ejemplopmt_HuecosOK").unwrap();
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
     let data = collect_hulc_data(&hulcfiles).unwrap();
-    assert_eq!(data.autil, 1073.76);
+    assert_eq!(data.a_util_ref(), 1073.76);
     assert_eq!(data.clima, "B3");
     assert_eq!(data.envolvente.huecos.len(), 29);
     assert_eq!(data.envolvente.opacos.len(), 60);
