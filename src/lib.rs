@@ -130,21 +130,23 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         .collect::<Result<Vec<Space>, Error>>()?;
 
     // Interpreta .kyg
-    let elementos_envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
+    let envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
     eprintln!("Localizada definición de elementos de la envolvente");
 
     // Calcula área útil
-    let area_util = compute_autil(&espacios);
-    eprintln!("Area útil: {} m2", area_util);
+    let autil = compute_autil(&espacios);
+    eprintln!("Area útil: {} m2", autil);
+
+    // Zona climática
+    let clima = ctehexmldata.climate;
 
     // Salida de datos
-    let data = EnvolventeCteData {
-        autil: area_util,
-        clima: ctehexmldata.climate,
-        envolvente: elementos_envolvente,
+    Ok(EnvolventeCteData {
+        autil,
+        clima,
+        envolvente,
         espacios,
-    };
-    Ok(data)
+    })
 }
 
 /// Calcula la superficie útil de los espacios habitables interiores a la envolvente térmica
