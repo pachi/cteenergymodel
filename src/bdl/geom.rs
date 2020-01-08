@@ -118,7 +118,7 @@ impl Space {
             Ok(db.floors
                 .iter()
                 .find(|f| f.name == self.parent)
-                .and_then(|f| Some(f.spaceheight))
+                .map(|f| f.spaceheight)
                 .ok_or_else(|| {
                     format_err!(
                         "Polígono del espacio {} no encontrado {}. No se puede calcular la superficie",
@@ -220,7 +220,8 @@ impl TryFrom<BdlBlock> for Space {
         let spaceconds = attrs.remove_str("SPACE-CONDITIONS")?;
         let systemconds = attrs.remove_str("SYSTEM-CONDITIONS")?;
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
-        let ismultiplied = attrs.remove_f32("MULTIPLIED")? == 1.0;
+        // XXX: Es un booleano codificado como entero que se parse como número
+        let ismultiplied = (attrs.remove_f32("MULTIPLIED")? - 1.0).abs() < 0.1;
 
         Ok(Self {
             name,
@@ -298,7 +299,7 @@ impl TryFrom<BdlBlock> for Polygon {
         let mut vertices = Vec::new();
         for i in 1.. {
             let name = format!("V{}", i);
-            if let Some(vdata) = attrs.remove_str(&name).ok() {
+            if let Ok(vdata) = attrs.remove_str(&name) {
                 vertices.push(Vertex2D {
                     name,
                     vector: vdata.parse()?,

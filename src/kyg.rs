@@ -34,9 +34,9 @@ use super::envolventetypes::{ElementosEnvolvente, Window, Opaque, TB};
 use super::utils::read_latin1_file;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse(
+pub fn parse<S: ::std::hash::BuildHasher + Default>(
     path: &str,
-    gglshwimap: Option<HashMap<String, f32>>,
+    gglshwimap: Option<HashMap<String, f32, S>>,
 ) -> Result<ElementosEnvolvente, Error> {
     let utf8buf = read_latin1_file(path)?;
 
@@ -49,7 +49,7 @@ pub fn parse(
     let mut huecos: Vec<Window> = Vec::new();
     let mut opacos: Vec<Opaque> = Vec::new();
     let mut pts: Vec<TB> = Vec::new();
-    let mut qsolvalues: HashMap<String, f32> = HashMap::new();
+    let mut qsolvalues: HashMap<String, f32> = HashMap::default();
 
     for line in lines {
         // Datos de elemento

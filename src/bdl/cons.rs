@@ -373,7 +373,7 @@ impl TryFrom<BdlBlock> for Glass {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
-        if attrs.remove_str("TYPE")? != "SHADING-COEF".to_string() {
+        if attrs.remove_str("TYPE")? != "SHADING-COEF" {
             bail!(
                 "Definición de vidrio por código no soportada en '{}'",
                 &name
@@ -511,7 +511,7 @@ impl TryFrom<BdlBlock> for ThermalBridge {
                 classes: extract_namesvec(attrs.remove_str("LISTA-N")?),
                 pcts: extract_f32vec(attrs.remove_str("LISTA-L")?)?,
                 firstelems: extract_f32vec(attrs.remove_str("LISTA-MURO")?)?,
-                secondelems: if let Some(list) = attrs.remove_str("LISTA-MARCO").ok() {
+                secondelems: if let Ok(list) = attrs.remove_str("LISTA-MARCO") {
                     Some(extract_f32vec(list)?)
                 } else {
                     None

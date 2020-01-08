@@ -83,7 +83,7 @@ impl AttrMap {
         self.0
             .remove(attr)
             .and_then(|v| match v {
-                BdlValue::String(string) => Some(string.to_string()),
+                BdlValue::String(string) => Some(string),
                 _ => None,
             })
             .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
@@ -99,7 +99,7 @@ pub enum BdlValue {
 
 impl From<String> for BdlValue {
     fn from(val: String) -> Self {
-        BdlValue::String(val.to_string())
+        BdlValue::String(val)
     }
 }
 

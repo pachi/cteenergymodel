@@ -185,7 +185,7 @@ pub struct WallGeometry {
 
 impl WallGeometry {
     pub fn get_wallgeometry(mut attrs: super::AttrMap) -> Result<Option<Self>, Error> {
-        if let Some(name) = attrs.remove_str("POLYGON").ok() {
+        if let Ok(name) = attrs.remove_str("POLYGON") {
             let x = attrs.remove_f32("X")?;
             let y = attrs.remove_f32("Y")?;
             let z = attrs.remove_f32("Z")?;
@@ -572,7 +572,7 @@ impl TryFrom<BdlBlock> for Shade {
             let mut verts = Vec::new();
             for i in 1.. {
                 let name = format!("V{}", i);
-                if let Some(vdata) = attrs.remove_str(&name).ok() {
+                if let Ok(vdata) = attrs.remove_str(&name) {
                     verts.push(Vertex3D {
                         name,
                         vector: vdata.parse()?,

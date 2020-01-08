@@ -55,7 +55,7 @@ impl std::str::FromStr for BdlBlock {
             .map(|s| s.trim_matches('"'))
             .collect::<Vec<_>>();
         let [name, btype] = if let [name, btype] = headlineparts.as_slice() {
-            [name, btype]
+            [*name, *btype]
         } else {
             bail!(
                 "Error al parsear el encabezado '{}'\ndel bloque:\n{:?}",
@@ -68,7 +68,7 @@ impl std::str::FromStr for BdlBlock {
         let name = name.to_string();
         // Construye el objeto
         Ok(BdlBlock {
-            name: name.clone(),
+            name,
             btype: btype.to_string(),
             parent: None,
             attrs,
@@ -82,7 +82,7 @@ pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
         .replace("\r\n", "\n")
         .lines()
         .map(str::trim)
-        .filter(|l| *l != "" && !l.starts_with("$"))
+        .filter(|l| *l != "" && !l.starts_with('$'))
         // Eliminamos la línea TEMPLARY = USER que separa la parte
         // propia de LIDER del BDL "estándar"
         .filter(|l| !l.starts_with("TEMPLARY"))
