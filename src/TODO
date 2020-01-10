@@ -21,8 +21,8 @@ BDL:
     - condiciones operacionales
     - consignas
 - Hacer cálculos de:
-    - normales, etc para polígonos (ver lib_sisgen/claseEdificio.py)
     - volúmenes y alturas de espacios (usando datos de pisos, etc)
+    - superficies de cerramientos...
 - Implementar cálculo de U para los distintos elementos y así no usar kyg
   (O al menos calcular con suma de las resistencias superficiales)
 

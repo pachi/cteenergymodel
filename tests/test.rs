@@ -39,6 +39,47 @@ fn test_polygon() {
     .."#.parse().unwrap();
     let pol: Polygon = Polygon::try_from(polblk).unwrap();
     assert_eq!(pol.area(), 76.306793);
+    assert_eq!(pol.edge_indices("V1").unwrap(), [0, 1]);
+    assert_eq!(pol.edge_indices("V6").unwrap(), [5, 0]);
+    assert_eq!(pol.edge_length("V3"), 18.22 - 10.86);
+}
+
+#[test]
+fn test_polygon2() {
+    use bdl::Polygon;
+    use hulc2envolventecte::bdl::BdlBlock;
+    let polblk: BdlBlock = 
+        r#"\"TEST_POLYGON\" = POLYGON                                             
+    V1   =( 1, 1 )
+    V2   =( 2, 1 )
+    V3   =( 3, 2 )
+    V4   =( 3, 3 )
+    V5   =( 1, 3 )
+    V6   =( 0, 2 )
+    .."#.parse().unwrap();
+    let pol: Polygon = Polygon::try_from(polblk).unwrap();
+    assert_eq!(pol.area(), 4.5);
+    assert_eq!(pol.edge_indices("V1").unwrap(), [0, 1]);
+    assert_eq!(pol.edge_indices("V6").unwrap(), [5, 0]);
+    assert_eq!(pol.edge_length("V3"), 1.0);
+    // lado horizontal hacia la derecha
+    assert_eq!(pol.edge_orient("V1", 0.0), 0.0);
+    // lado inclinado 45º hacia la derecha-arriba
+    assert_eq!(pol.edge_orient("V2", 0.0), 45.0);
+    // lado vertical hacia arriba
+    assert_eq!(pol.edge_orient("V3", 0.0), 90.0);
+    // lado horizontal hacia la izquierda
+    assert_eq!(pol.edge_orient("V4", 0.0), 180.0);
+    // lado inclinado 45º hacia la izquierda-abajo
+    assert_eq!(pol.edge_orient("V5", 0.0), 225.0);
+    // lado inclinado 45º hacia la derecha-abajo
+    assert_eq!(pol.edge_orient("V6", 0.0), 315.0);
+    // V1 con norte desviado 45º
+    assert_eq!(pol.edge_orient("V1", 45.0), 315.0);
+    // V5 con norte desviado 45º
+    assert_eq!(pol.edge_orient("V5", 45.0), 180.0);
+    // V2 con norte desviado 45º
+    assert_eq!(pol.edge_orient("V2", 45.0), 0.0);
 }
 
 #[test]

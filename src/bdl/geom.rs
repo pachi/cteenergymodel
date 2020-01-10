@@ -271,6 +271,57 @@ impl Polygon {
 
         f32::abs(0.5 * area)
     }
+
+    /// Longitud del lado que empieza en el vértice indicado
+    pub fn edge_length(&self, vertexname: &str) -> f32 {
+        let vv = &self.vertices;
+        let [n, m] = self.edge_indices(vertexname).unwrap_or([0, 0]);
+        let Vector2D { x: xn, y: yn } = unsafe { vv.get_unchecked(n).vector };
+        let Vector2D { x: xm, y: ym } = unsafe { vv.get_unchecked(m).vector };
+        (xn - xm).hypot(yn - ym)
+    }
+
+    /// Índices del lado que empieza en el vértice dado
+    /// El lado que empieza en el último vértice continua en el vértice inicial
+    pub fn edge_indices(&self, vertexname: &str) -> Option<[usize; 2]> {
+        let vv = &self.vertices;
+        let nvertsmax = vv.len() - 1;
+        let maybepos = vv.iter().position(|v| v.name == vertexname);
+        match maybepos {
+            Some(pos) if pos == nvertsmax => Some([pos, 0]),
+            Some(pos) if pos < nvertsmax => Some([pos, pos + 1]),
+            _ => None,
+        }
+    }
+
+    /// Ángulo con el sur de la normal del lado definido por el vértice y con desviación global respecto al norte
+    /// Los ángulos se dan en grados sexagesimales
+    pub fn edge_orient(&self, vertexname: &str, northangle: f32) -> f32 {
+        let vv = &self.vertices;
+        let [n, m] = self.edge_indices(vertexname).unwrap_or([0, 0]);
+        let Vector2D { x: xn, y: yn } = unsafe { vv.get_unchecked(n).vector };
+        let Vector2D { x: xm, y: ym } = unsafe { vv.get_unchecked(m).vector };
+        // vector director del lado
+        let dx = xm - xn;
+        let dy = ym - yn;
+        // normal al vector director (hay dos, (dy, -dx) y (-dy, dx))
+        let nx = dy;
+        let ny = -dx;
+        // vector del sur (0, -1)
+        let sx = 0.0;
+        let sy = -1.0;
+        // ángulo entre la normal y el sur
+        let dot = sx * nx + sy * ny;
+        let mag_n = nx.hypot(ny);
+        let mag_s = 1.0;
+        // Para las normales en el semiplano nx <= 0 cogemos el ángulo largo
+        let sign = f32::signum(nx);
+        normalize(
+            sign * f32::acos(dot / (mag_n * mag_s)).to_degrees() - northangle,
+            0.0,
+            360.0,
+        )
+    }
 }
 
 impl TryFrom<BdlBlock> for Polygon {
@@ -401,6 +452,15 @@ impl std::str::FromStr for Vector3D {
             bail!("Fallo al generar vector 3D con los datos '{}'", s)
         }
     }
+}
+
+// Normalize number to an arbitrary range
+// by assuming the range wraps around when going below min or above max
+pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
+    let width = end - start;
+    let offset = value - start; // value relative to 0
+                                // + start to reset back to start of original range
+    (offset - (f32::floor(offset / width) * width)) + start
 }
 // - Composición de cerramiento (CONSTRUCTION) =================
 
