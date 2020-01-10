@@ -65,6 +65,13 @@ pub struct Window {
     pub gglshwi: f32,
 }
 
+impl Window {
+    /// Superficie de la ventana [m2]
+    pub fn area(&self) -> f32 {
+        return self.width * self.height
+    }
+}
+
 impl TryFrom<BdlBlock> for Window {
     type Error = Error;
 
