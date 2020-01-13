@@ -97,18 +97,9 @@ pub fn find_hulc_files(basedir: &str) -> Result<HulcFiles, Error> {
     })
 }
 
-pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
-    // Interpreta .ctehexml
-    let ctehexmldata = ctehexml::parse(&hulcfiles.ctehexml)?;
-    eprintln!(
-        "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
-        ctehexmldata.climate
-    );
-
-    let bdl = &ctehexmldata.bdldata;
-    let spaces = &bdl.spaces;
-
-    let espacios = spaces
+/// Construye lista de espacios a partir de datos BDL (BdlData)
+pub fn build_spaces(bdl: &bdl::BdlData) -> Result<Vec<Space>, failure::Error> {
+    bdl.spaces
         .iter()
         .map(|s| {
             let area = s.area(&bdl)?;
@@ -127,7 +118,18 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
                 .to_string(),
             })
         })
-        .collect::<Result<Vec<Space>, Error>>()?;
+        .collect::<Result<Vec<Space>, Error>>()
+}
+
+pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
+    // Interpreta .ctehexml
+    let ctehexmldata = ctehexml::parse(&hulcfiles.ctehexml)?;
+    eprintln!(
+        "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
+        ctehexmldata.climate
+    );
+
+    let espacios = build_spaces(&ctehexmldata.bdldata)?;
 
     // Interpreta .kyg
     let envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
