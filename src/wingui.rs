@@ -393,7 +393,6 @@ fn do_convert() {
         Ok(hulcfiles) => {
             append_to_edit(&format!("\nLocalizados archivos de datos en '{}'", dir_in));
             append_to_edit(&format!("\n  - {}", hulcfiles.ctehexml));
-            append_to_edit(&format!("\n  - {}", hulcfiles.tbl));
             append_to_edit(&format!("\n  - {}", hulcfiles.kyg));
             hulcfiles
         }
@@ -417,21 +416,6 @@ fn do_convert() {
         }
     };
 
-    let tbl = match tbl::parse(&hulcfiles.tbl) {
-        Ok(tbl) => {
-            append_to_edit(&format!(
-                "\nLocalizados {} espacios y {} elementos",
-                tbl.spaces.len(),
-                tbl.elements.len()
-            ));
-            tbl
-        }
-        _ => {
-            append_to_edit("\nERROR: No se ha localizado la definición de espacios y elementos en el archivo .tbl");
-            return;
-        }
-    };
-
     let elementos_envolvente = match kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi)) {
         Ok(elementos_envolvente) => {
             append_to_edit("\nEncontrada descripción de elementos de la envolvente");
@@ -443,15 +427,28 @@ fn do_convert() {
         }
     };
 
-    let area_util = tbl.compute_autil(&elementos_envolvente);
+    let espacios = match crate::build_spaces(&ctehexmldata.bdldata) {
+        Ok(espacios) => {
+            append_to_edit("\nIdentificados espacios de la envolvente");
+            espacios
+        }
+        _ => {
+            append_to_edit("\nERROR: No se han podido generar los espacios de la envolvente correctamente");
+            return;
+        }
+    };
+    // Construye objeto de Envolvente
+    let envolvente_data = EnvolventeCteData {
+        clima: ctehexmldata.climate,
+        envolvente: elementos_envolvente,
+        espacios
+    };
+
+    let area_util = envolvente_data.a_util_ref();
     append_to_edit(&format!("\nArea útil: {} m2", area_util));
 
     // Salida en JSON
-    let envolvente_data = EnvolventeCteData {
-        autil: area_util,
-        clima: ctehexmldata.climate,
-        envolvente: elementos_envolvente,
-    };
+
     match serde_json::to_string_pretty(&envolvente_data) {
         Ok(json) => {
             // No podemos hacer un hash repetible así que usamos uuid
