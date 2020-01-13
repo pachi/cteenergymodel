@@ -1,4 +1,6 @@
 general:
+
+- Añadir tests de tbl.rs (parse)
 - Convertir vectores de objetos de espacios, pisos, etc a vectores de nombres y hashmaps de objetos
   o convertir a https://docs.rs/crate/indexmap/
 - Ir viendo qué cosas se podrían sacar del BDL en lugar del kyg (el tbl ya no se usa)
