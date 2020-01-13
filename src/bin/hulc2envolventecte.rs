@@ -62,7 +62,6 @@ Descripción:
     let hulcfiles = find_hulc_files(&dir)?;
     eprintln!("Localizados archivos de datos en '{}'", dir);
     eprintln!("- {}", hulcfiles.ctehexml);
-    eprintln!("- {}", hulcfiles.tbl);
     eprintln!("- {}", hulcfiles.kyg);
 
     // Lee datos
