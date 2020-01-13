@@ -386,7 +386,7 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
 }
 
 fn do_convert() {
-    use crate::{ctehexml, kyg, serde_json, tbl, utils, EnvolventeCteData};
+    use crate::{ctehexml, build_spaces, kyg, tbl, EnvolventeCteData};
     let dir_in = unsafe { MODEL.dir_in };
 
     let hulcfiles = match crate::find_hulc_files(&dir_in) {
