@@ -43,7 +43,7 @@ pub fn find_first_file(pattern: &str) -> Result<PathBuf, Error> {
     Ok(results[0].clone())
 }
 
-// Lee archivo en latin1
+// Lee a una cadena un archivo en latin1
 pub fn read_latin1_file(path: &str) -> Result<String, Error> {
     let buf = {
         let mut buf = Vec::new();
@@ -57,4 +57,13 @@ pub fn read_latin1_file(path: &str) -> Result<String, Error> {
         Ok(utf8buf) => Ok(utf8buf),
         _ => bail!("Error de codificación del archivo {}", path),
     }
+}
+
+// Lee a una cadena un archivo en utf8
+pub fn read_file(path: &str) -> Result<String, Error> {
+    let mut buf = String::new();
+    File::open(path)?
+        .read_to_string(&mut buf)
+        .context("No se ha podido leer el archivo")?;
+    Ok(buf)
 }

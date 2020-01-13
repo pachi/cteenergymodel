@@ -28,7 +28,7 @@ use std::collections::HashMap;
 use failure::Error;
 
 use crate::bdl::{BdlData, BdlEnvType};
-use crate::utils::read_latin1_file;
+use crate::utils::read_file;
 
 #[derive(Debug)]
 pub struct CtehexmlData {
@@ -43,7 +43,7 @@ pub struct CtehexmlData {
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
 pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
-    let utf8buf = read_latin1_file(path)?;
+    let utf8buf = read_file(path)?;
 
     // Localiza datos en XML
     let doc = roxmltree::Document::parse(&utf8buf)?;
