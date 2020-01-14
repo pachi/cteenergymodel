@@ -68,7 +68,7 @@ pub struct Window {
 impl Window {
     /// Superficie de la ventana [m2]
     pub fn area(&self) -> f32 {
-        return self.width * self.height
+        self.width * self.height
     }
 }
 
