@@ -163,8 +163,7 @@ fn test_bdl_parse() {
     match wall1 {
         bdl::BdlEnvType::ExteriorWall(wall) => {
             assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 30.0);
-            // TODO: net_area, descontando huecos
-            // assert_eq!(wall.met_area(&data.bdldata).unwrap(), 28.0);
+            assert_eq!(wall.net_area(&data.bdldata).unwrap(), 28.0);
             assert_eq!(wall.space, "P02_E01");
             assert_eq!(wall.tilt(), 90.0);
         }
@@ -182,6 +181,7 @@ fn test_bdl_parse() {
     match wall2 {
         bdl::BdlEnvType::InteriorWall(wall) => {
             assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 49.985004);
+            assert_eq!(wall.net_area(&data.bdldata).unwrap(), 49.985004);
             assert_eq!(wall.space, "P02_E01");
             assert_eq!(wall.tilt(), 180.0);
         }
@@ -199,6 +199,7 @@ fn test_bdl_parse() {
     match wall3 {
         bdl::BdlEnvType::UndergroundWall(wall) => {
             assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 50.0);
+            assert_eq!(wall.net_area(&data.bdldata).unwrap(), 50.0);
             assert_eq!(wall.space, "P01_E01");
             assert_eq!(wall.tilt(), 180.0);
         }

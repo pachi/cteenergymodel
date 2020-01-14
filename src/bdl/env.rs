@@ -93,7 +93,7 @@ impl Window {
             BdlEnvType::UndergroundWall(e) => Ok(e.tilt()),
             BdlEnvType::Roof(e) => Ok(e.tilt()),
             _ => bail!("Caso imprevisto!"),
-}
+        }
     }
 }
 
@@ -339,12 +339,28 @@ pub trait WallExt {
         }
     }
 
-    /// Superficie neta (sin huecos) del cerramiento
+    /// Superficie neta (sin huecos) del cerramiento (m2)
     fn net_area(&self, db: &BdlData) -> Result<f32, Error> {
-        unimplemented!()
+        let wall_gross_area = self.gross_area(db)?;
+        let windows_area = db
+            .env
+            .iter()
+            .filter(|e| {
+                if let BdlEnvType::Window(win) = e {
+                    win.wall == self.get_name()
+                } else {
+                    false
+                }
+            })
+            .map(|w| match w {
+                BdlEnvType::Window(win) => win.area(),
+                _ => 0.0,
+            })
+            .sum::<f32>();
+        Ok(wall_gross_area - windows_area)
     }
 
-    /// Perímetro del cerramiento
+    /// Perímetro del cerramiento (m)
     fn perimeter(&self, db: &BdlData) -> Result<f32, Error> {
         unimplemented!()
     }
@@ -362,7 +378,7 @@ pub trait WallExt {
                     Some("BOTTOM") => 180.0,
                     _ => 90.0,
                 },
-}
+            }
         }
     }
 }
@@ -407,7 +423,7 @@ impl WallExt for ExteriorWall {
     }
     fn get_type(&self) -> &str {
         &self.wtype
-}
+    }
 }
 
 impl TryFrom<BdlBlock> for ExteriorWall {
