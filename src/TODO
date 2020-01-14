@@ -16,14 +16,19 @@ envolventetypes:
 
 BDL:
 
+- Diccionario de espacios por nombre en lugar de vectores
 - Revisar conversión de SHADING-COEF a factor solar (Fw = 0.90? Ahora es 0.85)
+- Terminar de unificar en Wall EXTERIOR-WALL y ROOF (cambia solo el TILT por defecto), y eliminar btype
+    - El objetivo sería tener EXTWALL, INTWALL y GNDWALL o un muro con propiedades distintas según tipos
+    - Comprobar que se pone bien el tilt ahora para ROOF
 - Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL:
     - metadatos
     - horarios
     - condiciones operacionales
     - consignas
 - Hacer cálculos de:
-    - volúmenes y alturas de espacios (usando datos de pisos, etc)
+    - volúmenes
+    - alturas de espacios (usando datos de pisos, etc)
     - superficies de cerramientos...
 - Implementar cálculo de U para los distintos elementos y así no usar kyg
   (O al menos calcular con suma de las resistencias superficiales)
