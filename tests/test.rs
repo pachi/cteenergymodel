@@ -133,9 +133,7 @@ fn test_bdl_parse() {
     // println!("{:#?}", polygons);
 
     // Cálculos básicos sobre elementos de la envolvente
-    // - Área, perímetro
-    // - Elemento madre (muro o espacio)
-    // - TODO: Inclinación (tilt)
+    // - TODO: perímetro
     // - TODO: azimuth
     // - TODO: perímetro
     let win1 = env
@@ -149,10 +147,12 @@ fn test_bdl_parse() {
         bdl::BdlEnvType::Window(win) => {
             assert_eq!(win.area(), 2.0);
             assert_eq!(win.wall, "P02_E01_PE001");
+            assert_eq!(win.tilt(&data.bdldata).unwrap(), 90.0)
         }
         _ => panic!("Ventana no encontrada"),
     };
 
+    // Muro interior
     let wall1 = env
         .iter()
         .find(|e| match e {
@@ -166,10 +166,12 @@ fn test_bdl_parse() {
             // TODO: net_area, descontando huecos
             // assert_eq!(wall.met_area(&data.bdldata).unwrap(), 28.0);
             assert_eq!(wall.space, "P02_E01");
+            assert_eq!(wall.tilt(), 90.0);
         }
         _ => panic!("Muro exterior no encontrado"),
     };
 
+    // Forjado interior
     let wall2 = env
         .iter()
         .find(|e| match e {
@@ -181,10 +183,12 @@ fn test_bdl_parse() {
         bdl::BdlEnvType::InteriorWall(wall) => {
             assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 49.985004);
             assert_eq!(wall.space, "P02_E01");
+            assert_eq!(wall.tilt(), 180.0);
         }
         _ => panic!("Muro interior no encontrado"),
     };
 
+    // Solera
     let wall3 = env
         .iter()
         .find(|e| match e {
@@ -196,6 +200,7 @@ fn test_bdl_parse() {
         bdl::BdlEnvType::UndergroundWall(wall) => {
             assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 50.0);
             assert_eq!(wall.space, "P01_E01");
+            assert_eq!(wall.tilt(), 180.0);
         }
         _ => panic!("Solera enterrada no encontrada"),
     };

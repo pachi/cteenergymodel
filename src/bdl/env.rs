@@ -70,6 +70,31 @@ impl Window {
     pub fn area(&self) -> f32 {
         self.width * self.height
     }
+
+    /// Inclinación de la ventana (grados)
+    /// Es el ángulo respecto al eje Z de la normal a la superficie en la que está la ventana
+    pub fn tilt(&self, db: &BdlData) -> Result<f32, Error> {
+        let wall = db.env.iter().find(|s| match s {
+            BdlEnvType::ExteriorWall(e) => e.name == self.wall,
+            BdlEnvType::InteriorWall(e) => e.name == self.wall,
+            BdlEnvType::UndergroundWall(e) => e.name == self.wall,
+            BdlEnvType::Roof(e) => e.name == self.wall,
+            _ => false
+        }).ok_or_else(|| {
+            format_err!(
+                "Muro {} al que pertenece la ventana {} no encontrado. No se puede calcular la inclinación",
+                self.wall,
+                self.name
+            )
+        })?;
+        match wall {
+            BdlEnvType::ExteriorWall(e) => Ok(e.tilt()),
+            BdlEnvType::InteriorWall(e) => Ok(e.tilt()),
+            BdlEnvType::UndergroundWall(e) => Ok(e.tilt()),
+            BdlEnvType::Roof(e) => Ok(e.tilt()),
+            _ => bail!("Caso imprevisto!"),
+}
+    }
 }
 
 impl TryFrom<BdlBlock> for Window {
@@ -183,23 +208,39 @@ pub struct WallGeometry {
     /// Acimut (grados sexagesimales)
     /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
     pub azimuth: f32,
-    /// Inclinación
+    /// Inclinación (grados sexagesimales)
     /// Ángulo entre el eje Z y la normal exterior del muro
-    /// Por defecto es 90 para ExteriorWall y 0 (hacia arriba) para Roof
-    /// Puede no definirse cuando location es: TOP, BOTTOM, ¿?
-    pub tilt: Option<f32>,
+    pub tilt: f32,
 }
 
 impl WallGeometry {
-    pub fn parse_wallgeometry(mut attrs: super::AttrMap) -> Result<Option<Self>, Error> {
+    pub fn parse_wallgeometry(
+        mut attrs: super::AttrMap,
+        btype: &str,
+        location: &Option<String>,
+    ) -> Result<Option<Self>, Error> {
         if let Ok(polygon) = attrs.remove_str("POLYGON") {
             let x = attrs.remove_f32("X")?;
             let y = attrs.remove_f32("Y")?;
             let z = attrs.remove_f32("Z")?;
             let azimuth = attrs.remove_f32("AZIMUTH")?;
-            // XXX: se podría identificar la inclinación por defecto según el btype
-            // XXX: Si se define location (p.e. TOP) no se define la inclinación
-            let tilt = attrs.remove_f32("TILT").ok();
+
+            // Si la inclinación es None (se define location)
+            // asignamos el valor por defecto, que es:
+            // - Para btype = ROOF -> 0.0 (hacia arriba)
+            // - Para el resto de btypes:
+            //      - con location = TOP -> tilt = 0.0 (techo)
+            //      - con location = BOTTOM -> tilt = 180.0 (suelo)
+            //      - el resto -> tilt = 90.0 (defecto)
+            let tilt = match attrs.remove_f32("TILT").ok() {
+                Some(tilt) => tilt,
+                _ => match (btype, location.as_deref()) {
+                    ("ROOF", _) | (_, Some("TOP")) => 0.0,
+                    (_, Some("BOTTOM")) => 180.0,
+                    _ => 90.0,
+                },
+            };
+
             Ok(Some(WallGeometry {
                 polygon,
                 x,
@@ -221,10 +262,16 @@ impl WallGeometry {
 
 /// Trait con métodos compartidos por todos los cerramientos
 pub trait WallExt {
+    /// Geometría del cerramiento
     fn get_geometry(&self) -> Option<&WallGeometry>;
-    fn get_location(&self) -> Option<&String>;
+    /// Posición del cerramiento
+    fn get_location(&self) -> Option<&str>;
+    /// Espacio al que pertenece el cerramiento
     fn get_space(&self) -> &str;
+    /// Nombre del cerramiento
     fn get_name(&self) -> &str;
+    /// Tipo de cerramiento (ROOF, EXTERIOR-WALL, INTERIOR-WALL, UNDERGROUND-WALL)
+    fn get_type(&self) -> &str;
 
     /// Localiza el vértice definido en location
     /// TODO: se podría amortizar este cálculo dejando el vértice ya al hacer el parsing
@@ -261,7 +308,7 @@ pub trait WallExt {
                 )
             })?;
             // Elementos de suelo o techo
-            if ["TOP", "BOTTOM"].contains(&location.as_str()) {
+            if ["TOP", "BOTTOM"].contains(&location) {
                 space.area(&db)
             // Elementos definidos por vértice
             } else {
@@ -301,6 +348,23 @@ pub trait WallExt {
     fn perimeter(&self, db: &BdlData) -> Result<f32, Error> {
         unimplemented!()
     }
+
+    /// Inclinación del cerramiento (grados)
+    /// Ángulo de la normal del cerramiento con el eje Z
+    fn tilt(&self) -> f32 {
+        if let Some(geom) = self.get_geometry() {
+            geom.tilt
+        } else {
+            match self.get_type() {
+                "ROOF" => 0.0,
+                _ => match self.get_location() {
+                    Some("TOP") => 0.0,
+                    Some("BOTTOM") => 180.0,
+                    _ => 90.0,
+                },
+}
+        }
+    }
 }
 
 // Muro exterior (EXTERIOR-WALL) o cubierta (ROOF) ------------------------------
@@ -332,9 +396,8 @@ impl WallExt for ExteriorWall {
     fn get_geometry(&self) -> Option<&WallGeometry> {
         self.geometry.as_ref()
     }
-
-    fn get_location(&self) -> Option<&String> {
-        self.location.as_ref()
+    fn get_location(&self) -> Option<&str> {
+        self.location.as_deref()
     }
     fn get_space(&self) -> &str {
         self.space.as_str()
@@ -342,6 +405,9 @@ impl WallExt for ExteriorWall {
     fn get_name(&self) -> &str {
         self.name.as_str()
     }
+    fn get_type(&self) -> &str {
+        &self.wtype
+}
 }
 
 impl TryFrom<BdlBlock> for ExteriorWall {
@@ -408,7 +474,7 @@ impl TryFrom<BdlBlock> for ExteriorWall {
         let construction = attrs.remove_str("CONSTRUCTION")?;
         let absorptance = attrs.remove_f32("ABSORPTANCE")?;
         let location = attrs.remove_str("LOCATION").ok();
-        let geometry = WallGeometry::parse_wallgeometry(attrs)?;
+        let geometry = WallGeometry::parse_wallgeometry(attrs, &btype, &location)?;
         Ok(Self {
             name,
             wtype: btype,
@@ -451,15 +517,17 @@ impl WallExt for InteriorWall {
     fn get_geometry(&self) -> Option<&WallGeometry> {
         self.geometry.as_ref()
     }
-
-    fn get_location(&self) -> Option<&String> {
-        self.location.as_ref()
+    fn get_location(&self) -> Option<&str> {
+        self.location.as_deref()
     }
     fn get_space(&self) -> &str {
         self.space.as_str()
     }
     fn get_name(&self) -> &str {
         self.name.as_str()
+    }
+    fn get_type(&self) -> &str {
+        &self.wtype
     }
 }
 
@@ -495,6 +563,7 @@ impl TryFrom<BdlBlock> for InteriorWall {
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
+            btype,
             parent,
             mut attrs,
             ..
@@ -505,7 +574,7 @@ impl TryFrom<BdlBlock> for InteriorWall {
         let nextto = attrs.remove_str("NEXT-TO").ok();
         let construction = attrs.remove_str("CONSTRUCTION")?;
         let location = attrs.remove_str("LOCATION").ok();
-        let geometry = WallGeometry::parse_wallgeometry(attrs)?;
+        let geometry = WallGeometry::parse_wallgeometry(attrs, &btype, &location)?;
         Ok(Self {
             name,
             wtype,
@@ -564,15 +633,17 @@ impl WallExt for UndergroundWall {
     fn get_geometry(&self) -> Option<&WallGeometry> {
         self.geometry.as_ref()
     }
-
-    fn get_location(&self) -> Option<&String> {
-        self.location.as_ref()
+    fn get_location(&self) -> Option<&str> {
+        self.location.as_deref()
     }
     fn get_space(&self) -> &str {
         self.space.as_str()
     }
     fn get_name(&self) -> &str {
         self.name.as_str()
+    }
+    fn get_type(&self) -> &str {
+        "UNDERGROUND-WALL"
     }
 }
 
@@ -603,6 +674,7 @@ impl TryFrom<BdlBlock> for UndergroundWall {
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
+            btype,
             parent,
             mut attrs,
             ..
@@ -614,7 +686,7 @@ impl TryFrom<BdlBlock> for UndergroundWall {
             parent.ok_or_else(|| format_err!("Muro interior sin espacio asociado '{}'", &name))?;
         let construction = attrs.remove_str("CONSTRUCTION")?;
         let location = attrs.remove_str("LOCATION").ok();
-        let geometry = WallGeometry::parse_wallgeometry(attrs)?;
+        let geometry = WallGeometry::parse_wallgeometry(attrs, &btype, &location)?;
         Ok(Self {
             name,
             zground,
