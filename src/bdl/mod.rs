@@ -21,7 +21,7 @@ mod geom;
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
-pub use env::{BdlEnvType, InteriorWall, Shade, UndergroundWall, Wall, Window};
+pub use env::{BdlEnvType, ExteriorWall, InteriorWall, Shade, UndergroundWall, WallExt, Window};
 pub use geom::{Construction, Floor, Polygon, Space};
 
 // ------------------------- BDL ----------------------------
@@ -122,10 +122,16 @@ impl BdlData {
                 }
 
                 // Elementos opacos de la envolvente -----------
+                // TODO: Unificar exterior wall y roof en un solo tipo
                 "EXTERIOR-WALL" => {
                     bdldata
                         .env
-                        .push(BdlEnvType::ExteriorWall(Wall::try_from(block)?));
+                        .push(BdlEnvType::ExteriorWall(ExteriorWall::try_from(block)?));
+                }
+                "ROOF" => {
+                    bdldata
+                        .env
+                        .push(BdlEnvType::Roof(ExteriorWall::try_from(block)?));
                 }
                 "INTERIOR-WALL" => {
                     bdldata
@@ -138,9 +144,6 @@ impl BdlData {
                         .push(BdlEnvType::UndergroundWall(UndergroundWall::try_from(
                             block,
                         )?));
-                }
-                "ROOF" => {
-                    bdldata.env.push(BdlEnvType::Roof(Wall::try_from(block)?));
                 }
                 "BUILDING-SHADE" => {
                     bdldata.shadings.push(Shade::try_from(block)?);
