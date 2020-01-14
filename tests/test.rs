@@ -56,9 +56,12 @@ fn test_polygon2() {
     V4   =( 3, 3 )
     V5   =( 1, 3 )
     V6   =( 0, 2 )
-    .."#.parse().unwrap();
+    .."#
+        .parse()
+        .unwrap();
     let pol: Polygon = Polygon::try_from(polblk).unwrap();
     assert_eq!(pol.area(), 4.5);
+    assert_eq!(pol.perimeter(), 8.2426405);
     assert_eq!(pol.edge_indices("V1").unwrap(), [0, 1]);
     assert_eq!(pol.edge_indices("V6").unwrap(), [5, 0]);
     assert_eq!(pol.edge_length("V3"), 1.0);

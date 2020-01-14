@@ -272,6 +272,25 @@ impl Polygon {
         f32::abs(0.5 * area)
     }
 
+    /// Perímetro de un polígono (m)
+    pub fn perimeter(&self) -> f32 {
+        let nlen = self.vertices.len();
+        match nlen {
+            0 => 0.0,
+            1 => 0.0,
+            _ => {
+                let first = self.vertices.get(0).unwrap().clone();
+                let mut vecs = self.vertices.clone();
+                vecs.push(first);
+                vecs.as_slice().windows(2).map(|win| {
+                    let vn = &win[0].vector;
+                    let vm = &win[1].vector;
+                    (vn.x - vm.x).hypot(vn.y - vm.y)
+                }).sum()
+            }
+        }
+    }
+
     /// Longitud del lado que empieza en el vértice indicado
     pub fn edge_length(&self, vertexname: &str) -> f32 {
         let vv = &self.vertices;
