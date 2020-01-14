@@ -253,7 +253,7 @@ pub struct Polygon {
 }
 
 impl Polygon {
-    /// Calcula área del polígono definido por vértices
+    /// Área del polígono definido por vértices (m2)
     pub fn area(&self) -> f32 {
         // https://www.mathopenref.com/coordpolygonarea2.html
         // https://www.mathopenref.com/coordpolygonarea.html
