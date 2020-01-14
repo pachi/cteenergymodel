@@ -17,12 +17,14 @@ mod common;
 mod cons;
 mod env;
 mod geom;
+mod window;
 
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
-pub use env::{BdlEnvType, ExteriorWall, InteriorWall, Shade, UndergroundWall, WallExt, Window};
+pub use env::{BdlEnvType, ExteriorWall, InteriorWall, Shade, UndergroundWall, WallExt};
 pub use geom::{Construction, Floor, Polygon, Space};
+pub use window::Window;
 
 // ------------------------- BDL ----------------------------
 
