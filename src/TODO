@@ -35,3 +35,4 @@ BDL:
 
 EnvolventeCTE:
 - Eliminar uso de data.autil y usar data.a_util_ref()
+- Leer datos de gglshwi desde construcción de hueco y no de elemento
