@@ -21,14 +21,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, find_hulc_files, tbl};
+use hulc2envolventecte::{
+    bdl::{self, WallExt},
+    collect_hulc_data, ctehexml, find_hulc_files, tbl,
+};
 use std::convert::TryFrom;
 
 #[test]
 fn test_polygon() {
     use bdl::Polygon;
     use hulc2envolventecte::bdl::BdlBlock;
-    let polblk: BdlBlock = 
+    let polblk: BdlBlock =
         r#"\"P01_E01_Pol2\" = POLYGON                                             
     V1   =( 14.97, 11.39 )
     V2   =( 10.84, 11.39 )
@@ -50,7 +53,7 @@ fn test_polygon() {
 fn test_polygon2() {
     use bdl::Polygon;
     use hulc2envolventecte::bdl::BdlBlock;
-    let polblk: BdlBlock = 
+    let polblk: BdlBlock =
         r#"\"TEST_POLYGON\" = POLYGON                                             
     V1   =( 1, 1 )
     V2   =( 2, 1 )
@@ -121,13 +124,81 @@ fn test_bdl_parse() {
         systemconds,
         schedules,
     } = &data.bdldata;
-    println!("{:#?}", db);
-    println!("{:#?}", constructions);
-    println!("{:#?}", floors);
-    println!("{:#?}", spaces);
+    // println!("{:#?}", db);
+    // println!("{:#?}", constructions);
+    // println!("{:#?}", floors);
+    // println!("{:#?}", spaces);
     println!("{:#?}", env);
-    println!("{:#?}", shadings);
-    println!("{:#?}", polygons);
+    // println!("{:#?}", shadings);
+    // println!("{:#?}", polygons);
+
+    // Cálculos básicos sobre elementos de la envolvente
+    // - Área, perímetro
+    // - Elemento madre (muro o espacio)
+    // - TODO: Inclinación (tilt)
+    // - TODO: azimuth
+    // - TODO: perímetro
+    let win1 = env
+        .iter()
+        .find(|e| match e {
+            bdl::BdlEnvType::Window(win) => win.name == "P02_E01_PE001_V",
+            _ => false,
+        })
+        .unwrap();
+    match win1 {
+        bdl::BdlEnvType::Window(win) => {
+            assert_eq!(win.area(), 2.0);
+            assert_eq!(win.wall, "P02_E01_PE001");
+        }
+        _ => panic!("Ventana no encontrada"),
+    };
+
+    let wall1 = env
+        .iter()
+        .find(|e| match e {
+            bdl::BdlEnvType::ExteriorWall(wall) => wall.name == "P02_E01_PE001",
+            _ => false,
+        })
+        .unwrap();
+    match wall1 {
+        bdl::BdlEnvType::ExteriorWall(wall) => {
+            assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 30.0);
+            // TODO: net_area, descontando huecos
+            // assert_eq!(wall.met_area(&data.bdldata).unwrap(), 28.0);
+            assert_eq!(wall.space, "P02_E01");
+        }
+        _ => panic!("Muro exterior no encontrado"),
+    };
+
+    let wall2 = env
+        .iter()
+        .find(|e| match e {
+            bdl::BdlEnvType::InteriorWall(wall) => wall.name == "P02_E01_FI001",
+            _ => false,
+        })
+        .unwrap();
+    match wall2 {
+        bdl::BdlEnvType::InteriorWall(wall) => {
+            assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 49.985004);
+            assert_eq!(wall.space, "P02_E01");
+        }
+        _ => panic!("Muro interior no encontrado"),
+    };
+
+    let wall3 = env
+        .iter()
+        .find(|e| match e {
+            bdl::BdlEnvType::UndergroundWall(wall) => wall.name == "P01_E01_FTER001",
+            _ => false,
+        })
+        .unwrap();
+    match wall3 {
+        bdl::BdlEnvType::UndergroundWall(wall) => {
+            assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 50.0);
+            assert_eq!(wall.space, "P01_E01");
+        }
+        _ => panic!("Solera enterrada no encontrada"),
+    };
 }
 
 #[test]

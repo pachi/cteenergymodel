@@ -214,6 +214,95 @@ impl WallGeometry {
     }
 }
 
+// Cerramientos ------------------
+// - muro (o cubierta o suelo) exterior (EXTERIOR-WALL) - alias para cubierta: ROOF
+// - muro (o cubierta o suelo) interior (INTERIOR-WALL)
+// - muro (o cubierta o suelo) enterrado (UNDERGROUND-WALL)
+
+/// Trait con métodos compartidos por todos los cerramientos
+pub trait WallExt {
+    fn get_geometry(&self) -> Option<&WallGeometry>;
+    fn get_location(&self) -> Option<&String>;
+    fn get_space(&self) -> &str;
+    fn get_name(&self) -> &str;
+
+    /// Localiza el vértice definido en location
+    /// TODO: se podría amortizar este cálculo dejando el vértice ya al hacer el parsing
+    fn get_location_vertex(&self) -> Option<String> {
+        self.get_location().and_then(|l| {
+            l.split('-')
+                .collect::<Vec<_>>()
+                .get(1)
+                .map(|s| s.to_string())
+        })
+    }
+
+    /// Superficie bruta (incluyendo huecos) del muro (m2)
+    ///
+    /// TODO: la búsqueda de polígonos y espacios no es óptima (se podría cachear)
+    fn gross_area(&self, db: &BdlData) -> Result<f32, Error> {
+        if let Some(geom) = &self.get_geometry() {
+            // Superficie para muros definidos por polígono
+            let geom_polygon = db.polygons.get(&geom.polygon).ok_or_else(|| {
+                format_err!(
+                    "Polígono del cerramiento {} no encontrado {}. No se puede calcular la superficie",
+                    self.get_name(),
+                    geom.polygon
+                )
+            })?;
+            Ok(geom_polygon.area())
+        } else if let Some(location) = &self.get_location() {
+            // Superficie para muros definidos por posición, en un espacio
+            let space = db.spaces.iter().find(|s| s.name == self.get_space()).ok_or_else(|| {
+                format_err!(
+                    "Espacio {} al que pertenece el cerramiento {} no encontrado. No se puede calcular la superficie",
+                    self.get_space(),
+                    self.get_name()
+                )
+            })?;
+            // Elementos de suelo o techo
+            if ["TOP", "BOTTOM"].contains(&location.as_str()) {
+                space.area(&db)
+            // Elementos definidos por vértice
+            } else {
+                let vertex = self
+                    .get_location_vertex()
+                    .ok_or_else(|| {
+                        format_err!(
+                            "Vértice del cerramiento {} no encontrado en {}",
+                            self.get_name(),
+                            location
+                        )
+                    })?
+                    .to_string();
+                let poly = db.polygons.get(&space.polygon).ok_or_else(|| {
+                    format_err!(
+                        "Polígono {} del espacio {} al que pertenece el cerramiento {} no encontrado. No se puede calcular la superficie",
+                        space.polygon,
+                        self.get_space(),
+                        self.get_name()
+                    )
+                })?;
+                let height = space.height(&db)?;
+                let length = poly.edge_length(&vertex);
+                Ok(height * length)
+            }
+        } else {
+            bail!("Formato de cerramiento incorrecto. No se define por polígono ni por vértice")
+        }
+    }
+
+    /// Superficie neta (sin huecos) del cerramiento
+    fn net_area(&self, db: &BdlData) -> Result<f32, Error> {
+        unimplemented!()
+    }
+
+    /// Perímetro del cerramiento
+    fn perimeter(&self, db: &BdlData) -> Result<f32, Error> {
+        unimplemented!()
+    }
+}
+
 // Muro exterior (EXTERIOR-WALL) o cubierta (ROOF) ------------------------------
 // ROOF es igual pero con inclinación por defecto = 0 en vez de 90
 
@@ -239,6 +328,21 @@ pub struct ExteriorWall {
     pub absorptance: f32,
 }
 
+impl WallExt for ExteriorWall {
+    fn get_geometry(&self) -> Option<&WallGeometry> {
+        self.geometry.as_ref()
+    }
+
+    fn get_location(&self) -> Option<&String> {
+        self.location.as_ref()
+    }
+    fn get_space(&self) -> &str {
+        self.space.as_str()
+    }
+    fn get_name(&self) -> &str {
+        self.name.as_str()
+    }
+}
 
 impl TryFrom<BdlBlock> for ExteriorWall {
     type Error = Error;
@@ -343,6 +447,20 @@ pub struct InteriorWall {
     pub nextto: Option<String>,
 }
 
+impl WallExt for InteriorWall {
+    fn get_geometry(&self) -> Option<&WallGeometry> {
+        self.geometry.as_ref()
+    }
+
+    fn get_location(&self) -> Option<&String> {
+        self.location.as_ref()
+    }
+    fn get_space(&self) -> &str {
+        self.space.as_str()
+    }
+    fn get_name(&self) -> &str {
+        self.name.as_str()
+    }
 }
 
 impl TryFrom<BdlBlock> for InteriorWall {
@@ -442,6 +560,20 @@ pub struct UndergroundWall {
     pub perimeter: Option<f32>,
 }
 
+impl WallExt for UndergroundWall {
+    fn get_geometry(&self) -> Option<&WallGeometry> {
+        self.geometry.as_ref()
+    }
+
+    fn get_location(&self) -> Option<&String> {
+        self.location.as_ref()
+    }
+    fn get_space(&self) -> &str {
+        self.space.as_str()
+    }
+    fn get_name(&self) -> &str {
+        self.name.as_str()
+    }
 }
 
 impl TryFrom<BdlBlock> for UndergroundWall {
