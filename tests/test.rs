@@ -36,7 +36,9 @@ fn test_polygon() {
     V4   =( 18.22, 0 )
     V5   =( 18.22, 9.04 )
     V6   =( 14.97, 9.04 )
-    .."#.parse().unwrap();
+    .."#
+        .parse()
+        .unwrap();
     let pol: Polygon = Polygon::try_from(polblk).unwrap();
     assert_eq!(pol.area(), 76.306793);
     assert_eq!(pol.edge_indices("V1").unwrap(), [0, 1]);
@@ -104,8 +106,10 @@ fn test_bdl_parse() {
     let _data = ctehexml::parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
     let _data = ctehexml::parse("tests/casoA/casoa.ctehexml").unwrap();
     let data = ctehexml::parse("tests/casoC/casoc.ctehexml").unwrap();
+
+    #[allow(unused_variables)]
     let bdl::BdlData {
-        meta: _,
+        meta,
         db,
         floors,
         spaces,
@@ -113,9 +117,9 @@ fn test_bdl_parse() {
         shadings,
         polygons,
         constructions,
-        spaceconds: _,
-        systemconds: _,
-        schedules: _,
+        spaceconds,
+        systemconds,
+        schedules,
     } = &data.bdldata;
     println!("{:#?}", db);
     println!("{:#?}", constructions);
