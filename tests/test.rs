@@ -22,7 +22,7 @@ SOFTWARE.
 */
 
 use hulc2envolventecte::{
-    bdl::{self, WallExt},
+    bdl,
     collect_hulc_data, ctehexml, find_hulc_files, tbl,
 };
 use std::convert::TryFrom;

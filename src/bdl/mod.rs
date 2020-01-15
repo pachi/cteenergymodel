@@ -25,7 +25,7 @@ pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
 pub use geom::{Construction, Floor, Polygon, Space};
 pub use shadings::Shade;
-pub use walls::{Wall, WallExt};
+pub use walls::{Wall};
 pub use window::Window;
 
 // ------------------------- BDL ----------------------------
