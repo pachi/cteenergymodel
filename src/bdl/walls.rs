@@ -13,71 +13,7 @@ use std::convert::TryFrom;
 
 use super::{BdlBlock, BdlData};
 
-// Muros (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
-
-/// Definición geométrica de un muro (EXTERIOR-WALL, ROOF o INTERIOR-WALL)
-/// Se usa cuando no se define respecto a un vértice del espacio padre sino por polígono
-#[derive(Debug, Clone, Default)]
-pub struct WallGeometry {
-    /// Nombre del polígono que define la geometría
-    pub polygon: String,
-    /// Coordenada X de la esquina inferior izquierda
-    pub x: f32,
-    /// Coordenada Y de la esquina inferior izquierda
-    pub y: f32,
-    /// Coordenada Z de la esquina inferior izquierda
-    pub z: f32,
-    /// Acimut (grados sexagesimales)
-    /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
-    pub azimuth: f32,
-    /// Inclinación (grados sexagesimales)
-    /// Ángulo entre el eje Z y la normal exterior del muro
-    pub tilt: f32,
-}
-
-impl WallGeometry {
-    pub fn parse_wallgeometry(
-        mut attrs: super::AttrMap,
-        wtype: &str,
-        location: &Option<String>,
-    ) -> Result<Option<Self>, Error> {
-        if let Ok(polygon) = attrs.remove_str("POLYGON") {
-            let x = attrs.remove_f32("X")?;
-            let y = attrs.remove_f32("Y")?;
-            let z = attrs.remove_f32("Z")?;
-            let azimuth = attrs.remove_f32("AZIMUTH")?;
-
-            // Si la inclinación es None (se define location)
-            // asignamos el valor por defecto, que es:
-            // - Para btype = ROOF -> 0.0 (hacia arriba)
-            // - Para el resto de btypes:
-            //      - con location = TOP -> tilt = 0.0 (techo)
-            //      - con location = BOTTOM -> tilt = 180.0 (suelo)
-            //      - el resto -> tilt = 90.0 (defecto)
-            let tilt = match attrs.remove_f32("TILT").ok() {
-                Some(tilt) => tilt,
-                _ => match (wtype, location.as_deref()) {
-                    ("ROOF", _) | (_, Some("TOP")) => 0.0,
-                    (_, Some("BOTTOM")) => 180.0,
-                    _ => 90.0,
-                },
-            };
-
-            Ok(Some(WallGeometry {
-                polygon,
-                x,
-                y,
-                z,
-                azimuth,
-                tilt,
-            }))
-        } else {
-            Ok(None)
-        }
-    }
-}
-
-// Cerramientos opacos ------------------------------
+// Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
 /// Cerramiento exterior o interior
 /// Puede definirse su configuración geométrica por polígono
@@ -101,7 +37,6 @@ pub struct Wall {
     /// - ADIABATIC: cerramiento que no conduce calor (a otro espacio) pero lo almacena
     /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
     /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
-    ///
     pub wtype: String,
     // --- Propiedades exclusivas -----------------------
     /// Absortividad definida por usuario
@@ -192,6 +127,68 @@ impl Wall {
                     _ => 90.0,
                 },
             }
+        }
+    }
+}
+
+/// Definición geométrica de un muro (EXTERIOR-WALL, ROOF o INTERIOR-WALL)
+/// Se usa cuando no se define respecto a un vértice del espacio padre sino por polígono
+#[derive(Debug, Clone, Default)]
+pub struct WallGeometry {
+    /// Nombre del polígono que define la geometría
+    pub polygon: String,
+    /// Coordenada X de la esquina inferior izquierda
+    pub x: f32,
+    /// Coordenada Y de la esquina inferior izquierda
+    pub y: f32,
+    /// Coordenada Z de la esquina inferior izquierda
+    pub z: f32,
+    /// Acimut (grados sexagesimales)
+    /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
+    pub azimuth: f32,
+    /// Inclinación (grados sexagesimales)
+    /// Ángulo entre el eje Z y la normal exterior del muro
+    pub tilt: f32,
+}
+
+impl WallGeometry {
+    pub fn parse_wallgeometry(
+        mut attrs: super::AttrMap,
+        wtype: &str,
+        location: &Option<String>,
+    ) -> Result<Option<Self>, Error> {
+        if let Ok(polygon) = attrs.remove_str("POLYGON") {
+            let x = attrs.remove_f32("X")?;
+            let y = attrs.remove_f32("Y")?;
+            let z = attrs.remove_f32("Z")?;
+            let azimuth = attrs.remove_f32("AZIMUTH")?;
+            
+            // Si la inclinación es None (se define location)
+            // asignamos el valor por defecto, que es:
+            // - Para btype = ROOF -> 0.0 (hacia arriba)
+            // - Para el resto de btypes:
+            //      - con location = TOP -> tilt = 0.0 (techo)
+            //      - con location = BOTTOM -> tilt = 180.0 (suelo)
+            //      - el resto -> tilt = 90.0 (defecto)
+            let tilt = match attrs.remove_f32("TILT").ok() {
+                Some(tilt) => tilt,
+                _ => match (wtype, location.as_deref()) {
+                    ("ROOF", _) | (_, Some("TOP")) => 0.0,
+                    (_, Some("BOTTOM")) => 180.0,
+                    _ => 90.0,
+                },
+            };
+
+            Ok(Some(WallGeometry {
+                polygon,
+                x,
+                y,
+                z,
+                azimuth,
+                tilt,
+            }))
+        } else {
+            Ok(None)
         }
     }
 }
