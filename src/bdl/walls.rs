@@ -111,6 +111,10 @@ impl Wall {
     /// Perímetro del cerramiento (m)
     pub fn perimeter(&self, db: &BdlData) -> Result<f32, Error> {
         unimplemented!()
+        // 1. Elementos definidos por geometría -> perímetro del polígono
+        // 2. Elementos definidos por posición TOP, BOTTOM o SPACE-Vxx
+        // 2.1 Elementos TOP o BOTTOM -> perímetro del polígono del espacio
+        // 2.2 Elementos definidos por vértice en el espacio -> longitud de lado * altura
     }
 
     /// Inclinación del cerramiento (grados)
