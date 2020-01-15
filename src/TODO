@@ -18,7 +18,11 @@ BDL:
 
 - Diccionario de espacios por nombre en lugar de vectores
 - Revisar conversión de SHADING-COEF a factor solar (Fw = 0.90? Ahora es 0.85)
-- Identificar posición en muros
+- Identificar posición en muros. Trasladar tilt fuera de WallGeometry:
+    - Si existe tilt se usa eso. Si no, se usa el criterio que tenemos en WallGeometry
+      en función del tipo BDL. Así eliminamos el tipo de muro ROOF en wtype y ya solo tenemos
+      tipos en función de las condiciones de contorno.
+
         if hasattr(self, 'LOCATION'):
             lugar = getattr(self, 'LOCATION')
             if lugar == 'BOTTOM':           posicion = 'suelo'
@@ -40,7 +44,6 @@ BDL:
 - Hacer cálculos de:
     - volúmenes
     - alturas de espacios (usando datos de pisos, etc)
-    - superficies de cerramientos...
 - Implementar cálculo de U para los distintos elementos y así no usar kyg
   (O al menos calcular con suma de las resistencias superficiales)
 
