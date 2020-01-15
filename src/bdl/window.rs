@@ -111,8 +111,8 @@ impl TryFrom<BdlBlock> for Window {
     ///     ..
     /// ```
     /// TODO: atributos no trasladados:
-    /// TODO: propiedades para definir salientes y voladizos o para lamas:
     /// TODO:  GLASS-TYPE, FRAME-WIDTH, FRAME-CONDUCT, FRAME-ABS, INF-COEF,
+    /// TODO: propiedades para definir salientes y voladizos o para lamas:
     /// TODO: OVERHANG-A, OVERHANG-B, OVERHANG-W, OVERHANG-D, OVERHANG-ANGLE,
     /// TODO: LEFT-FIN-A, LEFT-FIN-B, LEFT-FIN-H, LEFT-FIN-D, RIGHT-FIN-A, RIGHT-FIN-B, RIGHT-FIN-H, RIGHT-FIN-D
     /// TODO: propiedades para definición de lamas

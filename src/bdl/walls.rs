@@ -240,10 +240,10 @@ impl TryFrom<BdlBlock> for Wall {
     ///         LOCATION      = TOP
     ///         ..
     /// ```
-    /// TODO: atributos no trasladados:
-    /// TODO: propiedades para definir el estado de la interfaz para la selección de la absortividad:
-    /// TODO: TYPE_ABSORPTANCE, COLOR_ABSORPTANCE, DEGREE_ABSORPTANCE,
-    /// TODO: CONSTRUCCION_MURO, COMPROBAR-REQUISITOS-MINIMOS
+    /// XXX: atributos no trasladados:
+    /// XXX: propiedades para definir el estado de la interfaz para la selección de la absortividad:
+    /// XXX: TYPE_ABSORPTANCE, COLOR_ABSORPTANCE, DEGREE_ABSORPTANCE
+    /// XXX: Atributos no trasladados: COMPROBAR-REQUISITOS-MINIMOS, CONSTRUCCION_MURO
     ///
     /// Ejemplos en BDL de INTERIOR-WALL:
     /// ```text
@@ -267,8 +267,7 @@ impl TryFrom<BdlBlock> for Wall {
     ///         POLYGON       = "P02_E01_FI002_Poligono2"
     ///         ..
     /// ```
-    /// TODO: atributos no trasladados:
-    /// TODO: COMPROBAR-REQUISITOS-MINIMOS
+    /// XXX: atributos no trasladados:
     ///
     /// Ejemplos en BDL de UNDERGROUND-WALL:
     /// ```text
