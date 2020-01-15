@@ -7,7 +7,6 @@ use super::{ExteriorWall, InteriorWall, UndergroundWall, Window};
 /// Elementos de envolvente
 #[derive(Debug)]
 pub enum BdlEnvType {
-    Window(Window),
     ExteriorWall(ExteriorWall),
     InteriorWall(InteriorWall),
     UndergroundWall(UndergroundWall),

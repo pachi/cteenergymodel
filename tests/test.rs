@@ -117,6 +117,7 @@ fn test_bdl_parse() {
         floors,
         spaces,
         env,
+        windows,
         shadings,
         polygons,
         constructions,
@@ -136,21 +137,13 @@ fn test_bdl_parse() {
     // - TODO: perímetro
     // - TODO: azimuth
     // - TODO: perímetro
-    let win1 = env
+    let win1 = windows
         .iter()
-        .find(|e| match e {
-            bdl::BdlEnvType::Window(win) => win.name == "P02_E01_PE001_V",
-            _ => false,
-        })
+        .find(|w| w.name == "P02_E01_PE001_V")
         .unwrap();
-    match win1 {
-        bdl::BdlEnvType::Window(win) => {
-            assert_eq!(win.area(), 2.0);
-            assert_eq!(win.wall, "P02_E01_PE001");
-            assert_eq!(win.tilt(&data.bdldata).unwrap(), 90.0)
-        }
-        _ => panic!("Ventana no encontrada"),
-    };
+    assert_eq!(win1.area(), 2.0);
+    assert_eq!(win1.wall, "P02_E01_PE001");
+    assert_eq!(win1.tilt(&data.bdldata).unwrap(), 90.0);
 
     // Muro interior
     let wall1 = env

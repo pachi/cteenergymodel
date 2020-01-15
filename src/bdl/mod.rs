@@ -43,8 +43,10 @@ pub struct BdlData {
     pub floors: Vec<Floor>,
     /// Lista de espacios
     pub spaces: Vec<Space>,
-    /// Elementos de la envolvente
+    /// Elementos opacos de la envolvente
     pub env: Vec<BdlEnvType>,
+    /// Elementos semitransparentes de la envolvente
+    pub windows: Vec<Window>,
     // Sombras exteriores del edificio
     pub shadings: Vec<Shade>,
     /// Lista de polígonos
@@ -151,17 +153,21 @@ impl BdlData {
                             block,
                         )?));
                 }
-                "BUILDING-SHADE" => {
-                    bdldata.shadings.push(Shade::try_from(block)?);
-                }
 
                 // Elementos transparentes de la envolvente -----
                 // Hueco
                 "WINDOW" => {
                     bdldata
-                        .env
-                        .push(BdlEnvType::Window(Window::try_from(block)?));
+                        .windows
+                        .push(Window::try_from(block)?);
                 }
+
+                // Sombras --------------------------------------
+                "BUILDING-SHADE" => {
+                    bdldata.shadings.push(Shade::try_from(block)?);
+                }
+
+                // Elemento desconocido -------------------------
                 _ => {
                     eprintln!(
                         "Tipo desconocido. bname: {}, btype: {}",

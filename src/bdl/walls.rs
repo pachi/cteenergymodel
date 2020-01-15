@@ -161,19 +161,10 @@ pub trait WallExt {
     fn net_area(&self, db: &BdlData) -> Result<f32, Error> {
         let wall_gross_area = self.gross_area(db)?;
         let windows_area = db
-            .env
+            .windows
             .iter()
-            .filter(|e| {
-                if let BdlEnvType::Window(win) = e {
-                    win.wall == self.get_name()
-                } else {
-                    false
-                }
-            })
-            .map(|w| match w {
-                BdlEnvType::Window(win) => win.area(),
-                _ => 0.0,
-            })
+            .filter(|w| w.wall == self.get_name())
+            .map(|w| w.area())
             .sum::<f32>();
         Ok(wall_gross_area - windows_area)
     }
