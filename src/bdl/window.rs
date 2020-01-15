@@ -62,6 +62,11 @@ impl Window {
         })?;
         Ok(wall.tilt())
     }
+
+    /// Perímetro del hueco [m]
+    pub fn perimeter(&self) -> f32 {
+        2.0 * (self.width + self.height)
+    }
 }
 
 impl TryFrom<BdlBlock> for Window {
