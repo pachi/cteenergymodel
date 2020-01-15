@@ -166,7 +166,7 @@ impl WallGeometry {
             let y = attrs.remove_f32("Y")?;
             let z = attrs.remove_f32("Z")?;
             let azimuth = attrs.remove_f32("AZIMUTH")?;
-            
+
             // Si la inclinación es None (se define location)
             // asignamos el valor por defecto, que es:
             // - Para btype = ROOF -> 0.0 (hacia arriba)
@@ -310,6 +310,7 @@ impl TryFrom<BdlBlock> for Wall {
         };
 
         // Tipos
+        // TODO: Convertir a enum
         let wtype = match btype.as_str() {
             "INTERIOR-WALL" => attrs.remove_str("INT-WALL-TYPE")?,
             "UNDERGROUND-WALL" => "UNDERGROUND-WALL".to_string(),
