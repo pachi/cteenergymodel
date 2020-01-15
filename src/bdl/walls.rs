@@ -300,8 +300,13 @@ impl TryFrom<BdlBlock> for Wall {
             parent.ok_or_else(|| format_err!("Cerramiento sin espacio asociado '{}'", &name))?;
         let construction = attrs.remove_str("CONSTRUCTION")?;
         let location = match attrs.remove_str("LOCATION").ok() {
+            // Solo soportamos algunos subtipos de location: TOP, BOTTOM, SPACE-x
+            Some(loc) if ["TOP", "BOTTOM"].contains(&loc.as_str()) => Some(loc),
+            // Para los elementos definidos como vértices de espacios guardamos el vértice directamente
             Some(loc) if loc.starts_with("SPACE-") => Some(loc["SPACE-".len()..].to_string()),
-            origloc @ _ => origloc,
+            // Para el resto fallamos
+            Some(loc) => bail!("Elemento {} con localización desconocida {}", name, loc),
+            _ => None
         };
 
         // Tipos
