@@ -15,7 +15,6 @@ use failure::Error;
 mod blocks;
 mod common;
 mod cons;
-mod env;
 mod geom;
 mod shadings;
 mod walls;
@@ -24,7 +23,6 @@ mod window;
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
-pub use env::BdlEnvType;
 pub use geom::{Construction, Floor, Polygon, Space};
 pub use shadings::Shade;
 pub use walls::{Wall, WallExt};
@@ -44,7 +42,7 @@ pub struct BdlData {
     /// Lista de espacios
     pub spaces: Vec<Space>,
     /// Elementos opacos de la envolvente
-    pub env: Vec<BdlEnvType>,
+    pub env: Vec<Wall>,
     /// Elementos semitransparentes de la envolvente
     pub windows: Vec<Window>,
     // Sombras exteriores del edificio
@@ -132,34 +130,22 @@ impl BdlData {
                 // Elementos opacos de la envolvente -----------
                 // TODO: Unificar exterior wall y roof en un solo tipo
                 "EXTERIOR-WALL" => {
-                    bdldata
-                        .env
-                        .push(BdlEnvType::Wall(Wall::try_from(block)?));
+                    bdldata.env.push(Wall::try_from(block)?);
                 }
                 "ROOF" => {
-                    bdldata
-                        .env
-                        .push(BdlEnvType::Roof(Wall::try_from(block)?));
+                    bdldata.env.push(Wall::try_from(block)?);
                 }
                 "INTERIOR-WALL" => {
-                    bdldata
-                        .env
-                        .push(BdlEnvType::InteriorWall(Wall::try_from(block)?));
+                    bdldata.env.push(Wall::try_from(block)?);
                 }
                 "UNDERGROUND-WALL" => {
-                    bdldata
-                        .env
-                        .push(BdlEnvType::UndergroundWall(Wall::try_from(
-                            block,
-                        )?));
+                    bdldata.env.push(Wall::try_from(block)?);
                 }
 
                 // Elementos transparentes de la envolvente -----
                 // Hueco
                 "WINDOW" => {
-                    bdldata
-                        .windows
-                        .push(Window::try_from(block)?);
+                    bdldata.windows.push(Window::try_from(block)?);
                 }
 
                 // Sombras --------------------------------------

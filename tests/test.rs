@@ -146,58 +146,25 @@ fn test_bdl_parse() {
     assert_eq!(win1.tilt(&data.bdldata).unwrap(), 90.0);
 
     // Muro interior
-    let wall1 = env
-        .iter()
-        .find(|e| match e {
-            bdl::BdlEnvType::Wall(wall) => wall.name == "P02_E01_PE001",
-            _ => false,
-        })
-        .unwrap();
-    match wall1 {
-        bdl::BdlEnvType::Wall(wall) => {
-            assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 30.0);
-            assert_eq!(wall.net_area(&data.bdldata).unwrap(), 28.0);
-            assert_eq!(wall.space, "P02_E01");
-            assert_eq!(wall.tilt(), 90.0);
-        }
-        _ => panic!("Muro exterior no encontrado"),
-    };
+    let wall1 = env.iter().find(|w| w.name == "P02_E01_PE001").unwrap();
+    assert_eq!(wall1.gross_area(&data.bdldata).unwrap(), 30.0);
+    assert_eq!(wall1.net_area(&data.bdldata).unwrap(), 28.0);
+    assert_eq!(wall1.space, "P02_E01");
+    assert_eq!(wall1.tilt(), 90.0);
 
     // Forjado interior
-    let wall2 = env
-        .iter()
-        .find(|e| match e {
-            bdl::BdlEnvType::InteriorWall(wall) => wall.name == "P02_E01_FI001",
-            _ => false,
-        })
-        .unwrap();
-    match wall2 {
-        bdl::BdlEnvType::InteriorWall(wall) => {
-            assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 49.985004);
-            assert_eq!(wall.net_area(&data.bdldata).unwrap(), 49.985004);
-            assert_eq!(wall.space, "P02_E01");
-            assert_eq!(wall.tilt(), 180.0);
-        }
-        _ => panic!("Muro interior no encontrado"),
-    };
+    let wall2 = env.iter().find(|w| w.name == "P02_E01_FI001").unwrap();
+    assert_eq!(wall2.gross_area(&data.bdldata).unwrap(), 49.985004);
+    assert_eq!(wall2.net_area(&data.bdldata).unwrap(), 49.985004);
+    assert_eq!(wall2.space, "P02_E01");
+    assert_eq!(wall2.tilt(), 180.0);
 
     // Solera
-    let wall3 = env
-        .iter()
-        .find(|e| match e {
-            bdl::BdlEnvType::UndergroundWall(wall) => wall.name == "P01_E01_FTER001",
-            _ => false,
-        })
-        .unwrap();
-    match wall3 {
-        bdl::BdlEnvType::UndergroundWall(wall) => {
-            assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 50.0);
-            assert_eq!(wall.net_area(&data.bdldata).unwrap(), 50.0);
-            assert_eq!(wall.space, "P01_E01");
-            assert_eq!(wall.tilt(), 180.0);
-        }
-        _ => panic!("Solera enterrada no encontrada"),
-    };
+    let wall3 = env.iter().find(|w| w.name == "P01_E01_FTER001").unwrap();
+    assert_eq!(wall3.gross_area(&data.bdldata).unwrap(), 50.0);
+    assert_eq!(wall3.net_area(&data.bdldata).unwrap(), 50.0);
+    assert_eq!(wall3.space, "P01_E01");
+    assert_eq!(wall3.tilt(), 180.0);
 }
 
 #[test]

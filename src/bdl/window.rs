@@ -5,7 +5,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{extract_f32vec, BdlBlock, BdlData, BdlEnvType, WallExt};
+use super::{extract_f32vec, BdlBlock, BdlData, WallExt};
 
 // Hueco (WINDOW) -------------------------------------------------
 
@@ -53,26 +53,14 @@ impl Window {
     /// Inclinación de la ventana (grados)
     /// Es el ángulo respecto al eje Z de la normal a la superficie en la que está la ventana
     pub fn tilt(&self, db: &BdlData) -> Result<f32, Error> {
-        let wall = db.env.iter().find(|s| match s {
-            BdlEnvType::Wall(e) => e.name == self.wall,
-            BdlEnvType::InteriorWall(e) => e.name == self.wall,
-            BdlEnvType::UndergroundWall(e) => e.name == self.wall,
-            BdlEnvType::Roof(e) => e.name == self.wall,
-            _ => false
-        }).ok_or_else(|| {
+        let wall = db.env.iter().find(|s| s.name == self.wall).ok_or_else(|| {
             format_err!(
                 "Muro {} al que pertenece la ventana {} no encontrado. No se puede calcular la inclinación",
                 self.wall,
                 self.name
             )
         })?;
-        match wall {
-            BdlEnvType::Wall(e) => Ok(e.tilt()),
-            BdlEnvType::InteriorWall(e) => Ok(e.tilt()),
-            BdlEnvType::UndergroundWall(e) => Ok(e.tilt()),
-            BdlEnvType::Roof(e) => Ok(e.tilt()),
-            _ => bail!("Caso imprevisto!"),
-        }
+        Ok(wall.tilt())
     }
 }
 
