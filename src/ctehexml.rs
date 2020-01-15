@@ -27,7 +27,7 @@ use std::collections::HashMap;
 
 use failure::Error;
 
-use crate::bdl::{BdlData, BdlEnvType};
+use crate::bdl::{BdlData};
 use crate::utils::read_file;
 
 #[derive(Debug)]
@@ -72,12 +72,11 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
 
     let bdldata = BdlData::new(&entrada_grafica_lider)?;
     // gglshwi de huecos
+    // TODO: convertir a un collect
     let mut gglshwi: HashMap<String, f32> = HashMap::new();
-    for el in &bdldata.env {
-        if let BdlEnvType::Window(w) = el {
-            gglshwi.insert(w.name.to_string(), w.gglshwi);
-        }
-    }
+    &bdldata.windows.iter().map(|w| {
+        gglshwi.insert(w.name.to_string(), w.gglshwi);
+    });
 
     // Zona climática
     let climate = datos_generales

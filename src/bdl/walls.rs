@@ -1,13 +1,17 @@
 //! Parser del Building Description Language (BDL) de DOE
 //!
-//! Cerramientos opacos de la envolvente térmica (EXTERIOR-WALL, INTERIOR-WALL, UNDERGROUND-WALL, ROOF)
-//! 
+//! Cerramientos opacos de la envolvente térmica:
+//! - EXTERIOR-WALL
+//! - ROOF
+//! - INTERIOR-WALL
+//! - UNDERGROUND-WALL
+//!
 //! Todos tienen una construcción y pertenecen a un espacio (location)
 
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{BdlBlock, BdlData, BdlEnvType};
+use super::{BdlBlock, BdlData};
 
 // Muros (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
@@ -34,7 +38,7 @@ pub struct WallGeometry {
 impl WallGeometry {
     pub fn parse_wallgeometry(
         mut attrs: super::AttrMap,
-        btype: &str,
+        wtype: &str,
         location: &Option<String>,
     ) -> Result<Option<Self>, Error> {
         if let Ok(polygon) = attrs.remove_str("POLYGON") {
@@ -52,7 +56,7 @@ impl WallGeometry {
             //      - el resto -> tilt = 90.0 (defecto)
             let tilt = match attrs.remove_f32("TILT").ok() {
                 Some(tilt) => tilt,
-                _ => match (btype, location.as_deref()) {
+                _ => match (wtype, location.as_deref()) {
                     ("ROOF", _) | (_, Some("TOP")) => 0.0,
                     (_, Some("BOTTOM")) => 180.0,
                     _ => 90.0,
@@ -74,9 +78,6 @@ impl WallGeometry {
 }
 
 // Cerramientos ------------------
-// - muro (o cubierta o suelo) exterior (EXTERIOR-WALL) - alias para cubierta: ROOF
-// - muro (o cubierta o suelo) interior (INTERIOR-WALL)
-// - muro (o cubierta o suelo) enterrado (UNDERGROUND-WALL)
 
 /// Trait con métodos compartidos por todos los cerramientos
 pub trait WallExt {
@@ -192,17 +193,16 @@ pub trait WallExt {
     }
 }
 
-// Muro exterior (EXTERIOR-WALL) o cubierta (ROOF) ------------------------------
-// ROOF es igual pero con inclinación por defecto = 0 en vez de 90
+// Muro exterior (EXTERIOR-WALL), cubierta (ROOF) ------------------------------
 
-/// Muro exterior (EXTERIOR-WALL) o cubierta (ROOF)
+/// Cerramiento exterior o interior
 /// Puede definirse su configuración geométrica por polígono
 /// o por localización respecto al espacio padre.
 #[derive(Debug, Clone, Default)]
-pub struct ExteriorWall {
+pub struct Wall {
     /// Nombre
     pub name: String,
-    /// Espacio en al que pertenece el muro o cubierta
+    /// Espacio en al que pertenece el cerramiento
     pub space: String,
     /// Definición de la composición del cerramiento (Construction)
     pub construction: String,
@@ -210,14 +210,28 @@ pub struct ExteriorWall {
     pub location: Option<String>,
     /// Posición definida por polígono
     pub geometry: Option<WallGeometry>,
-    // --- Propiedades exclusivas de cerramientos exteriores ---
-    /// Tipo (EXTERIOR-WALL o ROOF)
+    /// Tipo de cerramiento: 
+    /// - EXTERIOR-WALL: Muro en contacto con el aire exterior 
+    /// - ROOF: Cubierta en contacto con el aire exterior
+    /// - STANDARD: cerramiento interior entre dos espacios
+    /// - ADIABATIC: cerramiento que no conduce calor (a otro espacio) pero lo almacena
+    /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
+    /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
+    /// 
     pub wtype: String,
+    // --- Propiedades exclusivas -----------------------
     /// Absortividad definida por usuario
-    pub absorptance: f32,
+    /// (solo en cerramientos en contacto con el aire)
+    pub absorptance: Option<f32>,
+    /// Espacio adyacente que conecta con el espacio padre
+    /// (solo en algunos tipos de cerramientos interiores (no adiabático o superficie interior))
+    pub nextto: Option<String>,
+    /// Profundidad del elemento en el terreno (m)
+    /// (solo en cerramientos en contacto con el terreno)
+    pub zground: Option<f32>,
 }
 
-impl WallExt for ExteriorWall {
+impl WallExt for Wall {
     fn get_geometry(&self) -> Option<&WallGeometry> {
         self.geometry.as_ref()
     }
@@ -235,13 +249,13 @@ impl WallExt for ExteriorWall {
     }
 }
 
-impl TryFrom<BdlBlock> for ExteriorWall {
+impl TryFrom<BdlBlock> for Wall {
     type Error = Error;
 
-    /// Conversión de bloque BDL a elemento en contacto con el aire exterior
-    /// (muro, cubierta o suelo)
+    /// Conversión de bloque BDL a cerramiento
+    /// (cerramiento exterior, interior, cubierta o elemento en contacto con el terreno)
     ///
-    /// Ejemplos en BDL:
+    /// Ejemplos en BDL de EXTERIOR-WALL y ROOF:
     /// ```text
     ///    "P01_E02_PE006" = EXTERIOR-WALL
     ///         ABSORPTANCE   =            0.6
@@ -282,86 +296,8 @@ impl TryFrom<BdlBlock> for ExteriorWall {
     /// TODO: propiedades para definir el estado de la interfaz para la selección de la absortividad:
     /// TODO: TYPE_ABSORPTANCE, COLOR_ABSORPTANCE, DEGREE_ABSORPTANCE,
     /// TODO: CONSTRUCCION_MURO, COMPROBAR-REQUISITOS-MINIMOS
-    fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock {
-            name,
-            btype,
-            parent,
-            mut attrs,
-            ..
-        } = value;
-        let space = parent.ok_or_else(|| {
-            format_err!(
-                "Elemento en contacto con el aire exterior sin espacio asociado '{}'",
-                &name
-            )
-        })?;
-        let construction = attrs.remove_str("CONSTRUCTION")?;
-        let absorptance = attrs.remove_f32("ABSORPTANCE")?;
-        let location = attrs.remove_str("LOCATION").ok();
-        let geometry = WallGeometry::parse_wallgeometry(attrs, &btype, &location)?;
-        Ok(Self {
-            name,
-            wtype: btype,
-            space,
-            construction,
-            absorptance,
-            location,
-            geometry,
-        })
-    }
-}
-
-// Muro interior (INTERIOR-WALL) -------------------------------------
-
-/// Muro interior
-#[derive(Debug, Clone, Default)]
-pub struct InteriorWall {
-    /// Nombre
-    pub name: String,
-    /// Espacio en al que pertenece el muro
-    pub space: String,
-    /// Definición de la composición del cerramiento (Construction)
-    pub construction: String,
-    /// Posición respecto al espacio asociado (TOP, BOTTOM, nombreespacio)
-    pub location: Option<String>,
-    /// Posición definida por polígono
-    pub geometry: Option<WallGeometry>,
-    // --- Propiedades exclusivas de cerramientos interiores ---
-    /// Tipo de muro interior
-    /// - STANDARD: muro entre dos espacios
-    /// - ADIABATIC: muro que no conduce calor (a otro espacio) pero lo almacena
-    /// - INTERNAL: muro interior a un espacio (no comunica espacios)
-    /// - AIR: superficie interior sin masa pero que admite convección
-    pub wtype: String,
-    /// Espacio adyacente que conecta con el espacio padre (salvo que sea adiabático o interior)
-    pub nextto: Option<String>,
-}
-
-impl WallExt for InteriorWall {
-    fn get_geometry(&self) -> Option<&WallGeometry> {
-        self.geometry.as_ref()
-    }
-    fn get_location(&self) -> Option<&str> {
-        self.location.as_deref()
-    }
-    fn get_space(&self) -> &str {
-        self.space.as_str()
-    }
-    fn get_name(&self) -> &str {
-        self.name.as_str()
-    }
-    fn get_type(&self) -> &str {
-        &self.wtype
-    }
-}
-
-impl TryFrom<BdlBlock> for InteriorWall {
-    type Error = Error;
-
-    /// Conversión de bloque BDL a muro exterior (o cubierta)
-    ///
-    /// Ejemplos en BDL:
+    /// 
+    /// Ejemplos en BDL de INTERIOR-WALL:
     /// ```text
     ///    "P01_E02_Med001" = INTERIOR-WALL
     ///         INT-WALL-TYPE = STANDARD
@@ -385,6 +321,25 @@ impl TryFrom<BdlBlock> for InteriorWall {
     /// ```
     /// TODO: atributos no trasladados:
     /// TODO: COMPROBAR-REQUISITOS-MINIMOS
+    /// 
+    /// Ejemplos en BDL de UNDERGROUND-WALL:
+    /// ```text
+    ///    "P01_E01_FTER001" = UNDERGROUND-WALL
+    ///     Z-GROUND      =              0
+    ///     COMPROBAR-REQUISITOS-MINIMOS = YES
+    ///                    CONSTRUCTION  = "solera tipo"
+    ///                    LOCATION      = BOTTOM
+    ///                     AREA          =        418.4805
+    ///                     PERIMETRO     =        65.25978
+    ///                          ..
+    ///                    "solera tipo" =  CONSTRUCTION
+    ///                          TYPE   = LAYERS
+    ///                          LAYERS = "solera tipo"
+    ///                          ..
+    /// ```
+    /// XXX: No se han trasladado las variables de AREA y PERIMETRO porque se pueden calcular
+    /// y los valores comprobados en algunos archivos no son correctos
+    /// 
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
@@ -394,133 +349,43 @@ impl TryFrom<BdlBlock> for InteriorWall {
             ..
         } = value;
         let space =
-            parent.ok_or_else(|| format_err!("Muro interior sin espacio asociado '{}'", &name))?;
-        let wtype = attrs.remove_str("INT-WALL-TYPE")?;
-        let nextto = attrs.remove_str("NEXT-TO").ok();
+            parent.ok_or_else(|| format_err!("Cerramiento sin espacio asociado '{}'", &name))?;
         let construction = attrs.remove_str("CONSTRUCTION")?;
         let location = attrs.remove_str("LOCATION").ok();
-        let geometry = WallGeometry::parse_wallgeometry(attrs, &btype, &location)?;
+
+        // Tipos
+        let wtype = match btype.as_str() {
+            "INTERIOR-WALL" => attrs.remove_str("INT-WALL-TYPE")?,
+            "UNDERGROUND-WALL" => "UNDERGROUND-WALL".to_string(),
+            "ROOF" => "ROOF".to_string(),
+            "EXTERIOR-WALL" => "EXTERIOR-WALL".to_string(),
+            _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
+        };
+        // Propiedad específica
+        let absorptance = match wtype.as_str() {
+            "EXTERIOR-WALL" | "ROOF" => Some(attrs.remove_f32("ABSORPTANCE")?),
+            _ => None,
+        };
+        let nextto = match wtype.as_str() {
+            "STANDARD" | "AIR" => attrs.remove_str("NEXT-TO").ok(),
+            _ => None,
+        };
+        let zground = match wtype.as_str() {
+            "UNDERGROUND-WALL" => Some(attrs.remove_f32("Z-GROUND")?),
+            _ => None,
+        };
+
+        let geometry = WallGeometry::parse_wallgeometry(attrs, &wtype, &location)?;
         Ok(Self {
             name,
             wtype,
+            space,
+            construction,
+            location,
+            geometry,
+            absorptance,
             nextto,
-            space,
-            construction,
-            location,
-            geometry,
-        })
-    }
-}
-
-// Muro o soleras en contacto con el terreno (UNDERGROUND-WALL) --------
-//
-// Ejemplo en BDL:
-// ```text
-//    "P01_E01_FTER001" = UNDERGROUND-WALL
-//     Z-GROUND      =              0
-//     COMPROBAR-REQUISITOS-MINIMOS = YES
-//                    CONSTRUCTION  = "solera tipo"
-//                    LOCATION      = BOTTOM
-//                     AREA          =        418.4805
-//                     PERIMETRO     =        65.25978
-//                          ..
-//                    "solera tipo" =  CONSTRUCTION
-//                          TYPE   = LAYERS
-//                          LAYERS = "solera tipo"
-//                          ..
-// ```
-
-/// Muro (UNDERGROUND-WALL) o suelo (UNDEGROUND-FLOOR) en contacto con el terreno
-#[derive(Debug, Clone, Default)]
-pub struct UndergroundWall {
-    /// Nombre
-    pub name: String,
-    /// Espacio en al que pertenece el muro o suelo
-    pub space: String,
-    /// Definición de la composición del cerramiento (Construction)
-    pub construction: String,
-    /// Posición respecto al espacio asociado (TOP, BOTTOM, nombreespacio)
-    pub location: Option<String>,
-    /// Posición definida por polígono
-    pub geometry: Option<WallGeometry>,
-    // --- Propiedades exclusivas de cerramientos enterrados ---
-    /// Profundidad del elemento (m)
-    pub zground: f32,
-    // XXX: esto parece algo que guarda HULC pero se puede calcular
-    /// Superficie (m2)
-    pub area: Option<f32>,
-    // XXX: esto parece algo que guarda HULC pero se puede calcular
-    /// Perímetro (m)
-    pub perimeter: Option<f32>,
-}
-
-impl WallExt for UndergroundWall {
-    fn get_geometry(&self) -> Option<&WallGeometry> {
-        self.geometry.as_ref()
-    }
-    fn get_location(&self) -> Option<&str> {
-        self.location.as_deref()
-    }
-    fn get_space(&self) -> &str {
-        self.space.as_str()
-    }
-    fn get_name(&self) -> &str {
-        self.name.as_str()
-    }
-    fn get_type(&self) -> &str {
-        "UNDERGROUND-WALL"
-    }
-}
-
-impl TryFrom<BdlBlock> for UndergroundWall {
-    type Error = Error;
-
-    /// Conversión de bloque BDL a muro exterior, suelo o cubierta enterrado
-    ///
-    /// Ejemplo en BDL:
-    /// ```text
-    ///    "P01_E01_FTER001" = UNDERGROUND-WALL
-    ///         Z-GROUND      =              0
-    ///         COMPROBAR-REQUISITOS-MINIMOS = YES
-    ///         CONSTRUCTION  = "solera tipo"
-    ///         LOCATION      = BOTTOM
-    ///         AREA          =        418.4805
-    ///         PERIMETRO     =        65.25978
-    ///         ..
-    ///    "P01_E01_TER002" = UNDERGROUND-WALL
-    ///         Z-GROUND      =              0
-    ///         COMPROBAR-REQUISITOS-MINIMOS = YES
-    ///         CONSTRUCTION  = "Solera"  
-    ///         LOCATION      = SPACE-V2  
-    ///         ..
-    /// ```
-    /// TODO: atributos no trasladados:
-    /// TODO: COMPROBAR-REQUISITOS-MINIMOS
-    fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock {
-            name,
-            btype,
-            parent,
-            mut attrs,
-            ..
-        } = value;
-        let zground = attrs.remove_f32("Z-GROUND")?;
-        let area = attrs.remove_f32("AREA").ok();
-        let perimeter = attrs.remove_f32("PERIMETRO").ok();
-        let space =
-            parent.ok_or_else(|| format_err!("Muro interior sin espacio asociado '{}'", &name))?;
-        let construction = attrs.remove_str("CONSTRUCTION")?;
-        let location = attrs.remove_str("LOCATION").ok();
-        let geometry = WallGeometry::parse_wallgeometry(attrs, &btype, &location)?;
-        Ok(Self {
-            name,
             zground,
-            area,
-            perimeter,
-            space,
-            construction,
-            location,
-            geometry,
         })
     }
 }

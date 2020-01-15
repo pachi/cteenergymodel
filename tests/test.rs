@@ -149,12 +149,12 @@ fn test_bdl_parse() {
     let wall1 = env
         .iter()
         .find(|e| match e {
-            bdl::BdlEnvType::ExteriorWall(wall) => wall.name == "P02_E01_PE001",
+            bdl::BdlEnvType::Wall(wall) => wall.name == "P02_E01_PE001",
             _ => false,
         })
         .unwrap();
     match wall1 {
-        bdl::BdlEnvType::ExteriorWall(wall) => {
+        bdl::BdlEnvType::Wall(wall) => {
             assert_eq!(wall.gross_area(&data.bdldata).unwrap(), 30.0);
             assert_eq!(wall.net_area(&data.bdldata).unwrap(), 28.0);
             assert_eq!(wall.space, "P02_E01");

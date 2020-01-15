@@ -54,7 +54,7 @@ impl Window {
     /// Es el ángulo respecto al eje Z de la normal a la superficie en la que está la ventana
     pub fn tilt(&self, db: &BdlData) -> Result<f32, Error> {
         let wall = db.env.iter().find(|s| match s {
-            BdlEnvType::ExteriorWall(e) => e.name == self.wall,
+            BdlEnvType::Wall(e) => e.name == self.wall,
             BdlEnvType::InteriorWall(e) => e.name == self.wall,
             BdlEnvType::UndergroundWall(e) => e.name == self.wall,
             BdlEnvType::Roof(e) => e.name == self.wall,
@@ -67,7 +67,7 @@ impl Window {
             )
         })?;
         match wall {
-            BdlEnvType::ExteriorWall(e) => Ok(e.tilt()),
+            BdlEnvType::Wall(e) => Ok(e.tilt()),
             BdlEnvType::InteriorWall(e) => Ok(e.tilt()),
             BdlEnvType::UndergroundWall(e) => Ok(e.tilt()),
             BdlEnvType::Roof(e) => Ok(e.tilt()),

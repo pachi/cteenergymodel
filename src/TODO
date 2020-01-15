@@ -18,9 +18,20 @@ BDL:
 
 - Diccionario de espacios por nombre en lugar de vectores
 - Revisar conversión de SHADING-COEF a factor solar (Fw = 0.90? Ahora es 0.85)
-- Terminar de unificar en Wall EXTERIOR-WALL y ROOF (cambia solo el TILT por defecto), y eliminar btype
-    - El objetivo sería tener EXTWALL, INTWALL y GNDWALL o un muro con propiedades distintas según tipos
-    - Comprobar que se pone bien el tilt ahora para ROOF
+- Identificar posición en muros
+        if hasattr(self, 'LOCATION'):
+            lugar = getattr(self, 'LOCATION')
+            if lugar == 'BOTTOM':           posicion = 'suelo'
+            elif lugar == 'TOP':            posicion = 'techo'
+            elif lugar.startswith('SPACE'): posicion = 'muro'
+            else: raise
+        elif hasattr(self, 'TILT'): #si no tiene location debe tener tilt, y se corrigen los de space
+            tilt = float(getattr(self, 'TILT'))
+            if tilt < 60:      posicion = 'techo'
+            elif tilt < 120:   posicion = 'muro'
+            elif tilt < 240:   posicion = 'suelo'
+            else: raise
+        else: raise
 - Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL:
     - metadatos
     - horarios

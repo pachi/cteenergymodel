@@ -27,7 +27,7 @@ pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
 pub use env::BdlEnvType;
 pub use geom::{Construction, Floor, Polygon, Space};
 pub use shadings::Shade;
-pub use walls::{ExteriorWall, InteriorWall, UndergroundWall, WallExt};
+pub use walls::{Wall, WallExt};
 pub use window::Window;
 
 // ------------------------- BDL ----------------------------
@@ -134,22 +134,22 @@ impl BdlData {
                 "EXTERIOR-WALL" => {
                     bdldata
                         .env
-                        .push(BdlEnvType::ExteriorWall(ExteriorWall::try_from(block)?));
+                        .push(BdlEnvType::Wall(Wall::try_from(block)?));
                 }
                 "ROOF" => {
                     bdldata
                         .env
-                        .push(BdlEnvType::Roof(ExteriorWall::try_from(block)?));
+                        .push(BdlEnvType::Roof(Wall::try_from(block)?));
                 }
                 "INTERIOR-WALL" => {
                     bdldata
                         .env
-                        .push(BdlEnvType::InteriorWall(InteriorWall::try_from(block)?));
+                        .push(BdlEnvType::InteriorWall(Wall::try_from(block)?));
                 }
                 "UNDERGROUND-WALL" => {
                     bdldata
                         .env
-                        .push(BdlEnvType::UndergroundWall(UndergroundWall::try_from(
+                        .push(BdlEnvType::UndergroundWall(Wall::try_from(
                             block,
                         )?));
                 }

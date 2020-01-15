@@ -2,13 +2,13 @@
 //!
 //! Elementos de la envolvente térmica:
 
-use super::{ExteriorWall, InteriorWall, UndergroundWall, Window};
+use super::{Wall};
 
 /// Elementos de envolvente
 #[derive(Debug)]
 pub enum BdlEnvType {
-    ExteriorWall(ExteriorWall),
-    InteriorWall(InteriorWall),
-    UndergroundWall(UndergroundWall),
-    Roof(ExteriorWall),
+    Wall(Wall),
+    InteriorWall(Wall),
+    UndergroundWall(Wall),
+    Roof(Wall),
 }
