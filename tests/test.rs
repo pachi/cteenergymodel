@@ -211,6 +211,7 @@ fn parse_test_data2() {
     assert_eq!(data.envolvente.pts.len(), 7);
 }
 
+#[ignore]
 #[test]
 fn parse_lider_bdl() {
     let mut count: u32 = 0;
