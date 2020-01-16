@@ -365,8 +365,8 @@ pub struct Glass {
     pub group: String,
     /// Conductividad W/m2K (GLASS-CONDUCTANCE)
     pub conductivity: f32,
-    /// Factor solar a incidencia normal - (SHADING-COEF)
-    pub shadingcoef: f32,
+    /// Factor solar del vidrio a incidencia normal - (SHADING-COEF / 0.87)
+    pub g_gln: f32,
 }
 
 impl TryFrom<BdlBlock> for Glass {
@@ -409,14 +409,17 @@ impl TryFrom<BdlBlock> for Glass {
         // LIDER antiguo no guardaba el grupo
         let group = attrs.remove_str("GROUP").unwrap_or("Vidrios".to_string());
         let conductivity = attrs.remove_f32("GLASS-CONDUCTANCE")?;
-        // TODO: Guardamos esto o el valor a incidencia normal?
-        // TODO: comprobar el 0.85 (el Fw en la 52016 es 0.90)
-        let shadingcoef = attrs.remove_f32("SHADING-COEF")? * 0.85;
+        // El SHADING-COEF es SGHC/SGHC_ref donde: 
+        // - SGHC_ref = 0.87 (vidrio claro)
+        // - SGHC es el factor solar del vidrio a incidencia normal
+        // A nosotros nos interesa covertir este valor a g_gln,
+        // y por tanto debemos multiplicar por 0.87
+        let g_gln = attrs.remove_f32("SHADING-COEF")? * 0.87;
         Ok(Self {
             name,
             group,
             conductivity,
-            shadingcoef,
+            g_gln,
         })
     }
 }
