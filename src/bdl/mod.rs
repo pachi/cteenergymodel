@@ -15,6 +15,7 @@ use failure::Error;
 mod blocks;
 mod common;
 mod cons;
+mod construction;
 mod geom;
 mod shadings;
 mod walls;
@@ -23,9 +24,10 @@ mod window;
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
-pub use geom::{Construction, Floor, Polygon, Space};
+pub use construction::Construction;
+pub use geom::{Floor, Polygon, Space};
 pub use shadings::Shade;
-pub use walls::{Wall};
+pub use walls::Wall;
 pub use window::Window;
 
 // ------------------------- BDL ----------------------------
