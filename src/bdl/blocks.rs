@@ -39,10 +39,7 @@ impl std::str::FromStr for BdlBlock {
     /// ```
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         // Separa encabezado del resto
-        let stanza: Vec<_> = s
-            .splitn(2, '\n')
-            .map(str::trim)
-            .collect();
+        let stanza: Vec<_> = s.splitn(2, '\n').map(str::trim).collect();
         let [bheadline, bdata] = if let [bheadline, bdata] = stanza.as_slice() {
             [bheadline, bdata]
         } else {
@@ -80,9 +77,17 @@ pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
     // Elimina líneas en blanco y comentarios, y luego separa por bloques
     let cleanlines = input
         .replace("\r\n", "\n")
+        .replace("ÿ", "") // Marcador de LIDER (antiguo)
         .lines()
         .map(str::trim)
-        .filter(|l| *l != "" && !l.starts_with('$'))
+        .filter(|l| {
+            *l != "" // Líneas en blanco
+                && !l.starts_with('$') // Comentarios
+                && !l.starts_with('+') // Encabezados de LIDER (antiguo)
+                && *l != "MARCOS"
+                && *l != "HUECOS"
+                && *l != "PUENTES TERMICOS"
+        })
         // Eliminamos la línea TEMPLARY = USER que separa la parte
         // propia de LIDER del BDL "estándar"
         .filter(|l| !l.starts_with("TEMPLARY"))
@@ -99,6 +104,8 @@ pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
     // ENERGIAGT  = YES
     let (_lider_part, bdl_part) =
         if let Some(pos) = cleanlines.find("\"DATOS GENERALES\" = GENERAL-DATA") {
+            cleanlines.split_at(pos)
+        } else if let Some(pos) = cleanlines.find("\"Defecto\" = DESCRIPTION") {
             cleanlines.split_at(pos)
         } else {
             panic!(
@@ -121,6 +128,10 @@ pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
     let mut currentwall = String::new();
 
     for block in blockstrs {
+        // Ignoramos bloques SET-DEFAULT del antiguo LIDER
+        if block.starts_with("SET-DEFAULT") {
+            continue;
+        };
         let mut bdlblock: BdlBlock = block.parse()?;
         // Corrige el elemento madre
         let parent = match bdlblock.btype.as_str() {
@@ -155,7 +166,9 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
     let mut attributes = AttrMap::new();
     let mut lines = data.lines().map(str::trim);
     while let Some(l) = lines.next() {
-        if l == ".." { continue };
+        if l == ".." {
+            continue;
+        };
         if let [key, value] = l.split('=').map(str::trim).collect::<Vec<_>>().as_slice() {
             // Valores simples o con paréntesis
             let value = if value.starts_with('(') && !value.ends_with(')') {

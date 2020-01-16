@@ -71,12 +71,16 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .to_string();
 
     let bdldata = BdlData::new(&entrada_grafica_lider)?;
-    
+
     // gglshwi de huecos
     let gglshwi: HashMap<String, f32> = bdldata
         .windows
         .iter()
-        .map(|w| (w.name.to_string(), w.gglshwi))
+        // TODO: usamos el default pero deberíamos adaptarnos a los distintos formatos: 
+        // TODO: - información pública -> gglshwi en WINDOW
+        // TODO: - versión final -> gglshwi en GAP
+        // TODO: - LIDER antiguo -> no existe
+        .map(|w| (w.name.to_string(), w.gglshwi.unwrap_or_default()))
         .collect();
 
     // Zona climática

@@ -29,19 +29,13 @@ pub struct Window {
     /// Retranqueo del hueco (m)
     pub setback: f32,
     /// Coeficientes de corrección por dispositivo de sombra estacional
-    /// Corrección de factor solar fuera de la temporada veraniega (-)
-    pub corrg0: f32,
-    /// Coeficientes de corrección por dispositivo de sombra estacional
-    /// Corrección de factor solar dentro de la temporada veraniega (-)
-    pub corrg1: f32,
-    /// Coeficientes de corrección por dispositivo de sombra estacional
-    /// Corrección de transmitancia térmica fuera de la temporada veraniega (-)
-    pub corru0: f32,
-    /// Coeficientes de corrección por dispositivo de sombra estacional
-    /// Corrección de transmitancia térmica dentro de la temporada veraniega (-)
-    pub corru1: f32,
+    /// - 0: Corrección de factor solar fuera de la temporada veraniega (-)
+    /// - 1: Corrección de factor solar dentro de la temporada veraniega (-)
+    /// - 2: Corrección de transmitancia térmica fuera de la temporada veraniega (-)
+    /// - 3: Corrección de transmitancia térmica dentro de la temporada veraniega (-)
+    pub coefs: Option<Vec<f32>>,
     /// Transmitancia total de energía del acristalameinto con los dispositivo de sombra móvil activados (g_gl;sh;wi) (-)
-    pub gglshwi: f32,
+    pub gglshwi: Option<f32>,
 }
 
 impl Window {
@@ -135,15 +129,17 @@ impl TryFrom<BdlBlock> for Window {
         let height = attrs.remove_f32("HEIGHT")?;
         let width = attrs.remove_f32("WIDTH")?;
         let setback = attrs.remove_f32("SETBACK")?;
-        let coefs = extract_f32vec(attrs.remove_str("COEFF")?)?;
-        let [corrg0, corrg1, corru0, corru1] = match coefs.as_slice() {
-            [c1, c2, c3, c4] => [*c1, *c2, *c3, *c4],
-            _ => bail!(
-                "Definición incorrecta de coeficientes de corrección en el hueco '{}'",
-                name
-            ),
+        let coefs = match attrs.remove_str("COEFF").ok() {
+            None => None, // LIDER antiguo no define estos parámetros
+            Some(vals) => match extract_f32vec(vals) {
+                Ok(vec) if vec.len() == 4 => Some(vec),
+                _ => bail!(
+                    "Definición incorrecta de coeficientes de corrección en el hueco '{}'",
+                    name
+                )
+            }
         };
-        let gglshwi = attrs.remove_f32("transmisividadJulio")?;
+        let gglshwi = attrs.remove_f32("transmisividadJulio").ok();
 
         Ok(Self {
             name,
@@ -154,10 +150,11 @@ impl TryFrom<BdlBlock> for Window {
             height,
             width,
             setback,
-            corrg0,
-            corrg1,
-            corru0,
-            corru1,
+            coefs,
+            // corrg0,
+            // corrg1,
+            // corru0,
+            // corru1,
             gglshwi,
         })
     }

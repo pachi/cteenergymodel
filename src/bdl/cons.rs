@@ -61,7 +61,8 @@ pub struct Material {
 #[derive(Debug, Copy, Clone, Default)]
 pub struct MaterialProperties {
     /// Espesor, d (m)
-    pub thickness: f32,
+    /// En LIDER antiguo no se define este valor
+    pub thickness: Option<f32>,
     /// Conductividad térmica, lambda (W/mK)
     pub conductivity: f32,
     /// Densidad, rho (kg/m3)
@@ -69,7 +70,8 @@ pub struct MaterialProperties {
     /// Calor específico, C_p (J/kg K)
     pub specificheat: f32,
     /// Factor de difusividad al vapor de agua, mu (-)
-    pub vapourdiffusivity: f32,
+    /// En archivos de LIDER antiguo se pone por defecto 0.0 (no definido)
+    pub vapourdiffusivity: Option<f32>,
 }
 
 /// Definición por resistencia térmica
@@ -104,6 +106,14 @@ impl TryFrom<BdlBlock> for Material {
     ///     UTIL          =  NO
     ///     OBSOLETE      = NO
     ///     ..
+    ///     
+    ///     $ LIDER antiguo
+    ///     "AislanteREF" = MATERIAL
+    ///         TYPE = PROPERTIES
+    ///         CONDUCTIVITY = 0.036
+    ///         DENSITY = 30
+    ///         SPECIFIC-HEAT = 1800
+    ///         ..
     /// ```
     /// TODO: Propiedades no convertidas:
     /// TODO: THICKNESS_CHANGE, THICKNESS_MAX, THICKNESS_MIN, IMAGE, NAME_CALENER, LIBRARY, UTIL, OBSOLETE
@@ -111,14 +121,17 @@ impl TryFrom<BdlBlock> for Material {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
-        let group = attrs.remove_str("GROUP")?;
+        // El LIDER antiguo no guardaba grupos
+        let group = attrs.remove_str("GROUP").unwrap_or("Materiales".to_string());
         let (properties, resistance) = match attrs.remove_str("TYPE")?.as_ref() {
             "PROPERTIES" => {
-                let thickness = attrs.remove_f32("THICKNESS")?;
+                /// XXX: En LIDER antiguo no se define este valor
+                let thickness = attrs.remove_f32("THICKNESS").ok();
                 let conductivity = attrs.remove_f32("CONDUCTIVITY")?;
                 let density = attrs.remove_f32("DENSITY")?;
                 let specificheat = attrs.remove_f32("SPECIFIC-HEAT")?;
-                let vapourdiffusivity = attrs.remove_f32("VAPOUR-DIFFUSIVITY-FACTOR")?;
+                // XXX: En LIDER antiguo no se define este valor
+                let vapourdiffusivity = attrs.remove_f32("VAPOUR-DIFFUSIVITY-FACTOR").ok();
                 (
                     Some(MaterialProperties {
                         thickness,
@@ -175,7 +188,13 @@ impl TryFrom<BdlBlock> for Layers {
     ///         UTIL          =  YES
     ///         IMAGE = ""
     ///         DEFAULT = NO
-    ///     ..
+    ///         ..
+    ///
+    ///     $ LIDER antiguo
+    ///     "CONST_referencia-5" = LAYERS
+    ///         MATERIAL = ( "PlaquetaREF","MorteroREF","ForjadoREF" )
+    ///         THICKNESS = ( 0.015, 0.020, 0.250 )
+    ///         ..
     /// ```
     /// TODO: Propiedades de Layers no convertidas:
     /// TODO: IMAGE, NAME_CALENER, LIBRARY, UTIL, TYPE-DEFINITION, DEFAULT
@@ -183,7 +202,8 @@ impl TryFrom<BdlBlock> for Layers {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
-        let group = attrs.remove_str("GROUP")?;
+        // En LIDER antiguo no se guarda el grupo
+        let group = attrs.remove_str("GROUP").unwrap_or("Capas".to_string());
         let material = extract_namesvec(attrs.remove_str("MATERIAL")?);
         let thickness = extract_f32vec(attrs.remove_str("THICKNESS")?)?;
         Ok(Self {
@@ -368,6 +388,13 @@ impl TryFrom<BdlBlock> for Glass {
     ///           LIBRARY       =  NO
     ///           UTIL          =  NO
     ///           ..
+    ///      $ LIDER antiguo
+    ///      "GT_referencia-3" = GLASS-TYPE
+    ///           TYPE = SHADING-COEF
+    ///           SHADING-COEF = 0
+    ///           SHADING-COEF-SUMMER = 0
+    ///           GLASS-CONDUCTANCE = 3.5
+    ///          ..        
     /// ```
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
@@ -379,7 +406,8 @@ impl TryFrom<BdlBlock> for Glass {
                 &name
             );
         };
-        let group = attrs.remove_str("GROUP")?;
+        // LIDER antiguo no guardaba el grupo
+        let group = attrs.remove_str("GROUP").unwrap_or("Vidrios".to_string());
         let conductivity = attrs.remove_f32("GLASS-CONDUCTANCE")?;
         // TODO: Guardamos esto o el valor a incidencia normal?
         // TODO: comprobar el 0.85 (el Fw en la 52016 es 0.90)
@@ -399,7 +427,8 @@ pub struct ThermalBridge {
     /// Nombre
     pub name: String,
     /// Longitud total (m)
-    pub length: f32,
+    /// En LIDER antiguo no se guarda la medición en el objeto
+    pub length: Option<f32>,
     /// Tipo de puente térmico:
     /// - PILLAR: pilar en fachada,
     /// - WINDOW-FRAME: borde de hueco,
@@ -485,7 +514,7 @@ impl TryFrom<BdlBlock> for ThermalBridge {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
-        let length = attrs.remove_f32("LONG-TOTAL")?;
+        let length = attrs.remove_f32("LONG-TOTAL").ok();
         let (psi, frsi) = if name == "LONGITUDES_CALCULADAS" {
             (0.0, 0.0)
         } else {
@@ -501,13 +530,16 @@ impl TryFrom<BdlBlock> for ThermalBridge {
             }),
         };
 
-        let defn = attrs.remove_f32("DEFINICION")? as i32;
+        let defn = attrs
+            .remove_f32("DEFINICION")
+            .and_then(|v| Ok(v as i32))
+            .ok(); // El LIDER antiguo no usa la definición del tipo
 
         let catalog = match defn {
             // Definido con valor por defecto o por el usuario
-            1 | 2 => None,
+            Some(1) | Some(2) | None => None,
             // Definido por catálogo de PTs
-            3 => Some(TBByCatalog {
+            Some(3) => Some(TBByCatalog {
                 classes: extract_namesvec(attrs.remove_str("LISTA-N")?),
                 pcts: extract_f32vec(attrs.remove_str("LISTA-L")?)?,
                 firstelems: extract_f32vec(attrs.remove_str("LISTA-MURO")?)?,
@@ -517,7 +549,7 @@ impl TryFrom<BdlBlock> for ThermalBridge {
                     None
                 },
             }),
-            _ => bail!("Puente térmico '{}' con tipo desconocido ({})", name, defn),
+            Some(v) => bail!("Puente térmico '{}' con tipo desconocido ({})", name, v),
         };
         Ok(Self {
             name,

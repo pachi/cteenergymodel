@@ -156,6 +156,8 @@ impl BdlData {
                 }
 
                 // Elemento desconocido -------------------------
+                // No implementados: AUX-LINE
+                // Fakes: DESCRIPTION, PARTELIDER
                 _ => {
                     eprintln!(
                         "Tipo desconocido. bname: {}, btype: {}",

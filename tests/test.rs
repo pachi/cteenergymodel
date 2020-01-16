@@ -21,10 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use hulc2envolventecte::{
-    bdl,
-    collect_hulc_data, ctehexml, find_hulc_files, tbl,
-};
+use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, find_hulc_files, tbl, utils};
 use std::convert::TryFrom;
 
 #[test]
@@ -212,4 +209,20 @@ fn parse_test_data2() {
     assert_eq!(data.envolvente.huecos.len(), 29);
     assert_eq!(data.envolvente.opacos.len(), 60);
     assert_eq!(data.envolvente.pts.len(), 7);
+}
+
+#[test]
+fn parse_lider_bdl() {
+    let mut count: u32 = 0;
+    for ff in std::fs::read_dir("tests/liderdata/").unwrap() {
+        let file = ff.unwrap().path().to_str().unwrap().to_string();
+        if !file.ends_with(".CTE") && !file.ends_with(".cte") {
+            continue
+        };
+        println!("Examinando archivo {:#?}", file);
+        let strdata = utils::read_latin1_file(&file).unwrap();
+        let _data = bdl::BdlData::new(&strdata).unwrap();
+        count += 1;
+    }
+    println!("Comprobados {} archivos antiguos", count);
 }

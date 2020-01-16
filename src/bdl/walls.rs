@@ -39,9 +39,9 @@ pub struct Wall {
     /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
     pub wtype: String,
     // --- Propiedades exclusivas -----------------------
-    /// Absortividad definida por usuario
-    /// (solo en cerramientos en contacto con el aire)
-    pub absorptance: Option<f32>,
+    // XXX: Absortividad definida por usuario -> Se debe consultar en la construcción
+    // XXX: (solo en cerramientos en contacto con el aire)
+    // XXX: pub absorptance: Option<f32>,
     /// Espacio adyacente que conecta con el espacio padre
     /// (solo en algunos tipos de cerramientos interiores (no adiabático o superficie interior))
     pub nextto: Option<String>,
@@ -142,10 +142,13 @@ pub struct WallGeometry {
     /// Nombre del polígono que define la geometría
     pub polygon: String,
     /// Coordenada X de la esquina inferior izquierda
+    /// usa coordenadas del espacio ??
     pub x: f32,
     /// Coordenada Y de la esquina inferior izquierda
+    /// usa coordenadas del espacio ??
     pub y: f32,
     /// Coordenada Z de la esquina inferior izquierda
+    /// usa coordenadas del espacio ??
     pub z: f32,
     /// Acimut (grados sexagesimales)
     /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
@@ -162,9 +165,10 @@ impl WallGeometry {
         location: &Option<String>,
     ) -> Result<Option<Self>, Error> {
         if let Ok(polygon) = attrs.remove_str("POLYGON") {
-            let x = attrs.remove_f32("X")?;
-            let y = attrs.remove_f32("Y")?;
-            let z = attrs.remove_f32("Z")?;
+            // XXX: en LIDER antiguo pueden no aparecer algunas de estas coordenadas
+            let x = attrs.remove_f32("X").unwrap_or_default();
+            let y = attrs.remove_f32("Y").unwrap_or_default();
+            let z = attrs.remove_f32("Z").unwrap_or_default();
             let azimuth = attrs.remove_f32("AZIMUTH")?;
 
             // Si la inclinación es None (se define location)
@@ -243,6 +247,8 @@ impl TryFrom<BdlBlock> for Wall {
     /// XXX: atributos no trasladados:
     /// XXX: propiedades para definir el estado de la interfaz para la selección de la absortividad:
     /// XXX: TYPE_ABSORPTANCE, COLOR_ABSORPTANCE, DEGREE_ABSORPTANCE
+    /// XXX: propiedades cacheadas de la CONSTRUCTION: 
+    /// XXX: ABSORPTANCE
     /// XXX: Atributos no trasladados: COMPROBAR-REQUISITOS-MINIMOS, CONSTRUCCION_MURO
     ///
     /// Ejemplos en BDL de INTERIOR-WALL:
@@ -267,7 +273,7 @@ impl TryFrom<BdlBlock> for Wall {
     ///         POLYGON       = "P02_E01_FI002_Poligono2"
     ///         ..
     /// ```
-    /// XXX: atributos no trasladados:
+    /// XXX: atributos no trasladados: Ninguno
     ///
     /// Ejemplos en BDL de UNDERGROUND-WALL:
     /// ```text
@@ -318,10 +324,11 @@ impl TryFrom<BdlBlock> for Wall {
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
         // Propiedad específica
-        let absorptance = match wtype.as_str() {
-            "EXTERIOR-WALL" | "ROOF" => Some(attrs.remove_f32("ABSORPTANCE")?),
-            _ => None,
-        };
+        // XXX: La absortividad debe consultarse en la construcción, esto parece una cache de HULC
+        // let absorptance = match wtype.as_str() {
+        //     "EXTERIOR-WALL" | "ROOF" => Some(attrs.remove_f32("ABSORPTANCE")?),
+        //     _ => None,
+        // };
         let nextto = match wtype.as_str() {
             "STANDARD" | "AIR" => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
@@ -339,7 +346,6 @@ impl TryFrom<BdlBlock> for Wall {
             construction,
             location,
             geometry,
-            absorptance,
             nextto,
             zground,
         })

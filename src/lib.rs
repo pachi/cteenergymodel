@@ -26,7 +26,7 @@ pub mod ctehexml;
 pub mod envolventetypes;
 pub mod kyg;
 pub mod tbl;
-mod utils;
+pub mod utils;
 #[cfg(windows)]
 pub mod wingui;
 

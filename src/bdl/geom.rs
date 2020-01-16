@@ -155,25 +155,43 @@ impl TryFrom<BdlBlock> for Space {
     /// Ejemplo:
     /// ```text
     ///     "P01_E01" = SPACE
-    ///     nCompleto = "P01_E01"
-    ///     HEIGHT        =            3.5
-    ///     SHAPE             = POLYGON
-    ///     POLYGON           = "P01_E01_Pol2"
-    ///     TYPE              = CONDITIONED
-    ///     SPACE-TYPE        = "Residencial"
-    ///     SYSTEM-CONDITIONS = "Residencial"
-    ///     SPACE-CONDITIONS  = "Residencial"
-    ///     FLOOR-WEIGHT      =              0
-    ///     MULTIPLIER        = 1
-    ///     MULTIPLIED        = 0
-    ///     PILLARS-NUMBERS   = 0
-    ///     FactorSuperficieUtil   = 1.0
-    ///     perteneceALaEnvolventeTermica   = SI
-    ///     INTERIOR-RADIATION  = FIXED
-    ///     POWER     = 4.4
-    ///     VEEI-OBJ  = 7.000000
-    ///     VEEI-REF  = 10.000000
-    ///     ..
+    ///         nCompleto = "P01_E01"
+    ///         HEIGHT        =            3.5
+    ///         SHAPE             = POLYGON
+    ///         POLYGON           = "P01_E01_Pol2"
+    ///         TYPE              = CONDITIONED
+    ///         SPACE-TYPE        = "Residencial"
+    ///         SYSTEM-CONDITIONS = "Residencial"
+    ///         SPACE-CONDITIONS  = "Residencial"
+    ///         FLOOR-WEIGHT      =              0
+    ///         MULTIPLIER        = 1
+    ///         MULTIPLIED        = 0
+    ///         PILLARS-NUMBERS   = 0
+    ///         FactorSuperficieUtil   = 1.0
+    ///         perteneceALaEnvolventeTermica   = SI
+    ///         INTERIOR-RADIATION  = FIXED
+    ///         POWER     = 4.4
+    ///         VEEI-OBJ  = 7.000000
+    ///         VEEI-REF  = 10.000000
+    ///         ..
+    /// 
+    ///     $ LIDER antiguo
+    ///     "P01_E01" = SPACE
+    ///         HEIGHT        =              3
+    ///         SHAPE             = POLYGON
+    ///         POLYGON           = "P01_E01_Poligono002"
+    ///         TYPE              = CONDITIONED
+    ///         SPACE-TYPE        = "Residencial"
+    ///         FLOOR-WEIGHT      =              0
+    ///         MULTIPLIER        = 1            
+    ///         MULTIPLIED        = 0
+    ///         PILLARS-NUMBERS   = 0
+    ///         INTERIOR-RADIATION  = FIXED
+    ///         POWER     = 4.4
+    ///         VEEI-OBJ  = 7.000000
+    ///         VEEI-REF  = 10.000000
+    ///         AIR-CHANGES/HR        = 1.000000
+    ///         ..
     /// ```
     /// TODO: propiedades no convertidas:
     /// TODO: PILLARS-NUMBERS (número de pilares en el espacio, como PTs),
@@ -217,8 +235,10 @@ impl TryFrom<BdlBlock> for Space {
         let veeiobj = attrs.remove_f32("VEEI-OBJ")?;
         let veeiref = attrs.remove_f32("VEEI-REF")?;
         let spacetype = attrs.remove_str("SPACE-TYPE")?;
-        let spaceconds = attrs.remove_str("SPACE-CONDITIONS")?;
-        let systemconds = attrs.remove_str("SYSTEM-CONDITIONS")?;
+        // No existe en LIDER antiguo
+        let spaceconds = attrs.remove_str("SPACE-CONDITIONS").unwrap_or(spacetype.clone());
+        // No existe en LIDER antiguo
+        let systemconds = attrs.remove_str("SYSTEM-CONDITIONS").unwrap_or(spacetype.clone());
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
         // XXX: Es un booleano codificado como entero que se parse como número
         let ismultiplied = (attrs.remove_f32("MULTIPLIED")? - 1.0).abs() < 0.1;
@@ -481,3 +501,4 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
                                 // + start to reset back to start of original range
     (offset - (f32::floor(offset / width) * width)) + start
 }
+
