@@ -9,7 +9,7 @@
 use std::convert::TryFrom;
 
 use super::blocks::BdlBlock;
-use super::BdlData;
+use super::Data;
 
 use failure::bail;
 use failure::Error;
@@ -111,7 +111,7 @@ impl Space {
     ///
     /// Usa el valor definido como propiedad o la altura por defecto para los espacios
     /// definida en la planta
-    pub fn height(&self, db: &BdlData) -> Result<f32, Error> {
+    pub fn height(&self, db: &Data) -> Result<f32, Error> {
         if let Some(height) = self.height {
             Ok(height)
         } else {
@@ -132,7 +132,7 @@ impl Space {
     /// Calcula el área del espacio
     ///
     /// Usa el área del polígono que define el espacio
-    pub fn area(&self, db: &BdlData) -> Result<f32, Error> {
+    pub fn area(&self, db: &Data) -> Result<f32, Error> {
         Ok(db
             .polygons
             .get(&self.polygon)

@@ -34,7 +34,7 @@ pub use window::Window;
 
 /// Datos del archivo BDL
 #[derive(Debug, Default)]
-pub struct BdlData {
+pub struct Data {
     /// Metadatos: espacio de trabajo, parámetros de edificio, construcciones por defecto y datos generales
     pub meta: HashMap<String, BdlBlock>,
     /// Base de datos de materiales, productos y composiciones constructivas
@@ -61,7 +61,7 @@ pub struct BdlData {
     pub schedules: HashMap<String, BdlBlock>,
 }
 
-impl BdlData {
+impl Data {
     pub fn new(input: &str) -> Result<Self, Error> {
         let mut bdldata: Self = Default::default();
         for block in build_blocks(input)? {

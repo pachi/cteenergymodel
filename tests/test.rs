@@ -109,7 +109,7 @@ fn test_bdl_parse() {
     let bdldb = &data.bdldata;
 
     #[allow(unused_variables)]
-    let bdl::BdlData {
+    let bdl::Data {
         meta,
         db,
         floors,
@@ -227,7 +227,7 @@ fn parse_lider_bdl() {
         };
         println!("Examinando archivo {:#?}", file);
         let strdata = utils::read_latin1_file(&file).unwrap();
-        let _data = bdl::BdlData::new(&strdata).unwrap();
+        let _data = bdl::Data::new(&strdata).unwrap();
         count += 1;
     }
     println!("Comprobados {} archivos antiguos", count);

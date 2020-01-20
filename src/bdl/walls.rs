@@ -11,7 +11,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{BdlBlock, BdlData};
+use super::{BdlBlock, Data};
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
@@ -54,7 +54,7 @@ impl Wall {
     /// Superficie bruta (incluyendo huecos) del muro (m2)
     ///
     /// TODO: la búsqueda de polígonos y espacios no es óptima (se podría cachear)
-    pub fn gross_area(&self, db: &BdlData) -> Result<f32, Error> {
+    pub fn gross_area(&self, db: &Data) -> Result<f32, Error> {
         if let Some(geom) = &self.geometry {
             // Superficie para muros definidos por polígono
             let geom_polygon = db.polygons.get(&geom.polygon).ok_or_else(|| {
@@ -97,7 +97,7 @@ impl Wall {
     }
 
     /// Superficie neta (sin huecos) del cerramiento (m2)
-    pub fn net_area(&self, db: &BdlData) -> Result<f32, Error> {
+    pub fn net_area(&self, db: &Data) -> Result<f32, Error> {
         let wall_gross_area = self.gross_area(db)?;
         let windows_area = db
             .windows
@@ -109,7 +109,7 @@ impl Wall {
     }
 
     /// Perímetro del cerramiento (m)
-    pub fn perimeter(&self, db: &BdlData) -> Result<f32, Error> {
+    pub fn perimeter(&self, db: &Data) -> Result<f32, Error> {
         unimplemented!()
         // 1. Elementos definidos por geometría -> perímetro del polígono
         // 2. Elementos definidos por posición TOP, BOTTOM o SPACE-Vxx
@@ -144,7 +144,7 @@ impl Wall {
     /// 1. Los elementos definidos por geometría ya tiene definido su azimut
     /// 2. Los elementos horizontales se definen con azimut igual a 0.0
     /// 3. Los elementos definidos por vértice de polígono del espacio madre deben consultar su azimuth con el polígono del espacio
-    pub fn azimuth(&self, northangle: f32, db: &BdlData) -> Result<f32, Error> {
+    pub fn azimuth(&self, northangle: f32, db: &Data) -> Result<f32, Error> {
         if let Some(geom) = &self.geometry {
             // Elementos definidos por polígono
             // Elementos horizontales (hacia arriba o hacia abajo)
