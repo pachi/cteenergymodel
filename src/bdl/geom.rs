@@ -333,8 +333,10 @@ impl Polygon {
         }
     }
 
-    /// Ángulo con el sur de la normal del lado definido por el vértice y con desviación global respecto al norte
+    /// Ángulo con el sur de la normal del lado definido por el vértice
+    /// northangle es la desviación global respecto al norte
     /// Los ángulos se dan en grados sexagesimales
+    /// TODO: hacer versión segura, comprobando existencia de vértices
     pub fn edge_orient(&self, vertexname: &str, northangle: f32) -> f32 {
         let vv = &self.vertices;
         let [n, m] = self.edge_indices(vertexname).unwrap_or([0, 0]);

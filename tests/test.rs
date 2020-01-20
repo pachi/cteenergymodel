@@ -106,6 +106,7 @@ fn test_bdl_parse() {
     let _data = ctehexml::parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
     let _data = ctehexml::parse("tests/casoA/casoa.ctehexml").unwrap();
     let data = ctehexml::parse("tests/casoC/casoc.ctehexml").unwrap();
+    let bdldb = &data.bdldata;
 
     #[allow(unused_variables)]
     let bdl::BdlData {
@@ -121,7 +122,7 @@ fn test_bdl_parse() {
         spaceconds,
         systemconds,
         schedules,
-    } = &data.bdldata;
+    } = bdldb;
     // println!("{:#?}", db);
     // println!("{:#?}", constructions);
     // println!("{:#?}", floors);
@@ -140,28 +141,32 @@ fn test_bdl_parse() {
         .unwrap();
     assert_eq!(win1.area(), 2.0);
     assert_eq!(win1.wall, "P02_E01_PE001");
-    assert_eq!(win1.tilt(&data.bdldata).unwrap(), 90.0);
+    assert_eq!(win1.tilt(bdldb).unwrap(), 90.0);
+    assert_eq!(win1.azimuth(0.0, bdldb).unwrap(), 270.0); // Oeste
 
     // Muro interior
     let wall1 = env.iter().find(|w| w.name == "P02_E01_PE001").unwrap();
-    assert_eq!(wall1.gross_area(&data.bdldata).unwrap(), 30.0);
-    assert_eq!(wall1.net_area(&data.bdldata).unwrap(), 28.0);
+    assert_eq!(wall1.gross_area(bdldb).unwrap(), 30.0);
+    assert_eq!(wall1.net_area(bdldb).unwrap(), 28.0);
     assert_eq!(wall1.space, "P02_E01");
     assert_eq!(wall1.tilt(), 90.0);
+    assert_eq!(wall1.azimuth(0.0, bdldb).unwrap(), 270.0); // Oeste
 
     // Forjado interior
     let wall2 = env.iter().find(|w| w.name == "P02_E01_FI001").unwrap();
-    assert_eq!(wall2.gross_area(&data.bdldata).unwrap(), 49.985004);
-    assert_eq!(wall2.net_area(&data.bdldata).unwrap(), 49.985004);
+    assert_eq!(wall2.gross_area(bdldb).unwrap(), 49.985004);
+    assert_eq!(wall2.net_area(bdldb).unwrap(), 49.985004);
     assert_eq!(wall2.space, "P02_E01");
     assert_eq!(wall2.tilt(), 180.0);
+    assert_eq!(wall2.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
 
     // Solera
     let wall3 = env.iter().find(|w| w.name == "P01_E01_FTER001").unwrap();
-    assert_eq!(wall3.gross_area(&data.bdldata).unwrap(), 50.0);
-    assert_eq!(wall3.net_area(&data.bdldata).unwrap(), 50.0);
+    assert_eq!(wall3.gross_area(bdldb).unwrap(), 50.0);
+    assert_eq!(wall3.net_area(bdldb).unwrap(), 50.0);
     assert_eq!(wall3.space, "P01_E01");
     assert_eq!(wall3.tilt(), 180.0);
+    assert_eq!(wall3.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
 }
 
 #[test]
@@ -218,7 +223,7 @@ fn parse_lider_bdl() {
     for ff in std::fs::read_dir("tests/liderdata/").unwrap() {
         let file = ff.unwrap().path().to_str().unwrap().to_string();
         if !file.ends_with(".CTE") && !file.ends_with(".cte") {
-            continue
+            continue;
         };
         println!("Examinando archivo {:#?}", file);
         let strdata = utils::read_latin1_file(&file).unwrap();

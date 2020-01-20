@@ -69,7 +69,7 @@ impl Wall {
             // Superficie para muros definidos por posición, en un espacio
             let space = db.spaces.iter().find(|s| s.name == self.space.as_str()).ok_or_else(|| {
                 format_err!(
-                    "Espacio {} al que pertenece el cerramiento {} no encontrado. No se puede calcular la superficie",
+                    "Espacio {} del cerramiento {} no encontrado. No se puede calcular la superficie",
                     self.space,
                     self.name
                 )
@@ -81,7 +81,7 @@ impl Wall {
             } else {
                 let poly = db.polygons.get(&space.polygon).ok_or_else(|| {
                     format_err!(
-                        "Polígono {} del espacio {} al que pertenece el cerramiento {} no encontrado. No se puede calcular la superficie",
+                        "Polígono {} del espacio {} del cerramiento {} no encontrado. No se puede calcular la superficie",
                         space.polygon,
                         self.space,
                         self.name
@@ -119,17 +119,70 @@ impl Wall {
 
     /// Inclinación del cerramiento (grados)
     /// Ángulo de la normal del cerramiento con el eje Z
+    /// Solamente se define cuando se da el atributo POLYGON
+    /// Si la inclinación es None (se define location)
+    /// asignamos el valor por defecto, que es:
+    /// - Para btype = ROOF -> 0.0 (hacia arriba)
+    /// - Para el resto de btypes:
+    ///      - con location = TOP -> tilt = 0.0 (techo)
+    ///      - con location = BOTTOM -> tilt = 180.0 (suelo)
+    ///      - el resto -> tilt = 90.0 (defecto)
     pub fn tilt(&self) -> f32 {
         if let Some(geom) = &self.geometry {
             geom.tilt
         } else {
-            match self.wtype.as_str() {
-                "ROOF" => 0.0,
-                _ => match self.location.as_deref() {
-                    Some("TOP") => 0.0,
-                    Some("BOTTOM") => 180.0,
-                    _ => 90.0,
-                },
+            match (self.wtype.as_str(), self.location.as_deref()) {
+                ("ROOF", _) | (_, Some("TOP")) => 0.0,
+                (_, Some("BOTTOM")) => 180.0,
+                _ => 90.0,
+            }
+        }
+    }
+
+    /// Azimut (grados sexagesimales)
+    /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
+    /// 1. Los elementos definidos por geometría ya tiene definido su azimut
+    /// 2. Los elementos horizontales se definen con azimut igual a 0.0
+    /// 3. Los elementos definidos por vértice de polígono del espacio madre deben consultar su azimuth con el polígono del espacio
+    pub fn azimuth(&self, northangle: f32, db: &BdlData) -> Result<f32, Error> {
+        if let Some(geom) = &self.geometry {
+            // Elementos definidos por polígono
+            // Elementos horizontales (hacia arriba o hacia abajo)
+            if geom.tilt == 0.0 || geom.tilt == 180.0 {
+                Ok(0.0)
+            } else {
+                Ok(geom.azimuth)
+            }
+        } else {
+            match (self.wtype.as_str(), self.location.as_deref()) {
+                // Elementos horizontales
+                ("ROOF", _) | (_, Some("TOP")) | (_, Some("BOTTOM")) => Ok(0.0),
+                // Elementos definidos por vértice en polígono
+                (_, Some(vertex)) => {
+                    // Superficie para muros definidos por vértice del polígono de su espacio
+                    let space = db
+                        .spaces
+                        .iter()
+                        .find(|s| s.name == self.space.as_str())
+                        .ok_or_else(|| {
+                            format_err!(
+                                "Espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
+                                self.space,
+                                self.name
+                            )
+                        })?;
+                    let polygon = db.polygons.get(&space.polygon).ok_or_else(|| {
+                        format_err!(
+                            "Polígono del espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
+                            space.name,
+                            self.name,
+                        )
+                    })?;
+                    let azimuth = polygon.edge_orient(vertex, northangle);
+                    Ok(azimuth)
+                }
+                // Resto de casos
+                _ => bail!("Imposible calcular azimut de elemento {}", self.name),
             }
         }
     }
@@ -247,7 +300,7 @@ impl TryFrom<BdlBlock> for Wall {
     /// XXX: atributos no trasladados:
     /// XXX: propiedades para definir el estado de la interfaz para la selección de la absortividad:
     /// XXX: TYPE_ABSORPTANCE, COLOR_ABSORPTANCE, DEGREE_ABSORPTANCE
-    /// XXX: propiedades cacheadas de la CONSTRUCTION: 
+    /// XXX: propiedades cacheadas de la CONSTRUCTION:
     /// XXX: ABSORPTANCE
     /// XXX: Atributos no trasladados: COMPROBAR-REQUISITOS-MINIMOS, CONSTRUCCION_MURO
     ///
@@ -323,6 +376,7 @@ impl TryFrom<BdlBlock> for Wall {
             "EXTERIOR-WALL" => "EXTERIOR-WALL".to_string(),
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
+
         // Propiedades específicas
         // XXX: La absortividad debe consultarse en la construcción, esto parece una cache de HULC
         // let absorptance = match wtype.as_str() {
