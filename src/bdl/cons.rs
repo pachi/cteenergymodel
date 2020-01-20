@@ -125,7 +125,7 @@ impl TryFrom<BdlBlock> for Material {
         let group = attrs.remove_str("GROUP").unwrap_or("Materiales".to_string());
         let (properties, resistance) = match attrs.remove_str("TYPE")?.as_ref() {
             "PROPERTIES" => {
-                /// XXX: En LIDER antiguo no se define este valor
+                // XXX: En LIDER antiguo no se define este valor
                 let thickness = attrs.remove_f32("THICKNESS").ok();
                 let conductivity = attrs.remove_f32("CONDUCTIVITY")?;
                 let density = attrs.remove_f32("DENSITY")?;

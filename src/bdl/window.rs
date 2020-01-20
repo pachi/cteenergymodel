@@ -47,7 +47,7 @@ impl Window {
     /// Inclinación de la ventana (grados)
     /// Es el ángulo respecto al eje Z de la normal a la superficie en la que está la ventana
     pub fn tilt(&self, db: &Data) -> Result<f32, Error> {
-        let wall = db.env.iter().find(|s| s.name == self.wall).ok_or_else(|| {
+        let wall = db.get_wall(&self.wall).ok_or_else(|| {
             format_err!(
                 "Muro {} al que pertenece la ventana {} no encontrado. No se puede calcular la inclinación",
                 self.wall,
@@ -60,7 +60,7 @@ impl Window {
     /// Azimut de la ventana (grados)
     /// Es el ángulo respecto al eje Z de la normal a la superficie en la que está la ventana
     pub fn azimuth(&self, northangle: f32, db: &Data) -> Result<f32, Error> {
-        let wall = db.env.iter().find(|s| s.name == self.wall).ok_or_else(|| {
+        let wall = db.get_wall(&self.wall).ok_or_else(|| {
             format_err!(
                 "Muro {} al que pertenece la ventana {} no encontrado. No se puede calcular el azimut",
                 self.wall,

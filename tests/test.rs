@@ -95,7 +95,7 @@ fn test_test_spaces_caso_a() {
     let bdl = xmldata.bdldata;
 
     for s in tbl.spaces {
-        let spc = bdl.spaces.iter().find(|ss| &ss.name == &s.name).unwrap();
+        let spc = bdl.get_space(&s.name).unwrap();
         let poly = bdl.polygons.get(&spc.polygon).unwrap();
         assert_eq!(s.area, poly.area())
     }
@@ -114,7 +114,7 @@ fn test_bdl_parse() {
         db,
         floors,
         spaces,
-        env,
+        walls,
         windows,
         shadings,
         polygons,
@@ -127,46 +127,54 @@ fn test_bdl_parse() {
     // println!("{:#?}", constructions);
     // println!("{:#?}", floors);
     // println!("{:#?}", spaces);
-    println!("{:#?}", env);
+    println!("{:#?}", walls);
     // println!("{:#?}", shadings);
     // println!("{:#?}", polygons);
 
     // Cálculos básicos sobre elementos de la envolvente
     // - TODO: perímetro
-    // - TODO: azimuth
-    // - TODO: perímetro
-    let win1 = windows
-        .iter()
-        .find(|w| w.name == "P02_E01_PE001_V")
-        .unwrap();
-    assert_eq!(win1.area(), 2.0);
-    assert_eq!(win1.wall, "P02_E01_PE001");
-    assert_eq!(win1.tilt(bdldb).unwrap(), 90.0);
-    assert_eq!(win1.azimuth(0.0, bdldb).unwrap(), 270.0); // Oeste
-
-    // Muro interior
-    let wall1 = env.iter().find(|w| w.name == "P02_E01_PE001").unwrap();
-    assert_eq!(wall1.gross_area(bdldb).unwrap(), 30.0);
-    assert_eq!(wall1.net_area(bdldb).unwrap(), 28.0);
-    assert_eq!(wall1.space, "P02_E01");
-    assert_eq!(wall1.tilt(), 90.0);
-    assert_eq!(wall1.azimuth(0.0, bdldb).unwrap(), 270.0); // Oeste
 
     // Forjado interior
-    let wall2 = env.iter().find(|w| w.name == "P02_E01_FI001").unwrap();
-    assert_eq!(wall2.gross_area(bdldb).unwrap(), 49.985004);
-    assert_eq!(wall2.net_area(bdldb).unwrap(), 49.985004);
-    assert_eq!(wall2.space, "P02_E01");
-    assert_eq!(wall2.tilt(), 180.0);
-    assert_eq!(wall2.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
+    let w = bdldb.get_wall("P02_E01_FI001").unwrap();
+    assert_eq!(w.gross_area(bdldb).unwrap(), 49.985004);
+    assert_eq!(w.net_area(bdldb).unwrap(), 49.985004);
+    assert_eq!(w.space, "P02_E01");
+    assert_eq!(w.tilt(), 180.0);
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
 
     // Solera
-    let wall3 = env.iter().find(|w| w.name == "P01_E01_FTER001").unwrap();
-    assert_eq!(wall3.gross_area(bdldb).unwrap(), 50.0);
-    assert_eq!(wall3.net_area(bdldb).unwrap(), 50.0);
-    assert_eq!(wall3.space, "P01_E01");
-    assert_eq!(wall3.tilt(), 180.0);
-    assert_eq!(wall3.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
+    let w = bdldb.get_wall("P01_E01_FTER001").unwrap();
+    assert_eq!(w.gross_area(bdldb).unwrap(), 50.0);
+    assert_eq!(w.net_area(bdldb).unwrap(), 50.0);
+    assert_eq!(w.space, "P01_E01");
+    assert_eq!(w.tilt(), 180.0);
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
+
+    // Pared exterior
+    let w = bdldb.get_wall("P01_E01_PE003").unwrap();
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Norte
+
+    // Muro exterior
+    let w = bdldb.get_wall("P01_E01_PE001").unwrap();
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 180.0); // Sur
+
+    // Muro exterior
+    let w = bdldb.get_wall("P02_E01_PE003").unwrap();
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 90.0); // Este
+
+    // Muro interior
+    let w = bdldb.get_wall("P02_E01_PE001").unwrap();
+    assert_eq!(w.gross_area(bdldb).unwrap(), 30.0);
+    assert_eq!(w.net_area(bdldb).unwrap(), 28.0);
+    assert_eq!(w.space, "P02_E01");
+    assert_eq!(w.tilt(), 90.0);
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 270.0); // Oeste
+
+    let v = bdldb.get_window("P02_E01_PE001_V").unwrap();
+    assert_eq!(v.area(), 2.0);
+    assert_eq!(v.wall, "P02_E01_PE001");
+    assert_eq!(v.tilt(bdldb).unwrap(), 90.0);
+    assert_eq!(v.azimuth(0.0, bdldb).unwrap(), 270.0); // Oeste
 }
 
 #[test]

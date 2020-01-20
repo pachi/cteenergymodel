@@ -67,7 +67,7 @@ impl Wall {
             Ok(geom_polygon.area())
         } else if let Some(location) = self.location.as_deref() {
             // Superficie para muros definidos por posición, en un espacio
-            let space = db.spaces.iter().find(|s| s.name == self.space.as_str()).ok_or_else(|| {
+            let space = db.get_space(self.space.as_str()).ok_or_else(|| {
                 format_err!(
                     "Espacio {} del cerramiento {} no encontrado. No se puede calcular la superficie",
                     self.space,
@@ -161,9 +161,7 @@ impl Wall {
                 (_, Some(vertex)) => {
                     // Superficie para muros definidos por vértice del polígono de su espacio
                     let space = db
-                        .spaces
-                        .iter()
-                        .find(|s| s.name == self.space.as_str())
+                        .get_space(self.space.as_str())
                         .ok_or_else(|| {
                             format_err!(
                                 "Espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",

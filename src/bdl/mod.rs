@@ -44,7 +44,7 @@ pub struct Data {
     /// Lista de espacios
     pub spaces: Vec<Space>,
     /// Elementos opacos de la envolvente
-    pub env: Vec<Wall>,
+    pub walls: Vec<Wall>,
     /// Elementos semitransparentes de la envolvente
     pub windows: Vec<Window>,
     // Sombras exteriores del edificio
@@ -130,18 +130,8 @@ impl Data {
                 }
 
                 // Elementos opacos de la envolvente -----------
-                // TODO: Unificar exterior wall y roof en un solo tipo
-                "EXTERIOR-WALL" => {
-                    bdldata.env.push(Wall::try_from(block)?);
-                }
-                "ROOF" => {
-                    bdldata.env.push(Wall::try_from(block)?);
-                }
-                "INTERIOR-WALL" => {
-                    bdldata.env.push(Wall::try_from(block)?);
-                }
-                "UNDERGROUND-WALL" => {
-                    bdldata.env.push(Wall::try_from(block)?);
+                "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL" => {
+                    bdldata.walls.push(Wall::try_from(block)?);
                 }
 
                 // Elementos transparentes de la envolvente -----
@@ -168,5 +158,20 @@ impl Data {
         }
 
         Ok(bdldata)
+    }
+
+    /// Localiza hueco
+    pub fn get_window(&self, name: &str) -> Option<&Window> {
+        self.windows.iter().find(|w| w.name == name)
+    }
+
+    /// Localiza muro
+    pub fn get_wall(&self, name: &str) -> Option<&Wall> {
+        self.walls.iter().find(|w| w.name == name)
+    }
+
+    /// Localiza espacio
+    pub fn get_space(&self, name: &str) -> Option<&Space> {
+        self.spaces.iter().find(|w| w.name == name)
     }
 }
