@@ -11,7 +11,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{BdlBlock, Data};
+use super::{BdlBlock, Data, geom::normalize};
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
@@ -139,8 +139,12 @@ impl Wall {
         }
     }
 
-    /// Azimut (grados sexagesimales)
+    /// Azimut, ángulo del muro respecto al norte (grados sexagesimales)
+    /// 
     /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
+    /// Se puede indicar una desviación del norte geográfico respecto al geométrico (northangle)
+    /// 
+    /// Se calcula:
     /// 1. Los elementos definidos por geometría ya tiene definido su azimut
     /// 2. Los elementos horizontales se definen con azimut igual a 0.0
     /// 3. Los elementos definidos por vértice de polígono del espacio madre deben consultar su azimuth con el polígono del espacio
@@ -151,6 +155,7 @@ impl Wall {
             if geom.tilt == 0.0 || geom.tilt == 180.0 {
                 Ok(0.0)
             } else {
+                // TODO: comprobar que lo que se guarda aquí es el ángulo respecto al norte
                 Ok(geom.azimuth)
             }
         } else {
@@ -176,7 +181,7 @@ impl Wall {
                             self.name,
                         )
                     })?;
-                    let azimuth = polygon.edge_orient(vertex, northangle);
+                    let azimuth = normalize(180.0 - polygon.edge_orient(vertex, northangle), 0.0, 360.0);
                     Ok(azimuth)
                 }
                 // Resto de casos

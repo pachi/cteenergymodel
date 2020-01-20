@@ -133,6 +133,9 @@ fn test_bdl_parse() {
 
     // Cálculos básicos sobre elementos de la envolvente
     // - TODO: perímetro
+    // TODO: Hacer más casos de orientación respecto al sur, con muros definidos con AZIMUTH
+    // ya que ahora mismo solo se prueban los definidos por vértices y no está claro
+    // si los valores que se obtienen en ese parámetro son respecto al norte (los de espacios sí)
 
     // Forjado interior
     let w = bdldb.get_wall("P02_E01_FI001").unwrap();
