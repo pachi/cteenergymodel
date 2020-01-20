@@ -145,6 +145,23 @@ impl Space {
             })?
             .area())
     }
+
+    /// Calcula el perímetro del espacio
+    /// 
+    /// Usa el perímetro del polígono que define el espacio
+    pub fn perimeter(&self, db: &Data) -> Result<f32, Error> {
+        Ok(db
+            .polygons
+            .get(&self.polygon)
+            .ok_or_else(|| {
+                format_err!(
+                    "Polígono del espacio {} no encontrado {}. No se puede calcular el perímetro",
+                    self.name,
+                    self.polygon
+                )
+            })?
+            .perimeter())
+    }
 }
 
 impl TryFrom<BdlBlock> for Space {

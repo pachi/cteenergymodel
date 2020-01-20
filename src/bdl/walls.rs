@@ -110,11 +110,49 @@ impl Wall {
 
     /// Perímetro del cerramiento (m)
     pub fn perimeter(&self, db: &Data) -> Result<f32, Error> {
-        unimplemented!()
         // 1. Elementos definidos por geometría -> perímetro del polígono
         // 2. Elementos definidos por posición TOP, BOTTOM o SPACE-Vxx
         // 2.1 Elementos TOP o BOTTOM -> perímetro del polígono del espacio
         // 2.2 Elementos definidos por vértice en el espacio -> longitud de lado * altura
+        if let Some(geom) = &self.geometry {
+            // 1. Muros definidos por geometría (polígono)
+            let geom_polygon = db.polygons.get(&geom.polygon).ok_or_else(|| {
+                format_err!(
+                    "Polígono del cerramiento {} no encontrado {}. No se puede calcular el perímetro",
+                    self.name,
+                    geom.polygon
+                )
+            })?;
+            Ok(geom_polygon.perimeter())
+        } else if let Some(location) = self.location.as_deref() {
+            // 2. Muros definidos por posición, en un espacio (polígono del espacio)
+            let space = db.get_space(self.space.as_str()).ok_or_else(|| {
+                format_err!(
+                    "Espacio {} del cerramiento {} no encontrado. No se puede calcular el perímetro",
+                    self.space,
+                    self.name
+                )
+            })?;
+            // 2.1 Elementos de suelo o techo
+            if ["TOP", "BOTTOM"].contains(&location) {
+                space.perimeter(&db)
+            // 2.2 Elementos definidos por vértice (location contiene el nombre del vértice)
+            } else {
+                let poly = db.polygons.get(&space.polygon).ok_or_else(|| {
+                    format_err!(
+                        "Polígono {} del espacio {} del cerramiento {} no encontrado. No se puede calcular el perímetro",
+                        space.polygon,
+                        self.space,
+                        self.name
+                    )
+                })?;
+                let height = space.height(&db)?;
+                let length = poly.edge_length(&location);
+                Ok(2.0 * (height + length))
+            }
+        } else {
+            bail!("Formato de cerramiento incorrecto. No se define por polígono ni por vértice")
+        }
     }
 
     /// Inclinación del cerramiento (grados)
