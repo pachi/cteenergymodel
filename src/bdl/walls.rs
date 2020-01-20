@@ -311,7 +311,7 @@ impl TryFrom<BdlBlock> for Wall {
             Some(loc) if loc.starts_with("SPACE-") => Some(loc["SPACE-".len()..].to_string()),
             // Para el resto fallamos
             Some(loc) => bail!("Elemento {} con localización desconocida {}", name, loc),
-            _ => None
+            _ => None,
         };
 
         // Tipos
