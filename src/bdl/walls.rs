@@ -282,8 +282,8 @@ impl TryFrom<BdlBlock> for Wall {
     ///     COMPROBAR-REQUISITOS-MINIMOS = YES
     ///                    CONSTRUCTION  = "solera tipo"
     ///                    LOCATION      = BOTTOM
-    ///                     AREA          =        418.4805
-    ///                     PERIMETRO     =        65.25978
+    ///                    AREA          =        418.4805
+    ///                    PERIMETRO     =        65.25978
     ///                          ..
     ///                    "solera tipo" =  CONSTRUCTION
     ///                          TYPE   = LAYERS
@@ -323,7 +323,7 @@ impl TryFrom<BdlBlock> for Wall {
             "EXTERIOR-WALL" => "EXTERIOR-WALL".to_string(),
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
-        // Propiedad específica
+        // Propiedades específicas
         // XXX: La absortividad debe consultarse en la construcción, esto parece una cache de HULC
         // let absorptance = match wtype.as_str() {
         //     "EXTERIOR-WALL" | "ROOF" => Some(attrs.remove_f32("ABSORPTANCE")?),
