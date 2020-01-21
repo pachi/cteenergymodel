@@ -167,6 +167,9 @@ fn test_bdl_parse() {
     // Pared exterior
     let w = bdldb.get_wall("P01_E01_PE003").unwrap();
     assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Norte
+    let w = bdldb.get_wall("P04_E01_ME001").unwrap();
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Norte
+    assert_eq!(w.gross_area(bdldb).unwrap(), 17.5);
 
     // Muro exterior
     let w = bdldb.get_wall("P01_E01_PE001").unwrap();
@@ -189,6 +192,17 @@ fn test_bdl_parse() {
     assert_eq!(v.wall, "P02_E01_PE001");
     assert_eq!(v.tilt(bdldb).unwrap(), 90.0);
     assert_eq!(v.azimuth(0.0, bdldb).unwrap(), 270.0); // Oeste
+
+    // Cubiertas
+    let w = bdldb.get_wall("P03_E01_CUB001").unwrap();
+    assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.0, 0.005);
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
+    assert_eq!(w.tilt(), 0.0); // Horizontal
+    let w = bdldb.get_wall("P04_E01_CUB001").unwrap();
+    assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.99020, 0.005);
+    assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 90.0); // Este
+    assert_eq!(w.tilt(), 11.30993);
+
 }
 
 #[test]
@@ -209,8 +223,8 @@ fn test_test_caso_c() {
     let data = collect_hulc_data(&hulcfiles).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.clima, "D3");
-    assert_eq!(data.envolvente.huecos.len(), 10);
-    assert_eq!(data.envolvente.opacos.len(), 29);
+    assert_eq!(data.envolvente.huecos.len(), 9);
+    assert_eq!(data.envolvente.opacos.len(), 27);
     assert_eq!(data.envolvente.pts.len(), 7);
 }
 

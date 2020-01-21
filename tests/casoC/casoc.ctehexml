@@ -86,6 +86,7 @@
 		<fechaVisita>13/11/19</fechaVisita>
 		<extInfo>SI</extInfo>
 		<VentNoct>SI</VentNoct>
+		<SistSus>SI</SistSus>
 		<pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado>
 		<imgEdif>Especifique imagen para el edificio</imgEdif>
 		<imgPlano>Especifique imagen para el plano de situación del edificio</imgPlano>
@@ -122,7 +123,7 @@
 	</DatosGenerales>
 	<EntradaGraficaLIDER>
 		<![CDATA[$ +----------------------------------------------------+
-$ |         FICHERO GENERADO CON CTE-HE 2018           |
+$ |         FICHERO GENERADO CON CTE-HE-2019           |
 $ +----------------------------------------------------+
 $
 $ PROGRAM = LIDER
@@ -216,6 +217,7 @@ CAMBIO-CALENER = NO
      VAL-MEN-ELE              = "NO"
      VAL-MEN-ACS              = "NO"
      VentNoct                 = "SI"
+     SistSust                 = "SI"
      ..
  "Defectos" = DEFECTOS
      PEConstruccionV = "SATE"
@@ -265,168 +267,6 @@ TEMPLARY = USER
 $ ++++++++++++++++++++++++++++++
 $           MATERIALES
 $ ++++++++++++++++++++++++++++++
-"Material_Base" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =          0.075
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =              1
-    DENSITY           =           3000
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             10
-    NAME          = "Material_Base"
-    GROUP         = "Otro"
-    IMAGE          = "C:\ProgramasCTEyCEE\CTEHE2018\Imagenes\Ladrillo.bmp"
-    NAME_CALENER   = ""
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"Teja cerámica-porcelana" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.02
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =            1.3
-    DENSITY           =           2300
-    SPECIFIC-HEAT     =            840
-    VAPOUR-DIFFUSIVITY-FACTOR =             30
-    NAME          = "Teja cerámica-porcelana"
-    GROUP         = "Cerámicos"
-    IMAGE          = "arcilla.bmp"
-    NAME_CALENER   = "Teja cerámica-porcelana"
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FU Entrevigado de EPS moldeado descolgado -Canto 250 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.25
-    THICKNESS_CHANGE         = NO
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.1760563
-    DENSITY           =            710
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 250 mm"
-    GROUP         = "Forjados unidireccionales"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 250 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FU Entrevigado de EPS moldeado descolgado -Canto 300 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =            0.3
-    THICKNESS_CHANGE         = NO
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =            0.2
-    DENSITY           =            670
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 300 mm"
-    GROUP         = "Forjados unidireccionales"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 30 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FU Entrevigado de EPS moldeado descolgado -Canto 350 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.35
-    THICKNESS_CHANGE         = NO
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.2229299
-    DENSITY           =            640
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 350 mm"
-    GROUP         = "Forjados unidireccionales"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 35 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FR Entrevigado de EPS moldeado descolgado -Canto 300 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =            0.3
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.3571429
-    DENSITY           =           1330
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 300 mm"
-    GROUP         = "Forjados reticulares"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 300 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FR Entrevigado de EPS moldeado descolgado -Canto 350 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.35
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.4022988
-    DENSITY           =           1310
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 350 mm"
-    GROUP         = "Forjados reticulares"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 350 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FR Entrevigado de EPS moldeado descolgado -Canto 400 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =            0.4
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.4395604
-    DENSITY           =           1290
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 400 mm"
-    GROUP         = "Forjados reticulares"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 400 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
-"FR Entrevigado de EPS moldeado descolgado -Canto 450 mm" = MATERIAL
-    TYPE              = PROPERTIES
-    THICKNESS         =           0.45
-    THICKNESS_CHANGE         = YES
-    THICKNESS_MAX         =              2
-    THICKNESS_MIN         =          0.001
-    CONDUCTIVITY      =      0.4787234
-    DENSITY           =           1280
-    SPECIFIC-HEAT     =           1000
-    VAPOUR-DIFFUSIVITY-FACTOR =             60
-    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 450 mm"
-    GROUP         = "Forjados reticulares"
-    IMAGE          = "ladrillo.bmp"
-    NAME_CALENER   = "oldeado descolgado -Canto 450 "
-    LIBRARY       = NO
-    UTIL          =  NO
-    OBSOLETE      = NO
-    ..
 "Material_Base" = MATERIAL
     TYPE              = PROPERTIES
     THICKNESS         =          0.075
@@ -863,33 +703,6 @@ $ ++++++++++++++++++++++++++++++
                 LIBRARY       = NO
     UTIL          =  NO
 ..
- "Met - Gris claro" = NAME-FRAME
-      GROUP         = "Marcos"
-      FRAME-WIDTH   =            0.1
-      FRAME-CONDUCT =            5.7
-      FRAME-ABS     =            0.4
-      NAME_CALENER  = ""
-                LIBRARY       = NO
-    UTIL          =  NO
-..
- "Mrpt - Gris claro" = NAME-FRAME
-      GROUP         = "Marcos"
-      FRAME-WIDTH   =            0.1
-      FRAME-CONDUCT =            3.2
-      FRAME-ABS     =            0.4
-      NAME_CALENER  = ""
-                LIBRARY       = NO
-    UTIL          =  NO
-..
- "Mpvc o mad - Gris claro" = NAME-FRAME
-      GROUP         = "Marcos"
-      FRAME-WIDTH   =            0.1
-      FRAME-CONDUCT =            2.2
-      FRAME-ABS     =            0.4
-      NAME_CALENER  = ""
-                LIBRARY       = NO
-    UTIL          =  NO
-..
 $ ++++++++++++++++++++++++++++++
 $             HUECOS
 $ ++++++++++++++++++++++++++++++
@@ -905,6 +718,7 @@ $ ++++++++++++++++++++++++++++++
      INF-COEF          = 50.000000
      porcentajeIncrementoU = 0.000000
      NAME_CALENER      = ""
+     TransmisividadJulio = 1.000000
     VIGENCIA = ( "A", "B", "C", "D", "E", "F")
     IMAGE = ""
      TRANSMITANCIA       =            5.7
@@ -930,6 +744,7 @@ $ ++++++++++++++++++++++++++++++
      INF-COEF          = 50.000000
      porcentajeIncrementoU = 0.000000
      NAME_CALENER      = ""
+     TransmisividadJulio = 1.000000
     VIGENCIA = ( "A", "B", "C", "D", "E", "F")
     IMAGE = ""
      TRANSMITANCIA       =            5.7
@@ -955,6 +770,7 @@ $ ++++++++++++++++++++++++++++++
      INF-COEF          = 50.000000
      porcentajeIncrementoU = 0.000000
      NAME_CALENER      = ""
+     TransmisividadJulio = 1.000000
     VIGENCIA = ( "A", "B", "C", "D", "E", "F")
     IMAGE = ""
      TRANSMITANCIA       =            5.7
@@ -980,6 +796,7 @@ $ ++++++++++++++++++++++++++++++
      INF-COEF          = 50.000000
      porcentajeIncrementoU = 0.000000
      NAME_CALENER      = ""
+     TransmisividadJulio = 1.000000
     VIGENCIA = ( "A", "B", "C", "D", "E", "F")
     IMAGE = ""
      TRANSMITANCIA       =            5.7
@@ -1005,6 +822,7 @@ $ ++++++++++++++++++++++++++++++
      INF-COEF          = 50.000000
      porcentajeIncrementoU = 0.000000
      NAME_CALENER      = ""
+     TransmisividadJulio = 1.000000
     VIGENCIA = ( "A", "B", "C", "D", "E", "F")
     IMAGE = ""
      TRANSMITANCIA       =            5.7
@@ -1171,31 +989,53 @@ $
     V3   =( 5, 9.999001 )
     V4   =( 0, 9.999001 )
     ..
-"P04_E02C002_Poligono4" = POLYGON
-    V1   =( 0, 0 )
-    V2   =( 11.18034, 0 )
-    V3   =( 2.236068, 4.472136 )
-    ..
-"P04_E02C001_Poligono5" = POLYGON
-    V1   =( 0, 0 )
-    V2   =( 10, 0 )
-    V3   =( 10, 5 )
-    ..
-"P04_E01C004_Poligono6" = POLYGON
-    V1   =( 0, 0 )
-    V2   =( 11.18034, 0 )
-    V3   =( 2.236068, 4.472136 )
-    ..
-"P04_E01C003_Poligono7" = POLYGON
-    V1   =( 0, 0 )
-    V2   =( 10, 0 )
-    V3   =( 10, 5 )
-    ..
 "P03_E01_FI001_Poligono1" = POLYGON
     V1   =( 0, 0 )
     V2   =( 5, 0 )
     V3   =( 5, 10 )
     V4   =( 0, 10 )
+    ..
+"P04_E01C001_Poligono1" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 10, 0 )
+    V3   =( 10, 4 )
+    V4   =( 0, 4 )
+    ..
+"P04_E02C001_Poligono1" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 5, 0 )
+    V3   =( 5, 4 )
+    V4   =( 0, 3 )
+    ..
+"P04_E02C001_Poligono2" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 5, 0 )
+    V3   =( 5, 3 )
+    V4   =( 0, 4 )
+    ..
+"P04_E01C001_Poligono2" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 5, 0 )
+    V3   =( 5, 4 )
+    V4   =( 0, 3 )
+    ..
+"P04_E01C001_Poligono3" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 5, 0 )
+    V3   =( 5, 3 )
+    V4   =( 0, 4 )
+    ..
+"P04_E02C001_Poligono3" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 10, 0 )
+    V3   =( 10, 5.09902 )
+    V4   =( 0, 5.09902 )
+    ..
+"P04_E01C001_Poligono4" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 10, 0 )
+    V3   =( 10, 5.09902 )
+    V4   =( 0, 5.09902 )
     ..
 $
 $ +-------------------+
@@ -1462,7 +1302,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -1505,7 +1345,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -1533,7 +1373,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -1576,7 +1416,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -1713,7 +1553,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -1762,7 +1602,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -1790,7 +1630,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -1833,7 +1673,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -1868,26 +1708,6 @@ $          TYPE-OPER = "Acondicionado"
                         LAYERS = "SATE" 
                         ABSORPTANCE = 0.600000
                         ..
-            "P03_E01_FE004" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 0
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "Cubierta no transitable"  
-                  CONSTRUCTION  = "Cubierta no transitable0.60"  
-                  X             =          2.496
-                  Y             =         -4.888
-                  Z             =              3
-                  AZIMUTH       =            180
-                  LOCATION      = TOP  
-                  POLYGON       = "P03_E01_FE004_Poligono3"
-                        ..
-                  "Cubierta no transitable0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "Cubierta no transitable" 
-                        ABSORPTANCE = 0.600000
-                        ..
             "P03_E01_FI003" = INTERIOR-WALL
                   INT-WALL-TYPE = STANDARD  
                   NEXT-TO       = "P02_E01"  
@@ -1902,7 +1722,7 @@ $          TYPE-OPER = "Acondicionado"
             "P03_E01_FI001" = INTERIOR-WALL
                   INT-WALL-TYPE = STANDARD  
                   NEXT-TO       = "P04_E02"  
-   COMPROBAR-REQUISITOS-MINIMOS = YES
+   COMPROBAR-REQUISITOS-MINIMOS = NO
                   CONSTRUCTION  = "Forjado interior"  
                   X             =      -2.503992
                   Y             =       5.111458
@@ -1914,6 +1734,24 @@ $          TYPE-OPER = "Acondicionado"
                   "Forjado interior" =  CONSTRUCTION
                         TYPE   = LAYERS  
                         LAYERS = "Forjado interior" 
+                        ..
+            "P03_E01_CUB001" = ROOF
+                  ABSORPTANCE   =            0.6
+                  COMPROBAR-REQUISITOS-MINIMOS = YES
+                  TYPE_ABSORPTANCE    = 0
+                  COLOR_ABSORPTANCE   = 0
+                  DEGREE_ABSORPTANCE   = 2
+                  CONSTRUCTION  = "SATE"  
+                  X             =          2.496
+                  Y             =         -4.888
+                  Z             =              3
+                  AZIMUTH       =            180
+                  LOCATION      = TOP  
+                  POLYGON       = "P03_E01_FE004_Poligono3"
+                        ..
+                  "SATE" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
                         ..
 "P04" = FLOOR
       Z             =               9
@@ -1943,49 +1781,6 @@ $          TYPE-OPER = "Acondicionado"
            VEEI-OBJ  = 7.000000
            VEEI-REF  = 10.000000
             ..
-            "P04_E01_PE001" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 0
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V2  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
-                  "P04_E01_PE001_V" = WINDOW
-                        X              =           1.77
-                        Y              =              1
-                        SETBACK        =              0
-                        HEIGHT         =              1
-                        WIDTH          =              1
-                        GAP            = "PVC 2"
-                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
-                        GLASS-TYPE     = "Doble baja emisividad argon258"
-                        FRAME-WIDTH   =     0.02565835
-                        FRAME-CONDUCT =       1.799999
-                        FRAME-ABS     =            0.7
-                        INF-COEF       =             50
-                        OVERHANG-A     =              0
-                        OVERHANG-B     =              0
-                        OVERHANG-W     =              0
-                        OVERHANG-D     =              0
-                        OVERHANG-ANGLE =              0
-                        LEFT-FIN-A     =              0
-                        LEFT-FIN-B     =              0
-                        LEFT-FIN-H     =              0
-                        LEFT-FIN-D     =              0
-                        RIGHT-FIN-A    =              0
-                        RIGHT-FIN-B    =              0
-                        RIGHT-FIN-H    =              0
-                        RIGHT-FIN-D    =              0
-                        ..
             "P04_E01_PE002" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
@@ -2009,7 +1804,7 @@ $          TYPE-OPER = "Acondicionado"
                         WIDTH          =              2
                         GAP            = "PVC 2"
                         COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
-            transmisividadJulio        = 0.300000
+            transmisividadJulio        = 1.000000
                         GLASS-TYPE     = "Doble baja emisividad argon258"
                         FRAME-WIDTH   =     0.03410895
                         FRAME-CONDUCT =       1.799999
@@ -2029,32 +1824,6 @@ $          TYPE-OPER = "Acondicionado"
                         RIGHT-FIN-H    =              0
                         RIGHT-FIN-D    =              0
                         ..
-            "P04_E01_PE003" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 0
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V4  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
-            "P04_E01_Med001" = INTERIOR-WALL
-                  INT-WALL-TYPE = STANDARD  
-                  NEXT-TO       = "P04_E02"  
-   COMPROBAR-REQUISITOS-MINIMOS = NO
-                  CONSTRUCTION  = "Placas de yeso"  
-                  LOCATION      = SPACE-V1  
-                        ..
-                  "Placas de yeso" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "Placas de yeso" 
-                        ..
             "P04_E01_FI001" = INTERIOR-WALL
                   INT-WALL-TYPE = STANDARD  
                   NEXT-TO       = "P03_E01"  
@@ -2071,7 +1840,62 @@ $          TYPE-OPER = "Acondicionado"
                         TYPE   = LAYERS  
                         LAYERS = "Forjado interior" 
                         ..
-            "P04_E01C003" = ROOF
+            "P04_E01_MED001" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "SATE"  
+                  X             =      -2.503992
+                  Y             =       5.111458
+                  Z             =              0
+                  AZIMUTH       =            270
+                  TILT          =             90
+                  POLYGON       = "P04_E01C001_Poligono1"
+                        ..
+                  "SATE" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
+                        ..
+            "P04_E01_ME001" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+                  COMPROBAR-REQUISITOS-MINIMOS = YES
+                  TYPE_ABSORPTANCE    = 0
+                  COLOR_ABSORPTANCE   = 0
+                  DEGREE_ABSORPTANCE   = 2
+                  CONSTRUCCION_MURO  = "SATE"  
+                  CONSTRUCTION  = "SATE0.60"  
+                  X             =       2.496008
+                  Y             =       5.111458
+                  Z             =              0
+                  AZIMUTH       =              0
+                  TILT          =             90
+                  POLYGON       = "P04_E01C001_Poligono2"
+                        ..
+                  "SATE0.60" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
+                        ABSORPTANCE = 0.600000
+                        ..
+            "P04_E01_ME002" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+                  COMPROBAR-REQUISITOS-MINIMOS = YES
+                  TYPE_ABSORPTANCE    = 0
+                  COLOR_ABSORPTANCE   = 0
+                  DEGREE_ABSORPTANCE   = 2
+                  CONSTRUCCION_MURO  = "SATE"  
+                  CONSTRUCTION  = "SATE0.60"  
+                  X             =      -2.503992
+                  Y             =       5.111458
+                  Z             =              0
+                  AZIMUTH       =              0
+                  TILT          =             90
+                  POLYGON       = "P04_E01C001_Poligono3"
+                        ..
+                  "SATE0.60" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
+                        ABSORPTANCE = 0.600000
+                        ..
+            "P04_E01_CUB001" = ROOF
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
                   TYPE_ABSORPTANCE    = 0
@@ -2082,26 +1906,8 @@ $          TYPE-OPER = "Acondicionado"
                   Y             =      -4.888542
                   Z             =              3
                   AZIMUTH       =             90
-                  TILT          =              0
-                  POLYGON       = "P04_E01C003_Poligono7"
-                        ..
-                  "SATE" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ..
-            "P04_E01C004" = ROOF
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 0
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCTION  = "SATE"  
-                  X             =       2.496008
-                  Y             =      -4.888542
-                  Z             =              3
-                  AZIMUTH       =       63.43494
-                  TILT          =              0
-                  POLYGON       = "P04_E01C004_Poligono6"
+                  TILT          =       11.30993
+                  POLYGON       = "P04_E01C001_Poligono4"
                         ..
                   "SATE" =  CONSTRUCTION
                         TYPE   = LAYERS  
@@ -2128,21 +1934,6 @@ $          TYPE-OPER = "Acondicionado"
            VEEI-OBJ  = 7.000000
            VEEI-REF  = 10.000000
             ..
-            "P04_E02_PE001" = EXTERIOR-WALL
-                  ABSORPTANCE   =            0.6
-                  COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 0
-                  COLOR_ABSORPTANCE   = 0
-                  DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCCION_MURO  = "SATE"  
-                  CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V1  
-                        ..
-                  "SATE0.60" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ABSORPTANCE = 0.600000
-                        ..
             "P04_E02_PE002" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
@@ -2158,52 +1949,59 @@ $          TYPE-OPER = "Acondicionado"
                         LAYERS = "SATE" 
                         ABSORPTANCE = 0.600000
                         ..
-            "P04_E02_PE003" = EXTERIOR-WALL
+            "P04_E02_ME001" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 1
+                  TYPE_ABSORPTANCE    = 0
                   COLOR_ABSORPTANCE   = 0
                   DEGREE_ABSORPTANCE   = 2
                   CONSTRUCCION_MURO  = "SATE"  
                   CONSTRUCTION  = "SATE0.60"  
-                  LOCATION      = SPACE-V3  
+                  X             =      -7.503992
+                  Y             =      -4.888542
+                  Z             =              0
+                  AZIMUTH       =            180
+                  TILT          =             90
+                  POLYGON       = "P04_E02C001_Poligono1"
                         ..
                   "SATE0.60" =  CONSTRUCTION
                         TYPE   = LAYERS  
                         LAYERS = "SATE" 
                         ABSORPTANCE = 0.600000
                         ..
-            "P04_E02C001" = ROOF
+            "P04_E02_ME002" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
                   TYPE_ABSORPTANCE    = 0
                   COLOR_ABSORPTANCE   = 0
                   DEGREE_ABSORPTANCE   = 2
-                  CONSTRUCTION  = "SATE"  
-                  X             =      -7.503992
+                  CONSTRUCCION_MURO  = "SATE"  
+                  CONSTRUCTION  = "SATE0.60"  
+                  X             =      -2.503992
                   Y             =      -4.888542
-                  Z             =              3
-                  AZIMUTH       =             90
-                  TILT          =            180
-                  POLYGON       = "P04_E02C001_Poligono5"
+                  Z             =              0
+                  AZIMUTH       =            180
+                  TILT          =             90
+                  POLYGON       = "P04_E02C001_Poligono2"
                         ..
-                  "SATE" =  CONSTRUCTION
+                  "SATE0.60" =  CONSTRUCTION
                         TYPE   = LAYERS  
                         LAYERS = "SATE" 
+                        ABSORPTANCE = 0.600000
                         ..
-            "P04_E02C002" = ROOF
+            "P04_E02_CUB001" = ROOF
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
-                  TYPE_ABSORPTANCE    = 0
+                  TYPE_ABSORPTANCE    = 1
                   COLOR_ABSORPTANCE   = 0
                   DEGREE_ABSORPTANCE   = 2
                   CONSTRUCTION  = "SATE"  
                   X             =      -7.503992
-                  Y             =      -4.888542
+                  Y             =       5.111458
                   Z             =              3
-                  AZIMUTH       =        116.565
-                  TILT          =            180
-                  POLYGON       = "P04_E02C002_Poligono4"
+                  AZIMUTH       =            270
+                  TILT          =       11.30993
+                  POLYGON       = "P04_E02C001_Poligono3"
                         ..
                   "SATE" =  CONSTRUCTION
                         TYPE   = LAYERS  
@@ -3009,7 +2807,7 @@ $
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 1
-    VALUES  = ( 14.98, 14.98, 14.98, 14.98, 14.98, 14.98, 14.98, 14.98, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    VALUES  = ( 15.38, 15.38, 15.38, 15.38, 15.38, 15.38, 15.38, 15.38, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
   "HA19_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
