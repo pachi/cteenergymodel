@@ -7,6 +7,7 @@
 use std::convert::TryFrom;
 
 use super::blocks::BdlBlock;
+use crate::utils::normalize;
 
 use failure::bail;
 use failure::Error;
@@ -243,13 +244,3 @@ impl std::str::FromStr for Vector3D {
         }
     }
 }
-
-// Normalize number to an arbitrary range
-// by assuming the range wraps around when going below min or above max
-pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
-    let width = end - start;
-    let offset = value - start; // value relative to 0
-                                // + start to reset back to start of original range
-    (offset - (f32::floor(offset / width) * width)) + start
-}
-

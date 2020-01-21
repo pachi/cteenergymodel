@@ -11,7 +11,8 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{BdlBlock, Data, geom::normalize};
+use crate::utils::normalize;
+use super::{BdlBlock, Data};
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 

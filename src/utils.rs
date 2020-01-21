@@ -67,3 +67,14 @@ pub fn read_file(path: &str) -> Result<String, Error> {
         .context("No se ha podido leer el archivo")?;
     Ok(buf)
 }
+
+// Normaliza número a un intervalo arbitrario (wrapping)
+pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
+    // ancho del intervalo
+    let width = end - start;
+    // convertimos el intervalo a [0, ancho] restando el valor inicial
+    let offset = value - start;
+    // volvemos a sumar el valor incial para volver al intervalo [start, end]
+    (offset - (f32::floor(offset / width) * width)) + start
+}
+
