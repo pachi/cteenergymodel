@@ -90,6 +90,7 @@ impl Polygon {
     pub fn edge_orient(&self, vertexname: &str, northangle: f32) -> f32 {
         let vv = &self.vertices;
         let [n, m] = self.edge_indices(vertexname).unwrap_or([0, 0]);
+        // m y n siempre son inferiores a vv.len()
         let Vector2D { x: xn, y: yn } = unsafe { vv.get_unchecked(n).vector };
         let Vector2D { x: xm, y: ym } = unsafe { vv.get_unchecked(m).vector };
         // vector director del lado
@@ -163,15 +164,6 @@ pub struct Vertex2D {
     pub vector: Vector2D,
 }
 
-/// Vertex3D - Vértice, conjunto de nombre y vector 3d (x, y, z)
-#[derive(Debug, Clone, Default)]
-pub struct Vertex3D {
-    /// Nombre del vértice
-    pub name: String,
-    /// Coordenadas del vértice
-    pub vector: Vector3D,
-}
-
 /// Vector 2D (x,y)
 #[derive(Debug, Copy, Clone, Default)]
 pub struct Vector2D {
@@ -205,6 +197,16 @@ impl std::str::FromStr for Vector2D {
             bail!("Fallo al generar vector 2D con los datos '{}'", s)
         }
     }
+}
+
+
+/// Vertex3D - Vértice, conjunto de nombre y vector 3d (x, y, z)
+#[derive(Debug, Clone, Default)]
+pub struct Vertex3D {
+    /// Nombre del vértice
+    pub name: String,
+    /// Coordenadas del vértice
+    pub vector: Vector3D,
 }
 
 /// Vector 3D (x,y,z)
