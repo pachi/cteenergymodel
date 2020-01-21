@@ -25,7 +25,7 @@ mod window;
 
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
-pub use cons::{BdlDB, Frame, Gap, Glass, Layers, Material, ThermalBridge};
+pub use cons::{Frame, Gap, Glass, Layers, Material, ThermalBridge, DB};
 pub use construction::Construction;
 pub use floor::Floor;
 pub use geom::Polygon;
@@ -42,7 +42,7 @@ pub struct Data {
     /// Metadatos: espacio de trabajo, parámetros de edificio, construcciones por defecto y datos generales
     pub meta: HashMap<String, BdlBlock>,
     /// Base de datos de materiales, productos y composiciones constructivas
-    pub db: Vec<BdlDB>,
+    pub db: DB,
     /// Lista de plantas
     pub floors: Vec<Floor>,
     /// Lista de espacios
@@ -91,24 +91,28 @@ impl Data {
                 // Componentes de la envolvente ===============
                 // Materiales y construcciones ----------------
                 "MATERIAL" => {
-                    bdldata.db.push(BdlDB::Material(Material::try_from(block)?));
+                    let e = Material::try_from(block)?;
+                    bdldata.db.materials.insert(e.name.clone(), e);
                 }
                 "LAYERS" => {
-                    bdldata.db.push(BdlDB::Layers(Layers::try_from(block)?));
+                    let e = Layers::try_from(block)?;
+                    bdldata.db.layers.insert(e.name.clone(), e);
                 }
                 "GAP" => {
-                    bdldata.db.push(BdlDB::Gap(Gap::try_from(block)?));
+                    let e = Gap::try_from(block)?;
+                    bdldata.db.windows.insert(e.name.clone(), e);
                 }
                 "NAME-FRAME" => {
-                    bdldata.db.push(BdlDB::Frame(Frame::try_from(block)?));
+                    let e = Frame::try_from(block)?;
+                    bdldata.db.frames.insert(e.name.clone(), e);
                 }
                 "GLASS-TYPE" => {
-                    bdldata.db.push(BdlDB::Glass(Glass::try_from(block)?));
+                    let e = Glass::try_from(block)?;
+                    bdldata.db.glasses.insert(e.name.clone(), e);
                 }
                 "THERMAL-BRIDGE" => {
-                    bdldata
-                        .db
-                        .push(BdlDB::ThermalBridge(ThermalBridge::try_from(block)?));
+                    let e = ThermalBridge::try_from(block)?;
+                    bdldata.db.tbridges.insert(e.name.clone(), e);
                 }
 
                 // Elementos geométricos y espacios -----------

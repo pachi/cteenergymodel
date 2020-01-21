@@ -80,7 +80,18 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         // TODO: - información pública -> gglshwi en WINDOW
         // TODO: - versión final -> gglshwi en GAP
         // TODO: - LIDER antiguo -> no existe
-        .map(|w| (w.name.to_string(), w.gglshwi.unwrap_or_default()))
+        .map(|w| {
+            (
+                w.name.to_string(),
+                bdldata
+                    .db
+                    .windows
+                    .get(&w.gap)
+                    .unwrap()
+                    .gglshwi
+                    .unwrap_or_default(),
+            )
+        })
         .collect();
 
     // Zona climática

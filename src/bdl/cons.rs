@@ -22,26 +22,27 @@
 //! - Puentes térmicos (THERMAL-BRIDGE)?
 
 use failure::Error;
+use std::collections::HashMap;
 use std::convert::TryFrom;
 
 use super::{extract_f32vec, extract_namesvec, BdlBlock};
 
 /// Elementos constructivos y de materiales pertenecientes a la base de datos
 /// Se organizan por nombre y grupo (tipo)
-#[derive(Debug)]
-pub enum BdlDB {
+#[derive(Debug, Default)]
+pub struct DB {
     /// Material o producto
-    Material(Material),
+    pub materials: HashMap<String, Material>,
     /// Composición por capas (opacos)
-    Layers(Layers),
+    pub layers: HashMap<String, Layers>,
     /// Composición por capas (huecos)
-    Gap(Gap),
+    pub windows: HashMap<String, Gap>,
     /// Vidrio
-    Glass(Glass),
+    pub glasses: HashMap<String, Glass>,
     /// Marco
-    Frame(Frame),
+    pub frames: HashMap<String, Frame>,
     /// Puente térmico
-    ThermalBridge(ThermalBridge),
+    pub tbridges: HashMap<String, ThermalBridge>,
 }
 
 /// Material definido por sus propiedades térmicas o por resistencia
@@ -416,7 +417,7 @@ impl TryFrom<BdlBlock> for Glass {
         // LIDER antiguo no guardaba el grupo
         let group = attrs.remove_str("GROUP").unwrap_or("Vidrios".to_string());
         let conductivity = attrs.remove_f32("GLASS-CONDUCTANCE")?;
-        // El SHADING-COEF es SGHC/SGHC_ref donde: 
+        // El SHADING-COEF es SGHC/SGHC_ref donde:
         // - SGHC_ref = 0.86 (vidrio claro) (a veces se indica 0.87)
         // - SGHC es el factor solar del vidrio a incidencia normal
         // A nosotros nos interesa covertir este valor a g_gln,
