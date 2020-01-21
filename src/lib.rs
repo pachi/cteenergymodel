@@ -97,8 +97,8 @@ pub fn find_hulc_files(basedir: &str) -> Result<HulcFiles, Error> {
     })
 }
 
-/// Construye lista de espacios a partir de datos BDL (BdlData)
-pub fn build_spaces(bdl: &bdl::BdlData) -> Result<Vec<Space>, failure::Error> {
+/// Construye lista de espacios a partir de datos BDL (Data)
+pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
     bdl.spaces
         .iter()
         .map(|s| {

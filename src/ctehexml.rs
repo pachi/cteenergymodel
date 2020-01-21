@@ -27,14 +27,14 @@ use std::collections::HashMap;
 
 use failure::Error;
 
-use crate::bdl::BdlData;
+use crate::bdl::Data;
 use crate::utils::read_file;
 
 #[derive(Debug)]
 pub struct CtehexmlData {
     // Datos buenos
     pub datos_generales: String,
-    pub bdldata: BdlData,
+    pub bdldata: Data,
     pub definicion_sistemas: String,
     // Datos legacy - a eliminar en refactorización
     pub climate: String,
@@ -70,7 +70,7 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         .trim()
         .to_string();
 
-    let bdldata = BdlData::new(&entrada_grafica_lider)?;
+    let bdldata = Data::new(&entrada_grafica_lider)?;
 
     // gglshwi de huecos
     let gglshwi: HashMap<String, f32> = bdldata
