@@ -158,9 +158,9 @@ impl Wall {
 
     /// Inclinación del cerramiento (grados)
     /// Ángulo de la normal del cerramiento con el eje Z
-    /// Solamente se define cuando se da el atributo POLYGON
-    /// Si la inclinación es None (se define location)
-    /// asignamos el valor por defecto, que es:
+    /// 
+    /// Solamente se define explícitamente cuando se da el atributo POLYGON
+    /// Si la inclinación es None (se define location) asignamos el valor por defecto:
     /// - Para btype = ROOF -> 0.0 (hacia arriba)
     /// - Para el resto de btypes:
     ///      - con location = TOP -> tilt = 0.0 (techo)
@@ -194,7 +194,7 @@ impl Wall {
             if geom.tilt == 0.0 || geom.tilt == 180.0 {
                 Ok(0.0)
             } else {
-                // TODO: comprobar que lo que se guarda aquí es el ángulo respecto al norte
+                // Se guarda el ángulo respecto al eje Y del espacio (norte, si la desviación global es cero)
                 Ok(geom.azimuth)
             }
         } else {
@@ -246,7 +246,7 @@ pub struct WallGeometry {
     /// usa coordenadas del espacio ??
     pub z: f32,
     /// Acimut (grados sexagesimales)
-    /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
+    /// Ángulo entre el eje Y (norte) del espacio y la proyección horizontal de la normal exterior del muro
     pub azimuth: f32,
     /// Inclinación (grados sexagesimales)
     /// Ángulo entre el eje Z y la normal exterior del muro

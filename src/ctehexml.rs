@@ -76,7 +76,7 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
     let gglshwi: HashMap<String, f32> = bdldata
         .windows
         .iter()
-        // TODO: usamos el default pero deberíamos adaptarnos a los distintos formatos: 
+        // TODO: usamos el default pero deberíamos adaptarnos a los distintos formatos:
         // TODO: - información pública -> gglshwi en WINDOW
         // TODO: - versión final -> gglshwi en GAP
         // TODO: - LIDER antiguo -> no existe
