@@ -34,8 +34,6 @@ pub struct Window {
     /// - 2: Corrección de transmitancia térmica fuera de la temporada veraniega (-)
     /// - 3: Corrección de transmitancia térmica dentro de la temporada veraniega (-)
     pub coefs: Option<Vec<f32>>,
-    /// Transmitancia total de energía del acristalameinto con los dispositivo de sombra móvil activados (g_gl;sh;wi) (-)
-    pub gglshwi: Option<f32>,
 }
 
 impl Window {
@@ -152,7 +150,6 @@ impl TryFrom<BdlBlock> for Window {
                 )
             }
         };
-        let gglshwi = attrs.remove_f32("transmisividadJulio").ok();
 
         Ok(Self {
             name,
@@ -164,11 +161,6 @@ impl TryFrom<BdlBlock> for Window {
             width,
             setback,
             coefs,
-            // corrg0,
-            // corrg1,
-            // corru0,
-            // corru1,
-            gglshwi,
         })
     }
 }
