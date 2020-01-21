@@ -24,6 +24,17 @@ SOFTWARE.
 use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, find_hulc_files, tbl, utils};
 use std::convert::TryFrom;
 
+macro_rules! assert_almost_eq {
+    ($a:expr, $b:expr, $c:expr) => {
+        if ($a - $b).abs() > $c {
+            panic!(format!(
+                "assertion failed: `abs(left - right) < {}`, (left: `{}`, right: `{}`)",
+                $c, $a, $b
+            ));
+        }
+    };
+}
+
 #[test]
 fn test_polygon() {
     use bdl::Polygon;
