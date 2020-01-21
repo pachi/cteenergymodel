@@ -1,128 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CTE-HE-XML>
-	<DatosGenerales>
-		<refCatastral>ninguno</refCatastral>
-		<tipoVivienda>Bloque</tipoVivienda>
-		<anio/>
-		<tipoDefinicion>Nuevo</tipoDefinicion>
-		<comunidad>Madrid</comunidad>
-		<provincia>Madrid</provincia>
-		<poblacion>Madrid</poblacion>
-		<zonaClimatica>D3</zonaClimatica>
-		<altitud>600</altitud>
-		<tipoUso>Residencial</tipoUso>
-		<claseHigrometria>3</claseHigrometria>
-		<numRenovacionesHS3>1</numRenovacionesHS3>
-		<ventilacionPorDefecto>NO</ventilacionPorDefecto>
-		<numViviendasBloque>5</numViviendasBloque>
-		<valorImpulsionAire>66.67</valorImpulsionAire>
-		<valorExtraccionAireCocina>1.00</valorExtraccionAireCocina>
-		<valorExtraccionAireBanos>1.00</valorExtraccionAireBanos>
-		<valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos>
-		<vent_p1>25.00</vent_p1>
-		<vent_p2>25.00</vent_p2>
-		<vent_p3>25.00</vent_p3>
-		<vent_p4>25.00</vent_p4>
-		<nomPro>Nombre del Proyecto</nomPro>
-		<usoPro>- Seleccione de la lista -</usoPro>
-		<usoProOtros/>
-		<comunidadPro>Madrid</comunidadPro>
-		<proPro>Madrid</proPro>
-		<locPro>Madrid</locPro>
-		<cpPro>Código Postal</cpPro>
-		<tipoViaPro>Calle</tipoViaPro>
-		<viaPro>C/</viaPro>
-		<tipoNPro>Num</tipoNPro>
-		<nPro>-</nPro>
-		<blqPro>-</blqPro>
-		<portalPro>-</portalPro>
-		<escPro>-</escPro>
-		<pisoPro>-</pisoPro>
-		<puertaPro>-</puertaPro>
-		<datosAdicPro>-</datosAdicPro>
-		<normativaEdificacion>- Seleccione de la lista -</normativaEdificacion>
-		<normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones>
-		<normativaOtros>- Seleccione de la lista -</normativaOtros>
-		<normativaEdificacionOtros/>
-		<normativaInstalacionesOtros/>
-		<normativaOtrosOtros/>
-		<superficieConstruida>0.00</superficieConstruida>
-		<SupConsCubierta>0.00</SupConsCubierta>
-		<supOcupada>0.00</supOcupada>
-		<alturaTotal>0.00</alturaTotal>
-		<plantaSobreRasante>0</plantaSobreRasante>
-		<plantaBajoRasante>0</plantaBajoRasante>
-		<EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida>
-		<panelFotoVoltaicoAutoConsumido>0</panelFotoVoltaicoAutoConsumido>
-		<contribucionResACS>0</contribucionResACS>
-		<puertaPro>-</puertaPro>
-		<cifAut>CIF</cifAut>
-		<nomAut>Nombres</nomAut>
-		<apellido1Aut>Apellido1</apellido1Aut>
-		<apellido2Aut>Apellido2</apellido2Aut>
-		<razAut>Razón Social</razAut>
-		<NIFEntidad/>
-		<comunidadAut>- Seleccione de la lista -</comunidadAut>
-		<proAut>- Seleccione de la lista -</proAut>
-		<locAut>Localidad</locAut>
-		<cpAut>Codigo postal</cpAut>
-		<tipoViaAut>Calle</tipoViaAut>
-		<viaAut>Nombre calle</viaAut>
-		<tipoNAut>Num</tipoNAut>
-		<nAut>-</nAut>
-		<blqAut>-</blqAut>
-		<portalAut>-</portalAut>
-		<escAut>-</escAut>
-		<pisoAut>-</pisoAut>
-		<puertaAut>-</puertaAut>
-		<datosAdicAut>-</datosAdicAut>
-		<correoAut>-</correoAut>
-		<telAut>-</telAut>
-		<titulacionAut>- Seleccione de la lista -</titulacionAut>
-		<titulacionOtrosAut>-</titulacionOtrosAut>
-		<colegioAut>- Seleccione de la lista -</colegioAut>
-		<colegioOtrosAut>-</colegioOtrosAut>
-		<numeroColegiadoAut>-</numeroColegiadoAut>
-		<fechaVisita>13/11/19</fechaVisita>
-		<extInfo>SI</extInfo>
-		<VentNoct>SI</VentNoct>
-		<SistSus>SI</SistSus>
-		<pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado>
-		<imgEdif>Especifique imagen para el edificio</imgEdif>
-		<imgPlano>Especifique imagen para el plano de situación del edificio</imgPlano>
-		<MesIniPerSom>Junio</MesIniPerSom>
-		<MesFinPerSom>Septiembre</MesFinPerSom>
-		<energiaGT>true</energiaGT>
-		<directoCALENERGT>NO</directoCALENERGT>
-		<valMenELE>NO</valMenELE>
-		<valMenACS>NO</valMenACS>
-		<valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE>
-		<valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS>
-		<datoGeneralNuevo>0</datoGeneralNuevo>
-		<potenciaFVInstalada>0</potenciaFVInstalada>
-		<IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu>
-		<estimacionConsumoACSGT>0.00</estimacionConsumoACSGT>
-		<bajaPermeabilidad>SI</bajaPermeabilidad>
-		<ensayoPermeabilidad>SI</ensayoPermeabilidad>
-		<ValorN50Medido>5.32</ValorN50Medido>
-		<datosVentilacion>1;240.000;0.00;0;0.00;0.00;0.000;0.00;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;240.000;0.00;0.00;0.0000</datosVentilacion>
-		<venPotEC>0.000</venPotEC>
-		<recEFC>-1.000</recEFC>
-		<cambios>NO</cambios>
-		<cambioscalener>NO</cambioscalener>
-		<RED1>RED1  <precioEnergia>0.0</precioEnergia>
-			<conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria>
-			<conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable>
-			<conversionEmisionesCO2>1.000</conversionEmisionesCO2>
-		</RED1>
-		<RED2>RED2  <precioEnergia>0.0</precioEnergia>
-			<conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria>
-			<conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable>
-			<conversionEmisionesCO2>1.000</conversionEmisionesCO2>
-		</RED2>
-	</DatosGenerales>
-	<EntradaGraficaLIDER>
-		<![CDATA[$ +----------------------------------------------------+
+<?xml version="1.0"?>
+<CTE-HE-XML><DatosGenerales><refCatastral>ninguno</refCatastral><tipoVivienda>Bloque</tipoVivienda><anio/><tipoDefinicion>Nuevo</tipoDefinicion><comunidad>Madrid</comunidad><provincia>Madrid</provincia><poblacion>Madrid</poblacion><zonaClimatica>D3</zonaClimatica><altitud>600</altitud><tipoUso>Residencial</tipoUso><claseHigrometria>3</claseHigrometria><numRenovacionesHS3>1</numRenovacionesHS3><ventilacionPorDefecto>NO</ventilacionPorDefecto><numViviendasBloque>5</numViviendasBloque><valorImpulsionAire>66.67</valorImpulsionAire><valorExtraccionAireCocina>1.00</valorExtraccionAireCocina><valorExtraccionAireBanos>1.00</valorExtraccionAireBanos><valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos><vent_p1>25.00</vent_p1><vent_p2>25.00</vent_p2><vent_p3>25.00</vent_p3><vent_p4>25.00</vent_p4><nomPro>Nombre del Proyecto</nomPro><usoPro>- Seleccione de la lista -</usoPro><usoProOtros/><comunidadPro>Madrid</comunidadPro><proPro>Madrid</proPro><locPro>Madrid</locPro><cpPro>C&#xF3;digo Postal</cpPro><tipoViaPro>Calle</tipoViaPro><viaPro>C/</viaPro><tipoNPro>Num</tipoNPro><nPro>-</nPro><blqPro>-</blqPro><portalPro>-</portalPro><escPro>-</escPro><pisoPro>-</pisoPro><puertaPro>-</puertaPro><datosAdicPro>-</datosAdicPro><normativaEdificacion>- Seleccione de la lista -</normativaEdificacion><normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones><normativaOtros>- Seleccione de la lista -</normativaOtros><normativaEdificacionOtros/><normativaInstalacionesOtros/><normativaOtrosOtros/><superficieConstruida>0.00</superficieConstruida><SupConsCubierta>0.00</SupConsCubierta><supOcupada>0.00</supOcupada><alturaTotal>0.00</alturaTotal><plantaSobreRasante>0</plantaSobreRasante><plantaBajoRasante>0</plantaBajoRasante><EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida><panelFotoVoltaicoAutoConsumido>0</panelFotoVoltaicoAutoConsumido><contribucionResACS>0</contribucionResACS><puertaPro>-</puertaPro><cifAut>CIF</cifAut><nomAut>Nombres</nomAut><apellido1Aut>Apellido1</apellido1Aut><apellido2Aut>Apellido2</apellido2Aut><razAut>Raz&#xF3;n Social</razAut><NIFEntidad/><comunidadAut>- Seleccione de la lista -</comunidadAut><proAut>- Seleccione de la lista -</proAut><locAut>Localidad</locAut><cpAut>Codigo postal</cpAut><tipoViaAut>Calle</tipoViaAut><viaAut>Nombre calle</viaAut><tipoNAut>Num</tipoNAut><nAut>-</nAut><blqAut>-</blqAut><portalAut>-</portalAut><escAut>-</escAut><pisoAut>-</pisoAut><puertaAut>-</puertaAut><datosAdicAut>-</datosAdicAut><correoAut>-</correoAut><telAut>-</telAut><titulacionAut>- Seleccione de la lista -</titulacionAut><titulacionOtrosAut>-</titulacionOtrosAut><colegioAut>- Seleccione de la lista -</colegioAut><colegioOtrosAut>-</colegioOtrosAut><numeroColegiadoAut>-</numeroColegiadoAut><fechaVisita>13/11/19</fechaVisita><extInfo>SI</extInfo><VentNoct>SI</VentNoct><SistSus>SI</SistSus><pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado><imgEdif>Especifique imagen para el edificio</imgEdif><imgPlano>Especifique imagen para el plano de situaci&#xF3;n del edificio</imgPlano><MesIniPerSom>Junio</MesIniPerSom><MesFinPerSom>Septiembre</MesFinPerSom><energiaGT>true</energiaGT><directoCALENERGT>NO</directoCALENERGT><valMenELE>NO</valMenELE><valMenACS>NO</valMenACS><valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE><valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS><datoGeneralNuevo>0</datoGeneralNuevo><potenciaFVInstalada>0</potenciaFVInstalada><IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu><estimacionConsumoACSGT>0.00</estimacionConsumoACSGT><bajaPermeabilidad>SI</bajaPermeabilidad><ensayoPermeabilidad>SI</ensayoPermeabilidad><ValorN50Medido>5.32</ValorN50Medido><datosVentilacion>1;240.000;0.00;0;0.00;0.00;0.000;0.00;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;240.000;0.00;0.00;0.0000</datosVentilacion><venPotEC>0.000</venPotEC><recEFC>-1.000</recEFC><cambios>NO</cambios><cambioscalener>NO</cambioscalener><RED1>RED1  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED1><RED2>RED2  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED2></DatosGenerales><EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
 $ |         FICHERO GENERADO CON CTE-HE-2019           |
 $ +----------------------------------------------------+
 $
@@ -1824,37 +1701,6 @@ $          TYPE-OPER = "Acondicionado"
                         RIGHT-FIN-H    =              0
                         RIGHT-FIN-D    =              0
                         ..
-            "P04_E01_FI001" = INTERIOR-WALL
-                  INT-WALL-TYPE = STANDARD  
-                  NEXT-TO       = "P03_E01"  
-   COMPROBAR-REQUISITOS-MINIMOS = NO
-                  CONSTRUCTION  = "Forjado interior"  
-                  X             =         -2.503
-                  Y             =          5.111
-                  Z             =              0
-                  AZIMUTH       =            180
-                  TILT          =            180
-                  POLYGON       = "P04_E01_FI001_Poligono1"
-                        ..
-                  "Forjado interior" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "Forjado interior" 
-                        ..
-            "P04_E01_MED001" = INTERIOR-WALL
-                  INT-WALL-TYPE = ADIABATIC  
-   COMPROBAR-REQUISITOS-MINIMOS = YES
-                  CONSTRUCTION  = "SATE"  
-                  X             =      -2.503992
-                  Y             =       5.111458
-                  Z             =              0
-                  AZIMUTH       =            270
-                  TILT          =             90
-                  POLYGON       = "P04_E01C001_Poligono1"
-                        ..
-                  "SATE" =  CONSTRUCTION
-                        TYPE   = LAYERS  
-                        LAYERS = "SATE" 
-                        ..
             "P04_E01_ME001" = EXTERIOR-WALL
                   ABSORPTANCE   =            0.6
                   COMPROBAR-REQUISITOS-MINIMOS = YES
@@ -1894,6 +1740,37 @@ $          TYPE-OPER = "Acondicionado"
                         TYPE   = LAYERS  
                         LAYERS = "SATE" 
                         ABSORPTANCE = 0.600000
+                        ..
+            "P04_E01_FI001" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P03_E01"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Forjado interior"  
+                  X             =         -2.503
+                  Y             =          5.111
+                  Z             =              0
+                  AZIMUTH       =            180
+                  TILT          =            180
+                  POLYGON       = "P04_E01_FI001_Poligono1"
+                        ..
+                  "Forjado interior" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado interior" 
+                        ..
+            "P04_E01_MED001" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "SATE"  
+                  X             =      -2.503992
+                  Y             =       5.111458
+                  Z             =              0
+                  AZIMUTH       =            270
+                  TILT          =             90
+                  POLYGON       = "P04_E01C001_Poligono1"
+                        ..
+                  "SATE" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "SATE" 
                         ..
             "P04_E01_CUB001" = ROOF
                   ABSORPTANCE   =            0.6
@@ -3058,12 +2935,4 @@ $
 $ +-----------------------------------------------------------------+
 $ |                        Final del fichero                        |
 $ +-----------------------------------------------------------------+
-]]>
-	</EntradaGraficaLIDER>
-	<Definicion_Sistema>
-		<elementos>
-			<FactoresDeCorreccion/>
-			<Sistemas/>
-		</elementos>
-	</Definicion_Sistema>
-</CTE-HE-XML>
+]]></EntradaGraficaLIDER><Definicion_Sistema><elementos><FactoresDeCorreccion/><Sistemas/></elementos></Definicion_Sistema></CTE-HE-XML>

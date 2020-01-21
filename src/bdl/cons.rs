@@ -236,6 +236,8 @@ pub struct Gap {
     pub infcoef: f32,
     /// Porcentaje de U debido a intercalarios y cajón de persiana (%)
     pub deltau: f32,
+    /// Transmitancia total de energía del acristalameinto con los dispositivo de sombra móvil activados (g_gl;sh;wi) (-)
+    pub gglshwi: Option<f32>,
 }
 
 impl TryFrom<BdlBlock> for Gap {
@@ -257,8 +259,9 @@ impl TryFrom<BdlBlock> for Gap {
     ///           INF-COEF          = 9.000000
     ///           porcentajeIncrementoU = 10.000000
     ///           NAME_CALENER      = ""
-    ///          VIGENCIA = ( "A", "B", "C", "D", "E", "F")
-    ///          IMAGE = ""
+    ///           TransmisividadJulio = 1.000000
+    ///           VIGENCIA = ( "A", "B", "C", "D", "E", "F")
+    ///           IMAGE = ""
     ///           TRANSMITANCIA       =            5.7
     ///           SHADING-COEF        =           0.86
     ///           SHADE-COEF-SUMMER   =              1
@@ -288,6 +291,7 @@ impl TryFrom<BdlBlock> for Gap {
         let deltau = attrs
             .remove_f32("porcentajeIncrementoU")
             .unwrap_or_default();
+        let gglshwi = attrs.remove_f32("TransmisividadJulio").ok();
         Ok(Self {
             name,
             group,
@@ -298,6 +302,7 @@ impl TryFrom<BdlBlock> for Gap {
             framepct,
             infcoef,
             deltau,
+            gglshwi,
         })
     }
 }
