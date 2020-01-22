@@ -23,10 +23,8 @@ pub struct Floor {
     pub z: f32,
     /// Polígono que define la geometría
     pub polygon: String,
-    /// Altura suelo a suelo, incluyendo los plenum
-    pub floorheight: f32,
-    /// Altura libre (la altura de los espacios de tipo PLENUM es floorheight - spaceheight)
-    pub spaceheight: f32,
+    /// Altura suelo a suelo de la planta (incluye plenum y forjados)
+    pub height: f32,
     /// Planta anterior (inferior)
     pub previous: String,
 }
@@ -46,6 +44,10 @@ impl TryFrom<BdlBlock> for Floor {
     ///     PREVIOUS      =  "Ninguna"
     ///     ..
     /// ```
+    /// XXX: Atributos no trasladados: SPACE-HEIGHT
+    /// HULC no usa esta propiedad, que permitiría definir plenum (o reducir la altura de forjados)
+    /// (la altura de los espacios de tipo PLENUM es floorheight - spaceheight)
+
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name, mut attrs, ..
@@ -57,15 +59,13 @@ impl TryFrom<BdlBlock> for Floor {
         };
         let z = attrs.remove_f32("Z").unwrap_or_default();
         let polygon = attrs.remove_str("POLYGON")?;
-        let floorheight = attrs.remove_f32("FLOOR-HEIGHT")?;
-        let spaceheight = attrs.remove_f32("SPACE-HEIGHT")?;
+        let height = attrs.remove_f32("FLOOR-HEIGHT")?;
         let previous = attrs.remove_str("PREVIOUS")?;
         Ok(Self {
             name,
             z,
             polygon,
-            floorheight,
-            spaceheight,
+            height,
             previous,
         })
     }

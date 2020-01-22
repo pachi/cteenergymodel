@@ -23,7 +23,7 @@ pub struct Space {
     /// Nombre de polígono que define el espacio
     /// XXX: Solo vale para SHAPE = POLIGON (no vale con BOX o NO-SHAPE)
     pub polygon: String,
-    /// Altura del espacio, (o None si es la de la planta)
+    /// Altura (suelo a suelo) del espacio, (o None si es la de la planta)
     pub height: Option<f32>,
     /// Pertenencia a la envolvente térmica
     pub insidete: bool,
@@ -52,14 +52,14 @@ impl Space {
     ///
     /// Usa el valor definido como propiedad o la altura por defecto para los espacios
     /// definida en la planta
-    pub fn height(&self, db: &Data) -> Result<f32, Error> {
+    pub fn floor_height(&self, db: &Data) -> Result<f32, Error> {
         if let Some(height) = self.height {
             Ok(height)
         } else {
             Ok(db.floors
                 .iter()
                 .find(|f| f.name == self.parent)
-                .map(|f| f.spaceheight)
+                .map(|f| f.height)
                 .ok_or_else(|| {
                     format_err!(
                         "Polígono del espacio {} no encontrado {}. No se puede calcular la superficie",
@@ -68,6 +68,42 @@ impl Space {
                     )
                 })?)
         }
+    }
+
+    /// Altura (suelo a techo) del espacio
+    ///
+    /// Usa la altura bruta y resta espesores de cubiertas y forjados
+    pub fn space_height(&self, db: &Data) -> Result<f32, Error> {
+        let topwall = db
+            .walls
+            .iter()
+            .find(|w| {
+                // Cubiertas
+                w.wtype == "ROOF"
+                || match w.location.as_deref() {
+                    // Muros exteriores o cubiertas en posición superior
+                    Some("TOP") => true,
+                    // Cerramiento interior sobre este espacio
+                    Some("BOTTOM") => w.nextto.as_ref().map(|s| s == &self.name).unwrap_or(false),
+                    _ => false,
+                } ||
+            // Faltarían cerramientos exteriores con tilt 0? u otra inclinación de cubierta?
+            w.tilt == 0.0
+            })
+            .ok_or_else(|| {
+                format_err!(
+                    "Cerramiento superior del espacio {} no encontrado. No se puede calcular la altura libre",
+                    self.name
+                )
+            })?;
+        let consname = &topwall.construction;
+        let construction = db.constructions.get(consname).ok_or_else(|| format_err!("No se ha encontrado la definición de la construcción {} del elemento {}. No se puede calcular la altura libre", consname, topwall.name))?;
+        let layersname = construction.layers.as_ref().ok_or_else(|| format_err!("No se ha encontrado la definición de capas de la construcción {} del elemento {}. No se puede calcular la altura libre", consname, topwall.name))?;
+        let layers = db.db.layers
+            .get(layersname)
+            .ok_or_else(|| format_err!("No se ha encontrado la solución constructiva {} del elemento {}. No se puede calcular la altura libre", consname, topwall.name))?;
+        let topheight: f32 = layers.thickness.iter().sum();
+        Ok(self.floor_height(db)? - topheight)
     }
 
     /// Calcula el área del espacio

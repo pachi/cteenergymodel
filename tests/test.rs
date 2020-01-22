@@ -143,10 +143,17 @@ fn test_bdl_parse() {
     // println!("{:#?}", polygons);
 
     // Cálculos básicos sobre elementos de la envolvente
-    // - TODO: perímetro
+
     // TODO: Hacer más casos de orientación respecto al sur, con muros definidos con AZIMUTH
     // ya que ahora mismo solo se prueban los definidos por vértices y no está claro
     // si los valores que se obtienen en ese parámetro son respecto al norte (los de espacios sí)
+
+    // Espacio
+    let s = bdldb.get_space("P02_E01").unwrap();
+    assert_eq!(s.floor_height(bdldb).unwrap(), 3.0); // Altura
+    assert_eq!(s.space_height(bdldb).unwrap(), 2.62); // Altura libre
+    assert_eq!(s.area(bdldb).unwrap(), 150.0); // Área 10m x 15m
+    assert_eq!(s.perimeter(bdldb).unwrap(), 50.0); // Perímetro (10 + 15) x 2
 
     // Forjado interior
     let w = bdldb.get_wall("P02_E01_FI001").unwrap();
