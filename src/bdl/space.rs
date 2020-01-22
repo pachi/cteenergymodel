@@ -88,7 +88,7 @@ impl Space {
     }
 
     /// Calcula el perímetro del espacio
-    /// 
+    ///
     /// Usa el perímetro del polígono que define el espacio
     pub fn perimeter(&self, db: &Data) -> Result<f32, Error> {
         Ok(db
@@ -132,7 +132,7 @@ impl TryFrom<BdlBlock> for Space {
     ///         VEEI-OBJ  = 7.000000
     ///         VEEI-REF  = 10.000000
     ///         ..
-    /// 
+    ///
     ///     $ LIDER antiguo
     ///     "P01_E01" = SPACE
     ///         HEIGHT        =              3
@@ -194,9 +194,13 @@ impl TryFrom<BdlBlock> for Space {
         let veeiref = attrs.remove_f32("VEEI-REF")?;
         let spacetype = attrs.remove_str("SPACE-TYPE")?;
         // No existe en LIDER antiguo
-        let spaceconds = attrs.remove_str("SPACE-CONDITIONS").unwrap_or(spacetype.clone());
+        let spaceconds = attrs
+            .remove_str("SPACE-CONDITIONS")
+            .unwrap_or(spacetype.clone());
         // No existe en LIDER antiguo
-        let systemconds = attrs.remove_str("SYSTEM-CONDITIONS").unwrap_or(spacetype.clone());
+        let systemconds = attrs
+            .remove_str("SYSTEM-CONDITIONS")
+            .unwrap_or(spacetype.clone());
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
         // XXX: Es un booleano codificado como entero que se parse como número
         let ismultiplied = (attrs.remove_f32("MULTIPLIED")? - 1.0).abs() < 0.1;

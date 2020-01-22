@@ -11,8 +11,8 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use crate::utils::normalize;
 use super::{BdlBlock, Data};
+use crate::utils::normalize;
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
@@ -160,10 +160,10 @@ impl Wall {
     }
 
     /// Azimut, ángulo del muro respecto al norte (grados sexagesimales)
-    /// 
+    ///
     /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
     /// Se puede indicar una desviación del norte geográfico respecto al geométrico (northangle)
-    /// 
+    ///
     /// Se calcula:
     /// 1. Los elementos definidos por geometría ya tiene definido su azimut
     /// 2. Los elementos horizontales se definen con azimut igual a 0.0
@@ -201,7 +201,8 @@ impl Wall {
                             self.name,
                         )
                     })?;
-                    let azimuth = normalize(180.0 - polygon.edge_orient(vertex, northangle), 0.0, 360.0);
+                    let azimuth =
+                        normalize(180.0 - polygon.edge_orient(vertex, northangle), 0.0, 360.0);
                     Ok(azimuth)
                 }
                 // Resto de casos
@@ -370,6 +371,7 @@ impl TryFrom<BdlBlock> for Wall {
         let space =
             parent.ok_or_else(|| format_err!("Cerramiento sin espacio asociado '{}'", &name))?;
         let construction = attrs.remove_str("CONSTRUCTION")?;
+
         let location = match attrs.remove_str("LOCATION").ok() {
             // Solo soportamos algunos subtipos de location: TOP, BOTTOM, SPACE-x
             Some(loc) if ["TOP", "BOTTOM"].contains(&loc.as_str()) => Some(loc),
