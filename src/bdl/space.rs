@@ -48,7 +48,7 @@ pub struct Space {
 }
 
 impl Space {
-    /// Calcula la altura del espacio
+    /// Altura (suelo a suelo) del espacio
     ///
     /// Usa el valor definido como propiedad o la altura por defecto para los espacios
     /// definida en la planta
