@@ -153,7 +153,7 @@ fn test_bdl_parse() {
     assert_eq!(w.gross_area(bdldb).unwrap(), 49.985004);
     assert_eq!(w.net_area(bdldb).unwrap(), 49.985004);
     assert_eq!(w.space, "P02_E01");
-    assert_eq!(w.tilt(), 180.0);
+    assert_eq!(w.tilt, 180.0);
     assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
 
     // Solera
@@ -161,7 +161,7 @@ fn test_bdl_parse() {
     assert_eq!(w.gross_area(bdldb).unwrap(), 50.0);
     assert_eq!(w.net_area(bdldb).unwrap(), 50.0);
     assert_eq!(w.space, "P01_E01");
-    assert_eq!(w.tilt(), 180.0);
+    assert_eq!(w.tilt, 180.0);
     assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
 
     // Pared exterior
@@ -184,7 +184,7 @@ fn test_bdl_parse() {
     assert_eq!(w.gross_area(bdldb).unwrap(), 30.0);
     assert_eq!(w.net_area(bdldb).unwrap(), 28.0);
     assert_eq!(w.space, "P02_E01");
-    assert_eq!(w.tilt(), 90.0);
+    assert_eq!(w.tilt, 90.0);
     assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 270.0); // Oeste
 
     let v = bdldb.get_window("P02_E01_PE001_V").unwrap();
@@ -197,11 +197,11 @@ fn test_bdl_parse() {
     let w = bdldb.get_wall("P03_E01_CUB001").unwrap();
     assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.0, 0.005);
     assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0); // Horizontal
-    assert_eq!(w.tilt(), 0.0); // Horizontal
+    assert_eq!(w.tilt, 0.0); // Horizontal
     let w = bdldb.get_wall("P04_E01_CUB001").unwrap();
     assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.99020, 0.005);
     assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 90.0); // Este
-    assert_eq!(w.tilt(), 11.30993);
+    assert_eq!(w.tilt, 11.30993);
 
 }
 

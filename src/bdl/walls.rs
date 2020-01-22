@@ -29,6 +29,9 @@ pub struct Wall {
     pub construction: String,
     /// Posición respecto al espacio asociado (TOP, BOTTOM, nombreespacio)
     pub location: Option<String>,
+    /// Inclinación (grados sexagesimales)
+    /// Ángulo entre el eje Z y la normal exterior del muro
+    pub tilt: f32,
     /// Posición definida por polígono
     pub geometry: Option<WallGeometry>,
     /// Tipo de cerramiento:
@@ -156,28 +159,6 @@ impl Wall {
         }
     }
 
-    /// Inclinación del cerramiento (grados)
-    /// Ángulo de la normal del cerramiento con el eje Z
-    /// 
-    /// Solamente se define explícitamente cuando se da el atributo POLYGON
-    /// Si la inclinación es None (se define location) asignamos el valor por defecto:
-    /// - Para btype = ROOF -> 0.0 (hacia arriba)
-    /// - Para el resto de btypes:
-    ///      - con location = TOP -> tilt = 0.0 (techo)
-    ///      - con location = BOTTOM -> tilt = 180.0 (suelo)
-    ///      - el resto -> tilt = 90.0 (defecto)
-    pub fn tilt(&self) -> f32 {
-        if let Some(geom) = &self.geometry {
-            geom.tilt
-        } else {
-            match (self.wtype.as_str(), self.location.as_deref()) {
-                ("ROOF", _) | (_, Some("TOP")) => 0.0,
-                (_, Some("BOTTOM")) => 180.0,
-                _ => 90.0,
-            }
-        }
-    }
-
     /// Azimut, ángulo del muro respecto al norte (grados sexagesimales)
     /// 
     /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
@@ -191,7 +172,7 @@ impl Wall {
         if let Some(geom) = &self.geometry {
             // Elementos definidos por polígono
             // Elementos horizontales (hacia arriba o hacia abajo)
-            if geom.tilt == 0.0 || geom.tilt == 180.0 {
+            if self.tilt == 0.0 || self.tilt == 180.0 {
                 Ok(0.0)
             } else {
                 // Se guarda el ángulo respecto al eje Y del espacio (norte, si la desviación global es cero)
@@ -248,17 +229,10 @@ pub struct WallGeometry {
     /// Acimut (grados sexagesimales)
     /// Ángulo entre el eje Y (norte) del espacio y la proyección horizontal de la normal exterior del muro
     pub azimuth: f32,
-    /// Inclinación (grados sexagesimales)
-    /// Ángulo entre el eje Z y la normal exterior del muro
-    pub tilt: f32,
 }
 
 impl WallGeometry {
-    pub fn parse_wallgeometry(
-        mut attrs: super::AttrMap,
-        wtype: &str,
-        location: &Option<String>,
-    ) -> Result<Option<Self>, Error> {
+    pub fn parse_wallgeometry(mut attrs: super::AttrMap) -> Result<Option<Self>, Error> {
         if let Ok(polygon) = attrs.remove_str("POLYGON") {
             // XXX: en LIDER antiguo pueden no aparecer algunas de estas coordenadas
             let x = attrs.remove_f32("X").unwrap_or_default();
@@ -266,29 +240,12 @@ impl WallGeometry {
             let z = attrs.remove_f32("Z").unwrap_or_default();
             let azimuth = attrs.remove_f32("AZIMUTH")?;
 
-            // Si la inclinación es None (se define location)
-            // asignamos el valor por defecto, que es:
-            // - Para btype = ROOF -> 0.0 (hacia arriba)
-            // - Para el resto de btypes:
-            //      - con location = TOP -> tilt = 0.0 (techo)
-            //      - con location = BOTTOM -> tilt = 180.0 (suelo)
-            //      - el resto -> tilt = 90.0 (defecto)
-            let tilt = match attrs.remove_f32("TILT").ok() {
-                Some(tilt) => tilt,
-                _ => match (wtype, location.as_deref()) {
-                    ("ROOF", _) | (_, Some("TOP")) => 0.0,
-                    (_, Some("BOTTOM")) => 180.0,
-                    _ => 90.0,
-                },
-            };
-
             Ok(Some(WallGeometry {
                 polygon,
                 x,
                 y,
                 z,
                 azimuth,
-                tilt,
             }))
         } else {
             Ok(None)
@@ -329,6 +286,20 @@ impl TryFrom<BdlBlock> for Wall {
     ///         TILT          =            180
     ///         POLYGON       = "P02_E01_FE001_Poligono3"
     ///         ..
+    ///     "P03_E01_CUB001" = ROOF
+    ///         ABSORPTANCE   =            0.6
+    ///         COMPROBAR-REQUISITOS-MINIMOS = YES
+    ///         TYPE_ABSORPTANCE    = 0
+    ///         COLOR_ABSORPTANCE   = 0
+    ///         DEGREE_ABSORPTANCE   = 2
+    ///         CONSTRUCTION  = "SATE"  
+    ///         X             =          2.496
+    ///         Y             =         -4.888
+    ///         Z             =              3
+    ///         AZIMUTH       =            180
+    ///         LOCATION      = TOP  
+    ///         POLYGON       = "P03_E01_FE004_Poligono3"
+    ///         ..    
     ///     "P03_E01_CUB001" = ROOF
     ///         ABSORPTANCE   =            0.6
     ///         COMPROBAR-REQUISITOS-MINIMOS = YES
@@ -419,6 +390,21 @@ impl TryFrom<BdlBlock> for Wall {
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
 
+        // Si la inclinación es None (se define location)
+        // Solamente se define explícitamente cuando se define el cerramiento por geometría
+        // TODO: dado que siempre definimos el tilt no nos haría falta tener un subtipo ROOF
+        let tilt = match attrs.remove_f32("TILT").ok() {
+            Some(tilt) => tilt,
+            _ => match (wtype.as_str(), location.as_deref()) {
+                // Cubiertas y cerramientos en location top (techos)
+                ("ROOF", _) | (_, Some("TOP")) => 0.0,
+                // cerramientos en location bottom (suelos y soleras)
+                (_, Some("BOTTOM")) => 180.0,
+                // Cerramientos verticales
+                _ => 90.0,
+            },
+        };
+
         // Propiedades específicas
         // XXX: La absortividad debe consultarse en la construcción, esto parece una cache de HULC
         // let absorptance = match wtype.as_str() {
@@ -434,13 +420,14 @@ impl TryFrom<BdlBlock> for Wall {
             _ => None,
         };
 
-        let geometry = WallGeometry::parse_wallgeometry(attrs, &wtype, &location)?;
+        let geometry = WallGeometry::parse_wallgeometry(attrs)?;
         Ok(Self {
             name,
             wtype,
             space,
             construction,
             location,
+            tilt,
             geometry,
             nextto,
             zground,

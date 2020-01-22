@@ -52,7 +52,7 @@ impl Window {
                 self.name
             )
         })?;
-        Ok(wall.tilt())
+        Ok(wall.tilt)
     }
 
     /// Azimut de la ventana (grados)
