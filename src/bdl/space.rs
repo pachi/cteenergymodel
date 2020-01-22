@@ -48,7 +48,7 @@ pub struct Space {
 }
 
 impl Space {
-    /// Altura (suelo a suelo) del espacio
+    /// Altura (suelo a suelo) del espacio (m)
     ///
     /// Usa el valor definido como propiedad o la altura por defecto para los espacios
     /// definida en la planta
@@ -70,7 +70,7 @@ impl Space {
         }
     }
 
-    /// Altura (suelo a techo) del espacio
+    /// Altura (suelo a techo) del espacio (m)
     ///
     /// Usa la altura bruta y resta espesores de cubiertas y forjados
     pub fn space_height(&self, db: &Data) -> Result<f32, Error> {
@@ -106,7 +106,7 @@ impl Space {
         Ok(self.floor_height(db)? - topheight)
     }
 
-    /// Calcula el área del espacio
+    /// Superficie del espacio (m2)
     ///
     /// Usa el área del polígono que define el espacio
     pub fn area(&self, db: &Data) -> Result<f32, Error> {
@@ -123,7 +123,7 @@ impl Space {
             .area())
     }
 
-    /// Calcula el perímetro del espacio
+    /// Calcula el perímetro del espacio (m)
     ///
     /// Usa el perímetro del polígono que define el espacio
     pub fn perimeter(&self, db: &Data) -> Result<f32, Error> {
@@ -138,6 +138,20 @@ impl Space {
                 )
             })?
             .perimeter())
+    }
+
+    /// Volumen bruto del espacio (m3)
+    ///
+    /// Usa el área y la altura total (suelo a suelo) del espacio
+    pub fn gross_volume(&self, db: &Data) -> Result<f32, Error> {
+        Ok(self.area(db)? * self.floor_height(db)?)
+    }
+
+    /// Volumen neto del espacio (m3)
+    ///
+    /// Usa el área y la altura libre (suelo a techo) del espacio
+    pub fn net_volume(&self, db: &Data) -> Result<f32, Error> {
+        Ok(self.area(db)? * self.space_height(db)?)
     }
 }
 
