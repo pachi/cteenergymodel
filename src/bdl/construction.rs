@@ -12,20 +12,12 @@ use super::BdlBlock;
 pub struct Construction {
     /// Nombre
     pub name: String,
-    /// Tipo de definición de la construcción (LAYERS o U-VALUE)
-    pub ctype: String,
     /// Elemento vinculado (muro, etc)
     pub parent: String,
     /// Definición de capas, cuando ctype es LAYERS
     pub layers: Option<String>,
-    /// Transmitancia, cuando ctype es U-VALUE (W/m2K)
-    pub uvalue: Option<f32>,
     /// Absortividad (a la radiación solar) (-)
     pub absorptance: Option<f32>,
-    /// Rugosidad (1 a 6)
-    pub roughness: Option<f32>,
-    /// Nombre de parámetros de muro (WALL-PARAMETERS)
-    pub wallparameters: Option<String>,
 }
 
 impl TryFrom<BdlBlock> for Construction {
@@ -41,6 +33,9 @@ impl TryFrom<BdlBlock> for Construction {
     ///     ABSORPTANCE = 0.400000
     ///     ..
     /// ```
+    /// HULC solo usa construcciones definidas por capas (LAYERS) y únicamente permite
+    /// definir la absortividad (ABSORPTANCE)
+    ///
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
@@ -48,12 +43,12 @@ impl TryFrom<BdlBlock> for Construction {
             parent,
             ..
         } = value;
-        let ctype = attrs.remove_str("TYPE")?;
+        // Tipo de definición de la construcción (LAYERS o U-VALUE)
+        if attrs.remove_str("TYPE")? != "LAYERS" {
+            bail!("Construcción {} no definida por capas (LAYERS)", name);
+        }
         let layers = attrs.remove_str("LAYERS").ok();
-        let uvalue = attrs.remove_f32("U-VALUE").ok();
         let absorptance = attrs.remove_f32("ABSORPTANCE").ok();
-        let roughness = attrs.remove_f32("ROUGHNESS").ok();
-        let wallparameters = attrs.remove_str("WALL-PARAMETERS").ok();
         let parent = parent.ok_or_else(|| {
             format_err!(
                 "No se encuentra la referencia al elemento en la construcción {}",
@@ -62,13 +57,9 @@ impl TryFrom<BdlBlock> for Construction {
         })?;
         Ok(Self {
             name,
-            ctype,
             parent,
             layers,
-            uvalue,
             absorptance,
-            roughness,
-            wallparameters,
         })
     }
 }
