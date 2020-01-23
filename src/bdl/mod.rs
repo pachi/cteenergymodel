@@ -61,15 +61,9 @@ pub struct Data {
 
 impl Data {
     pub fn new(input: &str) -> Result<Self, Error> {
-        // Estructuras provisionales que se eliminan en el postproceso ------
-        // Construcciones de elementos de la envolvente
-        let mut constructions: HashMap<String, Construction> = HashMap::new();
-        // Plantas
-        let mut floors: Vec<Floor> = Vec::new();
-
         let blocks = build_blocks(input)?;
 
-        // Separa lista de polígonos (POLYGON)
+        // Separa polígonos (POLYGON) -----------
         // luego los sustituiremos en los objetos que los usan
         let (poly_blocks, blocks): (Vec<BdlBlock>, Vec<BdlBlock>) =
             blocks.into_iter().partition(|b| &b.btype == "POLYGON");
@@ -80,7 +74,29 @@ impl Data {
             polygons.insert(block.name.clone(), Polygon::try_from(block)?);
         }
 
-        // Resto de bloques
+        // Separa plantas (FLOOR) --------------
+        // luego los sustituiremos en los objetos que los usan
+        let (floor_blocks, blocks): (Vec<BdlBlock>, Vec<BdlBlock>) =
+            blocks.into_iter().partition(|b| &b.btype == "FLOOR");
+
+        let mut floors: HashMap<String, Floor> = Default::default();
+        for block in floor_blocks {
+            // Plantas
+            floors.insert(block.name.clone(), Floor::try_from(block)?);
+        }
+
+        // Separa construcciones (CONSTRUCTION) -------
+        // luego los sustituiremos en los objetos que los usan
+        let (cons_blocks, blocks): (Vec<BdlBlock>, Vec<BdlBlock>) =
+            blocks.into_iter().partition(|b| &b.btype == "CONSTRUCTION");
+
+        let mut constructions: HashMap<String, Construction> = Default::default();
+        for block in cons_blocks {
+            // Construcciones
+            constructions.insert(block.name.clone(), Construction::try_from(block)?);
+        }
+
+        // Resto de bloques -------------------------------
         let mut bdldata: Self = Default::default();
         for block in blocks {
             match block.btype.as_ref() {
@@ -130,18 +146,15 @@ impl Data {
                 }
 
                 // Elementos geométricos y espacios -----------
-                // Plantas
-                "FLOOR" => {
-                    floors.push(Floor::try_from(block)?);
-                }
                 // Espacios
                 "SPACE" => {
                     let polygon_name = block.attrs.get_str("POLYGON")?;
-                    // Algún caso copia un polígono con un desplazamiento
+                    // Se puede copiar un polígono con desplazamiento ------------
                     // Ver caso 14_BloqueH5P.CTE y espacios P1E5A-Hall, P1E5B-Hall
                     let x = block.attrs.get_f32("X");
                     let y = block.attrs.get_f32("Y");
 
+                    // Copiamos polígono ----------
                     let mut space = Space::try_from(block)?;
                     let mut polygon = polygons.get(&polygon_name).ok_or_else(|| {
                         format_err!(
@@ -150,7 +163,7 @@ impl Data {
                             &space.name,
                         )
                     })?.clone();
-                    // Generamos el polígono con el desplazamiento que se haya definido
+                    // Desplazamos el polígono
                     if let Ok(xval) = x {
                         polygon.vertices.iter_mut().for_each(|v| v.vector.x += xval);
                     }
@@ -159,6 +172,21 @@ impl Data {
                     }
                     // Insertamos el polígono
                     space.polygon = polygon;
+
+                    // Incorporamos datos de planta ----------
+                    // Trasladamos la cota Z y la altura de planta
+                    // HULC Solamente considera la altura de la planta para los espacios
+                    // NOTA: los espacios con cubierta inclinada podrían llegar a tener otra altura
+                    let floor = floors.get(&space.floor).ok_or_else(|| {
+                        format_err!(
+                            "No se ha encontrado la planta {} del espacio {}",
+                            space.floor,
+                            space.name
+                        )
+                    })?;
+                    space.height = floor.height;
+                    space.z = floor.z;
+
                     bdldata.spaces.push(space);
                 }
                 // Construcciones
@@ -171,6 +199,7 @@ impl Data {
                     let maybe_polygon_name = block.attrs.get_str("POLYGON");
                     let mut wall = Wall::try_from(block)?;
 
+                    // Insertamos los polígonos -----------
                     if let Some(mut geom) = wall.geometry.as_mut() {
                         let wall_name = wall.name.clone();
                         let polygon_name = maybe_polygon_name.unwrap();
@@ -183,6 +212,18 @@ impl Data {
                         })?;
                         geom.polygon = new_polygon;
                     };
+
+                    // Sustituimos la construcción por el nombre de la composición de capas
+                    // La absortividad ya está correcta en el muro y así podemos eliminar constructions
+                    let cons = constructions.get(&wall.construction).ok_or_else(|| {
+                        format_err!(
+                            "No se ha definido la construcción del cerramiento {}",
+                            wall.name
+                        )
+                    })?;
+                    wall.construction = cons.layers.clone();
+
+                    // Guardamos el muro
                     bdldata.walls.push(wall);
                 }
 
@@ -207,25 +248,6 @@ impl Data {
                     );
                 }
             };
-        }
-
-        // Postproceso para filtrar elementos redundantes (CONSTRUCTION) ============
-
-        // 1. Traslado de datos de construcciones a muros (HULC solo las define por capas)
-        // Se copia en wall.construction la composición de capas de layers de la construcción
-        // la absortividad ya está bien el muro
-        for s in &mut bdldata.walls {
-            let cons = constructions.get(&s.construction).ok_or_else(|| format_err!("No se ha definido la construcción del cerramiento {}", s.name))?;
-            s.construction = cons.layers.clone();
-        }
-
-        // 2. Copiar altura de planta en espacios
-        // HULC Solamente considera la altura de la planta para los espacios
-        // Los espacios con cubierta podrían llegar a tener otra altura
-        for s in &mut bdldata.spaces {
-            let floor = floors.iter().find(|f| f.name == s.floor).ok_or_else(|| format_err!("No se ha definido la planta {} del espacio {}", s.floor, s.name))?;
-            s.height = floor.height;
-            s.z = floor.z;
         }
 
         Ok(bdldata)
