@@ -222,16 +222,17 @@ pub struct WallGeometry {
     /// Nombre del polígono que define la geometría
     pub polygon: String,
     /// Coordenada X de la esquina inferior izquierda
-    /// usa coordenadas del espacio ??
+    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
     pub x: f32,
     /// Coordenada Y de la esquina inferior izquierda
-    /// usa coordenadas del espacio ??
+    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
     pub y: f32,
     /// Coordenada Z de la esquina inferior izquierda
-    /// usa coordenadas del espacio ??
+    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
     pub z: f32,
     /// Acimut (grados sexagesimales)
     /// Ángulo entre el eje Y (norte) del espacio y la proyección horizontal de la normal exterior del muro
+    /// 0 -> orientación norte, 90 -> orientación este, 180 -> orientación sur y 270 -> orientación oeste
     pub azimuth: f32,
 }
 
