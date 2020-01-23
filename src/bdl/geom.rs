@@ -13,7 +13,7 @@ use failure::bail;
 use failure::Error;
 
 /// Polígono
-/// TODO: ver sisgen/libreria_sisgen/claseEdificio.py para áreas, normal, etc.
+/// Solo pueden ser polígonos con vértices 2D
 #[derive(Debug, Clone, Default)]
 pub struct Polygon {
     /// Nombre del polígono
@@ -201,6 +201,7 @@ impl std::str::FromStr for Vector2D {
 
 
 /// Vertex3D - Vértice, conjunto de nombre y vector 3d (x, y, z)
+/// Se usan para definir sombras
 #[derive(Debug, Clone, Default)]
 pub struct Vertex3D {
     /// Nombre del vértice
