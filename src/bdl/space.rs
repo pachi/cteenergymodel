@@ -96,12 +96,10 @@ impl Space {
                     self.name
                 )
             })?;
-        let consname = &topwall.construction;
-        let construction = db.constructions.get(consname).ok_or_else(|| format_err!("No se ha encontrado la definición de la construcción {} del elemento {}. No se puede calcular la altura libre", consname, topwall.name))?;
-        let layersname = construction.layers.as_ref().ok_or_else(|| format_err!("No se ha encontrado la definición de capas de la construcción {} del elemento {}. No se puede calcular la altura libre", consname, topwall.name))?;
+        // TODO: convertir cálculo de espesor a método de layers
         let layers = db.db.layers
-            .get(layersname)
-            .ok_or_else(|| format_err!("No se ha encontrado la solución constructiva {} del elemento {}. No se puede calcular la altura libre", consname, topwall.name))?;
+            .get(&topwall.construction)
+            .ok_or_else(|| format_err!("No se ha encontrado la composición {} del cerramiento {}. No se puede calcular la altura libre", &topwall.construction, topwall.name))?;
         let topheight: f32 = layers.thickness.iter().sum();
         Ok(self.floor_height(db)? - topheight)
     }

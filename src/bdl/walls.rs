@@ -27,6 +27,9 @@ pub struct Wall {
     pub space: String,
     /// Definición de la composición del cerramiento (Construction)
     pub construction: String,
+    /// Absortividad exterior del cerramiento a la radiación solar [-]
+    /// Este parámetro no se usa/define para elementos interiores o en contacto con el terreno
+    pub absorptance: Option<f32>,
     /// Posición respecto al espacio asociado (TOP, BOTTOM, nombreespacio)
     pub location: Option<String>,
     /// Inclinación (grados sexagesimales)
@@ -314,8 +317,6 @@ impl TryFrom<BdlBlock> for Wall {
     /// XXX: atributos no trasladados:
     /// XXX: propiedades para definir el estado de la interfaz para la selección de la absortividad:
     /// XXX: TYPE_ABSORPTANCE, COLOR_ABSORPTANCE, DEGREE_ABSORPTANCE
-    /// XXX: propiedades cacheadas de la CONSTRUCTION:
-    /// XXX: ABSORPTANCE
     /// XXX: Atributos no trasladados: COMPROBAR-REQUISITOS-MINIMOS, CONSTRUCCION_MURO
     ///
     /// Ejemplos en BDL de INTERIOR-WALL:
@@ -371,6 +372,7 @@ impl TryFrom<BdlBlock> for Wall {
         let space =
             parent.ok_or_else(|| format_err!("Cerramiento sin espacio asociado '{}'", &name))?;
         let construction = attrs.remove_str("CONSTRUCTION")?;
+        let absorptance = attrs.remove_f32("ABSORPTANCE").ok();
 
         let location = match attrs.remove_str("LOCATION").ok() {
             // Solo soportamos algunos subtipos de location: TOP, BOTTOM, SPACE-x
@@ -428,6 +430,7 @@ impl TryFrom<BdlBlock> for Wall {
             wtype,
             space,
             construction,
+            absorptance,
             location,
             tilt,
             geometry,

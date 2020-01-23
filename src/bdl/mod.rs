@@ -55,8 +55,6 @@ pub struct Data {
     pub shadings: Vec<Shade>,
     /// Lista de polígonos
     pub polygons: HashMap<String, Polygon>,
-    /// Construcciones de elementos de la envolvente
-    pub constructions: HashMap<String, Construction>,
     /// Condiciones de uso de los espacios
     pub spaceconds: HashMap<String, BdlBlock>,
     /// Consignas de los sistemas
@@ -67,6 +65,9 @@ pub struct Data {
 
 impl Data {
     pub fn new(input: &str) -> Result<Self, Error> {
+        // Construcciones de elementos de la envolvente
+        let mut constructions: HashMap<String, Construction> = HashMap::new();
+
         let mut bdldata: Self = Default::default();
         for block in build_blocks(input)? {
             match block.btype.as_ref() {
@@ -132,8 +133,7 @@ impl Data {
                 }
                 // Construcciones
                 "CONSTRUCTION" => {
-                    bdldata
-                        .constructions
+                    constructions
                         .insert(block.name.clone(), Construction::try_from(block)?);
                 }
 
@@ -164,6 +164,16 @@ impl Data {
                 }
             };
         }
+
+        // Postproceso para filtrar elementos redundantes (CONSTRUCTION) ============
+
+        // 1. Traslado de datos de construcciones a muros (HULC solo las define por capas)
+        // Se copia en wall.construction la composición de capas de layers de la construcción
+        // la absortividad ya está bien el muro
+        for s in &mut bdldata.walls {
+            let cons = constructions.get(&s.construction).ok_or_else(|| format_err!("No se ha definido la construcción del cerramiento {}", s.name))?;
+            s.construction = cons.layers.clone();
+        };
 
         Ok(bdldata)
     }

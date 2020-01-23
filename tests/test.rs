@@ -129,16 +129,14 @@ fn test_bdl_parse() {
         windows,
         shadings,
         polygons,
-        constructions,
         spaceconds,
         systemconds,
         schedules,
     } = bdldb;
     // println!("{:#?}", db);
-    // println!("{:#?}", constructions);
     // println!("{:#?}", floors);
     // println!("{:#?}", spaces);
-    println!("{:#?}", walls);
+    // println!("{:#?}", walls);
     // println!("{:#?}", shadings);
     // println!("{:#?}", polygons);
 

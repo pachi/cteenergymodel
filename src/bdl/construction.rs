@@ -14,8 +14,8 @@ pub struct Construction {
     pub name: String,
     /// Elemento vinculado (muro, etc)
     pub parent: String,
-    /// Definición de capas, cuando ctype es LAYERS
-    pub layers: Option<String>,
+    /// Definición de capas (HULC solo admite definición por capas)
+    pub layers: String,
     /// Absortividad (a la radiación solar) (-)
     pub absorptance: Option<f32>,
 }
@@ -47,7 +47,12 @@ impl TryFrom<BdlBlock> for Construction {
         if attrs.remove_str("TYPE")? != "LAYERS" {
             bail!("Construcción {} no definida por capas (LAYERS)", name);
         }
-        let layers = attrs.remove_str("LAYERS").ok();
+        let layers = attrs.remove_str("LAYERS").map_err(|_| {
+            format_err!(
+                "No se ha definido la composición de capas de la construcción {}",
+                name
+            )
+        })?;
         let absorptance = attrs.remove_f32("ABSORPTANCE").ok();
         let parent = parent.ok_or_else(|| {
             format_err!(
