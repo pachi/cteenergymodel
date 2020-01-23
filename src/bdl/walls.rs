@@ -94,7 +94,7 @@ impl Wall {
                         self.name
                     )
                 })?;
-                let height = space.floor_height(&db)?;
+                let height = space.height;
                 let length = poly.edge_length(&location);
                 Ok(height * length)
             }
@@ -153,7 +153,7 @@ impl Wall {
                         self.name
                     )
                 })?;
-                let height = space.floor_height(&db)?;
+                let height = space.height;
                 let length = poly.edge_length(&location);
                 Ok(2.0 * (height + length))
             }

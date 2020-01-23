@@ -23,12 +23,16 @@ pub struct Space {
     /// Nombre de polígono que define el espacio
     /// XXX: Solo vale para SHAPE = POLIGON (no vale con BOX o NO-SHAPE)
     pub polygon: String,
-    /// Altura (suelo a suelo) del espacio, (o None si es la de la planta)
-    pub height: Option<f32>,
+    /// Altura (suelo a suelo) del espacio
+    /// (HULC solo permite que los espacios tengan la altura de la planta)
+    pub height: f32,
+    /// Cota Z del espacio
+    /// Se define en la planta inicialmente
+    pub z: f32,
     /// Pertenencia a la envolvente térmica
     pub insidete: bool,
     /// Planta a la que pertenece el espacio
-    pub parent: String,
+    pub floor: String,
     /// Potencia de iluminación (W/m2)
     pub power: f32,
     /// VEEI del edificio objeto W/m2/100lux
@@ -48,28 +52,6 @@ pub struct Space {
 }
 
 impl Space {
-    /// Altura (suelo a suelo) del espacio (m)
-    ///
-    /// Usa el valor definido como propiedad o la altura por defecto para los espacios
-    /// definida en la planta
-    pub fn floor_height(&self, db: &Data) -> Result<f32, Error> {
-        if let Some(height) = self.height {
-            Ok(height)
-        } else {
-            Ok(db.floors
-                .iter()
-                .find(|f| f.name == self.parent)
-                .map(|f| f.height)
-                .ok_or_else(|| {
-                    format_err!(
-                        "Polígono del espacio {} no encontrado {}. No se puede calcular la superficie",
-                        self.name,
-                        self.polygon
-                    )
-                })?)
-        }
-    }
-
     /// Altura (suelo a techo) del espacio (m)
     ///
     /// Usa la altura bruta y resta espesores de cubiertas y forjados
@@ -101,7 +83,7 @@ impl Space {
             .get(&topwall.construction)
             .ok_or_else(|| format_err!("No se ha encontrado la composición {} del cerramiento {}. No se puede calcular la altura libre", &topwall.construction, topwall.name))?;
         let topheight: f32 = layers.thickness.iter().sum();
-        Ok(self.floor_height(db)? - topheight)
+        Ok(self.height - topheight)
     }
 
     /// Superficie del espacio (m2)
@@ -142,7 +124,7 @@ impl Space {
     ///
     /// Usa el área y la altura total (suelo a suelo) del espacio
     pub fn gross_volume(&self, db: &Data) -> Result<f32, Error> {
-        Ok(self.area(db)? * self.floor_height(db)?)
+        Ok(self.area(db)? * self.height)
     }
 
     /// Volumen neto del espacio (m3)
@@ -219,7 +201,13 @@ impl TryFrom<BdlBlock> for Space {
 
         let stype = attrs.remove_str("TYPE")?;
         let polygon = attrs.remove_str("POLYGON")?;
-        let height = attrs.remove_f32("HEIGHT").ok();
+        // HULC no define a veces la altura pero para el cálculo de volúmenes y alturas
+        // usa la altura de la planta
+        // XXX: podríamos ver si esos casos se corresponden a espacios con cubierta inclinada
+        // XXX: y calcular la altura media en función de la geometría de la cubierta
+        let height = attrs.remove_f32("HEIGHT").unwrap_or_default();
+        // La cota Z se define en los objetos FLOOR, pero la guardamos luego aquí para eliminarlos
+        let z = 0.0;
         let insidete = attrs
             .remove_str("perteneceALaEnvolventeTermica")
             .ok()
@@ -231,7 +219,7 @@ impl TryFrom<BdlBlock> for Space {
                 _ => Some(false),
             })
             .unwrap_or(false);
-        let parent = parent.ok_or_else(|| {
+        let floor = parent.ok_or_else(|| {
             format_err!(
                 "No se encuentra la referencia de la planta en el espacio {}",
                 name
@@ -258,8 +246,9 @@ impl TryFrom<BdlBlock> for Space {
             stype,
             polygon,
             height,
+            z,
             insidete,
-            parent,
+            floor,
             power,
             veeiobj,
             veeiref,

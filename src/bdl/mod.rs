@@ -43,8 +43,6 @@ pub struct Data {
     pub meta: HashMap<String, BdlBlock>,
     /// Base de datos de materiales, productos y composiciones constructivas
     pub db: DB,
-    /// Lista de plantas
-    pub floors: Vec<Floor>,
     /// Lista de espacios
     pub spaces: Vec<Space>,
     /// Elementos opacos de la envolvente
@@ -65,8 +63,11 @@ pub struct Data {
 
 impl Data {
     pub fn new(input: &str) -> Result<Self, Error> {
+        // Estructuras provisionales que se eliminan en el postproceso ------
         // Construcciones de elementos de la envolvente
         let mut constructions: HashMap<String, Construction> = HashMap::new();
+        // Plantas
+        let mut floors: Vec<Floor> = Vec::new();
 
         let mut bdldata: Self = Default::default();
         for block in build_blocks(input)? {
@@ -119,7 +120,7 @@ impl Data {
                 // Elementos geométricos y espacios -----------
                 // Plantas
                 "FLOOR" => {
-                    bdldata.floors.push(Floor::try_from(block)?);
+                    floors.push(Floor::try_from(block)?);
                 }
                 // Espacios
                 "SPACE" => {
@@ -173,7 +174,16 @@ impl Data {
         for s in &mut bdldata.walls {
             let cons = constructions.get(&s.construction).ok_or_else(|| format_err!("No se ha definido la construcción del cerramiento {}", s.name))?;
             s.construction = cons.layers.clone();
-        };
+        }
+
+        // 2. Copiar altura de planta en espacios
+        // HULC Solamente considera la altura de la planta para los espacios
+        // Los espacios con cubierta podrían llegar a tener otra altura
+        for s in &mut bdldata.spaces {
+            let floor = floors.iter().find(|f| f.name == s.floor).ok_or_else(|| format_err!("No se ha definido la planta {} del espacio {}", s.floor, s.name))?;
+            s.height = floor.height;
+            s.z = floor.z;
+        }
 
         Ok(bdldata)
     }

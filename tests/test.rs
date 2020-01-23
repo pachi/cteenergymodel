@@ -123,7 +123,6 @@ fn test_bdl_parse() {
     let bdl::Data {
         meta,
         db,
-        floors,
         spaces,
         walls,
         windows,
@@ -134,7 +133,6 @@ fn test_bdl_parse() {
         schedules,
     } = bdldb;
     // println!("{:#?}", db);
-    // println!("{:#?}", floors);
     // println!("{:#?}", spaces);
     // println!("{:#?}", walls);
     // println!("{:#?}", shadings);
@@ -148,7 +146,7 @@ fn test_bdl_parse() {
 
     // Espacio
     let s = bdldb.get_space("P02_E01").unwrap();
-    assert_eq!(s.floor_height(bdldb).unwrap(), 3.0); // Altura
+    assert_eq!(s.height, 3.0); // Altura
     assert_eq!(s.space_height(bdldb).unwrap(), 2.62); // Altura libre
     assert_eq!(s.area(bdldb).unwrap(), 150.0); // Área 10m x 15m
     assert_eq!(s.perimeter(bdldb).unwrap(), 50.0); // Perímetro (10 + 15) x 2

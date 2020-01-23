@@ -10,7 +10,6 @@ use std::convert::TryFrom;
 
 use super::blocks::BdlBlock;
 
-use failure::bail;
 use failure::Error;
 
 /// Planta (agrupación de espacios)
@@ -19,10 +18,7 @@ pub struct Floor {
     /// Nombre de la planta
     pub name: String,
     /// Cota de la planta en el sistema coordenado del edificio
-    /// XXX: podría no aparecer y ser la de la del edificio
     pub z: f32,
-    /// Polígono que define la geometría
-    pub polygon: String,
     /// Altura suelo a suelo de la planta (incluye plenum y forjados)
     pub height: f32,
     /// Planta anterior (inferior)
@@ -37,34 +33,41 @@ impl TryFrom<BdlBlock> for Floor {
     /// Ejemplo:
     /// ```text
     ///     "P01" = FLOOR
-    ///     POLYGON       =  "P01_Poligono1"
-    ///     FLOOR-HEIGHT  =            3.5
-    ///     SPACE-HEIGHT  =            3.5
-    ///     SHAPE         =  POLYGON
-    ///     PREVIOUS      =  "Ninguna"
-    ///     ..
+    ///         POLYGON       =  "P01_Poligono1"
+    ///         FLOOR-HEIGHT  =            3.5
+    ///         SPACE-HEIGHT  =            3.5
+    ///         SHAPE         =  POLYGON
+    ///         PREVIOUS      =  ""
+    ///         ..
+    ///     "P02" = FLOOR
+    ///         Z             =               3
+    ///         POLYGON       =  "P02_Poligono1"
+    ///         FLOOR-HEIGHT  =              3
+    ///         SPACE-HEIGHT  =              3
+    ///         SHAPE         =  POLYGON
+    ///         PREVIOUS      =  "P01"
+    ///         ..
     /// ```
-    /// XXX: Atributos no trasladados: SPACE-HEIGHT
-    /// HULC no usa esta propiedad, que permitiría definir plenum (o reducir la altura de forjados)
+    /// XXX: Atributos no trasladados: FLOOR-HEIGHT, POLYGON, SHAPE
+    /// LIDER no usa bien la propiedad SPACE-HEIGHT, que permitiría definir plenum (o reducir la altura de forjados)
+    /// sino que la usa como si fuese FLOOR-HEIGHT. HULC pone igual FLOOR-HEIGHT y SPACE-HEIGHT
     /// (la altura de los espacios de tipo PLENUM es floorheight - spaceheight)
+    /// XXX: SHAPE y POLYGON no tienen información relevante, solo vale para exportar a BDL
+    /// XXX: HULC solo maneja plantas con SHAPE = POLYGON
 
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
-        // De los tipos de definición de la geometría: POLYGON, BOX, NO-SHAPE
-        // solamente manejamos definiciones por polígono
-        if attrs.remove_str("SHAPE")? != "POLYGON" {
-            bail!("Planta '{}' de tipo distinto a POLYGON, no soportado");
-        };
+        // TODO: Si no se define Z es la del edificio. Por ahora asignamos 0.0
         let z = attrs.remove_f32("Z").unwrap_or_default();
-        let polygon = attrs.remove_str("POLYGON")?;
-        let height = attrs.remove_f32("FLOOR-HEIGHT")?;
+        // Las versiones antiguas de LIDER usan SPACE-HEIGHT y dejan a cero FLOOR-HEIGHT
+        // HULC escribe FLOOR-HEIGHT con el mismo valor que SPACE-HEIGHT
+        let height = attrs.remove_f32("SPACE-HEIGHT")?;
         let previous = attrs.remove_str("PREVIOUS")?;
         Ok(Self {
             name,
             z,
-            polygon,
             height,
             previous,
         })
