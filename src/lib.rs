@@ -102,7 +102,7 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
     bdl.spaces
         .iter()
         .map(|s| {
-            let area = s.area(&bdl)?;
+            let area = s.area();
             let altura = s.space_height(&bdl)?;
             Ok(Space {
                 nombre: s.name.clone(),

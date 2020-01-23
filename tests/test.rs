@@ -107,7 +107,7 @@ fn test_test_spaces_caso_a() {
 
     for s in tbl.spaces {
         let spc = bdl.get_space(&s.name).unwrap();
-        let poly = bdl.polygons.get(&spc.polygon).unwrap();
+        let poly = &spc.polygon;
         assert_eq!(s.area, poly.area())
     }
 }
@@ -127,7 +127,6 @@ fn test_bdl_parse() {
         walls,
         windows,
         shadings,
-        polygons,
         spaceconds,
         systemconds,
         schedules,
@@ -136,7 +135,6 @@ fn test_bdl_parse() {
     // println!("{:#?}", spaces);
     // println!("{:#?}", walls);
     // println!("{:#?}", shadings);
-    // println!("{:#?}", polygons);
 
     // Cálculos básicos sobre elementos de la envolvente
 
@@ -148,8 +146,8 @@ fn test_bdl_parse() {
     let s = bdldb.get_space("P02_E01").unwrap();
     assert_eq!(s.height, 3.0); // Altura
     assert_eq!(s.space_height(bdldb).unwrap(), 2.62); // Altura libre
-    assert_eq!(s.area(bdldb).unwrap(), 150.0); // Área 10m x 15m
-    assert_eq!(s.perimeter(bdldb).unwrap(), 50.0); // Perímetro (10 + 15) x 2
+    assert_eq!(s.area(), 150.0); // Área 10m x 15m
+    assert_eq!(s.perimeter(), 50.0); // Perímetro (10 + 15) x 2
 
     // Forjado interior
     let w = bdldb.get_wall("P02_E01_FI001").unwrap();

@@ -8,6 +8,7 @@
 use std::convert::TryFrom;
 
 use super::blocks::BdlBlock;
+use super::geom::Polygon;
 use super::Data;
 
 use failure::bail;
@@ -21,8 +22,8 @@ pub struct Space {
     /// Tipo de espacio (CONDITIONED, UNHABITED, ¿UNCONDITIONED?, ¿PLENUM?)
     pub stype: String,
     /// Nombre de polígono que define el espacio
-    /// XXX: Solo vale para SHAPE = POLIGON (no vale con BOX o NO-SHAPE)
-    pub polygon: String,
+    /// HULC únicamente usa espacios definidos por polígono (no usa SHAPE = BOX o NO-SHAPE)
+    pub polygon: Polygon,
     /// Altura (suelo a suelo) del espacio
     /// (HULC solo permite que los espacios tengan la altura de la planta)
     pub height: f32,
@@ -89,49 +90,29 @@ impl Space {
     /// Superficie del espacio (m2)
     ///
     /// Usa el área del polígono que define el espacio
-    pub fn area(&self, db: &Data) -> Result<f32, Error> {
-        Ok(db
-            .polygons
-            .get(&self.polygon)
-            .ok_or_else(|| {
-                format_err!(
-                    "Polígono del espacio {} no encontrado {}. No se puede calcular la superficie",
-                    self.name,
-                    self.polygon
-                )
-            })?
-            .area())
+    pub fn area(&self) -> f32 {
+        self.polygon.area()
     }
 
     /// Calcula el perímetro del espacio (m)
     ///
     /// Usa el perímetro del polígono que define el espacio
-    pub fn perimeter(&self, db: &Data) -> Result<f32, Error> {
-        Ok(db
-            .polygons
-            .get(&self.polygon)
-            .ok_or_else(|| {
-                format_err!(
-                    "Polígono del espacio {} no encontrado {}. No se puede calcular el perímetro",
-                    self.name,
-                    self.polygon
-                )
-            })?
-            .perimeter())
+    pub fn perimeter(&self) -> f32 {
+        self.polygon.perimeter()
     }
 
     /// Volumen bruto del espacio (m3)
     ///
     /// Usa el área y la altura total (suelo a suelo) del espacio
-    pub fn gross_volume(&self, db: &Data) -> Result<f32, Error> {
-        Ok(self.area(db)? * self.height)
+    pub fn gross_volume(&self) -> f32 {
+        self.area() * self.height
     }
 
     /// Volumen neto del espacio (m3)
     ///
     /// Usa el área y la altura libre (suelo a techo) del espacio
     pub fn net_volume(&self, db: &Data) -> Result<f32, Error> {
-        Ok(self.area(db)? * self.space_height(db)?)
+        Ok(self.area() * self.space_height(db)?)
     }
 }
 
@@ -181,6 +162,8 @@ impl TryFrom<BdlBlock> for Space {
     ///         AIR-CHANGES/HR        = 1.000000
     ///         ..
     /// ```
+    /// NOTE: La propiedad POLYGON se trata en el postproceso y en la conversión incial se usa
+    /// un valor por defecto.
     /// TODO: propiedades no convertidas:
     /// TODO: PILLARS-NUMBERS (número de pilares en el espacio, como PTs),
     /// TODO: FactorSuperficieUtil, INTERIOR-RADIATION, nCompleto, FLOOR-WEIGHT
@@ -200,7 +183,8 @@ impl TryFrom<BdlBlock> for Space {
         };
 
         let stype = attrs.remove_str("TYPE")?;
-        let polygon = attrs.remove_str("POLYGON")?;
+        // Generamos un polígono por defecto, ya que se inserta en el postproceso de bloques
+        let polygon = Polygon::default();
         // HULC no define a veces la altura pero para el cálculo de volúmenes y alturas
         // usa la altura de la planta
         // XXX: podríamos ver si esos casos se corresponden a espacios con cubierta inclinada

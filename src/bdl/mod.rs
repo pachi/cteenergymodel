@@ -51,8 +51,6 @@ pub struct Data {
     pub windows: Vec<Window>,
     // Sombras exteriores del edificio
     pub shadings: Vec<Shade>,
-    /// Lista de polígonos
-    pub polygons: HashMap<String, Polygon>,
     /// Condiciones de uso de los espacios
     pub spaceconds: HashMap<String, BdlBlock>,
     /// Consignas de los sistemas
@@ -69,8 +67,22 @@ impl Data {
         // Plantas
         let mut floors: Vec<Floor> = Vec::new();
 
+        let blocks = build_blocks(input)?;
+
+        // Separa lista de polígonos (POLYGON)
+        // luego los sustituiremos en los objetos que los usan
+        let (poly_blocks, blocks): (Vec<BdlBlock>, Vec<BdlBlock>) =
+            blocks.into_iter().partition(|b| &b.btype == "POLYGON");
+
+        let mut polygons: HashMap<String, Polygon> = Default::default();
+        for block in poly_blocks {
+            // Polígonos
+            polygons.insert(block.name.clone(), Polygon::try_from(block)?);
+        }
+
+        // Resto de bloques
         let mut bdldata: Self = Default::default();
-        for block in build_blocks(input)? {
+        for block in blocks {
             match block.btype.as_ref() {
                 // Elementos generales =========================
                 // Valores por defecto, Datos generales, espacio de trabajo y edificio
@@ -124,23 +136,54 @@ impl Data {
                 }
                 // Espacios
                 "SPACE" => {
-                    bdldata.spaces.push(Space::try_from(block)?);
-                }
-                // Polígonos
-                "POLYGON" => {
-                    bdldata
-                        .polygons
-                        .insert(block.name.clone(), Polygon::try_from(block)?);
+                    let polygon_name = block.attrs.get_str("POLYGON")?;
+                    // Algún caso copia un polígono con un desplazamiento
+                    // Ver caso 14_BloqueH5P.CTE y espacios P1E5A-Hall, P1E5B-Hall
+                    let x = block.attrs.get_f32("X");
+                    let y = block.attrs.get_f32("Y");
+
+                    let mut space = Space::try_from(block)?;
+                    let mut polygon = polygons.get(&polygon_name).ok_or_else(|| {
+                        format_err!(
+                            "Polígono {} no encontrado para el espacio {}",
+                            &polygon_name,
+                            &space.name,
+                        )
+                    })?.clone();
+                    // Generamos el polígono con el desplazamiento que se haya definido
+                    if let Ok(xval) = x {
+                        polygon.vertices.iter_mut().for_each(|v| v.vector.x += xval);
+                    }
+                    if let Ok(yval) = y {
+                        polygon.vertices.iter_mut().for_each(|v| v.vector.y += yval);
+                    }
+                    // Insertamos el polígono
+                    space.polygon = polygon;
+                    bdldata.spaces.push(space);
                 }
                 // Construcciones
                 "CONSTRUCTION" => {
-                    constructions
-                        .insert(block.name.clone(), Construction::try_from(block)?);
+                    constructions.insert(block.name.clone(), Construction::try_from(block)?);
                 }
 
                 // Elementos opacos de la envolvente -----------
                 "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL" => {
-                    bdldata.walls.push(Wall::try_from(block)?);
+                    let maybe_polygon_name = block.attrs.get_str("POLYGON");
+                    let mut wall = Wall::try_from(block)?;
+
+                    if let Some(mut geom) = wall.geometry.as_mut() {
+                        let wall_name = wall.name.clone();
+                        let polygon_name = maybe_polygon_name.unwrap();
+                        let new_polygon = polygons.remove(&polygon_name).ok_or_else(|| {
+                            format_err!(
+                                "Polígono {} no encontrado para definición de muro {}",
+                                &polygon_name,
+                                &wall_name,
+                            )
+                        })?;
+                        geom.polygon = new_polygon;
+                    };
+                    bdldata.walls.push(wall);
                 }
 
                 // Elementos transparentes de la envolvente -----

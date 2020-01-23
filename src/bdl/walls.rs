@@ -11,7 +11,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{BdlBlock, Data};
+use super::{geom::Polygon, BdlBlock, Data};
 use crate::utils::normalize;
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
@@ -64,14 +64,7 @@ impl Wall {
     pub fn gross_area(&self, db: &Data) -> Result<f32, Error> {
         if let Some(geom) = &self.geometry {
             // Superficie para muros definidos por polígono
-            let geom_polygon = db.polygons.get(&geom.polygon).ok_or_else(|| {
-                format_err!(
-                    "Polígono del cerramiento {} no encontrado {}. No se puede calcular la superficie",
-                    self.name,
-                    geom.polygon
-                )
-            })?;
-            Ok(geom_polygon.area())
+            Ok(geom.polygon.area())
         } else if let Some(location) = self.location.as_deref() {
             // Superficie para muros definidos por posición, en un espacio
             let space = db.get_space(self.space.as_str()).ok_or_else(|| {
@@ -83,17 +76,10 @@ impl Wall {
             })?;
             // Elementos de suelo o techo
             if ["TOP", "BOTTOM"].contains(&location) {
-                space.area(&db)
+                Ok(space.area())
             // Elementos definidos por vértice (location contiene el nombre del vértice)
             } else {
-                let poly = db.polygons.get(&space.polygon).ok_or_else(|| {
-                    format_err!(
-                        "Polígono {} del espacio {} del cerramiento {} no encontrado. No se puede calcular la superficie",
-                        space.polygon,
-                        self.space,
-                        self.name
-                    )
-                })?;
+                let poly = &space.polygon;
                 let height = space.height;
                 let length = poly.edge_length(&location);
                 Ok(height * length)
@@ -123,14 +109,7 @@ impl Wall {
         // 2.2 Elementos definidos por vértice en el espacio -> longitud de lado * altura
         if let Some(geom) = &self.geometry {
             // 1. Muros definidos por geometría (polígono)
-            let geom_polygon = db.polygons.get(&geom.polygon).ok_or_else(|| {
-                format_err!(
-                    "Polígono del cerramiento {} no encontrado {}. No se puede calcular el perímetro",
-                    self.name,
-                    geom.polygon
-                )
-            })?;
-            Ok(geom_polygon.perimeter())
+            Ok(geom.polygon.perimeter())
         } else if let Some(location) = self.location.as_deref() {
             // 2. Muros definidos por posición, en un espacio (polígono del espacio)
             let space = db.get_space(self.space.as_str()).ok_or_else(|| {
@@ -142,17 +121,10 @@ impl Wall {
             })?;
             // 2.1 Elementos de suelo o techo
             if ["TOP", "BOTTOM"].contains(&location) {
-                space.perimeter(&db)
+                Ok(space.perimeter())
             // 2.2 Elementos definidos por vértice (location contiene el nombre del vértice)
             } else {
-                let poly = db.polygons.get(&space.polygon).ok_or_else(|| {
-                    format_err!(
-                        "Polígono {} del espacio {} del cerramiento {} no encontrado. No se puede calcular el perímetro",
-                        space.polygon,
-                        self.space,
-                        self.name
-                    )
-                })?;
+                let poly = &space.polygon;
                 let height = space.height;
                 let length = poly.edge_length(&location);
                 Ok(2.0 * (height + length))
@@ -197,13 +169,7 @@ impl Wall {
                                 self.name
                             )
                         })?;
-                    let polygon = db.polygons.get(&space.polygon).ok_or_else(|| {
-                        format_err!(
-                            "Polígono del espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
-                            space.name,
-                            self.name,
-                        )
-                    })?;
+                    let polygon = &space.polygon;
                     let azimuth =
                         normalize(180.0 - polygon.edge_orient(vertex, northangle), 0.0, 360.0);
                     Ok(azimuth)
@@ -220,7 +186,7 @@ impl Wall {
 #[derive(Debug, Clone, Default)]
 pub struct WallGeometry {
     /// Nombre del polígono que define la geometría
-    pub polygon: String,
+    pub polygon: Polygon,
     /// Coordenada X de la esquina inferior izquierda
     /// usa coordenadas del espacio y es el cerramiento visto desde fuera
     pub x: f32,
@@ -237,8 +203,12 @@ pub struct WallGeometry {
 }
 
 impl WallGeometry {
+    /// Detectamos si se define la geometría por polígono
+    /// Como guardaremos el polígono no por su nombre sino como objeto aquí usamos un default
+    /// y lo corregimos en el postproceso
     pub fn parse_wallgeometry(mut attrs: super::AttrMap) -> Result<Option<Self>, Error> {
-        if let Ok(polygon) = attrs.remove_str("POLYGON") {
+        if attrs.remove_str("POLYGON").is_ok() {
+            let polygon = Default::default();
             // XXX: en LIDER antiguo pueden no aparecer algunas de estas coordenadas
             let x = attrs.remove_f32("X").unwrap_or_default();
             let y = attrs.remove_f32("Y").unwrap_or_default();
