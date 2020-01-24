@@ -131,6 +131,8 @@ pub struct Window {
     /// Fracción de marco
     #[serde(rename(serialize = "Ff"))]
     pub ff: f32,
+    /// Factor solar del hueco sin la protección solar activada (g_glwi = g_gln * 0.90)
+    pub gglwi: f32,
     /// Factor solar del hueco con la protección solar activada
     pub gglshwi: f32,
     /// Factor de obstáculos remotos
