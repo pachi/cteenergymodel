@@ -102,7 +102,7 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
     bdl.spaces
         .iter()
         .map(|s| {
-            let area = s.area();
+            let area = (s.area() * 100.0).round() / 100.0;
             let height_net = s.space_height(&bdl)?;
             let height_gross = s.height;
             Ok(Space {
