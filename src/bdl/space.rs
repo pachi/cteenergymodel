@@ -62,7 +62,7 @@ impl Space {
             .iter()
             .find(|w| {
                 // Cubiertas
-                w.wtype == "ROOF"
+                w.wall_type == "ROOF"
                 || match w.location.as_deref() {
                     // Muros exteriores o cubiertas en posición superior
                     Some("TOP") => true,

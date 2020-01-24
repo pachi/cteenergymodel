@@ -65,10 +65,10 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         ff: ff.replace(",", ".").parse::<f32>()? / 100.0_f32,
-                        gglwi: 1.0, // Se completa a posteriori con datos del .ctehexml
+                        gglwi: 1.0,   // Se completa a posteriori con datos del .ctehexml
                         gglshwi: 1.0, // Se completa a posteriori con datos del .ctehexml
                         fshobst: 1.0, // Se completa a posteriori con datos de los campos qsolwindow
-                        infcoeff_100: 50.0,  // se completa luego con datos del .ctehexml
+                        infcoeff_100: 50.0, // se completa luego con datos del .ctehexml
                     });
                 }
                 "Muro" => {
@@ -82,6 +82,7 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         btrx: btrx.replace(",", ".").parse()?,
+                        wall_type: "EXTERIOR-WALL".to_string(), // Se completa luego con .ctehexml
                     });
                 }
                 "PPTT" => {
@@ -115,12 +116,14 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
             continue;
         }
     }
-    // Actualización de valores de fshobst
+    // Actualización de valores de fshobst disponibles en el KyGananciasSolares.txt
     for mut hueco in &mut windows {
         if let Some(val) = qsolvalues.get(&hueco.name) {
             hueco.fshobst = *val;
         }
     }
+
+    // Actualizaciones con datos del ctehexmldata ---------------
     // Actualización de valores de gglshwi
     if let Some(ref data) = ctehexmldata {
         let gglshwimap = &data.gglshwi;
@@ -138,12 +141,14 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                     if let Some(glass) = data.bdldata.db.glasses.get(&cons.glass) {
                         win.gglwi = (glass.g_gln * 0.90 * 100.0).round() / 100.0;
                     }
-
                 }
-
             };
         }
-
+        for mut wall in &mut walls {
+            if let Some(w) = data.bdldata.walls.iter().find(|w| w.name == wall.name) {
+                wall.wall_type = w.wall_type.clone();
+            }
+        }
     }
 
     Ok(EnvelopeElements {

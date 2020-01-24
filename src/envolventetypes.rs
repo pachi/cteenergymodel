@@ -154,16 +154,22 @@ pub struct Wall {
     pub u: f32,
     /// Coeficiente de transmisión del elemento opaco (-)
     pub btrx: f32, // 0 | 1
-
-                   // TODO: propiedades que se podrían incorporar
-                   // Orientación del elemento opaco (N, S, E, W, H...)
-                   // pub orientacion: String,
-                   // Absortividad del elemento opaco (-)
-                   //pub abs: f32,
-                   // Tipo - Muro, cubierta, suelo, terreno, adiabático, partición interior
-                   // Orientación - azimuth criterio 52016 (distinto en BDL) ->(0 -> sur)
-                   // Inclinación - respecto a la horizontal y hacia arriba (0 -> suelo, 180 -> techo)
+    /// Tipo de cerramiento:
+    /// - UNDERGROUND-WALL
+    /// - EXTERIOR-WALL
+    /// - ROOF
+    /// - PARTITION
+    /// - ADIABATIC
+    #[serde(rename(serialize = "type"))]
+    pub wall_type: String,
 }
+// TODO: propiedades que se podrían incorporar a los cerramientos
+// Orientación del elemento opaco (N, S, E, W, H...)
+// pub orientacion: String,
+// Absortividad del elemento opaco (-)
+//pub abs: f32,
+// Orientación - azimuth criterio 52016 (distinto en BDL) ->(0 -> sur)
+// Inclinación - respecto a la horizontal y hacia arriba (0 -> suelo, 180 -> techo)
 
 /// Puente térmico
 #[derive(Debug, Serialize)]

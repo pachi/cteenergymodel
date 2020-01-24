@@ -37,14 +37,16 @@ pub struct Wall {
     pub tilt: f32,
     /// Posición definida por polígono
     pub geometry: Option<WallGeometry>,
-    /// Tipo de cerramiento:
-    /// - EXTERIOR-WALL: Muro en contacto con el aire exterior
+    /// Tipos de cerramiento:
+    /// - UNDERGROUND-WALL: cerramiento en contacto con el terreno
+    /// - EXTERIOR-WALL: cerramiento en contacto con el aire exterior
     /// - ROOF: Cubierta en contacto con el aire exterior
-    /// - STANDARD: cerramiento interior entre dos espacios
+    /// - PARTITION (STANDARD en BDL): cerramiento interior entre dos espacios
     /// - ADIABATIC: cerramiento que no conduce calor (a otro espacio) pero lo almacena
+    /// Existen otros tipos en BDL pero HULC no los admite:
     /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
     /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
-    pub wtype: String,
+    pub wall_type: String,
     // --- Propiedades exclusivas -----------------------
     // XXX: Absortividad definida por usuario -> Se debe consultar en la construcción
     // XXX: (solo en cerramientos en contacto con el aire)
@@ -154,7 +156,7 @@ impl Wall {
                 Ok(geom.azimuth)
             }
         } else {
-            match (self.wtype.as_str(), self.location.as_deref()) {
+            match (self.wall_type.as_str(), self.location.as_deref()) {
                 // Elementos horizontales
                 ("ROOF", _) | (_, Some("TOP")) | (_, Some("BOTTOM")) => Ok(0.0),
                 // Elementos definidos por vértice en polígono
@@ -357,20 +359,34 @@ impl TryFrom<BdlBlock> for Wall {
 
         // Tipos
         // TODO: Convertir a enum
-        let wtype = match btype.as_str() {
-            "INTERIOR-WALL" => attrs.remove_str("INT-WALL-TYPE")?,
-            "UNDERGROUND-WALL" => "UNDERGROUND-WALL".to_string(),
-            "ROOF" => "ROOF".to_string(),
-            "EXTERIOR-WALL" => "EXTERIOR-WALL".to_string(),
+        let wall_type = match btype.as_str() {
+            "INTERIOR-WALL" => {
+                let int_wall = attrs.remove_str("INT-WALL-TYPE")?;
+                match int_wall.as_str() {
+                    "STANDARD" => "PARTITION",
+                    "ADIABATIC" => "ADIABATIC",
+                    // AIR, INTERNAL
+                    _ => bail!(
+                        "Cerramiento interior {} con subtipo desconocido {} / {}",
+                        name,
+                        btype,
+                        int_wall
+                    ),
+                }
+            }
+            "UNDERGROUND-WALL" => "UNDERGROUND-WALL",
+            "ROOF" => "ROOF",
+            "EXTERIOR-WALL" => "EXTERIOR-WALL",
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
-        };
+        }
+        .to_string();
 
         // Si la inclinación es None (se define location)
         // Solamente se define explícitamente cuando se define el cerramiento por geometría
         // TODO: dado que siempre definimos el tilt no nos haría falta tener un subtipo ROOF
         let tilt = match attrs.remove_f32("TILT").ok() {
             Some(tilt) => tilt,
-            _ => match (wtype.as_str(), location.as_deref()) {
+            _ => match (wall_type.as_str(), location.as_deref()) {
                 // Cubiertas y cerramientos en location top (techos)
                 ("ROOF", _) | (_, Some("TOP")) => 0.0,
                 // cerramientos en location bottom (suelos y soleras)
@@ -382,15 +398,15 @@ impl TryFrom<BdlBlock> for Wall {
 
         // Propiedades específicas
         // XXX: La absortividad debe consultarse en la construcción, esto parece una cache de HULC
-        // let absorptance = match wtype.as_str() {
+        // let absorptance = match wall_type.as_str() {
         //     "EXTERIOR-WALL" | "ROOF" => Some(attrs.remove_f32("ABSORPTANCE")?),
         //     _ => None,
         // };
-        let nextto = match wtype.as_str() {
-            "STANDARD" | "AIR" => attrs.remove_str("NEXT-TO").ok(),
+        let nextto = match wall_type.as_str() {
+            "PARTITION" => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
         };
-        let zground = match wtype.as_str() {
+        let zground = match wall_type.as_str() {
             "UNDERGROUND-WALL" => Some(attrs.remove_f32("Z-GROUND")?),
             _ => None,
         };
@@ -398,7 +414,7 @@ impl TryFrom<BdlBlock> for Wall {
         let geometry = WallGeometry::parse_wallgeometry(attrs)?;
         Ok(Self {
             name,
-            wtype,
+            wall_type,
             space,
             construction,
             absorptance,
