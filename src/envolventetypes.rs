@@ -47,7 +47,7 @@ impl EnvolventeCteData {
             .spaces
             .iter()
             .map(|s| {
-                if s.inside_tenv && s.space_type.as_str() != "NOHABITABLE" {
+                if s.inside_tenv && s.space_type.as_str() != "NO_HABITABLE" {
                     s.area * s.multiplier
                 } else {
                     0.0

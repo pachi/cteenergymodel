@@ -114,8 +114,8 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
                 multiplier: s.multiplier,
                 space_type: match s.stype.as_ref() {
                     "CONDITIONED" => "ACONDICIONADO",
-                    "UNHABITED" => "NOHABITABLE",
-                    _ => "NOACONDICIONADO",
+                    "UNHABITED" => "NO_HABITABLE",
+                    _ => "NO_ACONDICIONADO",
                 }
                 .to_string(),
             })
