@@ -151,8 +151,11 @@ pub struct Space {
     pub nombre: String,
     /// Superficie de la zona en m2
     pub area: f32,
-    /// Altura libre de la zona en m
+    /// Altura libre (suelo a techo) de la zona en m
+    /// No incluye el volumen de forjados o cubiertas.
     pub altura: f32,
+    /// Altura bruta (suelo a suelo) de la zona en m
+    pub altura_tot: f32,
     /// Pertenencia al interior de la envolvente térmica
     pub dentroet: bool,
     /// Multiplicador
