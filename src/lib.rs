@@ -103,16 +103,14 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
         .iter()
         .map(|s| {
             let area = s.area();
-            let altura = s.space_height(&bdl)?;
-            let altura_tot = s.height;
+            let height_net = s.space_height(&bdl)?;
             Ok(Space {
-                nombre: s.name.clone(),
+                name: s.name.clone(),
                 area,
-                altura,
-                altura_tot,
-                dentroet: s.insidete,
-                mult: s.multiplier,
-                tipo: match s.stype.as_ref() {
+                height_net,
+                inside_tenv: s.insidete,
+                multiplier: s.multiplier,
+                space_type: match s.stype.as_ref() {
                     "CONDITIONED" => "ACONDICIONADO",
                     "UNHABITED" => "NOHABITABLE",
                     _ => "NOACONDICIONADO",
@@ -131,19 +129,19 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         ctehexmldata.climate
     );
 
-    let espacios = build_spaces(&ctehexmldata.bdldata)?;
+    let spaces = build_spaces(&ctehexmldata.bdldata)?;
 
     // Interpreta .kyg
-    let envolvente = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
+    let envelope = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
     eprintln!("Localizada definición de elementos de la envolvente");
 
     // Zona climática
-    let clima = ctehexmldata.climate;
+    let climate = ctehexmldata.climate;
 
     // Salida de datos
     Ok(EnvolventeCteData {
-        clima,
-        envolvente,
-        espacios,
+        climate,
+        envelope,
+        spaces,
     })
 }

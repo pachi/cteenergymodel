@@ -29,9 +29,9 @@ use serde_json;
 
 #[derive(Debug, Serialize)]
 pub struct EnvolventeCteData {
-    pub clima: String,
-    pub envolvente: ElementosEnvolvente,
-    pub espacios: Vec<Space>,
+    pub climate: String,
+    pub envelope: EnvelopeElements,
+    pub spaces: Vec<Space>,
 }
 
 impl EnvolventeCteData {
@@ -44,11 +44,11 @@ impl EnvolventeCteData {
     /// Computa únicamente los espacios habitables dentro de la envolvente térmica
     pub fn a_util_ref(&self) -> f32 {
         let a_util: f32 = self
-            .espacios
+            .spaces
             .iter()
             .map(|s| {
-                if s.dentroet && s.tipo.as_str() != "NOHABITABLE" {
-                    s.area * s.mult
+                if s.inside_tenv && s.space_type.as_str() != "NOHABITABLE" {
+                    s.area * s.multiplier
                 } else {
                     0.0
                 }
@@ -61,10 +61,10 @@ impl EnvolventeCteData {
 // ---------- Elementos de la envolvente --------------
 
 #[derive(Debug, Serialize)]
-pub struct ElementosEnvolvente {
-    pub huecos: Vec<Window>,
-    pub opacos: Vec<Opaque>,
-    pub pts: Vec<TB>,
+pub struct EnvelopeElements {
+    pub windows: Vec<Window>,
+    pub walls: Vec<Wall>,
+    pub thermal_bridges: Vec<ThermalBridge>,
 }
 
 #[derive(Debug, Serialize)]
@@ -85,9 +85,9 @@ pub struct Window {
     /// UID del hueco
     pub id: String,
     /// Nombre del hueco
-    pub nombre: String,
+    pub name: String,
     /// Orientación del hueco (N, S, E, W, H...)
-    pub orientacion: String,
+    pub orientation: String,
     /// Superficie del hueco (m2)
     #[serde(rename(serialize = "A"))]
     pub a: f32,
@@ -106,11 +106,11 @@ pub struct Window {
 
 /// Elemento opaco (muro, cubierta, suelo, partición)
 #[derive(Debug, Serialize)]
-pub struct Opaque {
+pub struct Wall {
     /// UID del elemento opaco
     pub id: String,
     /// Nombre del elemento opaco
-    pub nombre: String,
+    pub name: String,
     /// Superficie del elemento opaco (m2)
     #[serde(rename(serialize = "A"))]
     pub a: f32,
@@ -132,11 +132,11 @@ pub struct Opaque {
 
 /// Puente térmico
 #[derive(Debug, Serialize)]
-pub struct TB {
+pub struct ThermalBridge {
     /// UID del puente térmico
     pub id: String,
     /// Nombre del puente térmico
-    pub nombre: String,
+    pub name: String,
     /// Longitud del puente térmico (m)
     #[serde(rename(serialize = "L"))]
     pub l: f32,
@@ -148,18 +148,18 @@ pub struct TB {
 #[derive(Debug, Serialize)]
 pub struct Space {
     /// Nombre del espacio
-    pub nombre: String,
+    pub name: String,
     /// Superficie de la zona en m2
     pub area: f32,
     /// Altura libre (suelo a techo) de la zona en m
     /// No incluye el volumen de forjados o cubiertas.
-    pub altura: f32,
+    pub height_net: f32,
     /// Altura bruta (suelo a suelo) de la zona en m
-    pub altura_tot: f32,
+    pub height_gross: f32,
     /// Pertenencia al interior de la envolvente térmica
-    pub dentroet: bool,
+    pub inside_tenv: bool,
     /// Multiplicador
-    pub mult: f32,
+    pub multiplier: f32,
     // Tipo de espacio (ACONDICIONADO, NOACONDICIONADO, NOHABITABLE)
-    pub tipo: String,
+    pub space_type: String,
 }
