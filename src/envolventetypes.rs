@@ -197,6 +197,7 @@ pub struct Space {
     pub inside_tenv: bool,
     /// Multiplicador
     pub multiplier: f32,
-    // Tipo de espacio (ACONDICIONADO, NOACONDICIONADO, NOHABITABLE)
+    // Tipo de espacio (ACONDICIONADO, NO_ACONDICIONADO, NO_HABITABLE)
+    #[serde(rename(serialize = "type"))]
     pub space_type: String,
 }
