@@ -56,6 +56,40 @@ impl EnvolventeCteData {
             .sum();
         (a_util * 100.0).round() / 100.0
     }
+
+    /// Calcula el volumen bruto de los espacios de la envolvente [m³]
+    /// Computa el volumen de todos los espacios (habitables o no) de la envolvente
+    pub fn vol_env_gross(&self) -> f32 {
+        let v_env: f32 = self
+            .spaces
+            .iter()
+            .map(|s| {
+                if s.inside_tenv {
+                    s.area * s.height_gross * s.multiplier
+                } else {
+                    0.0
+                }
+            })
+            .sum();
+        (v_env * 100.0).round() / 100.0
+    }
+    /// Calcula el volumen neto de los espacios de la envolvente [m³]
+    /// Computa el volumen de todos los espacios (habitables o no) de la envolvente y
+    /// descuenta los volúmenes de forjados y cubiertas
+    pub fn vol_env_net(&self) -> f32 {
+        let v_env: f32 = self
+            .spaces
+            .iter()
+            .map(|s| {
+                if s.inside_tenv {
+                    s.area * s.height_net * s.multiplier
+                } else {
+                    0.0
+                }
+            })
+            .sum();
+        (v_env * 100.0).round() / 100.0
+    }
 }
 
 // ---------- Elementos de la envolvente --------------
