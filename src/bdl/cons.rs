@@ -236,7 +236,7 @@ pub struct Gap {
     /// Porcentaje de hueco cubierto por el marco (%)
     pub framepct: f32,
     /// Permeabilidad al aire (m3/hm2 a 100Pa)
-    pub infcoef: f32,
+    pub infcoeff: f32,
     /// Porcentaje de U debido a intercalarios y cajón de persiana (%)
     pub deltau: f32,
     /// Transmitancia total de energía del acristalameinto con los dispositivo de sombra móvil activados (g_gl;sh;wi) (-)
@@ -290,7 +290,7 @@ impl TryFrom<BdlBlock> for Gap {
         let frame = attrs.remove_str("NAME-FRAME")?;
         let framegroup = attrs.remove_str("GROUP-FRAME")?;
         let framepct = attrs.remove_f32("PORCENTAGE")?;
-        let infcoef = attrs.remove_f32("INF-COEF")?;
+        let infcoeff = attrs.remove_f32("INF-COEF")?;
         let deltau = attrs
             .remove_f32("porcentajeIncrementoU")
             .unwrap_or_default();
@@ -303,7 +303,7 @@ impl TryFrom<BdlBlock> for Gap {
             frame,
             framegroup,
             framepct,
-            infcoef,
+            infcoeff,
             deltau,
             gglshwi,
         })

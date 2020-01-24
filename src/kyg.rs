@@ -22,7 +22,7 @@ SOFTWARE.
 */
 
 //! Funciones de interpretación de archivos KyGananciasSolares.txt
-//! 
+//!
 //! En este archivo no aparecen los elementos adiabáticos entre los cerramientos
 
 use std::collections::HashMap;
@@ -30,14 +30,12 @@ use std::collections::HashMap;
 use failure::Error;
 use uuid::Uuid;
 
-use super::envolventetypes::{EnvelopeElements, Window, Wall, ThermalBridge};
+use super::ctehexml::CtehexmlData;
+use super::envolventetypes::{EnvelopeElements, ThermalBridge, Wall, Window};
 use super::utils::read_latin1_file;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse<S: ::std::hash::BuildHasher + Default>(
-    path: &str,
-    gglshwimap: Option<HashMap<String, f32, S>>,
-) -> Result<EnvelopeElements, Error> {
+pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<EnvelopeElements, Error> {
     let utf8buf = read_latin1_file(path)?;
 
     let lines = utf8buf
@@ -71,6 +69,7 @@ pub fn parse<S: ::std::hash::BuildHasher + Default>(
                         ff: ff.replace(",", ".").parse::<f32>()? / 100.0_f32,
                         gglshwi: 1.0, // Se completa a posteriori con datos del .ctehexml
                         fshobst: 1.0, // Se completa a posteriori con datos de los campos qsolwindow
+                        infcoeff_100: 50.0,  // se completa luego con datos del .ctehexml
                     });
                 }
                 "Muro" => {
@@ -126,12 +125,19 @@ pub fn parse<S: ::std::hash::BuildHasher + Default>(
         }
     }
     // Actualización de valores de gglshwi
-    if let Some(gglshwimap) = gglshwimap {
-        for mut hueco in &mut windows {
-            if let Some(val) = gglshwimap.get(&hueco.name) {
-                hueco.gglshwi = *val;
-            }
+    if let Some(ref data) = ctehexmldata {
+        let gglshwimap = &data.gglshwi;
+        for mut win in &mut windows {
+            if let Some(val) = gglshwimap.get(&win.name) {
+                win.gglshwi = *val;
+            };
+            if let Some(bdlwin) = data.bdldata.windows.iter().find(|w| w.name == win.name) {
+                if let Some(cons) = data.bdldata.db.windows.get(&bdlwin.gap) {
+                    win.infcoeff_100 = cons.infcoeff;
+                }
+            };
         }
+
     }
 
     Ok(EnvelopeElements {

@@ -136,6 +136,9 @@ pub struct Window {
     /// Factor de obstáculos remotos
     #[serde(rename(serialize = "Fshobst"))]
     pub fshobst: f32,
+    /// Permeabilidad al aire a 100 Pa [m3/hm2]
+    #[serde(rename(serialize = "C_100"))]
+    pub infcoeff_100: f32,
 }
 
 /// Elemento opaco (muro, cubierta, suelo, partición)

@@ -134,7 +134,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
     let spaces = build_spaces(&ctehexmldata.bdldata)?;
 
     // Interpreta .kyg
-    let envelope = kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi))?;
+    let envelope = kyg::parse(&hulcfiles.kyg, Some(&ctehexmldata))?;
     eprintln!("Localizada definición de elementos de la envolvente");
 
     // Zona climática
