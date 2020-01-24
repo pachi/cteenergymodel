@@ -11,10 +11,11 @@
 /// See https://docs.microsoft.com/en-us/windows/desktop/learnwin32/learn-to-program-for-windows
 /// See Tomaka's error handling strategy for HRESULT (check_result): https://github.com/tomaka/cpal/blob/master/src/wasapi/mod.rs
 /// See retep998's string handling in https://users.rust-lang.org/t/tidy-pattern-to-work-with-lpstr-mutable-char-array/2976
+use std::collections::hash_map::DefaultHasher;
 use std::error::Error;
+use std::hash::{Hash, Hasher};
 use std::path::Path;
 use std::ptr::null_mut;
-use uuid::Uuid;
 
 use winapi::shared::minwindef::*;
 use winapi::shared::ntdef::*;
@@ -453,10 +454,11 @@ fn do_convert() {
 
     match serde_json::to_string_pretty(&envolvente_data) {
         Ok(json) => {
-            // No podemos hacer un hash repetible así que usamos uuid
-            // Esto es porque los uuid de los elementos se regeneran en cada conversión
-            let suuid = &(Uuid::new_v4()).to_hyphenated().to_string()[..8];
-            let path = Path::new(dir_in).join(&format!("envolventecte-{}.json", &suuid));
+            // Generamos un hash sencillo del resultado
+            let mut hasher = DefaultHasher::new();
+            json.hash(&mut hasher);
+            let id = hasher.finish();
+            let path = Path::new(dir_in).join(&format!("envolventecte-{}.json", id));
             if write_file(&path, &json).is_err() {
                 append_to_edit(&format!(
                     "\nERROR: no se ha podido escribir en la ruta {}",

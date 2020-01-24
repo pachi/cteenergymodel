@@ -28,7 +28,6 @@ SOFTWARE.
 use std::collections::HashMap;
 
 use failure::Error;
-use uuid::Uuid;
 
 use super::ctehexml::CtehexmlData;
 use super::envolventetypes::{EnvelopeElements, ThermalBridge, Wall, Window};
@@ -61,7 +60,6 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                     }
                     let (nombre, a, u, orienta, ff) = (vv[1], vv[2], vv[3], vv[4], vv[5]);
                     windows.push(Window {
-                        id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         name: nombre.to_string(),
                         orientation: orienta.replace("O", "W").to_string(),
                         a: a.replace(",", ".").parse()?,
@@ -80,7 +78,6 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                     // En versiones más recientes hay dos datos más, construcción y orientación
                     let (nombre, a, u, btrx) = (vv[1], vv[2], vv[3], vv[4]);
                     walls.push(Wall {
-                        id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         name: nombre.to_string(),
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
@@ -94,7 +91,6 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                     // En versiones más recientes se añade el sistema dimensional como dato extra
                     let (l, psi, nombre) = (vv[1], vv[2], vv[3]);
                     thermal_bridges.push(ThermalBridge {
-                        id: (Uuid::new_v4()).to_hyphenated().to_string(),
                         name: nombre.to_string(),
                         l: l.replace(",", ".").parse()?,
                         psi: psi.replace(",", ".").parse()?,

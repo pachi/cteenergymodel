@@ -116,8 +116,6 @@ pub enum OpaqueTypes {
 /// Hueco
 #[derive(Debug, Serialize)]
 pub struct Window {
-    /// UID del hueco
-    pub id: String,
     /// Nombre del hueco
     pub name: String,
     /// Orientación del hueco (N, S, E, W, H...)
@@ -146,8 +144,6 @@ pub struct Window {
 /// Elemento opaco (muro, cubierta, suelo, partición)
 #[derive(Debug, Serialize)]
 pub struct Wall {
-    /// UID del elemento opaco
-    pub id: String,
     /// Nombre del elemento opaco
     pub name: String,
     /// Superficie del elemento opaco (m2)
@@ -172,8 +168,6 @@ pub struct Wall {
 /// Puente térmico
 #[derive(Debug, Serialize)]
 pub struct ThermalBridge {
-    /// UID del puente térmico
-    pub id: String,
     /// Nombre del puente térmico
     pub name: String,
     /// Longitud del puente térmico (m)
