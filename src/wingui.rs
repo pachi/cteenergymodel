@@ -51,7 +51,7 @@ fn setup_folders() {
         let dir_in = if Path::new(DEFAULT_DIR_IN).is_dir() {
             DEFAULT_DIR_IN.to_string()
         } else {
-             let mut buffer = [0; MAX_PATH];
+            let mut buffer = [0; MAX_PATH];
             if !SUCCEEDED(SHGetFolderPathW(
                 null_mut(),
                 CSIDL_PROFILE,
@@ -386,7 +386,7 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
 }
 
 fn do_convert() {
-    use crate::{ctehexml, build_spaces, kyg, tbl, EnvolventeCteData};
+    use crate::{build_spaces, ctehexml, kyg, tbl, EnvolventeCteData};
     let dir_in = unsafe { MODEL.dir_in };
 
     let hulcfiles = match crate::find_hulc_files(&dir_in) {
@@ -433,7 +433,9 @@ fn do_convert() {
             espacios
         }
         _ => {
-            append_to_edit("\nERROR: No se han podido generar los espacios de la envolvente correctamente");
+            append_to_edit(
+                "\nERROR: No se han podido generar los espacios de la envolvente correctamente",
+            );
             return;
         }
     };
@@ -441,7 +443,7 @@ fn do_convert() {
     let envolvente_data = EnvolventeCteData {
         clima: ctehexmldata.climate,
         envolvente: elementos_envolvente,
-        espacios
+        espacios,
     };
 
     let area_util = envolvente_data.a_util_ref();
