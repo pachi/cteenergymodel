@@ -204,6 +204,16 @@ fn test_bdl_parse() {
     assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 90.0); // Este
     assert_eq!(w.tilt, 11.30993);
 
+    // // Volumen acondicionado de la envolvente: 
+    // // - volumen de los espacios acondicionados
+    // // - restamos volumen de los forjados interiores y de las cubiertas
+    // let mut v = 0.0;
+    // for spc in &bdldb.spaces {
+    //     if spc.stype == "CONDITIONED" {
+    //         v += spc.space_height(bdldb).unwrap() * spc.area(bdldb).unwrap();
+    //     }
+    // }
+    // assert_almost_eq!(v, 1055.949951, 0.005);
 }
 
 #[test]
@@ -245,14 +255,14 @@ fn parse_test_data2() {
     let hulcfiles = find_hulc_files("tests/ejemplopmt_HuecosOK").unwrap();
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
     let data = collect_hulc_data(&hulcfiles).unwrap();
-    assert_eq!(data.a_util_ref(), 1073.76);
+    assert_eq!(data.a_util_ref(), 1073.78);
     assert_eq!(data.climate, "B3");
     assert_eq!(data.envelope.windows.len(), 29);
     assert_eq!(data.envelope.walls.len(), 60);
     assert_eq!(data.envelope.thermal_bridges.len(), 7);
 }
 
-#[ignore]
+// #[ignore]
 #[test]
 fn parse_lider_bdl() {
     let mut count: u32 = 0;
@@ -264,6 +274,20 @@ fn parse_lider_bdl() {
         println!("Examinando archivo {:#?}", file);
         let strdata = utils::read_latin1_file(&file).unwrap();
         let _data = bdl::Data::new(&strdata).unwrap();
+
+        // for s in _data.spaces {
+        //     let floor = _data.floors.iter().find(|f| f.name == s.floor).unwrap();
+        //     // TODO: esto debería pasar siempre. Ver si hay algún caso que no pase
+        //     assert_eq!(s.height, floor.height);
+        // }
+
+        // for w in _data.walls {
+        //     if let Some(geom) = &w.geometry {
+        //         if  geom.tilt != 0.0 && geom.tilt != 180.0 {
+        //             println!("{:#?}", w);
+        //         }
+        //     }
+        // }
         count += 1;
     }
     println!("Comprobados {} archivos antiguos", count);
