@@ -10,11 +10,45 @@
 
 use failure::Error;
 use std::convert::TryFrom;
+use std::fmt::Display;
 
 use super::{geom::Polygon, BdlBlock, Data};
 use crate::utils::normalize;
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
+
+/// Tipos de cerramientos
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum WallType {
+    /// Cerramiento en contacto con el aire exterior
+    EXTERIOR,
+    /// Cerramiento en contacto con el terreno
+    UNDERGROUND,
+    /// Cerramiento en contacto con el aire de otro espacio
+    PARTITION,
+    /// Cerramiento sin transmisión térmica
+    ADIABATIC,
+    /// Cerramiento en contacto con el aire exterior
+    /// Equivale a EXTERIOR pero tiene una inclinación por defecto igual a 0
+    ROOF,
+}
+
+impl Display for WallType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let printable = match *self {
+            WallType::EXTERIOR => "EXTERIOR",
+            WallType::UNDERGROUND => "UNDERGROUND",
+            WallType::PARTITION => "PARTITION",
+            WallType::ADIABATIC => "ADIABATIC",
+            WallType::ROOF => "ROOF",
+        };
+        write!(f, "{}", printable)
+    }
+}
+
+impl Default for WallType {
+    fn default() -> Self { WallType::EXTERIOR }
+}
 
 /// Cerramiento exterior o interior
 /// Puede definirse su configuración geométrica por polígono
@@ -46,7 +80,7 @@ pub struct Wall {
     /// Existen otros tipos en BDL pero HULC no los admite:
     /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
     /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
-    pub wall_type: String,
+    pub wall_type: WallType,
     // --- Propiedades exclusivas -----------------------
     // XXX: Absortividad definida por usuario -> Se debe consultar en la construcción
     // XXX: (solo en cerramientos en contacto con el aire)
@@ -156,9 +190,9 @@ impl Wall {
                 Ok(geom.azimuth)
             }
         } else {
-            match (self.wall_type.as_str(), self.location.as_deref()) {
+            match (self.wall_type, self.location.as_deref()) {
                 // Elementos horizontales
-                ("ROOF", _) | (_, Some("TOP")) | (_, Some("BOTTOM")) => Ok(0.0),
+                (WallType::ROOF, _) | (_, Some("TOP")) | (_, Some("BOTTOM")) => Ok(0.0),
                 // Elementos definidos por vértice en polígono
                 (_, Some(vertex)) => {
                     // Superficie para muros definidos por vértice del polígono de su espacio
@@ -357,14 +391,13 @@ impl TryFrom<BdlBlock> for Wall {
             _ => None,
         };
 
-        // Tipos
-        // TODO: Convertir a enum
+        // Tipos de cerramientos
         let wall_type = match btype.as_str() {
             "INTERIOR-WALL" => {
                 let int_wall = attrs.remove_str("INT-WALL-TYPE")?;
                 match int_wall.as_str() {
-                    "STANDARD" => "PARTITION",
-                    "ADIABATIC" => "ADIABATIC",
+                    "STANDARD" => WallType::PARTITION,
+                    "ADIABATIC" => WallType::ADIABATIC,
                     // AIR, INTERNAL
                     _ => bail!(
                         "Cerramiento interior {} con subtipo desconocido {} / {}",
@@ -374,21 +407,20 @@ impl TryFrom<BdlBlock> for Wall {
                     ),
                 }
             }
-            "UNDERGROUND-WALL" => "UNDERGROUND-WALL",
-            "ROOF" => "ROOF",
-            "EXTERIOR-WALL" => "EXTERIOR-WALL",
+            "UNDERGROUND-WALL" => WallType::UNDERGROUND,
+            "ROOF" => WallType::ROOF,
+            "EXTERIOR-WALL" => WallType::EXTERIOR,
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
-        }
-        .to_string();
+        };
 
         // Si la inclinación es None (se define location)
         // Solamente se define explícitamente cuando se define el cerramiento por geometría
         // TODO: dado que siempre definimos el tilt no nos haría falta tener un subtipo ROOF
         let tilt = match attrs.remove_f32("TILT").ok() {
             Some(tilt) => tilt,
-            _ => match (wall_type.as_str(), location.as_deref()) {
+            _ => match (wall_type, location.as_deref()) {
                 // Cubiertas y cerramientos en location top (techos)
-                ("ROOF", _) | (_, Some("TOP")) => 0.0,
+                (WallType::ROOF, _) | (_, Some("TOP")) => 0.0,
                 // cerramientos en location bottom (suelos y soleras)
                 (_, Some("BOTTOM")) => 180.0,
                 // Cerramientos verticales
@@ -402,12 +434,12 @@ impl TryFrom<BdlBlock> for Wall {
         //     "EXTERIOR-WALL" | "ROOF" => Some(attrs.remove_f32("ABSORPTANCE")?),
         //     _ => None,
         // };
-        let nextto = match wall_type.as_str() {
-            "PARTITION" => attrs.remove_str("NEXT-TO").ok(),
+        let nextto = match wall_type {
+            WallType::PARTITION => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
         };
-        let zground = match wall_type.as_str() {
-            "UNDERGROUND-WALL" => Some(attrs.remove_f32("Z-GROUND")?),
+        let zground = match wall_type {
+            WallType::UNDERGROUND => Some(attrs.remove_f32("Z-GROUND")?),
             _ => None,
         };
 

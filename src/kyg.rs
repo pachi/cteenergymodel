@@ -82,7 +82,7 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         btrx: btrx.replace(",", ".").parse()?,
-                        wall_type: "EXTERIOR-WALL".to_string(), // Se completa luego con .ctehexml
+                        wall_type: "EXTERIOR".to_string(), // Se completa luego con .ctehexml
                     });
                 }
                 "PPTT" => {
@@ -146,7 +146,7 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
         }
         for mut wall in &mut walls {
             if let Some(w) = data.bdldata.walls.iter().find(|w| w.name == wall.name) {
-                wall.wall_type = w.wall_type.clone();
+                wall.wall_type = w.wall_type.to_string();
             }
         }
     }

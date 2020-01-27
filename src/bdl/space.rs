@@ -10,6 +10,7 @@ use std::convert::TryFrom;
 use super::blocks::BdlBlock;
 use super::geom::Polygon;
 use super::Data;
+use super::walls::WallType;
 
 use failure::bail;
 use failure::Error;
@@ -62,7 +63,7 @@ impl Space {
             .iter()
             .find(|w| {
                 // Cubiertas
-                w.wall_type == "ROOF"
+                w.wall_type == WallType::ROOF
                 || match w.location.as_deref() {
                     // Muros exteriores o cubiertas en posición superior
                     Some("TOP") => true,
