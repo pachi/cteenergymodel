@@ -39,7 +39,7 @@ pub struct Data {
     pub windows: Vec<Window>,
     /// Puentes térmicos
     pub tbridges: HashMap<String, ThermalBridge>,
-    // Sombras exteriores del edificio
+    /// Sombras exteriores del edificio
     pub shadings: Vec<Shade>,
     /// Condiciones de uso de los espacios
     pub spaceconds: HashMap<String, BdlBlock>,
