@@ -76,7 +76,7 @@ impl std::str::FromStr for BdlBlock {
 pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
     // Elimina líneas en blanco y comentarios, y luego separa por bloques
     let cleanlines = input
-        .replace("\r\n", "\n")
+        .replace("\r\n", "\n") // Normalizar saltos de línea
         .replace("ÿ", "") // Marcador de LIDER (antiguo)
         .lines()
         .map(str::trim)
@@ -84,13 +84,11 @@ pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
             *l != "" // Líneas en blanco
                 && !l.starts_with('$') // Comentarios
                 && !l.starts_with('+') // Encabezados de LIDER (antiguo)
+                && !l.starts_with("TEMPLARY") // Separador de parte de lider del BDL "estándar"
                 && *l != "MARCOS"
                 && *l != "HUECOS"
                 && *l != "PUENTES TERMICOS"
         })
-        // Eliminamos la línea TEMPLARY = USER que separa la parte
-        // propia de LIDER del BDL "estándar"
-        .filter(|l| !l.starts_with("TEMPLARY"))
         .collect::<Vec<&str>>()
         .join("\n");
 
