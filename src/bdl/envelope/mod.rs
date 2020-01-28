@@ -11,6 +11,7 @@ mod floor;
 mod geom;
 mod shadings;
 mod space;
+mod thermalbridge;
 mod walls;
 mod window;
 
@@ -18,5 +19,6 @@ pub use floor::Floor;
 pub use geom::*;
 pub use shadings::Shade;
 pub use space::Space;
+pub use thermalbridge::ThermalBridge;
 pub use walls::Wall;
 pub use window::Window;

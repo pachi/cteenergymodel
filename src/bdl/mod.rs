@@ -19,8 +19,8 @@ mod envelope;
 
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
-pub use db::{Construction, Frame, Gap, Glass, Layers, Material, ThermalBridge, DB};
-pub use envelope::{Floor, Polygon, Shade, Space, Wall, Window};
+pub use db::{Construction, Frame, Gap, Glass, Layers, Material, DB};
+pub use envelope::{Floor, Polygon, Shade, Space, ThermalBridge, Wall, Window};
 
 // ------------------------- BDL ----------------------------
 
@@ -37,6 +37,8 @@ pub struct Data {
     pub walls: Vec<Wall>,
     /// Elementos semitransparentes de la envolvente
     pub windows: Vec<Window>,
+    /// Puentes térmicos
+    pub tbridges: HashMap<String, ThermalBridge>,
     // Sombras exteriores del edificio
     pub shadings: Vec<Shade>,
     /// Condiciones de uso de los espacios
@@ -128,10 +130,6 @@ impl Data {
                     let e = Glass::try_from(block)?;
                     bdldata.db.glasses.insert(e.name.clone(), e);
                 }
-                "THERMAL-BRIDGE" => {
-                    let e = ThermalBridge::try_from(block)?;
-                    bdldata.db.tbridges.insert(e.name.clone(), e);
-                }
 
                 // Elementos geométricos y espacios -----------
                 // Espacios
@@ -180,12 +178,13 @@ impl Data {
 
                     bdldata.spaces.push(space);
                 }
-                // Construcciones
+                // Construcciones -------------
+                // Son elementos redundantes que se eliminan en el postproceso
                 "CONSTRUCTION" => {
                     constructions.insert(block.name.clone(), Construction::try_from(block)?);
                 }
 
-                // Elementos opacos de la envolvente -----------
+                // Cerramientos opacos de la envolvente -----------
                 "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL" => {
                     let maybe_polygon_name = block.attrs.get_str("POLYGON");
                     let mut wall = Wall::try_from(block)?;
@@ -216,6 +215,11 @@ impl Data {
 
                     // Guardamos el muro
                     bdldata.walls.push(wall);
+                }
+                // Puentes térmicos ----------
+                "THERMAL-BRIDGE" => {
+                    let e = ThermalBridge::try_from(block)?;
+                    bdldata.tbridges.insert(e.name.clone(), e);
                 }
 
                 // Elementos transparentes de la envolvente -----

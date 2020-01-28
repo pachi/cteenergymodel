@@ -126,6 +126,7 @@ fn test_bdl_parse() {
         spaces,
         walls,
         windows,
+        tbridges,
         shadings,
         spaceconds,
         systemconds,

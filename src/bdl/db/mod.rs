@@ -21,7 +21,6 @@ mod gap;
 mod glass;
 mod layers;
 mod material;
-mod thermalbridge;
 
 pub use construction::Construction;
 pub use frame::Frame;
@@ -29,7 +28,6 @@ pub use gap::Gap;
 pub use glass::Glass;
 pub use layers::Layers;
 pub use material::Material;
-pub use thermalbridge::ThermalBridge;
 
 /// Elementos constructivos y de materiales pertenecientes a la base de datos
 /// Se organizan por nombre y grupo (tipo)
@@ -45,8 +43,6 @@ pub struct DB {
     pub glasses: HashMap<String, Glass>,
     /// Marco
     pub frames: HashMap<String, Frame>,
-    /// Puente térmico
-    pub tbridges: HashMap<String, ThermalBridge>,
 }
 
 impl DB {
