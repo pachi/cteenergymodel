@@ -74,7 +74,7 @@ impl std::str::FromStr for BdlBlock {
 }
 
 /// Elimina líneas en blanco y comentarios
-pub fn clean_lines(input: &str) -> String {
+fn clean_lines(input: &str) -> String {
     input
         .replace("\r\n", "\n") // Normalizar saltos de línea
         .replace("ÿ", "") // Marcador de LIDER (antiguo)
@@ -97,7 +97,7 @@ pub fn clean_lines(input: &str) -> String {
 ///
 /// Elimina comentarios y líneas en blanco
 /// Corrige bloque de datos de LIDER mal formados
-pub fn sanitize_lider_data(input: &str) -> String {
+fn sanitize_lider_data(input: &str) -> String {
     // Elimna comentarios y líneas innecesarias
     let cleanlines = clean_lines(input);
 
