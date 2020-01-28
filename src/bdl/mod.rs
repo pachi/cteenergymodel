@@ -17,20 +17,32 @@ mod common;
 mod cons;
 mod construction;
 mod floor;
+mod frame;
+mod gap;
 mod geom;
+mod glass;
+mod layers;
+mod material;
 mod shadings;
 mod space;
+mod thermalbridge;
 mod walls;
 mod window;
 
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
-pub use cons::{Frame, Gap, Glass, Layers, Material, ThermalBridge, DB};
+pub use cons::DB;
 pub use construction::Construction;
 pub use floor::Floor;
+pub use frame::Frame;
+pub use gap::Gap;
 pub use geom::Polygon;
+pub use glass::Glass;
+pub use layers::Layers;
+pub use material::Material;
 pub use shadings::Shade;
 pub use space::Space;
+pub use thermalbridge::ThermalBridge;
 pub use walls::Wall;
 pub use window::Window;
 
@@ -156,13 +168,16 @@ impl Data {
 
                     // Copiamos polígono ----------
                     let mut space = Space::try_from(block)?;
-                    let mut polygon = polygons.get(&polygon_name).ok_or_else(|| {
-                        format_err!(
-                            "Polígono {} no encontrado para el espacio {}",
-                            &polygon_name,
-                            &space.name,
-                        )
-                    })?.clone();
+                    let mut polygon = polygons
+                        .get(&polygon_name)
+                        .ok_or_else(|| {
+                            format_err!(
+                                "Polígono {} no encontrado para el espacio {}",
+                                &polygon_name,
+                                &space.name,
+                            )
+                        })?
+                        .clone();
                     // Desplazamos el polígono
                     if let Ok(xval) = x {
                         polygon.vertices.iter_mut().for_each(|v| v.vector.x += xval);
