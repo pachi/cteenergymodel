@@ -30,7 +30,7 @@ pub struct MaterialProperties {
     pub conductivity: f32,
     /// Densidad, rho (kg/m3)
     pub density: f32,
-    /// Calor específico, C_p (J/kg K)
+    /// Calor específico, C_p (J/kg K) (valor por defecto 800 J/kg·K)
     pub specificheat: f32,
     /// Factor de difusividad al vapor de agua, mu (-)
     /// En archivos de LIDER antiguo se pone por defecto 0.0 (no definido)
@@ -87,7 +87,7 @@ impl TryFrom<BdlBlock> for Material {
                 let thickness = attrs.remove_f32("THICKNESS").ok();
                 let conductivity = attrs.remove_f32("CONDUCTIVITY")?;
                 let density = attrs.remove_f32("DENSITY")?;
-                let specificheat = attrs.remove_f32("SPECIFIC-HEAT")?;
+                let specificheat = attrs.remove_f32("SPECIFIC-HEAT").unwrap_or(800.0);
                 // XXX: En LIDER antiguo no se define este valor
                 let vapourdiffusivity = attrs.remove_f32("VAPOUR-DIFFUSIVITY-FACTOR").ok();
                 (
