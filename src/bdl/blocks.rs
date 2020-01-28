@@ -73,27 +73,36 @@ impl std::str::FromStr for BdlBlock {
     }
 }
 
-pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
-    // Elimina líneas en blanco y comentarios, y luego separa por bloques
-    let cleanlines = input
+/// Elimina líneas en blanco y comentarios
+pub fn clean_lines(input: &str) -> String {
+    input
         .replace("\r\n", "\n") // Normalizar saltos de línea
         .replace("ÿ", "") // Marcador de LIDER (antiguo)
         .lines()
         .map(str::trim)
         .filter(|l| {
             *l != "" // Líneas en blanco
-                && !l.starts_with('$') // Comentarios
-                && !l.starts_with('+') // Encabezados de LIDER (antiguo)
-                && !l.starts_with("TEMPLARY") // Separador de parte de lider del BDL "estándar"
-                && *l != "MARCOS"
-                && *l != "HUECOS"
-                && *l != "PUENTES TERMICOS"
+            && !l.starts_with('$') // Comentarios
+            && !l.starts_with('+') // Encabezados de LIDER (antiguo)
+            && !l.starts_with("TEMPLARY") // Separador de parte de lider del BDL "estándar"
+            && *l != "MARCOS"
+            && *l != "HUECOS"
+            && *l != "PUENTES TERMICOS"
         })
         .collect::<Vec<&str>>()
-        .join("\n");
+        .join("\n")
+}
 
-    // Separamos una parte inicial de atributos sueltos, sin bloque,
-    // del resto que es BDL válido:
+/// Limpia y corrige datos de LIDER para tener bloques BDL bien formateados
+///
+/// Elimina comentarios y líneas en blanco
+/// Corrige bloque de datos de LIDER mal formados
+pub fn sanitize_lider_data(input: &str) -> String {
+    // Elimna comentarios y líneas innecesarias
+    let cleanlines = clean_lines(input);
+
+    // Si existe, separamos una parte inicial de atributos sueltos de LIDER,
+    // sin bloque, del resto de contenido, que es BDL válido:
     // CAMBIO = SI
     // CAMBIO-CALENER = NO
     // EEGeneradaAutoconsumida        = "0"
@@ -106,16 +115,18 @@ pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
         } else if let Some(pos) = cleanlines.find("\"Defecto\" = DESCRIPTION") {
             cleanlines.split_at(pos)
         } else {
-            panic!(
-            "Error en la estructura de datos. No se han encontrado los datos de LIDER y de USARIO"
-        )
+            return cleanlines;
         };
-    let new_bdl_part = format!(
+    format!(
         "\"PARTELIDER\" = PARTELIDER\n{}\n..\n{}",
         _lider_part, bdl_part
-    );
+    )
+}
 
-    let blockstrs = new_bdl_part
+pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
+    let cleandata = sanitize_lider_data(input);
+
+    let blockstrs = cleandata
         .split("..")
         .map(str::trim)
         .filter(|v| !v.is_empty());
@@ -167,7 +178,7 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
         if l == ".." {
             continue;
         };
-        if let [key, value] = l.split('=').map(str::trim).collect::<Vec<_>>().as_slice() {
+        if let [key, value] = l.splitn(2, '=').map(str::trim).collect::<Vec<_>>().as_slice() {
             // Valores simples o con paréntesis
             let value = if value.starts_with('(') && !value.ends_with(')') {
                 let mut values = vec![*value];
@@ -184,7 +195,7 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
             };
             attributes.insert(key, &value);
         } else {
-            bail!("No se ha podido extraer clave y atributo de '{}'", l)
+            bail!("No se ha podido extraer clave y atributo de la línea '{}'", l)
         }
     }
     Ok(attributes)
