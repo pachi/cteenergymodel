@@ -5,7 +5,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{extract_f32vec, extract_namesvec, BdlBlock};
+use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock};
 
 /// Definición de capas
 #[derive(Debug, Clone, Default)]

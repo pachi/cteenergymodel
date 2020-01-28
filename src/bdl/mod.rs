@@ -14,35 +14,23 @@ use failure::Error;
 
 mod blocks;
 mod common;
-mod cons;
 mod construction;
+mod db;
 mod floor;
-mod frame;
-mod gap;
 mod geom;
-mod glass;
-mod layers;
-mod material;
 mod shadings;
 mod space;
-mod thermalbridge;
 mod walls;
 mod window;
 
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
-pub use cons::DB;
 pub use construction::Construction;
+pub use db::{Frame, Gap, Glass, Layers, Material, ThermalBridge, DB};
 pub use floor::Floor;
-pub use frame::Frame;
-pub use gap::Gap;
 pub use geom::Polygon;
-pub use glass::Glass;
-pub use layers::Layers;
-pub use material::Material;
 pub use shadings::Shade;
 pub use space::Space;
-pub use thermalbridge::ThermalBridge;
 pub use walls::Wall;
 pub use window::Window;
 

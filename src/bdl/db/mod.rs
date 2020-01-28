@@ -1,13 +1,8 @@
 //! Parser del Building Description Language (BDL) de DOE
 //!
-//! Composiciones constructivas y de materiales
-//!
-//! - Acristalamiento (GLASS-TYPE)
-//! - Marco (NAME-FRAME)
-//!
-//! Configuran la base de datos de materiales por familias y dentro de ellas, por grupos:
-//!
-//! BBDD
+//! ## Base de datos de materiales y composiciones de elementos de la envolvente
+//! 
+//! Los materiales se organizan por familias, dentro de ellas, por grupos:
 //!
 //! - Opacos
 //!      - Materiales y productos (MATERIAL (tipo PROPERTIES o RESISTANCE))
@@ -20,12 +15,19 @@
 
 use std::collections::HashMap;
 
-use super::frame::Frame;
-use super::gap::Gap;
-use super::glass::Glass;
-use super::layers::Layers;
-use super::material::Material;
-use super::thermalbridge::ThermalBridge;
+mod frame;
+mod gap;
+mod glass;
+mod layers;
+mod material;
+mod thermalbridge;
+
+pub use frame::Frame;
+pub use gap::Gap;
+pub use glass::Glass;
+pub use layers::Layers;
+pub use material::Material;
+pub use thermalbridge::ThermalBridge;
 
 /// Elementos constructivos y de materiales pertenecientes a la base de datos
 /// Se organizan por nombre y grupo (tipo)

@@ -5,7 +5,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::BdlBlock;
+use crate::bdl::BdlBlock;
 
 /// Definición de hueco o lucernario (GAP)
 #[derive(Debug, Clone, Default)]

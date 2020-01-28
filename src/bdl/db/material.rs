@@ -5,7 +5,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::BdlBlock;
+use crate::bdl::BdlBlock;
 
 /// Material definido por sus propiedades térmicas o por resistencia
 #[derive(Debug, Clone, Default)]
