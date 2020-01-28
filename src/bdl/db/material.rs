@@ -14,10 +14,10 @@ pub struct Material {
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
-    /// Definición detallada de propiedades
+    /// Definición detallada de propiedades (labda, rho, C_p, mu, ...)
     pub properties: Option<MaterialProperties>,
-    /// Definición de resistencia térmica
-    pub resistance: Option<MaterialResistance>,
+    /// Definición de resistencia térmica R (m2K/W)
+    pub resistance: Option<f32>,
 }
 
 /// Definición de propiedades termofísicas y grosor
@@ -35,13 +35,6 @@ pub struct MaterialProperties {
     /// Factor de difusividad al vapor de agua, mu (-)
     /// En archivos de LIDER antiguo se pone por defecto 0.0 (no definido)
     pub vapourdiffusivity: Option<f32>,
-}
-
-/// Definición por resistencia térmica
-#[derive(Debug, Copy, Clone, Default)]
-pub struct MaterialResistance {
-    /// Resistencia térmica R (m2K/W)
-    pub resistance: f32,
 }
 
 impl TryFrom<BdlBlock> for Material {
@@ -110,7 +103,7 @@ impl TryFrom<BdlBlock> for Material {
             }
             _ => {
                 let resistance = attrs.remove_f32("RESISTANCE")?;
-                (None, Some(MaterialResistance { resistance }))
+                (None, Some(resistance))
             }
         };
         Ok(Self {
