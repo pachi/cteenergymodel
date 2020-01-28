@@ -80,11 +80,9 @@ impl Space {
                     self.name
                 )
             })?;
-        // TODO: convertir cálculo de espesor a método de layers
-        let layers = db.db.layers
-            .get(&topwall.construction)
-            .ok_or_else(|| format_err!("No se ha encontrado la composición {} del cerramiento {}. No se puede calcular la altura libre", &topwall.construction, topwall.name))?;
-        let topheight: f32 = layers.thickness.iter().sum();
+        let topheight = db.db
+            .get_layers_thickness(&topwall.layers)
+            .ok_or_else(|| format_err!("No se ha podido calcular el espesor de la composición {} del cerramiento {}. No se puede calcular la altura libre", &topwall.layers, topwall.name))?;
         Ok(self.height - topheight)
     }
 

@@ -206,13 +206,13 @@ impl Data {
 
                     // Sustituimos la construcción por el nombre de la composición de capas
                     // La absortividad ya está correcta en el muro y así podemos eliminar constructions
-                    let cons = constructions.get(&wall.construction).ok_or_else(|| {
+                    let cons = constructions.get(&wall.layers).ok_or_else(|| {
                         format_err!(
                             "No se ha definido la construcción del cerramiento {}",
                             wall.name
                         )
                     })?;
-                    wall.construction = cons.layers.clone();
+                    wall.layers = cons.layers.clone();
 
                     // Guardamos el muro
                     bdldata.walls.push(wall);

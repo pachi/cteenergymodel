@@ -48,3 +48,13 @@ pub struct DB {
     /// Puente térmico
     pub tbridges: HashMap<String, ThermalBridge>,
 }
+
+impl DB {
+    /// Espesor total de una composición de capas [m]
+    pub fn get_layers_thickness(&self, name: &str) -> Option<f32> {
+        self.layers
+            .get(name)
+            .and_then(|layers| Some(layers.thickness.iter().sum()))
+    }
+
+}
