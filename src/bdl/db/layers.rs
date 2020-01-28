@@ -14,9 +14,9 @@ pub struct Layers {
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
-    /// Lista de nombres de materiales de las capas
+    /// Lista de nombres de materiales de las capas ([mat1, mat2, ...])
     pub material: Vec<String>,
-    /// Lista de espesores de las capas ([m, m, ...])
+    /// Lista de espesores de las capas [m] ([e1, e2, ...])
     pub thickness: Vec<f32>,
 }
 
