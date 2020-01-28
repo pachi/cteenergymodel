@@ -155,11 +155,11 @@ pub struct Wall {
     /// Coeficiente de transmisión del elemento opaco (-)
     pub btrx: f32, // 0 | 1
     /// Tipo de cerramiento:
-    /// - UNDERGROUND-WALL
-    /// - EXTERIOR-WALL
-    /// - ROOF
-    /// - PARTITION
-    /// - ADIABATIC
+    /// - UNDERGROUND: cerramientos en contacxto con el terreno
+    /// - EXTERIOR: cerramientos en contacto con el aire exterior
+    /// - ROOF: cerramientos en contacto con el aire exterior
+    /// - PARTITION: cerramientos en contacto con el aire de otros espacios
+    /// - ADIABATIC: cerramientos sin transmisión de calor
     #[serde(rename(serialize = "type"))]
     pub wall_type: String,
 }
