@@ -1,7 +1,7 @@
 //! Parser del Building Description Language (BDL) de DOE
 //!
 //! ## Base de datos de materiales y composiciones de elementos de la envolvente
-//! 
+//!
 //! Los materiales se organizan por familias, dentro de ellas, por grupos:
 //!
 //! - Opacos
@@ -15,6 +15,7 @@
 
 use std::collections::HashMap;
 
+mod construction;
 mod frame;
 mod gap;
 mod glass;
@@ -22,6 +23,7 @@ mod layers;
 mod material;
 mod thermalbridge;
 
+pub use construction::Construction;
 pub use frame::Frame;
 pub use gap::Gap;
 pub use glass::Glass;

@@ -12,7 +12,7 @@ use failure::Error;
 use std::convert::TryFrom;
 use std::fmt::Display;
 
-use super::{geom::Polygon, BdlBlock, Data};
+use crate::bdl::{envelope::Polygon, AttrMap, BdlBlock, Data};
 use crate::utils::normalize;
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
@@ -47,7 +47,9 @@ impl Display for WallType {
 }
 
 impl Default for WallType {
-    fn default() -> Self { WallType::EXTERIOR }
+    fn default() -> Self {
+        WallType::EXTERIOR
+    }
 }
 
 /// Cerramiento exterior o interior
@@ -242,7 +244,7 @@ impl WallGeometry {
     /// Detectamos si se define la geometría por polígono
     /// Como guardaremos el polígono no por su nombre sino como objeto aquí usamos un default
     /// y lo corregimos en el postproceso
-    pub fn parse_wallgeometry(mut attrs: super::AttrMap) -> Result<Option<Self>, Error> {
+    pub fn parse_wallgeometry(mut attrs: AttrMap) -> Result<Option<Self>, Error> {
         if attrs.remove_str("POLYGON").is_ok() {
             let polygon = Default::default();
             // XXX: en LIDER antiguo pueden no aparecer algunas de estas coordenadas

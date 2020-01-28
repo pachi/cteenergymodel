@@ -7,10 +7,10 @@
 
 use std::convert::TryFrom;
 
-use super::blocks::BdlBlock;
 use super::geom::Polygon;
-use super::Data;
 use super::walls::WallType;
+use crate::bdl::BdlBlock;
+use crate::bdl::Data;
 
 use failure::bail;
 use failure::Error;

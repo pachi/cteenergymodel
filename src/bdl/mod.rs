@@ -14,25 +14,13 @@ use failure::Error;
 
 mod blocks;
 mod common;
-mod construction;
 mod db;
-mod floor;
-mod geom;
-mod shadings;
-mod space;
-mod walls;
-mod window;
+mod envelope;
 
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
-pub use construction::Construction;
-pub use db::{Frame, Gap, Glass, Layers, Material, ThermalBridge, DB};
-pub use floor::Floor;
-pub use geom::Polygon;
-pub use shadings::Shade;
-pub use space::Space;
-pub use walls::Wall;
-pub use window::Window;
+pub use db::{Construction, Frame, Gap, Glass, Layers, Material, ThermalBridge, DB};
+pub use envelope::{Floor, Polygon, Shade, Space, Wall, Window};
 
 // ------------------------- BDL ----------------------------
 

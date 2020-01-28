@@ -8,7 +8,7 @@
 
 use std::convert::TryFrom;
 
-use super::blocks::BdlBlock;
+use crate::bdl::BdlBlock;
 
 use failure::Error;
 

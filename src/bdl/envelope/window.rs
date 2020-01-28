@@ -5,7 +5,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{extract_f32vec, BdlBlock, Data};
+use crate::bdl::{extract_f32vec, BdlBlock, Data};
 
 // Hueco (WINDOW) -------------------------------------------------
 

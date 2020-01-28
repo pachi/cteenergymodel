@@ -5,7 +5,7 @@
 use failure::Error;
 use std::convert::TryFrom;
 
-use super::{geom::Vertex3D, BdlBlock};
+use crate::bdl::{envelope::Vertex3D, BdlBlock};
 
 // Sombras ---------------------
 
