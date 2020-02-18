@@ -41,9 +41,7 @@ pub struct CtehexmlData {
     pub gglshwi: HashMap<String, f32>,
 }
 
-// Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
-    let utf8buf = read_file(path)?;
+// Lee estructura de datos desde cadena con formato de archivo .ctehexml
 
     // Localiza datos en XML
     let doc = roxmltree::Document::parse(&utf8buf)?;
