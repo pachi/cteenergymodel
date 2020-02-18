@@ -131,6 +131,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         ctehexmldata.climate
     );
 
+    // Carga datos de espacios
     let spaces = build_spaces(&ctehexmldata.bdldata)?;
 
     // Interpreta .kyg
