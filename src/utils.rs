@@ -78,3 +78,37 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     (offset - (f32::floor(offset / width) * width)) + start
 }
 
+/// Nombre del ángulo a partir de su valor sexagesimal (0 -> 360)
+/// El ángulo se define respecto al sur (sur = 0)
+/// y crece en sentido antihorario, según DB-HE1 figura A.1
+pub fn angle_name(angle: f32) -> String {
+    let angle = normalize(angle, 0.0, 360.0);
+    let name = if angle < 18.0 {
+        "S"
+    } else if angle < 69.0 {
+        "SE"
+    } else if angle < 120.0 {
+        "E"
+    } else if angle < 157.5 {
+        "NE"
+    } else if angle < 202.5 {
+        "N"
+    }
+    // 202.5 = 360 - 157.5
+    else if angle < 240.0 {
+        "NO"
+    }
+    // 240 = 360 - 120
+    else if angle < 291.0 {
+        "O"
+    }
+    // 291 = 360 - 69
+    else if angle < 342.0 {
+        "SO"
+    }
+    // 342 = 360 - 18
+    else {
+        "S"
+    };
+    name.to_string()
+}
