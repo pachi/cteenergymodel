@@ -29,12 +29,11 @@ use std::collections::HashMap;
 
 use failure::Error;
 
-use super::ctehexml::CtehexmlData;
 use super::envolventetypes::{EnvelopeElements, ThermalBridge, Wall, Window};
 use super::utils::read_latin1_file;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<EnvelopeElements, Error> {
+pub fn parse(path: &str) -> Result<EnvelopeElements, Error> {
     let utf8buf = read_latin1_file(path)?;
 
     let lines = utf8buf
@@ -65,10 +64,10 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         ff: ff.replace(",", ".").parse::<f32>()? / 100.0_f32,
-                        gglwi: 1.0,   // Se completa a posteriori con datos del .ctehexml
-                        gglshwi: 1.0, // Se completa a posteriori con datos del .ctehexml
-                        fshobst: 1.0, // Se completa a posteriori con datos de los campos qsolwindow
-                        infcoeff_100: 50.0, // se completa luego con datos del .ctehexml
+                        gglwi: 1.0,   // Valor por defecto. Solo disponible en .ctehexml
+                        gglshwi: 1.0, // Valor por defecto. Solo disponible en .ctehexml
+                        fshobst: 1.0, // Valor por defecto. Solo disponible en .ctehexml
+                        infcoeff_100: 50.0, // Valor por defecto. Solo disponible en .ctehexml
                     });
                 }
                 "Muro" => {
@@ -82,7 +81,7 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         btrx: btrx.replace(",", ".").parse()?,
-                        wall_type: "EXTERIOR".to_string(), // Se completa luego con .ctehexml
+                        wall_type: "EXTERIOR".to_string(), // Valor por defecto. Solo disponible en .ctehexml
                     });
                 }
                 "PPTT" => {
@@ -120,35 +119,6 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
     for mut hueco in &mut windows {
         if let Some(val) = qsolvalues.get(&hueco.name) {
             hueco.fshobst = *val;
-        }
-    }
-
-    // Actualizaciones con datos del ctehexmldata ---------------
-    if let Some(ref data) = ctehexmldata {
-        // 1. Datos de huecos: gglshwi, gglwi y infcoeff
-        let gglshwimap = &data.gglshwi;
-        for mut win in &mut windows {
-            // Factor solar con protecciones activadas
-            if let Some(val) = gglshwimap.get(&win.name) {
-                win.gglshwi = *val;
-            };
-            // Coeficiente de permeabilidad a 100 Pa y factor solar del hueco
-            if let Some(bdlwin) = data.bdldata.windows.iter().find(|w| w.name == win.name) {
-                if let Some(cons) = data.bdldata.db.windows.get(&bdlwin.gap) {
-                    // Permeabilidad
-                    win.infcoeff_100 = cons.infcoeff;
-                    // Factor solar del hueco redondeado a dos decimales
-                    if let Some(glass) = data.bdldata.db.glasses.get(&cons.glass) {
-                        win.gglwi = (glass.g_gln * 0.90 * 100.0).round() / 100.0;
-                    }
-                }
-            };
-        }
-        // 2. Datos de muros
-        for mut wall in &mut walls {
-            if let Some(w) = data.bdldata.walls.iter().find(|w| w.name == wall.name) {
-                wall.wall_type = w.wall_type.to_string();
-            }
         }
     }
 

@@ -125,7 +125,7 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
 
 pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
     // Interpreta .ctehexml
-    let ctehexmldata = ctehexml::parse(&hulcfiles.ctehexml)?;
+    let mut ctehexmldata = ctehexml::parse(&hulcfiles.ctehexml)?;
     eprintln!(
         "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
         ctehexmldata.climate
@@ -134,8 +134,40 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
     let spaces = build_spaces(&ctehexmldata.bdldata)?;
 
     // Interpreta .kyg
-    let envelope = kyg::parse(&hulcfiles.kyg, Some(&ctehexmldata))?;
+    let mut envelope = kyg::parse(&hulcfiles.kyg)?;
     eprintln!("Localizada definición de elementos de la envolvente");
+
+    // Actualizaciones del kyg con datos del ctehexmldata ---------------
+    // 1. Datos de huecos: gglshwi, gglwi y infcoeff
+    let gglshwimap = &ctehexmldata.gglshwi;
+    for mut win in &mut envelope.windows {
+        // Factor solar con protecciones activadas
+        if let Some(val) = gglshwimap.get(&win.name) {
+            win.gglshwi = *val;
+        };
+        // Coeficiente de permeabilidad a 100 Pa y factor solar del hueco
+        if let Some(bdlwin) = ctehexmldata
+            .bdldata
+            .windows
+            .iter()
+            .find(|w| w.name == win.name)
+        {
+            if let Some(cons) = ctehexmldata.bdldata.db.windows.get(&bdlwin.gap) {
+                // Permeabilidad
+                win.infcoeff_100 = cons.infcoeff;
+                // Factor solar del hueco redondeado a dos decimales
+                if let Some(glass) = ctehexmldata.bdldata.db.glasses.get(&cons.glass) {
+                    win.gglwi = (glass.g_gln * 0.90 * 100.0).round() / 100.0;
+                }
+            }
+        };
+    }
+    // 2. Datos de muros
+    for mut wall in &mut envelope.walls {
+        if let Some(w) = ctehexmldata.bdldata.walls.iter().find(|w| w.name == wall.name) {
+            wall.wall_type = w.wall_type.to_string();
+        }
+    }
 
     // Zona climática
     let climate = ctehexmldata.climate;
