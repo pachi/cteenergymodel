@@ -64,7 +64,8 @@ pub struct HulcFiles {
 }
 
 // Localiza los archivos relevantes
-pub fn find_hulc_files(basedir: &str) -> Result<HulcFiles, Error> {
+pub fn find_hulc_files<T: AsRef<str>>(basedir: T) -> Result<HulcFiles, Error> {
+    let basedir = basedir.as_ref();
     if !PathBuf::from(basedir).exists() {
         bail!("No se ha localizado el directorio base {}", basedir);
     }

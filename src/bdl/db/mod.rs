@@ -13,6 +13,7 @@
 //!      - Composición de huecos y lucernarios (GAP)
 //! - Puentes térmicos (THERMAL-BRIDGE)?
 
+use failure::Error;
 use std::collections::HashMap;
 
 mod construction;
@@ -53,4 +54,51 @@ impl DB {
             .and_then(|layers| Some(layers.thickness.iter().sum()))
     }
 
+    /// Transmitancia térmica de una composición de capas [W/m2K]
+    pub fn get_layers_transmittance(&self, name: &str) -> Result<f32, Error> {
+        let layers = self
+            .layers
+            .get(name)
+            .ok_or_else(|| format_err!("No se encuentra la composición de capas \"{}\"", name))?;
+
+        let materials = layers
+            .material
+            .iter()
+            .map(|m| {
+                self.materials.get(m).ok_or_else(|| {
+                    format_err!(
+                        "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
+                        m,
+                        name
+                    )
+                })
+            })
+            .collect::<Result<Vec<_>, Error>>()?;
+
+        materials
+            .iter()
+            .zip(&layers.thickness)
+            // Resistencias térmicas de las capas
+            .map(|(mat, thk)| match mat.properties {
+                Some(props) if props.conductivity != 0.0 => Some(thk / props.conductivity),
+                None => mat.resistance,
+                _ => None,
+            })
+            // Resistencia térmica total
+            .try_fold(0.0_f32, |acc, x| x.and_then(|res| Some(res + acc)))
+            // Transmitancia térmica
+            .and_then(|resvec| {
+                if resvec != 0.0 {
+                    Some(1.0 / resvec)
+                } else {
+                    None
+                }
+            })
+            .ok_or_else(|| {
+                format_err!(
+                    "Error al calcular la transmitancia de la composición \"{}\"",
+                    name
+                )
+            })
+    }
 }

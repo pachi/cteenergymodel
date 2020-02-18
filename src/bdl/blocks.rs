@@ -123,8 +123,8 @@ fn sanitize_lider_data(input: &str) -> String {
     )
 }
 
-pub fn build_blocks(input: &str) -> Result<Vec<BdlBlock>, Error> {
-    let cleandata = sanitize_lider_data(input);
+pub fn build_blocks<T: AsRef<str>>(input: T) -> Result<Vec<BdlBlock>, Error> {
+    let cleandata = sanitize_lider_data(input.as_ref());
 
     let blockstrs = cleandata
         .split("..")

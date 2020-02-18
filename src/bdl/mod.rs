@@ -50,8 +50,8 @@ pub struct Data {
 }
 
 impl Data {
-    pub fn new(input: &str) -> Result<Self, Error> {
-        let blocks = build_blocks(input)?;
+    pub fn new<T: AsRef<str>>(input: T) -> Result<Self, Error> {
+        let blocks = build_blocks(input.as_ref())?;
 
         // Separa polígonos (POLYGON) -----------
         // luego los sustituiremos en los objetos que los usan
@@ -249,17 +249,17 @@ impl Data {
     }
 
     /// Localiza hueco
-    pub fn get_window(&self, name: &str) -> Option<&Window> {
-        self.windows.iter().find(|w| w.name == name)
+    pub fn get_window<T: AsRef<str>>(&self, name: T) -> Option<&Window> {
+        self.windows.iter().find(|w| w.name == name.as_ref())
     }
 
     /// Localiza muro
-    pub fn get_wall(&self, name: &str) -> Option<&Wall> {
-        self.walls.iter().find(|w| w.name == name)
+    pub fn get_wall<T: AsRef<str>>(&self, name: T) -> Option<&Wall> {
+        self.walls.iter().find(|w| w.name == name.as_ref())
     }
 
     /// Localiza espacio
-    pub fn get_space(&self, name: &str) -> Option<&Space> {
-        self.spaces.iter().find(|w| w.name == name)
+    pub fn get_space<T: AsRef<str>>(&self, name: T) -> Option<&Space> {
+        self.spaces.iter().find(|w| w.name == name.as_ref())
     }
 }

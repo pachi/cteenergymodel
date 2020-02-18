@@ -33,8 +33,8 @@ use super::envolventetypes::{EnvelopeElements, ThermalBridge, Wall, Window};
 use super::utils::read_latin1_file;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse(path: &str) -> Result<EnvelopeElements, Error> {
-    let utf8buf = read_latin1_file(path)?;
+pub fn parse<T: AsRef<str>>(path: T) -> Result<EnvelopeElements, Error> {
+    let utf8buf = read_latin1_file(path.as_ref())?;
 
     let lines = utf8buf
         .lines()
