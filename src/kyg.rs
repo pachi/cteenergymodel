@@ -124,8 +124,8 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
     }
 
     // Actualizaciones con datos del ctehexmldata ---------------
-    // Actualización de valores de gglshwi
     if let Some(ref data) = ctehexmldata {
+        // 1. Datos de huecos: gglshwi, gglwi y infcoeff
         let gglshwimap = &data.gglshwi;
         for mut win in &mut windows {
             // Factor solar con protecciones activadas
@@ -144,6 +144,7 @@ pub fn parse(path: &str, ctehexmldata: Option<&CtehexmlData>) -> Result<Envelope
                 }
             };
         }
+        // 2. Datos de muros
         for mut wall in &mut walls {
             if let Some(w) = data.bdldata.walls.iter().find(|w| w.name == wall.name) {
                 wall.wall_type = w.wall_type.to_string();
