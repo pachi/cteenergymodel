@@ -42,6 +42,8 @@ pub struct CtehexmlData {
 }
 
 // Lee estructura de datos desde cadena con formato de archivo .ctehexml
+pub fn parse<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error> {
+    let utf8buf = read_file(path.as_ref())?;
 
     // Localiza datos en XML
     let doc = roxmltree::Document::parse(&utf8buf)?;
@@ -114,9 +116,9 @@ pub struct CtehexmlData {
 static LIDERCATSTR: &'static str = include_str!("BDCatalogo.bdc.utf8");
 
 /// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
-pub fn parse_with_catalog(path: &str) -> Result<CtehexmlData, Error> {
+pub fn parse_with_catalog<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error> {
     // Carga archivo .ctehexml
-    let mut ctehexmldata = parse(&path)?;
+    let mut ctehexmldata = parse(path.as_ref())?;
     let mut db = ctehexmldata.bdldata.db;
     // Carga datos del catálogo
     let catdb = Data::new(&LIDERCATSTR)?.db;
