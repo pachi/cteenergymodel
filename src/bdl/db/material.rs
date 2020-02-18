@@ -80,7 +80,7 @@ impl TryFrom<BdlBlock> for Material {
         // El LIDER antiguo no guardaba grupos
         let group = attrs
             .remove_str("GROUP")
-            .unwrap_or("Materiales".to_string());
+            .unwrap_or_else(|_| "Materiales".to_string());
         let (properties, resistance) = match attrs.remove_str("TYPE")?.as_ref() {
             "PROPERTIES" => {
                 // XXX: En LIDER antiguo no se define este valor

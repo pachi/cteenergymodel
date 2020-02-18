@@ -58,7 +58,7 @@ impl TryFrom<BdlBlock> for Glass {
             );
         };
         // LIDER antiguo no guardaba el grupo
-        let group = attrs.remove_str("GROUP").unwrap_or("Vidrios".to_string());
+        let group = attrs.remove_str("GROUP").unwrap_or_else(|_| "Vidrios".to_string());
         let conductivity = attrs.remove_f32("GLASS-CONDUCTANCE")?;
         // El SHADING-COEF es SGHC/SGHC_ref donde:
         // - SGHC_ref = 0.86 (vidrio claro) (a veces se indica 0.87)

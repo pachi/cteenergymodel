@@ -53,7 +53,7 @@ impl TryFrom<BdlBlock> for Layers {
             name, mut attrs, ..
         } = value;
         // En LIDER antiguo no se guarda el grupo
-        let group = attrs.remove_str("GROUP").unwrap_or("Capas".to_string());
+        let group = attrs.remove_str("GROUP").unwrap_or_else(|_| "Capas".to_string());
         let material = extract_namesvec(attrs.remove_str("MATERIAL")?);
         let thickness = extract_f32vec(attrs.remove_str("THICKNESS")?)?;
         Ok(Self {

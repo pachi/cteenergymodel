@@ -51,7 +51,7 @@ impl DB {
     pub fn get_layers_thickness(&self, name: &str) -> Option<f32> {
         self.layers
             .get(name)
-            .and_then(|layers| Some(layers.thickness.iter().sum()))
+            .map(|layers| layers.thickness.iter().sum())
     }
 
     /// Transmitancia térmica de una composición de capas [W/m2K]
@@ -85,7 +85,7 @@ impl DB {
                 _ => None,
             })
             // Resistencia térmica total
-            .try_fold(0.0_f32, |acc, x| x.and_then(|res| Some(res + acc)))
+            .try_fold(0.0_f32, |acc, x| x.map(|res| res + acc))
             // Transmitancia térmica
             .and_then(|resvec| {
                 if resvec != 0.0 {

@@ -215,11 +215,11 @@ impl TryFrom<BdlBlock> for Space {
         // No existe en LIDER antiguo
         let spaceconds = attrs
             .remove_str("SPACE-CONDITIONS")
-            .unwrap_or(spacetype.clone());
+            .unwrap_or_else(|_| spacetype.clone());
         // No existe en LIDER antiguo
         let systemconds = attrs
             .remove_str("SYSTEM-CONDITIONS")
-            .unwrap_or(spacetype.clone());
+            .unwrap_or_else(|_| spacetype.clone());
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
         // XXX: Es un booleano codificado como entero que se parse como número
         let ismultiplied = (attrs.remove_f32("MULTIPLIED")? - 1.0).abs() < 0.1;

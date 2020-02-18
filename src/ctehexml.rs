@@ -113,7 +113,7 @@ pub fn parse<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error> {
 }
 
 // TODO: convertir a DB sin datos innecesarios del catálogo
-static LIDERCATSTR: &'static str = include_str!("BDCatalogo.bdc.utf8");
+static LIDERCATSTR: &str = include_str!("BDCatalogo.bdc.utf8");
 
 /// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
 pub fn parse_with_catalog<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error> {
@@ -122,11 +122,11 @@ pub fn parse_with_catalog<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error>
     let mut db = ctehexmldata.bdldata.db;
     // Carga datos del catálogo
     let catdb = Data::new(&LIDERCATSTR)?.db;
-    db.materials.extend(catdb.materials.clone());
-    db.layers.extend(catdb.layers.clone());
-    db.windows.extend(catdb.windows.clone());
-    db.glasses.extend(catdb.glasses.clone());
-    db.frames.extend(catdb.frames.clone());
+    db.materials.extend(catdb.materials);
+    db.layers.extend(catdb.layers);
+    db.windows.extend(catdb.windows);
+    db.glasses.extend(catdb.glasses);
+    db.frames.extend(catdb.frames);
     ctehexmldata.bdldata.db = db;
     Ok(ctehexmldata)
 }

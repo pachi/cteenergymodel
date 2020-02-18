@@ -186,7 +186,10 @@ impl Wall {
         if let Some(geom) = &self.geometry {
             // Elementos definidos por polígono
             // Elementos horizontales (hacia arriba o hacia abajo)
-            if self.tilt == 0.0 || self.tilt == 180.0 {
+            // tilt == 0 o tilt == 180
+            if self.tilt.abs() < 10.0 * std::f32::EPSILON
+                || (self.tilt - 180.0).abs() < 10.0 * std::f32::EPSILON
+            {
                 Ok(0.0)
             } else {
                 // Se guarda el ángulo respecto al eje Y del espacio (norte, si la desviación global es cero)
