@@ -218,12 +218,6 @@ fn test_bdl_parse() {
 }
 
 #[test]
-fn test_load_catalogo() {
-    let strdata = utils::read_latin1_file("tests/BDCatalogo.bdc").unwrap();
-    bdl::Data::new(&strdata).unwrap();
-}
-
-#[test]
 fn test_caso_a() {
     let hulcfiles = find_hulc_files("tests/casoA").unwrap();
     let data = collect_hulc_data(&hulcfiles).unwrap();

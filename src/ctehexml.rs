@@ -111,3 +111,20 @@ pub fn parse(path: &str) -> Result<CtehexmlData, Error> {
         climate,
     })
 }
+
+/// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
+pub fn parse_with_catalog(path: &str) -> Result<CtehexmlData, Error> {
+    // Carga archivo .ctehexml
+    let mut ctehexmldata = parse(&path)?;
+    let mut db = ctehexmldata.bdldata.db;
+    // Carga datos del catálogo
+    let catalog = read_file("src/BDCatalogo.bdc.utf8")?;
+    let catdb = Data::new(&catalog)?.db;
+    db.materials.extend(catdb.materials.clone());
+    db.layers.extend(catdb.layers.clone());
+    db.windows.extend(catdb.windows.clone());
+    db.glasses.extend(catdb.glasses.clone());
+    db.frames.extend(catdb.frames.clone());
+    ctehexmldata.bdldata.db = db;
+    Ok(ctehexmldata)
+}

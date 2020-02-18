@@ -124,8 +124,8 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
 }
 
 pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
-    // Interpreta .ctehexml
-    let mut ctehexmldata = ctehexml::parse(&hulcfiles.ctehexml)?;
+    // Carga .ctehexml y BBDD HULC
+    let ctehexmldata = ctehexml::parse_with_catalog(&hulcfiles.ctehexml)?;
     eprintln!(
         "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
         ctehexmldata.climate
