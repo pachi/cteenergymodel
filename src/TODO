@@ -1,11 +1,15 @@
 general:
 
-- Llevar todo lo que hacemos de ctehexml en kyg a lib.rs
+- Llevar cosas que sacamos del kyg a lib.rs y desde ctehexml
     - extraer muros del ctehexml (ahora solo salen los de la ET y no, p.e. los interiores)
     - consultar solo datos de kyg en lib.rs, mientras que no los calculemos nosotros (p.e. Fshobst, U)
 - Ir viendo qué cosas se podrían sacar del BDL en lugar del kyg (el tbl ya no se usa)
     - Primero detectar elementos en BDL y tomar datos de kyg hasta que no se calculen
 - Incluir espacios en la exportación y detectar elementos de la envolvente a partir de ellos
+- Incluir construcciones en la exportación
+    - opacos
+    - huecos
+    - pts?
 - Añadir tests de tbl.rs (parse)
 - Convertir vectores de objetos de espacios, pisos, etc a vectores de nombres y hashmaps de objetos
   o convertir a https://docs.rs/crate/indexmap/
