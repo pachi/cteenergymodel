@@ -17,7 +17,18 @@ use crate::utils::normalize;
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
-/// Tipos de cerramientos
+/// Tipo de cerramiento según su inclinación
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum WallPos {
+    /// Suelo (inclinación < 60º)
+    FLOOR,
+    /// Cubierta (inclinación > 120º)
+    ROOF,
+    /// Muro (inclinación entre 60 y 120º)
+    WALL,
+}
+
+/// Tipos de cerramientos según condiciones de contorno
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum WallType {
     /// Cerramiento en contacto con el aire exterior
@@ -215,8 +226,17 @@ impl Wall {
             bail!("Imposible calcular azimut del muro {}", self.name)
         }
     }
+
+    /// Posición del elemento (SUELO, CUBIERTA, MURO) según su inclinación
+    pub fn position(&self) -> WallPos {
+        if self.tilt < 60.0 {
+            WallPos::ROOF
+        } else if self.tilt < 120.0 {
+            WallPos::WALL
+        } else {
+            WallPos::FLOOR
+        }
     }
-}
 
 /// Definición geométrica de un muro (EXTERIOR-WALL, ROOF o INTERIOR-WALL)
 /// Se usa cuando no se define respecto a un vértice del espacio padre sino por polígono
