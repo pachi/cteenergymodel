@@ -18,17 +18,17 @@ use std::collections::HashMap;
 
 mod construction;
 mod frame;
-mod gap;
 mod glass;
-mod layers;
+mod wallcons;
 mod material;
+mod windowcons;
 
 pub use construction::Construction;
 pub use frame::Frame;
-pub use gap::Gap;
 pub use glass::Glass;
-pub use layers::Layers;
+pub use wallcons::WallCons;
 pub use material::Material;
+pub use windowcons::WindowCons;
 
 /// Elementos constructivos y de materiales pertenecientes a la base de datos
 /// Se organizan por nombre y grupo (tipo)
@@ -37,9 +37,9 @@ pub struct DB {
     /// Material o producto
     pub materials: HashMap<String, Material>,
     /// Composición por capas (opacos)
-    pub layers: HashMap<String, Layers>,
+    pub wallcons: HashMap<String, WallCons>,
     /// Composición por capas (huecos)
-    pub windows: HashMap<String, Gap>,
+    pub windowcons: HashMap<String, WindowCons>,
     /// Vidrio
     pub glasses: HashMap<String, Glass>,
     /// Marco
@@ -48,20 +48,20 @@ pub struct DB {
 
 impl DB {
     /// Espesor total de una composición de capas [m]
-    pub fn get_layers_thickness(&self, name: &str) -> Option<f32> {
-        self.layers
+    pub fn get_wallcons_thickness(&self, name: &str) -> Option<f32> {
+        self.wallcons
             .get(name)
-            .map(|layers| layers.thickness.iter().sum())
+            .map(|wallcons| wallcons.thickness.iter().sum())
     }
 
     /// Transmitancia térmica de una composición de capas [W/m2K]
-    pub fn get_layers_transmittance(&self, name: &str) -> Result<f32, Error> {
-        let layers = self
-            .layers
+    pub fn get_wallcons_transmittance(&self, name: &str) -> Result<f32, Error> {
+        let wallcons = self
+            .wallcons
             .get(name)
             .ok_or_else(|| format_err!("No se encuentra la composición de capas \"{}\"", name))?;
 
-        let materials = layers
+        let materials = wallcons
             .material
             .iter()
             .map(|m| {
@@ -77,7 +77,7 @@ impl DB {
 
         materials
             .iter()
-            .zip(&layers.thickness)
+            .zip(&wallcons.thickness)
             // Resistencias térmicas de las capas
             .map(|(mat, thk)| match mat.properties {
                 Some(props) if props.conductivity != 0.0 => Some(thk / props.conductivity),

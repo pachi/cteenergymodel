@@ -7,9 +7,9 @@ use std::convert::TryFrom;
 
 use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock};
 
-/// Definición de capas
+/// Definición de elemento a través de sus capas
 #[derive(Debug, Clone, Default)]
-pub struct Layers {
+pub struct WallCons {
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
@@ -20,7 +20,7 @@ pub struct Layers {
     pub thickness: Vec<f32>,
 }
 
-impl TryFrom<BdlBlock> for Layers {
+impl TryFrom<BdlBlock> for WallCons {
     type Error = Error;
 
     /// Conversión de bloque BDL a definición de capas

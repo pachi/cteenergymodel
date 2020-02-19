@@ -19,7 +19,7 @@ mod envelope;
 
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
-pub use db::{Construction, Frame, Gap, Glass, Layers, Material, DB};
+pub use db::{Construction, Frame, Glass, Material, WallCons, WindowCons, DB};
 pub use envelope::{Floor, Polygon, Shade, Space, ThermalBridge, Wall, Window};
 
 // ------------------------- BDL ----------------------------
@@ -115,12 +115,12 @@ impl Data {
                     bdldata.db.materials.insert(e.name.clone(), e);
                 }
                 "LAYERS" => {
-                    let e = Layers::try_from(block)?;
-                    bdldata.db.layers.insert(e.name.clone(), e);
+                    let e = WallCons::try_from(block)?;
+                    bdldata.db.wallcons.insert(e.name.clone(), e);
                 }
                 "GAP" => {
-                    let e = Gap::try_from(block)?;
-                    bdldata.db.windows.insert(e.name.clone(), e);
+                    let e = WindowCons::try_from(block)?;
+                    bdldata.db.windowcons.insert(e.name.clone(), e);
                 }
                 "NAME-FRAME" => {
                     let e = Frame::try_from(block)?;
@@ -205,13 +205,13 @@ impl Data {
 
                     // Sustituimos la construcción por el nombre de la composición de capas
                     // La absortividad ya está correcta en el muro y así podemos eliminar constructions
-                    let cons = constructions.get(&wall.layers).ok_or_else(|| {
+                    let cons = constructions.get(&wall.construction).ok_or_else(|| {
                         format_err!(
                             "No se ha definido la construcción del cerramiento {}",
                             wall.name
                         )
                     })?;
-                    wall.layers = cons.layers.clone();
+                    wall.construction = cons.wallcons.clone();
 
                     // Guardamos el muro
                     bdldata.walls.push(wall);

@@ -9,7 +9,7 @@ use crate::bdl::BdlBlock;
 
 /// Definición de hueco o lucernario (GAP)
 #[derive(Debug, Clone, Default)]
-pub struct Gap {
+pub struct WindowCons {
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
@@ -32,7 +32,7 @@ pub struct Gap {
     pub gglshwi: Option<f32>,
 }
 
-impl TryFrom<BdlBlock> for Gap {
+impl TryFrom<BdlBlock> for WindowCons {
     type Error = Error;
 
     /// Conversión de bloque BDL a definición de hueco o lucernario (GAP)

@@ -154,7 +154,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
             .iter()
             .find(|w| w.name == win.name)
         {
-            if let Some(cons) = ctehexmldata.bdldata.db.windows.get(&bdlwin.gap) {
+            if let Some(cons) = ctehexmldata.bdldata.db.windowcons.get(&bdlwin.construction) {
                 // Permeabilidad
                 win.infcoeff_100 = cons.infcoeff;
                 // Factor solar del hueco redondeado a dos decimales

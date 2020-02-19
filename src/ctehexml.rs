@@ -85,8 +85,8 @@ pub fn parse<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error> {
                 w.name.to_string(),
                 bdldata
                     .db
-                    .windows
-                    .get(&w.gap)
+                    .windowcons
+                    .get(&w.construction)
                     .unwrap()
                     .gglshwi
                     .unwrap_or_default(),
@@ -123,8 +123,8 @@ pub fn parse_with_catalog<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error>
     // Carga datos del catálogo
     let catdb = Data::new(&LIDERCATSTR)?.db;
     db.materials.extend(catdb.materials);
-    db.layers.extend(catdb.layers);
-    db.windows.extend(catdb.windows);
+    db.wallcons.extend(catdb.wallcons);
+    db.windowcons.extend(catdb.windowcons);
     db.glasses.extend(catdb.glasses);
     db.frames.extend(catdb.frames);
     ctehexmldata.bdldata.db = db;
