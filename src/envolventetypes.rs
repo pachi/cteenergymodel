@@ -154,13 +154,12 @@ pub struct Wall {
     pub u: f32,
     /// Coeficiente de transmisión del elemento opaco (-)
     pub btrx: f32, // 0 | 1
-    /// Tipo de cerramiento:
+    /// Condiciones de contorno del cerramiento:
     /// - UNDERGROUND: cerramientos en contacxto con el terreno
     /// - EXTERIOR: cerramientos en contacto con el aire exterior
     /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
-    #[serde(rename(serialize = "type"))]
-    pub wall_type: String,
+    pub bounds: String,
 }
 // TODO: propiedades que se podrían incorporar a los cerramientos
 // Orientación del elemento opaco (N, S, E, W, H...)

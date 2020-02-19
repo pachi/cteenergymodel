@@ -81,7 +81,7 @@ pub fn parse<T: AsRef<str>>(path: T) -> Result<EnvelopeElements, Error> {
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         btrx: btrx.replace(",", ".").parse()?,
-                        wall_type: "EXTERIOR".to_string(), // Valor por defecto. Solo disponible en .ctehexml
+                        bounds: "EXTERIOR".to_string(), // Valor por defecto. Solo disponible en .ctehexml
                     });
                 }
                 "PPTT" => {

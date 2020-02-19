@@ -167,7 +167,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
     // 2. Datos de muros
     for mut wall in &mut envelope.walls {
         if let Some(w) = ctehexmldata.bdldata.walls.iter().find(|w| w.name == wall.name) {
-            wall.wall_type = w.wall_type.to_string();
+            wall.bounds = w.bounds.to_string();
         }
     }
 

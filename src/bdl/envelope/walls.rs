@@ -30,32 +30,32 @@ pub enum WallPos {
 
 /// Tipos de cerramientos según condiciones de contorno
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum WallType {
+pub enum WallBoundary {
     /// Cerramiento en contacto con el aire exterior
     EXTERIOR,
-    /// Cerramiento en contacto con el terreno
-    UNDERGROUND,
     /// Cerramiento en contacto con el aire de otro espacio
     INTERIOR,
+    /// Cerramiento en contacto con el terreno
+    UNDERGROUND,
     /// Cerramiento sin transmisión térmica
     ADIABATIC,
 }
 
-impl Display for WallType {
+impl Display for WallBoundary {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let printable = match *self {
-            WallType::EXTERIOR => "EXTERIOR",
-            WallType::UNDERGROUND => "UNDERGROUND",
-            WallType::INTERIOR => "INTERIOR",
-            WallType::ADIABATIC => "ADIABATIC",
+            WallBoundary::EXTERIOR => "EXTERIOR",
+            WallBoundary::INTERIOR => "INTERIOR",
+            WallBoundary::UNDERGROUND => "UNDERGROUND",
+            WallBoundary::ADIABATIC => "ADIABATIC",
         };
         write!(f, "{}", printable)
     }
 }
 
-impl Default for WallType {
+impl Default for WallBoundary {
     fn default() -> Self {
-        WallType::EXTERIOR
+        WallBoundary::EXTERIOR
     }
 }
 
@@ -89,7 +89,7 @@ pub struct Wall {
     /// Existen otros tipos en BDL pero HULC no los admite:
     /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
     /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
-    pub wall_type: WallType,
+    pub bounds: WallBoundary,
     // --- Propiedades exclusivas -----------------------
     // XXX: Absortividad definida por usuario -> Se debe consultar en la construcción
     // XXX: (solo en cerramientos en contacto con el aire)
@@ -411,12 +411,12 @@ impl TryFrom<BdlBlock> for Wall {
         };
 
         // Tipos de cerramientos
-        let wall_type = match btype.as_str() {
+        let bounds = match btype.as_str() {
             "INTERIOR-WALL" => {
                 let int_wall = attrs.remove_str("INT-WALL-TYPE")?;
                 match int_wall.as_str() {
-                    "STANDARD" => WallType::INTERIOR,
-                    "ADIABATIC" => WallType::ADIABATIC,
+                    "STANDARD" => WallBoundary::INTERIOR,
+                    "ADIABATIC" => WallBoundary::ADIABATIC,
                     // AIR, INTERNAL
                     _ => bail!(
                         "Cerramiento interior {} con subtipo desconocido {} / {}",
@@ -426,8 +426,8 @@ impl TryFrom<BdlBlock> for Wall {
                     ),
                 }
             }
-            "UNDERGROUND-WALL" => WallType::UNDERGROUND,
-            "EXTERIOR-WALL" | "ROOF" => WallType::EXTERIOR,
+            "UNDERGROUND-WALL" => WallBoundary::UNDERGROUND,
+            "EXTERIOR-WALL" | "ROOF" => WallBoundary::EXTERIOR,
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
 
@@ -446,24 +446,19 @@ impl TryFrom<BdlBlock> for Wall {
         };
 
         // Propiedades específicas
-        // XXX: La absortividad debe consultarse en la construcción, esto parece una cache de HULC
-        // let absorptance = match wall_type.as_str() {
-        //     "EXTERIOR-WALL" | "ROOF" => Some(attrs.remove_f32("ABSORPTANCE")?),
-        //     _ => None,
-        // };
-        let nextto = match wall_type {
-            WallType::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
+        let nextto = match bounds {
+            WallBoundary::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
         };
-        let zground = match wall_type {
-            WallType::UNDERGROUND => Some(attrs.remove_f32("Z-GROUND")?),
+        let zground = match bounds {
+            WallBoundary::UNDERGROUND => Some(attrs.remove_f32("Z-GROUND")?),
             _ => None,
         };
 
         let geometry = WallGeometry::parse_wallgeometry(attrs)?;
         Ok(Self {
             name,
-            wall_type,
+            bounds,
             space,
             construction,
             absorptance,
