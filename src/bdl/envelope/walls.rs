@@ -25,7 +25,7 @@ pub enum WallType {
     /// Cerramiento en contacto con el terreno
     UNDERGROUND,
     /// Cerramiento en contacto con el aire de otro espacio
-    PARTITION,
+    INTERIOR,
     /// Cerramiento sin transmisión térmica
     ADIABATIC,
     /// Cerramiento en contacto con el aire exterior
@@ -38,7 +38,7 @@ impl Display for WallType {
         let printable = match *self {
             WallType::EXTERIOR => "EXTERIOR",
             WallType::UNDERGROUND => "UNDERGROUND",
-            WallType::PARTITION => "PARTITION",
+            WallType::INTERIOR => "INTERIOR",
             WallType::ADIABATIC => "ADIABATIC",
             WallType::ROOF => "ROOF",
         };
@@ -78,7 +78,7 @@ pub struct Wall {
     /// - UNDERGROUND-WALL: cerramiento en contacto con el terreno
     /// - EXTERIOR-WALL: cerramiento en contacto con el aire exterior
     /// - ROOF: Cubierta en contacto con el aire exterior
-    /// - PARTITION (STANDARD en BDL): cerramiento interior entre dos espacios
+    /// - INTERIOR (STANDARD en BDL): cerramiento interior entre dos espacios
     /// - ADIABATIC: cerramiento que no conduce calor (a otro espacio) pero lo almacena
     /// Existen otros tipos en BDL pero HULC no los admite:
     /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
@@ -404,7 +404,7 @@ impl TryFrom<BdlBlock> for Wall {
             "INTERIOR-WALL" => {
                 let int_wall = attrs.remove_str("INT-WALL-TYPE")?;
                 match int_wall.as_str() {
-                    "STANDARD" => WallType::PARTITION,
+                    "STANDARD" => WallType::INTERIOR,
                     "ADIABATIC" => WallType::ADIABATIC,
                     // AIR, INTERNAL
                     _ => bail!(
@@ -443,7 +443,7 @@ impl TryFrom<BdlBlock> for Wall {
         //     _ => None,
         // };
         let nextto = match wall_type {
-            WallType::PARTITION => attrs.remove_str("NEXT-TO").ok(),
+            WallType::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
         };
         let zground = match wall_type {

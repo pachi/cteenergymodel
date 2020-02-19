@@ -158,7 +158,7 @@ pub struct Wall {
     /// - UNDERGROUND: cerramientos en contacxto con el terreno
     /// - EXTERIOR: cerramientos en contacto con el aire exterior
     /// - ROOF: cerramientos en contacto con el aire exterior
-    /// - PARTITION: cerramientos en contacto con el aire de otros espacios
+    /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
     #[serde(rename(serialize = "type"))]
     pub wall_type: String,
