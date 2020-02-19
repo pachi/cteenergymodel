@@ -179,47 +179,42 @@ impl Wall {
     /// Se puede indicar una desviación del norte geográfico respecto al geométrico (northangle)
     ///
     /// Se calcula:
-    /// 1. Los elementos definidos por geometría ya tiene definido su azimut
-    /// 2. Los elementos horizontales se definen con azimut igual a 0.0
-    /// 3. Los elementos definidos por vértice de polígono del espacio madre deben consultar su azimuth con el polígono del espacio
+    /// 1. Los elementos horizontales se definen con azimut igual a 0.0
+    /// 2. Los elementos definidos por geometría ya tiene definido su azimut
+    /// 3. Los elementos definidos por vértice de polígono del espacio consultan el azimuth del polígono del espacio
     pub fn azimuth(&self, northangle: f32, db: &Data) -> Result<f32, Error> {
-        if let Some(geom) = &self.geometry {
-            // Elementos definidos por polígono
-            // Elementos horizontales (hacia arriba o hacia abajo)
-            // tilt == 0 o tilt == 180
-            if self.tilt.abs() < 10.0 * std::f32::EPSILON
-                || (self.tilt - 180.0).abs() < 10.0 * std::f32::EPSILON
-            {
-                Ok(0.0)
-            } else {
-                // Se guarda el ángulo respecto al eje Y del espacio (norte, si la desviación global es cero)
-                Ok(geom.azimuth)
-            }
-        } else {
-            match (self.wall_type, self.location.as_deref()) {
-                // Elementos horizontales
-                (WallType::ROOF, _) | (_, Some("TOP")) | (_, Some("BOTTOM")) => Ok(0.0),
-                // Elementos definidos por vértice en polígono
-                (_, Some(vertex)) => {
-                    // Superficie para muros definidos por vértice del polígono de su espacio
-                    let space = db
-                        .get_space(self.space.as_str())
-                        .ok_or_else(|| {
-                            format_err!(
-                                "Espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
-                                self.space,
-                                self.name
-                            )
-                        })?;
-                    let polygon = &space.polygon;
-                    let azimuth =
-                        normalize(180.0 - polygon.edge_orient(vertex, northangle), 0.0, 360.0);
-                    Ok(azimuth)
-                }
-                // Resto de casos
-                _ => bail!("Imposible calcular azimut de elemento {}", self.name),
-            }
+        // Elementos horizontales (hacia arriba o hacia abajo) con tilt definido
+        // tilt == 0 o tilt == 180 -> azimuth 0
+        if self.tilt.abs() < 10.0 * std::f32::EPSILON
+            || (self.tilt - 180.0).abs() < 10.0 * std::f32::EPSILON
+        {
+            Ok(0.0)
         }
+        // Elementos definidos por geometría (no horizontales), con azimuth
+        // Se guarda el ángulo respecto al eje Y del espacio (norte, si la desviación global es cero)
+        else if let Some(geom) = &self.geometry {
+            Ok(geom.azimuth)
+        }
+        // Elementos definidos por vértice del polígono de un espacio
+        else if let Some(vertex) = self.location.as_deref() {
+            let space = db.get_space(self.space.as_str()).ok_or_else(|| {
+                format_err!(
+                    "Espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
+                    self.space,
+                    self.name
+                )
+            })?;
+            Ok(normalize(
+                180.0 - &space.polygon.edge_orient(vertex, northangle),
+                0.0,
+                360.0,
+            ))
+        }
+        // Resto de casos
+        else {
+            bail!("Imposible calcular azimut del muro {}", self.name)
+        }
+    }
     }
 }
 
