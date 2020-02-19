@@ -21,11 +21,11 @@ use crate::utils::normalize;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum WallPos {
     /// Suelo (inclinación < 60º)
-    FLOOR,
+    BOTTOM,
     /// Cubierta (inclinación > 120º)
-    ROOF,
+    TOP,
     /// Muro (inclinación entre 60 y 120º)
-    WALL,
+    SIDE,
 }
 
 /// Tipos de cerramientos según condiciones de contorno
@@ -39,9 +39,6 @@ pub enum WallType {
     INTERIOR,
     /// Cerramiento sin transmisión térmica
     ADIABATIC,
-    /// Cerramiento en contacto con el aire exterior
-    /// Equivale a EXTERIOR pero tiene una inclinación por defecto igual a 0
-    ROOF,
 }
 
 impl Display for WallType {
@@ -51,7 +48,6 @@ impl Display for WallType {
             WallType::UNDERGROUND => "UNDERGROUND",
             WallType::INTERIOR => "INTERIOR",
             WallType::ADIABATIC => "ADIABATIC",
-            WallType::ROOF => "ROOF",
         };
         write!(f, "{}", printable)
     }
@@ -86,10 +82,9 @@ pub struct Wall {
     /// Posición definida por polígono
     pub geometry: Option<WallGeometry>,
     /// Tipos de cerramiento:
-    /// - UNDERGROUND-WALL: cerramiento en contacto con el terreno
-    /// - EXTERIOR-WALL: cerramiento en contacto con el aire exterior
-    /// - ROOF: Cubierta en contacto con el aire exterior
-    /// - INTERIOR (STANDARD en BDL): cerramiento interior entre dos espacios
+    /// - UNDERGROUND: cerramiento en contacto con el terreno (UNDERGROUND-WALL)
+    /// - EXTERIOR: cerramiento en contacto con el aire exterior (EXTERIOR-WALL, ROOF)
+    /// - INTERIOR: cerramiento interior entre dos espacios (STANDARD en BDL)
     /// - ADIABATIC: cerramiento que no conduce calor (a otro espacio) pero lo almacena
     /// Existen otros tipos en BDL pero HULC no los admite:
     /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
@@ -227,16 +222,17 @@ impl Wall {
         }
     }
 
-    /// Posición del elemento (SUELO, CUBIERTA, MURO) según su inclinación
+    /// Posición del elemento (TOP, BOTTOM, SIDE) según su inclinación
     pub fn position(&self) -> WallPos {
         if self.tilt < 60.0 {
-            WallPos::ROOF
+            WallPos::TOP
         } else if self.tilt < 120.0 {
-            WallPos::WALL
+            WallPos::SIDE
         } else {
-            WallPos::FLOOR
+            WallPos::BOTTOM
         }
     }
+
 
 /// Definición geométrica de un muro (EXTERIOR-WALL, ROOF o INTERIOR-WALL)
 /// Se usa cuando no se define respecto a un vértice del espacio padre sino por polígono
@@ -431,19 +427,17 @@ impl TryFrom<BdlBlock> for Wall {
                 }
             }
             "UNDERGROUND-WALL" => WallType::UNDERGROUND,
-            "ROOF" => WallType::ROOF,
-            "EXTERIOR-WALL" => WallType::EXTERIOR,
+            "EXTERIOR-WALL" | "ROOF" => WallType::EXTERIOR,
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
 
         // Si la inclinación es None (se define location)
         // Solamente se define explícitamente cuando se define el cerramiento por geometría
-        // TODO: dado que siempre definimos el tilt no nos haría falta tener un subtipo ROOF
         let tilt = match attrs.remove_f32("TILT").ok() {
             Some(tilt) => tilt,
-            _ => match (wall_type, location.as_deref()) {
+            _ => match (btype.as_str(), location.as_deref()) {
                 // Cubiertas y cerramientos en location top (techos)
-                (WallType::ROOF, _) | (_, Some("TOP")) => 0.0,
+                ("ROOF", _) | (_, Some("TOP")) => 0.0,
                 // cerramientos en location bottom (suelos y soleras)
                 (_, Some("BOTTOM")) => 180.0,
                 // Cerramientos verticales

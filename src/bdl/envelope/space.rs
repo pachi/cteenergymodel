@@ -8,7 +8,7 @@
 use std::convert::TryFrom;
 
 use super::geom::Polygon;
-use super::walls::WallType;
+use super::walls::WallPos;
 use crate::bdl::BdlBlock;
 use crate::bdl::Data;
 
@@ -62,17 +62,15 @@ impl Space {
             .walls
             .iter()
             .find(|w| {
-                // Cubiertas
-                w.wall_type == WallType::ROOF
-                || match w.location.as_deref() {
-                    // Muros exteriores o cubiertas en posición superior
-                    Some("TOP") => true,
-                    // Cerramiento interior sobre este espacio
-                    Some("BOTTOM") => w.nextto.as_ref().map(|s| s == &self.name).unwrap_or(false),
-                    _ => false,
-                } ||
-            // Faltarían cerramientos exteriores con tilt 0? u otra inclinación de cubierta?
-            w.tilt == 0.0
+                // Muros exteriores o cubiertas sobre el espacio
+                if w.position() == WallPos::TOP {
+                    true
+                } else {
+                    w.nextto.as_ref().map(|s| 
+                        // Es un cerramiento interior sobre este espacio
+                        s == &self.name
+                    ).unwrap_or(false)
+                }
             })
             .ok_or_else(|| {
                 format_err!(
