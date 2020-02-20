@@ -17,12 +17,14 @@ ideas:
 - Se podrían meter las ventanas como hijos de muros para facilitar las mediciones (pero tiene sus desventajas)
 - hacer visualizador 3d (con 3djs).
 
+kyg:
+- llevar tipos de datos de envolventecte y:
+    - dejar de usar lo que no es necesario (space, nextto, wall, tilt, etc)
+    - añadir el resto que pueda ser útil
 
 envolventectedata:
-    - dejar de usar estos tipos de datos en KyG para no poner datos por defecto o no incluidos en kyg
+    - dejar de usar tipos de datos de KyG (btrx)
     - añadir construcciones de opacos y huecos
-    - en muros indicar espacio al que pertenecen o al que comunican (nextto)
-    - en huecos indicar el muro al que pertenecen
     Llevar a env:
         - Altura libre de espacios: data.space_net_height(spacename)
             - Otra opción es llevar la altura de suelo a techo al espacio como dato
@@ -43,8 +45,6 @@ BDL:
     - horarios
     - condiciones operacionales
     - consignas
-- Hacer cálculos de:
-    - Para azimut e inclinación ver 52016-1
 - Implementar cálculo de U para los distintos elementos y así no usar kyg
   (O al menos calcular con suma de las resistencias superficiales)
 
