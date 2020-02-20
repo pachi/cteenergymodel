@@ -29,7 +29,7 @@ use std::collections::HashMap;
 
 use failure::Error;
 
-use super::envolventetypes::{EnvelopeElements, ThermalBridge, Wall, Window};
+use super::envolventetypes::{Boundaries, EnvelopeElements, ThermalBridge, Wall, Window};
 use super::utils::read_latin1_file;
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
@@ -81,7 +81,8 @@ pub fn parse<T: AsRef<str>>(path: T) -> Result<EnvelopeElements, Error> {
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         btrx: btrx.replace(",", ".").parse()?,
-                        bounds: "EXTERIOR".to_string(), // Valor por defecto. Solo disponible en .ctehexml
+                        // Valor por defecto. Solo disponible en .ctehexml
+                        bounds: Boundaries::default(),
                     });
                 }
                 "PPTT" => {

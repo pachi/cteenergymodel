@@ -166,8 +166,13 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
     }
     // 2. Datos de muros
     for mut wall in &mut envelope.walls {
-        if let Some(w) = ctehexmldata.bdldata.walls.iter().find(|w| w.name == wall.name) {
-            wall.bounds = w.bounds.to_string();
+        if let Some(w) = ctehexmldata
+            .bdldata
+            .walls
+            .iter()
+            .find(|w| w.name == wall.name)
+        {
+            wall.bounds = w.bounds.into();
         }
     }
 
@@ -180,4 +185,27 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         envelope,
         spaces,
     })
+}
+
+// Conversiones de BDL a EnvolventeTypes -------------------
+
+impl From<bdl::Positions> for envolventetypes::Positions {
+    fn from(pos: bdl::Positions) -> Self {
+        match pos {
+            bdl::Positions::TOP => Self::TOP,
+            bdl::Positions::BOTTOM => Self::BOTTOM,
+            bdl::Positions::SIDE => Self::SIDE,
+        }
+    }
+}
+
+impl From<bdl::Boundaries> for envolventetypes::Boundaries {
+    fn from(boundary: bdl::Boundaries) -> Self {
+        match boundary {
+            bdl::Boundaries::EXTERIOR => Self::EXTERIOR,
+            bdl::Boundaries::INTERIOR => Self::INTERIOR,
+            bdl::Boundaries::UNDERGROUND => Self::UNDERGROUND,
+            bdl::Boundaries::ADIABATIC => Self::ADIABATIC,
+        }
+    }
 }

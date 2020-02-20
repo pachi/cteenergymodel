@@ -10,16 +10,15 @@
 
 use failure::Error;
 use std::convert::TryFrom;
-use std::fmt::Display;
 
 use crate::bdl::{envelope::Polygon, AttrMap, BdlBlock, Data};
 use crate::utils::normalize;
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
-/// Tipo de cerramiento según su inclinación
+/// Posiciones de los cerramientos según su inclinación
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum WallPos {
+pub enum Positions {
     /// Suelo (inclinación < 60º)
     BOTTOM,
     /// Cubierta (inclinación > 120º)
@@ -28,9 +27,9 @@ pub enum WallPos {
     SIDE,
 }
 
-/// Tipos de cerramientos según condiciones de contorno
+/// Condiciones de contorno de los cerramientos
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum WallBoundary {
+pub enum Boundaries {
     /// Cerramiento en contacto con el aire exterior
     EXTERIOR,
     /// Cerramiento en contacto con el aire de otro espacio
@@ -41,21 +40,9 @@ pub enum WallBoundary {
     ADIABATIC,
 }
 
-impl Display for WallBoundary {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let printable = match *self {
-            WallBoundary::EXTERIOR => "EXTERIOR",
-            WallBoundary::INTERIOR => "INTERIOR",
-            WallBoundary::UNDERGROUND => "UNDERGROUND",
-            WallBoundary::ADIABATIC => "ADIABATIC",
-        };
-        write!(f, "{}", printable)
-    }
-}
-
-impl Default for WallBoundary {
+impl Default for Boundaries {
     fn default() -> Self {
-        WallBoundary::EXTERIOR
+        Boundaries::EXTERIOR
     }
 }
 
@@ -89,7 +76,7 @@ pub struct Wall {
     /// Existen otros tipos en BDL pero HULC no los admite:
     /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
     /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
-    pub bounds: WallBoundary,
+    pub bounds: Boundaries,
     // --- Propiedades exclusivas -----------------------
     // XXX: Absortividad definida por usuario -> Se debe consultar en la construcción
     // XXX: (solo en cerramientos en contacto con el aire)
@@ -223,13 +210,13 @@ impl Wall {
     }
 
     /// Posición del elemento (TOP, BOTTOM, SIDE) según su inclinación
-    pub fn position(&self) -> WallPos {
+    pub fn position(&self) -> Positions {
         if self.tilt < 60.0 {
-            WallPos::TOP
+            Positions::TOP
         } else if self.tilt < 120.0 {
-            WallPos::SIDE
+            Positions::SIDE
         } else {
-            WallPos::BOTTOM
+            Positions::BOTTOM
         }
     }
 
@@ -415,8 +402,8 @@ impl TryFrom<BdlBlock> for Wall {
             "INTERIOR-WALL" => {
                 let int_wall = attrs.remove_str("INT-WALL-TYPE")?;
                 match int_wall.as_str() {
-                    "STANDARD" => WallBoundary::INTERIOR,
-                    "ADIABATIC" => WallBoundary::ADIABATIC,
+                    "STANDARD" => Boundaries::INTERIOR,
+                    "ADIABATIC" => Boundaries::ADIABATIC,
                     // AIR, INTERNAL
                     _ => bail!(
                         "Cerramiento interior {} con subtipo desconocido {} / {}",
@@ -426,8 +413,8 @@ impl TryFrom<BdlBlock> for Wall {
                     ),
                 }
             }
-            "UNDERGROUND-WALL" => WallBoundary::UNDERGROUND,
-            "EXTERIOR-WALL" | "ROOF" => WallBoundary::EXTERIOR,
+            "UNDERGROUND-WALL" => Boundaries::UNDERGROUND,
+            "EXTERIOR-WALL" | "ROOF" => Boundaries::EXTERIOR,
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
 
@@ -447,11 +434,11 @@ impl TryFrom<BdlBlock> for Wall {
 
         // Propiedades específicas
         let nextto = match bounds {
-            WallBoundary::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
+            Boundaries::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
         };
         let zground = match bounds {
-            WallBoundary::UNDERGROUND => Some(attrs.remove_f32("Z-GROUND")?),
+            Boundaries::UNDERGROUND => Some(attrs.remove_f32("Z-GROUND")?),
             _ => None,
         };
 

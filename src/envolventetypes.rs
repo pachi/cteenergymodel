@@ -21,6 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+use std::fmt::Display;
+
 use failure::Error;
 use serde::Serialize;
 use serde_json;
@@ -101,16 +103,46 @@ pub struct EnvelopeElements {
     pub thermal_bridges: Vec<ThermalBridge>,
 }
 
-#[derive(Debug, Serialize)]
-pub enum OpaqueTypes {
-    Roof,
-    Wall,
-    Floor,
-    Ground,
-    Interior,
-    Adiabatic,
-    // Window,
-    // ThermalBridge,
+/// Posiciones de los cerramientos según su inclinación
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
+pub enum Positions {
+    /// Suelo (inclinación < 60º)
+    BOTTOM,
+    /// Cubierta (inclinación > 120º)
+    TOP,
+    /// Muro (inclinación entre 60 y 120º)
+    SIDE,
+}
+
+/// Condiciones de contorno de los cerramientos
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
+pub enum Boundaries {
+    /// Cerramiento en contacto con el aire exterior
+    EXTERIOR,
+    /// Cerramiento en contacto con el aire de otro espacio
+    INTERIOR,
+    /// Cerramiento en contacto con el terreno
+    UNDERGROUND,
+    /// Cerramiento sin transmisión térmica
+    ADIABATIC,
+}
+
+impl Display for Boundaries {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let printable = match *self {
+            Boundaries::EXTERIOR => "EXTERIOR",
+            Boundaries::INTERIOR => "INTERIOR",
+            Boundaries::UNDERGROUND => "UNDERGROUND",
+            Boundaries::ADIABATIC => "ADIABATIC",
+        };
+        write!(f, "{}", printable)
+    }
+}
+
+impl Default for Boundaries {
+    fn default() -> Self {
+        Boundaries::EXTERIOR
+    }
 }
 
 /// Hueco
@@ -159,7 +191,7 @@ pub struct Wall {
     /// - EXTERIOR: cerramientos en contacto con el aire exterior
     /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
-    pub bounds: String,
+    pub bounds: Boundaries,
 }
 // TODO: propiedades que se podrían incorporar a los cerramientos
 // Orientación del elemento opaco (N, S, E, W, H...)
