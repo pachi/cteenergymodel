@@ -1,10 +1,6 @@
 general:
 
 - Llevar cosas que sacamos del kyg a lib.rs y desde ctehexml
-    - extraer muros del ctehexml (ahora solo salen los de la ET y no, p.e. los interiores)
-    - consultar solo datos de kyg en lib.rs, mientras que no los calculemos nosotros (p.e. Fshobst, U)
-- Ir viendo qué cosas se podrían sacar del BDL en lugar del kyg (el tbl ya no se usa)
-    - Primero detectar elementos en BDL y tomar datos de kyg hasta que no se calculen
 - Incluir espacios en la exportación y detectar elementos de la envolvente a partir de ellos
 - Incluir construcciones en la exportación
     - opacos
@@ -13,6 +9,7 @@ general:
 - Añadir tests de tbl.rs (parse)
 - Convertir vectores de objetos de espacios, pisos, etc a vectores de nombres y hashmaps de objetos
   o convertir a https://docs.rs/crate/indexmap/
+- BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 
 ideas:
 - Se podría eliminar la referencia entre muros y espacios, generando el polígono del muro a partir de su referencia al polígono del espacios
@@ -22,6 +19,10 @@ ideas:
 
 
 envolventectedata:
+    - dejar de usar estos tipos de datos en KyG para no poner datos por defecto o no incluidos en kyg
+    - añadir construcciones de opacos y huecos
+    - en muros indicar espacio al que pertenecen o al que comunican (nextto)
+    - en huecos indicar el muro al que pertenecen
     Llevar a env:
         - Altura libre de espacios: data.space_net_height(spacename)
             - Otra opción es llevar la altura de suelo a techo al espacio como dato
@@ -44,20 +45,6 @@ BDL:
     - consignas
 - Hacer cálculos de:
     - Para azimut e inclinación ver 52016-1
-    - posiciones de cerramientos y nombre orientación (que es respecto al sur y no al norte, como tenemos ahora)
-            if hasattr(self, 'LOCATION'):
-                lugar = getattr(self, 'LOCATION')
-                if lugar == 'BOTTOM':           posicion = 'suelo'
-                elif lugar == 'TOP':            posicion = 'techo'
-                elif lugar.startswith('SPACE'): posicion = 'muro'
-                else: raise
-            elif hasattr(self, 'TILT'): #si no tiene location debe tener tilt, y se corrigen los de space
-                tilt = float(getattr(self, 'TILT'))
-                if tilt < 60:      posicion = 'techo'
-                elif tilt < 120:   posicion = 'muro'
-                elif tilt < 240:   posicion = 'suelo'
-                else: raise
-            else: raise
 - Implementar cálculo de U para los distintos elementos y así no usar kyg
   (O al menos calcular con suma de las resistencias superficiales)
 
