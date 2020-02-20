@@ -151,6 +151,8 @@ pub struct Window {
     /// Nombre del hueco
     pub name: String,
     /// Orientación del hueco (N, S, E, W, H...)
+    /// XXX: eliminar por una referencia al muro al que pertenece el hueco
+    /// XXX: parent: String,
     pub orientation: String,
     /// Superficie del hueco (m2)
     #[serde(rename(serialize = "A"))]
@@ -185,6 +187,7 @@ pub struct Wall {
     #[serde(rename(serialize = "U"))]
     pub u: f32,
     /// Coeficiente de transmisión del elemento opaco (-)
+    /// TODO: queda obsoleto al poder deducirse de bounds
     pub btrx: f32, // 0 | 1
     /// Condiciones de contorno del cerramiento:
     /// - UNDERGROUND: cerramientos en contacxto con el terreno
@@ -192,14 +195,18 @@ pub struct Wall {
     /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
     pub bounds: Boundaries,
+    // TODO: nuevas propiedades -> absorption, orientation, tilt
+    // Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
+    // pub absorption: f32,
+    // Orientación (gamma) [-180,+180]
+    // Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
+    // Criterio: medido desde el sur, positivo al este, negativo al oeste
+    // Difiere del criterio BDL, que parte del norte, con E+ y W-
+    // pub orientation: f32,
+    // Inclinación (beta) [0, 180]
+    // Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
+    // pub tilt: f32,
 }
-// TODO: propiedades que se podrían incorporar a los cerramientos
-// Orientación del elemento opaco (N, S, E, W, H...)
-// pub orientacion: String,
-// Absortividad del elemento opaco (-)
-//pub abs: f32,
-// Orientación - azimuth criterio 52016 (distinto en BDL) ->(0 -> sur)
-// Inclinación - respecto a la horizontal y hacia arriba (0 -> suelo, 180 -> techo)
 
 /// Puente térmico
 #[derive(Debug, Serialize)]
@@ -209,7 +216,7 @@ pub struct ThermalBridge {
     /// Longitud del puente térmico (m)
     #[serde(rename(serialize = "L"))]
     pub l: f32,
-    /// Transmitancia térmica lineal del puente térmic (W/mK)
+    /// Transmitancia térmica lineal del puente térmico (W/mK)
     pub psi: f32,
 }
 
