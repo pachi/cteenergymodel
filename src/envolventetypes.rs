@@ -96,7 +96,7 @@ impl EnvolventeCteData {
 
 // ---------- Elementos de la envolvente --------------
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Default, Serialize)]
 pub struct EnvelopeElements {
     pub windows: Vec<Window>,
     pub walls: Vec<Wall>,
@@ -146,13 +146,13 @@ impl Default for Boundaries {
 }
 
 /// Hueco
-#[derive(Debug, Serialize)]
+#[derive(Debug, Default, Serialize)]
 pub struct Window {
     /// Nombre del hueco
     pub name: String,
+    /// Muro al que pertenece el hueco
+    pub wall: String,
     /// Orientación del hueco (N, S, E, W, H...)
-    /// XXX: eliminar por una referencia al muro al que pertenece el hueco
-    /// XXX: parent: String,
     pub orientation: String,
     /// Superficie del hueco (m2)
     #[serde(rename(serialize = "A"))]
@@ -176,10 +176,14 @@ pub struct Window {
 }
 
 /// Elemento opaco (muro, cubierta, suelo, partición)
-#[derive(Debug, Serialize)]
+#[derive(Debug, Default, Serialize)]
 pub struct Wall {
     /// Nombre del elemento opaco
     pub name: String,
+    /// Espacio al que pertenece el elemento opaco
+    pub space: String,
+    /// Espacio adyacente con el que comunica el elemento opaco
+    pub nextto: Option<String>,
     /// Superficie del elemento opaco (m2)
     #[serde(rename(serialize = "A"))]
     pub a: f32,
@@ -195,21 +199,20 @@ pub struct Wall {
     /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
     pub bounds: Boundaries,
-    // TODO: nuevas propiedades -> absorption, orientation, tilt
-    // Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
-    // pub absorption: f32,
-    // Orientación (gamma) [-180,+180]
-    // Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
-    // Criterio: medido desde el sur, positivo al este, negativo al oeste
-    // Difiere del criterio BDL, que parte del norte, con E+ y W-
-    // pub orientation: f32,
-    // Inclinación (beta) [0, 180]
-    // Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
-    // pub tilt: f32,
+    /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
+    pub absorptance: f32,
+    /// Orientación (gamma) [-180,+180]
+    /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
+    /// Criterio: medido desde el sur, positivo al este, negativo al oeste
+    /// Difiere del criterio BDL, que parte del norte, con E+ y W-
+    pub orientation: f32,
+    /// Inclinación (beta) [0, 180]
+    /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
+    pub tilt: f32,
 }
 
 /// Puente térmico
-#[derive(Debug, Serialize)]
+#[derive(Debug, Default, Serialize)]
 pub struct ThermalBridge {
     /// Nombre del puente térmico
     pub name: String,

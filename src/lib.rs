@@ -36,8 +36,8 @@ extern crate failure;
 use failure::Error;
 use std::path::PathBuf;
 
-use envolventetypes::{EnvolventeCteData, Space};
-use utils::find_first_file;
+use envolventetypes::{Boundaries, EnvolventeCteData, Space};
+use utils::{find_first_file, fround2, normalize};
 
 pub const PROGNAME: &str = env!("CARGO_PKG_NAME");
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -124,6 +124,95 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
         .collect::<Result<Vec<Space>, Error>>()
 }
 
+/// Construye elementos de la envolvente a partir de datos BDL
+/// TODO: algunos datos no los podemos calcular todavía
+fn envelope_from_ctehedata(
+    data: &ctehexml::CtehexmlData,
+) -> Result<envolventetypes::EnvelopeElements, Error> {
+    let bdl = &data.bdldata;
+    let mut envelope = envolventetypes::EnvelopeElements::default();
+
+    // Walls: falta U
+    for wall in &bdl.walls {
+        use Boundaries::*;
+        let bounds = wall.bounds.into();
+        let btrx = match bounds {
+            EXTERIOR | UNDERGROUND => 1.0,
+            _ => 0.0,
+        };
+        // Actualización a criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
+        let orientation = normalize(180.0 - wall.azimuth(0.0, &bdl)?, -180.0, 180.0);
+        let w = envolventetypes::Wall {
+            name: wall.name.clone(),
+            a: fround2(wall.net_area(bdl)?),
+            space: wall.space.clone(),
+            nextto: wall.nextto.clone(),
+            bounds,
+            btrx,                  // TODO: eliminar
+            u: Default::default(), // TODO: por ahora completar con kyg
+            absorptance: wall.absorptance.unwrap_or(0.6),
+            orientation: fround2(orientation),
+            tilt: fround2(wall.tilt),
+        };
+        envelope.walls.push(w);
+    }
+
+    // Windows: falta Fshobst, U, orientation
+    for win in &bdl.windows {
+        let cons = data
+            .bdldata
+            .db
+            .windowcons
+            .get(&win.construction)
+            .ok_or_else(|| {
+                format_err!(
+                    "Construcción {} de hueco {} no encontrada",
+                    win.construction,
+                    win.name
+                )
+            })?;
+        // Factor solar del hueco redondeado a dos decimales
+        let glass = bdl.db.glasses.get(&cons.glass).ok_or_else(|| {
+            format_err!(
+                "Vidrio {} de la construcción {} del hueco {} no encontrado",
+                cons.glass,
+                win.construction,
+                win.name
+            )
+        })?;
+        let ff = cons.framefrac;
+        let gglwi = (glass.g_gln * 0.90 * 100.0).round() / 100.0;
+        let gglshwi = cons.gglshwi.unwrap_or(gglwi);
+        let infcoeff_100 = cons.infcoeff;
+
+        let w = envolventetypes::Window {
+            name: win.name.clone(),
+            orientation: Default::default(), // TODO: por ahora completar con kyg
+            wall: win.wall.clone(),
+            a: (win.area() * 100.0).round() / 100.0,
+            u: Default::default(), // TODO: por ahora completar con kyg
+            ff,
+            gglwi,
+            gglshwi,
+            fshobst: Default::default(), // TODO: por ahora completar con kyg
+            infcoeff_100,
+        };
+        envelope.windows.push(w);
+    }
+
+    // PTs
+    for (_, tb) in &bdl.tbridges {
+        let t = envolventetypes::ThermalBridge {
+            name: tb.name.clone(),
+            l: (tb.length.unwrap_or(0.0) * 100.0).round() / 100.0,
+            psi: tb.psi,
+        };
+        envelope.thermal_bridges.push(t);
+    }
+
+    Ok(envelope)
+}
+
 pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
     // Carga .ctehexml y BBDD HULC
     let ctehexmldata = ctehexml::parse_with_catalog(&hulcfiles.ctehexml)?;
@@ -131,48 +220,30 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
         ctehexmldata.climate
     );
+    let mut envelope = envelope_from_ctehedata(&ctehexmldata)?;
 
     // Carga datos de espacios
     let spaces = build_spaces(&ctehexmldata.bdldata)?;
 
     // Interpreta .kyg
-    let mut envelope = kyg::parse(&hulcfiles.kyg)?;
-    eprintln!("Localizada definición de elementos de la envolvente");
+    let envelopekyg = kyg::parse(&hulcfiles.kyg)?;
+    eprintln!("Localizada definición KyGananciasSolares.txt");
 
-    // Actualizaciones del kyg con datos del ctehexmldata ---------------
-    // 1. Datos de huecos: gglshwi, gglwi y infcoeff
-    let gglshwimap = &ctehexmldata.gglshwi;
-    for mut win in &mut envelope.windows {
-        // Factor solar con protecciones activadas
-        if let Some(val) = gglshwimap.get(&win.name) {
-            win.gglshwi = *val;
-        };
-        // Coeficiente de permeabilidad a 100 Pa y factor solar del hueco
-        if let Some(bdlwin) = ctehexmldata
-            .bdldata
-            .windows
-            .iter()
-            .find(|w| w.name == win.name)
-        {
-            if let Some(cons) = ctehexmldata.bdldata.db.windowcons.get(&bdlwin.construction) {
-                // Permeabilidad
-                win.infcoeff_100 = cons.infcoeff;
-                // Factor solar del hueco redondeado a dos decimales
-                if let Some(glass) = ctehexmldata.bdldata.db.glasses.get(&cons.glass) {
-                    win.gglwi = (glass.g_gln * 0.90 * 100.0).round() / 100.0;
-                }
-            }
-        };
+    // Actualizaciones de los datos del ctehexmldata con valores del archivo kyg -------
+
+    for wall in &mut envelope.walls {
+        let kygwall = envelopekyg.walls.iter().find(|w| w.name == wall.name);
+        if let Some(kw) = kygwall {
+            wall.u = kw.u;
+        }
     }
-    // 2. Datos de muros
-    for mut wall in &mut envelope.walls {
-        if let Some(w) = ctehexmldata
-            .bdldata
-            .walls
-            .iter()
-            .find(|w| w.name == wall.name)
-        {
-            wall.bounds = w.bounds.into();
+
+    for win in &mut envelope.windows {
+        let kygwin = envelopekyg.windows.iter().find(|w| w.name == win.name);
+        if let Some(kw) = kygwin {
+            win.u = kw.u;
+            win.orientation = kw.orientation.clone();
+            win.fshobst = kw.fshobst;
         }
     }
 
@@ -199,7 +270,7 @@ impl From<bdl::Positions> for envolventetypes::Positions {
     }
 }
 
-impl From<bdl::Boundaries> for envolventetypes::Boundaries {
+impl From<bdl::Boundaries> for Boundaries {
     fn from(boundary: bdl::Boundaries) -> Self {
         match boundary {
             bdl::Boundaries::EXTERIOR => Self::EXTERIOR,

@@ -61,9 +61,11 @@ pub fn parse<T: AsRef<str>>(path: T) -> Result<EnvelopeElements, Error> {
                     windows.push(Window {
                         name: nombre.to_string(),
                         orientation: orienta.replace("O", "W").to_string(),
+                        wall: Default::default(),
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         ff: ff.replace(",", ".").parse::<f32>()? / 100.0_f32,
+                        // TODO: no usar tipos de datos de envolventecte
                         gglwi: 1.0,   // Valor por defecto. Solo disponible en .ctehexml
                         gglshwi: 1.0, // Valor por defecto. Solo disponible en .ctehexml
                         fshobst: 1.0, // Valor por defecto. Solo disponible en .ctehexml
@@ -74,15 +76,27 @@ pub fn parse<T: AsRef<str>>(path: T) -> Result<EnvelopeElements, Error> {
                     if vv.len() < 5 {
                         bail!("Línea de datos de opaco con formato desconocido")
                     }
-                    // En versiones más recientes hay dos datos más, construcción y orientación
+                    // Datos de muro
                     let (nombre, a, u, btrx) = (vv[1], vv[2], vv[3], vv[4]);
+                    // En versiones más recientes hay dos datos más, construcción y orientación
+                    let (_cons, _orient) = if vv.len() > 6 {
+                        (vv[5].to_string(), vv[6].to_string())
+                    } else {
+                        ("".to_string(), "N".to_string())
+                    };
+
                     walls.push(Wall {
                         name: nombre.to_string(),
                         a: a.replace(",", ".").parse()?,
                         u: u.replace(",", ".").parse()?,
                         btrx: btrx.replace(",", ".").parse()?,
-                        // Valor por defecto. Solo disponible en .ctehexml
+                        // TODO: eliminar, valores no diponibles en KyG
+                        space: Default::default(), // TODO: eliminar
+                        nextto: Default::default(), // TODO: eliminar
                         bounds: Boundaries::default(),
+                        absorptance: 0.6,
+                        orientation: 180.0,
+                        tilt: 90.0,
                     });
                 }
                 "PPTT" => {
