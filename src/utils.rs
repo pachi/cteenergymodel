@@ -44,10 +44,10 @@ pub fn find_first_file(pattern: &str) -> Result<PathBuf, Error> {
 }
 
 // Lee a una cadena un archivo en latin1
-pub fn read_latin1_file(path: &str) -> Result<String, Error> {
+pub fn read_latin1_file<T: AsRef<str>>(path: T) -> Result<String, Error> {
     let buf = {
         let mut buf = Vec::new();
-        File::open(path)?
+        File::open(path.as_ref())?
             .read_to_end(&mut buf)
             .context("No se ha podido leer el archivo")?;
         buf
@@ -55,14 +55,14 @@ pub fn read_latin1_file(path: &str) -> Result<String, Error> {
 
     match ISO_8859_1.decode(&buf, DecoderTrap::Replace) {
         Ok(utf8buf) => Ok(utf8buf),
-        _ => bail!("Error de codificación del archivo {}", path),
+        _ => bail!("Error de codificación del archivo {}", path.as_ref()),
     }
 }
 
 // Lee a una cadena un archivo en utf8
-pub fn read_file(path: &str) -> Result<String, Error> {
+pub fn read_file<T: AsRef<str>>(path: T) -> Result<String, Error> {
     let mut buf = String::new();
-    File::open(path)?
+    File::open(path.as_ref())?
         .read_to_string(&mut buf)
         .context("No se ha podido leer el archivo")?;
     Ok(buf)
