@@ -78,9 +78,6 @@ pub struct Wall {
     /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
     pub bounds: Boundaries,
     // --- Propiedades exclusivas -----------------------
-    // XXX: Absortividad definida por usuario -> Se debe consultar en la construcción
-    // XXX: (solo en cerramientos en contacto con el aire)
-    // XXX: pub absorptance: Option<f32>,
     /// Espacio adyacente que conecta con el espacio padre
     /// (solo en algunos tipos de cerramientos interiores (no adiabático o superficie interior))
     pub nextto: Option<String>,
