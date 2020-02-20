@@ -22,8 +22,8 @@ pub struct WindowCons {
     pub frame: String,
     /// Grupo al que pertenece el marco
     pub framegroup: String,
-    /// Porcentaje de hueco cubierto por el marco (%)
-    pub framepct: f32,
+    /// Fracción de hueco cubierto por el marco [0.0-1.0]
+    pub framefrac: f32,
     /// Permeabilidad al aire (m3/hm2 a 100Pa)
     pub infcoeff: f32,
     /// Porcentaje de U debido a intercalarios y cajón de persiana (%)
@@ -78,7 +78,7 @@ impl TryFrom<BdlBlock> for WindowCons {
         let glassgroup = attrs.remove_str("GROUP-GLASS")?;
         let frame = attrs.remove_str("NAME-FRAME")?;
         let framegroup = attrs.remove_str("GROUP-FRAME")?;
-        let framepct = attrs.remove_f32("PORCENTAGE")?;
+        let framefrac = attrs.remove_f32("PORCENTAGE")? / 100.0;
         let infcoeff = attrs.remove_f32("INF-COEF")?;
         let deltau = attrs
             .remove_f32("porcentajeIncrementoU")
@@ -91,7 +91,7 @@ impl TryFrom<BdlBlock> for WindowCons {
             glassgroup,
             frame,
             framegroup,
-            framepct,
+            framefrac,
             infcoeff,
             deltau,
             gglshwi,
