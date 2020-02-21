@@ -17,11 +17,6 @@ ideas:
 - Se podrían meter las ventanas como hijos de muros para facilitar las mediciones (pero tiene sus desventajas)
 - hacer visualizador 3d (con 3djs).
 
-kyg:
-- llevar tipos de datos de envolventecte y:
-    - dejar de usar lo que no es necesario (space, nextto, wall, tilt, etc)
-    - añadir el resto que pueda ser útil
-
 envolventectedata:
     - dejar de usar tipos de datos de KyG (btrx)
     - añadir construcciones de opacos y huecos
