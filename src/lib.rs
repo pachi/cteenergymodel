@@ -59,7 +59,6 @@ Publicado bajo licencia MIT
 #[derive(Debug)]
 pub struct HulcFiles {
     pub ctehexml: String,
-    pub tbl: String,
     pub kyg: String,
 }
 
@@ -77,13 +76,6 @@ pub fn find_hulc_files<T: AsRef<str>>(basedir: T) -> Result<HulcFiles, Error> {
         .into_owned();
     let ctehexmlpath = find_first_file(&ctehexmlpattern)?;
 
-    let tblpattern = [basedir, "NewBDL_O.tbl"]
-        .iter()
-        .collect::<PathBuf>()
-        .to_string_lossy()
-        .into_owned();
-    let tblpath = find_first_file(&tblpattern)?;
-
     let kygpattern = [basedir, "KyGananciasSolares.txt"]
         .iter()
         .collect::<PathBuf>()
@@ -93,7 +85,6 @@ pub fn find_hulc_files<T: AsRef<str>>(basedir: T) -> Result<HulcFiles, Error> {
 
     Ok(HulcFiles {
         ctehexml: ctehexmlpath.to_string_lossy().into_owned(),
-        tbl: tblpath.to_string_lossy().into_owned(),
         kyg: kygpath.to_string_lossy().into_owned(),
     })
 }

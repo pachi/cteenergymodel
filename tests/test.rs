@@ -100,8 +100,8 @@ fn test_polygon2() {
 
 #[test]
 fn test_test_spaces_caso_a() {
+    let tbl = tbl::parse("tests/casoA/NewBDL_O.tbl").unwrap();
     let hulcfiles = find_hulc_files("tests/casoA").unwrap();
-    let tbl = tbl::parse(&hulcfiles.tbl).unwrap();
     let xmldata = ctehexml::parse(&hulcfiles.ctehexml).unwrap();
     let bdl = xmldata.bdldata;
 
