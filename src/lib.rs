@@ -36,7 +36,9 @@ extern crate failure;
 use failure::Error;
 use std::path::PathBuf;
 
-use envolventetypes::{Boundaries, EnvolventeCteData, Space};
+use envolventetypes::{
+    Boundaries, EnvelopeElements, EnvolventeCteData, Positions, Space, ThermalBridge, Wall, Window,
+};
 use utils::{find_first_file, fround2, normalize};
 
 pub const PROGNAME: &str = env!("CARGO_PKG_NAME");
@@ -94,7 +96,7 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
     bdl.spaces
         .iter()
         .map(|s| {
-            let area = (s.area() * 100.0).round() / 100.0;
+            let area = fround2(s.area());
             let height_net = s.space_height(&bdl)?;
             let height_gross = s.height;
             Ok(Space {
@@ -117,18 +119,15 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
 
 /// Construye elementos de la envolvente a partir de datos BDL
 /// TODO: algunos datos no los podemos calcular todavía
-fn envelope_from_ctehedata(
-    data: &ctehexml::CtehexmlData,
-) -> Result<envolventetypes::EnvelopeElements, Error> {
-    let bdl = &data.bdldata;
-    let mut envelope = envolventetypes::EnvelopeElements::default();
+fn envelope_from_ctehedata(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
+    let mut envelope = EnvelopeElements::default();
 
     // Walls: falta U
     for wall in &bdl.walls {
         let bounds = wall.bounds.into();
         // Actualización a criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
         let orientation = normalize(180.0 - wall.azimuth(0.0, &bdl)?, -180.0, 180.0);
-        let w = envolventetypes::Wall {
+        let w = Wall {
             name: wall.name.clone(),
             a: fround2(wall.net_area(bdl)?),
             space: wall.space.clone(),
@@ -144,18 +143,13 @@ fn envelope_from_ctehedata(
 
     // Windows: falta Fshobst, U, orientation
     for win in &bdl.windows {
-        let cons = data
-            .bdldata
-            .db
-            .windowcons
-            .get(&win.construction)
-            .ok_or_else(|| {
-                format_err!(
-                    "Construcción {} de hueco {} no encontrada",
-                    win.construction,
-                    win.name
-                )
-            })?;
+        let cons = bdl.db.windowcons.get(&win.construction).ok_or_else(|| {
+            format_err!(
+                "Construcción {} de hueco {} no encontrada",
+                win.construction,
+                win.name
+            )
+        })?;
         // Factor solar del hueco redondeado a dos decimales
         let glass = bdl.db.glasses.get(&cons.glass).ok_or_else(|| {
             format_err!(
@@ -166,15 +160,15 @@ fn envelope_from_ctehedata(
             )
         })?;
         let ff = cons.framefrac;
-        let gglwi = (glass.g_gln * 0.90 * 100.0).round() / 100.0;
+        let gglwi = fround2(glass.g_gln * 0.90);
         let gglshwi = cons.gglshwi.unwrap_or(gglwi);
         let infcoeff_100 = cons.infcoeff;
 
-        let w = envolventetypes::Window {
+        let w = Window {
             name: win.name.clone(),
             orientation: Default::default(), // TODO: por ahora completar con kyg
             wall: win.wall.clone(),
-            a: (win.area() * 100.0).round() / 100.0,
+            a: fround2(win.area()),
             u: Default::default(), // TODO: por ahora completar con kyg
             ff,
             gglwi,
@@ -187,9 +181,9 @@ fn envelope_from_ctehedata(
 
     // PTs
     for (_, tb) in &bdl.tbridges {
-        let t = envolventetypes::ThermalBridge {
+        let t = ThermalBridge {
             name: tb.name.clone(),
-            l: (tb.length.unwrap_or(0.0) * 100.0).round() / 100.0,
+            l: fround2(tb.length.unwrap_or(0.0)),
             psi: tb.psi,
         };
         envelope.thermal_bridges.push(t);
@@ -205,7 +199,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
         ctehexmldata.climate
     );
-    let mut envelope = envelope_from_ctehedata(&ctehexmldata)?;
+    let mut envelope = envelope_from_ctehedata(&ctehexmldata.bdldata)?;
 
     // Carga datos de espacios
     let spaces = build_spaces(&ctehexmldata.bdldata)?;
@@ -248,7 +242,7 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
 
 // Conversiones de BDL a EnvolventeTypes -------------------
 
-impl From<bdl::Positions> for envolventetypes::Positions {
+impl From<bdl::Positions> for Positions {
     fn from(pos: bdl::Positions) -> Self {
         match pos {
             bdl::Positions::TOP => Self::TOP,
