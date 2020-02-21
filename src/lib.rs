@@ -92,7 +92,7 @@ pub fn find_hulc_files<T: AsRef<str>>(basedir: T) -> Result<HulcFiles, Error> {
 }
 
 /// Construye lista de espacios a partir de datos BDL (Data)
-pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
+pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
     bdl.spaces
         .iter()
         .map(|s| {
@@ -119,7 +119,7 @@ pub fn build_spaces(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
 
 /// Construye elementos de la envolvente a partir de datos BDL
 /// TODO: algunos datos no los podemos calcular todavía
-fn envelope_from_ctehedata(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
+fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
     let mut envelope = EnvelopeElements::default();
 
     // Walls: falta U
@@ -192,33 +192,34 @@ fn envelope_from_ctehedata(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
     Ok(envelope)
 }
 
-pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
-    // Carga .ctehexml y BBDD HULC
-    let ctehexmldata = ctehexml::parse_with_catalog(&hulcfiles.ctehexml)?;
-    eprintln!(
-        "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
-        ctehexmldata.climate
-    );
-    let mut envelope = envelope_from_ctehedata(&ctehexmldata.bdldata)?;
+/// Genera datos de EnvolventeCTE a partir de datos BDL
+pub fn ecdata_from_xml(
+    ctehexmldata: &ctehexml::CtehexmlData,
+) -> Result<EnvolventeCteData, failure::Error> {
+    // Zona climática
+    let climate = ctehexmldata.climate.clone();
+    let envelope = envelope_from_bdl(&ctehexmldata.bdldata)?;
+    let spaces = spaces_from_bdl(&ctehexmldata.bdldata)?;
 
-    // Carga datos de espacios
-    let spaces = build_spaces(&ctehexmldata.bdldata)?;
+    Ok(EnvolventeCteData {
+        climate,
+        envelope,
+        spaces,
+    })
+}
 
-    // Interpreta .kyg
-    let envelopekyg = kyg::parse(&hulcfiles.kyg)?;
-    eprintln!("Localizada definición KyGananciasSolares.txt");
-
+/// Incluye los datos que todavía no calculamos desde el xml
+pub fn fix_ecdata_from_kyg(ecdata: &mut EnvolventeCteData, kygdata: &kyg::KyGElements) {
     // Actualizaciones de los datos del ctehexmldata con valores del archivo kyg -------
-
-    for wall in &mut envelope.walls {
-        let kygwall = envelopekyg.walls.iter().find(|w| w.name == wall.name);
+    for wall in &mut ecdata.envelope.walls {
+        let kygwall = kygdata.walls.iter().find(|w| w.name == wall.name);
         if let Some(kw) = kygwall {
             wall.u = kw.u;
         }
     }
 
-    for win in &mut envelope.windows {
-        let kygwin = envelopekyg.windows.iter().find(|w| w.name == win.name);
+    for win in &mut ecdata.envelope.windows {
+        let kygwin = kygdata.windows.iter().find(|w| w.name == win.name);
         if let Some(kw) = kygwin {
             win.u = kw.u;
             win.orientation = kw.orientation.clone();
@@ -228,16 +229,24 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
 
     // TODO: hacer un assert de que la U del kyg y la calculada es igual
     // assert_eq!(wall.u, w.U(&data.bdldata), "Probando muro {}", wall.name);
+}
 
-    // Zona climática
-    let climate = ctehexmldata.climate;
+pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
+    // Carga .ctehexml y BBDD HULC
+    let ctehexmldata = ctehexml::parse_with_catalog(&hulcfiles.ctehexml)?;
+    eprintln!(
+        "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
+        ctehexmldata.climate
+    );
+    // Genera EnvolventeCteData desde BDL
+    let mut ecdata = ecdata_from_xml(&ctehexmldata)?;
 
-    // Salida de datos
-    Ok(EnvolventeCteData {
-        climate,
-        envelope,
-        spaces,
-    })
+    // Interpreta .kyg y añade datos que faltan
+    let kygdata = kyg::parse(&hulcfiles.kyg)?;
+    eprintln!("Localizada definición KyGananciasSolares.txt");
+    fix_ecdata_from_kyg(&mut ecdata, &kygdata);
+
+    Ok(ecdata)
 }
 
 // Conversiones de BDL a EnvolventeTypes -------------------
