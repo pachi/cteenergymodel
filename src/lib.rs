@@ -232,6 +232,9 @@ pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, fai
         }
     }
 
+    // TODO: hacer un assert de que la U del kyg y la calculada es igual
+    // assert_eq!(wall.u, w.U(&data.bdldata), "Probando muro {}", wall.name);
+
     // Zona climática
     let climate = ctehexmldata.climate;
 
