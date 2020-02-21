@@ -1,7 +1,9 @@
 general:
 
 - Llevar cosas que sacamos del kyg a lib.rs y desde ctehexml
-- Incluir espacios en la exportación y detectar elementos de la envolvente a partir de ellos
+- Detectar elementos que pertenecen a la envolvente a partir de espacios
+    - elementos que pertenecen a espacios dentro de la envolvente pero
+      que no comunican con otros espacios interiores a la envolvente
 - Incluir construcciones en la exportación
     - opacos
     - huecos
@@ -12,13 +14,11 @@ general:
 - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 
 ideas:
-- Se podría eliminar la referencia entre muros y espacios, generando el polígono del muro a partir de su referencia al polígono del espacios
-    - así eliminamos referencias a vértices de polígonos y también location
 - Se podrían meter las ventanas como hijos de muros para facilitar las mediciones (pero tiene sus desventajas)
 - hacer visualizador 3d (con 3djs).
 
 envolventectedata:
-    - dejar de usar tipos de datos de KyG (btrx)
+    - dejar de usar tipos de datos de KyG
     - añadir construcciones de opacos y huecos
     Llevar a env:
         - Altura libre de espacios: data.space_net_height(spacename)
@@ -31,6 +31,8 @@ envolventectedata:
         - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
 
 BDL:
+- Se podría eliminar la referencia entre muros y espacios, generando el polígono del muro a partir de su referencia al polígono del espacios
+    - así eliminamos referencias a vértices de polígonos y también location
 - Quitar de los elementos aquellas cosas que necesitan consultas globales (con acceso a bdldata)
 - Comprobar qué se cambia en las plantas o en el edificio cuando se indica una cota base distinta a la 0.0 (ver si se pone la Z de la planta P01 distinta a "")
 - Convertir definición de muros de polygon o location a (X, Y, Z, WIDTH, HEIGHT, AZIMUTH)
@@ -45,5 +47,4 @@ BDL:
 
 EnvolventeCTE:
 - Eliminar uso de data.autil y usar data.a_util_ref()
-- Leer datos de gglshwi desde construcción de hueco y no en el elemento
 - Exportar construcciones (LAYERS, GAPS)
