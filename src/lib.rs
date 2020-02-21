@@ -125,12 +125,7 @@ fn envelope_from_ctehedata(
 
     // Walls: falta U
     for wall in &bdl.walls {
-        use Boundaries::*;
         let bounds = wall.bounds.into();
-        let btrx = match bounds {
-            EXTERIOR | UNDERGROUND => 1.0,
-            _ => 0.0,
-        };
         // Actualización a criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
         let orientation = normalize(180.0 - wall.azimuth(0.0, &bdl)?, -180.0, 180.0);
         let w = envolventetypes::Wall {
@@ -139,7 +134,6 @@ fn envelope_from_ctehedata(
             space: wall.space.clone(),
             nextto: wall.nextto.clone(),
             bounds,
-            btrx,                  // TODO: eliminar
             u: Default::default(), // TODO: por ahora completar con kyg
             absorptance: wall.absorptance.unwrap_or(0.6),
             orientation: fround2(orientation),

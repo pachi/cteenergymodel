@@ -190,9 +190,6 @@ pub struct Wall {
     /// Transmitancia térmica (W/m2K)
     #[serde(rename(serialize = "U"))]
     pub u: f32,
-    /// Coeficiente de transmisión del elemento opaco (-)
-    /// TODO: queda obsoleto al poder deducirse de bounds
-    pub btrx: f32, // 0 | 1
     /// Condiciones de contorno del cerramiento:
     /// - UNDERGROUND: cerramientos en contacxto con el terreno
     /// - EXTERIOR: cerramientos en contacto con el aire exterior
