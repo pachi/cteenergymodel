@@ -180,7 +180,7 @@ fn envelope_from_ctehedata(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
     }
 
     // PTs
-    for (_, tb) in &bdl.tbridges {
+    for tb in bdl.tbridges.values() {
         let t = ThermalBridge {
             name: tb.name.clone(),
             l: fround2(tb.length.unwrap_or(0.0)),
