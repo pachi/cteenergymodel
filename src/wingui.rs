@@ -372,15 +372,17 @@ unsafe fn get_folder_path() -> String {
 // Message handling loop
 fn run_message_loop(hwnd: HWND) -> WPARAM {
     unsafe {
-        let mut msg: MSG = std::mem::uninitialized();
+        let mut msg = std::mem::MaybeUninit::<MSG>::uninit();
         loop {
             // Get message from message queue
-            if GetMessageW(&mut msg, hwnd, 0, 0) > 0 {
-                TranslateMessage(&msg);
-                DispatchMessageW(&msg);
+            if GetMessageW(msg.as_mut_ptr(), hwnd, 0, 0) > 0 {
+                // Ya hemos inicializado msg
+                msg.assume_init();
+                TranslateMessage(msg.as_ptr());
+                DispatchMessageW(msg.as_ptr());
             } else {
                 // Return on error (<0) or exit (=0) cases
-                return msg.wParam;
+                return (*msg.as_ptr()).wParam;
             }
         }
     }
