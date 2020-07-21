@@ -317,19 +317,27 @@ unsafe fn get_folder_path() -> String {
     );
     if SUCCEEDED(hr) {
         // Crear diálogo
-        let mut pfd: *mut IFileDialog = std::mem::uninitialized();
+        let mut pfd: *mut IFileDialog = null_mut();
         hr = CoCreateInstance(
             &CLSID_FileOpenDialog,
             null_mut(),
             CLSCTX_ALL,
             &IFileOpenDialog::uuidof(),
-            &mut pfd as *mut *mut IFileDialog as *mut _,
+            <*mut _>::cast(&mut pfd),
         );
+        // Mejor, usando wio-rs:
+        // let pfd = ComPtr::new(pfd).unwrap();
+        // Esto:
+        // 1. evita tener que hacer el pfd.Release() al final
+        // 2. implementa Clone para evitar AddRef manual
+        // 3. implementa función cast para evitar QueryInterface manual
+        let pfd = &mut *pfd;
+
         if SUCCEEDED(hr) {
             // Fijar opciones del selector
             let mut fop: FILEOPENDIALOGOPTIONS = std::mem::zeroed();
-            if SUCCEEDED((*pfd).GetOptions(&mut fop)) {
-                (*pfd).SetOptions(
+            if SUCCEEDED(pfd.GetOptions(&mut fop)) {
+                pfd.SetOptions(
                     fop | FOS_PICKFOLDERS
                         | FOS_FORCESHOWHIDDEN
                         | FOS_PATHMUSTEXIST
@@ -338,10 +346,10 @@ unsafe fn get_folder_path() -> String {
             }
 
             // Mostrar diálogo
-            if SUCCEEDED((*pfd).Show(null_mut())) {
+            if SUCCEEDED(pfd.Show(null_mut())) {
                 // Recoger resultados
                 let mut psi: *mut IShellItem = std::mem::zeroed();
-                if SUCCEEDED((*pfd).GetResult(&mut psi)) {
+                if SUCCEEDED(pfd.GetResult(&mut psi)) {
                     // Provide a pointer to a buffer so windows can swap it for its own buffer
                     let mut buffer: PWSTR = std::ptr::null_mut();
                     if SUCCEEDED((*psi).GetDisplayName(SIGDN_FILESYSPATH, &mut buffer)) {
@@ -352,7 +360,7 @@ unsafe fn get_folder_path() -> String {
                 }
                 (*psi).Release();
             }
-            (*pfd).Release();
+            pfd.Release();
         }
         // Cerrar COM
         CoUninitialize();
