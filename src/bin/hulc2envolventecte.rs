@@ -26,6 +26,7 @@ use exitfailure::ExitFailure;
 #[cfg(not(windows))]
 use std::process::exit;
 
+// TODO: investigar iui https://docs.rs/crate/iui/0.3.0
 #[cfg(windows)]
 use hulc2envolventecte::wingui;
 #[cfg(not(windows))]
