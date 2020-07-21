@@ -192,7 +192,7 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
     Ok(envelope)
 }
 
-/// Genera datos de EnvolventeCTE a partir de datos BDL
+/// Genera datos de EnvolventeCTE a partir de datos BDL en el XML
 pub fn ecdata_from_xml(
     ctehexmldata: &ctehexml::CtehexmlData,
 ) -> Result<EnvolventeCteData, failure::Error> {
@@ -209,6 +209,7 @@ pub fn ecdata_from_xml(
 }
 
 /// Incluye los datos que todavía no calculamos desde el xml
+/// TODO: ir viendo qué se podría calcular bien desde el ctehexml para ir migrando
 pub fn fix_ecdata_from_kyg(ecdata: &mut EnvolventeCteData, kygdata: &kyg::KyGElements) {
     // Actualizaciones de los datos del ctehexmldata con valores del archivo kyg -------
     for wall in &mut ecdata.envelope.walls {
