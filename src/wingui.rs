@@ -389,7 +389,7 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
 }
 
 fn do_convert() {
-    use crate::{build_spaces, ctehexml, kyg, tbl, EnvolventeCteData};
+    use crate::collect_hulc_data;
     let dir_in = unsafe { MODEL.dir_in };
 
     let hulcfiles = match crate::find_hulc_files(&dir_in) {
@@ -405,52 +405,17 @@ fn do_convert() {
         }
     };
 
-    let ctehexmldata = match ctehexml::parse(&hulcfiles.ctehexml) {
-        Ok(ctehexmldata) => {
-            append_to_edit(&format!(
-                "\nLocalizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
-                ctehexmldata.climate
-            ));
-            ctehexmldata
+    let envolvente_data = match collect_hulc_data(&hulcfiles) {
+        Ok(data) => {
+            append_to_edit("\nLeídos datos envolvente");
+            data
         }
-        _ => {
-            append_to_edit("\nERROR: No se ha encontrado la zona climática o los coeficientes de transmisión de energía solar g_gl;sh;wi");
+        Err(error) => {
+            append_to_edit("\nERROR: No se han podido encontrar las definiciones de elementos de la envolvente");
+            append_to_edit(&format!("\nERROR: {}", error));
             return;
         }
     };
-
-    let elementos_envolvente = match kyg::parse(&hulcfiles.kyg, Some(ctehexmldata.gglshwi)) {
-        Ok(elementos_envolvente) => {
-            append_to_edit("\nEncontrada descripción de elementos de la envolvente");
-            elementos_envolvente
-        }
-        _ => {
-            append_to_edit("\nERROR: No se ha podido interpretar correctamente el archivo .kyg de elementos de la envolvente");
-            return;
-        }
-    };
-
-    let espacios = match crate::build_spaces(&ctehexmldata.bdldata) {
-        Ok(espacios) => {
-            append_to_edit("\nIdentificados espacios de la envolvente");
-            espacios
-        }
-        _ => {
-            append_to_edit(
-                "\nERROR: No se han podido generar los espacios de la envolvente correctamente",
-            );
-            return;
-        }
-    };
-    // Construye objeto de Envolvente
-    let envolvente_data = EnvolventeCteData {
-        clima: ctehexmldata.climate,
-        envolvente: elementos_envolvente,
-        espacios,
-    };
-
-    let area_util = envolvente_data.a_util_ref();
-    append_to_edit(&format!("\nArea útil: {} m2", area_util));
 
     // Salida en JSON
 
