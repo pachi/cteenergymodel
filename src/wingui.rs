@@ -305,18 +305,9 @@ unsafe fn get_folder_path() -> String {
     };
     use winapi::um::objbase::{COINIT_APARTMENTTHREADED, COINIT_DISABLE_OLE1DDE};
     use winapi::um::shobjidl::*;
-    use winapi::um::shobjidl_core::{IShellItem, SIGDN_FILESYSPATH};
+    use winapi::um::shobjidl_core::{CLSID_FileOpenDialog, IShellItem, SIGDN_FILESYSPATH};
     use winapi::Interface;
 
-    // winapi::um::shobjidl_core::CLSID_FileOpenDialog is unreleased
-    // This will be available as FileOpenDialog::uuidof()
-    #[allow(non_upper_case_globals)]
-    const CLSID_FileOpenDialog: winapi::shared::guiddef::GUID = winapi::shared::guiddef::GUID {
-        Data1: 0xdc1c5a9c,
-        Data2: 0xe88a,
-        Data3: 0x4dde,
-        Data4: [0xa5, 0xa1, 0x60, 0xf8, 0x2a, 0x20, 0xae, 0xf7],
-    };
     let mut sel_dir: String = "".to_string();
 
     // Inicializar COM
