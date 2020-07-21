@@ -376,8 +376,6 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
         loop {
             // Get message from message queue
             if GetMessageW(msg.as_mut_ptr(), hwnd, 0, 0) > 0 {
-                // Ya hemos inicializado msg
-                msg.assume_init();
                 TranslateMessage(msg.as_ptr());
                 DispatchMessageW(msg.as_ptr());
             } else {
