@@ -28,6 +28,7 @@ use std::process::exit;
 
 #[cfg(windows)]
 use hulc2envolventecte::wingui;
+#[cfg(not(windows))]
 use hulc2envolventecte::{collect_hulc_data, find_hulc_files, get_copytxt, PROGNAME};
 
 #[cfg(windows)]
