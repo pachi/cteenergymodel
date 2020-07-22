@@ -40,7 +40,10 @@ fn main() {
 #[cfg(not(windows))]
 fn get_help() -> String {
     format!(
-        "Uso: {} DIRECTORIO
+        "Uso: {} [--skip-kyg] DIRECTORIO
+
+Opciones:
+--skip-kyg      Ignorar datos obtenidos del archivo KyGananciasSolares.txt
 
 Argumentos:
 DIRECTORIO     Directorio del proyecto de HULC
@@ -56,14 +59,48 @@ Puede redirigir la salida de resultados a un archivo para su uso posterior:
     )
 }
 
+#[derive(Debug, Copy, Clone)]
+struct Options {
+    use_kyg: bool,
+}
+
+impl Default for Options {
+    fn default() -> Self {
+        Self { use_kyg: true }
+    }
+}
+
 #[cfg(not(windows))]
 fn main() -> Result<(), ExitFailure> {
     eprintln!("{}\n", get_copytxt());
 
-    let dir = std::env::args().nth(1).unwrap_or_else(|| {
-        eprintln!("{}", get_help());
-        exit(1)
-    });
+    let args = std::env::args().collect::<Vec<_>>();
+
+    let (opts, dir) = match args.len() {
+        // Sin argumentos
+        1 => {
+            eprintln!("{}", get_help());
+            exit(1)
+        }
+        // Directorio de proyecto
+        2 => (Options::default(), &args[1]),
+        // Opciones + directorio de proyecto
+        _ => {
+            let mut opts = Options::default();
+            for opt in &args[1..args.len() - 1] {
+                match opt.as_ref() {
+                    "--skip-kyg" => {
+                        eprintln!(
+                            "Se ignorará la información en el archivo KyGananciasSolares.txt"
+                        );
+                        opts.use_kyg = false;
+                    }
+                    _ => (),
+                }
+            }
+            (opts, &args[args.len() - 1])
+        }
+    };
 
     // Localiza archivos
     eprintln!("Localizando archivos de datos en '{}'", dir);
@@ -75,14 +112,19 @@ fn main() -> Result<(), ExitFailure> {
             .map(|p| p.display().to_string())
             .unwrap_or("".to_string())
     );
-    let kygpath = kyg::find_kyg(&dir)?;
-    eprintln!(
-        "- {}",
+    let kygpath = if opts.use_kyg == false {
+        None
+    } else {
+        let kygpath = kyg::find_kyg(&dir)?;
+        eprintln!(
+            "- {}",
+            kygpath
+                .as_ref()
+                .map(|p| p.display().to_string())
+                .unwrap_or("".to_string())
+        );
         kygpath
-            .as_ref()
-            .map(|p| p.display().to_string())
-            .unwrap_or("".to_string())
-    );
+    };
 
     // Lee datos
     let data = collect_hulc_data(ctehexmlpath, kygpath)?;
