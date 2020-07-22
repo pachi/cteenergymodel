@@ -140,7 +140,7 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
             ff,
             gglwi,
             gglshwi,
-            fshobst: Default::default(), // TODO: por ahora completar con kyg
+            fshobst: 1.0, // TODO: por ahora completar con kyg
             infcoeff_100,
         };
         envelope.windows.push(w);
