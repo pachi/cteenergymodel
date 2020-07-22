@@ -4,6 +4,8 @@ Exportación de datos de HULC a EnvolventeCTE
 
 Esta aplicación permite exportar los datos de un proyecto de la `Herramienta unificada LIDER-CALENER (HULC)` al formato JSON que utiliza la aplicación web para el cálculo de parámetros energéticos de la envolvente térmica [`EnvolventeCTE`](https://pachi.github.io/envolventecte).
 
+Esta versión está preparada para funcionar con las versiones de HULC adaptadas al CTE DB-HE 2019.
+
 ## Instalación
 
 En la [página de versiones publicadas del proyecto](http://github.com/pachi/hulc2envolventecte/releases) puede encontrar los archivos necesarios para el funcionamiento del programa, que no necesita instalación.
