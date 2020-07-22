@@ -24,8 +24,8 @@ SOFTWARE.
 // Utilidades varias
 
 use std::fs::File;
-use std::io::prelude::*;
-use std::path::PathBuf;
+use std::io::{prelude::*, BufReader};
+use std::path::{Path, PathBuf};
 
 use encoding::all::ISO_8859_1;
 use encoding::{DecoderTrap, Encoding};
@@ -34,20 +34,19 @@ use failure::ResultExt;
 use glob::glob;
 
 // Busca el primer archivo que coincida con el patrón dado
-pub fn find_first_file(pattern: &str) -> Result<PathBuf, Error> {
+pub fn find_first_file(pattern: &str) -> Result<Option<PathBuf>, Error> {
     let globiter = glob(pattern)?;
-    let results: Vec<PathBuf> = globiter.map(|r| r.unwrap()).collect();
-    if results.is_empty() {
-        bail!("No se ha encontrado ningún archivo {}", pattern);
+    match globiter.map(|r| r).next() {
+        Some(p) => Ok(Some(p?)),
+        None => Ok(None),
     }
-    Ok(results[0].clone())
 }
 
 // Lee a una cadena un archivo en latin1
-pub fn read_latin1_file<T: AsRef<str>>(path: T) -> Result<String, Error> {
+pub fn read_latin1_file<T: AsRef<Path>>(path: T) -> Result<String, Error> {
     let buf = {
         let mut buf = Vec::new();
-        File::open(path.as_ref())?
+        BufReader::new(File::open(path.as_ref())?)
             .read_to_end(&mut buf)
             .context("No se ha podido leer el archivo")?;
         buf
@@ -55,14 +54,17 @@ pub fn read_latin1_file<T: AsRef<str>>(path: T) -> Result<String, Error> {
 
     match ISO_8859_1.decode(&buf, DecoderTrap::Replace) {
         Ok(utf8buf) => Ok(utf8buf),
-        _ => bail!("Error de codificación del archivo {}", path.as_ref()),
+        _ => bail!(
+            "Error de codificación del archivo {}",
+            path.as_ref().display()
+        ),
     }
 }
 
 // Lee a una cadena un archivo en utf8
-pub fn read_file<T: AsRef<str>>(path: T) -> Result<String, Error> {
+pub fn read_file<T: AsRef<Path>>(path: T) -> Result<String, Error> {
     let mut buf = String::new();
-    File::open(path.as_ref())?
+    BufReader::new(File::open(path.as_ref())?)
         .read_to_string(&mut buf)
         .context("No se ha podido leer el archivo")?;
     Ok(buf)

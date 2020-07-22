@@ -102,7 +102,7 @@ fn test_polygon2() {
 fn test_test_spaces_caso_a() {
     let tbl = tbl::parse("tests/casoA/NewBDL_O.tbl").unwrap();
     let hulcfiles = find_hulc_files("tests/casoA").unwrap();
-    let xmldata = ctehexml::parse(&hulcfiles.ctehexml).unwrap();
+    let xmldata = ctehexml::parse(&hulcfiles.ctehexml.unwrap()).unwrap();
     let bdl = xmldata.bdldata;
 
     for s in tbl.spaces {
@@ -205,7 +205,7 @@ fn test_bdl_parse() {
     assert_eq!(w.azimuth(0.0, bdldb).unwrap(), 90.0); // Este
     assert_eq!(w.tilt, 11.30993);
 
-    // // Volumen acondicionado de la envolvente: 
+    // // Volumen acondicionado de la envolvente:
     // // - volumen de los espacios acondicionados
     // // - restamos volumen de los forjados interiores y de las cubiertas
     // let mut v = 0.0;

@@ -63,8 +63,22 @@ Descripción:
     // Localiza archivos
     let hulcfiles = find_hulc_files(&dir)?;
     eprintln!("Localizados archivos de datos en '{}'", dir);
-    eprintln!("- {}", hulcfiles.ctehexml);
-    eprintln!("- {}", hulcfiles.kyg);
+    eprintln!(
+        "- {}",
+        hulcfiles
+            .ctehexml
+            .as_ref()
+            .map(|p| p.display().to_string())
+            .unwrap_or("".to_string())
+    );
+    eprintln!(
+        "- {}",
+        hulcfiles
+            .kyg
+            .as_ref()
+            .map(|p| p.display().to_string())
+            .unwrap_or("".to_string())
+    );
 
     // Lee datos
     let data = collect_hulc_data(&hulcfiles)?;

@@ -23,7 +23,7 @@ SOFTWARE.
 
 // Funciones relacionadas con la interpretación de archivos .ctehexml
 
-use std::collections::HashMap;
+use std::{collections::HashMap, path::Path};
 
 use failure::Error;
 
@@ -42,7 +42,7 @@ pub struct CtehexmlData {
 }
 
 // Lee estructura de datos desde cadena con formato de archivo .ctehexml
-pub fn parse<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error> {
+pub fn parse<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
     let utf8buf = read_file(path.as_ref())?;
 
     // Localiza datos en XML
@@ -116,7 +116,7 @@ pub fn parse<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error> {
 static LIDERCATSTR: &str = include_str!("BDCatalogo.bdc.utf8");
 
 /// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
-pub fn parse_with_catalog<T: AsRef<str>>(path: T) -> Result<CtehexmlData, Error> {
+pub fn parse_with_catalog<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
     // Carga archivo .ctehexml
     let mut ctehexmldata = parse(path.as_ref())?;
     let mut db = ctehexmldata.bdldata.db;

@@ -25,7 +25,7 @@ SOFTWARE.
 //!
 //! En este archivo no aparecen los elementos adiabáticos entre los cerramientos
 
-use std::collections::HashMap;
+use std::{collections::HashMap, path::Path};
 
 use failure::Error;
 
@@ -114,7 +114,7 @@ pub struct ThermalBridge {
 }
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse<T: AsRef<str>>(path: T) -> Result<KyGElements, Error> {
+pub fn parse<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
     let utf8buf = read_latin1_file(path.as_ref())?;
 
     let lines = utf8buf

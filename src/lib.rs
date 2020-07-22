@@ -60,8 +60,8 @@ Publicado bajo licencia MIT
 
 #[derive(Debug)]
 pub struct HulcFiles {
-    pub ctehexml: String,
-    pub kyg: String,
+    pub ctehexml: Option<PathBuf>,
+    pub kyg: Option<PathBuf>,
 }
 
 // Localiza los archivos relevantes
@@ -86,8 +86,8 @@ pub fn find_hulc_files<T: AsRef<str>>(basedir: T) -> Result<HulcFiles, Error> {
     let kygpath = find_first_file(&kygpattern)?;
 
     Ok(HulcFiles {
-        ctehexml: ctehexmlpath.to_string_lossy().into_owned(),
-        kyg: kygpath.to_string_lossy().into_owned(),
+        ctehexml: ctehexmlpath,
+        kyg: kygpath,
     })
 }
 
@@ -232,20 +232,23 @@ pub fn fix_ecdata_from_kyg(ecdata: &mut EnvolventeCteData, kygdata: &kyg::KyGEle
     // assert_eq!(wall.u, w.U(&data.bdldata), "Probando muro {}", wall.name);
 }
 
+/// Recoge datos desde archivo .ctehexml y, si se indica, del archivo KyGananciasSolares.txt
 pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
     // Carga .ctehexml y BBDD HULC
-    let ctehexmldata = ctehexml::parse_with_catalog(&hulcfiles.ctehexml)?;
-    eprintln!(
-        "Localizada zona climática {} y coeficientes de transmisión de energía solar g_gl;sh;wi",
-        ctehexmldata.climate
-    );
+    let ctehexmlpath = match &hulcfiles.ctehexml {
+        Some(p) => p,
+        _ => bail!("No se ha podido localizar el archivo .ctehexml del proyecto"),
+    };
+
     // Genera EnvolventeCteData desde BDL
+    let ctehexmldata = ctehexml::parse_with_catalog(&ctehexmlpath)?;
     let mut ecdata = ecdata_from_xml(&ctehexmldata)?;
 
     // Interpreta .kyg y añade datos que faltan
-    let kygdata = kyg::parse(&hulcfiles.kyg)?;
-    eprintln!("Localizada definición KyGananciasSolares.txt");
-    fix_ecdata_from_kyg(&mut ecdata, &kygdata);
+    if let Some(kygpath) = &hulcfiles.kyg {
+        let kygdata = kyg::parse(&kygpath)?;
+        fix_ecdata_from_kyg(&mut ecdata, &kygdata);
+    };
 
     Ok(ecdata)
 }
