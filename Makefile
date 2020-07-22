@@ -20,9 +20,16 @@ bloat:
 	cargo bloat --release --crates -n 10
 	# cargo bloat --release --crates --split-std -n 10
 perf:
-	$(info [INFO]: Obteniendo datos de perfilado)
-	perf record -g target/release/hulc2envolventecte tests/data
-	perf report -f --sort comm,dso
+	# Ver https://profiler.firefox.com/docs/#/./guide-perf-profiling
+	$(info [INFO]: Obteniendo datos de perfilado en el archivo perf.data)
+	# -g -> call graph recording, -F number -> frecuencia de registro
+	$(info [INFO]: Puede parar la toma de datos cuando quiera con Ctrl+C)
+	perf record -g -F 999 target/release/hulc2envolventecte tests/data > /dev/null
+	$(info [INFO]: Convirtiendo datos de perfilado a Firefox Profiler y guardando en /tmp/test.perf)
+	perf script -F +pid > /tmp/test.perf
+	$(info [INFO]: Puede abrir los datos en http://profiler.firefox.com)
+	# Visualización alterantiva
+	# perf report -f --sort comm,dso
 count:
 	$(info [INFO]: Calculando tamaño del código)
 	cargo count -a src/
