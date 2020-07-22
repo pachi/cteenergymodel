@@ -20,7 +20,9 @@ mod envelope;
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use db::{Construction, Frame, Glass, Material, WallCons, WindowCons, DB};
-pub use envelope::{Floor, Polygon, Shade, Space, ThermalBridge, Wall, Window, Positions, Boundaries};
+pub use envelope::{
+    Boundaries, Floor, Polygon, Positions, Shade, Space, ThermalBridge, Wall, Window,
+};
 
 // ------------------------- BDL ----------------------------
 
@@ -38,7 +40,7 @@ pub struct Data {
     /// Elementos semitransparentes de la envolvente
     pub windows: Vec<Window>,
     /// Puentes térmicos
-    pub tbridges: HashMap<String, ThermalBridge>,
+    pub tbridges: Vec<ThermalBridge>,
     /// Sombras exteriores del edificio
     pub shadings: Vec<Shade>,
     /// Condiciones de uso de los espacios
@@ -219,7 +221,7 @@ impl Data {
                 // Puentes térmicos ----------
                 "THERMAL-BRIDGE" => {
                     let e = ThermalBridge::try_from(block)?;
-                    bdldata.tbridges.insert(e.name.clone(), e);
+                    bdldata.tbridges.push(e);
                 }
 
                 // Elementos transparentes de la envolvente -----
