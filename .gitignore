@@ -4,3 +4,4 @@
 **/*.rs.bk
 tests/**
 salida.json
+perf.data*
