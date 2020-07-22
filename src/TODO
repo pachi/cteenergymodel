@@ -19,7 +19,7 @@ general:
 - Convertir vectores de objetos de espacios, pisos, etc a vectores de nombres y hashmaps de objetos
   o convertir a https://docs.rs/crate/indexmap/
 - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
-- Migrar de failure a thiserror: https://github.com/bytecodealliance/cranelift/pull/1188/files
+- Migrar de failure a thiserror o anyhow: https://github.com/bytecodealliance/cranelift/pull/1188/files
 - Usar referencias con hashes como IDs:
         #[derive(Hash)]
         struct Block {
