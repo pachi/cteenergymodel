@@ -1,21 +1,28 @@
 general:
 
 - Llevar cosas que sacamos del kyg a lib.rs y desde ctehexml
-- Permitir cargar datos solo del .ctehexml y usar valores por
-  defecto (o intentar progresivamente calcular mejor) o rellenar
-  con datos de kyg si está presente.
-    - Esto nos permite ir migrando de .kyg a .ctehexml
+    - Comparamos
+        - cargo run -- --skip-kyg tests/data/ > salida.json.skip
+        - cargo run tests/data/ > salida.json.base
+    - Nos falta:
+        - windows:
+            - Orientation: podemos obtenerlo del muro. Pensar si lo calculamos (mejor) y eliminamos del hueco o lo guardamos
+            - U: ir haciendo cálculos a partir de construcción
+            - Fshobst: empezar con 1.0 en vez de 0.0?
+        - walls: U: ir haciendo cálculos a partir de construcción
 - Detectar elementos que pertenecen a la envolvente a partir de espacios
-    - elementos que pertenecen a espacios dentro de la envolvente pero
+    - son los elementos que pertenecen a espacios dentro de la envolvente pero
       que no comunican con otros espacios interiores a la envolvente
 - Incluir construcciones en la exportación
+    - Necesitamos biblioteca base en Rust para interpretar construcciones:
+        - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
     - opacos
     - huecos
     - pts?
 - Añadir tests de tbl.rs (parse)
-- Convertir vectores de objetos de espacios, pisos, etc a vectores de nombres y hashmaps de objetos
-  o convertir a https://docs.rs/crate/indexmap/
-- BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+- ¿Convertir vectores de objetos de espacios, pisos, etc a vectores de nombres y hashmaps de objetos
+  o convertir a https://docs.rs/crate/indexmap/?
+    - Esto igual es mejor como una cache para hacer las consultas (una función que memoize la búsqueda o algo así)
 - Migrar de failure a thiserror o anyhow: https://github.com/bytecodealliance/cranelift/pull/1188/files
 - Usar referencias con hashes como IDs:
         #[derive(Hash)]
@@ -29,8 +36,6 @@ general:
             s.finish(); // u64
             format!("{:x}", s)
         }
-
-
 
 ideas:
 - Se podrían meter las ventanas como hijos de muros para facilitar las mediciones (pero tiene sus desventajas)
@@ -67,3 +72,6 @@ BDL:
 EnvolventeCTE:
 - Eliminar uso de data.autil y usar data.a_util_ref()
 - Exportar construcciones (LAYERS, GAPS)
+
+- Ver relación entre huecos y muros (orientación).
+    - Si eliminamos orientación de los huecos y lo calculamos desde su muro (orientation+tilt -> orientación CTE)
