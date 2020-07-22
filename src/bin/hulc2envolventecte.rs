@@ -30,7 +30,7 @@ use std::process::exit;
 #[cfg(windows)]
 use hulc2envolventecte::wingui;
 #[cfg(not(windows))]
-use hulc2envolventecte::{collect_hulc_data, find_hulc_files, get_copytxt, PROGNAME};
+use hulc2envolventecte::{collect_hulc_data, ctehexml, get_copytxt, kyg, PROGNAME};
 
 #[cfg(windows)]
 fn main() {
@@ -38,50 +38,54 @@ fn main() {
 }
 
 #[cfg(not(windows))]
+fn get_help() -> String {
+    format!(
+        "Uso: {} DIRECTORIO
+
+Argumentos:
+DIRECTORIO     Directorio del proyecto de HULC
+
+Descripción:
+Exporta al formato JSON de EnvolventeCTE los datos de un proyecto HULC.
+
+Emite en formato JSON de EnvolventeCTE los datos de un proyecto HULC.
+Puede redirigir la salida de resultados a un archivo para su uso posterior:
+    {} DIRECTORIO > archivo_salida.json
+",
+        PROGNAME, PROGNAME
+    )
+}
+
+#[cfg(not(windows))]
 fn main() -> Result<(), ExitFailure> {
     eprintln!("{}\n", get_copytxt());
 
     let dir = std::env::args().nth(1).unwrap_or_else(|| {
-        eprintln!(
-            "Uso: {} DIRECTORIO
-
-Argumentos:
-    DIRECTORIO     Directorio del proyecto de HULC
-
-Descripción:
-    Exporta al formato JSON de EnvolventeCTE los datos de un proyecto HULC.
-
-    Emite en formato JSON de EnvolventeCTE los datos de un proyecto HULC.
-    Puede redirigir la salida de resultados a un archivo para su uso posterior:
-        {} DIRECTORIO > archivo_salida.json
-",
-            PROGNAME, PROGNAME
-        );
+        eprintln!("{}", get_help());
         exit(1)
     });
 
     // Localiza archivos
-    let hulcfiles = find_hulc_files(&dir)?;
-    eprintln!("Localizados archivos de datos en '{}'", dir);
+    eprintln!("Localizando archivos de datos en '{}'", dir);
+    let ctehexmlpath = ctehexml::find_ctehexml(&dir)?;
     eprintln!(
         "- {}",
-        hulcfiles
-            .ctehexml
+        ctehexmlpath
             .as_ref()
             .map(|p| p.display().to_string())
             .unwrap_or("".to_string())
     );
+    let kygpath = kyg::find_kyg(&dir)?;
     eprintln!(
         "- {}",
-        hulcfiles
-            .kyg
+        kygpath
             .as_ref()
             .map(|p| p.display().to_string())
             .unwrap_or("".to_string())
     );
 
     // Lee datos
-    let data = collect_hulc_data(&hulcfiles)?;
+    let data = collect_hulc_data(ctehexmlpath, kygpath)?;
 
     // Convierte a JSON
     match data.as_json() {

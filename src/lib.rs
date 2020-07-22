@@ -34,12 +34,12 @@ pub mod wingui;
 extern crate failure;
 
 use failure::Error;
-use std::path::PathBuf;
+use std::path::Path;
 
 use envolventetypes::{
     Boundaries, EnvelopeElements, EnvolventeCteData, Positions, Space, ThermalBridge, Wall, Window,
 };
-use utils::{find_first_file, fround2, normalize};
+use utils::{fround2, normalize};
 
 pub const PROGNAME: &str = env!("CARGO_PKG_NAME");
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -56,39 +56,6 @@ Publicado bajo licencia MIT
 ",
         PROGNAME, VERSION
     )
-}
-
-#[derive(Debug)]
-pub struct HulcFiles {
-    pub ctehexml: Option<PathBuf>,
-    pub kyg: Option<PathBuf>,
-}
-
-// Localiza los archivos relevantes
-pub fn find_hulc_files<T: AsRef<str>>(basedir: T) -> Result<HulcFiles, Error> {
-    let basedir = basedir.as_ref();
-    if !PathBuf::from(basedir).exists() {
-        bail!("No se ha localizado el directorio base {}", basedir);
-    }
-
-    let ctehexmlpattern = [basedir, "*.ctehexml"]
-        .iter()
-        .collect::<PathBuf>()
-        .to_string_lossy()
-        .into_owned();
-    let ctehexmlpath = find_first_file(&ctehexmlpattern)?;
-
-    let kygpattern = [basedir, "KyGananciasSolares.txt"]
-        .iter()
-        .collect::<PathBuf>()
-        .to_string_lossy()
-        .into_owned();
-    let kygpath = find_first_file(&kygpattern)?;
-
-    Ok(HulcFiles {
-        ctehexml: ctehexmlpath,
-        kyg: kygpath,
-    })
 }
 
 /// Construye lista de espacios a partir de datos BDL (Data)
@@ -233,19 +200,21 @@ pub fn fix_ecdata_from_kyg(ecdata: &mut EnvolventeCteData, kygdata: &kyg::KyGEle
 }
 
 /// Recoge datos desde archivo .ctehexml y, si se indica, del archivo KyGananciasSolares.txt
-pub fn collect_hulc_data(hulcfiles: &HulcFiles) -> Result<EnvolventeCteData, failure::Error> {
+pub fn collect_hulc_data<T: AsRef<Path>>(
+    ctehexmlpath: Option<T>,
+    kygpath: Option<T>,
+) -> Result<EnvolventeCteData, failure::Error> {
     // Carga .ctehexml y BBDD HULC
-    let ctehexmlpath = match &hulcfiles.ctehexml {
-        Some(p) => p,
-        _ => bail!("No se ha podido localizar el archivo .ctehexml del proyecto"),
-    };
+    let ctehexmlpath = &ctehexmlpath.ok_or_else(|| {
+        format_err!("No se ha podido localizar el archivo .ctehexml del proyecto")
+    })?;
 
     // Genera EnvolventeCteData desde BDL
     let ctehexmldata = ctehexml::parse_with_catalog(&ctehexmlpath)?;
     let mut ecdata = ecdata_from_xml(&ctehexmldata)?;
 
     // Interpreta .kyg y añade datos que faltan
-    if let Some(kygpath) = &hulcfiles.kyg {
+    if let Some(kygpath) = &kygpath {
         let kygdata = kyg::parse(&kygpath)?;
         fix_ecdata_from_kyg(&mut ecdata, &kygdata);
     };

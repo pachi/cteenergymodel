@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, find_hulc_files, tbl, utils};
+use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, kyg, tbl, utils};
 use std::convert::TryFrom;
 
 macro_rules! assert_almost_eq {
@@ -101,8 +101,8 @@ fn test_polygon2() {
 #[test]
 fn test_test_spaces_caso_a() {
     let tbl = tbl::parse("tests/casoA/NewBDL_O.tbl").unwrap();
-    let hulcfiles = find_hulc_files("tests/casoA").unwrap();
-    let xmldata = ctehexml::parse(&hulcfiles.ctehexml.unwrap()).unwrap();
+    let ctehexmlpath = ctehexml::find_ctehexml("tests/casoA").unwrap();
+    let xmldata = ctehexml::parse(&ctehexmlpath.unwrap()).unwrap();
     let bdl = xmldata.bdldata;
 
     for s in tbl.spaces {
@@ -219,8 +219,9 @@ fn test_bdl_parse() {
 
 #[test]
 fn test_caso_a() {
-    let hulcfiles = find_hulc_files("tests/casoA").unwrap();
-    let data = collect_hulc_data(&hulcfiles).unwrap();
+    let ctehexmlpath = ctehexml::find_ctehexml("tests/casoA").unwrap();
+    let kygpath = kyg::find_kyg("tests/casoA").unwrap();
+    let data = collect_hulc_data(ctehexmlpath, kygpath).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 10);
@@ -230,8 +231,9 @@ fn test_caso_a() {
 
 #[test]
 fn test_caso_c() {
-    let hulcfiles = find_hulc_files("tests/casoC").unwrap();
-    let data = collect_hulc_data(&hulcfiles).unwrap();
+    let ctehexmlpath = ctehexml::find_ctehexml("tests/casoC").unwrap();
+    let kygpath = kyg::find_kyg("tests/casoC").unwrap();
+    let data = collect_hulc_data(ctehexmlpath, kygpath).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 9);
@@ -242,8 +244,9 @@ fn test_caso_c() {
 // Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
 #[test]
 fn parse_test_data() {
-    let hulcfiles = find_hulc_files("tests/data").unwrap();
-    let data = collect_hulc_data(&hulcfiles).unwrap();
+    let ctehexmlpath = ctehexml::find_ctehexml("tests/data").unwrap();
+    let kygpath = kyg::find_kyg("tests/data").unwrap();
+    let data = collect_hulc_data(ctehexmlpath, kygpath).unwrap();
     assert_eq!(data.a_util_ref(), 1673.92);
     assert_eq!(data.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 92);
@@ -253,9 +256,10 @@ fn parse_test_data() {
 
 #[test]
 fn parse_test_data2() {
-    let hulcfiles = find_hulc_files("tests/ejemplopmt_HuecosOK").unwrap();
+    let ctehexmlpath = ctehexml::find_ctehexml("tests/ejemplopmt_HuecosOK").unwrap();
+    let kygpath = kyg::find_kyg("tests/ejemplopmt_HuecosOK").unwrap();
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
-    let data = collect_hulc_data(&hulcfiles).unwrap();
+    let data = collect_hulc_data(ctehexmlpath, kygpath).unwrap();
     assert_eq!(data.a_util_ref(), 1073.78);
     assert_eq!(data.climate, "B3");
     assert_eq!(data.envelope.windows.len(), 29);

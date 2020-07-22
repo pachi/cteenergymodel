@@ -23,12 +23,15 @@ SOFTWARE.
 
 // Funciones relacionadas con la interpretación de archivos .ctehexml
 
-use std::{collections::HashMap, path::Path};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 use failure::Error;
 
 use crate::bdl::Data;
-use crate::utils::read_file;
+use crate::utils::{find_file_in_basedir, read_file};
 
 #[derive(Debug)]
 pub struct CtehexmlData {
@@ -41,7 +44,12 @@ pub struct CtehexmlData {
     pub gglshwi: HashMap<String, f32>,
 }
 
-// Lee estructura de datos desde cadena con formato de archivo .ctehexml
+/// Localiza archivo .ctehexml en el directorio de proyecto basedir
+pub fn find_ctehexml<T: AsRef<str>>(basedir: T) -> Result<Option<PathBuf>, Error> {
+    find_file_in_basedir(basedir, "*.ctehexml")
+}
+
+/// Lee estructura de datos desde cadena con formato de archivo .ctehexml
 pub fn parse<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
     let utf8buf = read_file(path.as_ref())?;
 

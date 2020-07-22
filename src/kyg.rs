@@ -25,11 +25,19 @@ SOFTWARE.
 //!
 //! En este archivo no aparecen los elementos adiabáticos entre los cerramientos
 
-use std::{collections::HashMap, path::Path};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 use failure::Error;
 
-use super::utils::read_latin1_file;
+use crate::utils::{find_file_in_basedir, read_latin1_file};
+
+/// Localiza archivo KyGananciasSolares.txt en el directorio de proyecto basedir
+pub fn find_kyg<T: AsRef<str>>(basedir: T) -> Result<Option<PathBuf>, Error> {
+    find_file_in_basedir(basedir, "KyGananciasSolares.txt")
+}
 
 // Elementos definidos en el archivo KyGanaciasSolares
 #[derive(Debug, Default)]

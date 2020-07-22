@@ -33,6 +33,27 @@ use failure::Error;
 use failure::ResultExt;
 use glob::glob;
 
+/// Localiza archivo que sigue el patrón pat en el directorio dir
+/// Falla si hay algún error en el patrón
+pub fn find_file_in_basedir<T: AsRef<str>>(dir: T, pat: &str) -> Result<Option<PathBuf>, Error> {
+    let dir = dir.as_ref();
+    if !PathBuf::from(dir).exists() {
+        bail!("No se ha localizado el directorio {}", dir);
+    }
+
+    let pattern = [dir, pat]
+        .iter()
+        .collect::<PathBuf>()
+        .to_string_lossy()
+        .into_owned();
+
+    let globiter = glob(&pattern)?;
+    match globiter.map(|r| r).next() {
+        Some(p) => Ok(Some(p?)),
+        None => Ok(None),
+    }
+}
+
 // Busca el primer archivo que coincida con el patrón dado
 pub fn find_first_file(pattern: &str) -> Result<Option<PathBuf>, Error> {
     let globiter = glob(pattern)?;

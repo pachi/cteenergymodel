@@ -386,23 +386,38 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
 }
 
 fn do_convert() {
-    use crate::collect_hulc_data;
-    let dir_in = unsafe { MODEL.dir_in };
+    use crate::{collect_hulc_data, ctehexml, kyg};
 
-    let hulcfiles = match crate::find_hulc_files(&dir_in) {
-        Ok(hulcfiles) => {
-            append_to_edit(&format!("\nLocalizados archivos de datos en '{}'", dir_in));
-            append_to_edit(&format!("\n  - {}", hulcfiles.ctehexml));
-            append_to_edit(&format!("\n  - {}", hulcfiles.kyg));
-            hulcfiles
+    let dir_in = unsafe { MODEL.dir_in };
+    append_to_edit(&format!("\nLocalizando archivos de datos en '{}'", dir_in));
+
+    let ctehexmlpath = match ctehexml::find_ctehexml(&dir_in) {
+        Ok(Some(p)) => {
+            append_to_edit(&format!("\n  - {}", p.display()));
+            Some(p)
         }
         _ => {
-            append_to_edit(&format!("\nERROR: No se han encontrado los archivos .ctehexml, .tbl o .kyg en el directorio de proyecto {}.", dir_in));
+            append_to_edit(&format!("\nERROR: No se ha encontrado el archivo .ctehexml en el directorio de proyecto {}.", dir_in));
             return;
         }
     };
 
-    let envolvente_data = match collect_hulc_data(&hulcfiles) {
+    let kygpath = match kyg::find_kyg(&dir_in) {
+        Ok(Some(p)) => {
+            append_to_edit(&format!("\n  - {}", p.display()));
+            Some(p)
+        }
+        Ok(None) => None,
+        _ => {
+            append_to_edit(&format!(
+                "\nERROR: No se ha encontrado el archivo .tbl en el directorio de proyecto {}.",
+                dir_in
+            ));
+            return;
+        }
+    };
+
+    let envolvente_data = match collect_hulc_data(ctehexmlpath, kygpath) {
         Ok(data) => {
             append_to_edit("\nLeídos datos envolvente");
             data
