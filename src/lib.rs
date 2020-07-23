@@ -131,9 +131,16 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
         let gglshwi = cons.gglshwi.unwrap_or(gglwi);
         let infcoeff_100 = cons.infcoeff;
 
+        let orientation = envelope
+            .walls
+            .iter()
+            .find(|w| w.name == win.wall)
+            .map(|w| utils::angle_name(w.orientation))
+            .unwrap_or_default();
+
         let w = Window {
             name: win.name.clone(),
-            orientation: Default::default(), // TODO: por ahora completar con kyg
+            orientation,
             wall: win.wall.clone(),
             a: fround2(win.area()),
             u: Default::default(), // TODO: por ahora completar con kyg
@@ -190,7 +197,6 @@ pub fn fix_ecdata_from_kyg(ecdata: &mut EnvolventeCteData, kygdata: &kyg::KyGEle
         let kygwin = kygdata.windows.iter().find(|w| w.name == win.name);
         if let Some(kw) = kygwin {
             win.u = kw.u;
-            win.orientation = kw.orientation.clone();
             win.fshobst = kw.fshobst;
         }
     }

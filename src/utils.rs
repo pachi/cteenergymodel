@@ -124,15 +124,15 @@ pub fn angle_name(angle: f32) -> String {
     }
     // 202.5 = 360 - 157.5
     else if angle < 240.0 {
-        "NO"
+        "NW"
     }
     // 240 = 360 - 120
     else if angle < 291.0 {
-        "O"
+        "W"
     }
     // 291 = 360 - 69
     else if angle < 342.0 {
-        "SO"
+        "SW"
     }
     // 342 = 360 - 18
     else {
