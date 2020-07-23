@@ -75,3 +75,7 @@ EnvolventeCTE:
 
 - Ver relación entre huecos y muros (orientación).
     - Si eliminamos orientación de los huecos y lo calculamos desde su muro (orientation+tilt -> orientación CTE)
+
+Notas:
+
+- Separar hueco en datos de hueco (name, wall, orientation, A, Fshobst) y construcción (name, Ff, gglwi, ggshwi, C_100)

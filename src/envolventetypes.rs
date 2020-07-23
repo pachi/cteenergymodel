@@ -158,6 +158,8 @@ pub struct Window {
     #[serde(rename(serialize = "A"))]
     pub a: f32,
     /// Transmitancia térmica (W/m2K)
+    /// Esta transmitancia no incluye resistencias superficiales,
+    /// solo el efecto del marco, vidrio e incremento de u por intercalarios y cajones de persiana
     #[serde(rename(serialize = "U"))]
     pub u: f32,
     /// Fracción de marco
@@ -201,6 +203,7 @@ pub struct Wall {
     /// Orientación (gamma) [-180,+180]
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
     /// Criterio: medido desde el sur, positivo al este, negativo al oeste
+    /// Corresponde al criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
     /// Difiere del criterio BDL, que parte del norte, con E+ y W-
     pub orientation: f32,
     /// Inclinación (beta) [0, 180]

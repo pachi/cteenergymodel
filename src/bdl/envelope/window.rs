@@ -16,7 +16,7 @@ pub struct Window {
     pub name: String,
     /// Muro, cubierta o suelo en el que se sitúa
     pub wall: String,
-    /// Definición de la composición del hueco
+    /// Definición de la composición del hueco (WindowCons::name)
     pub construction: String,
     /// Distancia (m) del borde izquierdo del hueco al borde izquierdo del cerramiento que lo contiene (mirando desde fuera)
     pub x: f32,
@@ -147,8 +147,8 @@ impl TryFrom<BdlBlock> for Window {
                 _ => bail!(
                     "Definición incorrecta de coeficientes de corrección en el hueco '{}'",
                     name
-                )
-            }
+                ),
+            },
         };
 
         Ok(Self {

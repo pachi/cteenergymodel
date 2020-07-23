@@ -108,8 +108,9 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
         envelope.walls.push(w);
     }
 
-    // Windows: falta Fshobst, U, orientation
+    // Windows: falta Fshobst
     for win in &bdl.windows {
+        // Construcción del hueco WindowCons
         let cons = bdl.db.windowcons.get(&win.construction).ok_or_else(|| {
             format_err!(
                 "Construcción {} de hueco {} no encontrada",
@@ -117,7 +118,7 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
                 win.name
             )
         })?;
-        // Factor solar del hueco redondeado a dos decimales
+        // Vidrio del hueco (Glass)
         let glass = bdl.db.glasses.get(&cons.glass).ok_or_else(|| {
             format_err!(
                 "Vidrio {} de la construcción {} del hueco {} no encontrado",
@@ -126,24 +127,40 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
                 win.name
             )
         })?;
+        // Marco del hueco (Frame)
+        let frame = bdl.db.frames.get(&cons.frame).ok_or_else(|| {
+            format_err!(
+                "Marco {} de la construcción {} del hueco {} no encontrado",
+                cons.frame,
+                win.construction,
+                win.name
+            )
+        })?;
+        // Muro en el que está el hueco (Wall)
+        let wall = envelope
+            .walls
+            .iter()
+            .find(|w| w.name == win.wall)
+            .ok_or_else(|| format_err!("Muro {} del hueco {} no encontrado", win.wall, win.name))?;
+
+        // Datos trasladados directamente
         let ff = cons.framefrac;
         let gglwi = fround2(glass.g_gln * 0.90);
         let gglshwi = cons.gglshwi.unwrap_or(gglwi);
         let infcoeff_100 = cons.infcoeff;
 
-        let orientation = envelope
-            .walls
-            .iter()
-            .find(|w| w.name == win.wall)
-            .map(|w| utils::angle_name(w.orientation))
-            .unwrap_or_default();
+        // Cálculo de U. Incluye las resistencias superficiales (que ya están consideradas en vidrio y marco, por posiciones)
+        let deltau = cons.deltau; // deltau de persiana e intercalarios
+        let frameu = frame.conductivity;
+        let glassu = glass.conductivity;
+        let u = fround2((1.0 + deltau / 100.0) * (frameu * ff + glassu * (1.0 - ff)));
 
         let w = Window {
             name: win.name.clone(),
-            orientation,
+            orientation: utils::angle_name(wall.orientation),
             wall: win.wall.clone(),
             a: fround2(win.area()),
-            u: Default::default(), // TODO: por ahora completar con kyg
+            u,
             ff,
             gglwi,
             gglshwi,
@@ -196,7 +213,6 @@ pub fn fix_ecdata_from_kyg(ecdata: &mut EnvolventeCteData, kygdata: &kyg::KyGEle
     for win in &mut ecdata.envelope.windows {
         let kygwin = kygdata.windows.iter().find(|w| w.name == win.name);
         if let Some(kw) = kygwin {
-            win.u = kw.u;
             win.fshobst = kw.fshobst;
         }
     }
