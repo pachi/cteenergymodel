@@ -108,6 +108,7 @@ impl WallCons {
             // Tomamos valor 0.0. Siempre se podría consultar la resistencia intrínseca
             ADIABATIC => 0.0,
             // HULC no diferencia entre posiciones para elementos interiores
+            // TODO: Faltaría el caso de contacto con espacios no habitables, con cálculo de b
             INTERIOR => 1.0 / (1.0 / u + 2.0 * RSI_HORIZONTAL),
             EXTERIOR => match position {
                 BOTTOM => 1.0 / (1.0 / u + RSI_DESCENDENTE + RSE),
