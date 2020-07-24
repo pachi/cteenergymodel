@@ -13,7 +13,6 @@
 //!      - Composición de huecos y lucernarios (GAP)
 //! - Puentes térmicos (THERMAL-BRIDGE)?
 
-use failure::Error;
 use std::collections::HashMap;
 
 mod construction;
