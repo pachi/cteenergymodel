@@ -40,7 +40,10 @@ SOFTWARE.
 //!     #NOTA: Las líneas 10 y 11 se repiten tantas veces como zonas tenga el edificio
 //! ```
 
-use std::{path::PathBuf, str::FromStr};
+use std::{
+    path::{Path, PathBuf},
+    str::FromStr,
+};
 
 use failure::Error;
 use failure::ResultExt;
@@ -182,8 +185,8 @@ pub struct Tbl {
 /// Interpreta archivo .tbl de datos de elementos y espacios del modelo
 ///
 /// path: ruta del archivo .tbl
-pub fn parse(path: &str) -> Result<Tbl, Error> {
-    let utf8buf = read_latin1_file(path)?;
+pub fn parse<T: AsRef<Path>>(path: T) -> Result<Tbl, Error> {
+    let utf8buf = read_latin1_file(path.as_ref())?;
 
     // Líneas, eliminando dos primeras líneas de comentarios iniciales
     let mut lines = utf8buf.lines().skip(2); //.collect::<Vec<&str>>().into_iter();
