@@ -61,13 +61,15 @@ Puede redirigir la salida de resultados a un archivo para su uso posterior:
 
 #[derive(Debug, Copy, Clone)]
 struct Options {
-    use_kyg: bool,
+    use_extra_files: bool,
 }
 
 impl Default for Options {
     fn default() -> Self {
-        Self { use_kyg: true }
+        Self {
+            use_extra_files: true,
     }
+}
 }
 
 #[cfg(not(windows))]
@@ -89,11 +91,11 @@ fn main() -> Result<(), ExitFailure> {
             let mut opts = Options::default();
             for opt in &args[1..args.len() - 1] {
                 match opt.as_ref() {
-                    "--skip-kyg" => {
+                    "--skip-extra" => {
                         eprintln!(
-                            "Se ignorará la información en el archivo KyGananciasSolares.txt"
+                            "Se ignorará la información en los archivos KyGananciasSolares.txt y NewBDL_O.tbl"
                         );
-                        opts.use_kyg = false;
+                        opts.use_extra_files = false;
                     }
                     _ => (),
                 }
@@ -112,7 +114,8 @@ fn main() -> Result<(), ExitFailure> {
             .map(|p| p.display().to_string())
             .unwrap_or("".to_string())
     );
-    let kygpath = if opts.use_kyg == false {
+
+    let kygpath = if opts.use_extra_files == false {
         None
     } else {
         let kygpath = kyg::find_kyg(&dir)?;
