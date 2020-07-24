@@ -221,7 +221,8 @@ fn test_bdl_parse() {
 fn test_caso_a() {
     let ctehexmlpath = ctehexml::find_ctehexml("tests/casoA").unwrap();
     let kygpath = kyg::find_kyg("tests/casoA").unwrap();
-    let data = collect_hulc_data(ctehexmlpath, kygpath).unwrap();
+    let tblpath = tbl::find_tbl("tests/casoA").unwrap();
+    let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 10);
@@ -233,7 +234,8 @@ fn test_caso_a() {
 fn test_caso_c() {
     let ctehexmlpath = ctehexml::find_ctehexml("tests/casoC").unwrap();
     let kygpath = kyg::find_kyg("tests/casoC").unwrap();
-    let data = collect_hulc_data(ctehexmlpath, kygpath).unwrap();
+    let tblpath = tbl::find_tbl("tests/casoC").unwrap();
+    let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 9);
@@ -246,7 +248,8 @@ fn test_caso_c() {
 fn parse_test_data() {
     let ctehexmlpath = ctehexml::find_ctehexml("tests/data").unwrap();
     let kygpath = kyg::find_kyg("tests/data").unwrap();
-    let data = collect_hulc_data(ctehexmlpath, kygpath).unwrap();
+    let tblpath = tbl::find_tbl("tests/data").unwrap();
+    let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 1673.92);
     assert_eq!(data.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 92);
@@ -258,8 +261,9 @@ fn parse_test_data() {
 fn parse_test_data2() {
     let ctehexmlpath = ctehexml::find_ctehexml("tests/ejemplopmt_HuecosOK").unwrap();
     let kygpath = kyg::find_kyg("tests/ejemplopmt_HuecosOK").unwrap();
+    let tblpath = tbl::find_tbl("tests/ejemplopmt_HuecosOK").unwrap();
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
-    let data = collect_hulc_data(ctehexmlpath, kygpath).unwrap();
+    let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 1073.78);
     assert_eq!(data.climate, "B3");
     assert_eq!(data.envelope.windows.len(), 29);

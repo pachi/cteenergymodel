@@ -410,6 +410,21 @@ fn do_convert() {
         Ok(None) => None,
         _ => {
             append_to_edit(&format!(
+                "\nERROR: No se ha encontrado el archivo .kyg en el directorio de proyecto {}.",
+                dir_in
+            ));
+            return;
+        }
+    };
+
+    let tblpath = match tbl::find_tbl(&dir_in) {
+        Ok(Some(p)) => {
+            append_to_edit(&format!("\n  - {}", p.display()));
+            Some(p)
+        }
+        Ok(None) => None,
+        _ => {
+            append_to_edit(&format!(
                 "\nERROR: No se ha encontrado el archivo .tbl en el directorio de proyecto {}.",
                 dir_in
             ));
@@ -417,7 +432,7 @@ fn do_convert() {
         }
     };
 
-    let envolvente_data = match collect_hulc_data(ctehexmlpath, kygpath) {
+    let envolvente_data = match collect_hulc_data(ctehexmlpath, kygpath, tblpath) {
         Ok(data) => {
             append_to_edit("\nLeídos datos envolvente");
             data

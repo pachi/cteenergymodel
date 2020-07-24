@@ -227,6 +227,7 @@ pub fn fix_ecdata_from_kyg(ecdata: &mut EnvolventeCteData, kygdata: &kyg::KyGEle
 pub fn collect_hulc_data<T: AsRef<Path>>(
     ctehexmlpath: Option<T>,
     kygpath: Option<T>,
+    tblpath: Option<T>,
 ) -> Result<EnvolventeCteData, failure::Error> {
     // Carga .ctehexml y BBDD HULC
     let ctehexmlpath = &ctehexmlpath.ok_or_else(|| {

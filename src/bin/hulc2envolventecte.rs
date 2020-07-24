@@ -30,7 +30,7 @@ use std::process::exit;
 #[cfg(windows)]
 use hulc2envolventecte::wingui;
 #[cfg(not(windows))]
-use hulc2envolventecte::{collect_hulc_data, ctehexml, get_copytxt, kyg, PROGNAME};
+use hulc2envolventecte::{collect_hulc_data, ctehexml, get_copytxt, kyg, tbl, PROGNAME};
 
 #[cfg(windows)]
 fn main() {
@@ -68,8 +68,8 @@ impl Default for Options {
     fn default() -> Self {
         Self {
             use_extra_files: true,
+        }
     }
-}
 }
 
 #[cfg(not(windows))]
@@ -129,8 +129,22 @@ fn main() -> Result<(), ExitFailure> {
         kygpath
     };
 
+    let tblpath = if opts.use_extra_files == false {
+        None
+    } else {
+        let tblpath = tbl::find_tbl(&dir)?;
+        eprintln!(
+            "- {}",
+            tblpath
+                .as_ref()
+                .map(|p| p.display().to_string())
+                .unwrap_or("".to_string())
+        );
+        tblpath
+    };
+
     // Lee datos
-    let data = collect_hulc_data(ctehexmlpath, kygpath)?;
+    let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath)?;
 
     // Convierte a JSON
     match data.as_json() {
