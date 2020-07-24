@@ -19,15 +19,15 @@ use std::collections::HashMap;
 mod construction;
 mod frame;
 mod glass;
-mod wallcons;
 mod material;
+mod wallcons;
 mod windowcons;
 
 pub use construction::Construction;
 pub use frame::Frame;
 pub use glass::Glass;
-pub use wallcons::WallCons;
 pub use material::Material;
+pub use wallcons::WallCons;
 pub use windowcons::WindowCons;
 
 /// Elementos constructivos y de materiales pertenecientes a la base de datos
