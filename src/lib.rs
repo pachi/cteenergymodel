@@ -128,7 +128,7 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
         envelope.walls.push(w);
     }
 
-    // Windows: falta Fshobst
+    // Windows
     for win in &bdl.windows {
         // Construcción del hueco WindowCons
         let cons = bdl.db.windowcons.get(&win.construction).ok_or_else(|| {
@@ -155,6 +155,7 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
             .ok_or_else(|| format_err!("Muro {} del hueco {} no encontrado", win.wall, win.name))?;
 
         // Datos trasladados directamente
+        let orientation = utils::angle_name(wall.orientation);
         let ff = cons.framefrac;
         let gglwi = fround2(glass.g_gln * 0.90);
         let gglshwi = cons.gglshwi.unwrap_or(gglwi);
@@ -163,14 +164,15 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
 
         let w = Window {
             name: win.name.clone(),
-            orientation: utils::angle_name(wall.orientation),
+            orientation,
             wall: win.wall.clone(),
             a: fround2(win.area()),
             u,
             ff,
             gglwi,
             gglshwi,
-            fshobst: 1.0, // TODO: por ahora completar con kyg
+            // El cálculo es aproximado y no se hace con geometría, sino solo con tablas
+            fshobst: win.fshobst(northangle, &bdl)?,
             infcoeff_100,
         };
         envelope.windows.push(w);
