@@ -106,6 +106,13 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     (offset - (f32::floor(offset / width) * width)) + start
 }
 
+/// Convierte ángulo desde el criterio del BDL al criterio de la 52016-1
+/// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
+/// UNE-EN ISO 52016-1: S=0, E=+90, W=-90
+pub fn orientation_bdl252016(azimuth: f32) -> f32 {
+    normalize(180.0 - azimuth, -180.0, 180.0)
+}
+
 /// Nombre del ángulo a partir de su valor sexagesimal (0 -> 360)
 /// El ángulo se define respecto al sur (sur = 0)
 /// y crece en sentido antihorario, según DB-HE1 figura A.1

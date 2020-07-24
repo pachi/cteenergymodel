@@ -207,13 +207,18 @@ impl Wall {
     }
 
     /// Posición del elemento (TOP, BOTTOM, SIDE) según su inclinación
+    /// Los elementos con inclinación > 60º Con la horizontal son verticales.
     pub fn position(&self) -> Positions {
-        if self.tilt < 60.0 {
+        if self.tilt <= 60.0 {
             Positions::TOP
         } else if self.tilt < 120.0 {
             Positions::SIDE
-        } else {
+        } else if self.tilt < 240.0 {
             Positions::BOTTOM
+        } else if self.tilt < 300.0 {
+            Positions::SIDE
+        } else {
+            Positions::TOP
         }
     }
 
@@ -226,8 +231,8 @@ impl Wall {
     ///       las construcciones por defecto
     #[allow(non_snake_case)]
     pub fn U(&self, db: &Data) -> f32 {
-        use Positions::*;
         use Boundaries::*;
+        use Positions::*;
         let u = db
             .db
             .get_wallcons_transmittance(&self.construction)
