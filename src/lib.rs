@@ -198,25 +198,47 @@ pub fn ecdata_from_xml(
 }
 
 /// Incluye los datos que todavía no calculamos desde el xml
-/// TODO: ir viendo qué se podría calcular bien desde el ctehexml para ir migrando
-pub fn fix_ecdata_from_kyg(ecdata: &mut EnvolventeCteData, kygdata: &kyg::KyGElements) {
+pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
+    ecdata: &mut EnvolventeCteData,
+    kygpath: Option<T>,
+    tblpath: Option<T>,
+) {
     // Actualizaciones de los datos del ctehexmldata con valores del archivo kyg -------
-    for wall in &mut ecdata.envelope.walls {
-        let kygwall = kygdata.walls.iter().find(|w| w.name == wall.name);
-        if let Some(kw) = kygwall {
-            wall.u = kw.u;
+    // Interpreta .kyg y añade datos que faltan
+    if let Some(kygpath) = &kygpath {
+        let kygdata = kyg::parse(&kygpath).unwrap();
+
+        for wall in &mut ecdata.envelope.walls {
+            let kygwall = kygdata.walls.iter().find(|w| w.name == wall.name);
+            if let Some(kw) = kygwall {
+                wall.u = kw.u;
+            }
+        }
+
+        for win in &mut ecdata.envelope.windows {
+            let kygwin = kygdata.windows.iter().find(|w| w.name == win.name);
+            if let Some(kw) = kygwin {
+                win.fshobst = kw.fshobst;
+            }
         }
     }
 
-    for win in &mut ecdata.envelope.windows {
-        let kygwin = kygdata.windows.iter().find(|w| w.name == win.name);
-        if let Some(kw) = kygwin {
-            win.fshobst = kw.fshobst;
+    // Actualizamos datos desde el archivo .tbl
+    // Básicamente son U de particiones interiores
+    if let Some(tblpath) = &tblpath {
+        let tbldata = tbl::parse(&tblpath).unwrap();
+        for wall in &mut ecdata.envelope.walls {
+            if wall.bounds != Boundaries::INTERIOR {
+                continue;
+            };
+            let w = tbldata
+                .elements
+                .iter()
+                .find(|w| w.name == wall.name)
+                .unwrap();
+            wall.u = fround2(w.u);
         }
     }
-
-    // TODO: hacer un assert de que la U del kyg y la calculada es igual
-    // assert_eq!(wall.u, w.U(&data.bdldata), "Probando muro {}", wall.name);
 }
 
 /// Recoge datos desde archivo .ctehexml y, si se indica, del archivo KyGananciasSolares.txt
@@ -234,11 +256,8 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
     let ctehexmldata = ctehexml::parse_with_catalog(&ctehexmlpath)?;
     let mut ecdata = ecdata_from_xml(&ctehexmldata)?;
 
-    // Interpreta .kyg y añade datos que faltan
-    if let Some(kygpath) = &kygpath {
-        let kygdata = kyg::parse(&kygpath)?;
-        fix_ecdata_from_kyg(&mut ecdata, &kygdata);
-    };
+    // Interpreta .kyg y añade datos que faltan con archivos adicionales
+    fix_ecdata_from_extra(&mut ecdata, kygpath, tblpath);
 
     Ok(ecdata)
 }
