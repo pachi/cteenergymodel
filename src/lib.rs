@@ -88,6 +88,14 @@ pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
 fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
     let mut envelope = EnvelopeElements::default();
 
+    // Desviación general respecto al Norte (criterio BDL)
+    let northangle = bdl
+        .meta
+        .get("BUILD-PARAMETERS")
+        .unwrap()
+        .attrs
+        .get_f32("ANGLE")?;
+
     // Walls: falta U
     for wall in &bdl.walls {
         // Construcción del hueco WindowCons
@@ -102,7 +110,7 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
         // Datos trasladados directamente
         let bounds = wall.bounds;
         // Actualización a criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
-        let orientation = utils::orientation_bdl252016(wall.azimuth(0.0, &bdl)?);
+        let orientation = utils::orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?);
         let tilt = fround2(wall.tilt);
         let u = cons.u(bounds, wall.position(), &bdl.db.materials);
 
