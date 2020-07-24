@@ -1,10 +1,12 @@
 run:
 	$(info [INFO]: Ejecutando ejemplo)
 	time cargo run tests/data/ > salida.json
+	time cargo run tests/casoA/ > salida_a.json
 runskip:
 	cargo run -- --skip-extra tests/data/ > salida.json.skip
-compare: runskip
-	meld salida.json salida.json.skip&
+	cargo run -- --skip-extra tests/casoA/ > salida_a.json.skip
+compare: run runskip
+	(meld salida.json salida.json.skip&) && (meld -n salida_a.json salida_a.json.skip&)
 linux:
 	$(info [INFO]: Versión de producción para linux)
 	cargo build --release
