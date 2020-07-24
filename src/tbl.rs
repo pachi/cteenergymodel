@@ -40,12 +40,18 @@ SOFTWARE.
 //!     #NOTA: Las líneas 10 y 11 se repiten tantas veces como zonas tenga el edificio
 //! ```
 
-use std::str::FromStr;
+use std::{path::PathBuf, str::FromStr};
 
 use failure::Error;
 use failure::ResultExt;
 
-use super::utils::read_latin1_file;
+use crate::utils::{find_file_in_basedir, read_latin1_file};
+
+/// Localiza archivo NewBDL_O.txt en el directorio de proyecto basedir
+pub fn find_tbl<T: AsRef<str>>(basedir: T) -> Result<Option<PathBuf>, Error> {
+    // XXX: No serviría para elementos especiales, que usan los NewBDL_O2.txt?
+    find_file_in_basedir(basedir, "NewBDL_O.tbl")
+}
 
 /// Tipos de elementos definidos en archivo .tbl
 #[derive(Debug)]
