@@ -36,6 +36,7 @@ pub struct Window {
     pub coefs: Option<Vec<f32>>,
 }
 
+// TODO: Muchas de estas cosas seguramente tendrían que ir a envolventetypes y quedar Window como datos simplemente
 impl Window {
     /// Superficie de la ventana [m2]
     pub fn area(&self) -> f32 {
