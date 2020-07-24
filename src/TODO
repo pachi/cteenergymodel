@@ -79,10 +79,11 @@ EnvolventeCTE:
 Notas:
 
 Envolventetypes:
-
-- Separar de hueco y muro las construcciones del resto de datos:
+- Separar las construcciones de hueco (WindowCons) y muro (WallCons) del resto de datos:
     - datos de hueco (name, wall, orientation, A, Fshobst + id construcción (a partir de hash o con una semilla constante?))
     - construcción de hueco (name, Ff, gglwi, ggshwi, C_100)
     - muro
     - construcción de muro
     - en envolventecte se haría un diccionario de ids a nombres, u, C_100, etc para obtener los datos relevantes
+- Crear materiales para poder calcular U desde construcciones
+- Llevar implementaciones de métodos para calcular U de construcciones desde BDL a envolventetypes
