@@ -7,9 +7,8 @@ general:
     - Nos falta:
         - windows:
             - Orientation: podemos obtenerlo del muro. Pensar si lo calculamos (mejor) y eliminamos del hueco o lo guardamos
-            - U: ir haciendo cálculos a partir de construcción
             - Fshobst: empezar con 1.0 en vez de 0.0?
-        - walls: U: ir haciendo cálculos a partir de construcción
+        - walls: En general, calcular U de elementos enterrados e interiores con espacios no habitables
 - Detectar elementos que pertenecen a la envolvente a partir de espacios
     - son los elementos que pertenecen a espacios dentro de la envolvente pero
       que no comunican con otros espacios interiores a la envolvente
@@ -71,7 +70,8 @@ BDL:
 
 EnvolventeCTE:
 - Eliminar uso de data.autil y usar data.a_util_ref()
-- Exportar construcciones (LAYERS, GAPS)
+- Exportar construcciones (WindowCons, WallCons)
+- Calculador de elementos para obtener % de afección de U según intercalarios y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
 
 - Ver relación entre huecos y muros (orientación).
     - Si eliminamos orientación de los huecos y lo calculamos desde su muro (orientation+tilt -> orientación CTE)
