@@ -219,14 +219,14 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
         for wall in &mut ecdata.envelope.walls {
             let kygwall = kygdata.walls.iter().find(|w| w.name == wall.name);
             if let Some(kw) = kygwall {
-                wall.u = kw.u;
+                wall.u = fround2(kw.u);
             }
         }
 
         for win in &mut ecdata.envelope.windows {
             let kygwin = kygdata.windows.iter().find(|w| w.name == win.name);
             if let Some(kw) = kygwin {
-                win.fshobst = kw.fshobst;
+                win.fshobst = fround2(kw.fshobst);
             }
         }
     }
