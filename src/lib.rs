@@ -39,7 +39,7 @@ use std::path::Path;
 use envolventetypes::{
     Boundaries, EnvelopeElements, EnvolventeCteData, Positions, Space, ThermalBridge, Wall, Window,
 };
-use utils::{fround2, normalize};
+use utils::fround2;
 
 pub const PROGNAME: &str = env!("CARGO_PKG_NAME");
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
