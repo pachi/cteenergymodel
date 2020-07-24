@@ -101,8 +101,9 @@ impl WallCons {
             // TODO: implementar
             UNDERGROUND => match position {
                 BOTTOM => Default::default(),
-                TOP => Default::default(),
                 SIDE => Default::default(),
+                // En este caso el terreno se define como una capa de tierra con lambda = 2 W/K
+                TOP => 1.0 / (1.0 / u + RSI_ASCENDENTE + RSE),
             },
             // Tomamos valor 0.0. Siempre se podría consultar la resistencia intrínseca
             ADIABATIC => 0.0,
