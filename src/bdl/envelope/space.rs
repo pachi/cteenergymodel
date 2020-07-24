@@ -78,9 +78,8 @@ impl Space {
                     self.name
                 )
             })?;
-        let topheight = db.db
-            .get_wallcons_thickness(&topwall.construction)
-            .ok_or_else(|| format_err!("No se ha podido calcular el espesor de la composición {} del cerramiento {}. No se puede calcular la altura libre", &topwall.construction, topwall.name))?;
+        let topheight = db.db.wallcons.get(&topwall.construction)
+            .ok_or_else(|| format_err!("No se encuentra la composición de capas \"{}\"", &topwall.construction))?.total_thickness();
         Ok(self.height - topheight)
     }
 

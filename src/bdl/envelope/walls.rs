@@ -221,46 +221,6 @@ impl Wall {
             Positions::TOP
         }
     }
-
-    /// Transmitancia térmica del cerramiento, en W/m2K
-    /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
-    /// Notas:
-    /// - en particiones interiores no se considera el factor b, reductor de temperatura
-    /// - no se ha implementado el cálculo de cerramientos en contacto con el terreno
-    ///     - en HULC los valores por defecto de Ra y D se indican en las opciones generales de
-    ///       las construcciones por defecto
-    #[allow(non_snake_case)]
-    pub fn U(&self, db: &Data) -> f32 {
-        use Boundaries::*;
-        use Positions::*;
-        let u = db
-            .db
-            .get_wallcons_transmittance(&self.construction)
-            .unwrap();
-
-        // Resistencias superficiales [m2·K/W]
-        // Revisar según DA-DB-HE/1 tabla 1
-        let RSE: f32 = 0.04;
-        const RSI_ASCENDENTE: f32 = 0.10;
-        const RSI_HORIZONTAL: f32 = 0.13;
-        const RSI_DESCENDENTE: f32 = 0.17;
-
-        let pos = self.position();
-        let u_noround = match self.bounds {
-            UNDERGROUND => unimplemented!(),
-            ADIABATIC => 0.0,
-            INTERIOR => match pos {
-                TOP | BOTTOM => 1.0 / (1.0 / u + RSI_DESCENDENTE + RSI_ASCENDENTE),
-                SIDE => 1.0 / (1.0 / u + RSI_HORIZONTAL + RSI_HORIZONTAL),
-            },
-            EXTERIOR => match pos {
-                BOTTOM => 1.0 / (1.0 / u + RSI_DESCENDENTE + RSE),
-                TOP => 1.0 / (1.0 / u + RSI_ASCENDENTE + RSE),
-                SIDE => 1.0 / (1.0 / u + RSI_HORIZONTAL + RSE),
-            },
-        };
-        (u_noround * 100.0).round() / 100.0
-    }
 }
 
 /// Definición geométrica de un muro (EXTERIOR-WALL, ROOF o INTERIOR-WALL)

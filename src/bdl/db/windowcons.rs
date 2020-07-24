@@ -3,9 +3,9 @@
 //! Composición constructiva de huecos (GAP)
 
 use failure::Error;
-use std::convert::TryFrom;
+use std::{collections::HashMap, convert::TryFrom};
 
-use crate::bdl::BdlBlock;
+use crate::bdl::{BdlBlock, Frame, Glass};
 
 /// Definición de hueco o lucernario (GAP)
 #[derive(Debug, Clone, Default)]
@@ -30,6 +30,41 @@ pub struct WindowCons {
     pub deltau: f32,
     /// Transmitancia total de energía del acristalameinto con los dispositivo de sombra móvil activados (g_gl;sh;wi) (-)
     pub gglshwi: Option<f32>,
+}
+
+// TODO: Llevar estas implementaciones a las WindowCons de envolventetypes, que es donde deberían estar
+// y dejar esto solo como contenedores de datos
+impl WindowCons {
+    /// Cálculo de U de la construcción del hueco
+    /// Incluye las resistencias superficiales (que ya están consideradas en vidrio y marco, para sus posiciones)
+    pub fn u(
+        &self,
+        framesdb: &HashMap<String, Frame>,
+        glassesdb: &HashMap<String, Glass>,
+    ) -> Result<f32, Error> {
+        // Vidrio del hueco (Glass)
+        let glass = glassesdb.get(&self.glass).ok_or_else(|| {
+            format_err!(
+                "Vidrio {} de la construcción {} no encontrado",
+                self.glass,
+                self.name
+            )
+        })?;
+        // Marco del hueco (Frame)
+        let frame = framesdb.get(&self.frame).ok_or_else(|| {
+            format_err!(
+                "Marco {} de la construcción {} no encontrado",
+                self.frame,
+                self.name
+            )
+        })?;
+        let deltau = self.deltau; // deltau de persiana e intercalarios
+        let frameu = frame.conductivity;
+        let glassu = glass.conductivity;
+        let u =
+            (1.0 + deltau / 100.0) * (frameu * self.framefrac + glassu * (1.0 - self.framefrac));
+        Ok(u)
+    }
 }
 
 impl TryFrom<BdlBlock> for WindowCons {

@@ -90,22 +90,32 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
 
     // Walls: falta U
     for wall in &bdl.walls {
-        let bounds = wall.bounds.into();
-        // Actualización a criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
-        let orientation = normalize(180.0 - wall.azimuth(0.0, &bdl)?, -180.0, 180.0);
+        // Construcción del hueco WindowCons
+        let cons = bdl.db.wallcons.get(&wall.construction).ok_or_else(|| {
+            format_err!(
+                "Construcción {} de muro {} no encontrada",
+                wall.construction,
+                wall.name
+            )
+        })?;
 
-        // TODO: calcular U. Ir haciendo por tipos: exterior, interior, underground, suelos, techos...
+        // Datos trasladados directamente
+        let bounds = wall.bounds;
+        // Actualización a criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
+        let orientation = utils::orientation_bdl252016(wall.azimuth(0.0, &bdl)?);
+        let tilt = fround2(wall.tilt);
+        let u = cons.u(bounds, wall.position(), &bdl.db.materials);
 
         let w = Wall {
             name: wall.name.clone(),
             a: fround2(wall.net_area(bdl)?),
             space: wall.space.clone(),
             nextto: wall.nextto.clone(),
-            bounds,
-            u: Default::default(), // TODO: por ahora completar con kyg
+            bounds: bounds.into(),
+            u,
             absorptance: wall.absorptance.unwrap_or(0.6),
             orientation: fround2(orientation),
-            tilt: fround2(wall.tilt),
+            tilt,
         };
         envelope.walls.push(w);
     }
@@ -129,15 +139,6 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
                 win.name
             )
         })?;
-        // Marco del hueco (Frame)
-        let frame = bdl.db.frames.get(&cons.frame).ok_or_else(|| {
-            format_err!(
-                "Marco {} de la construcción {} del hueco {} no encontrado",
-                cons.frame,
-                win.construction,
-                win.name
-            )
-        })?;
         // Muro en el que está el hueco (Wall)
         let wall = envelope
             .walls
@@ -150,12 +151,7 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
         let gglwi = fround2(glass.g_gln * 0.90);
         let gglshwi = cons.gglshwi.unwrap_or(gglwi);
         let infcoeff_100 = cons.infcoeff;
-
-        // Cálculo de U. Incluye las resistencias superficiales (que ya están consideradas en vidrio y marco, por posiciones)
-        let deltau = cons.deltau; // deltau de persiana e intercalarios
-        let frameu = frame.conductivity;
-        let glassu = glass.conductivity;
-        let u = fround2((1.0 + deltau / 100.0) * (frameu * ff + glassu * (1.0 - ff)));
+        let u = fround2(cons.u(&bdl.db.frames, &bdl.db.glasses)?);
 
         let w = Window {
             name: win.name.clone(),

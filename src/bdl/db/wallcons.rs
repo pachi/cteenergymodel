@@ -3,9 +3,9 @@
 //! Composiciones constructivas de cerramientos opacos (LAYERS)
 
 use failure::Error;
-use std::convert::TryFrom;
+use std::{collections::HashMap, convert::TryFrom};
 
-use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock};
+use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock, Boundaries, Material, Positions};
 
 /// Definición de elemento a través de sus capas
 #[derive(Debug, Clone, Default)]
@@ -18,6 +18,100 @@ pub struct WallCons {
     pub material: Vec<String>,
     /// Lista de espesores de las capas [m] ([e1, e2, ...])
     pub thickness: Vec<f32>,
+}
+
+// TODO: estas implementaciones deberían llevarse a WallConstruction de EnvolventeTypes cuando se creen
+// y dejar las clases BDL como meros contenedores de datos
+impl WallCons {
+    /// Espesor total de una composición de capas [m]
+    pub fn total_thickness(&self) -> f32 {
+        self.thickness.iter().sum()
+    }
+
+    /// Transmitancia térmica de una composición de capas [W/m2K]
+    pub fn u_intrinsic(&self, materialsdb: &HashMap<String, Material>) -> Result<f32, Error> {
+        let materials = &self
+            .material
+            .iter()
+            .map(|m| {
+                materialsdb.get(m).ok_or_else(|| {
+                    format_err!(
+                        "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
+                        m,
+                        self.name
+                    )
+                })
+            })
+            .collect::<Result<Vec<_>, Error>>()?;
+
+        materials
+            .iter()
+            .zip(&self.thickness)
+            // Resistencias térmicas de las capas
+            .map(|(mat, thk)| match mat.properties {
+                Some(props) if props.conductivity != 0.0 => Some(thk / props.conductivity),
+                None => mat.resistance,
+                _ => None,
+            })
+            // Resistencia térmica total
+            .try_fold(0.0_f32, |acc, x| x.map(|res| res + acc))
+            // Transmitancia térmica
+            .and_then(|resvec| {
+                if resvec != 0.0 {
+                    Some(1.0 / resvec)
+                } else {
+                    None
+                }
+            })
+            .ok_or_else(|| {
+                format_err!(
+                    "Error al calcular la transmitancia de la composición \"{}\"",
+                    self.name
+                )
+            })
+    }
+
+    /// Transmitancia térmica del cerramiento, en W/m2K
+    /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
+    /// Notas:
+    /// - en particiones interiores no se considera el factor b, reductor de temperatura
+    /// - no se ha implementado el cálculo de cerramientos en contacto con el terreno
+    ///     - en HULC los valores por defecto de Ra y D se indican en las opciones generales de
+    ///       las construcciones por defecto
+    pub fn u(
+        &self,
+        bounds: Boundaries,
+        position: Positions,
+        materialsdb: &HashMap<String, Material>,
+    ) -> f32 {
+        use Boundaries::*;
+        use Positions::*;
+        let u = self.u_intrinsic(&materialsdb).unwrap_or_default();
+
+        // Resistencias superficiales [m2·K/W]
+        // Revisar según DA-DB-HE/1 tabla 1
+        const RSE: f32 = 0.04;
+        const RSI_ASCENDENTE: f32 = 0.10;
+        const RSI_HORIZONTAL: f32 = 0.13;
+        const RSI_DESCENDENTE: f32 = 0.17;
+
+        let u_noround = match bounds {
+            // TODO: implementar
+            UNDERGROUND => Default::default(),
+            // TODO: implementar
+            ADIABATIC => Default::default(),
+            INTERIOR => match position {
+                TOP | BOTTOM => 1.0 / (1.0 / u + RSI_DESCENDENTE + RSI_ASCENDENTE),
+                SIDE => 1.0 / (1.0 / u + RSI_HORIZONTAL + RSI_HORIZONTAL),
+            },
+            EXTERIOR => match position {
+                BOTTOM => 1.0 / (1.0 / u + RSI_DESCENDENTE + RSE),
+                TOP => 1.0 / (1.0 / u + RSI_ASCENDENTE + RSE),
+                SIDE => 1.0 / (1.0 / u + RSI_HORIZONTAL + RSE),
+            },
+        };
+        (u_noround * 100.0).round() / 100.0
+    }
 }
 
 impl TryFrom<BdlBlock> for WallCons {
