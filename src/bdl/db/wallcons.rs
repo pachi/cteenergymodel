@@ -78,6 +78,8 @@ impl WallCons {
     /// - no se ha implementado el cálculo de cerramientos en contacto con el terreno
     ///     - en HULC los valores por defecto de Ra y D se indican en las opciones generales de
     ///       las construcciones por defecto
+    /// - los elementos adiabáticos se reportan con valor 0.0
+    /// - las particiones interiores horizontales
     pub fn u(
         &self,
         bounds: Boundaries,
@@ -97,13 +99,15 @@ impl WallCons {
 
         let u_noround = match bounds {
             // TODO: implementar
-            UNDERGROUND => Default::default(),
-            // TODO: implementar
-            ADIABATIC => Default::default(),
-            INTERIOR => match position {
-                TOP | BOTTOM => 1.0 / (1.0 / u + RSI_DESCENDENTE + RSI_ASCENDENTE),
-                SIDE => 1.0 / (1.0 / u + RSI_HORIZONTAL + RSI_HORIZONTAL),
+            UNDERGROUND => match position {
+                BOTTOM => Default::default(),
+                TOP => Default::default(),
+                SIDE => Default::default(),
             },
+            // Tomamos valor 0.0. Siempre se podría consultar la resistencia intrínseca
+            ADIABATIC => 0.0,
+            // HULC no diferencia entre posiciones para elementos interiores
+            INTERIOR => 1.0 / (1.0 / u + 2.0 * RSI_HORIZONTAL),
             EXTERIOR => match position {
                 BOTTOM => 1.0 / (1.0 / u + RSI_DESCENDENTE + RSE),
                 TOP => 1.0 / (1.0 / u + RSI_ASCENDENTE + RSE),
