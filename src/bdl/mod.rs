@@ -95,7 +95,7 @@ impl Data {
                 // Elementos generales =========================
                 // Valores por defecto, Datos generales, espacio de trabajo y edificio
                 "DEFECTOS" | "GENERAL-DATA" | "WORK-SPACE" | "BUILD-PARAMETERS" => {
-                    bdldata.meta.insert(block.name.clone(), block);
+                    bdldata.meta.insert(block.btype.clone(), block);
                 }
                 // Horarios ----------
                 "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
