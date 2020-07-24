@@ -78,4 +78,11 @@ EnvolventeCTE:
 
 Notas:
 
-- Separar hueco en datos de hueco (name, wall, orientation, A, Fshobst) y construcción (name, Ff, gglwi, ggshwi, C_100)
+Envolventetypes:
+
+- Separar de hueco y muro las construcciones del resto de datos:
+    - datos de hueco (name, wall, orientation, A, Fshobst + id construcción (a partir de hash o con una semilla constante?))
+    - construcción de hueco (name, Ff, gglwi, ggshwi, C_100)
+    - muro
+    - construcción de muro
+    - en envolventecte se haría un diccionario de ids a nombres, u, C_100, etc para obtener los datos relevantes

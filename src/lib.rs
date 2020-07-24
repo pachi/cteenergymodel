@@ -85,7 +85,6 @@ pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
 }
 
 /// Construye elementos de la envolvente a partir de datos BDL
-/// TODO: algunos datos no los podemos calcular todavía
 fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
     let mut envelope = EnvelopeElements::default();
 
@@ -94,6 +93,9 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
         let bounds = wall.bounds.into();
         // Actualización a criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
         let orientation = normalize(180.0 - wall.azimuth(0.0, &bdl)?, -180.0, 180.0);
+
+        // TODO: calcular U. Ir haciendo por tipos: exterior, interior, underground, suelos, techos...
+
         let w = Wall {
             name: wall.name.clone(),
             a: fround2(wall.net_area(bdl)?),
