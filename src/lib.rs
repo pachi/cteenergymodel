@@ -37,7 +37,8 @@ use failure::Error;
 use std::path::Path;
 
 use types::{
-    Boundaries, EnvelopeElements, EnvolventeCteData, Space, ThermalBridge, Tilt, Wall, Window,
+    Boundaries, ConstructionElements, EnvelopeElements, EnvolventeCteData, Space, ThermalBridge,
+    Tilt, Wall, Window,
 };
 use utils::fround2;
 
@@ -191,6 +192,12 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
     Ok(envelope)
 }
 
+/// Construye elementos de la envolvente a partir de datos BDL
+fn constructions_from_bdl(bdl: &bdl::Data) -> Result<ConstructionElements, Error> {
+    let mut conselems = ConstructionElements::default();
+    Ok(conselems)
+}
+
 /// Genera datos de EnvolventeCTE a partir de datos BDL en el XML
 pub fn ecdata_from_xml(
     ctehexmldata: &ctehexml::CtehexmlData,
@@ -198,11 +205,13 @@ pub fn ecdata_from_xml(
     // Zona climática
     let climate = ctehexmldata.climate.clone();
     let envelope = envelope_from_bdl(&ctehexmldata.bdldata)?;
+    let constructions = constructions_from_bdl(&ctehexmldata.bdldata)?;
     let spaces = spaces_from_bdl(&ctehexmldata.bdldata)?;
 
     Ok(EnvolventeCteData {
         climate,
         envelope,
+        constructions,
         spaces,
     })
 }

@@ -34,6 +34,7 @@ use serde_json;
 pub struct EnvolventeCteData {
     pub climate: String,
     pub envelope: EnvelopeElements,
+    pub constructions: ConstructionElements,
     pub spaces: Vec<Space>,
 }
 
@@ -102,6 +103,12 @@ pub struct EnvelopeElements {
     pub windows: Vec<Window>,
     pub walls: Vec<Wall>,
     pub thermal_bridges: Vec<ThermalBridge>,
+}
+
+#[derive(Debug, Default, Serialize)]
+pub struct ConstructionElements {
+    pub windows: Vec<WindowCons>,
+    pub walls: Vec<WallCons>,
 }
 
 /// Condiciones de contorno de los cerramientos
@@ -353,4 +360,41 @@ pub struct Space {
     // Tipo de espacio (ACONDICIONADO, NO_ACONDICIONADO, NO_HABITABLE)
     #[serde(rename(serialize = "type"))]
     pub space_type: String,
+}
+
+/// Definición de construcción de elemento opaco
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct WallCons {
+    /// Nombre
+    pub name: String,
+    /// Grupo al que pertenece (biblioteca)
+    pub group: String,
+    /// Transmitancia térmica (W/m2K)
+    #[serde(rename(serialize = "U"))]
+    pub u: f32,
+    /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
+    pub absorptance: f32,
+}
+
+/// Definición de construcción de hueco o lucernario
+#[derive(Debug, Clone, Default, Serialize)]
+pub struct WindowCons {
+    /// Nombre
+    pub name: String,
+    /// Grupo al que pertenece (biblioteca)
+    pub group: String,
+    /// Transmitancia térmica (W/m2K)
+    /// Esta transmitancia incluye el efecto del marco, vidrio e incremento de u por intercalarios y cajones de persiana
+    #[serde(rename(serialize = "U"))]
+    pub u: f32,
+    /// Fracción de marco
+    #[serde(rename(serialize = "Ff"))]
+    pub ff: f32,
+    /// Factor solar del hueco sin la protección solar activada (g_glwi = g_gln * 0.90)
+    pub gglwi: f32,
+    /// Factor solar del hueco con la protección solar activada
+    pub gglshwi: f32,
+    /// Permeabilidad al aire a 100 Pa [m3/hm2]
+    #[serde(rename(serialize = "C_100"))]
+    pub infcoeff_100: f32,
 }
