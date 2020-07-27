@@ -29,7 +29,7 @@ use serde::Serialize;
 
 // ---------- Estructura general de datos --------------
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct EnvolventeCteData {
     pub climate: String,
     pub envelope: EnvelopeElements,
@@ -103,7 +103,7 @@ impl EnvolventeCteData {
 // ---------- Elementos de la envolvente --------------
 
 /// Elementos de la envolvente térmica
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct EnvelopeElements {
     /// Huecos
     pub windows: Vec<Window>,
@@ -113,7 +113,7 @@ pub struct EnvelopeElements {
     pub thermal_bridges: Vec<ThermalBridge>,
 }
 
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct ConstructionElements {
     pub windows: Vec<WindowCons>,
     pub walls: Vec<WallCons>,
@@ -191,6 +191,7 @@ impl From<f32> for Tilt {
 }
 
 /// Orientación de la normal de un elemento constructivo en relación al sur geográfico (azimuth geográfico)
+#[derive(Debug, Copy, Clone, Serialize)]
 pub enum Orientation {
     /// Norte
     N,
@@ -226,7 +227,9 @@ impl Display for Orientation {
     }
 }
 
-/// Convierte de azimuth a enum Orientation
+/// Convierte de azimuth geográfico a enum Orientation
+/// Sigue el criterio de la UNE-EN ISO 52016-1, medido desde el sur, positivo al este, negativo al oeste (S=0, E=+90, W=-90)
+/// Nota: difiere del criterio BDL, que parte del norte, con E+ y W-
 impl From<f32> for Orientation {
     fn from(azimuth: f32) -> Self {
         let azimuth = normalize(azimuth, 0.0, 360.0);
@@ -260,18 +263,8 @@ impl From<f32> for Orientation {
     }
 }
 
-/// Orientación de un elemento constructivo
-/// Se define en función del azimuth geográfico y la inclinación respecto a la horizontal
-pub struct Position {
-    /// Azimuth geográfico de la poryección horizontal de la normal a la superficie (gamma) [-180,+180]
-    /// Sigue el criterio de la UNE-EN ISO 52016-1, medido desde el sur, positivo al este, negativo al oeste (S=0, E=+90, W=-90)
-    /// Nota: difiere del criterio BDL, que parte del norte, con E+ y W-
-    pub azimuth: f32,
-    pub tilt: f32,
-}
-
 /// Hueco
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct Window {
     /// Nombre del hueco
     pub name: String,
@@ -395,7 +388,7 @@ impl Window {
 }
 
 /// Elemento opaco (muro, cubierta, suelo, partición)
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct Wall {
     /// Nombre del elemento opaco
     pub name: String,
@@ -478,7 +471,7 @@ impl Wall {
 }
 
 /// Puente térmico
-#[derive(Debug, Default, Serialize)]
+#[derive(Debug, Clone, Default, Serialize)]
 pub struct ThermalBridge {
     /// Nombre del puente térmico
     pub name: String,
@@ -490,7 +483,7 @@ pub struct ThermalBridge {
 }
 
 /// Espacio
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct Space {
     /// Nombre del espacio
     pub name: String,
