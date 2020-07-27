@@ -91,8 +91,8 @@ impl TryFrom<BdlBlock> for WallCons {
     ///         THICKNESS = ( 0.015, 0.020, 0.250 )
     ///         ..
     /// ```
-    /// TODO: Propiedades de Layers no convertidas:
-    /// TODO: IMAGE, NAME_CALENER, LIBRARY, UTIL, TYPE-DEFINITION, DEFAULT
+    /// XXX: Propiedades de Layers no convertidas:
+    /// XXX: IMAGE, NAME_CALENER, LIBRARY, UTIL, TYPE-DEFINITION, DEFAULT
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name, mut attrs, ..

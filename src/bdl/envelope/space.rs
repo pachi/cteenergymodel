@@ -160,9 +160,9 @@ impl TryFrom<BdlBlock> for Space {
     /// ```
     /// NOTE: La propiedad POLYGON se trata en el postproceso y en la conversión incial se usa
     /// un valor por defecto.
-    /// TODO: propiedades no convertidas:
-    /// TODO: PILLARS-NUMBERS (número de pilares en el espacio, como PTs),
-    /// TODO: FactorSuperficieUtil, INTERIOR-RADIATION, nCompleto, FLOOR-WEIGHT
+    /// XXX: propiedades no convertidas:
+    /// XXX: PILLARS-NUMBERS (número de pilares en el espacio, como PTs),
+    /// XXX: FactorSuperficieUtil, INTERIOR-RADIATION, nCompleto, FLOOR-WEIGHT
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
