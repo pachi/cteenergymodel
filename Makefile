@@ -1,7 +1,7 @@
 run:
 	$(info [INFO]: Ejecutando ejemplo)
-	time cargo run tests/data/ > salida.json
-	time cargo run tests/casoA/ > salida_a.json
+	RUST_LOG=info cargo run tests/data/ > salida.json
+	RUST_LOG=info cargo run tests/casoA/ > salida_a.json
 runskip:
 	cargo run -- --skip-extra tests/data/ > salida.json.skip
 	cargo run -- --skip-extra tests/casoA/ > salida_a.json.skip

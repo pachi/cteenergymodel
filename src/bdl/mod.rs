@@ -11,6 +11,7 @@ use std::collections::HashMap;
 use std::convert::TryFrom;
 
 use failure::Error;
+use log::warn;
 
 mod blocks;
 mod common;
@@ -247,7 +248,7 @@ impl Data {
                 // No implementados: AUX-LINE
                 // Fakes: DESCRIPTION, PARTELIDER
                 _ => {
-                    eprintln!(
+                    warn!(
                         "Tipo desconocido. bname: {}, btype: {}",
                         block.name, block.btype
                     );

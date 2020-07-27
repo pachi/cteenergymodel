@@ -74,6 +74,8 @@ impl Default for Options {
 
 #[cfg(not(windows))]
 fn main() -> Result<(), ExitFailure> {
+    env_logger::init();
+
     eprintln!("{}\n", get_copytxt());
 
     let args = std::env::args().collect::<Vec<_>>();
