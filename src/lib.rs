@@ -38,7 +38,7 @@ use std::path::Path;
 
 use types::{
     Boundaries, ConstructionElements, EnvelopeElements, EnvolventeCteData, Space, ThermalBridge,
-    Tilt, Wall, Window,
+    Tilt, Wall, WallCons, Window, WindowCons,
 };
 use utils::fround2;
 
@@ -87,8 +87,6 @@ pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
 
 /// Construye elementos de la envolvente a partir de datos BDL
 fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
-    let mut envelope = EnvelopeElements::default();
-
     // Desviación general respecto al Norte (criterio BDL)
     let northangle = bdl
         .meta
@@ -97,21 +95,8 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
         .attrs
         .get_f32("ANGLE")?;
 
-    // Walls: falta U
+    let mut envelope = EnvelopeElements::default();
     for wall in &bdl.walls {
-        // TODO: esto se va a la construcción ------------------
-        // Construcción del muro WallCons
-        let cons = bdl.db.wallcons.get(&wall.construction).ok_or_else(|| {
-            format_err!(
-                "Construcción {} de muro {} no encontrada",
-                wall.construction,
-                wall.name
-            )
-        })?;
-        let u = cons.u(wall, &bdl.db.materials);
-        let absorptance = wall.absorptance.unwrap_or(0.6);
-        // TODO: hasta aquí --------------------------------
-
         let w = Wall {
             name: wall.name.clone(),
             cons: wall.construction.to_string(),
@@ -119,9 +104,7 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
             space: wall.space.clone(),
             nextto: wall.nextto.clone(),
             bounds: wall.bounds.into(),
-            u,
-            absorptance,
-            orientation: fround2(utils::orientation_bdl_to_52016(
+            azimuth: fround2(utils::orientation_bdl_to_52016(
                 wall.azimuth(northangle, &bdl)?,
             )),
             tilt: fround2(wall.tilt),
@@ -131,52 +114,13 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
 
     // Windows
     for win in &bdl.windows {
-        // TODO: Esto va a la construcción -------------
-        // Construcción del hueco WindowCons
-        let cons = bdl.db.windowcons.get(&win.construction).ok_or_else(|| {
-            format_err!(
-                "Construcción {} de hueco {} no encontrada",
-                win.construction,
-                win.name
-            )
-        })?;
-        // Vidrio del hueco (Glass)
-        let glass = bdl.db.glasses.get(&cons.glass).ok_or_else(|| {
-            format_err!(
-                "Vidrio {} de la construcción {} del hueco {} no encontrado",
-                cons.glass,
-                win.construction,
-                win.name
-            )
-        })?;
-        // Esto va a la construcción
-        let ff = cons.framefrac;
-        let gglwi = fround2(glass.g_gln * 0.90);
-        let gglshwi = cons.gglshwi.unwrap_or(gglwi);
-        let infcoeff_100 = cons.infcoeff;
-        let u = fround2(cons.u(&bdl.db.frames, &bdl.db.glasses)?);
-        // TODO: hasta aquí -----------------
-
-        // Muro en el que está el hueco (Wall)
-        let wall = envelope
-            .walls
-            .iter()
-            .find(|w| w.name == win.wall)
-            .ok_or_else(|| format_err!("Muro {} del hueco {} no encontrado", win.wall, win.name))?;
-
         let w = Window {
             name: win.name.clone(),
             cons: win.construction.to_string(),
-            orientation: utils::angle_name(wall.orientation),
             wall: win.wall.clone(),
-            a: fround2(win.area()),
-            u,
-            ff,
-            gglwi,
-            gglshwi,
-            // El cálculo es aproximado y no se hace con geometría, sino solo con tablas
-            fshobst: win.fshobst(northangle, &bdl)?,
-            infcoeff_100,
+            width: fround2(win.width),
+            height: fround2(win.height),
+            setback: win.setback,
         };
         envelope.windows.push(w);
     }
@@ -194,10 +138,121 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
     Ok(envelope)
 }
 
-/// Construye elementos de la envolvente a partir de datos BDL
-fn constructions_from_bdl(bdl: &bdl::Data) -> Result<ConstructionElements, Error> {
-    let mut conselems = ConstructionElements::default();
-    Ok(conselems)
+/// Construcciones de muros a partir de datos BDL
+fn wallcons_from_bdl(bdl: &bdl::Data) -> Result<Vec<WallCons>, Error> {
+    let mut wcnames: Vec<String> = bdl
+        .walls
+        .iter()
+        .map(|w| w.construction.clone())
+        .collect::<Vec<String>>();
+    wcnames.sort();
+    wcnames.dedup();
+
+    wcnames
+        .iter()
+        .map(|wcons| {
+            bdl.db
+                .wallcons
+                .get(wcons)
+                .and_then(|cons| {
+                    let absorptance = cons.absorptance;
+                    let r_intrinsic = match cons.r_intrinsic(&bdl.db.materials) {
+                        Ok(r) => r,
+                        _ => return None,
+                    };
+                    Some(WallCons {
+                        name: cons.name.clone(),
+                        group: cons.group.clone(),
+                        r_intrinsic,
+                        absorptance,
+                    })
+                })
+                .ok_or_else(|| format_err!("Construcción de muro no encontrada: {}", wcons))
+        })
+        .collect::<Result<Vec<_>, _>>()
+}
+
+/// Construcciones de huecos a partir de datos BDL
+fn windowcons_from_bdl(bdl: &bdl::Data) -> Result<Vec<WindowCons>, Error> {
+    let mut wcnames: Vec<String> = bdl
+        .windows
+        .iter()
+        .map(|w| w.construction.clone())
+        .collect::<Vec<String>>();
+    wcnames.sort();
+    wcnames.dedup();
+
+    wcnames
+        .iter()
+        .map(|wcons| {
+            bdl.db
+                .windowcons
+                .get(wcons)
+                .and_then(|cons| {
+                    // Vidrio del hueco (Glass)
+                    let glass = match bdl
+                        .db
+                        .glasses
+                        .get(&cons.glass)
+                        .ok_or_else(|| format_err!("Vidrio no encontrado: {}", cons.glass,))
+                    {
+                        Ok(glass) => glass,
+                        _ => return None,
+                    };
+                    let ff = cons.framefrac;
+                    let gglwi = fround2(glass.g_gln * 0.90);
+                    let gglshwi = cons.gglshwi.unwrap_or(gglwi);
+                    let infcoeff_100 = cons.infcoeff;
+                    let u = fround2(cons.u(&bdl.db.frames, &bdl.db.glasses).unwrap_or_default());
+                    Some(WindowCons {
+                        name: cons.name.clone(),
+                        group: cons.group.clone(),
+                        u,
+                        ff,
+                        gglwi,
+                        gglshwi,
+                        infcoeff_100,
+                    })
+                })
+                .ok_or_else(|| {
+                    format_err!(
+                        "Construcción de hueco no encontrada o mal formada: {}",
+                        &wcons,
+                    )
+                })
+        })
+        .collect::<Result<Vec<_>, _>>()
+}
+
+/// Vector con nombre y U de muros, para poder comprobar diferencias en JSON
+pub fn walls_u_from_data(
+    walls: &Vec<Wall>,
+    wallcons: &Vec<WallCons>,
+) -> Result<Vec<(String, Boundaries, f32)>, Error> {
+    walls
+        .iter()
+        .map(|w| {
+            wallcons
+                .iter()
+                .find(|c| c.name == w.cons)
+                .and_then(|c| Some((w.name.clone(), w.bounds, w.u(c))))
+        })
+        .collect::<Option<Vec<_>>>()
+        .ok_or_else(|| format_err!("No se han podido calcular las U de los muros"))
+}
+
+/// Vector con nombre y Fshobst de huecos, para poder comprobar diferencias en JSON
+pub fn windows_fshobst_from_data(
+    windows: &Vec<Window>,
+    walls: &Vec<Wall>,
+) -> Result<Vec<(String, f32)>, Error> {
+    Ok(windows
+        .iter()
+        .map(|w| {
+            let wall = walls.iter().find(|wall| wall.name == w.wall).unwrap();
+            (w.name.clone(), w.fshobst(&wall))
+        })
+        .collect::<Vec<_>>())
 }
 
 /// Genera datos de EnvolventeCTE a partir de datos BDL en el XML
@@ -207,14 +262,22 @@ pub fn ecdata_from_xml(
     // Zona climática
     let climate = ctehexmldata.climate.clone();
     let envelope = envelope_from_bdl(&ctehexmldata.bdldata)?;
-    let constructions = constructions_from_bdl(&ctehexmldata.bdldata)?;
+    let wallcons = wallcons_from_bdl(&ctehexmldata.bdldata)?;
+    let windowcons = windowcons_from_bdl(&ctehexmldata.bdldata)?;
     let spaces = spaces_from_bdl(&ctehexmldata.bdldata)?;
+    let walls_u = walls_u_from_data(&envelope.walls, &wallcons)?;
+    let windows_fshobst = windows_fshobst_from_data(&envelope.windows, &envelope.walls)?;
 
     Ok(EnvolventeCteData {
         climate,
         envelope,
-        constructions,
+        constructions: ConstructionElements {
+            windows: windowcons,
+            walls: wallcons,
+        },
         spaces,
+        walls_u,
+        windows_fshobst,
     })
 }
 
@@ -229,17 +292,19 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     if let Some(kygpath) = &kygpath {
         let kygdata = kyg::parse(&kygpath).unwrap();
 
-        for wall in &mut ecdata.envelope.walls {
-            let kygwall = kygdata.walls.iter().find(|w| w.name == wall.name);
+        for tuple in &mut ecdata.walls_u {
+            let wallname = &tuple.0;
+            let kygwall = kygdata.walls.iter().find(|w| &*w.name == wallname);
             if let Some(kw) = kygwall {
-                wall.u = fround2(kw.u);
+                tuple.2 = fround2(kw.u);
             }
         }
 
-        for win in &mut ecdata.envelope.windows {
-            let kygwin = kygdata.windows.iter().find(|w| w.name == win.name);
+        for tuple in &mut ecdata.windows_fshobst {
+            let winname = &tuple.0;
+            let kygwin = kygdata.windows.iter().find(|w| &*w.name == winname);
             if let Some(kw) = kygwin {
-                win.fshobst = fround2(kw.fshobst);
+                tuple.1 = fround2(kw.fshobst);
             }
         }
     }
@@ -248,16 +313,12 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     // Básicamente son U de particiones interiores
     if let Some(tblpath) = &tblpath {
         let tbldata = tbl::parse(&tblpath).unwrap();
-        for wall in &mut ecdata.envelope.walls {
-            if wall.bounds != Boundaries::INTERIOR {
+        for tuple in &mut ecdata.walls_u {
+            if tuple.1 != Boundaries::INTERIOR {
                 continue;
             };
-            let w = tbldata
-                .elements
-                .iter()
-                .find(|w| w.name == wall.name)
-                .unwrap();
-            wall.u = fround2(w.u);
+            let w = tbldata.elements.iter().find(|w| w.name == tuple.0).unwrap();
+            tuple.2 = fround2(w.u);
         }
     }
 }

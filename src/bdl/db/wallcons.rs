@@ -5,8 +5,7 @@
 use failure::Error;
 use std::{collections::HashMap, convert::TryFrom};
 
-use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock, Boundaries, Material, Tilt, Wall};
-use crate::utils::fround2;
+use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock, Material};
 
 /// Definición de elemento a través de sus capas
 #[derive(Debug, Clone, Default)]
@@ -24,8 +23,6 @@ pub struct WallCons {
     pub absorptance: f32,
 }
 
-// TODO: estas implementaciones deberían llevarse a WallConstruction de types cuando se creen
-// y dejar las clases BDL como meros contenedores de datos
 impl WallCons {
     /// Espesor total de una composición de capas [m]
     pub fn total_thickness(&self) -> f32 {
@@ -65,57 +62,6 @@ impl WallCons {
                     self.name
                 )
             })
-    }
-
-    /// Transmitancia térmica del cerramiento, en W/m2K
-    /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
-    /// Notas:
-    /// - en particiones interiores no se considera el factor b, reductor de temperatura
-    /// - NO se ha implementado el cálculo de elementos en contacto con espacios no habitables
-    /// - NO se ha implementado el cálculo de cerramientos en contacto con el terreno
-    ///     - en HULC los valores por defecto de Ra y D se indican en las opciones generales de
-    ///       las construcciones por defecto
-    /// - los elementos adiabáticos se reportan con valor 0.0
-    /// - las particiones interiores horizontales
-    pub fn u(&self, wall: &Wall, materialsdb: &HashMap<String, Material>) -> f32 {
-        use Boundaries::*;
-        use Tilt::*;
-
-        let bounds = wall.bounds;
-        let position = wall.position();
-
-        let r_intrinsic = self.r_intrinsic(&materialsdb).unwrap_or_default();
-
-        // Resistencias superficiales [m2·K/W]
-        // Revisar según DA-DB-HE/1 tabla 1
-        const RSE: f32 = 0.04;
-        const RSI_ASCENDENTE: f32 = 0.10;
-        const RSI_HORIZONTAL: f32 = 0.13;
-        const RSI_DESCENDENTE: f32 = 0.17;
-
-        let u_noround = match bounds {
-            UNDERGROUND => match position {
-                // TODO: implementar soleras en contacto con el terreno
-                BOTTOM => Default::default(),
-                // TODO: implementar muros enterrados
-                SIDE => Default::default(),
-                // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
-                TOP => 1.0 / (r_intrinsic + RSI_ASCENDENTE + RSE),
-            },
-            // Tomamos valor 0.0. Siempre se podría consultar la resistencia intrínseca
-            ADIABATIC => 0.0,
-            // HULC no diferencia entre posiciones para elementos interiores
-            // TODO: Detectar el caso de contacto con espacios no habitables, con cálculo de b, e implementar
-            // TODO: tal vez esto debería recibir el valor b como parámetro
-            INTERIOR => 1.0 / (r_intrinsic + 2.0 * RSI_HORIZONTAL),
-            // Elementos en contacto con el exterior
-            EXTERIOR => match position {
-                BOTTOM => 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE),
-                TOP => 1.0 / (r_intrinsic + RSI_ASCENDENTE + RSE),
-                SIDE => 1.0 / (r_intrinsic + RSI_HORIZONTAL + RSE),
-            },
-        };
-        fround2(u_noround)
     }
 }
 
