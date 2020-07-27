@@ -76,7 +76,8 @@ impl WallCons {
     /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
     /// Notas:
     /// - en particiones interiores no se considera el factor b, reductor de temperatura
-    /// - no se ha implementado el cálculo de cerramientos en contacto con el terreno
+    /// - NO se ha implementado el cálculo de elementos en contacto con espacios no habitables
+    /// - NO se ha implementado el cálculo de cerramientos en contacto con el terreno
     ///     - en HULC los valores por defecto de Ra y D se indican en las opciones generales de
     ///       las construcciones por defecto
     /// - los elementos adiabáticos se reportan con valor 0.0
@@ -99,25 +100,28 @@ impl WallCons {
         const RSI_DESCENDENTE: f32 = 0.17;
 
         let u_noround = match bounds {
-            // TODO: implementar
             UNDERGROUND => match position {
+                // TODO: implementar soleras en contacto con el terreno
                 BOTTOM => Default::default(),
+                // TODO: implementar muros enterrados
                 SIDE => Default::default(),
-                // En este caso el terreno se define como una capa de tierra con lambda = 2 W/K
+                // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
                 TOP => 1.0 / (1.0 / u + RSI_ASCENDENTE + RSE),
             },
             // Tomamos valor 0.0. Siempre se podría consultar la resistencia intrínseca
             ADIABATIC => 0.0,
             // HULC no diferencia entre posiciones para elementos interiores
-            // TODO: Faltaría el caso de contacto con espacios no habitables, con cálculo de b
+            // TODO: Detectar el caso de contacto con espacios no habitables, con cálculo de b, e implementar
+            // TODO: tal vez esto debería recibir el valor b como parámetro
             INTERIOR => 1.0 / (1.0 / u + 2.0 * RSI_HORIZONTAL),
+            // Elementos en contacto con el exterior
             EXTERIOR => match position {
                 BOTTOM => 1.0 / (1.0 / u + RSI_DESCENDENTE + RSE),
                 TOP => 1.0 / (1.0 / u + RSI_ASCENDENTE + RSE),
                 SIDE => 1.0 / (1.0 / u + RSI_HORIZONTAL + RSE),
             },
         };
-        (u_noround * 100.0).round() / 100.0
+        fround2(u_noround)
     }
 }
 
