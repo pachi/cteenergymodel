@@ -1,23 +1,18 @@
 general:
 
 - Llevar cosas que sacamos del kyg a lib.rs y desde ctehexml
-    - Comparamos
-        - cargo run -- --skip-kyg tests/data/ > salida.json.skip
-        - cargo run tests/data/ > salida.json.base
     - Nos falta:
         - windows:
-            - Orientation: podemos obtenerlo del muro. Pensar si lo calculamos (mejor) y eliminamos del hueco o lo guardamos
             - Fshobst: empezar con 1.0 en vez de 0.0?
         - walls: En general, calcular U de elementos enterrados e interiores con espacios no habitables
 - Detectar elementos que pertenecen a la envolvente a partir de espacios
     - son los elementos que pertenecen a espacios dentro de la envolvente pero
       que no comunican con otros espacios interiores a la envolvente
 - Incluir construcciones en la exportación
-    - Necesitamos biblioteca base en Rust para interpretar construcciones:
+    - Complica un poco más los tipos, ya que hay por resistencia y por conductividad
+    - Exportar materiales para poder calcular U con capas. Para eso necesitamos biblioteca base en Rust para interpretar construcciones:
         - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
-    - opacos
-    - huecos
-    - pts?
+
 - Añadir tests de tbl.rs (parse)
 - ¿Convertir vectores de objetos de espacios, pisos, etc a vectores de nombres y hashmaps de objetos
   o convertir a https://docs.rs/crate/indexmap/?
@@ -37,15 +32,10 @@ general:
         }
 
 ideas:
-- Se podrían meter las ventanas como hijos de muros para facilitar las mediciones (pero tiene sus desventajas)
 - hacer visualizador 3d (con 3djs).
 
 envolventectedata:
-    - dejar de usar tipos de datos de KyG
-    - añadir construcciones de opacos y huecos
     Llevar a env:
-        - Altura libre de espacios: data.space_net_height(spacename)
-            - Otra opción es llevar la altura de suelo a techo al espacio como dato
         - Volumen neto de espacios: data.space_volume(spacename)
         - ir viendo los cálculos que hacemos cómo se pueden llevar de BDL a types eliminando aspectos innecesarios
             wall -> data.wall_gross_area(wallname), data.wall_net_area(wallname), data.wall_azimuth(wallname)
@@ -70,20 +60,4 @@ BDL:
 
 EnvolventeCTE:
 - Eliminar uso de data.autil y usar data.a_util_ref()
-- Exportar construcciones (WindowCons, WallCons)
 - Calculador de elementos para obtener % de afección de U según intercalarios y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
-
-- Ver relación entre huecos y muros (orientación).
-    - Si eliminamos orientación de los huecos y lo calculamos desde su muro (orientation+tilt -> orientación CTE)
-
-Notas:
-
-types:
-- Separar las construcciones de hueco (WindowCons) y muro (WallCons) del resto de datos:
-    - datos de hueco (name, wall, orientation, A, Fshobst + id construcción (a partir de hash o con una semilla constante?))
-    - construcción de hueco (name, Ff, gglwi, ggshwi, C_100)
-    - muro
-    - construcción de muro
-    - en envolventecte se haría un diccionario de ids a nombres, u, C_100, etc para obtener los datos relevantes
-- Crear materiales para poder calcular U desde construcciones
-- Llevar implementaciones de métodos para calcular U de construcciones desde BDL a types
