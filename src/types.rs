@@ -267,6 +267,8 @@ pub struct Position {
 pub struct Window {
     /// Nombre del hueco
     pub name: String,
+    /// Construcción del hueco
+    pub cons: String,
     /// Muro al que pertenece el hueco
     pub wall: String,
     /// Superficie del hueco (m2)
@@ -300,6 +302,8 @@ pub struct Window {
 pub struct Wall {
     /// Nombre del elemento opaco
     pub name: String,
+    /// Construcción del opaco
+    pub cons: String,
     /// Espacio al que pertenece el elemento opaco
     pub space: String,
     /// Espacio adyacente con el que comunica el elemento opaco
@@ -369,9 +373,9 @@ pub struct WallCons {
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
-    /// Transmitancia térmica (W/m2K)
-    #[serde(rename(serialize = "U"))]
-    pub u: f32,
+    /// Resistencia térmica total sin resistencias superficiales (resistencia intrínseca) [m2K/W]
+    #[serde(rename(serialize = "R_intrinsic"))]
+    pub r_instrinsic: f32,
     /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
     pub absorptance: f32,
 }
@@ -383,16 +387,15 @@ pub struct WindowCons {
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
-    /// Transmitancia térmica (W/m2K)
-    /// Esta transmitancia incluye el efecto del marco, vidrio e incremento de u por intercalarios y cajones de persiana
+    /// Transmitancia térmica total (incluyendo marco, vidrio y efecto de intercalarios y/o cajones de persiana) [W/m2K]
     #[serde(rename(serialize = "U"))]
     pub u: f32,
-    /// Fracción de marco
+    /// Fracción de marco [-]
     #[serde(rename(serialize = "Ff"))]
     pub ff: f32,
-    /// Factor solar del hueco sin la protección solar activada (g_glwi = g_gln * 0.90)
+    /// Factor solar del hueco sin la protección solar activada (g_glwi = g_gln * 0.90) [-]
     pub gglwi: f32,
-    /// Factor solar del hueco con la protección solar activada
+    /// Factor solar del hueco con la protección solar activada [-]
     pub gglshwi: f32,
     /// Permeabilidad al aire a 100 Pa [m3/hm2]
     #[serde(rename(serialize = "C_100"))]

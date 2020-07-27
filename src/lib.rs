@@ -99,7 +99,8 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
 
     // Walls: falta U
     for wall in &bdl.walls {
-        // Construcción del hueco WindowCons
+        // TODO: esto se va a la construcción ------------------
+        // Construcción del muro WallCons
         let cons = bdl.db.wallcons.get(&wall.construction).ok_or_else(|| {
             format_err!(
                 "Construcción {} de muro {} no encontrada",
@@ -107,30 +108,30 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
                 wall.name
             )
         })?;
-
-        // Datos trasladados directamente
-        let bounds = wall.bounds;
-        // Actualización a criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
-        let orientation = utils::orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?);
-        let tilt = fround2(wall.tilt);
-        let u = cons.u(bounds, wall.position(), &bdl.db.materials);
+        let u = cons.u(wall, &bdl.db.materials);
+        let absorptance = wall.absorptance.unwrap_or(0.6);
+        // TODO: hasta aquí --------------------------------
 
         let w = Wall {
             name: wall.name.clone(),
+            cons: wall.construction.to_string(),
             a: fround2(wall.net_area(bdl)?),
             space: wall.space.clone(),
             nextto: wall.nextto.clone(),
-            bounds: bounds.into(),
+            bounds: wall.bounds.into(),
             u,
-            absorptance: wall.absorptance.unwrap_or(0.6),
-            orientation: fround2(orientation),
-            tilt,
+            absorptance,
+            orientation: fround2(utils::orientation_bdl_to_52016(
+                wall.azimuth(northangle, &bdl)?,
+            )),
+            tilt: fround2(wall.tilt),
         };
         envelope.walls.push(w);
     }
 
     // Windows
     for win in &bdl.windows {
+        // TODO: Esto va a la construcción -------------
         // Construcción del hueco WindowCons
         let cons = bdl.db.windowcons.get(&win.construction).ok_or_else(|| {
             format_err!(
@@ -148,6 +149,14 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
                 win.name
             )
         })?;
+        // Esto va a la construcción
+        let ff = cons.framefrac;
+        let gglwi = fround2(glass.g_gln * 0.90);
+        let gglshwi = cons.gglshwi.unwrap_or(gglwi);
+        let infcoeff_100 = cons.infcoeff;
+        let u = fround2(cons.u(&bdl.db.frames, &bdl.db.glasses)?);
+        // TODO: hasta aquí -----------------
+
         // Muro en el que está el hueco (Wall)
         let wall = envelope
             .walls
@@ -155,17 +164,10 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
             .find(|w| w.name == win.wall)
             .ok_or_else(|| format_err!("Muro {} del hueco {} no encontrado", win.wall, win.name))?;
 
-        // Datos trasladados directamente
-        let orientation = utils::angle_name(wall.orientation);
-        let ff = cons.framefrac;
-        let gglwi = fround2(glass.g_gln * 0.90);
-        let gglshwi = cons.gglshwi.unwrap_or(gglwi);
-        let infcoeff_100 = cons.infcoeff;
-        let u = fround2(cons.u(&bdl.db.frames, &bdl.db.glasses)?);
-
         let w = Window {
             name: win.name.clone(),
-            orientation,
+            cons: win.construction.to_string(),
+            orientation: utils::angle_name(wall.orientation),
             wall: win.wall.clone(),
             a: fround2(win.area()),
             u,
