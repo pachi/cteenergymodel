@@ -19,6 +19,9 @@ pub struct WallCons {
     pub material: Vec<String>,
     /// Lista de espesores de las capas [m] ([e1, e2, ...])
     pub thickness: Vec<f32>,
+    /// Absortividad (a la radiación solar) (-)
+    /// XXX: esta no es una definición del BDL pero lo usaremos para tomarla de Construction y evitar ese objeto
+    pub absorptance: f32,
 }
 
 // TODO: estas implementaciones deberían llevarse a WallConstruction de types cuando se creen
@@ -159,6 +162,7 @@ impl TryFrom<BdlBlock> for WallCons {
             group,
             material,
             thickness,
+            absorptance: 0.0,
         })
     }
 }

@@ -58,9 +58,6 @@ pub struct Wall {
     /// Definición de la composición de capas del cerramiento
     /// Incialmente contiene un elemento CONSTRUCTION y se sustituye en el postproceso por LAYERS
     pub construction: String,
-    /// Absortividad exterior del cerramiento a la radiación solar [-]
-    /// Este parámetro no se usa/define para elementos interiores o en contacto con el terreno
-    pub absorptance: Option<f32>,
     /// Posición respecto al espacio asociado (TOP, BOTTOM, nombreespacio)
     pub location: Option<String>,
     /// Inclinación (grados sexagesimales)
@@ -385,9 +382,9 @@ impl TryFrom<BdlBlock> for Wall {
         let space =
             parent.ok_or_else(|| format_err!("Cerramiento sin espacio asociado '{}'", &name))?;
         // XXX: incialmente guardamos la referencia al elemento CONSTRUCTION (agrupa wallcons y absorptance)
-        // XXX: y se sustituye en un postproceso por el elemento LAYERS, ya que ABSORPTANCE ya está guardado
+        // XXX: y se sustituye en un postproceso por el elemento LAYERS, que ampliamos con el ABSORPTANCE de CONSTRUCTION
         let construction = attrs.remove_str("CONSTRUCTION")?;
-        let absorptance = attrs.remove_f32("ABSORPTANCE").ok();
+        // let absorptance = attrs.remove_f32("ABSORPTANCE").ok();
 
         let location = match attrs.remove_str("LOCATION").ok() {
             // Solo soportamos algunos subtipos de location: TOP, BOTTOM, SPACE-x
@@ -450,7 +447,6 @@ impl TryFrom<BdlBlock> for Wall {
             bounds,
             space,
             construction,
-            absorptance,
             location,
             tilt,
             geometry,

@@ -211,7 +211,17 @@ impl Data {
                             wall.name
                         )
                     })?;
-                    wall.construction = cons.wallcons.clone();
+                    let absorptance = cons.absorptance.unwrap_or(0.0);
+                    let layersname = cons.wallcons.clone();
+                    let mut layers = bdldata.db.wallcons.get_mut(&layersname).ok_or_else(|| {
+                        format_err!(
+                            "No se ha encontrado la definición de capas {} de la construcción {}",
+                            layersname,
+                            cons.wallcons
+                        )
+                    })?;
+                    layers.absorptance = absorptance;
+                    wall.construction = layersname;
 
                     // Guardamos el muro
                     bdldata.walls.push(wall);
