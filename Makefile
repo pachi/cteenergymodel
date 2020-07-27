@@ -25,6 +25,8 @@ bloat:
 	cargo bloat --release -n 10
 	cargo bloat --release --crates -n 10
 	# cargo bloat --release --crates --split-std -n 10
+bench:
+	cargo bench
 perf:
 	# Ver https://profiler.firefox.com/docs/#/./guide-perf-profiling
 	$(info [INFO]: Obteniendo datos de perfilado en el archivo perf.data)
