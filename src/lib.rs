@@ -23,9 +23,9 @@ SOFTWARE.
 
 pub mod bdl;
 pub mod ctehexml;
-pub mod envolventetypes;
 pub mod kyg;
 pub mod tbl;
+pub mod types;
 pub mod utils;
 #[cfg(windows)]
 pub mod wingui;
@@ -36,7 +36,7 @@ extern crate failure;
 use failure::Error;
 use std::path::Path;
 
-use envolventetypes::{
+use types::{
     Boundaries, EnvelopeElements, EnvolventeCteData, Positions, Space, ThermalBridge, Wall, Window,
 };
 use utils::fround2;
@@ -272,7 +272,7 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
     Ok(ecdata)
 }
 
-// Conversiones de BDL a EnvolventeTypes -------------------
+// Conversiones de BDL a types -------------------
 
 impl From<bdl::Positions> for Positions {
     fn from(pos: bdl::Positions) -> Self {

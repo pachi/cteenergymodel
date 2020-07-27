@@ -20,7 +20,7 @@ pub struct WallCons {
     pub thickness: Vec<f32>,
 }
 
-// TODO: estas implementaciones deberían llevarse a WallConstruction de EnvolventeTypes cuando se creen
+// TODO: estas implementaciones deberían llevarse a WallConstruction de types cuando se creen
 // y dejar las clases BDL como meros contenedores de datos
 impl WallCons {
     /// Espesor total de una composición de capas [m]

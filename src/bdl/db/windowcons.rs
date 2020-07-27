@@ -32,7 +32,7 @@ pub struct WindowCons {
     pub gglshwi: Option<f32>,
 }
 
-// TODO: Llevar estas implementaciones a las WindowCons de envolventetypes, que es donde deberían estar
+// TODO: Llevar estas implementaciones a las WindowCons de types, que es donde deberían estar
 // y dejar esto solo como contenedores de datos
 impl WindowCons {
     /// Cálculo de U de la construcción del hueco

@@ -47,7 +47,7 @@ envolventectedata:
         - Altura libre de espacios: data.space_net_height(spacename)
             - Otra opción es llevar la altura de suelo a techo al espacio como dato
         - Volumen neto de espacios: data.space_volume(spacename)
-        - ir viendo los cálculos que hacemos cómo se pueden llevar de BDL a envolventetypes eliminando aspectos innecesarios
+        - ir viendo los cálculos que hacemos cómo se pueden llevar de BDL a types eliminando aspectos innecesarios
             wall -> data.wall_gross_area(wallname), data.wall_net_area(wallname), data.wall_azimuth(wallname)
             ...
         - Volumen interno a la envolvente térmica: volumen_et
@@ -78,7 +78,7 @@ EnvolventeCTE:
 
 Notas:
 
-Envolventetypes:
+types:
 - Separar las construcciones de hueco (WindowCons) y muro (WallCons) del resto de datos:
     - datos de hueco (name, wall, orientation, A, Fshobst + id construcción (a partir de hash o con una semilla constante?))
     - construcción de hueco (name, Ff, gglwi, ggshwi, C_100)
@@ -86,4 +86,4 @@ Envolventetypes:
     - construcción de muro
     - en envolventecte se haría un diccionario de ids a nombres, u, C_100, etc para obtener los datos relevantes
 - Crear materiales para poder calcular U desde construcciones
-- Llevar implementaciones de métodos para calcular U de construcciones desde BDL a envolventetypes
+- Llevar implementaciones de métodos para calcular U de construcciones desde BDL a types

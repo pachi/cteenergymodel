@@ -158,8 +158,7 @@ pub struct Window {
     #[serde(rename(serialize = "A"))]
     pub a: f32,
     /// Transmitancia térmica (W/m2K)
-    /// Esta transmitancia no incluye resistencias superficiales,
-    /// solo el efecto del marco, vidrio e incremento de u por intercalarios y cajones de persiana
+    /// Esta transmitancia incluye el efecto del marco, vidrio e incremento de u por intercalarios y cajones de persiana
     #[serde(rename(serialize = "U"))]
     pub u: f32,
     /// Fracción de marco
