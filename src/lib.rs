@@ -85,8 +85,8 @@ pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
         .collect::<Result<Vec<Space>, Error>>()
 }
 
-/// Construye elementos de la envolvente a partir de datos BDL
-fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
+/// Construye muros de la envolvente a partir de datos BDL
+fn walls_from_bdl(bdl: &bdl::Data) -> Result<Vec<Wall>, Error> {
     // Desviación general respecto al Norte (criterio BDL)
     let northangle = bdl
         .meta
@@ -95,9 +95,11 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
         .attrs
         .get_f32("ANGLE")?;
 
-    let mut envelope = EnvelopeElements::default();
-    for wall in &bdl.walls {
-        let w = Wall {
+    Ok(bdl
+        .walls
+        .iter()
+        .map(|wall| -> Result<Wall, Error> {
+            Ok(Wall {
             name: wall.name.clone(),
             cons: wall.construction.to_string(),
             a: fround2(wall.net_area(bdl)?),
@@ -108,34 +110,37 @@ fn envelope_from_bdl(bdl: &bdl::Data) -> Result<EnvelopeElements, Error> {
                 wall.azimuth(northangle, &bdl)?,
             )),
             tilt: fround2(wall.tilt),
-        };
-        envelope.walls.push(w);
+            })
+        })
+        .collect::<Result<Vec<Wall>, _>>()?)
     }
 
-    // Windows
-    for win in &bdl.windows {
-        let w = Window {
+/// Construye huecos de la envolvente a partir de datos BDL
+fn windows_from_bdl(bdl: &bdl::Data) -> Vec<Window> {
+    bdl.windows
+        .iter()
+        .map(|win| Window {
             name: win.name.clone(),
             cons: win.construction.to_string(),
             wall: win.wall.clone(),
             width: fround2(win.width),
             height: fround2(win.height),
             setback: win.setback,
-        };
-        envelope.windows.push(w);
+        })
+        .collect()
     }
 
+/// Construye puentes térmicos de la envolvente a partir de datos BDL
+fn thermal_bridges_from_bdl(bdl: &bdl::Data) -> Vec<ThermalBridge> {
     // PTs
-    for tb in &bdl.tbridges {
-        let t = ThermalBridge {
+    bdl.tbridges
+        .iter()
+        .map(|tb| ThermalBridge {
             name: tb.name.clone(),
             l: fround2(tb.length.unwrap_or(0.0)),
             psi: tb.psi,
-        };
-        envelope.thermal_bridges.push(t);
-    }
-
-    Ok(envelope)
+        })
+        .collect()
 }
 
 /// Construcciones de muros a partir de datos BDL
@@ -261,16 +266,21 @@ pub fn ecdata_from_xml(
 ) -> Result<EnvolventeCteData, failure::Error> {
     // Zona climática
     let climate = ctehexmldata.climate.clone();
-    let envelope = envelope_from_bdl(&ctehexmldata.bdldata)?;
+    let walls = walls_from_bdl(&ctehexmldata.bdldata)?;
+    let windows = windows_from_bdl(&ctehexmldata.bdldata);
+    let thermal_bridges = thermal_bridges_from_bdl(&ctehexmldata.bdldata);
     let wallcons = wallcons_from_bdl(&ctehexmldata.bdldata)?;
     let windowcons = windowcons_from_bdl(&ctehexmldata.bdldata)?;
-    let spaces = spaces_from_bdl(&ctehexmldata.bdldata)?;
-    let walls_u = walls_u_from_data(&envelope.walls, &wallcons)?;
-    let windows_fshobst = windows_fshobst_from_data(&envelope.windows, &envelope.walls)?;
+    let walls_u = walls_u_from_data(&walls, &wallcons)?;
+    let windows_fshobst = windows_fshobst_from_data(&windows, &walls)?;
 
     Ok(EnvolventeCteData {
         climate,
-        envelope,
+        envelope: EnvelopeElements {
+            walls,
+            windows,
+            thermal_bridges,
+        },
         constructions: ConstructionElements {
             windows: windowcons,
             walls: wallcons,
