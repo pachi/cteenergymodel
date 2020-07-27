@@ -262,11 +262,13 @@ pub struct Window {
     pub name: String,
     /// Muro al que pertenece el hueco
     pub wall: String,
-    /// Orientación del hueco (N, S, E, W, H...)
-    pub orientation: String,
     /// Superficie del hueco (m2)
     #[serde(rename(serialize = "A"))]
     pub a: f32,
+    /// Factor de obstáculos remotos
+    #[serde(rename(serialize = "Fshobst"))]
+    pub fshobst: f32,
+    // TODO: partes que pertenecen a la solución constructiva
     /// Transmitancia térmica (W/m2K)
     /// Esta transmitancia incluye el efecto del marco, vidrio e incremento de u por intercalarios y cajones de persiana
     #[serde(rename(serialize = "U"))]
@@ -278,12 +280,12 @@ pub struct Window {
     pub gglwi: f32,
     /// Factor solar del hueco con la protección solar activada
     pub gglshwi: f32,
-    /// Factor de obstáculos remotos
-    #[serde(rename(serialize = "Fshobst"))]
-    pub fshobst: f32,
     /// Permeabilidad al aire a 100 Pa [m3/hm2]
     #[serde(rename(serialize = "C_100"))]
     pub infcoeff_100: f32,
+    // TODO: esto se obtiene del muro
+    /// Orientación del hueco (N, S, E, W, H...)
+    pub orientation: String,
 }
 
 /// Elemento opaco (muro, cubierta, suelo, partición)
@@ -295,29 +297,29 @@ pub struct Wall {
     pub space: String,
     /// Espacio adyacente con el que comunica el elemento opaco
     pub nextto: Option<String>,
-    /// Superficie del elemento opaco (m2)
-    #[serde(rename(serialize = "A"))]
-    pub a: f32,
-    /// Transmitancia térmica (W/m2K)
-    #[serde(rename(serialize = "U"))]
-    pub u: f32,
     /// Condiciones de contorno del cerramiento:
     /// - UNDERGROUND: cerramientos en contacxto con el terreno
     /// - EXTERIOR: cerramientos en contacto con el aire exterior
     /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
     pub bounds: Boundaries,
-    /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
-    pub absorptance: f32,
-    /// Orientación (gamma) [-180,+180]
+    /// Superficie neta del elemento opaco (m2)
+    #[serde(rename(serialize = "A"))]
+    pub a: f32,
+    /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90)
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
-    /// Criterio: medido desde el sur, positivo al este, negativo al oeste
-    /// Corresponde al criterio de la UNE-EN ISO 52016-1. S=0, E=+90, W=-90
+    /// Coincide con el criterio de la UNE-EN ISO 52016-1
     /// Difiere del criterio BDL, que parte del norte, con E+ y W-
     pub orientation: f32,
     /// Inclinación (beta) [0, 180]
     /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
     pub tilt: f32,
+    // TODO: elementos que pertenecen a la construcción
+    /// Transmitancia térmica (W/m2K)
+    #[serde(rename(serialize = "U"))]
+    pub u: f32,
+    /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
+    pub absorptance: f32,
 }
 
 /// Puente térmico
