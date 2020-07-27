@@ -243,8 +243,8 @@ pub fn walls_u_from_data(
 
 /// Vector con nombre y Fshobst de huecos, para poder comprobar diferencias en JSON
 pub fn windows_fshobst_from_data(
-    windows: &Vec<Window>,
-    walls: &Vec<Wall>,
+    windows: &[Window],
+    walls: &[Wall],
 ) -> Result<Vec<(String, f32)>, Error> {
     Ok(windows
         .iter()
