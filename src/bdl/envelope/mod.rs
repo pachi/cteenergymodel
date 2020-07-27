@@ -20,5 +20,5 @@ pub use geom::*;
 pub use shadings::Shade;
 pub use space::Space;
 pub use thermalbridge::ThermalBridge;
-pub use walls::{Wall, Positions, Boundaries};
+pub use walls::{Boundaries, Tilt, Wall};
 pub use window::Window;

@@ -20,9 +20,7 @@ mod envelope;
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use db::{Construction, Frame, Glass, Material, WallCons, WindowCons, DB};
-pub use envelope::{
-    Boundaries, Floor, Polygon, Positions, Shade, Space, ThermalBridge, Wall, Window,
-};
+pub use envelope::{Boundaries, Floor, Polygon, Shade, Space, ThermalBridge, Tilt, Wall, Window};
 
 // ------------------------- BDL ----------------------------
 

@@ -87,7 +87,7 @@ impl Window {
             )
         })?;
         // Calcular según orientación e inclinación
-        use super::Positions::*;
+        use super::Tilt::*;
 
         match wall.position() {
             // Elementos verticales

@@ -18,7 +18,7 @@ use crate::utils::normalize;
 
 /// Posiciones de los cerramientos según su inclinación
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Positions {
+pub enum Tilt {
     /// Suelo (inclinación < 60º)
     BOTTOM,
     /// Cubierta (inclinación > 120º)
@@ -208,17 +208,17 @@ impl Wall {
 
     /// Posición del elemento (TOP, BOTTOM, SIDE) según su inclinación
     /// Los elementos con inclinación > 60º Con la horizontal son verticales.
-    pub fn position(&self) -> Positions {
+    pub fn position(&self) -> Tilt {
         if self.tilt <= 60.0 {
-            Positions::TOP
+            Tilt::TOP
         } else if self.tilt < 120.0 {
-            Positions::SIDE
+            Tilt::SIDE
         } else if self.tilt < 240.0 {
-            Positions::BOTTOM
+            Tilt::BOTTOM
         } else if self.tilt < 300.0 {
-            Positions::SIDE
+            Tilt::SIDE
         } else {
-            Positions::TOP
+            Tilt::TOP
         }
     }
 }

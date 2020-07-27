@@ -37,7 +37,7 @@ use failure::Error;
 use std::path::Path;
 
 use types::{
-    Boundaries, EnvelopeElements, EnvolventeCteData, Positions, Space, ThermalBridge, Wall, Window,
+    Boundaries, EnvelopeElements, EnvolventeCteData, Space, ThermalBridge, Tilt, Wall, Window,
 };
 use utils::fround2;
 
@@ -274,12 +274,12 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
 
 // Conversiones de BDL a types -------------------
 
-impl From<bdl::Positions> for Positions {
-    fn from(pos: bdl::Positions) -> Self {
+impl From<bdl::Tilt> for Tilt {
+    fn from(pos: bdl::Tilt) -> Self {
         match pos {
-            bdl::Positions::TOP => Self::TOP,
-            bdl::Positions::BOTTOM => Self::BOTTOM,
-            bdl::Positions::SIDE => Self::SIDE,
+            bdl::Tilt::TOP => Self::TOP,
+            bdl::Tilt::BOTTOM => Self::BOTTOM,
+            bdl::Tilt::SIDE => Self::SIDE,
         }
     }
 }

@@ -5,7 +5,8 @@
 use failure::Error;
 use std::{collections::HashMap, convert::TryFrom};
 
-use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock, Boundaries, Material, Positions};
+use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock, Boundaries, Material, Tilt};
+use crate::utils::fround2;
 
 /// Definición de elemento a través de sus capas
 #[derive(Debug, Clone, Default)]
@@ -83,11 +84,11 @@ impl WallCons {
     pub fn u(
         &self,
         bounds: Boundaries,
-        position: Positions,
+        position: Tilt,
         materialsdb: &HashMap<String, Material>,
     ) -> f32 {
         use Boundaries::*;
-        use Positions::*;
+        use Tilt::*;
         let u = self.u_intrinsic(&materialsdb).unwrap_or_default();
 
         // Resistencias superficiales [m2·K/W]

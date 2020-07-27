@@ -8,7 +8,7 @@
 use std::convert::TryFrom;
 
 use super::geom::Polygon;
-use super::walls::Positions;
+use super::walls::Tilt;
 use crate::bdl::BdlBlock;
 use crate::bdl::Data;
 
@@ -63,7 +63,7 @@ impl Space {
             .iter()
             .find(|w| {
                 // Muros exteriores o cubiertas sobre el espacio
-                if w.position() == Positions::TOP {
+                if w.position() == Tilt::TOP {
                     true
                 } else {
                     w.nextto.as_ref().map(|s| 
