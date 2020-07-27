@@ -23,6 +23,7 @@ SOFTWARE.
 
 use std::fmt::Display;
 
+use crate::utils::normalize;
 use failure::Error;
 use serde::Serialize;
 use serde_json;
@@ -103,17 +104,6 @@ pub struct EnvelopeElements {
     pub thermal_bridges: Vec<ThermalBridge>,
 }
 
-/// Posiciones de los cerramientos según su inclinación
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
-pub enum Positions {
-    /// Suelo (inclinación < 60º)
-    BOTTOM,
-    /// Cubierta (inclinación > 120º)
-    TOP,
-    /// Muro (inclinación entre 60 y 120º)
-    SIDE,
-}
-
 /// Condiciones de contorno de los cerramientos
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
 pub enum Boundaries {
@@ -143,6 +133,126 @@ impl Default for Boundaries {
     fn default() -> Self {
         Boundaries::EXTERIOR
     }
+}
+
+/// Posiciones de los cerramientos según su inclinación
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
+pub enum Tilt {
+    /// Suelo (inclinación < 60º)
+    BOTTOM,
+    /// Cubierta (inclinación > 120º)
+    TOP,
+    /// Muro (inclinación entre 60 y 120º)
+    SIDE,
+}
+
+impl Display for Tilt {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let printable = match *self {
+            Tilt::BOTTOM => "BOTTOM",
+            Tilt::TOP => "TOP",
+            Tilt::SIDE => "SIDE",
+        };
+        write!(f, "{}", printable)
+    }
+}
+
+/// Convierte de inclinación a enum Tilt
+impl From<f32> for Tilt {
+    fn from(tilt: f32) -> Self {
+        let tilt = normalize(tilt, 0.0, 360.0);
+        if tilt <= 60.0 {
+            Tilt::TOP
+        } else if tilt < 120.0 {
+            Tilt::SIDE
+        } else if tilt < 240.0 {
+            Tilt::BOTTOM
+        } else if tilt < 300.0 {
+            Tilt::SIDE
+        } else {
+            Tilt::TOP
+        }
+    }
+}
+
+/// Orientación de la normal de un elemento constructivo en relación al sur geográfico (azimuth geográfico)
+pub enum Orientation {
+    /// Norte
+    N,
+    /// Noreste
+    NE,
+    /// Este
+    E,
+    /// Sureste
+    SE,
+    /// Sur
+    S,
+    /// Suroeste
+    SW,
+    /// Oeste
+    W,
+    /// Noroeste
+    NW,
+}
+
+impl Display for Orientation {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let printable = match *self {
+            Orientation::N => "N",
+            Orientation::NE => "NE",
+            Orientation::E => "E",
+            Orientation::SE => "SE",
+            Orientation::S => "S",
+            Orientation::SW => "SW",
+            Orientation::W => "W",
+            Orientation::NW => "NW",
+        };
+        write!(f, "{}", printable)
+    }
+}
+
+/// Convierte de azimuth a enum Orientation
+impl From<f32> for Orientation {
+    fn from(azimuth: f32) -> Self {
+        let azimuth = normalize(azimuth, 0.0, 360.0);
+        if azimuth < 18.0 {
+            Self::S
+        } else if azimuth < 69.0 {
+            Self::SE
+        } else if azimuth < 120.0 {
+            Self::E
+        } else if azimuth < 157.5 {
+            Self::NE
+        } else if azimuth < 202.5 {
+            Self::N
+        }
+        // 202.5 = 360 - 157.5
+        else if azimuth < 240.0 {
+            Self::NW
+        }
+        // 240 = 360 - 120
+        else if azimuth < 291.0 {
+            Self::W
+        }
+        // 291 = 360 - 69
+        else if azimuth < 342.0 {
+            Self::SW
+        }
+        // 342 = 360 - 18
+        else {
+            Self::S
+        }
+    }
+}
+
+/// Orientación de un elemento constructivo
+/// Se define en función del azimuth geográfico y la inclinación respecto a la horizontal
+pub struct Position {
+    /// Azimuth geográfico de la poryección horizontal de la normal a la superficie (gamma) [-180,+180]
+    /// Sigue el criterio de la UNE-EN ISO 52016-1, medido desde el sur, positivo al este, negativo al oeste (S=0, E=+90, W=-90)
+    /// Nota: difiere del criterio BDL, que parte del norte, con E+ y W-
+    pub azimuth: f32,
+    pub tilt: f32,
 }
 
 /// Hueco
