@@ -58,6 +58,34 @@ impl Default for Boundaries {
     }
 }
 
+/// Tipo de espacio según su nivel de acondicionamiento
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SpaceType {
+    /// Acondicionado
+    CONDITIONED,
+    /// No acondicionado
+    UNCONDITIONED,
+    /// No habitable
+    UNINHABITED,
+}
+
+impl Display for SpaceType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let printable = match *self {
+            SpaceType::CONDITIONED => "CONDITIONED",
+            SpaceType::UNCONDITIONED => "UNCONDITIONED",
+            SpaceType::UNINHABITED => "UNINHABITED",
+        };
+        write!(f, "{}", printable)
+    }
+}
+
+impl Default for SpaceType {
+    fn default() -> Self {
+        SpaceType::CONDITIONED
+    }
+}
+
 /// Posiciones de los cerramientos según su inclinación
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Tilt {

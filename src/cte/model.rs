@@ -29,7 +29,8 @@ use failure::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    simplemodel::SimpleModel, Boundaries, Space, ThermalBridge, Wall, WallCons, Window, WindowCons,
+    simplemodel::SimpleModel, Boundaries, Space, SpaceType, ThermalBridge, Wall, WallCons, Window,
+    WindowCons,
 };
 use crate::utils::fround2;
 
@@ -62,7 +63,7 @@ impl Model {
             .spaces
             .values()
             .map(|s| {
-                if s.inside_tenv && s.space_type.as_str() != "NO_HABITABLE" {
+                if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
                     s.area * s.multiplier
                 } else {
                     0.0

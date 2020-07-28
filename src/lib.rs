@@ -37,8 +37,8 @@ use failure::Error;
 use std::{collections::BTreeMap, path::Path};
 
 use cte::{
-    model::{Constructions, Envelope},
-    Boundaries, Model, Space, ThermalBridge, Wall, WallCons, Window, WindowCons,
+    Boundaries, Constructions, Envelope, Model, Space, SpaceType, ThermalBridge, Wall, WallCons,
+    Window, WindowCons,
 };
 use utils::fround2;
 
@@ -77,11 +77,10 @@ pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<BTreeMap<String, Space>, failu
                     inside_tenv: s.insidete,
                     multiplier: s.multiplier,
                     space_type: match s.stype.as_ref() {
-                        "CONDITIONED" => "ACONDICIONADO",
-                        "UNHABITED" => "NO_HABITABLE",
-                        _ => "NO_ACONDICIONADO",
-                    }
-                    .to_string(),
+                        "CONDITIONED" => SpaceType::CONDITIONED,
+                        "UNHABITED" => SpaceType::UNINHABITED,
+                        _ => SpaceType::UNCONDITIONED,
+                    },
                 },
             ))
         })
@@ -164,11 +163,6 @@ fn wallcons_from_bdl(
     walls: &BTreeMap<String, Wall>,
     bdl: &bdl::Data,
 ) -> Result<BTreeMap<String, WallCons>, Error> {
-    // let mut wcnames: Vec<String> = bdl
-    //     .walls
-    //     .iter()
-    //     .map(|w| w.construction.clone())
-    //     .collect::<Vec<String>>();
     let mut wcnames = walls
         .values()
         .map(|w| w.cons.clone())

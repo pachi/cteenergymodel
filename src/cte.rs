@@ -28,6 +28,6 @@ pub mod elements;
 pub mod model;
 mod simplemodel;
 
-pub use common::{Boundaries, Orientation};
+pub use common::{Boundaries, Orientation, SpaceType, Tilt};
 pub use elements::{Space, ThermalBridge, Wall, WallCons, Window, WindowCons};
-pub use model::Model;
+pub use model::{Constructions, Envelope, Model};

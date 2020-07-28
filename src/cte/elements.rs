@@ -27,6 +27,7 @@ use serde::{Deserialize, Serialize};
 pub use super::common::{
     Boundaries::{self, *},
     Orientation::*,
+    SpaceType::{self, *},
     Tilt::*,
 };
 
@@ -264,7 +265,7 @@ pub struct Space {
     pub multiplier: f32,
     // Tipo de espacio (ACONDICIONADO, NO_ACONDICIONADO, NO_HABITABLE)
     #[serde(rename(serialize = "type"))]
-    pub space_type: String,
+    pub space_type: SpaceType,
 }
 
 /// Definición de construcción de elemento opaco
