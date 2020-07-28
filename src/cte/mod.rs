@@ -25,9 +25,10 @@ SOFTWARE.
 
 pub mod common;
 pub mod elements;
+pub(crate) mod from_bdl;
 pub mod model;
 pub mod params_compute;
-mod simplemodel;
+pub(crate) mod simplemodel;
 
 pub use common::{Boundaries, Orientation, SpaceType, Tilt};
 pub use elements::{Space, ThermalBridge, Wall, WallCons, Window, WindowCons};
