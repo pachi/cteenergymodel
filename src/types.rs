@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use std::fmt::Display;
+use std::{collections::BTreeMap, fmt::Display};
 
 use crate::utils::{fround2, normalize};
 use failure::Error;
@@ -34,7 +34,7 @@ pub struct EnvolventeCteData {
     pub climate: String,
     pub envelope: EnvelopeElements,
     pub constructions: ConstructionElements,
-    pub spaces: Vec<Space>,
+    pub spaces: BTreeMap<String, Space>,
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
     pub walls_u: Vec<(String, Boundaries, f32)>,
@@ -53,7 +53,7 @@ impl EnvolventeCteData {
     pub fn a_util_ref(&self) -> f32 {
         let a_util: f32 = self
             .spaces
-            .iter()
+            .values()
             .map(|s| {
                 if s.inside_tenv && s.space_type.as_str() != "NO_HABITABLE" {
                     s.area * s.multiplier
@@ -70,7 +70,7 @@ impl EnvolventeCteData {
     pub fn vol_env_gross(&self) -> f32 {
         let v_env: f32 = self
             .spaces
-            .iter()
+            .values()
             .map(|s| {
                 if s.inside_tenv {
                     s.area * s.height_gross * s.multiplier
@@ -87,7 +87,7 @@ impl EnvolventeCteData {
     pub fn vol_env_net(&self) -> f32 {
         let v_env: f32 = self
             .spaces
-            .iter()
+            .values()
             .map(|s| {
                 if s.inside_tenv {
                     s.area * s.height_net * s.multiplier
@@ -106,17 +106,19 @@ impl EnvolventeCteData {
 #[derive(Debug, Clone, Default, Serialize)]
 pub struct EnvelopeElements {
     /// Huecos
-    pub windows: Vec<Window>,
+    pub windows: BTreeMap<String, Window>,
     /// Opacos
-    pub walls: Vec<Wall>,
+    pub walls: BTreeMap<String, Wall>,
     /// Puentes térmicos
-    pub thermal_bridges: Vec<ThermalBridge>,
+    pub thermal_bridges: BTreeMap<String, ThermalBridge>,
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
 pub struct ConstructionElements {
-    pub windows: Vec<WindowCons>,
-    pub walls: Vec<WallCons>,
+    /// Construcciones de huecos
+    pub windows: BTreeMap<String, WindowCons>,
+    /// Construcciones de opacos
+    pub walls: BTreeMap<String, WallCons>,
 }
 
 /// Condiciones de contorno de los cerramientos

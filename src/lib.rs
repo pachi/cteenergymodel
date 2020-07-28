@@ -34,7 +34,7 @@ pub mod wingui;
 extern crate failure;
 
 use failure::Error;
-use std::path::Path;
+use std::{collections::BTreeMap, path::Path};
 
 use types::{
     Boundaries, ConstructionElements, EnvelopeElements, EnvolventeCteData, Space, ThermalBridge,
@@ -59,34 +59,37 @@ Publicado bajo licencia MIT
     )
 }
 
-/// Construye lista de espacios a partir de datos BDL (Data)
-pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
+/// Construye diccionario de espacios a partir de datos BDL (Data)
+pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<BTreeMap<String, Space>, failure::Error> {
     bdl.spaces
         .iter()
         .map(|s| {
             let area = fround2(s.area());
             let height_net = s.space_height(&bdl)?;
             let height_gross = s.height;
-            Ok(Space {
-                name: s.name.clone(),
-                area,
-                height_net,
-                height_gross,
-                inside_tenv: s.insidete,
-                multiplier: s.multiplier,
-                space_type: match s.stype.as_ref() {
-                    "CONDITIONED" => "ACONDICIONADO",
-                    "UNHABITED" => "NO_HABITABLE",
-                    _ => "NO_ACONDICIONADO",
-                }
-                .to_string(),
-            })
+            Ok((
+                s.name.clone(),
+                Space {
+                    name: s.name.clone(),
+                    area,
+                    height_net,
+                    height_gross,
+                    inside_tenv: s.insidete,
+                    multiplier: s.multiplier,
+                    space_type: match s.stype.as_ref() {
+                        "CONDITIONED" => "ACONDICIONADO",
+                        "UNHABITED" => "NO_HABITABLE",
+                        _ => "NO_ACONDICIONADO",
+                    }
+                    .to_string(),
+                },
+            ))
         })
-        .collect::<Result<Vec<Space>, Error>>()
+        .collect::<Result<BTreeMap<String, Space>, Error>>()
 }
 
 /// Construye muros de la envolvente a partir de datos BDL
-fn walls_from_bdl(bdl: &bdl::Data) -> Result<Vec<Wall>, Error> {
+fn walls_from_bdl(bdl: &bdl::Data) -> Result<BTreeMap<String, Wall>, Error> {
     // Desviación general respecto al Norte (criterio BDL)
     let northangle = bdl
         .meta
@@ -98,65 +101,86 @@ fn walls_from_bdl(bdl: &bdl::Data) -> Result<Vec<Wall>, Error> {
     Ok(bdl
         .walls
         .iter()
-        .map(|wall| -> Result<Wall, Error> {
-            Ok(Wall {
-            name: wall.name.clone(),
-            cons: wall.construction.to_string(),
-            a: fround2(wall.net_area(bdl)?),
-            space: wall.space.clone(),
-            nextto: wall.nextto.clone(),
-            bounds: wall.bounds.into(),
-            azimuth: fround2(utils::orientation_bdl_to_52016(
-                wall.azimuth(northangle, &bdl)?,
-            )),
-            tilt: fround2(wall.tilt),
-            })
+        .map(|wall| -> Result<(String, Wall), Error> {
+            Ok((
+                wall.name.clone(),
+                Wall {
+                    name: wall.name.clone(),
+                    cons: wall.construction.to_string(),
+                    a: fround2(wall.net_area(bdl)?),
+                    space: wall.space.clone(),
+                    nextto: wall.nextto.clone(),
+                    bounds: wall.bounds.into(),
+                    azimuth: fround2(utils::orientation_bdl_to_52016(
+                        wall.azimuth(northangle, &bdl)?,
+                    )),
+                    tilt: fround2(wall.tilt),
+                },
+            ))
         })
-        .collect::<Result<Vec<Wall>, _>>()?)
-    }
+        .collect::<Result<BTreeMap<String, Wall>, _>>()?)
+}
 
 /// Construye huecos de la envolvente a partir de datos BDL
-fn windows_from_bdl(bdl: &bdl::Data) -> Vec<Window> {
+fn windows_from_bdl(bdl: &bdl::Data) -> BTreeMap<String, Window> {
     bdl.windows
         .iter()
-        .map(|win| Window {
-            name: win.name.clone(),
-            cons: win.construction.to_string(),
-            wall: win.wall.clone(),
-            width: fround2(win.width),
-            height: fround2(win.height),
-            setback: win.setback,
+        .map(|win| {
+            (
+                win.name.clone(),
+                Window {
+                    name: win.name.clone(),
+                    cons: win.construction.to_string(),
+                    wall: win.wall.clone(),
+                    width: fround2(win.width),
+                    height: fround2(win.height),
+                    setback: win.setback,
+                },
+            )
         })
         .collect()
-    }
+}
 
 /// Construye puentes térmicos de la envolvente a partir de datos BDL
-fn thermal_bridges_from_bdl(bdl: &bdl::Data) -> Vec<ThermalBridge> {
+fn thermal_bridges_from_bdl(bdl: &bdl::Data) -> BTreeMap<String, ThermalBridge> {
     // PTs
     bdl.tbridges
         .iter()
-        .map(|tb| ThermalBridge {
-            name: tb.name.clone(),
-            l: fround2(tb.length.unwrap_or(0.0)),
-            psi: tb.psi,
+        .map(|tb| {
+            (
+                tb.name.clone(),
+                ThermalBridge {
+                    name: tb.name.clone(),
+                    l: fround2(tb.length.unwrap_or(0.0)),
+                    psi: tb.psi,
+                },
+            )
         })
         .collect()
 }
 
 /// Construcciones de muros a partir de datos BDL
-fn wallcons_from_bdl(bdl: &bdl::Data) -> Result<Vec<WallCons>, Error> {
-    let mut wcnames: Vec<String> = bdl
-        .walls
-        .iter()
-        .map(|w| w.construction.clone())
+fn wallcons_from_bdl(
+    walls: &BTreeMap<String, Wall>,
+    bdl: &bdl::Data,
+) -> Result<BTreeMap<String, WallCons>, Error> {
+    // let mut wcnames: Vec<String> = bdl
+    //     .walls
+    //     .iter()
+    //     .map(|w| w.construction.clone())
+    //     .collect::<Vec<String>>();
+    let mut wcnames = walls
+        .values()
+        .map(|w| w.cons.clone())
         .collect::<Vec<String>>();
     wcnames.sort();
     wcnames.dedup();
 
     wcnames
         .iter()
-        .map(|wcons| {
-            bdl.db
+        .map(|wcons| -> Result<(String, WallCons), Error> {
+            let wallcons = bdl
+                .db
                 .wallcons
                 .get(wcons)
                 .and_then(|cons| {
@@ -172,13 +196,14 @@ fn wallcons_from_bdl(bdl: &bdl::Data) -> Result<Vec<WallCons>, Error> {
                         absorptance,
                     })
                 })
-                .ok_or_else(|| format_err!("Construcción de muro no encontrada: {}", wcons))
+                .ok_or_else(|| format_err!("Construcción de muro no encontrada: {}", wcons))?;
+            Ok((wallcons.name.clone(), wallcons))
         })
-        .collect::<Result<Vec<_>, _>>()
+        .collect::<Result<BTreeMap<_, _>, _>>()
 }
 
 /// Construcciones de huecos a partir de datos BDL
-fn windowcons_from_bdl(bdl: &bdl::Data) -> Result<Vec<WindowCons>, Error> {
+fn windowcons_from_bdl(bdl: &bdl::Data) -> Result<BTreeMap<String, WindowCons>, Error> {
     let mut wcnames: Vec<String> = bdl
         .windows
         .iter()
@@ -209,15 +234,18 @@ fn windowcons_from_bdl(bdl: &bdl::Data) -> Result<Vec<WindowCons>, Error> {
                     let gglshwi = cons.gglshwi.unwrap_or(gglwi);
                     let infcoeff_100 = cons.infcoeff;
                     let u = fround2(cons.u(&bdl.db.frames, &bdl.db.glasses).unwrap_or_default());
-                    Some(WindowCons {
-                        name: cons.name.clone(),
-                        group: cons.group.clone(),
-                        u,
-                        ff,
-                        gglwi,
-                        gglshwi,
-                        infcoeff_100,
-                    })
+                    Some((
+                        cons.name.clone(),
+                        WindowCons {
+                            name: cons.name.clone(),
+                            group: cons.group.clone(),
+                            u,
+                            ff,
+                            gglwi,
+                            gglshwi,
+                            infcoeff_100,
+                        },
+                    ))
                 })
                 .ok_or_else(|| {
                     format_err!(
@@ -226,20 +254,19 @@ fn windowcons_from_bdl(bdl: &bdl::Data) -> Result<Vec<WindowCons>, Error> {
                     )
                 })
         })
-        .collect::<Result<Vec<_>, _>>()
+        .collect::<Result<BTreeMap<_, _>, _>>()
 }
 
 /// Vector con nombre y U de muros, para poder comprobar diferencias en JSON
 pub fn walls_u_from_data(
-    walls: &Vec<Wall>,
-    wallcons: &Vec<WallCons>,
+    walls: &BTreeMap<String, Wall>,
+    wallcons: &BTreeMap<String, WallCons>,
 ) -> Result<Vec<(String, Boundaries, f32)>, Error> {
     walls
-        .iter()
+        .values()
         .map(|w| {
             wallcons
-                .iter()
-                .find(|c| c.name == w.cons)
+                .get(&w.cons)
                 .and_then(|c| Some((w.name.clone(), w.bounds, w.u(c))))
         })
         .collect::<Option<Vec<_>>>()
@@ -248,13 +275,13 @@ pub fn walls_u_from_data(
 
 /// Vector con nombre y Fshobst de huecos, para poder comprobar diferencias en JSON
 pub fn windows_fshobst_from_data(
-    windows: &[Window],
-    walls: &[Wall],
+    windows: &BTreeMap<String, Window>,
+    walls: &BTreeMap<String, Wall>,
 ) -> Result<Vec<(String, f32)>, Error> {
     Ok(windows
-        .iter()
+        .values()
         .map(|w| {
-            let wall = walls.iter().find(|wall| wall.name == w.wall).unwrap();
+            let wall = walls.get(&w.wall).unwrap();
             (w.name.clone(), w.fshobst(&wall))
         })
         .collect::<Vec<_>>())
@@ -269,8 +296,9 @@ pub fn ecdata_from_xml(
     let walls = walls_from_bdl(&ctehexmldata.bdldata)?;
     let windows = windows_from_bdl(&ctehexmldata.bdldata);
     let thermal_bridges = thermal_bridges_from_bdl(&ctehexmldata.bdldata);
-    let wallcons = wallcons_from_bdl(&ctehexmldata.bdldata)?;
+    let wallcons = wallcons_from_bdl(&walls, &ctehexmldata.bdldata)?;
     let windowcons = windowcons_from_bdl(&ctehexmldata.bdldata)?;
+    let spaces = spaces_from_bdl(&ctehexmldata.bdldata)?;
     let walls_u = walls_u_from_data(&walls, &wallcons)?;
     let windows_fshobst = windows_fshobst_from_data(&windows, &walls)?;
 
