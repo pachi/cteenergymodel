@@ -105,10 +105,10 @@ fn test_test_spaces_caso_a() {
     let xmldata = ctehexml::parse(&ctehexmlpath.unwrap()).unwrap();
     let bdl = xmldata.bdldata;
 
-    for s in tbl.spaces {
-        let spc = bdl.get_space(&s.name).unwrap();
+    for (name, space) in tbl.spaces {
+        let spc = bdl.get_space(&name).unwrap();
         let poly = &spc.polygon;
-        assert_eq!(s.area, poly.area())
+        assert_eq!(space.area, poly.area())
     }
 }
 

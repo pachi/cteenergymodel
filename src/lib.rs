@@ -347,7 +347,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
             if tuple.1 != Boundaries::INTERIOR {
                 continue;
             };
-            let w = tbldata.elements.iter().find(|w| w.name == tuple.0).unwrap();
+            let w = tbldata.elements.get(&tuple.0).unwrap();
             tuple.2 = fround2(w.u);
         }
     }

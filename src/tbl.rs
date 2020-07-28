@@ -41,6 +41,7 @@ SOFTWARE.
 //! ```
 
 use std::{
+    collections::BTreeMap,
     path::{Path, PathBuf},
     str::FromStr,
 };
@@ -177,9 +178,9 @@ impl FromStr for Space {
 #[derive(Debug)]
 pub struct Tbl {
     /// Lista de elementos
-    pub elements: Vec<Element>,
+    pub elements: BTreeMap<String, Element>,
     /// Lista de espacios (zonas térmicas)
-    pub spaces: Vec<Space>,
+    pub spaces: BTreeMap<String, Space>,
 }
 
 /// Interpreta archivo .tbl de datos de elementos y espacios del modelo
@@ -210,7 +211,7 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<Tbl, Error> {
     let numspaces = nums[1];
 
     // Datos de elementos
-    let mut elements: Vec<Element> = Vec::new();
+    let mut elements: BTreeMap<String, Element> = BTreeMap::new();
     let mut idxelem: i32 = 0;
     while let Some(line) = lines.next() {
         let name = line.trim_matches('"').trim();
@@ -222,7 +223,7 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<Tbl, Error> {
                 "Error al leer el archivo .tbl: formato desconocido del elemento {}",
                 name
             ))?;
-        elements.push(element);
+        elements.insert(name.to_string(), element);
         idxelem += 1;
         if idxelem == numelements {
             break;
@@ -230,7 +231,7 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<Tbl, Error> {
     }
 
     // Datos de espacios
-    let mut spaces: Vec<Space> = Vec::new();
+    let mut spaces: BTreeMap<String, Space> = BTreeMap::new();
     let mut idxspc: i32 = 0;
     while let Some(line) = lines.next() {
         let name = line.trim_matches('"');
@@ -246,7 +247,7 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<Tbl, Error> {
                 "Error al leer el archivo .tbl: formato desconocido del espacio {}",
                 name
             ))?;
-        spaces.push(space);
+        spaces.insert(name.to_string(), space);
         idxspc += 1;
         if idxspc == numspaces {
             break;
