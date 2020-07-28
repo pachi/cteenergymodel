@@ -39,11 +39,11 @@ pub use super::WallCons;
 /// Se calcula, para huecos verticales, de acuerdo a la tabla 17 del DA DB-HE/1 (p. 19).
 pub fn fshobst_for_setback(tilt: f32, azimuth: f32, width: f32, height: f32, setback: f32) -> f32 {
     // Calcular según orientación e inclinación
+    let rh = setback / height;
+    let rw = setback / width;
     match tilt.into() {
-        // Elementos verticales
+        // Elementos verticales - Tabla 17 del DA DB-HE/1 (p.19)
         SIDE => {
-            let rh = setback / height;
-            let rw = setback / width;
             let range_rh = if rh < 0.05 {
                 0
             } else if rh <= 0.1 {
@@ -128,8 +128,58 @@ pub fn fshobst_for_setback(tilt: f32, azimuth: f32, width: f32, height: f32, set
             }
         }
         TOP => {
-            // TODO: hacer con tabla 19
-            1.0
+            // Elementos horizontales: tabla 19 DA DB-HE/1 p.19
+            let range_rh = if rh <= 0.1 {
+                0
+            } else if rh <= 0.5 {
+                1
+            } else if rh <= 1.0 {
+                2
+            } else if rh <= 2.0 {
+                3
+            } else if rh <= 5.0 {
+                4
+            } else {
+                5
+            };
+            let range_rw = if rw <= 0.1 {
+                0
+            } else if rw <= 0.5 {
+                1
+            } else if rw <= 1.0 {
+                2
+            } else if rw <= 2.0 {
+                3
+            } else if rw <= 5.0 {
+                4
+            } else {
+                5
+            };
+            let rmin = i32::min(range_rh, range_rw);
+            let rmax = i32::max(range_rh, range_rw);
+            match (rmax, rmin) {
+                (0, 0) => 0.42,
+                (1, 0) => 0.43,
+                (1, 1) => 0.46,
+                (2, 0) => 0.43,
+                (2, 1) => 0.48,
+                (2, 2) => 0.52,
+                (3, 0) => 0.43,
+                (3, 1) => 0.50,
+                (3, 2) => 0.55,
+                (3, 3) => 0.60,
+                (4, 0) => 0.44,
+                (4, 1) => 0.51,
+                (4, 2) => 0.58,
+                (4, 3) => 0.66,
+                (4, 4) => 0.75,
+                (5, 0) => 0.44,
+                (5, 1) => 0.52,
+                (5, 2) => 0.59,
+                (5, 3) => 0.68,
+                (5, 4) => 0.79,
+                _ => 0.85,
+            }
         }
         BOTTOM => 1.0,
     }
