@@ -24,8 +24,6 @@ SOFTWARE.
 pub mod cte;
 pub mod parsers;
 pub mod utils;
-#[cfg(windows)]
-pub mod wingui;
 
 #[macro_use]
 extern crate failure;

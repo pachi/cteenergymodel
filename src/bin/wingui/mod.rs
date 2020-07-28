@@ -1,16 +1,39 @@
 #![cfg(windows)]
 // Let's put this so that it won't open the console
 #![windows_subsystem = "windows"]
+/* -*- coding: utf-8 -*-
 
-/// GUI for the hulc2envolventecte app
-///
-/// Windows has a button to open a dialog to select a directory
-/// This dir is shown in a label
-/// Output file is also selected.
-///
-/// See https://docs.microsoft.com/en-us/windows/desktop/learnwin32/learn-to-program-for-windows
-/// See Tomaka's error handling strategy for HRESULT (check_result): https://github.com/tomaka/cpal/blob/master/src/wasapi/mod.rs
-/// See retep998's string handling in https://users.rust-lang.org/t/tidy-pattern-to-work-with-lpstr-mutable-char-array/2976
+Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+
+//! GUI for the hulc2envolventecte app
+//!
+//! Windows has a button to open a dialog to select a directory
+//! This dir is shown in a label
+//! Output file is also selected.
+//!
+//! See https://docs.microsoft.com/en-us/windows/desktop/learnwin32/learn-to-program-for-windows
+//! See Tomaka's error handling strategy for HRESULT (check_result): https://github.com/tomaka/cpal/blob/master/src/wasapi/mod.rs
+//! See retep998's string handling in https://users.rust-lang.org/t/tidy-pattern-to-work-with-lpstr-mutable-char-array/2976
+
 use std::collections::hash_map::DefaultHasher;
 use std::error::Error;
 use std::hash::{Hash, Hasher};
@@ -22,6 +45,11 @@ use winapi::shared::ntdef::*;
 use winapi::shared::windef::*;
 use winapi::um::libloaderapi::GetModuleHandleW;
 use winapi::um::winuser::*;
+
+use hulc2envolventecte::{
+    collect_hulc_data, get_copytxt,
+    parsers::{ctehexml, kyg, tbl},
+};
 
 // Global Model to keep state
 struct Model {
@@ -277,7 +305,7 @@ unsafe fn create_gui(hparent: HWND) {
     MODEL.h_edit_msg = CreateWindowExW(
         0,
         to_wstring("edit").as_ptr(),
-        to_wstring(&crate::get_copytxt()).as_ptr(),
+        to_wstring(&get_copytxt()).as_ptr(),
         WS_VSCROLL
             | WS_BORDER
             | WS_CHILD
@@ -386,8 +414,6 @@ fn run_message_loop(hwnd: HWND) -> WPARAM {
 }
 
 fn do_convert() {
-    use crate::{collect_hulc_data, ctehexml, kyg};
-
     let dir_in = unsafe { MODEL.dir_in };
     append_to_edit(&format!("\nLocalizando archivos de datos en '{}'", dir_in));
 
