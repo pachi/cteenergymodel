@@ -22,8 +22,18 @@ SOFTWARE.
 */
 
 //! Funciones para el cálculo de parámetros de los elementos
-//! - Fshobst para un hueco, a partir de su retranqueo
+//! - Fshobst para un hueco
+//!     - a partir de su retranqueo
+//!     - TODO: para lamas horizontales y/o verticales
+//!     - TODO: para voladizos
 //! - U de una composión constructiva de opaco, según su posición
+//! - factores de (UNE-EN ISO 13789:2017):
+//!     - b de un elemento de separación con un espacio no acondicionado (UNE-EN ISO 13789:2017) (salvo que esté en contacto con cámara sanitaria UNE-EN ISO 13370)
+//!         - q_iu = 0
+//!         - q_ue = V_u · n_ue; clase de permeablidad (tipo) y n_ue (tabla 7) ->  1 => 0.1 renh, 2 => 0.5 renh, 3 => 1 renh, 4 => 3 renh, 5 => 10 renh.
+//!         - UNE-EN ISO 6946 -> 5.4.3
+//!     - bm para acoplamiento con el terremo
+//!     - b con edificios adyacentes -> b = 0 (depende de la diferencia de temperaturas, pero es cero si es igual)
 
 use crate::utils::fround2;
 
