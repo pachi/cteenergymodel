@@ -29,8 +29,9 @@ use serde::Serialize;
 
 // ---------- Estructura general de datos --------------
 
+// #[serde(into = "SimpleEnvolventeCteData", from = "SimpleEnvolventeCteDataVecs")]
 #[derive(Debug, Clone, Serialize)]
-pub struct CteModel {
+pub struct Model {
     pub climate: String,
     pub envelope: Envelope,
     pub constructions: Constructions,
@@ -42,7 +43,7 @@ pub struct CteModel {
     pub windows_fshobst: Vec<(String, f32)>,
 }
 
-impl CteModel {
+impl Model {
     pub fn as_json(&self) -> Result<String, Error> {
         let json = serde_json::to_string_pretty(&self)?;
         Ok(json)

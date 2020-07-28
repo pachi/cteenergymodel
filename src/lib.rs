@@ -22,10 +22,10 @@ SOFTWARE.
  */
 
 pub mod bdl;
+pub mod cte;
 pub mod ctehexml;
 pub mod kyg;
 pub mod tbl;
-pub mod types;
 pub mod utils;
 #[cfg(windows)]
 pub mod wingui;
@@ -36,8 +36,8 @@ extern crate failure;
 use failure::Error;
 use std::{collections::BTreeMap, path::Path};
 
-use types::{
-    Boundaries, Constructions, CteModel, Envelope, Space, ThermalBridge, Wall, WallCons, Window,
+use cte::model::{
+    Boundaries, Constructions, Envelope, Model, Space, ThermalBridge, Wall, WallCons, Window,
     WindowCons,
 };
 use utils::fround2;
@@ -288,7 +288,7 @@ pub fn windows_fshobst_from_data(
 }
 
 /// Genera datos de EnvolventeCTE a partir de datos BDL en el XML
-pub fn ecdata_from_xml(ctehexmldata: &ctehexml::CtehexmlData) -> Result<CteModel, failure::Error> {
+pub fn ecdata_from_xml(ctehexmldata: &ctehexml::CtehexmlData) -> Result<Model, failure::Error> {
     // Zona climática
     let climate = ctehexmldata.climate.clone();
     let walls = walls_from_bdl(&ctehexmldata.bdldata)?;
@@ -300,7 +300,7 @@ pub fn ecdata_from_xml(ctehexmldata: &ctehexml::CtehexmlData) -> Result<CteModel
     let walls_u = walls_u_from_data(&walls, &wallcons)?;
     let windows_fshobst = windows_fshobst_from_data(&windows, &walls)?;
 
-    Ok(CteModel {
+    Ok(Model {
         climate,
         envelope: Envelope {
             walls,
@@ -319,7 +319,7 @@ pub fn ecdata_from_xml(ctehexmldata: &ctehexml::CtehexmlData) -> Result<CteModel
 
 /// Incluye los datos que todavía no calculamos desde el xml
 pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
-    ecdata: &mut CteModel,
+    ecdata: &mut Model,
     kygpath: Option<T>,
     tblpath: Option<T>,
 ) {
@@ -364,13 +364,13 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
     ctehexmlpath: Option<T>,
     kygpath: Option<T>,
     tblpath: Option<T>,
-) -> Result<CteModel, failure::Error> {
+) -> Result<Model, failure::Error> {
     // Carga .ctehexml y BBDD HULC
     let ctehexmlpath = &ctehexmlpath.ok_or_else(|| {
         format_err!("No se ha podido localizar el archivo .ctehexml del proyecto")
     })?;
 
-    // Genera CteModel desde BDL
+    // Genera Model desde BDL
     let ctehexmldata = ctehexml::parse_with_catalog(&ctehexmlpath)?;
     let mut ecdata = ecdata_from_xml(&ctehexmldata)?;
 
