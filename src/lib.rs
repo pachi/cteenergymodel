@@ -36,9 +36,9 @@ extern crate failure;
 use failure::Error;
 use std::{collections::BTreeMap, path::Path};
 
-use cte::model::{
-    Boundaries, Constructions, Envelope, Model, Space, ThermalBridge, Wall, WallCons, Window,
-    WindowCons,
+use cte::{
+    model::{Constructions, Envelope},
+    Boundaries, Model, Space, ThermalBridge, Wall, WallCons, Window, WindowCons,
 };
 use utils::fround2;
 
