@@ -1,5 +1,8 @@
 use criterion::{criterion_group, criterion_main, Criterion};
-use hulc2envolventecte::{collect_hulc_data, ctehexml, kyg, tbl};
+use hulc2envolventecte::{
+    collect_hulc_data,
+    parsers::{ctehexml, kyg, tbl},
+};
 
 fn load_caso_a() {
     let ctehexmlpath = ctehexml::find_ctehexml("tests/casoA").unwrap();

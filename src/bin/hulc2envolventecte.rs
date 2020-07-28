@@ -30,7 +30,11 @@ use std::process::exit;
 #[cfg(windows)]
 use hulc2envolventecte::wingui;
 #[cfg(not(windows))]
-use hulc2envolventecte::{collect_hulc_data, ctehexml, get_copytxt, kyg, tbl, PROGNAME};
+use hulc2envolventecte::{
+    collect_hulc_data, get_copytxt,
+    parsers::{ctehexml, kyg, tbl},
+    PROGNAME,
+};
 
 #[cfg(windows)]
 fn main() {

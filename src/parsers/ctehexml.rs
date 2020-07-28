@@ -23,10 +23,7 @@ SOFTWARE.
 
 // Funciones relacionadas con la interpretación de archivos .ctehexml
 
-use std::{
-    collections::HashMap,
-    path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
 
 use failure::Error;
 
@@ -41,7 +38,6 @@ pub struct CtehexmlData {
     pub definicion_sistemas: String,
     // Datos legacy - a eliminar en refactorización
     pub climate: String,
-    pub gglshwi: HashMap<String, f32>,
 }
 
 /// Localiza archivo .ctehexml en el directorio de proyecto basedir
@@ -80,28 +76,6 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
 
     let bdldata = Data::new(&entrada_grafica_lider)?;
 
-    // gglshwi de huecos
-    let gglshwi: HashMap<String, f32> = bdldata
-        .windows
-        .iter()
-        // TODO: usamos el default pero deberíamos adaptarnos a los distintos formatos:
-        // TODO: - información pública -> gglshwi en WINDOW
-        // TODO: - versión final -> gglshwi en GAP
-        // TODO: - LIDER antiguo -> no existe
-        .map(|w| {
-            (
-                w.name.to_string(),
-                bdldata
-                    .db
-                    .windowcons
-                    .get(&w.construction)
-                    .unwrap()
-                    .gglshwi
-                    .unwrap_or_default(),
-            )
-        })
-        .collect();
-
     // Zona climática
     let climate = datos_generales
         .descendants()
@@ -115,7 +89,6 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
         datos_generales: datos_generales.text().unwrap_or("").trim().to_string(),
         bdldata,
         definicion_sistemas,
-        gglshwi,
         climate,
     })
 }

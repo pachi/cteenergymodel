@@ -21,11 +21,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-pub mod bdl;
 pub mod cte;
-pub mod ctehexml;
-pub mod kyg;
-pub mod tbl;
+pub mod parsers;
 pub mod utils;
 #[cfg(windows)]
 pub mod wingui;
@@ -40,6 +37,7 @@ use cte::{
     Boundaries, Constructions, Envelope, Model, Space, SpaceType, ThermalBridge, Wall, WallCons,
     Window, WindowCons,
 };
+use parsers::{bdl, ctehexml, kyg, tbl};
 use utils::fround2;
 
 pub const PROGNAME: &str = env!("CARGO_PKG_NAME");

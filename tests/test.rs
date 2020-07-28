@@ -21,7 +21,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use hulc2envolventecte::{bdl, collect_hulc_data, ctehexml, kyg, tbl, utils};
+use hulc2envolventecte::{
+    collect_hulc_data,
+    parsers::{bdl, ctehexml, kyg, tbl},
+    utils,
+};
 use std::convert::TryFrom;
 
 macro_rules! assert_almost_eq {
@@ -37,8 +41,7 @@ macro_rules! assert_almost_eq {
 
 #[test]
 fn test_polygon() {
-    use bdl::Polygon;
-    use hulc2envolventecte::bdl::BdlBlock;
+    use bdl::{BdlBlock, Polygon};
     let polblk: BdlBlock =
         r#"\"P01_E01_Pol2\" = POLYGON                                             
     V1   =( 14.97, 11.39 )
@@ -59,8 +62,7 @@ fn test_polygon() {
 
 #[test]
 fn test_polygon2() {
-    use bdl::Polygon;
-    use hulc2envolventecte::bdl::BdlBlock;
+    use bdl::{BdlBlock, Polygon};
     let polblk: BdlBlock =
         r#"\"TEST_POLYGON\" = POLYGON                                             
     V1   =( 1, 1 )
