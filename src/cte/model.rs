@@ -46,8 +46,6 @@ pub struct Model {
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
     pub walls_u: Vec<(String, Boundaries, f32)>,
-    /// Factor de obstrucción de obstáculos remotos
-    pub windows_fshobst: Vec<(String, f32)>,
 }
 
 impl Model {

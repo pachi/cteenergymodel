@@ -32,6 +32,7 @@ use failure::Error;
 use std::{collections::BTreeMap, path::Path};
 
 use cte::{
+    params_compute::{fshobst_for_setback, u_for_wall},
     Boundaries, Constructions, Envelope, Model, Space, SpaceType, ThermalBridge, Wall, WallCons,
     Window, WindowCons,
 };
@@ -117,19 +118,21 @@ fn walls_from_bdl(bdl: &bdl::Data) -> Result<BTreeMap<String, Wall>, Error> {
 }
 
 /// Construye huecos de la envolvente a partir de datos BDL
-fn windows_from_bdl(bdl: &bdl::Data) -> BTreeMap<String, Window> {
+fn windows_from_bdl(walls: &BTreeMap<String, Wall>, bdl: &bdl::Data) -> BTreeMap<String, Window> {
     bdl.windows
         .iter()
         .map(|win| {
+            let wall = walls.get(&win.wall).unwrap();
+            let fshobst =
+                fshobst_for_setback(wall.tilt, wall.azimuth, win.width, win.height, win.setback);
             (
                 win.name.clone(),
                 Window {
                     name: win.name.clone(),
                     cons: win.construction.to_string(),
                     wall: win.wall.clone(),
-                    width: fround2(win.width),
-                    height: fround2(win.height),
-                    setback: win.setback,
+                    area: fround2(win.width * win.height),
+                    fshobst,
                 },
             )
         })
@@ -255,26 +258,16 @@ pub fn walls_u_from_data(
     walls
         .values()
         .map(|w| {
-            wallcons
-                .get(&w.cons)
-                .and_then(|c| Some((w.name.clone(), w.bounds, w.u(c))))
+            wallcons.get(&w.cons).map(|c| {
+                (
+                    w.name.clone(),
+                    w.bounds,
+                    u_for_wall(w.tilt.into(), w.bounds.into(), c),
+                )
+            })
         })
         .collect::<Option<Vec<_>>>()
         .ok_or_else(|| format_err!("No se han podido calcular las U de los muros"))
-}
-
-/// Vector con nombre y Fshobst de huecos, para poder comprobar diferencias en JSON
-pub fn windows_fshobst_from_data(
-    windows: &BTreeMap<String, Window>,
-    walls: &BTreeMap<String, Wall>,
-) -> Result<Vec<(String, f32)>, Error> {
-    Ok(windows
-        .values()
-        .map(|w| {
-            let wall = walls.get(&w.wall).unwrap();
-            (w.name.clone(), w.fshobst(&wall))
-        })
-        .collect::<Vec<_>>())
 }
 
 /// Genera datos de EnvolventeCTE a partir de datos BDL en el XML
@@ -282,13 +275,12 @@ pub fn ecdata_from_xml(ctehexmldata: &ctehexml::CtehexmlData) -> Result<Model, f
     // Zona climática
     let climate = ctehexmldata.climate.clone();
     let walls = walls_from_bdl(&ctehexmldata.bdldata)?;
-    let windows = windows_from_bdl(&ctehexmldata.bdldata);
+    let windows = windows_from_bdl(&walls, &ctehexmldata.bdldata);
     let thermal_bridges = thermal_bridges_from_bdl(&ctehexmldata.bdldata);
     let wallcons = wallcons_from_bdl(&walls, &ctehexmldata.bdldata)?;
     let windowcons = windowcons_from_bdl(&ctehexmldata.bdldata)?;
     let spaces = spaces_from_bdl(&ctehexmldata.bdldata)?;
     let walls_u = walls_u_from_data(&walls, &wallcons)?;
-    let windows_fshobst = windows_fshobst_from_data(&windows, &walls)?;
 
     Ok(Model {
         climate,
@@ -303,7 +295,6 @@ pub fn ecdata_from_xml(ctehexmldata: &ctehexml::CtehexmlData) -> Result<Model, f
         },
         spaces,
         walls_u,
-        windows_fshobst,
     })
 }
 
@@ -326,11 +317,10 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
             }
         }
 
-        for tuple in &mut ecdata.windows_fshobst {
-            let winname = tuple.0.as_str();
-            let kygwin = kygdata.windows.get(winname);
+        for win in ecdata.envelope.windows.values_mut() {
+            let kygwin = kygdata.windows.get(&win.name);
             if let Some(kw) = kygwin {
-                tuple.1 = fround2(kw.fshobst);
+                win.fshobst = fround2(kw.fshobst);
             }
         }
     }

@@ -26,6 +26,7 @@ SOFTWARE.
 pub mod common;
 pub mod elements;
 pub mod model;
+pub mod params_compute;
 mod simplemodel;
 
 pub use common::{Boundaries, Orientation, SpaceType, Tilt};

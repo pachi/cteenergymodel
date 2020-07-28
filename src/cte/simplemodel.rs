@@ -58,8 +58,6 @@ pub struct SimpleModel {
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
     pub walls_u: Vec<(String, Boundaries, f32)>,
-    /// Factor de obstrucción de obstáculos remotos
-    pub windows_fshobst: Vec<(String, f32)>,
 }
 
 impl From<Model> for SimpleModel {
@@ -77,7 +75,6 @@ impl From<Model> for SimpleModel {
             },
             spaces: m.spaces.values().cloned().collect(),
             walls_u: m.walls_u.clone(),
-            windows_fshobst: m.windows_fshobst.clone(),
         }
     }
 }
@@ -126,7 +123,6 @@ impl From<SimpleModel> for Model {
                 .map(|s| (s.name.clone(), s.clone()))
                 .collect(),
             walls_u: m.walls_u.clone(),
-            windows_fshobst: m.windows_fshobst.clone(),
         }
     }
 }
