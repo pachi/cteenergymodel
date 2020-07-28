@@ -1,3 +1,26 @@
+/* -*- coding: utf-8 -*-
+
+Copyright (c) 2018-2020 Rafael Villar Burke <pachi@ietcc.csic.es>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 //! Parser del Building Description Language (BDL) de DOE
 //!
 //! Bloques genéricos de BDL
@@ -178,7 +201,12 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
         if l == ".." {
             continue;
         };
-        if let [key, value] = l.splitn(2, '=').map(str::trim).collect::<Vec<_>>().as_slice() {
+        if let [key, value] = l
+            .splitn(2, '=')
+            .map(str::trim)
+            .collect::<Vec<_>>()
+            .as_slice()
+        {
             // Valores simples o con paréntesis
             let value = if value.starts_with('(') && !value.ends_with(')') {
                 let mut values = vec![*value];
@@ -195,7 +223,10 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
             };
             attributes.insert(key, &value);
         } else {
-            bail!("No se ha podido extraer clave y atributo de la línea '{}'", l)
+            bail!(
+                "No se ha podido extraer clave y atributo de la línea '{}'",
+                l
+            )
         }
     }
     Ok(attributes)

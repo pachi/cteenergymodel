@@ -1,6 +1,6 @@
 /* -*- coding: utf-8 -*-
 
-Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
+Copyright (c) 2018-2020 Rafael Villar Burke <pachi@ietcc.csic.es>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ pub fn get_copytxt() -> String {
     format!(
         "{} {} - Exportación de datos de HULC a EnvolventeCTE
 
-Copyright (c) 2018 Rafael Villar Burke <pachi@ietcc.csic.es>
+Copyright (c) 2018-2020 Rafael Villar Burke <pachi@ietcc.csic.es>
                    Daniel Jiménez González <danielj@ietcc.csic.es>
                    Marta Sorribes Gil <msorribes@ietcc.csic.es>
 

@@ -1,3 +1,26 @@
+/* -*- coding: utf-8 -*-
+
+Copyright (c) 2018-2020 Rafael Villar Burke <pachi@ietcc.csic.es>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 //! Parser del Building Description Language (BDL) de DOE
 //!
 //! Referencias:
@@ -32,10 +55,13 @@ impl AttrMap {
 
     /// Devuelve valor como BdlValue
     pub fn get(&self, attr: &str) -> Result<BdlValue, Error> {
-        self.0
-            .get(attr)
-            .map(|v| v.to_owned())
-            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+        self.0.get(attr).map(|v| v.to_owned()).ok_or_else(|| {
+            format_err!(
+                "Atributo '{}' no encontrado en el bloque '{:#?}'",
+                attr,
+                self
+            )
+        })
     }
 
     /// Devuelve valor como número
@@ -46,7 +72,13 @@ impl AttrMap {
                 BdlValue::Number(num) => Some(*num),
                 _ => None,
             })
-            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+            .ok_or_else(|| {
+                format_err!(
+                    "Atributo '{}' no encontrado en el bloque '{:#?}'",
+                    attr,
+                    self
+                )
+            })
     }
 
     /// Devuelve valor como String
@@ -57,14 +89,24 @@ impl AttrMap {
                 BdlValue::String(string) => Some(string.to_string()),
                 _ => None,
             })
-            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+            .ok_or_else(|| {
+                format_err!(
+                    "Atributo '{}' no encontrado en el bloque '{:#?}'",
+                    attr,
+                    self
+                )
+            })
     }
 
     /// Elimina un valor del diccionario y devuelve como BdlValue
     pub fn remove(&mut self, attr: &str) -> Result<BdlValue, Error> {
-        self.0
-            .remove(attr)
-            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+        self.0.remove(attr).ok_or_else(|| {
+            format_err!(
+                "Atributo '{}' no encontrado en el bloque '{:#?}'",
+                attr,
+                self
+            )
+        })
     }
 
     /// Elimina valor y devuelve como número
@@ -75,7 +117,13 @@ impl AttrMap {
                 BdlValue::Number(num) => Some(num),
                 _ => None,
             })
-            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+            .ok_or_else(|| {
+                format_err!(
+                    "Atributo '{}' no encontrado en el bloque '{:#?}'",
+                    attr,
+                    self
+                )
+            })
     }
 
     /// Elimina valor y devuelve como String
@@ -86,10 +134,15 @@ impl AttrMap {
                 BdlValue::String(string) => Some(string),
                 _ => None,
             })
-            .ok_or_else(|| format_err!("Atributo '{}' no encontrado en el bloque '{:#?}'", attr, self))
+            .ok_or_else(|| {
+                format_err!(
+                    "Atributo '{}' no encontrado en el bloque '{:#?}'",
+                    attr,
+                    self
+                )
+            })
     }
 }
-
 
 #[derive(Debug, Clone)]
 pub enum BdlValue {
@@ -134,7 +187,6 @@ impl std::convert::TryFrom<BdlValue> for f32 {
         }
     }
 }
-
 
 /// Interpreta lista de nombres con formato "("mat1", "mat2", "mat3", ...)"
 pub fn extract_namesvec<S: AsRef<str>>(input: S) -> Vec<String> {

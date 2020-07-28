@@ -1,3 +1,26 @@
+/* -*- coding: utf-8 -*-
+
+Copyright (c) 2018-2020 Rafael Villar Burke <pachi@ietcc.csic.es>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 //! Parser del Building Description Language (BDL) de DOE
 //!
 //! Elementos geométricos:
@@ -52,11 +75,14 @@ impl Polygon {
                 let first = self.vertices.get(0).unwrap().clone();
                 let mut vecs = self.vertices.clone();
                 vecs.push(first);
-                vecs.as_slice().windows(2).map(|win| {
-                    let vn = &win[0].vector;
-                    let vm = &win[1].vector;
-                    (vn.x - vm.x).hypot(vn.y - vm.y)
-                }).sum()
+                vecs.as_slice()
+                    .windows(2)
+                    .map(|win| {
+                        let vn = &win[0].vector;
+                        let vm = &win[1].vector;
+                        (vn.x - vm.x).hypot(vn.y - vm.y)
+                    })
+                    .sum()
             }
         }
     }
@@ -198,7 +224,6 @@ impl std::str::FromStr for Vector2D {
         }
     }
 }
-
 
 /// Vertex3D - Vértice, conjunto de nombre y vector 3d (x, y, z)
 /// Se usan para definir sombras
