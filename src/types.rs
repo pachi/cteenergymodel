@@ -30,10 +30,10 @@ use serde::Serialize;
 // ---------- Estructura general de datos --------------
 
 #[derive(Debug, Clone, Serialize)]
-pub struct EnvolventeCteData {
+pub struct CteModel {
     pub climate: String,
-    pub envelope: EnvelopeElements,
-    pub constructions: ConstructionElements,
+    pub envelope: Envelope,
+    pub constructions: Constructions,
     pub spaces: BTreeMap<String, Space>,
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
@@ -42,7 +42,7 @@ pub struct EnvolventeCteData {
     pub windows_fshobst: Vec<(String, f32)>,
 }
 
-impl EnvolventeCteData {
+impl CteModel {
     pub fn as_json(&self) -> Result<String, Error> {
         let json = serde_json::to_string_pretty(&self)?;
         Ok(json)
@@ -104,7 +104,7 @@ impl EnvolventeCteData {
 
 /// Elementos de la envolvente térmica
 #[derive(Debug, Clone, Default, Serialize)]
-pub struct EnvelopeElements {
+pub struct Envelope {
     /// Huecos
     pub windows: BTreeMap<String, Window>,
     /// Opacos
@@ -114,7 +114,7 @@ pub struct EnvelopeElements {
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
-pub struct ConstructionElements {
+pub struct Constructions {
     /// Construcciones de huecos
     pub windows: BTreeMap<String, WindowCons>,
     /// Construcciones de opacos
