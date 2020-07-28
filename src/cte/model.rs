@@ -21,18 +21,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+//! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y  metadatos
+
 use std::collections::BTreeMap;
 
 use failure::Error;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-use super::{Boundaries, Space, ThermalBridge, Wall, WallCons, Window, WindowCons};
+use super::{
+    simplemodel::SimpleModel, Boundaries, Space, ThermalBridge, Wall, WallCons, Window, WindowCons,
+};
 use crate::utils::fround2;
 
 // ---------- Estructura general de datos --------------
 
-// #[serde(into = "SimpleEnvolventeCteData", from = "SimpleEnvolventeCteDataVecs")]
-#[derive(Debug, Clone, Serialize)]
+#[serde(into = "SimpleModel", from = "SimpleModel")]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Model {
     pub climate: String,
     pub envelope: Envelope,
@@ -102,8 +106,6 @@ impl Model {
         fround2(v_env)
     }
 }
-
-// ---------- Elementos de la envolvente --------------
 
 /// Elementos de la envolvente térmica
 #[derive(Debug, Clone, Default, Serialize)]
