@@ -26,7 +26,7 @@ SOFTWARE.
 //! En este archivo no aparecen los elementos adiabáticos entre los cerramientos
 
 use std::{
-    collections::HashMap,
+    collections::{BTreeMap, HashMap},
     path::{Path, PathBuf},
 };
 
@@ -45,11 +45,11 @@ pub struct KyGElements {
     /// Valor de K global
     pub k: f32,
     /// Datos de huecos
-    pub windows: Vec<Window>,
+    pub windows: BTreeMap<String, Window>,
     /// Datos de opacos
-    pub walls: Vec<Wall>,
+    pub walls: BTreeMap<String, Wall>,
     /// Datos de PTs
-    pub thermal_bridges: Vec<ThermalBridge>,
+    pub thermal_bridges: BTreeMap<String, ThermalBridge>,
     /// Factores de insolación - uso desconocido
     pub hfactors: Vec<f32>,
 }
@@ -163,21 +163,24 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
                     } else {
                         (None, None, None, None, None)
                     };
-                    kyg.windows.push(Window {
-                        name: nombre.to_string(),
-                        orientation: orienta.replace("O", "W").to_string(),
-                        azimuth_n: 0.0, // Valor temporal, se completa más abajo
-                        wall: Default::default(),
-                        a: a.replace(",", ".").parse()?,
-                        u: u.replace(",", ".").parse()?,
-                        ff: ff.replace(",", ".").parse::<f32>()? / 100.0_f32,
-                        fshobst: 0.0, // Valor temporal, se completa más abajo
-                        ggln,
-                        unknown1,
-                        unknown2,
-                        infcoeff_100,
-                        cons,
-                    });
+                    kyg.windows.insert(
+                        nombre.to_string(),
+                        Window {
+                            name: nombre.to_string(),
+                            orientation: orienta.replace("O", "W").to_string(),
+                            azimuth_n: 0.0, // Valor temporal, se completa más abajo
+                            wall: Default::default(),
+                            a: a.replace(",", ".").parse()?,
+                            u: u.replace(",", ".").parse()?,
+                            ff: ff.replace(",", ".").parse::<f32>()? / 100.0_f32,
+                            fshobst: 0.0, // Valor temporal, se completa más abajo
+                            ggln,
+                            unknown1,
+                            unknown2,
+                            infcoeff_100,
+                            cons,
+                        },
+                    );
                 }
                 "Muro" => {
                     if vv.len() < 5 {
@@ -196,15 +199,18 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
                         (None, None, None)
                     };
 
-                    kyg.walls.push(Wall {
-                        name: nombre.to_string(),
-                        a: a.replace(",", ".").parse()?,
-                        u: u.replace(",", ".").parse()?,
-                        btrx: btrx.replace(",", ".").parse()?,
-                        wtype,
-                        orientation,
-                        cons,
-                    });
+                    kyg.walls.insert(
+                        nombre.to_string(),
+                        Wall {
+                            name: nombre.to_string(),
+                            a: a.replace(",", ".").parse()?,
+                            u: u.replace(",", ".").parse()?,
+                            btrx: btrx.replace(",", ".").parse()?,
+                            wtype,
+                            orientation,
+                            cons,
+                        },
+                    );
                 }
                 "PPTT" => {
                     if vv.len() < 4 {
@@ -213,12 +219,15 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
                     // En versiones más recientes se añade el sistema dimensional como dato extra
                     let (l, psi, nombre) = (vv[1], vv[2], vv[3]);
                     let sisdim = (if vv.len() > 4 { vv[4] } else { "" }).to_string();
-                    kyg.thermal_bridges.push(ThermalBridge {
-                        name: nombre.to_string(),
-                        l: l.replace(",", ".").parse()?,
-                        psi: psi.replace(",", ".").parse()?,
-                        sisdim,
-                    })
+                    kyg.thermal_bridges.insert(
+                        nombre.to_string(),
+                        ThermalBridge {
+                            name: nombre.to_string(),
+                            l: l.replace(",", ".").parse()?,
+                            psi: psi.replace(",", ".").parse()?,
+                            sisdim,
+                        },
+                    );
                 }
                 _ => println!("Desconocido"),
             };
@@ -278,8 +287,8 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
     }
 
     // Actualización de valores de fshobst disponibles en el KyGananciasSolares.txt
-    for mut hueco in &mut kyg.windows {
-        if let Some((azimuth_n, fshobst)) = qsolvalues.get(&hueco.name) {
+    for (name, mut hueco) in &mut kyg.windows {
+        if let Some((azimuth_n, fshobst)) = qsolvalues.get(name) {
             hueco.azimuth_n = *azimuth_n;
             hueco.fshobst = *fshobst;
         }

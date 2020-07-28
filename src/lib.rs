@@ -323,16 +323,16 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
         let kygdata = kyg::parse(&kygpath).unwrap();
 
         for tuple in &mut ecdata.walls_u {
-            let wallname = &tuple.0;
-            let kygwall = kygdata.walls.iter().find(|w| &*w.name == wallname);
+            let wallname = tuple.0.as_str();
+            let kygwall = kygdata.walls.get(wallname);
             if let Some(kw) = kygwall {
                 tuple.2 = fround2(kw.u);
             }
         }
 
         for tuple in &mut ecdata.windows_fshobst {
-            let winname = &tuple.0;
-            let kygwin = kygdata.windows.iter().find(|w| &*w.name == winname);
+            let winname = tuple.0.as_str();
+            let kygwin = kygdata.windows.get(winname);
             if let Some(kw) = kygwin {
                 tuple.1 = fround2(kw.fshobst);
             }
@@ -343,12 +343,12 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     // Básicamente son U de particiones interiores
     if let Some(tblpath) = &tblpath {
         let tbldata = tbl::parse(&tblpath).unwrap();
-        for tuple in &mut ecdata.walls_u {
-            if tuple.1 != Boundaries::INTERIOR {
+        for (name, boundary, mut value) in &mut ecdata.walls_u {
+            if *boundary != Boundaries::INTERIOR {
                 continue;
             };
-            let w = tbldata.elements.get(&tuple.0).unwrap();
-            tuple.2 = fround2(w.u);
+            let w = tbldata.elements.get(name.as_str()).unwrap();
+            value = fround2(w.u);
         }
     }
 }
