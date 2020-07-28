@@ -341,6 +341,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     // Básicamente son U de particiones interiores
     if let Some(tblpath) = &tblpath {
         let tbldata = tbl::parse(&tblpath).unwrap();
+        #[allow(unused_assignments, unused_variables)]
         for (name, boundary, mut value) in &mut ecdata.walls_u {
             if *boundary != Boundaries::INTERIOR {
                 continue;
