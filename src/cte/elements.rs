@@ -55,7 +55,7 @@ pub struct Wall {
     pub cons: String,
     /// Espacio al que pertenece el elemento opaco
     pub space: String,
-    /// Espacio adyacente con el que comunica el elemento opaco
+    /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
     pub nextto: Option<String>,
     /// Condiciones de contorno del cerramiento:
     /// - UNDERGROUND: cerramientos en contacxto con el terreno
@@ -74,6 +74,9 @@ pub struct Wall {
     /// Inclinación (beta) [0, 180]
     /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
     pub tilt: f32,
+    /// Profundidad del elemento en el terreno (m)
+    /// (solo en cerramientos en contacto con el terreno)
+    pub zground: Option<f32>,
 }
 
 /// Puente térmico
