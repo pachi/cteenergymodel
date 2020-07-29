@@ -104,9 +104,11 @@ pub struct Space {
     pub inside_tenv: bool,
     /// Multiplicador
     pub multiplier: f32,
-    // Tipo de espacio (ACONDICIONADO, NO_ACONDICIONADO, NO_HABITABLE)
+    /// Tipo de espacio (ACONDICIONADO, NO_ACONDICIONADO, NO_HABITABLE)
     #[serde(rename(serialize = "type"))]
     pub space_type: SpaceType,
+    /// Ventilación, en ren/h
+    pub n_v: Option<f32>,
 }
 
 /// Definición de construcción de elemento opaco

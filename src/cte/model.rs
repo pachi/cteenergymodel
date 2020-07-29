@@ -39,7 +39,7 @@ use crate::utils::fround2;
 #[serde(into = "SimpleModel", from = "SimpleModel")]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Model {
-    pub climate: String,
+    pub meta: Meta,
     pub envelope: Envelope,
     pub constructions: Constructions,
     pub spaces: BTreeMap<String, Space>,
@@ -104,6 +104,17 @@ impl Model {
             .sum();
         fround2(v_env)
     }
+}
+
+/// Metadatos del edificio
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Meta {
+    /// Zona climática
+    pub climate: String,
+    /// Ventilación global del edificio, para los espacios habitables de uso residencial, en l/s
+    /// Las zonas no habitables y todas las zonas de uso terciario tienen definida su tasa
+    /// de ventilación definida (en renh)
+    pub global_ventilation_l_s: Option<f32>,
 }
 
 /// Elementos de la envolvente térmica

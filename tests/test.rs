@@ -226,7 +226,7 @@ fn test_caso_a() {
     let tblpath = tbl::find_tbl("tests/casoA").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
-    assert_eq!(data.climate, "D3");
+    assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 10);
     assert_eq!(data.envelope.walls.len(), 35); // 19 en ET
     assert_eq!(data.envelope.thermal_bridges.len(), 11); // 7 en kyg
@@ -239,7 +239,7 @@ fn test_caso_c() {
     let tblpath = tbl::find_tbl("tests/casoC").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
-    assert_eq!(data.climate, "D3");
+    assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 9);
     assert_eq!(data.envelope.walls.len(), 33); // 27 en ET
     assert_eq!(data.envelope.thermal_bridges.len(), 11); // 7 en kyg
@@ -253,7 +253,7 @@ fn parse_test_data() {
     let tblpath = tbl::find_tbl("tests/data").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 1673.92);
-    assert_eq!(data.climate, "D3");
+    assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.envelope.windows.len(), 92);
     assert_eq!(data.envelope.walls.len(), 127); // 68 en ET
     assert_eq!(data.envelope.thermal_bridges.len(), 11); // 6 en kyg
@@ -266,8 +266,7 @@ fn parse_test_data2() {
     let tblpath = tbl::find_tbl("tests/ejemplopmt_HuecosOK").unwrap();
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
-    assert_eq!(data.a_util_ref(), 1073.78);
-    assert_eq!(data.climate, "B3");
+    assert_eq!(data.meta.climate, "B3");
     assert_eq!(data.envelope.windows.len(), 29);
     assert_eq!(data.envelope.walls.len(), 95); // 60 en ET
     assert_eq!(data.envelope.thermal_bridges.len(), 11); // 7 en kyg

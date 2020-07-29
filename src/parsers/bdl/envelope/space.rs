@@ -74,6 +74,9 @@ pub struct Space {
     pub multiplier: f32,
     /// Si es un espacio multiplicado
     pub ismultiplied: bool,
+    /// Tasa de renovación de aire (ventilación), en renh
+    /// En edificios residenciales no se guarda (es None) y se usa el global, repartiendo por volumen
+    pub airchanges_h: Option<f32>,
 }
 
 impl Space {
@@ -243,6 +246,15 @@ impl TryFrom<BdlBlock> for Space {
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
         // XXX: Es un booleano codificado como entero que se parse como número
         let ismultiplied = (attrs.remove_f32("MULTIPLIED")? - 1.0).abs() < 0.1;
+        let airchanges_h = match (stype.as_str(), spaceconds.as_str()) {
+            // Usamos la ventilación según niveles de estanqueidad de la UNE-EN ISO 13789:2017 (HULC usa 0 renh para nivel1)
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_1") => {Some(0.1)},
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_2") => {Some(0.5)},
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_3") => {Some(1.0)},
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_4") => {Some(3.0)},
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_5") => {Some(10.0)},
+            _ => attrs.remove_f32("AIR-CHANGES/HR").map(|v| Some(v)).unwrap_or( None)
+        };
 
         Ok(Self {
             name,
@@ -260,6 +272,7 @@ impl TryFrom<BdlBlock> for Space {
             systemconds,
             multiplier,
             ismultiplied,
+            airchanges_h
         })
     }
 }

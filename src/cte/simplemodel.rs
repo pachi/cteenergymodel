@@ -26,8 +26,8 @@ SOFTWARE.
 use serde::{Deserialize, Serialize};
 
 use super::{
-    model::{Constructions, Envelope},
-    Boundaries, Model, Space, ThermalBridge, Wall, WallCons, Window, WindowCons,
+    Boundaries, Constructions, Envelope, Meta, Model, Space, ThermalBridge, Wall, WallCons, Window,
+    WindowCons,
 };
 
 /// Elementos de la envolvente térmica
@@ -51,7 +51,7 @@ pub struct SimpleConstructions {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SimpleModel {
-    pub climate: String,
+    pub meta: Meta,
     pub envelope: SimpleEnvelope,
     pub constructions: SimpleConstructions,
     pub spaces: Vec<Space>,
@@ -63,7 +63,7 @@ pub struct SimpleModel {
 impl From<Model> for SimpleModel {
     fn from(m: Model) -> Self {
         Self {
-            climate: m.climate.clone(),
+            meta: m.meta.clone(),
             envelope: SimpleEnvelope {
                 windows: m.envelope.windows.values().cloned().collect(),
                 walls: m.envelope.walls.values().cloned().collect(),
@@ -82,7 +82,7 @@ impl From<Model> for SimpleModel {
 impl From<SimpleModel> for Model {
     fn from(m: SimpleModel) -> Self {
         Self {
-            climate: m.climate.clone(),
+            meta: m.meta.clone(),
             envelope: Envelope {
                 windows: m
                     .envelope
