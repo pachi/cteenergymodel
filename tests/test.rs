@@ -285,20 +285,6 @@ fn parse_lider_bdl() {
         println!("Examinando archivo {:#?}", file);
         let strdata = utils::read_latin1_file(&file).unwrap();
         let _data = bdl::Data::new(&strdata).unwrap();
-
-        // for s in _data.spaces {
-        //     let floor = _data.floors.iter().find(|f| f.name == s.floor).unwrap();
-        //     // TODO: esto debería pasar siempre. Ver si hay algún caso que no pase
-        //     assert_eq!(s.height, floor.height);
-        // }
-
-        // for w in _data.walls {
-        //     if let Some(geom) = &w.geometry {
-        //         if  geom.tilt != 0.0 && geom.tilt != 180.0 {
-        //             println!("{:#?}", w);
-        //         }
-        //     }
-        // }
         count += 1;
     }
     println!("Comprobados {} archivos antiguos", count);
