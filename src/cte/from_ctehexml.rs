@@ -61,7 +61,18 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let spaces = spaces_from_bdl(&bdl)?;
         let walls_u = walls_u_from_data(&walls, &wallcons)?;
 
-        // Completa metadatos desde ctehexml
+        // Completa metadatos desde ctehexml y el bdl
+        // Desviación general respecto al Norte (criterio BDL)
+        let buildparams = bdl.meta.get("BUILD-PARAMETERS").unwrap();
+        let d_perim_insulation = buildparams
+            .attrs
+            .get_f32("D-AISLAMIENTO-PERIMETRAL")
+            .unwrap_or(0.0);
+        let rn_perim_insulation = buildparams
+            .attrs
+            .get_f32("RA-AISLAMIENTO-PERIMETRAL")
+            .unwrap_or(0.0);
+
         let dg = &d.datos_generales;
         let is_dwelling =
             ["Unifamiliar", "Bloque", "UnaBloque"].contains(&dg.tipo_vivienda.as_str());
@@ -77,6 +88,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
                 None
             },
             n50_test_ach: dg.valor_n50_medido,
+            d_perim_insulation,
+            rn_perim_insulation,
         };
 
         Ok(Model {
@@ -144,7 +157,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
                 Wall {
                     name: wall.name.clone(),
                     cons: wall.construction.to_string(),
-                    a: fround2(wall.net_area(bdl)?),
+                    area: fround2(wall.net_area(bdl)?),
                     space: wall.space.clone(),
                     nextto: wall.nextto.clone(),
                     bounds: wall.bounds.into(),
@@ -294,7 +307,7 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error
 fn walls_u_from_data(
     walls: &BTreeMap<String, Wall>,
     wallcons: &BTreeMap<String, WallCons>,
-) -> Result<Vec<(String, Boundaries, f32)>, Error> {
+) -> Result<Vec<(String, Boundaries, Tilt, f32)>, Error> {
     walls
         .values()
         .map(|w| {
@@ -302,7 +315,8 @@ fn walls_u_from_data(
                 (
                     w.name.clone(),
                     w.bounds,
-                    u_for_wall(w.tilt.into(), w.bounds.into(), c),
+                    w.tilt.into(),
+                    u_for_wall(w.tilt.into(), w.bounds.into(), w.area, w.zground, c),
                 )
             })
         })

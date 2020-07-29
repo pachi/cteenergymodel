@@ -65,7 +65,7 @@ pub struct Wall {
     pub bounds: Boundaries,
     /// Superficie neta del elemento opaco (m2)
     #[serde(rename(serialize = "A"))]
-    pub a: f32,
+    pub area: f32,
     /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90)
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
     /// Coincide con el criterio de la UNE-EN ISO 52016-1

@@ -89,7 +89,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
             let wallname = tuple.0.as_str();
             let kygwall = kygdata.walls.get(wallname);
             if let Some(kw) = kygwall {
-                tuple.2 = fround2(kw.u);
+                tuple.3 = fround2(kw.u);
             }
         }
 
@@ -106,7 +106,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     if let Some(tblpath) = &tblpath {
         let tbldata = tbl::parse(&tblpath).unwrap();
         #[allow(unused_assignments, unused_variables)]
-        for (name, boundary, mut value) in &mut ecdata.walls_u {
+        for (name, boundary, tilt, mut value) in &mut ecdata.walls_u {
             if *boundary != Boundaries::INTERIOR {
                 continue;
             };

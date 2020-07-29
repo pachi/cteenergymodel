@@ -204,7 +204,15 @@ pub fn fshobst_for_setback(tilt: f32, azimuth: f32, width: f32, height: f32, set
 ///     - en HULC los valores por defecto de Ra y D se indican en las opciones generales de
 ///       las construcciones por defecto
 /// - los elementos adiabáticos se reportan con valor 0.0
-pub fn u_for_wall(position: Tilt, bounds: Boundaries, construction: &WallCons) -> f32 {
+pub fn u_for_wall(
+    position: Tilt,
+    bounds: Boundaries,
+    area: f32,
+    zground: Option<f32>,
+    construction: &WallCons,
+) -> f32 {
+    use std::f32::consts::PI;
+
     let r_intrinsic = construction.r_intrinsic;
 
     // Resistencias superficiales [m2·K/W]
@@ -213,12 +221,56 @@ pub fn u_for_wall(position: Tilt, bounds: Boundaries, construction: &WallCons) -
     const RSI_ASCENDENTE: f32 = 0.10;
     const RSI_HORIZONTAL: f32 = 0.13;
     const RSI_DESCENDENTE: f32 = 0.17;
+    // conductividad del terreno no helado, en [W/(m·K)]
+    const LAMBDA: f32 = 2.0;
 
     let u_noround = match (bounds, position) {
-        // TODO: implementar soleras en contacto con el terreno
-        (UNDERGROUND, BOTTOM) => Default::default(),
-        // TODO: implementar muros enterrados
-        (UNDERGROUND, SIDE) => Default::default(),
+        (UNDERGROUND, BOTTOM) => {
+            // TODO: implementar soleras en contacto con el terreno
+            // Inicialmente implementamos la opción sin aislamientos perimetrales
+
+            // 1. Solera sobre el terreno: UNE-EN ISO 13370:2010 Apartado 9.1 y 9.3.2
+            const W: f32 = 0.3; // Simplificación: espesor supuesto de los muros perimetrales
+            let d_t = W + LAMBDA * (RSI_DESCENDENTE + r_intrinsic + RSE);
+            // TODO: Simplificación: dimensión característica del suelo (B') solo a partir de A de la solera...
+            // TODO: debería ser de todo el suelo de la planta en contacto con el terreno ver 8.1
+            let b_1 = area / (0.5 * 4.0 * f32::sqrt(area));
+            let z = zground.unwrap();
+
+            let u_bf = if d_t < b_1 {
+                // Soleras sin aislar y moderadamente aisladas
+                (2.0 * LAMBDA / (PI * b_1 + d_t + 0.5 * z))
+                    * f32::ln(1.0 + PI * b_1 / (d_t + 0.5 * z))
+            } else {
+                // Soleras bien aisladas
+                LAMBDA / (0.457 * b_1 + d_t)
+            };
+            log::warn!("U de suelo de sótano: {}", u_bf);
+            u_bf
+        }
+        (UNDERGROUND, SIDE) => {
+            // Muros enterrados UNE-EN ISO 13370:2010 9.3.3
+
+            // TODO: Dimensión característica del suelo del sótano
+            // TODO: esto tendría que venir del espacio (la r_intrinsic de su suelo)
+            const W: f32 = 0.3;
+            let d_t = W + LAMBDA * (RSI_DESCENDENTE + r_intrinsic + RSE);
+
+            // Dimensión característica del muro de sótano
+            let d_w = LAMBDA * (RSI_HORIZONTAL + r_intrinsic + RSE);
+            let z = zground.unwrap();
+            // TODO: esto vale 0 si z=0 -> tenemos que calcular la parte enterrada en relación a la altura total y calcular una parte enterrada y otra al exterior...
+            // Ver cómo se pondera en DA DB-HE/1
+            let u_bw =
+                (2.0 * LAMBDA / (PI * z)) * (1.0 + 0.5 * d_t / (d_t + z)) * f32::ln(z / d_w + 1.0);
+            log::warn!(
+                "U de muro de sótano: {} (z={}, U_ext={})",
+                u_bw,
+                z,
+                1.0 / (r_intrinsic + RSI_HORIZONTAL + RSE)
+            );
+            u_bw
+        }
         // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
         (UNDERGROUND, TOP) => 1.0 / (r_intrinsic + RSI_ASCENDENTE + RSE),
         // Tomamos valor 0.0. Siempre se podría consultar la resistencia intrínseca
@@ -226,6 +278,8 @@ pub fn u_for_wall(position: Tilt, bounds: Boundaries, construction: &WallCons) -
         // HULC no diferencia entre posiciones para elementos interiores
         // TODO: Detectar el caso de contacto con espacios no habitables, con cálculo de b, e implementar
         // TODO: tal vez esto debería recibir el valor b como parámetro
+        // TODO: también está el caso del elemento interior que comunica con un sótano no calefactado:
+        // TODO: Ver UNE_EN ISO 13370:2010 9.4 que pondera las partes enterradas y no enterradas, adeḿas de la U del elemento interior
         (INTERIOR, _) => 1.0 / (r_intrinsic + 2.0 * RSI_HORIZONTAL),
         // Elementos en contacto con el exterior
         (EXTERIOR, BOTTOM) => 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE),

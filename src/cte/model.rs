@@ -29,8 +29,8 @@ use failure::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    simplemodel::SimpleModel, Boundaries, Space, SpaceType, ThermalBridge, Wall, WallCons, Window,
-    WindowCons,
+    simplemodel::SimpleModel, Boundaries, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
+    Window, WindowCons,
 };
 use crate::utils::fround2;
 
@@ -45,7 +45,7 @@ pub struct Model {
     pub spaces: BTreeMap<String, Space>,
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
-    pub walls_u: Vec<(String, Boundaries, f32)>,
+    pub walls_u: Vec<(String, Boundaries, Tilt, f32)>,
 }
 
 impl Model {
@@ -123,6 +123,10 @@ pub struct Meta {
     pub global_ventilation_l_s: Option<f32>,
     /// n50 medido mediante ensayo [renh]
     pub n50_test_ach: Option<f32>,
+    /// Anchura o profundidad del aislamiento perimetral horizontal o vertical de la solera [m]
+    pub d_perim_insulation: f32,
+    /// Resistencia térmica del aislamiento perimetral horizontal o vertical de la solera [m2K/W]
+    pub rn_perim_insulation: f32,
 }
 
 impl Default for Meta {
@@ -134,6 +138,8 @@ impl Default for Meta {
             climate: "D3".to_string(),
             global_ventilation_l_s: None,
             n50_test_ach: None,
+            d_perim_insulation: 0.0,
+            rn_perim_insulation: 0.0,
         }
     }
 }

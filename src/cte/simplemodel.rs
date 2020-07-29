@@ -26,8 +26,8 @@ SOFTWARE.
 use serde::{Deserialize, Serialize};
 
 use super::{
-    Boundaries, Constructions, Envelope, Meta, Model, Space, ThermalBridge, Wall, WallCons, Window,
-    WindowCons,
+    Boundaries, Constructions, Envelope, Meta, Model, Space, ThermalBridge, Tilt, Wall, WallCons,
+    Window, WindowCons,
 };
 
 /// Elementos de la envolvente térmica
@@ -57,7 +57,7 @@ pub struct SimpleModel {
     pub spaces: Vec<Space>,
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
-    pub walls_u: Vec<(String, Boundaries, f32)>,
+    pub walls_u: Vec<(String, Boundaries, Tilt, f32)>,
 }
 
 impl From<Model> for SimpleModel {
