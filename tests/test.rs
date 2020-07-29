@@ -266,6 +266,7 @@ fn parse_test_data2() {
     let tblpath = tbl::find_tbl("tests/ejemplopmt_HuecosOK").unwrap();
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
+    assert_eq!(data.a_util_ref(), 1063.03);
     assert_eq!(data.meta.climate, "B3");
     assert_eq!(data.envelope.windows.len(), 29);
     assert_eq!(data.envelope.walls.len(), 95); // 60 en ET
