@@ -54,7 +54,7 @@ pub use windowcons::WindowCons;
 
 /// Elementos constructivos y de materiales pertenecientes a la base de datos
 /// Se organizan por nombre y grupo (tipo)
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct DB {
     /// Material o producto
     pub materials: HashMap<String, Material>,

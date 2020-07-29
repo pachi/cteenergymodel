@@ -49,7 +49,7 @@ pub use envelope::{Boundaries, Floor, Polygon, Shade, Space, ThermalBridge, Tilt
 // ------------------------- BDL ----------------------------
 
 /// Datos del archivo BDL
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Data {
     /// Metadatos: espacio de trabajo, parámetros de edificio, construcciones por defecto y datos generales
     pub meta: HashMap<String, BdlBlock>,
