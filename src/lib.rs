@@ -74,7 +74,7 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
     Ok(ecdata)
 }
 
-/// Incluye los datos que todavía no se obtienen todavía desde el xml
+/// Incluye los datos que todavía no se obtienen desde el xml
 pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     ecdata: &mut Model,
     kygpath: Option<T>,
