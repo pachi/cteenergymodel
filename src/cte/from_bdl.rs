@@ -29,7 +29,7 @@ use failure::Error;
 
 use super::*;
 use crate::{
-    bdl::{self, extract_namesvec, Data},
+    bdl::{self, Data},
     utils::{fround2, orientation_bdl_to_52016},
 };
 use params_compute::{fshobst_for_setback, u_for_wall};
@@ -50,20 +50,6 @@ impl From<bdl::Boundaries> for Boundaries {
 impl TryFrom<&Data> for Model {
     type Error = Error;
     fn try_from(d: &Data) -> Result<Self, Self::Error> {
-        let gendata = d.meta.get("GENERAL-DATA").unwrap();
-        let climate = gendata.attrs.get_str("ZONE")?;
-        let buildinguse = gendata.attrs.get_str("TYPE-HOUSING")?;
-        let global_ventilation_l_s = match buildinguse.as_str() {
-            // Guardamos este valor en edificios residenciales, puesto que es la ventilación de todas las zonas habitables
-            "Unifamiliar" | "Bloque" => Some(
-                extract_namesvec(&gendata.attrs.get_str("VALORES-VENTILACION")?)
-                    .get(0)
-                    .unwrap()
-                    .parse::<f32>()?,
-            ),
-            // En zonas no habitables y en todas las de terciario es necesario definir la tasa de ventilación del espacio
-            _ => None,
-        };
         let walls = walls_from_bdl(&d)?;
         let windows = windows_from_bdl(&walls, &d);
         let thermal_bridges = thermal_bridges_from_bdl(&d);
@@ -73,10 +59,7 @@ impl TryFrom<&Data> for Model {
         let walls_u = walls_u_from_data(&walls, &wallcons)?;
 
         Ok(Model {
-            meta: Meta {
-                climate,
-                global_ventilation_l_s,
-            },
+            meta: Default::default(),
             envelope: Envelope {
                 walls,
                 windows,

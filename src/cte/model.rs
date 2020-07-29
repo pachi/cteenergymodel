@@ -109,12 +109,33 @@ impl Model {
 /// Metadatos del edificio
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Meta {
+    /// ¿Edificio nuevo?
+    pub is_new_building: bool,
+    /// ¿Es uso residencial?
+    pub is_dwelling: bool,
+    /// Número de viviendas
+    pub num_dwellings: i32,
     /// Zona climática
     pub climate: String,
     /// Ventilación global del edificio, para los espacios habitables de uso residencial, en l/s
     /// Las zonas no habitables y todas las zonas de uso terciario tienen definida su tasa
     /// de ventilación definida (en renh)
     pub global_ventilation_l_s: Option<f32>,
+    /// n50 medido mediante ensayo [renh]
+    pub n50_test_ach: Option<f32>,
+}
+
+impl Default for Meta {
+    fn default() -> Self {
+        Meta {
+            is_new_building: true,
+            is_dwelling: true,
+            num_dwellings: 1,
+            climate: "D3".to_string(),
+            global_ventilation_l_s: None,
+            n50_test_ach: None,
+        }
+    }
 }
 
 /// Elementos de la envolvente térmica

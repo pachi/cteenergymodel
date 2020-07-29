@@ -70,7 +70,21 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
     let mut ecdata = Model::try_from(&ctehexmldata.bdldata)?;
 
     // Completa metadatos desde ctehexml
-    ecdata.meta.climate = ctehexmldata.datos_generales.archivo_climatico.clone();
+    let dg = ctehexmldata.datos_generales;
+    let is_dwelling = ["Unifamiliar", "Bloque", "UnaBloque"].contains(&dg.tipo_vivienda.as_str());
+
+    ecdata.meta = cte::Meta {
+        is_new_building: dg.tipo_definicion.as_str() == "Nuevo",
+        is_dwelling,
+        num_dwellings: dg.num_viviendas_bloque,
+        climate: dg.archivo_climatico.clone(),
+        global_ventilation_l_s: if is_dwelling {
+            Some(dg.valor_impulsion_aire)
+        } else {
+            None
+        },
+        n50_test_ach: dg.valor_n50_medido,
+    };
 
     // Interpreta .kyg y añade datos que faltan con archivos adicionales
     fix_ecdata_from_extra(&mut ecdata, kygpath, tblpath);
