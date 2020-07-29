@@ -65,10 +65,12 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
     let ctehexmlpath = &ctehexmlpath.ok_or_else(|| {
         format_err!("No se ha podido localizar el archivo .ctehexml del proyecto")
     })?;
-
     // Genera Model desde BDL
     let ctehexmldata = ctehexml::parse_with_catalog(&ctehexmlpath)?;
     let mut ecdata = Model::try_from(&ctehexmldata.bdldata)?;
+
+    // Completa metadatos desde ctehexml
+    ecdata.meta.climate = ctehexmldata.datos_generales.archivo_climatico.clone();
 
     // Interpreta .kyg y añade datos que faltan con archivos adicionales
     fix_ecdata_from_extra(&mut ecdata, kygpath, tblpath);
