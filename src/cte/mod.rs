@@ -25,7 +25,7 @@ SOFTWARE.
 
 pub mod common;
 pub mod elements;
-pub(crate) mod from_bdl;
+pub(crate) mod from_ctehexml;
 pub mod model;
 pub mod params_compute;
 pub(crate) mod simplemodel;
