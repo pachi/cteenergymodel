@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-//! Conversión desde bdl::Data a cte::Model
+//! Conversión desde CtehexmlData a cte::Model
 
 use std::{collections::BTreeMap, convert::TryFrom};
 
@@ -30,6 +30,7 @@ use failure::Error;
 use super::*;
 use crate::{
     bdl::{self, Data},
+    parsers::ctehexml,
     utils::{fround2, orientation_bdl_to_52016},
 };
 use params_compute::{fshobst_for_setback, u_for_wall};
@@ -47,19 +48,39 @@ impl From<bdl::Boundaries> for Boundaries {
     }
 }
 
-impl TryFrom<&Data> for Model {
+impl TryFrom<&ctehexml::CtehexmlData> for Model {
     type Error = Error;
-    fn try_from(d: &Data) -> Result<Self, Self::Error> {
-        let walls = walls_from_bdl(&d)?;
-        let windows = windows_from_bdl(&walls, &d);
-        let thermal_bridges = thermal_bridges_from_bdl(&d);
-        let wallcons = wallcons_from_bdl(&walls, &d)?;
-        let windowcons = windowcons_from_bdl(&d)?;
-        let spaces = spaces_from_bdl(&d)?;
+    fn try_from(d: &ctehexml::CtehexmlData) -> Result<Self, Self::Error> {
+        let bdl = &d.bdldata;
+
+        let walls = walls_from_bdl(&bdl)?;
+        let windows = windows_from_bdl(&walls, &bdl);
+        let thermal_bridges = thermal_bridges_from_bdl(&bdl);
+        let wallcons = wallcons_from_bdl(&walls, &bdl)?;
+        let windowcons = windowcons_from_bdl(&bdl)?;
+        let spaces = spaces_from_bdl(&bdl)?;
         let walls_u = walls_u_from_data(&walls, &wallcons)?;
 
+        // Completa metadatos desde ctehexml
+        let dg = &d.datos_generales;
+        let is_dwelling =
+            ["Unifamiliar", "Bloque", "UnaBloque"].contains(&dg.tipo_vivienda.as_str());
+
+        let meta = Meta {
+            is_new_building: dg.tipo_definicion.as_str() == "Nuevo",
+            is_dwelling,
+            num_dwellings: dg.num_viviendas_bloque,
+            climate: dg.archivo_climatico.clone(),
+            global_ventilation_l_s: if is_dwelling {
+                Some(dg.valor_impulsion_aire)
+            } else {
+                None
+            },
+            n50_test_ach: dg.valor_n50_medido,
+        };
+
         Ok(Model {
-            meta: Default::default(),
+            meta,
             envelope: Envelope {
                 walls,
                 windows,
