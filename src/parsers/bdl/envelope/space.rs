@@ -217,7 +217,7 @@ impl TryFrom<BdlBlock> for Space {
         let insidete = attrs
             .remove_str("perteneceALaEnvolventeTermica")
             .ok()
-            .and_then(|v| if v == "SI" { Some(true) } else { Some(false) })
+            .map(|v| v == "SI")
             // TODO: En archivos antiguos, sin ese parámetro miramos si es acondicionado
             // TODO: En teoría también podría haber habitables no acondicionados
             .or_else(|| match stype.as_ref() {
