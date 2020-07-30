@@ -40,7 +40,7 @@ pub struct Window {
     /// Muro, cubierta o suelo en el que se sitúa
     pub wall: String,
     /// Definición de la composición del hueco (WindowCons::name)
-    pub construction: String,
+    pub cons: String,
     /// Distancia (m) del borde izquierdo del hueco al borde izquierdo del cerramiento que lo contiene (mirando desde fuera)
     pub x: f32,
     /// Distancia (m) del borde inferior del hueco al borde inferior del cerramiento que lo contiene (mirando desde fuera)
@@ -158,7 +158,7 @@ impl TryFrom<BdlBlock> for Window {
             ..
         } = value;
         let wall = parent.ok_or_else(|| format_err!("Hueco sin muro asociado '{}'", &name))?;
-        let construction = attrs.remove_str("GAP")?;
+        let cons = attrs.remove_str("GAP")?;
         let x = attrs.remove_f32("X")?;
         let y = attrs.remove_f32("Y")?;
         let height = attrs.remove_f32("HEIGHT")?;
@@ -178,7 +178,7 @@ impl TryFrom<BdlBlock> for Window {
         Ok(Self {
             name,
             wall,
-            construction,
+            cons,
             x,
             y,
             height,

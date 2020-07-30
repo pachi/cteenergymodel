@@ -21,12 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-//! Funciones para el cálculo de parámetros de los elementos
-//! - Fshobst para un hueco
-//!     - a partir de su retranqueo
-//!     - TODO: para lamas horizontales y/o verticales
-//!     - TODO: para voladizos
-//! - U de una composión constructiva de opaco, según su posición
+//! Implementación del cálculo de la U de una composión constructiva de opaco, según su posición
 //! - factores de (UNE-EN ISO 13789:2017):
 //!     - b de un elemento de separación con un espacio no acondicionado (UNE-EN ISO 13789:2017) (salvo que esté en contacto con cámara sanitaria UNE-EN ISO 13370)
 //!         - q_iu = 0
@@ -35,10 +30,19 @@ SOFTWARE.
 //!     - bm para acoplamiento con el terremo
 //!     - b con edificios adyacentes -> b = 0 (depende de la diferencia de temperaturas, pero es cero si es igual)
 
+use std::f32::consts::PI;
+
 use crate::utils::fround2;
 
 pub use super::{Boundaries, Model, Orientation, SpaceType, Tilt, Wall, WallCons};
 
+// Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
+const RSI_ASCENDENTE: f32 = 0.10;
+const RSI_HORIZONTAL: f32 = 0.13;
+const RSI_DESCENDENTE: f32 = 0.17;
+const RSE: f32 = 0.04;
+// conductividad del terreno no helado, en [W/(m·K)]
+const LAMBDA: f32 = 2.0;
 impl Model {
     // TODO: probablemente esto debería ser una función global que accede a espacios y elementos para poder localizar elementos de contorno
     // TODO: en elementos enterrados es necesario así como en elementos en contacto con otros espacios no calefactados.
@@ -53,24 +57,15 @@ impl Model {
     ///       las construcciones por defecto
     /// - los elementos adiabáticos se reportan con valor 0.0
     pub fn u_for_wall(&self, wall: &Wall) -> f32 {
-        use std::f32::consts::PI;
         use {Boundaries::*, Orientation::*, SpaceType::*, Tilt::*};
 
-        let construction = self.wallcons.get(&wall.cons).unwrap();
         let position: Tilt = wall.tilt.into();
         let bounds: Boundaries = wall.bounds.into();
         let area = wall.area;
         let zground = wall.zground;
-        let r_intrinsic = construction.r_intrinsic;
 
-        // Resistencias superficiales [m2·K/W]
-        // Revisar según DA-DB-HE/1 tabla 1
-        const RSE: f32 = 0.04;
-        const RSI_ASCENDENTE: f32 = 0.10;
-        const RSI_HORIZONTAL: f32 = 0.13;
-        const RSI_DESCENDENTE: f32 = 0.17;
-        // conductividad del terreno no helado, en [W/(m·K)]
-        const LAMBDA: f32 = 2.0;
+        let cons = self.wallcons.get(&wall.cons).unwrap();
+        let r_intrinsic = cons.r_intrinsic;
 
         let u_noround = match (bounds, position) {
             (UNDERGROUND, BOTTOM) => {

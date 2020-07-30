@@ -154,7 +154,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
                 wall.name.clone(),
                 Wall {
                     name: wall.name.clone(),
-                    cons: wall.construction.to_string(),
+                    cons: wall.cons.to_string(),
                     area: fround2(wall.net_area(bdl)?),
                     space: wall.space.clone(),
                     nextto: wall.nextto.clone(),
@@ -180,7 +180,7 @@ fn windows_from_bdl(walls: &BTreeMap<String, Wall>, bdl: &Data) -> BTreeMap<Stri
                 win.name.clone(),
                 Window {
                     name: win.name.clone(),
-                    cons: win.construction.to_string(),
+                    cons: win.cons.to_string(),
                     wall: win.wall.clone(),
                     area: fround2(win.width * win.height),
                     fshobst,
@@ -251,7 +251,7 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error
     let mut wcnames: Vec<String> = bdl
         .windows
         .iter()
-        .map(|w| w.construction.clone())
+        .map(|w| w.cons.clone())
         .collect::<Vec<String>>();
     wcnames.sort();
     wcnames.dedup();

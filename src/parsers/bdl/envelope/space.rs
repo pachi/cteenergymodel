@@ -104,8 +104,8 @@ impl Space {
                     self.name
                 )
             })?;
-        let topheight = db.db.wallcons.get(&topwall.construction)
-            .ok_or_else(|| format_err!("No se encuentra la composición de capas \"{}\"", &topwall.construction))?.total_thickness();
+        let topheight = db.db.wallcons.get(&topwall.cons)
+            .ok_or_else(|| format_err!("No se encuentra la composición de capas \"{}\"", &topwall.cons))?.total_thickness();
         Ok(self.height - topheight)
     }
 
