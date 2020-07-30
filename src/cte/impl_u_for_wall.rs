@@ -223,31 +223,54 @@ impl Model {
             (UNDERGROUND, TOP) => 1.0 / (r_intrinsic + RSI_ASCENDENTE + RSE),
             // Elementos en contacto con otros espacios ---------------------
             (INTERIOR, position @ _) => {
-                // Aquí hay varios casos:
+                // Tres casos:
                 // - Elementos en contacto con otros espacios habitables
+                // - Suelos en contacto con sótanos no habitables en contacto con el terreno
                 // - Elementos en contacto con espacios no habitables
-                //      - sótanos en contacto con el terreno
-                //      - espacios en contacto con el exterior
-
-                // TODO: Detectar el caso de contacto con espacios no habitables, con cálculo de b, e implementar
-                // TODO: tal vez esto debería recibir el valor b como parámetro
-                // TODO: también está el caso del elemento interior que comunica con un sótano no calefactado:
-                // TODO: Ver UNE_EN ISO 13370:2010 9.4 que pondera las partes enterradas y no enterradas, adeḿas de la U del elemento interior
                 use SpaceType::*;
 
                 let nextto = wall.nextto.as_ref().unwrap();
                 let nextspace = self.spaces.get(nextto.as_str()).unwrap();
                 let nexttype = nextspace.space_type;
 
-                match nexttype {
-                    CONDITIONED | UNCONDITIONED => {
-                        // HULC no diferencia entre posiciones para elementos interiores
-                        1.0 / (r_intrinsic + 2.0 * RSI_HORIZONTAL)
-                    }
-                    UNINHABITED => {
-                        log::warn!("Muro interior {}", wall.name);
-                        0.0
-                    }
+                if nexttype == CONDITIONED {
+                    // Elemento interior con otro espacio habitable
+                    // HULC no diferencia entre RS según posiciones para elementos interiores
+                    1.0 / (r_intrinsic + 2.0 * RSI_HORIZONTAL)
+                } else {
+                    // Conexión con sótanos no calefactados o sobreelevados - 13370:2010 (9.4)
+                    // Conexión con espacios no calefactados - UNE-EN ISO 6946:2007 (5.4.3)
+                    let r_f = match position {
+                        BOTTOM => r_intrinsic + 2.0 * RSI_DESCENDENTE,
+                        TOP => r_intrinsic + 2.0 * RSI_ASCENDENTE,
+                        SIDE => r_intrinsic + 2.0 * RSI_HORIZONTAL,
+                    };
+
+                    // Intercambio de aire del espacio adyacente
+                    let nextspace_v = nextspace.height_net * nextspace.area;
+                    let n_ven = match nextspace.n_v {
+                        Some(n_v) => n_v,
+                        _ => {
+                            3.6 * self.meta.global_ventilation_l_s.unwrap() / self.vol_env_inh_net()
+                        }
+                    };
+
+                    // Calculamos el A.U de los elementos del espacio que dan al exterior o al terreno (excluye interiores))
+                    let nextwalls = self.get_space_walls(nextspace.name.as_str());
+                    let ua_nextwalls = nextwalls
+                        .iter()
+                        .filter(|w| w.bounds == UNDERGROUND || w.bounds == EXTERIOR)
+                        .map(|w| w.area * self.u_for_wall(w))
+                        .sum::<f32>();
+                    // 1/U = 1/U_f + A / (sum A·U + 0.33·n·V) (17)
+                    let r_u = wall.area / (ua_nextwalls + 0.33 * n_ven * nextspace_v);
+                    let u = 1.0 / (r_f + r_u);
+                    log::info!(
+                        "Elemento en contacto con espacio no acondicionado o no habitable {}: {}",
+                        wall.name,
+                        u
+                    );
+                    u
                 }
             }
         };

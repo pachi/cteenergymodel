@@ -125,6 +125,23 @@ impl Model {
             .sum();
         fround2(v_env)
     }
+    /// Calcula el volumen neto de los espacios habitables de la envolvente [m³]
+    /// Computa el volumen de todos los espacios (solo habitables) de la envolvente y
+    /// descuenta los volúmenes de forjados y cubiertas
+    pub fn vol_env_inh_net(&self) -> f32 {
+        let v_env: f32 = self
+            .spaces
+            .values()
+            .map(|s| {
+                if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
+                    s.area * s.height_net * s.multiplier
+                } else {
+                    0.0
+                }
+            })
+            .sum();
+        fround2(v_env)
+    }
 }
 
 /// Metadatos del edificio
