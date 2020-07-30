@@ -46,7 +46,7 @@ pub struct SimpleModel {
     pub wallcons: Vec<WallCons>,
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
-    pub extra: ExtraData,
+    pub extra: Option<Vec<ExtraData>>,
 }
 
 impl From<Model> for SimpleModel {

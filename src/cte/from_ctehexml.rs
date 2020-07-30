@@ -57,9 +57,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let windows = windows_from_bdl(&walls, &bdl);
         let thermal_bridges = thermal_bridges_from_bdl(&bdl);
         let wallcons = wallcons_from_bdl(&walls, &bdl)?;
-        let windowcons = windowcons_from_bdl(&bdl)?;
+        let wincons = windowcons_from_bdl(&bdl)?;
         let spaces = spaces_from_bdl(&bdl)?;
-        let extra = extradata_from_data(&walls, &wallcons)?;
 
         // Completa metadatos desde ctehexml y el bdl
         // Desviación general respecto al Norte (criterio BDL)
@@ -98,9 +97,9 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             windows,
             thermal_bridges,
             spaces,
-            wincons: windowcons,
-            wallcons: wallcons,
-            extra,
+            wincons,
+            wallcons,
+            extra: None,
         })
     }
 }
@@ -297,25 +296,4 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error
                 })
         })
         .collect::<Result<BTreeMap<_, _>, _>>()
-}
-
-/// Vector con datos adicionales (u de muros), para poder comprobar diferencias en JSON
-fn extradata_from_data(
-    walls: &BTreeMap<String, Wall>,
-    wallcons: &BTreeMap<String, WallCons>,
-) -> Result<Vec<(String, Boundaries, Tilt, f32)>, Error> {
-    walls
-        .values()
-        .map(|w| {
-            wallcons.get(&w.cons).map(|c| {
-                (
-                    w.name.clone(),
-                    w.bounds,
-                    w.tilt.into(),
-                    u_for_wall(w.tilt.into(), w.bounds.into(), w.area, w.zground, c),
-                )
-            })
-        })
-        .collect::<Option<Vec<_>>>()
-        .ok_or_else(|| format_err!("No se han podido calcular las U de los muros"))
 }
