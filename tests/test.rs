@@ -21,12 +21,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+use std::convert::TryFrom;
+
 use hulc2envolventecte::{
     collect_hulc_data,
     parsers::{bdl, ctehexml, kyg, tbl},
-    utils,
+    utils::{fround2, read_latin1_file},
 };
-use std::convert::TryFrom;
 
 macro_rules! assert_almost_eq {
     ($a:expr, $b:expr, $c:expr) => {
@@ -247,6 +248,27 @@ fn test_caso_a() {
             .collect::<Vec<_>>(),
         results
     );
+    // Suelo al exterior (aire), HULC=0.34
+    let wall = data.walls.get("P02_E01_ME001").unwrap();
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.33);
+    // Fachada exterior, HULC=0.30
+    let wall = data.walls.get("P01_E01_ME001").unwrap();
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.30);
+    // Cubierta exterior, HULC=0.34
+    let wall = data.walls.get("P03_E01_FE004").unwrap();
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.34);
+    // Muro de sótano (z=0), HULC=0.0 (por no habitable)
+    let wall = data.walls.get("P01_E02_TER001").unwrap();
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.59);
+    // Solera (z=0), HULC=0.47 (?)
+    let wall = data.walls.get("P01_E01_FTER001").unwrap();
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.29);
+    // Partición interior, HULC=1.67
+    let wall = data.walls.get("P01_E01_Med001").unwrap();
+    assert_eq!(fround2(data.u_for_wall(&wall)), 1.67);
+    // Forjado interior, HULC=1.37
+    let wall = data.walls.get("P03_E01_FI003").unwrap();
+    assert_eq!(fround2(data.u_for_wall(&wall)), 1.37);
 }
 
 #[test]
@@ -300,7 +322,7 @@ fn parse_lider_bdl() {
             continue;
         };
         println!("Examinando archivo {:#?}", file);
-        let strdata = utils::read_latin1_file(&file).unwrap();
+        let strdata = read_latin1_file(&file).unwrap();
         let _data = bdl::Data::new(&strdata).unwrap();
         count += 1;
     }
