@@ -42,7 +42,9 @@ const RSI_HORIZONTAL: f32 = 0.13;
 const RSI_DESCENDENTE: f32 = 0.17;
 const RSE: f32 = 0.04;
 // conductividad del terreno no helado, en [W/(m·K)]
-const LAMBDA: f32 = 2.0;
+const LAMBDA_GND: f32 = 2.0;
+const LAMBDA_INS: f32 = 0.035;
+
 impl Model {
     // TODO: probablemente esto debería ser una función global que accede a espacios y elementos para poder localizar elementos de contorno
     // TODO: en elementos enterrados es necesario así como en elementos en contacto con otros espacios no calefactados.
@@ -61,50 +63,78 @@ impl Model {
 
         let position: Tilt = wall.tilt.into();
         let bounds: Boundaries = wall.bounds.into();
-        let area = wall.area;
         let zground = wall.zground;
+        let r_n_perim_ins = self.meta.rn_perim_insulation;
+        let d_perim_ins = self.meta.d_perim_insulation;
 
         let cons = self.wallcons.get(&wall.cons).unwrap();
         let r_intrinsic = cons.r_intrinsic;
 
         let u_noround = match (bounds, position) {
             (UNDERGROUND, BOTTOM) => {
-                // TODO: implementar soleras en contacto con el terreno
-                // Inicialmente implementamos la opción sin aislamientos perimetrales
-
                 // 1. Solera sobre el terreno: UNE-EN ISO 13370:2010 Apartado 9.1 y 9.3.2
-                const W: f32 = 0.3; // Simplificación: espesor supuesto de los muros perimetrales
-                let d_t = W + LAMBDA * (RSI_DESCENDENTE + r_intrinsic + RSE);
-                // TODO: Simplificación: dimensión característica del suelo (B') solo a partir de A de la solera...
-                // TODO: debería ser de todo el suelo de la planta en contacto con el terreno ver 8.1
-                let b_1 = area / (0.5 * 4.0 * f32::sqrt(area));
+                // Simplificaciones:
+                // - forma cuadrada para calcular el perímetro
+                // - ancho de muros externos w = 0.3m
+                // - lambda de aislamiento = 0,035 W/mK
+
+                let otherwalls = self.get_space_walls(&wall.space);
+                let gnd_a = otherwalls.iter().map(|w| w.area).sum();
+                // Simplificación del perímetro: Suponemos superficie cuadrada
+                let gnd_p = 4.0 * f32::sqrt(gnd_a);
                 let z = zground.unwrap();
+
+                // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
+                let b_1 = gnd_a / (0.5 * gnd_p);
+
+                const W: f32 = 0.3; // Simplificación: espesor supuesto de los muros perimetrales
+                let d_t = W + LAMBDA_GND * (RSI_DESCENDENTE + r_intrinsic + RSE);
 
                 let u_bf = if d_t < b_1 {
                     // Soleras sin aislar y moderadamente aisladas
-                    (2.0 * LAMBDA / (PI * b_1 + d_t + 0.5 * z))
+                    (2.0 * LAMBDA_GND / (PI * b_1 + d_t + 0.5 * z))
                         * f32::ln(1.0 + PI * b_1 / (d_t + 0.5 * z))
                 } else {
                     // Soleras bien aisladas
-                    LAMBDA / (0.457 * b_1 + d_t)
+                    LAMBDA_GND / (0.457 * b_1 + d_t + 0.5 * z)
                 };
-                log::warn!("U de suelo de sótano: {}", u_bf);
-                u_bf
+
+                // Efecto del aislamiento perimetral 13770 Anexo B.
+                // Espesor aislamiento perimetral d_n = r_n_perim_ins * lambda_ins
+                // Espesor equivalente adicional resultante del aislamiento perimetral (d')
+                let d_1 = r_n_perim_ins * (LAMBDA_GND - LAMBDA_INS);
+                let psi_ge = -LAMBDA_GND / PI
+                    * (f32::ln(d_perim_ins / d_t + 1.0) - f32::ln(1.0 + d_perim_ins / (d_t + d_1)));
+
+                let u = u_bf + 2.0 * psi_ge / b_1; // H_g sería U * A
+
+                log::warn!(
+                    "U de suelo de sótano {}: {} (Rn={}, D={}, B'={}, d_t={}, U_bf={}, psi_ge = {})",
+                    wall.name,
+                    u,
+                    r_n_perim_ins,
+                    d_perim_ins,
+                    b_1,
+                    d_t,
+                    u_bf,
+                    psi_ge
+                );
+                u
             }
             (UNDERGROUND, SIDE) => {
-                // Muros enterrados UNE-EN ISO 13370:2010 9.3.3
+                // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
 
                 // TODO: Dimensión característica del suelo del sótano
                 // TODO: esto tendría que venir del espacio (la r_intrinsic de su suelo)
                 const W: f32 = 0.3;
-                let d_t = W + LAMBDA * (RSI_DESCENDENTE + r_intrinsic + RSE);
+                let d_t = W + LAMBDA_GND * (RSI_DESCENDENTE + r_intrinsic + RSE);
 
                 // Dimensión característica del muro de sótano
-                let d_w = LAMBDA * (RSI_HORIZONTAL + r_intrinsic + RSE);
+                let d_w = LAMBDA_GND * (RSI_HORIZONTAL + r_intrinsic + RSE);
                 let z = zground.unwrap();
                 // TODO: esto vale 0 si z=0 -> tenemos que calcular la parte enterrada en relación a la altura total y calcular una parte enterrada y otra al exterior...
                 // Ver cómo se pondera en DA DB-HE/1
-                let u_bw = (2.0 * LAMBDA / (PI * z))
+                let u_bw = (2.0 * LAMBDA_GND / (PI * z))
                     * (1.0 + 0.5 * d_t / (d_t + z))
                     * f32::ln(z / d_w + 1.0);
                 log::warn!(
