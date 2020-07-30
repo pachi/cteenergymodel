@@ -46,8 +46,21 @@ const LAMBDA_GND: f32 = 2.0;
 const LAMBDA_INS: f32 = 0.035;
 
 impl Model {
-    // TODO: probablemente esto debería ser una función global que accede a espacios y elementos para poder localizar elementos de contorno
-    // TODO: en elementos enterrados es necesario así como en elementos en contacto con otros espacios no calefactados.
+    /// Vector de muros (incluyendo suelos y techos) que delimitan un espacio
+    pub fn get_space_walls(&self, space: &str) -> Vec<&Wall> {
+        self.walls
+            .values()
+            .filter(|w| {
+                w.space == space
+                    || (if let Some(ref spc) = w.nextto {
+                        spc == space
+                    } else {
+                        false
+                    })
+            })
+            // .map(|w| w.name.as_str())
+            .collect()
+    }
 
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
     /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales

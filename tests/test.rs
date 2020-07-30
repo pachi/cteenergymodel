@@ -230,6 +230,23 @@ fn test_caso_a() {
     assert_eq!(data.windows.len(), 10);
     assert_eq!(data.walls.len(), 35); // 19 en ET
     assert_eq!(data.thermal_bridges.len(), 11); // 7 en kyg
+    let results: Vec<&str> = vec![
+        "P02_E01_FI001",
+        "P02_E01_FI002",
+        "P02_E01_ME001",
+        "P02_E01_MED001",
+        "P02_E01_PE001",
+        "P02_E01_PE002",
+        "P02_E01_PE003",
+        "P03_E01_FI003",
+    ];
+    assert_eq!(
+        data.get_space_walls("P02_E01")
+            .iter()
+            .map(|w| w.name.as_str())
+            .collect::<Vec<_>>(),
+        results
+    );
 }
 
 #[test]
