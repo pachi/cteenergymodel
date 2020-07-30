@@ -32,4 +32,4 @@ pub(crate) mod simplemodel;
 
 pub use common::{Boundaries, Orientation, SpaceType, Tilt};
 pub use elements::{Space, ThermalBridge, Wall, WallCons, Window, WindowCons};
-pub use model::{Meta, Model};
+pub use model::{ExtraData, Meta, Model};

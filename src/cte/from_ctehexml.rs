@@ -59,7 +59,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let wallcons = wallcons_from_bdl(&walls, &bdl)?;
         let windowcons = windowcons_from_bdl(&bdl)?;
         let spaces = spaces_from_bdl(&bdl)?;
-        let walls_u = walls_u_from_data(&walls, &wallcons)?;
+        let extra = extradata_from_data(&walls, &wallcons)?;
 
         // Completa metadatos desde ctehexml y el bdl
         // Desviación general respecto al Norte (criterio BDL)
@@ -100,7 +100,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             spaces,
             wincons: windowcons,
             wallcons: wallcons,
-            walls_u,
+            extra,
         })
     }
 }
@@ -299,8 +299,8 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error
         .collect::<Result<BTreeMap<_, _>, _>>()
 }
 
-/// Vector con nombre y U de muros, para poder comprobar diferencias en JSON
-fn walls_u_from_data(
+/// Vector con datos adicionales (u de muros), para poder comprobar diferencias en JSON
+fn extradata_from_data(
     walls: &BTreeMap<String, Wall>,
     wallcons: &BTreeMap<String, WallCons>,
 ) -> Result<Vec<(String, Boundaries, Tilt, f32)>, Error> {

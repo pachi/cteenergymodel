@@ -36,6 +36,9 @@ use crate::utils::fround2;
 
 // ---------- Estructura general de datos --------------
 
+/// Datos adicionales para comprobación
+pub type ExtraData = Vec<(String, Boundaries, Tilt, f32)>;
+
 /// Modelo del edificio
 #[serde(into = "SimpleModel", from = "SimpleModel")]
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -55,8 +58,7 @@ pub struct Model {
     /// Construcciones de opacos
     pub wallcons: BTreeMap<String, WallCons>,
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
-    /// U de muros
-    pub walls_u: Vec<(String, Boundaries, Tilt, f32)>,
+    pub extra: ExtraData,
 }
 
 impl Model {

@@ -25,9 +25,7 @@ SOFTWARE.
 
 use serde::{Deserialize, Serialize};
 
-use super::{
-    Boundaries, Meta, Model, Space, ThermalBridge, Tilt, Wall, WallCons, Window, WindowCons,
-};
+use super::{ExtraData, Meta, Model, Space, ThermalBridge, Wall, WallCons, Window, WindowCons};
 
 /// Modelo simplificado para la exportación a JSON
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -48,7 +46,7 @@ pub struct SimpleModel {
     pub wallcons: Vec<WallCons>,
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
-    pub walls_u: Vec<(String, Boundaries, Tilt, f32)>,
+    pub extra: ExtraData,
 }
 
 impl From<Model> for SimpleModel {
@@ -61,7 +59,7 @@ impl From<Model> for SimpleModel {
             spaces: m.spaces.values().cloned().collect(),
             wincons: m.wincons.values().cloned().collect(),
             wallcons: m.wallcons.values().cloned().collect(),
-            walls_u: m.walls_u.clone(),
+            extra: m.extra.clone(),
         }
     }
 }
@@ -100,8 +98,7 @@ impl From<SimpleModel> for Model {
                 .iter()
                 .map(|w| (w.name.clone(), w.clone()))
                 .collect(),
-
-            walls_u: m.walls_u.clone(),
+            extra: m.extra.clone(),
         }
     }
 }
