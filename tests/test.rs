@@ -260,18 +260,18 @@ fn test_caso_a() {
     // Muro de sótano (z=0), HULC=0.0 (por no habitable)
     let wall = data.walls.get("P01_E02_TER001").unwrap();
     assert_eq!(fround2(data.u_for_wall(&wall)), 0.59);
-    // Solera (z=0), HULC=0.47 (?)
+    // Solera (z=0), HULC=0.47
     let wall = data.walls.get("P01_E01_FTER001").unwrap();
-    assert_eq!(fround2(data.u_for_wall(&wall)), 0.29);
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.34);
     // Forjado interior, HULC=1.37
     let wall = data.walls.get("P03_E01_FI003").unwrap();
     assert_eq!(fround2(data.u_for_wall(&wall)), 1.37);
     // Partición interior vertical con espacio no habitable, HULC=0.81
     let wall = data.walls.get("P01_E01_Med001").unwrap();
-    assert_eq!(fround2(data.u_for_wall(&wall)), 0.80);
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.82);
     // Partición interior horizontal (suelo) con espacio no habitable y enterrado, HULC=0.65
     let wall = data.walls.get("P02_E01_FI002").unwrap();
-    assert_eq!(fround2(data.u_for_wall(&wall)), 0.53);
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.54);
     // Partición interior horizontal (techo) con espacio no habitable/acondicionado, HULC=0.77
     let wall = data.walls.get("P03_E01_FI001").unwrap();
     assert_eq!(fround2(data.u_for_wall(&wall)), 0.45);

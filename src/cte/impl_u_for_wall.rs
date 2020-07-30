@@ -102,7 +102,11 @@ impl Model {
                 // let u = 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
 
                 let otherwalls = self.get_space_walls(&wall.space);
-                let gnd_a = otherwalls.iter().map(|w| w.area).sum();
+                let gnd_a = otherwalls
+                    .iter()
+                    .filter(|w| w.bounds == UNDERGROUND && Tilt::from(w.tilt) == BOTTOM)
+                    .map(|w| w.area)
+                    .sum();
                 // Simplificación del perímetro: Suponemos superficie cuadrada
                 let gnd_p = 4.0 * f32::sqrt(gnd_a);
 
@@ -131,11 +135,13 @@ impl Model {
                 let u = u_bf + 2.0 * psi_ge / b_1; // H_g sería U * A
 
                 log::info!(
-                    "U de suelo de sótano {}: {} (Rn={}, D={}, B'={}, z={}, d_t={}, R_f={}, U_bf={}, psi_ge = {})",
+                    "U de suelo de sótano {}: {} (Rn={}, D={}, gnd_a={}, gnd_p={}, B'={}, z={}, d_t={}, R_f={}, U_bf={}, psi_ge = {})",
                     wall.name,
                     u,
                     r_n_perim_ins,
                     d_perim_ins,
+                    gnd_a,
+                    gnd_p,
                     b_1,
                     z,
                     d_t,
