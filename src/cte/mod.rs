@@ -26,8 +26,8 @@ SOFTWARE.
 pub mod common;
 pub mod elements;
 pub(crate) mod from_ctehexml;
+pub mod impl_u_for_wall;
 pub mod model;
-pub mod params_compute;
 pub(crate) mod simplemodel;
 
 pub use common::{Boundaries, Orientation, SpaceType, Tilt};

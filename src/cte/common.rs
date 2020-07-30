@@ -126,7 +126,7 @@ impl From<f32> for Tilt {
     }
 }
 
-/// Orientación de la normal de un elemento constructivo en relación al sur geográfico (azimuth geográfico)
+/// Nombres para la orientación de un elemento, según los puntos cardinales
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub enum Orientation {
     /// Norte
@@ -163,7 +163,7 @@ impl Display for Orientation {
     }
 }
 
-/// Convierte de azimuth geográfico a enum Orientation
+/// Convierte del ángulo entre normal del elemento constructivo y sur geográfico (azimuth geográfico) a enum Orientation
 /// Sigue el criterio de la UNE-EN ISO 52016-1, medido desde el sur, positivo al este, negativo al oeste (S=0, E=+90, W=-90)
 /// Nota: difiere del criterio BDL, que parte del norte, con E+ y W-
 impl From<f32> for Orientation {

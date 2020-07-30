@@ -30,10 +30,7 @@ pub mod utils;
 
 use std::{convert::TryFrom, path::Path};
 
-use cte::{
-    params_compute::{fshobst_for_setback, u_for_wall},
-    Boundaries, ExtraData, Model,
-};
+use cte::{Boundaries, ExtraData, Model};
 use parsers::{bdl, ctehexml, kyg, tbl};
 use utils::fround2;
 
@@ -86,18 +83,13 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     let mut extra = ecdata
         .walls
         .values()
-        .map(|w| {
-            ecdata
-                .wallcons
-                .get(&w.cons)
-                .map(|c| ExtraData {
-                    name: w.name.clone(),
-                    bounds: w.bounds,
-                    tilt: w.tilt.into(),
-                    u: 0.0,
-                    computed_u: u_for_wall(w.tilt.into(), w.bounds.into(), w.area, w.zground, c),
-                })
-                .unwrap()
+        .map(|w| ExtraData {
+            name: w.name.clone(),
+            bounds: w.bounds,
+            tilt: w.tilt.into(),
+            cons: w.cons.clone(),
+            u: 0.0,
+            computed_u: ecdata.u_for_wall(w),
         })
         .collect::<Vec<_>>();
 

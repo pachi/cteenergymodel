@@ -42,6 +42,7 @@ pub struct ExtraData {
     pub name: String,
     pub bounds: Boundaries,
     pub tilt: Tilt,
+    pub cons: String,
     pub u: f32,
     pub computed_u: f32,
 }
