@@ -227,9 +227,9 @@ fn test_caso_a() {
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.meta.climate, "D3");
-    assert_eq!(data.envelope.windows.len(), 10);
-    assert_eq!(data.envelope.walls.len(), 35); // 19 en ET
-    assert_eq!(data.envelope.thermal_bridges.len(), 11); // 7 en kyg
+    assert_eq!(data.windows.len(), 10);
+    assert_eq!(data.walls.len(), 35); // 19 en ET
+    assert_eq!(data.thermal_bridges.len(), 11); // 7 en kyg
 }
 
 #[test]
@@ -240,9 +240,9 @@ fn test_caso_c() {
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 400.0);
     assert_eq!(data.meta.climate, "D3");
-    assert_eq!(data.envelope.windows.len(), 9);
-    assert_eq!(data.envelope.walls.len(), 33); // 27 en ET
-    assert_eq!(data.envelope.thermal_bridges.len(), 11); // 7 en kyg
+    assert_eq!(data.windows.len(), 9);
+    assert_eq!(data.walls.len(), 33); // 27 en ET
+    assert_eq!(data.thermal_bridges.len(), 11); // 7 en kyg
 }
 
 // Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
@@ -254,9 +254,9 @@ fn parse_test_data() {
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 1673.92);
     assert_eq!(data.meta.climate, "D3");
-    assert_eq!(data.envelope.windows.len(), 92);
-    assert_eq!(data.envelope.walls.len(), 127); // 68 en ET
-    assert_eq!(data.envelope.thermal_bridges.len(), 11); // 6 en kyg
+    assert_eq!(data.windows.len(), 92);
+    assert_eq!(data.walls.len(), 127); // 68 en ET
+    assert_eq!(data.thermal_bridges.len(), 11); // 6 en kyg
 }
 
 #[test]
@@ -268,9 +268,9 @@ fn parse_test_data2() {
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_util_ref(), 1063.03);
     assert_eq!(data.meta.climate, "B3");
-    assert_eq!(data.envelope.windows.len(), 29);
-    assert_eq!(data.envelope.walls.len(), 95); // 60 en ET
-    assert_eq!(data.envelope.thermal_bridges.len(), 11); // 7 en kyg
+    assert_eq!(data.windows.len(), 29);
+    assert_eq!(data.walls.len(), 95); // 60 en ET
+    assert_eq!(data.thermal_bridges.len(), 11); // 7 en kyg
 }
 
 // #[ignore]

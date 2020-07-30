@@ -195,6 +195,9 @@ pub fn fshobst_for_setback(tilt: f32, azimuth: f32, width: f32, height: f32, set
     }
 }
 
+// TODO: probablemente esto debería ser una función global que accede a espacios y elementos para poder localizar elementos de contorno
+// TODO: en elementos enterrados es necesario así como en elementos en contacto con otros espacios no calefactados.
+
 /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
 /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
 /// Notas:

@@ -93,7 +93,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
             }
         }
 
-        for win in ecdata.envelope.windows.values_mut() {
+        for win in ecdata.windows.values_mut() {
             let kygwin = kygdata.windows.get(&win.name);
             if let Some(kw) = kygwin {
                 win.fshobst = fround2(kw.fshobst);

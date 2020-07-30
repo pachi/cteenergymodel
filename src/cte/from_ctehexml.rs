@@ -94,16 +94,12 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
 
         Ok(Model {
             meta,
-            envelope: Envelope {
-                walls,
-                windows,
-                thermal_bridges,
-            },
-            constructions: Constructions {
-                windows: windowcons,
-                walls: wallcons,
-            },
+            walls,
+            windows,
+            thermal_bridges,
             spaces,
+            wincons: windowcons,
+            wallcons: wallcons,
             walls_u,
         })
     }

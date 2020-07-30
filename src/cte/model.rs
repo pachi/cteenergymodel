@@ -36,13 +36,24 @@ use crate::utils::fround2;
 
 // ---------- Estructura general de datos --------------
 
+/// Modelo del edificio
 #[serde(into = "SimpleModel", from = "SimpleModel")]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Model {
+    /// Metadatos
     pub meta: Meta,
-    pub envelope: Envelope,
-    pub constructions: Constructions,
+    /// Huecos
+    pub windows: BTreeMap<String, Window>,
+    /// Opacos
+    pub walls: BTreeMap<String, Wall>,
+    /// Puentes térmicos
+    pub thermal_bridges: BTreeMap<String, ThermalBridge>,
+    /// Espacios
     pub spaces: BTreeMap<String, Space>,
+    /// Construcciones de huecos
+    pub wincons: BTreeMap<String, WindowCons>,
+    /// Construcciones de opacos
+    pub wallcons: BTreeMap<String, WallCons>,
     // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
     /// U de muros
     pub walls_u: Vec<(String, Boundaries, Tilt, f32)>,
@@ -142,23 +153,4 @@ impl Default for Meta {
             rn_perim_insulation: 0.0,
         }
     }
-}
-
-/// Elementos de la envolvente térmica
-#[derive(Debug, Clone, Default, Serialize)]
-pub struct Envelope {
-    /// Huecos
-    pub windows: BTreeMap<String, Window>,
-    /// Opacos
-    pub walls: BTreeMap<String, Wall>,
-    /// Puentes térmicos
-    pub thermal_bridges: BTreeMap<String, ThermalBridge>,
-}
-
-#[derive(Debug, Clone, Default, Serialize)]
-pub struct Constructions {
-    /// Construcciones de huecos
-    pub windows: BTreeMap<String, WindowCons>,
-    /// Construcciones de opacos
-    pub walls: BTreeMap<String, WallCons>,
 }
