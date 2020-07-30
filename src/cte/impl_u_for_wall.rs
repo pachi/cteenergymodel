@@ -76,7 +76,7 @@ impl Model {
 
         let position: Tilt = wall.tilt.into();
         let bounds: Boundaries = wall.bounds.into();
-        let zground = wall.zground;
+        let z = wall.zground.unwrap_or(0.0);
         let r_n_perim_ins = self.meta.rn_perim_insulation;
         let d_perim_ins = self.meta.d_perim_insulation;
 
@@ -90,12 +90,14 @@ impl Model {
                 // - forma cuadrada para calcular el perímetro
                 // - ancho de muros externos w = 0.3m
                 // - lambda de aislamiento = 0,035 W/mK
+                //
+                // HULC parece estar calculando algo más parecido al método de Winkelman o:
+                // let u = 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
 
                 let otherwalls = self.get_space_walls(&wall.space);
                 let gnd_a = otherwalls.iter().map(|w| w.area).sum();
                 // Simplificación del perímetro: Suponemos superficie cuadrada
                 let gnd_p = 4.0 * f32::sqrt(gnd_a);
-                let z = zground.unwrap();
 
                 // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
                 let b_1 = gnd_a / (0.5 * gnd_p);
@@ -121,14 +123,15 @@ impl Model {
 
                 let u = u_bf + 2.0 * psi_ge / b_1; // H_g sería U * A
 
-                log::warn!(
-                    "U de suelo de sótano {}: {} (Rn={}, D={}, B'={}, d_t={}, U_bf={}, psi_ge = {})",
+                log::debug!(
+                    "U de suelo de sótano {}: {} (Rn={}, D={}, B'={}, d_t={}, R_f={}, U_bf={}, psi_ge = {})",
                     wall.name,
                     u,
                     r_n_perim_ins,
                     d_perim_ins,
                     b_1,
                     d_t,
+                    r_intrinsic,
                     u_bf,
                     psi_ge
                 );
@@ -136,6 +139,10 @@ impl Model {
             }
             (UNDERGROUND, SIDE) => {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
+                // Caso con z = 0 -> es un muro exterior
+                if z.abs() < 0.1 {
+                    return 1.0 / (r_intrinsic + RSI_HORIZONTAL + RSE);
+                };
 
                 // TODO: Dimensión característica del suelo del sótano
                 // TODO: esto tendría que venir del espacio (la r_intrinsic de su suelo)
@@ -144,7 +151,7 @@ impl Model {
 
                 // Dimensión característica del muro de sótano
                 let d_w = LAMBDA_GND * (RSI_HORIZONTAL + r_intrinsic + RSE);
-                let z = zground.unwrap();
+
                 // TODO: esto vale 0 si z=0 -> tenemos que calcular la parte enterrada en relación a la altura total y calcular una parte enterrada y otra al exterior...
                 // Ver cómo se pondera en DA DB-HE/1
                 let u_bw = (2.0 * LAMBDA_GND / (PI * z))
