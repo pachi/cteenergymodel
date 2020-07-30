@@ -112,7 +112,7 @@ impl Model {
                 const W: f32 = 0.3; // Simplificación: espesor supuesto de los muros perimetrales
                 let d_t = W + LAMBDA_GND * (RSI_DESCENDENTE + r_intrinsic + RSE);
 
-                let u_bf = if d_t < b_1 {
+                let u_bf = if (d_t + 0.5 * z) < b_1 {
                     // Soleras sin aislar y moderadamente aisladas
                     (2.0 * LAMBDA_GND / (PI * b_1 + d_t + 0.5 * z))
                         * f32::ln(1.0 + PI * b_1 / (d_t + 0.5 * z))
