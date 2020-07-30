@@ -72,7 +72,7 @@ impl Model {
     ///       las construcciones por defecto
     /// - los elementos adiabáticos se reportan con valor 0.0
     pub fn u_for_wall(&self, wall: &Wall) -> f32 {
-        use {Boundaries::*, Orientation::*, SpaceType::*, Tilt::*};
+        use {Boundaries::*, Tilt::*};
 
         let position: Tilt = wall.tilt.into();
         let bounds: Boundaries = wall.bounds.into();
@@ -84,6 +84,13 @@ impl Model {
         let r_intrinsic = cons.r_intrinsic;
 
         let u_noround = match (bounds, position) {
+            // Elementos adiabáticos -----------------------------
+            (ADIABATIC, _) => 0.0,
+            // Elementos en contacto con el exterior -------------
+            (EXTERIOR, BOTTOM) => 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE),
+            (EXTERIOR, TOP) => 1.0 / (r_intrinsic + RSI_ASCENDENTE + RSE),
+            (EXTERIOR, SIDE) => 1.0 / (r_intrinsic + RSI_HORIZONTAL + RSE),
+            // Elementos enterrados ------------------------------
             (UNDERGROUND, BOTTOM) => {
                 // 1. Solera sobre el terreno: UNE-EN ISO 13370:2010 Apartado 9.1 y 9.3.2
                 // Simplificaciones:
@@ -139,46 +146,96 @@ impl Model {
             }
             (UNDERGROUND, SIDE) => {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
-                // Caso con z = 0 -> es un muro exterior
+                let u_ext = 1.0 / (RSI_HORIZONTAL + r_intrinsic + RSE);
+
+                // Muros que realmente no son enterrados
                 if z.abs() < 0.1 {
-                    return 1.0 / (r_intrinsic + RSI_HORIZONTAL + RSE);
+                    log::warn!(
+                        "U de muro de sótano no enterrado {}: {} (z={})",
+                        wall.name,
+                        u_ext,
+                        z,
+                    );
+                    return u_ext;
                 };
 
-                // TODO: Dimensión característica del suelo del sótano
-                // TODO: esto tendría que venir del espacio (la r_intrinsic de su suelo)
+                // Dimensión característica del suelo del sótano.
+                // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
+                // Usamos el promedio de los suelos del espacio
+                let space = self.spaces.get(&wall.space).unwrap();
+                let mut d_t = self
+                    .get_space_walls(space.name.as_str())
+                    .iter()
+                    .filter(|w| Tilt::from(w.tilt) == BOTTOM)
+                    .zip(1..)
+                    .fold(0.0, |mean, (w, i)| {
+                        (W + LAMBDA_GND
+                            * (RSI_DESCENDENTE
+                                + self.wallcons.get(&w.cons).unwrap().r_intrinsic
+                                + RSE)
+                            + mean * (i - 1) as f32)
+                            / i as f32
+                    });
                 const W: f32 = 0.3;
-                let d_t = W + LAMBDA_GND * (RSI_DESCENDENTE + r_intrinsic + RSE);
 
-                // Dimensión característica del muro de sótano
+                // Espesor equivalente de los muros de sótano (13)
                 let d_w = LAMBDA_GND * (RSI_HORIZONTAL + r_intrinsic + RSE);
 
-                // TODO: esto vale 0 si z=0 -> tenemos que calcular la parte enterrada en relación a la altura total y calcular una parte enterrada y otra al exterior...
-                // Ver cómo se pondera en DA DB-HE/1
-                let u_bw = (2.0 * LAMBDA_GND / (PI * z))
-                    * (1.0 + 0.5 * d_t / (d_t + z))
-                    * f32::ln(z / d_w + 1.0);
+                if d_w < d_t {
+                    d_t = d_w
+                };
+
+                // U del muro completamente enterrado a profundidad z (14)
+                let u_bw = if z != 0.0 {
+                    (2.0 * LAMBDA_GND / (PI * z))
+                        * (1.0 + 0.5 * d_t / (d_t + z))
+                        * f32::ln(z / d_w + 1.0)
+                } else {
+                    u_ext
+                };
+
+                // Si el muro no es enterrado en toda su altura ponderamos U por altura
+                let h_muro = space.height_net;
+                let u = if z >= h_muro {
+                    // Muro completamente enterrado
+                    u_bw
+                } else {
+                    // Muro con z parcialmente enterrado
+                    (z * u_bw + (h_muro - z) * u_ext) / h_muro
+                };
+
                 log::warn!(
-                    "U de muro de sótano: {} (z={}, U_ext={})",
-                    u_bw,
+                    "U de muro de sótano {}: {} (z={}, h_muro={}, u_ext={}, u_bw={}, d_t={}, d_w={})",
+                    wall.name,
+                    u,
                     z,
-                    1.0 / (r_intrinsic + RSI_HORIZONTAL + RSE)
+                    h_muro,
+                    u_ext,
+                    u_bw,
+                    d_t,
+                    d_w,
                 );
-                u_bw
+
+                u
             }
             // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
             (UNDERGROUND, TOP) => 1.0 / (r_intrinsic + RSI_ASCENDENTE + RSE),
-            // Tomamos valor 0.0. Siempre se podría consultar la resistencia intrínseca
-            (ADIABATIC, _) => 0.0,
-            // HULC no diferencia entre posiciones para elementos interiores
-            // TODO: Detectar el caso de contacto con espacios no habitables, con cálculo de b, e implementar
-            // TODO: tal vez esto debería recibir el valor b como parámetro
-            // TODO: también está el caso del elemento interior que comunica con un sótano no calefactado:
-            // TODO: Ver UNE_EN ISO 13370:2010 9.4 que pondera las partes enterradas y no enterradas, adeḿas de la U del elemento interior
-            (INTERIOR, _) => 1.0 / (r_intrinsic + 2.0 * RSI_HORIZONTAL),
-            // Elementos en contacto con el exterior
-            (EXTERIOR, BOTTOM) => 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE),
-            (EXTERIOR, TOP) => 1.0 / (r_intrinsic + RSI_ASCENDENTE + RSE),
-            (EXTERIOR, SIDE) => 1.0 / (r_intrinsic + RSI_HORIZONTAL + RSE),
+            // Elementos en contacto con otros espacios ---------------------
+            (INTERIOR, _) => {
+                // Aquí hay varios casos:
+                // - Elementos en contacto con otros espacios habitables
+                // - Elementos en contacto con espacios no habitables
+                //      - sótanos en contacto con el terreno
+                //      - espacios en contacto con el exterior
+
+                // TODO: Detectar el caso de contacto con espacios no habitables, con cálculo de b, e implementar
+                // TODO: tal vez esto debería recibir el valor b como parámetro
+                // TODO: también está el caso del elemento interior que comunica con un sótano no calefactado:
+                // TODO: Ver UNE_EN ISO 13370:2010 9.4 que pondera las partes enterradas y no enterradas, adeḿas de la U del elemento interior
+
+                // HULC no diferencia entre posiciones para elementos interiores
+                1.0 / (r_intrinsic + 2.0 * RSI_HORIZONTAL)
+            }
         };
         fround2(u_noround)
     }
