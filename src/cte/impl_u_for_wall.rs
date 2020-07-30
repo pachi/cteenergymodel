@@ -22,13 +22,11 @@ SOFTWARE.
 */
 
 //! Implementación del cálculo de la U de una composión constructiva de opaco, según su posición
-//! - factores de (UNE-EN ISO 13789:2017):
-//!     - b de un elemento de separación con un espacio no acondicionado (UNE-EN ISO 13789:2017) (salvo que esté en contacto con cámara sanitaria UNE-EN ISO 13370)
-//!         - q_iu = 0
-//!         - q_ue = V_u · n_ue; clase de permeablidad (tipo) y n_ue (tabla 7) ->  1 => 0.1 renh, 2 => 0.5 renh, 3 => 1 renh, 4 => 3 renh, 5 => 10 renh.
-//!         - UNE-EN ISO 6946 -> 5.4.3
-//!     - bm para acoplamiento con el terremo
-//!     - b con edificios adyacentes -> b = 0 (depende de la diferencia de temperaturas, pero es cero si es igual)
+//! - UNE-EN ISO 13789:2010 transmisión general
+//! - UNE-EN ISO 6946:2012 para elementos opacos
+//! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
+//! TODO: No estamos teniendo en cuenta la transmitancia de los huecos
+//! TODO: comprobar si medimos superficies netas o brutas en muros
 
 use std::f32::consts::PI;
 

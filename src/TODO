@@ -1,22 +1,19 @@
 general:
+- cálculo de U:
+    - No estamos teniendo en cuenta la transmitancia de los huecos
+    - comprobar si medimos superficies netas o brutas en muros
+    - método get_windows_for_wall(self, &Wall) -> Vec<&Windows>
 
 - Llevar cosas que sacamos del kyg a lib.rs y desde ctehexml
-    - Nos falta:
-        - windows:
-            - Fshobst: empezar con 1.0 en vez de 0.0?
-        - walls: En general, calcular U de elementos enterrados e interiores con espacios no habitables
 - Detectar elementos que pertenecen a la envolvente a partir de espacios
     - son los elementos que pertenecen a espacios dentro de la envolvente pero
       que no comunican con otros espacios interiores a la envolvente
-- Incluir construcciones en la exportación
-    - Complica un poco más los tipos, ya que hay por resistencia y por conductividad
-    - Exportar materiales para poder calcular U con capas. Para eso necesitamos biblioteca base en Rust para interpretar construcciones:
-        - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+- Exportar capas en construcciones
+- Exportar materiales para poder calcular U con capas.
+    - Necesita biblioteca base en Rust para interpretar construcciones:
+    - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 
 - Añadir tests de tbl.rs (parse)
-- ¿Convertir vectores de objetos de espacios, pisos, etc a vectores de nombres y hashmaps de objetos
-  o convertir a https://docs.rs/crate/indexmap/?
-    - Esto igual es mejor como una cache para hacer las consultas (una función que memoize la búsqueda o algo así)
 - Migrar de failure a thiserror o anyhow: https://github.com/bytecodealliance/cranelift/pull/1188/files
 - Usar referencias con hashes como IDs:
         #[derive(Hash)]
@@ -36,12 +33,9 @@ ideas:
 
 envolventectedata:
     Llevar a env:
-        - Volumen neto de espacios: data.space_volume(spacename)
-        - ir viendo los cálculos que hacemos cómo se pueden llevar de BDL a types eliminando aspectos innecesarios
-            wall -> data.wall_gross_area(wallname), data.wall_net_area(wallname), data.wall_azimuth(wallname)
-            ...
-        - Volumen interno a la envolvente térmica: volumen_et
         - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
+        - qsoljul?
+        - compacidad
 
 BDL:
 - Se podría eliminar la referencia entre muros y espacios, generando el polígono del muro a partir de su referencia al polígono del espacios
@@ -55,8 +49,6 @@ BDL:
     - horarios
     - condiciones operacionales
     - consignas
-- Implementar cálculo de U para los distintos elementos y así no usar kyg
-  (O al menos calcular con suma de las resistencias superficiales)
 
 EnvolventeCTE:
 - Eliminar uso de data.autil y usar data.a_util_ref()
