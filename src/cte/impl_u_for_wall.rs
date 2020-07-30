@@ -221,7 +221,7 @@ impl Model {
             // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
             (UNDERGROUND, TOP) => 1.0 / (r_intrinsic + RSI_ASCENDENTE + RSE),
             // Elementos en contacto con otros espacios ---------------------
-            (INTERIOR, _) => {
+            (INTERIOR, position @ _) => {
                 // Aquí hay varios casos:
                 // - Elementos en contacto con otros espacios habitables
                 // - Elementos en contacto con espacios no habitables
@@ -232,9 +232,22 @@ impl Model {
                 // TODO: tal vez esto debería recibir el valor b como parámetro
                 // TODO: también está el caso del elemento interior que comunica con un sótano no calefactado:
                 // TODO: Ver UNE_EN ISO 13370:2010 9.4 que pondera las partes enterradas y no enterradas, adeḿas de la U del elemento interior
+                use SpaceType::*;
 
-                // HULC no diferencia entre posiciones para elementos interiores
-                1.0 / (r_intrinsic + 2.0 * RSI_HORIZONTAL)
+                let nextto = wall.nextto.as_ref().unwrap();
+                let nextspace = self.spaces.get(nextto.as_str()).unwrap();
+                let nexttype = nextspace.space_type;
+
+                match nexttype {
+                    CONDITIONED | UNCONDITIONED => {
+                        // HULC no diferencia entre posiciones para elementos interiores
+                        1.0 / (r_intrinsic + 2.0 * RSI_HORIZONTAL)
+                    }
+                    UNINHABITED => {
+                        log::warn!("Muro interior {}", wall.name);
+                        0.0
+                    }
+                }
             }
         };
         fround2(u_noround)
