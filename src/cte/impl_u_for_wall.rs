@@ -130,13 +130,14 @@ impl Model {
 
                 let u = u_bf + 2.0 * psi_ge / b_1; // H_g sería U * A
 
-                log::debug!(
-                    "U de suelo de sótano {}: {} (Rn={}, D={}, B'={}, d_t={}, R_f={}, U_bf={}, psi_ge = {})",
+                log::info!(
+                    "U de suelo de sótano {}: {} (Rn={}, D={}, B'={}, z={}, d_t={}, R_f={}, U_bf={}, psi_ge = {})",
                     wall.name,
                     u,
                     r_n_perim_ins,
                     d_perim_ins,
                     b_1,
+                    z,
                     d_t,
                     r_intrinsic,
                     u_bf,
@@ -150,7 +151,7 @@ impl Model {
 
                 // Muros que realmente no son enterrados
                 if z.abs() < 0.1 {
-                    log::warn!(
+                    log::info!(
                         "U de muro de sótano no enterrado {}: {} (z={})",
                         wall.name,
                         u_ext,
@@ -204,7 +205,7 @@ impl Model {
                     (z * u_bw + (h_muro - z) * u_ext) / h_muro
                 };
 
-                log::warn!(
+                log::info!(
                     "U de muro de sótano {}: {} (z={}, h_muro={}, u_ext={}, u_bw={}, d_t={}, d_w={})",
                     wall.name,
                     u,
