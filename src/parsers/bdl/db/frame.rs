@@ -25,8 +25,9 @@ SOFTWARE.
 //!
 //! Definición de marco de hueco (NAME-FRAME)
 
-use failure::Error;
 use std::convert::TryFrom;
+
+use anyhow::Error;
 
 use crate::bdl::BdlBlock;
 

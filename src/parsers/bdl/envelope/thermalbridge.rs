@@ -25,8 +25,9 @@ SOFTWARE.
 //!
 //! Puentes térmicos (THERMAL-BRIDGE)
 
-use failure::Error;
 use std::convert::TryFrom;
+
+use anyhow::{bail, Error};
 
 use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock};
 

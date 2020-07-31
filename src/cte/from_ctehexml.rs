@@ -25,7 +25,7 @@ SOFTWARE.
 
 use std::{collections::BTreeMap, convert::TryFrom};
 
-use failure::Error;
+use anyhow::{format_err, Error};
 
 use crate::{
     bdl::{self, Data},

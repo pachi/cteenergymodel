@@ -25,8 +25,9 @@ SOFTWARE.
 //!
 //! Composición constructiva de huecos (GAP)
 
-use failure::Error;
 use std::{collections::HashMap, convert::TryFrom};
+
+use anyhow::{format_err, Error};
 
 use crate::bdl::{BdlBlock, Frame, Glass};
 

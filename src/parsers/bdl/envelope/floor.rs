@@ -31,9 +31,9 @@ SOFTWARE.
 
 use std::convert::TryFrom;
 
-use crate::bdl::BdlBlock;
+use anyhow::Error;
 
-use failure::Error;
+use crate::bdl::BdlBlock;
 
 /// Planta (agrupación de espacios)
 #[derive(Debug, Clone, Default)]

@@ -29,8 +29,9 @@ SOFTWARE.
 //! ya que su información se almacena en los muros (ABSORPTANCE) o en
 //! la construcción de muro (LAYERS).
 
-use failure::Error;
 use std::convert::TryFrom;
+
+use anyhow::{bail, format_err, Error};
 
 use crate::bdl::BdlBlock;
 

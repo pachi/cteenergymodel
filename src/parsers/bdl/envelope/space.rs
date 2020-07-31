@@ -30,13 +30,12 @@ SOFTWARE.
 
 use std::convert::TryFrom;
 
+use anyhow::{bail, format_err, Error};
+
 use super::geom::Polygon;
 use super::walls::Tilt;
 use crate::bdl::BdlBlock;
 use crate::bdl::Data;
-
-use failure::bail;
-use failure::Error;
 
 /// Espacio
 #[derive(Debug, Clone, Default)]

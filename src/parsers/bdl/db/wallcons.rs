@@ -25,8 +25,9 @@ SOFTWARE.
 //!
 //! Composiciones constructivas de cerramientos opacos (LAYERS)
 
-use failure::Error;
 use std::{collections::HashMap, convert::TryFrom};
+
+use anyhow::{format_err, Error};
 
 use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock, Material};
 

@@ -30,7 +30,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use failure::Error;
+use anyhow::{bail, format_err, Error};
 
 use crate::utils::{find_file_in_basedir, read_latin1_file};
 

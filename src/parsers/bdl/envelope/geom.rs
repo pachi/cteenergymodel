@@ -29,11 +29,10 @@ SOFTWARE.
 
 use std::convert::TryFrom;
 
+use anyhow::{bail, Error};
+
 use crate::bdl::BdlBlock;
 use crate::utils::normalize;
-
-use failure::bail;
-use failure::Error;
 
 /// Polígono
 /// Solo pueden ser polígonos con vértices 2D

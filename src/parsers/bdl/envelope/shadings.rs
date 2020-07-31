@@ -25,8 +25,9 @@ SOFTWARE.
 //!
 //! Elementos de sombra (BUILDING-SHADE)
 
-use failure::Error;
 use std::convert::TryFrom;
+
+use anyhow::Error;
 
 use crate::bdl::{envelope::Vertex3D, BdlBlock};
 

@@ -27,10 +27,10 @@ use std::fs::File;
 use std::io::{prelude::*, BufReader};
 use std::path::{Path, PathBuf};
 
+use anyhow::{bail, Context, Error};
 use encoding::all::ISO_8859_1;
 use encoding::{DecoderTrap, Encoding};
-use failure::Error;
-use failure::ResultExt;
+
 use glob::glob;
 
 /// Localiza archivo que sigue el patrón pat en el directorio dir
@@ -83,11 +83,11 @@ pub fn read_latin1_file<T: AsRef<Path>>(path: T) -> Result<String, Error> {
 }
 
 // Lee a una cadena un archivo en utf8
-pub fn read_file<T: AsRef<Path>>(path: T) -> Result<String, Error> {
+pub fn read_file<T: AsRef<Path>>(path: T) -> anyhow::Result<String> {
     let mut buf = String::new();
     BufReader::new(File::open(path.as_ref())?)
         .read_to_string(&mut buf)
-        .context("No se ha podido leer el archivo")?;
+        .with_context(|| "No se ha podido leer el archivo")?;
     Ok(buf)
 }
 

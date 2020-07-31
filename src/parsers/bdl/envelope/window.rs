@@ -25,8 +25,9 @@ SOFTWARE.
 //!
 //! Elementos WINDOW de la envolvente térmica
 
-use failure::Error;
 use std::convert::TryFrom;
+
+use anyhow::{bail, format_err, Error};
 
 use crate::bdl::{extract_f32vec, BdlBlock, Data};
 

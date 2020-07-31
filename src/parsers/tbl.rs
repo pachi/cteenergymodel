@@ -46,8 +46,7 @@ use std::{
     str::FromStr,
 };
 
-use failure::Error;
-use failure::ResultExt;
+use anyhow::{bail, format_err, Context, Error};
 
 use crate::utils::{find_file_in_basedir, read_latin1_file};
 
@@ -201,7 +200,7 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<Tbl, Error> {
         .split_whitespace()
         .map(|s|
             s.parse::<i32>()
-                .context("Error al leer el archivo .tbl: no se ha podido determinar el número de elementos")
+                .with_context(|| "Error al leer el archivo .tbl: no se ha podido determinar el número de elementos")
         )
         .collect::<Result<Vec<i32>,_>>()?;
     if nums.len() < 2 {
@@ -219,10 +218,12 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<Tbl, Error> {
             .ok_or_else(|| format_err!("Error al leer el archivo .tbl: no se ha encontrado la línea de propiedades del elemento {}", name))?;
         let element = (name.to_owned() + " " + values)
             .parse::<Element>()
-            .context(format!(
-                "Error al leer el archivo .tbl: formato desconocido del elemento {}",
-                name
-            ))?;
+            .with_context(|| {
+                format!(
+                    "Error al leer el archivo .tbl: formato desconocido del elemento {}",
+                    name
+                )
+            })?;
         elements.insert(name.to_string(), element);
         idxelem += 1;
         if idxelem == numelements {
@@ -243,10 +244,12 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<Tbl, Error> {
         })?;
         let space = (name.to_owned() + " " + values)
             .parse::<Space>()
-            .context(format!(
-                "Error al leer el archivo .tbl: formato desconocido del espacio {}",
-                name
-            ))?;
+            .with_context(|| {
+                format!(
+                    "Error al leer el archivo .tbl: formato desconocido del espacio {}",
+                    name
+                )
+            })?;
         spaces.insert(name.to_string(), space);
         idxspc += 1;
         if idxspc == numspaces {

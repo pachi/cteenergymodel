@@ -24,10 +24,10 @@ SOFTWARE.
 #[cfg(not(windows))]
 mod cli;
 #[cfg(not(windows))]
-use exitfailure::ExitFailure;
+use anyhow::Result;
 
 #[cfg(not(windows))]
-fn main() -> Result<(), ExitFailure> {
+fn main() -> Result<()> {
     cli::cli_main()
 }
 

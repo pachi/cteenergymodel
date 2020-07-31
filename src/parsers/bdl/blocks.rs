@@ -27,8 +27,7 @@ SOFTWARE.
 
 use super::AttrMap;
 
-use failure::bail;
-use failure::Error;
+use anyhow::{bail, Error};
 
 // Objetos ----------------------------------------------------------------
 

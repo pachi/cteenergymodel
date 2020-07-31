@@ -22,8 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-use exitfailure::ExitFailure;
 use std::process::exit;
+
+use anyhow::Result;
 
 use hulc2envolventecte::{
     collect_hulc_data, get_copytxt,
@@ -65,7 +66,7 @@ impl Default for Options {
     }
 }
 
-pub fn cli_main() -> Result<(), ExitFailure> {
+pub fn cli_main() -> Result<()> {
     env_logger::init();
 
     eprintln!("{}\n", get_copytxt());

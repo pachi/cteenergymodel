@@ -25,8 +25,9 @@ SOFTWARE.
 //!
 //! Definición de acristalamiento de hueco (GLASS-TYPE)
 
-use failure::Error;
 use std::convert::TryFrom;
+
+use anyhow::{bail, Error};
 
 use crate::bdl::BdlBlock;
 

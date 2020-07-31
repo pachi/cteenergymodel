@@ -25,7 +25,7 @@ SOFTWARE.
 
 use std::path::{Path, PathBuf};
 
-use failure::Error;
+use anyhow::{format_err, Error};
 
 use crate::bdl::Data;
 use crate::utils::{find_file_in_basedir, read_file};

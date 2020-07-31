@@ -25,7 +25,7 @@ SOFTWARE.
 
 use std::collections::BTreeMap;
 
-use failure::Error;
+use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{

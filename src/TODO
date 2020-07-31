@@ -1,9 +1,5 @@
 # TAREAS PENDIENTES
 
-## hulc2envolventecte
-
-- Migrar de failure a thiserror o anyhow: https://github.com/bytecodealliance/cranelift/pull/1188/files
-
 ## cte::Data
 
 - Calcular más cosas:

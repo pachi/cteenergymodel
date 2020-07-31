@@ -21,14 +21,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-#[macro_use]
-extern crate failure;
-
 pub mod cte;
 pub mod parsers;
 pub mod utils;
 
 use std::{convert::TryFrom, path::Path};
+
+use anyhow::{format_err, Error};
 
 use cte::{Boundaries, ExtraData, Model};
 use parsers::{bdl, ctehexml, kyg, tbl};
@@ -60,7 +59,7 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
     ctehexmlpath: Option<T>,
     kygpath: Option<T>,
     tblpath: Option<T>,
-) -> Result<Model, failure::Error> {
+) -> Result<Model, Error> {
     // Carga .ctehexml y BBDD HULC
     let ctehexmlpath = &ctehexmlpath.ok_or_else(|| {
         format_err!("No se ha podido localizar el archivo .ctehexml del proyecto")

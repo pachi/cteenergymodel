@@ -31,8 +31,9 @@ SOFTWARE.
 //!
 //! Todos tienen una construcción y pertenecen a un espacio (location)
 
-use failure::Error;
 use std::convert::TryFrom;
+
+use anyhow::{bail, format_err, Error};
 
 use crate::bdl::{envelope::Polygon, AttrMap, BdlBlock, Data};
 use crate::utils::normalize;

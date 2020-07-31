@@ -25,8 +25,9 @@ SOFTWARE.
 //!
 //! Material (MATERIAL) (tipo PROPERTIES o RESISTANCE))
 
-use failure::Error;
 use std::convert::TryFrom;
+
+use anyhow::Error;
 
 use crate::bdl::BdlBlock;
 

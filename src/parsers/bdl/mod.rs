@@ -33,7 +33,7 @@ SOFTWARE.
 use std::collections::HashMap;
 use std::convert::TryFrom;
 
-use failure::Error;
+use anyhow::{format_err, Error};
 use log::warn;
 
 mod blocks;

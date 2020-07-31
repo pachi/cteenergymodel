@@ -32,8 +32,7 @@ SOFTWARE.
 
 use std::collections::HashMap;
 
-use failure::bail;
-use failure::Error;
+use anyhow::{bail, format_err, Error};
 
 #[derive(Debug, Clone, Default)]
 pub struct AttrMap(pub HashMap<String, BdlValue>);
