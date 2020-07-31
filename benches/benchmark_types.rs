@@ -1,3 +1,7 @@
+// Copyright (c) 2018-2020 Rafael Villar Burke <pachi@ietcc.csic.es>
+// Distributed under the MIT License
+// (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
+
 use criterion::{criterion_group, criterion_main, Criterion};
 use hulc2envolventecte::{
     collect_hulc_data,
