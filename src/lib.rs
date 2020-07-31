@@ -99,6 +99,10 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
         let kygdata = kyg::parse(&kygpath).unwrap();
 
         // Modifica U de muros con datos del .kyg
+        // XXX: hay que tener cuidado porque estos valores tienen desviaciones con los que se muestran en
+        // XXX: pantalla del HE1 en el caso de cerramientos interiores en contacto con otros espacios
+        // XXX: no habitables/ acondicionados y en elementos en contacto con el terreno.
+        // XXX: probablemente se deba a que HULC calcula con DA DB-HE1 o como DOE2 y no con UNE-EN 13789
         for e in &mut extra {
             let wallname = e.name.as_str();
             let kygwall = kygdata.walls.get(wallname);

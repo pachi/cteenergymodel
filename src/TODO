@@ -4,7 +4,7 @@ general:
     - son los elementos que pertenecen a espacios dentro de la envolvente pero
       que no comunican con otros espacios interiores a la envolvente
 - Exportar capas en construcciones
-- Exportar materiales para poder calcular U con capas.
+- Exportar materiales para poder calcular U con capas (capas: Vec<(String, f32)>)
     - Necesita biblioteca base en Rust para interpretar construcciones:
     - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 
@@ -26,11 +26,10 @@ general:
 ideas:
 - hacer visualizador 3d (con 3djs).
 
-envolventectedata:
-    Llevar a env:
-        - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
-        - qsoljul?
-        - compacidad
+cte::Data:
+    - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
+    - qsoljul?
+    - compacidad
 
 BDL:
 - Se podría eliminar la referencia entre muros y espacios, generando el polígono del muro a partir de su referencia al polígono del espacios
@@ -44,6 +43,7 @@ BDL:
     - horarios
     - condiciones operacionales
     - consignas
+- Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1
 
 EnvolventeCTE:
 - Eliminar uso de data.autil y usar data.a_util_ref()
