@@ -3,26 +3,36 @@
 ## cte::Data
 
 - Calcular más cosas:
+    - Devolver datos de U para u_values ({ windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> })
     - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
-    - qsoljul?
-    - compacidad
-    - Detectar elementos que pertenecen a la envolvente a partir de espacios
+    - qsoljul
+    - compacidad V/A
+    - n50
+    - Lista de elementos que pertenecen a la envolvente
         - son los elementos que pertenecen a espacios dentro de la envolvente pero
           que no comunican con otros espacios interiores a la envolvente
-    - calculadores de elementos -> ¿Mover a módulo separado?
-        - Calculador de elementos para obtener % de afección de U según intercalarios
-          y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
+- Módulo para calcular propiedades de elementos
+    - Calculador de elementos para obtener % de afección de U según intercalarios
+        y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
+    - propiedades de vidrios con protecciones móviles, etc
+    - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
 
 - Nuevos datos / campos:
     - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
-    - Traer capas en construcciones
-    - Traer materiales para poder calcular U con capas (capas: Vec<(String, f32)>)
+    - Incorporar en construcciones la composición de capas (capas: Vec<(String, f32)>)
+    - Incorporar datos de materiales para poder calcular U de composiciones
         - Necesita biblioteca base en Rust para interpretar construcciones:
         - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 
 ## EnvolventeCTE
 
 - Actualizar a versión actual del formato JSON de cte::Data
+- Pensar cómo mantenemos sincronizados los datos entre cte::Data y EnvolventeCTE:
+    - tal vez usando un Map de JS para BTreeMap (ver cómo funciona con serde-JSON
+    - devolviendo datos en estructuras aparte (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> })
+- Intentar llevar el trabajo a wasm
+    - calcular K, qsoljul, n50, U de elementos, A_ref, V/A, etc
+    - calcular elementos (propiedades de vidrios, Fshobst de huecos según retranqueos, voladizos, aletas, etc)
 - Eliminar uso de data.autil y usar data.a_util_ref()
 
 ## BDL
@@ -37,5 +47,5 @@
     - horarios
     - condiciones operacionales
     - consignas
-- Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1
+- Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1 y reutilizar módulo nuevo
 - Idea: hacer visualizador 3d (con 3djs).
