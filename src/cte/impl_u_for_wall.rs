@@ -25,8 +25,6 @@ SOFTWARE.
 //! - UNE-EN ISO 13789:2010 transmisión general
 //! - UNE-EN ISO 6946:2012 para elementos opacos
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
-//! TODO: No estamos teniendo en cuenta la transmitancia de los huecos
-//! TODO: comprobar si medimos superficies netas o brutas en muros
 
 use std::f32::consts::PI;
 
@@ -173,7 +171,7 @@ impl Model {
                         u_ext,
                         z,
                     );
-                    return u_ext;
+                    return fround2(u_ext);
                 };
 
                 // Dimensión característica del suelo del sótano.
