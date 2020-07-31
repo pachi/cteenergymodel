@@ -32,7 +32,7 @@ use std::f32::consts::PI;
 
 use crate::utils::fround2;
 
-pub use super::{Boundaries, Model, Orientation, SpaceType, Tilt, Wall, WallCons};
+pub use super::{Boundaries, Model, Orientation, SpaceType, Tilt, Wall, WallCons, Window};
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
 const RSI_ASCENDENTE: f32 = 0.10;
@@ -44,6 +44,14 @@ const LAMBDA_GND: f32 = 2.0;
 const LAMBDA_INS: f32 = 0.035;
 
 impl Model {
+    /// Devuelve huecos del muro
+    pub fn get_wall_windows(&self, wall: &Wall) -> Vec<&Window> {
+        self.windows
+            .values()
+            .filter(|w| w.wall == wall.name)
+            .collect()
+    }
+
     /// Vector de muros (incluyendo suelos y techos) que delimitan un espacio
     pub fn get_space_walls(&self, space: &str) -> Vec<&Wall> {
         self.walls
@@ -105,8 +113,12 @@ impl Model {
                     .filter(|w| w.bounds == UNDERGROUND && Tilt::from(w.tilt) == BOTTOM)
                     .map(|w| w.area)
                     .sum();
-                // Simplificación del perímetro: Suponemos superficie cuadrada
-                let gnd_p = 4.0 * f32::sqrt(gnd_a);
+                // Si no está definido, entonces suponemos superficie cuadrada
+                let gnd_p = if let Some(perimeter) = wall.perimeter {
+                    perimeter
+                } else {
+                    4.0 * f32::sqrt(gnd_a)
+                };
 
                 // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
                 let b_1 = gnd_a / (0.5 * gnd_p);
@@ -264,7 +276,15 @@ impl Model {
                     let ua_nextwalls = nextwalls
                         .iter()
                         .filter(|w| w.bounds == UNDERGROUND || w.bounds == EXTERIOR)
-                        .map(|w| w.area * self.u_for_wall(w))
+                        .map(|w| {
+                            // A·U de muros + A.U de sus huecos
+                            w.area * self.u_for_wall(w)
+                                + self
+                                    .get_wall_windows(&w)
+                                    .iter()
+                                    .map(|win| win.area * self.wincons.get(&win.cons).unwrap().u)
+                                    .sum::<f32>()
+                        })
                         .sum::<f32>();
                     // 1/U = 1/U_f + A / (sum A·U + 0.33·n·V) (17)
                     let r_u = wall.area / (ua_nextwalls + 0.33 * n_ven * nextspace_v);

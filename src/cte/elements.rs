@@ -63,9 +63,11 @@ pub struct Wall {
     /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
     pub bounds: Boundaries,
-    /// Superficie neta del elemento opaco (m2)
+    /// Superficie neta (sin huecos) del elemento opaco (m2)
     #[serde(rename(serialize = "A"))]
     pub area: f32,
+    /// Perímetro del elemento (m)
+    pub perimeter: Option<f32>,
     /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90)
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
     /// Coincide con el criterio de la UNE-EN ISO 52016-1

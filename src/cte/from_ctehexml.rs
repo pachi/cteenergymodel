@@ -150,17 +150,26 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
         .walls
         .iter()
         .map(|wall| -> Result<(String, Wall), Error> {
+            let bounds = wall.bounds.into();
+            let tilt = fround2(wall.tilt);
+            let pos = Tilt::from(tilt);
+            let perimeter = if pos == Tilt::BOTTOM && bounds == Boundaries::UNDERGROUND {
+                Some(wall.perimeter(bdl)?)
+            } else {
+                None
+            };
             Ok((
                 wall.name.clone(),
                 Wall {
                     name: wall.name.clone(),
                     cons: wall.cons.to_string(),
                     area: fround2(wall.net_area(bdl)?),
+                    perimeter,
                     space: wall.space.clone(),
                     nextto: wall.nextto.clone(),
-                    bounds: wall.bounds.into(),
+                    bounds,
                     azimuth: fround2(orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?)),
-                    tilt: fround2(wall.tilt),
+                    tilt,
                     zground: wall.zground,
                 },
             ))
