@@ -1,50 +1,45 @@
-general:
-- Llevar cosas que sacamos del kyg a lib.rs y desde ctehexml
-- Detectar elementos que pertenecen a la envolvente a partir de espacios
-    - son los elementos que pertenecen a espacios dentro de la envolvente pero
-      que no comunican con otros espacios interiores a la envolvente
-- Exportar capas en construcciones
-- Exportar materiales para poder calcular U con capas (capas: Vec<(String, f32)>)
-    - Necesita biblioteca base en Rust para interpretar construcciones:
-    - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+# TAREAS PENDIENTES
 
-- Añadir tests de tbl.rs (parse)
+## hulc2envolventecte
+
 - Migrar de failure a thiserror o anyhow: https://github.com/bytecodealliance/cranelift/pull/1188/files
-- Usar referencias con hashes como IDs:
-        #[derive(Hash)]
-        struct Block {
-            ...
-        }
 
-        fn get_id<T: Hash>(t: &T) -> String {
-            let mut s = DefaultHasher::new();
-            t.hash(&mut s);
-            s.finish(); // u64
-            format!("{:x}", s)
-        }
+## cte::Data
 
-ideas:
-- hacer visualizador 3d (con 3djs).
-
-cte::Data:
+- Calcular más cosas:
     - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
     - qsoljul?
     - compacidad
+    - Detectar elementos que pertenecen a la envolvente a partir de espacios
+        - son los elementos que pertenecen a espacios dentro de la envolvente pero
+          que no comunican con otros espacios interiores a la envolvente
+    - calculadores de elementos -> ¿Mover a módulo separado?
+        - Calculador de elementos para obtener % de afección de U según intercalarios
+          y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
 
-BDL:
+- Nuevos datos / campos:
+    - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
+    - Traer capas en construcciones
+    - Traer materiales para poder calcular U con capas (capas: Vec<(String, f32)>)
+        - Necesita biblioteca base en Rust para interpretar construcciones:
+        - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+
+## EnvolventeCTE
+
+- Actualizar a versión actual del formato JSON de cte::Data
+- Eliminar uso de data.autil y usar data.a_util_ref()
+
+## BDL
+
 - Se podría eliminar la referencia entre muros y espacios, generando el polígono del muro a partir de su referencia al polígono del espacios
     - así eliminamos referencias a vértices de polígonos y también location
 - Quitar de los elementos aquellas cosas que necesitan consultas globales (con acceso a bdldata)
 - Comprobar qué se cambia en las plantas o en el edificio cuando se indica una cota base distinta a la 0.0 (ver si se pone la Z de la planta P01 distinta a "")
 - Convertir definición de muros de polygon o location a (X, Y, Z, WIDTH, HEIGHT, AZIMUTH)
-- Implementar espacios (y plantas) con multiplicadores (mediciones)
 - Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL:
     - metadatos
     - horarios
     - condiciones operacionales
     - consignas
 - Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1
-
-EnvolventeCTE:
-- Eliminar uso de data.autil y usar data.a_util_ref()
-- Calculador de elementos para obtener % de afección de U según intercalarios y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
+- Idea: hacer visualizador 3d (con 3djs).
