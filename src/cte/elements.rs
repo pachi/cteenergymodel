@@ -48,6 +48,7 @@ pub struct Wall {
     #[serde(rename(serialize = "A"))]
     pub area: f32,
     /// Perímetro del elemento (m)
+    /// Si se indica None, se aproxima al que resultaría de una superficie cuadrada.
     pub perimeter: Option<f32>,
     /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90)
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie

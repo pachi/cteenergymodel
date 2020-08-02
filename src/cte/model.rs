@@ -10,8 +10,7 @@ use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    simplemodel::SimpleModel, Boundaries, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
-    Window, WindowCons,
+    Boundaries, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons, Window, WindowCons,
 };
 use crate::utils::fround2;
 
@@ -29,7 +28,6 @@ pub struct ExtraData {
 }
 
 /// Modelo del edificio
-#[serde(into = "SimpleModel", from = "SimpleModel")]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Model {
     /// Metadatos
