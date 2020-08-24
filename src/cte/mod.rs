@@ -10,6 +10,6 @@ pub(crate) mod from_ctehexml;
 pub mod impl_u_for_wall;
 pub mod model;
 
-pub use common::{Boundaries, Orientation, SpaceType, Tilt};
+pub use common::{BoundaryType, Orientation, SpaceType, Tilt};
 pub use elements::{Space, ThermalBridge, Wall, WallCons, Window, WindowCons};
 pub use model::{ExtraData, Meta, Model};

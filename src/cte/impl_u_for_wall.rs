@@ -11,7 +11,7 @@ use std::f32::consts::PI;
 
 use crate::utils::fround2;
 
-pub use super::{Boundaries, Model, Orientation, SpaceType, Tilt, Wall, WallCons, Window};
+pub use super::{BoundaryType, Model, Orientation, SpaceType, Tilt, Wall, WallCons, Window};
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
 const RSI_ASCENDENTE: f32 = 0.10;
@@ -57,10 +57,10 @@ impl Model {
     ///       las construcciones por defecto
     /// - los elementos adiabáticos se reportan con valor 0.0
     pub fn u_for_wall(&self, wall: &Wall) -> f32 {
-        use {Boundaries::*, Tilt::*};
+        use {BoundaryType::*, Tilt::*};
 
         let position: Tilt = wall.tilt.into();
-        let bounds: Boundaries = wall.bounds.into();
+        let bounds: BoundaryType = wall.bounds.into();
         let z = wall.zground.unwrap_or(0.0);
         let r_n_perim_ins = self.meta.rn_perim_insulation;
         let d_perim_ins = self.meta.d_perim_insulation;

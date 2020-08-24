@@ -10,7 +10,7 @@ use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    Boundaries, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons, Window, WindowCons,
+    BoundaryType, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons, Window, WindowCons,
 };
 use crate::utils::fround2;
 
@@ -20,7 +20,7 @@ use crate::utils::fround2;
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ExtraData {
     pub name: String,
-    pub bounds: Boundaries,
+    pub bounds: BoundaryType,
     pub tilt: Tilt,
     pub cons: String,
     pub u: f32,

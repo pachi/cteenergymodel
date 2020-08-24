@@ -15,19 +15,19 @@ use crate::{
 };
 
 pub use super::{
-    Boundaries, Meta, Model, Orientation, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
+    BoundaryType, Meta, Model, Orientation, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
     Window, WindowCons,
 };
 
 // Conversiones de BDL a tipos CTE -------------------
 
-impl From<bdl::Boundaries> for Boundaries {
-    fn from(boundary: bdl::Boundaries) -> Self {
+impl From<bdl::BoundaryType> for BoundaryType {
+    fn from(boundary: bdl::BoundaryType) -> Self {
         match boundary {
-            bdl::Boundaries::EXTERIOR => Self::EXTERIOR,
-            bdl::Boundaries::INTERIOR => Self::INTERIOR,
-            bdl::Boundaries::UNDERGROUND => Self::UNDERGROUND,
-            bdl::Boundaries::ADIABATIC => Self::ADIABATIC,
+            bdl::BoundaryType::EXTERIOR => Self::EXTERIOR,
+            bdl::BoundaryType::INTERIOR => Self::INTERIOR,
+            bdl::BoundaryType::UNDERGROUND => Self::UNDERGROUND,
+            bdl::BoundaryType::ADIABATIC => Self::ADIABATIC,
         }
     }
 }
@@ -134,7 +134,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
             let bounds = wall.bounds.into();
             let tilt = fround2(wall.tilt);
             let pos = Tilt::from(tilt);
-            let perimeter = if pos == Tilt::BOTTOM && bounds == Boundaries::UNDERGROUND {
+            let perimeter = if pos == Tilt::BOTTOM && bounds == BoundaryType::UNDERGROUND {
                 Some(wall.perimeter(bdl)?)
             } else {
                 None

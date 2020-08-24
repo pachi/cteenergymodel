@@ -10,7 +10,7 @@ use crate::utils::normalize;
 
 /// Condiciones de contorno de los cerramientos
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum Boundaries {
+pub enum BoundaryType {
     /// Cerramiento en contacto con el aire exterior
     EXTERIOR,
     /// Cerramiento en contacto con el aire de otro espacio
@@ -21,21 +21,21 @@ pub enum Boundaries {
     ADIABATIC,
 }
 
-impl Display for Boundaries {
+impl Display for BoundaryType {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let printable = match *self {
-            Boundaries::EXTERIOR => "EXTERIOR",
-            Boundaries::INTERIOR => "INTERIOR",
-            Boundaries::UNDERGROUND => "UNDERGROUND",
-            Boundaries::ADIABATIC => "ADIABATIC",
+            BoundaryType::EXTERIOR => "EXTERIOR",
+            BoundaryType::INTERIOR => "INTERIOR",
+            BoundaryType::UNDERGROUND => "UNDERGROUND",
+            BoundaryType::ADIABATIC => "ADIABATIC",
         };
         write!(f, "{}", printable)
     }
 }
 
-impl Default for Boundaries {
+impl Default for BoundaryType {
     fn default() -> Self {
-        Boundaries::EXTERIOR
+        BoundaryType::EXTERIOR
     }
 }
 

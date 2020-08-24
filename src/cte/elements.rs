@@ -5,7 +5,7 @@
 use serde::{Deserialize, Serialize};
 
 pub use super::common::{
-    Boundaries::{self, *},
+    BoundaryType::{self, *},
     Orientation::*,
     SpaceType::{self, *},
     Tilt::*,
@@ -43,7 +43,7 @@ pub struct Wall {
     /// - EXTERIOR: cerramientos en contacto con el aire exterior
     /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
-    pub bounds: Boundaries,
+    pub bounds: BoundaryType,
     /// Superficie neta (sin huecos) del elemento opaco (m2)
     #[serde(rename(serialize = "A"))]
     pub area: f32,
@@ -91,7 +91,10 @@ pub struct Space {
     pub inside_tenv: bool,
     /// Multiplicador
     pub multiplier: f32,
-    /// Tipo de espacio (ACONDICIONADO, NO_ACONDICIONADO, NO_HABITABLE)
+    /// Tipo de espacio:
+    /// - CONDITIONED: acondicionado,
+    /// - UNCONDITIONED: no acondicionado
+    /// - UNINHABITED: no habitable
     #[serde(rename(serialize = "type"))]
     pub space_type: SpaceType,
     /// Ventilación, en ren/h

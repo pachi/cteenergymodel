@@ -10,7 +10,7 @@ use std::{convert::TryFrom, path::Path};
 
 use anyhow::{format_err, Error};
 
-use cte::{Boundaries, ExtraData, Model};
+use cte::{BoundaryType, ExtraData, Model};
 use parsers::{bdl, ctehexml, kyg, tbl};
 use utils::fround2;
 
@@ -105,7 +105,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
         let tbldata = tbl::parse(&tblpath).unwrap();
         #[allow(unused_assignments, unused_variables)]
         for e in &mut extra {
-            if e.bounds != Boundaries::INTERIOR {
+            if e.bounds != BoundaryType::INTERIOR {
                 continue;
             };
             let w = tbldata.elements.get(e.name.as_str()).unwrap();

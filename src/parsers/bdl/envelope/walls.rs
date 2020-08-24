@@ -34,7 +34,7 @@ pub enum Tilt {
 
 /// Condiciones de contorno de los cerramientos
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Boundaries {
+pub enum BoundaryType {
     /// Cerramiento en contacto con el aire exterior
     EXTERIOR,
     /// Cerramiento en contacto con el aire de otro espacio
@@ -45,9 +45,9 @@ pub enum Boundaries {
     ADIABATIC,
 }
 
-impl Default for Boundaries {
+impl Default for BoundaryType {
     fn default() -> Self {
-        Boundaries::EXTERIOR
+        BoundaryType::EXTERIOR
     }
 }
 
@@ -78,7 +78,7 @@ pub struct Wall {
     /// Existen otros tipos en BDL pero HULC no los admite:
     /// - INTERNAL: cerramiento interior a un espacio (no comunica espacios)
     /// - AIR: superficie interior a un espacio, sin masa, pero que admite convección
-    pub bounds: Boundaries,
+    pub bounds: BoundaryType,
     // --- Propiedades exclusivas -----------------------
     /// Espacio adyacente que conecta con el espacio padre
     /// (solo en algunos tipos de cerramientos interiores (no adiabático o superficie interior))
@@ -406,8 +406,8 @@ impl TryFrom<BdlBlock> for Wall {
             "INTERIOR-WALL" => {
                 let int_wall = attrs.remove_str("INT-WALL-TYPE")?;
                 match int_wall.as_str() {
-                    "STANDARD" => Boundaries::INTERIOR,
-                    "ADIABATIC" => Boundaries::ADIABATIC,
+                    "STANDARD" => BoundaryType::INTERIOR,
+                    "ADIABATIC" => BoundaryType::ADIABATIC,
                     // AIR, INTERNAL
                     _ => bail!(
                         "Cerramiento interior {} con subtipo desconocido {} / {}",
@@ -417,8 +417,8 @@ impl TryFrom<BdlBlock> for Wall {
                     ),
                 }
             }
-            "UNDERGROUND-WALL" => Boundaries::UNDERGROUND,
-            "EXTERIOR-WALL" | "ROOF" => Boundaries::EXTERIOR,
+            "UNDERGROUND-WALL" => BoundaryType::UNDERGROUND,
+            "EXTERIOR-WALL" | "ROOF" => BoundaryType::EXTERIOR,
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
 
@@ -438,11 +438,11 @@ impl TryFrom<BdlBlock> for Wall {
 
         // Propiedades específicas
         let nextto = match bounds {
-            Boundaries::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
+            BoundaryType::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
         };
         let zground = match bounds {
-            Boundaries::UNDERGROUND => Some(attrs.remove_f32("Z-GROUND")?),
+            BoundaryType::UNDERGROUND => Some(attrs.remove_f32("Z-GROUND")?),
             _ => None,
         };
 
