@@ -24,18 +24,17 @@ const LAMBDA_INS: f32 = 0.035;
 
 impl Model {
     /// Devuelve huecos del muro
-    pub fn get_wall_windows(&self, wall: &Wall) -> Vec<&Window> {
+    pub fn windows_of_wall<'a>(&'a self, wallname: &'a str) -> impl Iterator<Item = &'a Window> {
         self.windows
             .values()
-            .filter(|w| w.wall == wall.name)
-            .collect()
+            .filter(move |w| w.wall == wallname)
     }
 
     /// Vector de muros (incluyendo suelos y techos) que delimitan un espacio
-    pub fn get_space_walls(&self, space: &str) -> Vec<&Wall> {
+    pub fn walls_of_space<'a>(&'a self, space: &'a str) -> impl Iterator<Item = &'a Wall> {
         self.walls
             .values()
-            .filter(|w| {
+            .filter(move |w| {
                 w.space == space
                     || (if let Some(ref spc) = w.nextto {
                         spc == space
@@ -43,8 +42,6 @@ impl Model {
                         false
                     })
             })
-            // .map(|w| w.name.as_str())
-            .collect()
     }
 
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
@@ -86,9 +83,7 @@ impl Model {
                 // HULC parece estar calculando algo más parecido al método de Winkelman o:
                 // let u = 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
 
-                let otherwalls = self.get_space_walls(&wall.space);
-                let gnd_a = otherwalls
-                    .iter()
+                let gnd_a = self.walls_of_space(&wall.space)
                     .filter(|w| w.bounds == UNDERGROUND && Tilt::from(w.tilt) == BOTTOM)
                     .map(|w| w.area)
                     .sum();
@@ -160,8 +155,7 @@ impl Model {
                 // Usamos el promedio de los suelos del espacio
                 let space = self.spaces.get(&wall.space).unwrap();
                 let mut d_t = self
-                    .get_space_walls(space.name.as_str())
-                    .iter()
+                    .walls_of_space(&space.name)
                     .filter(|w| Tilt::from(w.tilt) == BOTTOM)
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
@@ -251,16 +245,13 @@ impl Model {
                     };
 
                     // Calculamos el A.U de los elementos del espacio que dan al exterior o al terreno (excluye interiores))
-                    let nextwalls = self.get_space_walls(nextspace.name.as_str());
-                    let ua_nextwalls = nextwalls
-                        .iter()
+                    let ua_nextwalls = self.walls_of_space(&nextspace.name)
                         .filter(|w| w.bounds == UNDERGROUND || w.bounds == EXTERIOR)
                         .map(|w| {
                             // A·U de muros + A.U de sus huecos
                             w.area * self.u_for_wall(w)
                                 + self
-                                    .get_wall_windows(&w)
-                                    .iter()
+                                    .windows_of_wall(&w.name)
                                     .map(|win| win.area * self.wincons.get(&win.cons).unwrap().u)
                                     .sum::<f32>()
                         })

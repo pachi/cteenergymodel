@@ -223,8 +223,7 @@ fn test_caso_a() {
         "P03_E01_FI003",
     ];
     assert_eq!(
-        data.get_space_walls("P02_E01")
-            .iter()
+        data.walls_of_space("P02_E01")
             .map(|w| w.name.as_str())
             .collect::<Vec<_>>(),
         results
