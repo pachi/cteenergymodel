@@ -96,11 +96,13 @@ fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
             let area = fround2(s.area());
             let height_net = s.space_height(&bdl)?;
             let height_gross = s.height;
+            let perimeter = Some(s.perimeter()); 
             Ok((
                 s.name.clone(),
                 Space {
                     name: s.name.clone(),
                     area,
+                    perimeter,
                     height_net,
                     height_gross,
                     inside_tenv: s.insidete,
@@ -133,19 +135,12 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
         .map(|wall| -> Result<(String, Wall), Error> {
             let bounds = wall.bounds.into();
             let tilt = fround2(wall.tilt);
-            let pos = Tilt::from(tilt);
-            let perimeter = if pos == Tilt::BOTTOM && bounds == BoundaryType::UNDERGROUND {
-                Some(wall.perimeter(bdl)?)
-            } else {
-                None
-            };
             Ok((
                 wall.name.clone(),
                 Wall {
                     name: wall.name.clone(),
                     cons: wall.cons.to_string(),
                     area: fround2(wall.net_area(bdl)?),
-                    perimeter,
                     space: wall.space.clone(),
                     nextto: wall.nextto.clone(),
                     bounds,

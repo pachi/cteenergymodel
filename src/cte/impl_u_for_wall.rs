@@ -83,18 +83,12 @@ impl Model {
                 // HULC parece estar calculando algo más parecido al método de Winkelman o:
                 // let u = 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
 
-                let gnd_a = self.walls_of_space(&wall.space)
-                    .filter(|w| w.bounds == UNDERGROUND && Tilt::from(w.tilt) == BOTTOM)
-                    .map(|w| w.area)
-                    .sum();
-                // Si no está definido, entonces suponemos superficie cuadrada
-                let gnd_p = if let Some(perimeter) = wall.perimeter {
-                    perimeter
-                } else {
-                    4.0 * f32::sqrt(gnd_a)
-                };
-
                 // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
+                // Calculamos la dimensión característica del **espacio** en el que sitúa el suelo
+                // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
+                let wspace = self.spaces.get(&wall.space).unwrap();
+                let gnd_a = wspace.area;
+                let gnd_p = wspace.perimeter.unwrap_or_else(|| { 4.0 * f32::sqrt(gnd_a) });
                 let b_1 = gnd_a / (0.5 * gnd_p);
 
                 const W: f32 = 0.3; // Simplificación: espesor supuesto de los muros perimetrales
