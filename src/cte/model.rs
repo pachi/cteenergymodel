@@ -44,7 +44,7 @@ pub struct Model {
     pub wincons: BTreeMap<String, WindowCons>,
     /// Construcciones de opacos
     pub wallcons: BTreeMap<String, WallCons>,
-    // XXX: Elementos temporalmente almacenados mientras no se pueden calcular correctamente
+    // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
     pub extra: Option<Vec<ExtraData>>,
 }
 
