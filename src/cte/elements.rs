@@ -76,20 +76,24 @@ pub struct ThermalBridge {
 }
 
 /// Espacio
+/// XXX: en teoría se podrían asignar los espacios a zonas térmicas, aunque simplificadamente
+/// XXX: consideraremos que cada espacio se corresponde con una ZT.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Space {
     /// Nombre del espacio
     pub name: String,
-    /// Superficie de la zona en m2
+    /// Superficie útil del espacio (m2)
     pub area: f32,
-    /// Altura libre (suelo a techo) de la zona en m
+    /// Perímetro del espacio (suelo) (m)
+    pub perimeter: Option<f32>,
+    /// Altura libre (suelo a techo) del espacio (m)
     /// No incluye el volumen de forjados o cubiertas.
     pub height_net: f32,
-    /// Altura bruta (suelo a suelo) de la zona en m
+    /// Altura bruta (suelo a suelo) del espacio (m)
     pub height_gross: f32,
     /// Pertenencia al interior de la envolvente térmica
     pub inside_tenv: bool,
-    /// Multiplicador
+    /// Multiplicador del espacio
     pub multiplier: f32,
     /// Tipo de espacio:
     /// - CONDITIONED: acondicionado,
