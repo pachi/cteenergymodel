@@ -94,9 +94,9 @@ fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
         .iter()
         .map(|s| {
             let area = fround2(s.area());
-            let height_net = s.space_height(&bdl)?;
-            let height_gross = s.height;
-            let perimeter = Some(s.perimeter()); 
+            let height_net = fround2(s.space_height(&bdl)?);
+            let height_gross = fround2(s.height);
+            let perimeter = Some(s.perimeter());
             Ok((
                 s.name.clone(),
                 Space {
@@ -168,7 +168,7 @@ fn windows_from_bdl(walls: &BTreeMap<String, Wall>, bdl: &Data) -> BTreeMap<Stri
                     cons: win.cons.to_string(),
                     wall: win.wall.clone(),
                     area: fround2(win.width * win.height),
-                    fshobst,
+                    fshobst: fround2(fshobst),
                 },
             )
         })
