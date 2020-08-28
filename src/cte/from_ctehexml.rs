@@ -61,6 +61,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             ["Unifamiliar", "Bloque", "UnaBloque"].contains(&dg.tipo_vivienda.as_str());
 
         let meta = Meta {
+            name: dg.nombre_proyecto.clone(),
             is_new_building: dg.tipo_definicion.as_str() == "Nuevo",
             is_dwelling,
             num_dwellings: dg.num_viviendas_bloque,

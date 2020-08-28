@@ -26,6 +26,8 @@ pub struct CtehexmlData {
 /// Datos del bloque DatosGenerales
 /// hay algunos campos que aparentemente no se usan/cambian como: tipoUso
 pub struct DatosGenerales {
+    /// Nombre del proyecto
+    pub nombre_proyecto: String,
     /// Tipo de edificio:
     /// - Vivienda unifamiliar: Unifamiliar
     /// - Viviendas en bloque: Bloque
@@ -132,6 +134,7 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
             .unwrap_or("".to_string());
 
     let datos_generales = DatosGenerales {
+        nombre_proyecto: get_tag_as_str(&datos_generales, "nomPro").to_string(),
         tipo_vivienda: get_tag_as_str(&datos_generales, "tipoVivienda").to_string(),
         tipo_definicion: get_tag_as_str(&datos_generales, "tipoDefinicion").to_string(),
         num_viviendas_bloque: get_tag_as_i32(&datos_generales, "numViviendasBloque")?,

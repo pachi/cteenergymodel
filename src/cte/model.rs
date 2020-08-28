@@ -126,6 +126,8 @@ impl Model {
 /// Metadatos del edificio
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Meta {
+    /// Nombre del proyecto
+    pub name: String,
     /// ¿Edificio nuevo?
     pub is_new_building: bool,
     /// ¿Es uso residencial?
@@ -149,6 +151,7 @@ pub struct Meta {
 impl Default for Meta {
     fn default() -> Self {
         Meta {
+            name: "Nombre del proyecto".to_string(),
             is_new_building: true,
             is_dwelling: true,
             num_dwellings: 1,
