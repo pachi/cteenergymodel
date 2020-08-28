@@ -49,7 +49,7 @@ impl EnvolventeCteData {
             .spaces
             .iter()
             .map(|s| {
-                if s.inside_tenv && s.space_type.as_str() != "NO_HABITABLE" {
+                if s.inside_tenv && s.space_type.as_str() != "UNINHABITED" {
                     s.area * s.multiplier
                 } else {
                     0.0
@@ -236,7 +236,7 @@ pub struct Space {
     pub inside_tenv: bool,
     /// Multiplicador
     pub multiplier: f32,
-    // Tipo de espacio (ACONDICIONADO, NO_ACONDICIONADO, NO_HABITABLE)
+    // Tipo de espacio (CONTIDIONED, UNCONDITIONED, UNINHABITED)
     #[serde(rename(serialize = "type"))]
     pub space_type: String,
 }

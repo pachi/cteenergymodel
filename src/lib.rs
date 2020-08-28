@@ -107,9 +107,9 @@ pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
                 inside_tenv: s.insidete,
                 multiplier: s.multiplier,
                 space_type: match s.stype.as_ref() {
-                    "CONDITIONED" => "ACONDICIONADO",
-                    "UNHABITED" => "NO_HABITABLE",
-                    _ => "NO_ACONDICIONADO",
+                    "CONDITIONED" => "CONDITIONED",
+                    "UNHABITED" => "UNINHABITED",
+                    _ => "UNCONDITIONED",
                 }
                 .to_string(),
             })
