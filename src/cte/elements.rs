@@ -39,7 +39,7 @@ pub struct Wall {
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
     pub nextto: Option<String>,
     /// Condiciones de contorno del cerramiento:
-    /// - UNDERGROUND: cerramientos en contacxto con el terreno
+    /// - UNDERGROUND: cerramientos en contacto con el terreno
     /// - EXTERIOR: cerramientos en contacto con el aire exterior
     /// - INTERIOR: cerramientos en contacto con el aire de otros espacios
     /// - ADIABATIC: cerramientos sin transmisión de calor
