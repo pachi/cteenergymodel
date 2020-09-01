@@ -70,7 +70,7 @@ impl Space {
             .find(|w| {
                 // Muros exteriores o cubiertas sobre el espacio
                 if w.position() == Tilt::TOP {
-                    true
+                    &w.space == &self.name
                 } else {
                     w.nextto.as_ref().map(|s| 
                         // Es un cerramiento interior sobre este espacio

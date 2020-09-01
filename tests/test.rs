@@ -254,10 +254,10 @@ fn test_caso_a() {
     assert_eq!(fround2(data.u_for_wall(&wall)), 0.54);
     // Partición interior horizontal (techo) con espacio no habitable/acondicionado, HULC=0.77
     let wall = data.walls.get("P03_E01_FI001").unwrap();
-    assert_eq!(fround2(data.u_for_wall(&wall)), 0.45);
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.46);
     // Partición interior vertical con espacio no habitable/acondicionado, HULC=0.68
     let wall = data.walls.get("P04_E01_Med001").unwrap();
-    assert_eq!(fround2(data.u_for_wall(&wall)), 0.65);
+    assert_eq!(fround2(data.u_for_wall(&wall)), 0.66);
 }
 
 #[test]
