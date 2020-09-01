@@ -97,7 +97,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
             let area = fround2(s.area());
             let height_net = fround2(s.space_height(&bdl)?);
             let height_gross = fround2(s.height);
-            let perimeter = Some(s.perimeter());
+            let perimeter = Some(s.exposed_perimeter(&bdl));
             Ok((
                 s.name.clone(),
                 Space {

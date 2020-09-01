@@ -81,7 +81,9 @@ pub struct Space {
     pub name: String,
     /// Superficie útil del espacio (m2)
     pub area: f32,
-    /// Perímetro del espacio (suelo) (m)
+    /// Perímetro expuesto del espacio (suelos) (m)
+    /// Incluye la parte del perímetro que separa el espacio del exterior
+    /// y excluye que lo separa de otros espacios acondicionados.
     pub perimeter: Option<f32>,
     /// Altura libre (suelo a techo) del espacio (m)
     /// No incluye el volumen de forjados o cubiertas.
