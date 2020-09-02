@@ -77,6 +77,11 @@ pub fn fround2(val: f32) -> f32 {
     (val * 100.0).round() / 100.0
 }
 
+/// Redondea valor a 3 decimales
+pub fn fround3(val: f32) -> f32 {
+    (val * 1000.0).round() / 1000.0
+}
+
 /// Normaliza número a un intervalo arbitrario (wrapping)
 pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     // ancho del intervalo

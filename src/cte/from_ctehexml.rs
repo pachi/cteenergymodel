@@ -11,7 +11,7 @@ use anyhow::{format_err, Error};
 use crate::{
     bdl::{self, Data},
     parsers::ctehexml,
-    utils::{fround2, orientation_bdl_to_52016},
+    utils::{fround2, fround3, orientation_bdl_to_52016},
 };
 
 pub use super::{
@@ -216,7 +216,7 @@ fn wallcons_from_bdl(
                 .and_then(|cons| {
                     let absorptance = cons.absorptance;
                     let r_intrinsic = match cons.r_intrinsic(&bdl.db.materials) {
-                        Ok(r) => r,
+                        Ok(r) => fround3(r),
                         _ => return None,
                     };
                     Some(WallCons {
