@@ -181,6 +181,7 @@ fn thermal_bridges_from_bdl(bdl: &Data) -> BTreeMap<String, ThermalBridge> {
     // PTs
     bdl.tbridges
         .iter()
+        .filter(|tb| tb.name != "LONGITUDES_CALCULADAS")
         .map(|tb| {
             (
                 tb.name.clone(),
