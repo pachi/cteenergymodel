@@ -84,7 +84,7 @@ pub struct Space {
     /// Perímetro expuesto del espacio (suelos) (m)
     /// Incluye la parte del perímetro que separa el espacio del exterior
     /// y excluye que lo separa de otros espacios acondicionados.
-    pub perimeter: Option<f32>,
+    pub exposed_perimeter: Option<f32>,
     /// Altura libre (suelo a techo) del espacio (m)
     /// No incluye el volumen de forjados o cubiertas.
     pub height_net: f32,
