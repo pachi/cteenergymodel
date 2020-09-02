@@ -16,14 +16,26 @@ use crate::utils::fround2;
 
 // ---------- Estructura general de datos --------------
 
-/// Datos adicionales para comprobación
+/// Datos adicionales para comprobación de muros
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ExtraData {
+    // Nombre del muro
     pub name: String,
+    // Condiciones de contorno del muro
     pub bounds: BoundaryType,
+    // Tipo de espacio
+    pub spacetype: SpaceType,
+    // Espacio adyacente
+    pub nextspace: Option<String>,
+    // Tipo de espacio adyacente
+    pub nextspacetype: Option<SpaceType>,
+    // Inclinación del muro
     pub tilt: Tilt,
+    // Construcción
     pub cons: String,
+    // U por defecto u obtenida de archivo KyGananciasSolares.txt
     pub u: f32,
+    // U calculada con UNE-EN ISO 13789
     pub computed_u: f32,
 }
 
