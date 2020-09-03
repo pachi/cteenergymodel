@@ -211,7 +211,7 @@ fn test_caso_a() {
     assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.windows.len(), 10);
     assert_eq!(data.walls.len(), 35); // 19 en ET
-    assert_eq!(data.thermal_bridges.len(), 11); // 7 en kyg
+    assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
     let results: Vec<&str> = vec![
         "P02_E01_FI001",
         "P02_E01_FI002",
@@ -270,7 +270,7 @@ fn test_caso_c() {
     assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.windows.len(), 9);
     assert_eq!(data.walls.len(), 33); // 27 en ET
-    assert_eq!(data.thermal_bridges.len(), 11); // 7 en kyg
+    assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
 }
 
 // Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
@@ -284,7 +284,7 @@ fn parse_test_data() {
     assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.windows.len(), 92);
     assert_eq!(data.walls.len(), 127); // 68 en ET
-    assert_eq!(data.thermal_bridges.len(), 11); // 6 en kyg
+    assert_eq!(data.thermal_bridges.len(), 10); // 6 en kyg
 }
 
 #[test]
@@ -298,7 +298,7 @@ fn parse_test_data2() {
     assert_eq!(data.meta.climate, "B3");
     assert_eq!(data.windows.len(), 29);
     assert_eq!(data.walls.len(), 95); // 60 en ET
-    assert_eq!(data.thermal_bridges.len(), 11); // 7 en kyg
+    assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
 }
 
 // #[ignore]
