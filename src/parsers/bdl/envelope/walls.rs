@@ -40,7 +40,7 @@ pub enum BoundaryType {
     /// Cerramiento en contacto con el aire de otro espacio
     INTERIOR,
     /// Cerramiento en contacto con el terreno
-    UNDERGROUND,
+    GROUND,
     /// Cerramiento sin transmisión térmica
     ADIABATIC,
 }
@@ -417,7 +417,7 @@ impl TryFrom<BdlBlock> for Wall {
                     ),
                 }
             }
-            "UNDERGROUND-WALL" => BoundaryType::UNDERGROUND,
+            "UNDERGROUND-WALL" => BoundaryType::GROUND,
             "EXTERIOR-WALL" | "ROOF" => BoundaryType::EXTERIOR,
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
@@ -442,7 +442,7 @@ impl TryFrom<BdlBlock> for Wall {
             _ => None,
         };
         let zground = match bounds {
-            BoundaryType::UNDERGROUND => Some(attrs.remove_f32("Z-GROUND")?),
+            BoundaryType::GROUND => Some(attrs.remove_f32("Z-GROUND")?),
             _ => None,
         };
 

@@ -16,7 +16,7 @@ pub enum BoundaryType {
     /// Cerramiento en contacto con el aire de otro espacio
     INTERIOR,
     /// Cerramiento en contacto con el terreno
-    UNDERGROUND,
+    GROUND,
     /// Cerramiento sin transmisión térmica
     ADIABATIC,
 }
@@ -26,7 +26,7 @@ impl Display for BoundaryType {
         let printable = match *self {
             BoundaryType::EXTERIOR => "EXTERIOR",
             BoundaryType::INTERIOR => "INTERIOR",
-            BoundaryType::UNDERGROUND => "UNDERGROUND",
+            BoundaryType::GROUND => "GROUND",
             BoundaryType::ADIABATIC => "ADIABATIC",
         };
         write!(f, "{}", printable)

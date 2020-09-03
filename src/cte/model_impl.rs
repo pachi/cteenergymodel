@@ -161,7 +161,7 @@ impl Model {
                 U
             }
             // Elementos enterrados ------------------------------
-            (UNDERGROUND, BOTTOM) => {
+            (GROUND, BOTTOM) => {
                 // 1. Solera sobre el terreno: UNE-EN ISO 13370:2010 Apartado 9.1 y 9.3.2
                 // Simplificaciones:
                 // - forma cuadrada para calcular el perímetro
@@ -219,7 +219,7 @@ impl Model {
                 );
                 U
             }
-            (UNDERGROUND, SIDE) => {
+            (GROUND, SIDE) => {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
                 let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
 
@@ -289,7 +289,7 @@ impl Model {
                 U
             }
             // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
-            (UNDERGROUND, TOP) => {
+            (GROUND, TOP) => {
                 let U = 1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE);
                 info!(
                     "{} (cubierta enterrada) U={:.2} (R_f={:.3})",
@@ -354,7 +354,7 @@ impl Model {
                     // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
                     let UA_e_k = self
                         .walls_of_space(&uncondspace.name)
-                        .filter(|w| w.bounds == UNDERGROUND || w.bounds == EXTERIOR)
+                        .filter(|w| w.bounds == GROUND || w.bounds == EXTERIOR)
                         .map(|w| {
                             // A·U de muros (y suelos) + A.U de sus huecos
                             w.area * self.u_for_wall(w)

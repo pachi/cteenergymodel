@@ -26,7 +26,7 @@ impl From<bdl::BoundaryType> for BoundaryType {
         match boundary {
             bdl::BoundaryType::EXTERIOR => Self::EXTERIOR,
             bdl::BoundaryType::INTERIOR => Self::INTERIOR,
-            bdl::BoundaryType::UNDERGROUND => Self::UNDERGROUND,
+            bdl::BoundaryType::GROUND => Self::GROUND,
             bdl::BoundaryType::ADIABATIC => Self::ADIABATIC,
         }
     }
