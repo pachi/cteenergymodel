@@ -6,7 +6,6 @@
     - Devolver datos de U para u_values ({ windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> })
     - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
     - qsoljul
-    - compacidad V/A
     - n50
     - Lista de elementos que pertenecen a la envolvente
         - son los elementos que pertenecen a espacios dentro de la envolvente pero
@@ -31,7 +30,7 @@
     - tal vez usando un Map de JS para BTreeMap (ver cómo funciona con serde-JSON
     - devolviendo datos en estructuras aparte (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> })
 - Intentar llevar el trabajo a wasm
-    - calcular K, qsoljul, n50, U de elementos, A_ref, V/A, etc
+    - calcular K, qsoljul, n50, U de elementos, etc
     - calcular elementos (propiedades de vidrios, Fshobst de huecos según retranqueos, voladizos, aletas, etc)
 - Eliminar uso de data.autil y usar data.a_util_ref()
 

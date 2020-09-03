@@ -109,6 +109,30 @@ impl Model {
         fround2(v_env)
     }
 
+    /// Calcula la compacidad de la envolvente térmica del edificio V/A (m³/m²)
+    /// De acuerdo con la definición del DB-HE comprende el volumen interior de la envolvente térmica (V)
+    /// y la superficie de muros y huecos con intercambio térmico con el aire exterior o el terreno (A)
+    /// Esta superficie tiene en cuenta los multiplicadores de espacios
+    pub fn compacity(&self) -> f32 {
+        let vol: f32 = self.vol_env_gross();
+        let area: f32 = self
+            .walls
+            .values()
+            .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
+            .filter(|w| self.spaces.get(&w.space).unwrap().inside_tenv)
+            .map(|w| {
+                let win_area: f32 = self
+                    .windows
+                    .values()
+                    .filter(|win| win.wall == w.name)
+                    .map(|win| win.area)
+                    .sum();
+                (w.area + win_area) * self.spaces.get(&w.space).unwrap().multiplier
+            })
+            .sum();
+        vol / area
+    }
+
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
     /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
     /// Notas:
