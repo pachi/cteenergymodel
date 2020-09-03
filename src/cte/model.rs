@@ -40,7 +40,8 @@ pub struct ExtraData {
 }
 
 /// Modelo del edificio
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[serde(default)]
 pub struct Model {
     /// Metadatos
     pub meta: Meta,
