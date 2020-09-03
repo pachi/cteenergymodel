@@ -11,7 +11,8 @@ use std::f32::consts::PI;
 
 use log::info;
 
-pub use super::{BoundaryType, Model, Orientation, SpaceType, Tilt, Wall, WallCons, Window};
+use super::*;
+use crate::utils::fround2;
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
 const RSI_ASCENDENTE: f32 = 0.10;
@@ -38,6 +39,74 @@ impl Model {
                     false
                 })
         })
+    }
+
+    /// Calcula la superficie útil [m²]
+    /// Computa únicamente los espacios habitables dentro de la envolvente térmica
+    pub fn a_util_ref(&self) -> f32 {
+        let a_util: f32 = self
+            .spaces
+            .values()
+            .map(|s| {
+                if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
+                    s.area * s.multiplier
+                } else {
+                    0.0
+                }
+            })
+            .sum();
+        fround2(a_util)
+    }
+
+    /// Calcula el volumen bruto de los espacios de la envolvente [m³]
+    /// Computa el volumen de todos los espacios (habitables o no) de la envolvente
+    pub fn vol_env_gross(&self) -> f32 {
+        let v_env: f32 = self
+            .spaces
+            .values()
+            .map(|s| {
+                if s.inside_tenv {
+                    s.area * s.height_gross * s.multiplier
+                } else {
+                    0.0
+                }
+            })
+            .sum();
+        fround2(v_env)
+    }
+    /// Calcula el volumen neto de los espacios de la envolvente [m³]
+    /// Computa el volumen de todos los espacios (habitables o no) de la envolvente y
+    /// descuenta los volúmenes de forjados y cubiertas
+    pub fn vol_env_net(&self) -> f32 {
+        let v_env: f32 = self
+            .spaces
+            .values()
+            .map(|s| {
+                if s.inside_tenv {
+                    s.area * s.height_net * s.multiplier
+                } else {
+                    0.0
+                }
+            })
+            .sum();
+        fround2(v_env)
+    }
+    /// Calcula el volumen neto de los espacios habitables de la envolvente [m³]
+    /// Computa el volumen de todos los espacios (solo habitables) de la envolvente y
+    /// descuenta los volúmenes de forjados y cubiertas
+    pub fn vol_env_inh_net(&self) -> f32 {
+        let v_env: f32 = self
+            .spaces
+            .values()
+            .map(|s| {
+                if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
+                    s.area * s.height_net * s.multiplier
+                } else {
+                    0.0
+                }
+            })
+            .sum();
+        fround2(v_env)
     }
 
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
