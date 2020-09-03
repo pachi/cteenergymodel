@@ -41,9 +41,8 @@ impl Model {
         })
     }
 
-    /// Calcula la superficie útil [m²]
-    /// Computa únicamente los espacios habitables dentro de la envolvente térmica
-    pub fn a_util_ref(&self) -> f32 {
+    /// Calcula la superficie útil de los espacios habitables de la envolvente térmica [m²]
+    pub fn a_ref(&self) -> f32 {
         let a_util: f32 = self
             .spaces
             .values()

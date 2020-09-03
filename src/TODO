@@ -33,7 +33,7 @@
 - Intentar llevar el trabajo a wasm
     - calcular K, qsoljul, n50, U de elementos, etc
     - calcular elementos (propiedades de vidrios, Fshobst de huecos según retranqueos, voladizos, aletas, etc)
-- Eliminar uso de data.autil y usar data.a_util_ref()
+- Eliminar uso de data.autil y usar data.a_ref()
 
 ## BDL
 
