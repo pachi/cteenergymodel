@@ -6,6 +6,7 @@ use std::convert::TryFrom;
 
 use hulc2envolventecte::{
     collect_hulc_data,
+    cte::Model,
     parsers::{bdl, ctehexml, kyg, tbl},
     utils::{fround2, read_latin1_file},
 };
@@ -285,6 +286,12 @@ fn parse_test_data() {
     assert_eq!(data.windows.len(), 92);
     assert_eq!(data.walls.len(), 127); // 68 en ET
     assert_eq!(data.thermal_bridges.len(), 10); // 6 en kyg
+
+    let json = data.as_json().unwrap();
+    println!("{}", json);
+    let model = Model::from_json(&json).unwrap();
+    let json2 = model.as_json().unwrap();
+    assert_eq!(&json, &json2);
 }
 
 #[test]

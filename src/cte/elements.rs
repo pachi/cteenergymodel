@@ -21,7 +21,7 @@ pub struct Window {
     /// Muro al que pertenece el hueco
     pub wall: String,
     /// Superficie del hueco (m2)
-    #[serde(rename(serialize = "A"))]
+    #[serde(rename = "A")]
     pub area: f32,
     /// Factor de obstáculos remotos
     pub fshobst: f32,
@@ -45,7 +45,7 @@ pub struct Wall {
     /// - ADIABATIC: cerramientos sin transmisión de calor
     pub bounds: BoundaryType,
     /// Superficie neta (sin huecos) del elemento opaco (m2)
-    #[serde(rename(serialize = "A"))]
+    #[serde(rename = "A")]
     pub area: f32,
     /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90)
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
@@ -66,7 +66,7 @@ pub struct ThermalBridge {
     /// Nombre del puente térmico
     pub name: String,
     /// Longitud del puente térmico (m)
-    #[serde(rename(serialize = "L"))]
+    #[serde(rename = "L")]
     pub l: f32,
     /// Transmitancia térmica lineal del puente térmico (W/mK)
     pub psi: f32,
@@ -98,7 +98,7 @@ pub struct Space {
     /// - CONDITIONED: acondicionado,
     /// - UNCONDITIONED: no acondicionado
     /// - UNINHABITED: no habitable
-    #[serde(rename(serialize = "type"))]
+    #[serde(rename = "type")]
     pub space_type: SpaceType,
     /// Ventilación, en ren/h
     pub n_v: Option<f32>,
@@ -112,7 +112,7 @@ pub struct WallCons {
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
     /// Resistencia térmica total sin resistencias superficiales (resistencia intrínseca) [m2K/W]
-    #[serde(rename(serialize = "R_intrinsic"))]
+    #[serde(rename = "R_intrinsic")]
     pub r_intrinsic: f32,
     /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
     pub absorptance: f32,
@@ -126,16 +126,16 @@ pub struct WindowCons {
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
     /// Transmitancia térmica total (incluyendo marco, vidrio y efecto de intercalarios y/o cajones de persiana) [W/m2K]
-    #[serde(rename(serialize = "U"))]
+    #[serde(rename = "U")]
     pub u: f32,
     /// Fracción de marco [-]
-    #[serde(rename(serialize = "Ff"))]
+    #[serde(rename = "Ff")]
     pub ff: f32,
     /// Factor solar del hueco sin la protección solar activada (g_glwi = g_gln * 0.90) [-]
     pub gglwi: f32,
     /// Factor solar del hueco con la protección solar activada [-]
     pub gglshwi: f32,
     /// Permeabilidad al aire a 100 Pa [m3/hm2]
-    #[serde(rename(serialize = "C_100"))]
+    #[serde(rename = "C_100")]
     pub infcoeff_100: f32,
 }

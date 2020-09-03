@@ -61,9 +61,16 @@ pub struct Model {
 }
 
 impl Model {
+    /// Devuelve el modelo en formato JSON
     pub fn as_json(&self) -> Result<String, Error> {
         let json = serde_json::to_string_pretty(&self)?;
         Ok(json)
+    }
+
+    /// Lee un modelo desde JSON
+    pub fn from_json(data: &str) -> Result<Self, Error> {
+        let model: Model = serde_json::from_str(data)?;
+        Ok(model)
     }
 
     /// Calcula la superficie útil [m²]
