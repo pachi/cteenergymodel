@@ -23,12 +23,12 @@ const LAMBDA_GND: f32 = 2.0;
 const LAMBDA_INS: f32 = 0.035;
 
 impl Model {
-    /// Devuelve huecos del muro
+    /// Iterador de los huecos pertenecientes a un muro
     pub fn windows_of_wall<'a>(&'a self, wallname: &'a str) -> impl Iterator<Item = &'a Window> {
         self.windows.values().filter(move |w| w.wall == wallname)
     }
 
-    /// Vector de muros (incluyendo suelos y techos) que delimitan un espacio
+    /// Iterador de los cerramientos (incluyendo muros, suelos y techos) que delimitan un espacio
     pub fn walls_of_space<'a>(&'a self, space: &'a str) -> impl Iterator<Item = &'a Wall> {
         self.walls.values().filter(move |w| {
             w.space == space
@@ -230,8 +230,7 @@ impl Model {
             }
             // Elementos en contacto con otros espacios ---------------------
             (INTERIOR, position @ _) => {
-                // Tres casos:
-                // - Elementos en contacto con otros espacios no acondicionados
+                // Dos casos:
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
                 let space = self.spaces.get(&wall.space).unwrap();
