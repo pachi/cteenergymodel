@@ -122,6 +122,18 @@ pub fn cli_main() -> Result<()> {
     // Lee datos
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath)?;
 
+    // Información general
+    eprintln!(
+        "A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, n50(he2019)={:.2} 1/h, C_o(he2019)={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
+        data.a_ref(),
+        data.compacity(),
+        data.K_he2019(),
+        data.n50_he2019(),
+        data.C_o_he2019(),
+        data.n50(),
+        data.C_o()
+    );
+
     // Convierte a JSON
     match data.as_json() {
         Ok(json) => {

@@ -208,7 +208,7 @@ fn test_caso_a() {
     let kygpath = kyg::find_kyg("tests/casoA").unwrap();
     let tblpath = tbl::find_tbl("tests/casoA").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
-    assert_eq!(data.a_util_ref(), 400.0);
+    assert_eq!(data.a_ref(), 400.0);
     assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.windows.len(), 10);
     assert_eq!(data.walls.len(), 35); // 19 en ET
@@ -259,6 +259,14 @@ fn test_caso_a() {
     // Partición interior vertical con espacio no habitable/acondicionado, HULC=0.68
     let wall = data.walls.get("P04_E01_Med001").unwrap();
     assert_eq!(fround2(data.u_for_wall(&wall)), 0.66);
+
+    // Cálculo de K, n50, C_o
+    assert_eq!(fround2(data.K_he2019()), 0.51);
+    assert_eq!(fround2(data.n50_he2019()), 4.60);
+    assert_eq!(fround2(data.n50()), 5.32);
+    assert_eq!(fround2(data.n50_he2019()), 4.60);
+    assert_eq!(fround2(data.C_o_he2019()), 16.00);
+    assert_eq!(fround2(data.C_o()), 18.86);
 }
 
 #[test]
@@ -267,7 +275,7 @@ fn test_caso_c() {
     let kygpath = kyg::find_kyg("tests/casoC").unwrap();
     let tblpath = tbl::find_tbl("tests/casoC").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
-    assert_eq!(data.a_util_ref(), 400.0);
+    assert_eq!(data.a_ref(), 400.0);
     assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.windows.len(), 9);
     assert_eq!(data.walls.len(), 33); // 27 en ET
@@ -281,7 +289,7 @@ fn parse_test_data() {
     let kygpath = kyg::find_kyg("tests/data").unwrap();
     let tblpath = tbl::find_tbl("tests/data").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
-    assert_eq!(data.a_util_ref(), 1673.92);
+    assert_eq!(data.a_ref(), 1673.92);
     assert_eq!(data.meta.climate, "D3");
     assert_eq!(data.windows.len(), 92);
     assert_eq!(data.walls.len(), 127); // 68 en ET
@@ -301,7 +309,7 @@ fn parse_test_data2() {
     let tblpath = tbl::find_tbl("tests/ejemplopmt_HuecosOK").unwrap();
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
-    assert_eq!(data.a_util_ref(), 1063.03);
+    assert_eq!(data.a_ref(), 1063.03);
     assert_eq!(data.meta.climate, "B3");
     assert_eq!(data.windows.len(), 29);
     assert_eq!(data.walls.len(), 95); // 60 en ET

@@ -4,13 +4,10 @@
 - TODO: Comprobar si las z de los muros enterrados (y suelos) son > 0 o no (para calcular U en impl_u_for_walls)
 
 - Calcular más cosas:
-    - Devolver datos de U para u_values ({ windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> })
-    - K (igual devuelve estructura con datos intermedios por tipos, área de intercambio, etc)
+    - Estructura con las U de los elementos del edificio (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> })
     - qsoljul
-    - n50
-    - Lista de elementos que pertenecen a la envolvente
-        - son los elementos que pertenecen a espacios dentro de la envolvente pero
-          que no comunican con otros espacios interiores a la envolvente
+    - Lista de elementos que pertenecen a la envolvente (EXTERIOR, GROUND, ADIABATIC, INTERIOR*)
+        - los elementos interiores solo son aquellos que no comunican con otros espacios interiores a la envolvente
 - Módulo para calcular propiedades de elementos
     - Calculador de elementos para obtener % de afección de U según intercalarios
         y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
@@ -31,7 +28,7 @@
     - tal vez usando un Map de JS para BTreeMap (ver cómo funciona con serde-JSON
     - devolviendo datos en estructuras aparte (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> })
 - Intentar llevar el trabajo a wasm
-    - calcular K, qsoljul, n50, U de elementos, etc
+    - calcular K, qsoljul, n50, V/A, U de elementos, etc
     - calcular elementos (propiedades de vidrios, Fshobst de huecos según retranqueos, voladizos, aletas, etc)
 - Eliminar uso de data.autil y usar data.a_ref()
 

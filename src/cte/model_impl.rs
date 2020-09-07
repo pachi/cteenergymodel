@@ -6,10 +6,11 @@
 //! - UNE-EN ISO 13789:2010 transmisión general
 //! - UNE-EN ISO 6946:2012 para elementos opacos
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
+#![allow(non_snake_case)]
 
 use std::f32::consts::PI;
 
-use log::info;
+use log::{debug, info};
 
 use super::*;
 use crate::utils::fround2;
@@ -39,6 +40,14 @@ impl Model {
                     false
                 })
         })
+    }
+
+    /// Iterador de los cerramientos de la envolvente térmica en contacto con el aire o el terreno
+    pub fn walls_of_envelope(&self) -> impl Iterator<Item = &Wall> {
+        self.walls
+            .values()
+            .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
+            .filter(move |w| self.spaces.get(&w.space).unwrap().inside_tenv)
     }
 
     /// Calcula la superficie útil de los espacios habitables de la envolvente térmica [m²]
@@ -115,21 +124,174 @@ impl Model {
     pub fn compacity(&self) -> f32 {
         let vol: f32 = self.vol_env_gross();
         let area: f32 = self
-            .walls
-            .values()
-            .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
-            .filter(|w| self.spaces.get(&w.space).unwrap().inside_tenv)
+            .walls_of_envelope()
             .map(|w| {
-                let win_area: f32 = self
-                    .windows
-                    .values()
-                    .filter(|win| win.wall == w.name)
-                    .map(|win| win.area)
-                    .sum();
-                (w.area + win_area) * self.spaces.get(&w.space).unwrap().multiplier
+                let multiplier = self.spaces.get(&w.space).unwrap().multiplier;
+                let win_area: f32 = self.windows_of_wall(&w.name).map(|win| win.area).sum();
+                (w.area + win_area) * multiplier
             })
             .sum();
-        vol / area
+        let compac = vol / area;
+        info!("V/A={:.2} m³/m², V={:.2} m³, A={:.2} m²", compac, vol, area);
+        compac
+    }
+
+    /// Permeabilidad de opacos calculada según criterio de edad por defecto DB-HE2019 (1/h)
+    /// TODO: usamos is_new_building pero igual merecería la pena una variable para permeabilidad mejorada
+    pub fn C_o_he2019(&self) -> f32 {
+        if self.meta.is_new_building {
+            16.0
+        } else {
+            29.0
+        }
+    }
+
+    /// Permeabilidad de opacos por defecto o, si hay ensayo de permeabilidad, el resultante del ensayo
+    pub fn C_o(&self) -> f32 {
+        if let Some(n50test) = self.meta.n50_test_ach {
+            self.wall_inf_100_from_n50(n50test)
+        } else {
+            self.C_o_he2019()
+        }
+    }
+
+    /// Devuelve valor de la relación de cambio de aire por defecto o, en su caso, de ensayo
+    pub fn n50(&self) -> f32 {
+        if let Some(n50test) = self.meta.n50_test_ach {
+            n50test
+        } else {
+            self.n50_he2019()
+        }
+    }
+
+    /// Calcula la tasa teórica de intercambio de aire a 50Pa según DB-HE2019 (1/h)
+    /// Se considera:
+    /// - las superficies opacos en contacto con el aire exterior
+    /// - las permeabilidad al aire de opacos en función de si es nuevo (o permeab. mejorada) o existente
+    /// - los huecos de las superficies opacas anteriores
+    /// - la permeabilidad al aire de huecos definida en su construcción
+    /// - el volumen interior de la envolvente térmica ()
+    pub fn n50_he2019(&self) -> f32 {
+        let vol: f32 = self.vol_env_net();
+        if vol <= 0.01 {
+            info!("n_50=0.00 1/h, Σ(A.C)=- m³/h, vol={:.2} m³", vol);
+            return 0.0;
+        };
+        let c_o = self.C_o_he2019();
+
+        let sum_axc: f32 = self
+            .walls_of_envelope()
+            .filter(|w| w.bounds == BoundaryType::EXTERIOR)
+            .map(|w| {
+                let multiplier = self.spaces.get(&w.space).unwrap().multiplier;
+                let axc_h: f32 = self
+                    .windows_of_wall(&w.name)
+                    .map(|win| {
+                        let c_inf = self.wincons.get(&win.cons).unwrap().infcoeff_100;
+                        win.area * c_inf
+                    })
+                    .sum();
+                (w.area * c_o + axc_h) * multiplier
+            })
+            .sum();
+        let n50 = 0.629 * sum_axc / vol;
+        info!(
+            "n_50={:.2} 1/h, Σ(A.C)={:.2} m³/h, vol={:.2} m³",
+            n50, sum_axc, vol
+        );
+        n50
+    }
+    /// Calcula la permeabilidad de opacos a partir de un ensayo de puerta soplante
+    pub fn wall_inf_100_from_n50(&self, n50: f32) -> f32 {
+        let vol: f32 = self.vol_env_net();
+        let (sum_wall_area, sum_axc_h): (f32, f32) = self
+            .walls_of_envelope()
+            .filter(|w| w.bounds == BoundaryType::EXTERIOR)
+            .map(|w| {
+                let multiplier = self.spaces.get(&w.space).unwrap().multiplier;
+                let axc_h: f32 = self
+                    .windows_of_wall(&w.name)
+                    .map(|win| {
+                        let c_inf = self.wincons.get(&win.cons).unwrap().infcoeff_100;
+                        win.area * c_inf
+                    })
+                    .sum();
+                (w.area * multiplier, axc_h * multiplier)
+            })
+            .fold(
+                (0.0, 0.0),
+                |(acc_wall_area, acc_axc_h), (e_wall_area, e_axc_h)| {
+                    (acc_wall_area + e_wall_area, acc_axc_h + e_axc_h)
+                },
+            );
+        let C_o = ((n50 * vol) / 0.629 - sum_axc_h) / sum_wall_area;
+        info!(
+            "C_o={:.2}, n_50={:.2}, vol={:.2}, (A_h.C_h)={:.2}, A_o={:.2}",
+            C_o, n50, vol, sum_axc_h, sum_wall_area
+        );
+        C_o
+    }
+
+    /// Calcula la transmitancia térmica global K (W/m2K)
+    /// Transmitancia media de los elementos en contacto con el aire exterior o con el terreno
+    /// Incluye los puentes térmicos
+    pub fn K_he2019(&self) -> f32 {
+        let (walls_axu, walls_a, windows_axu, windows_a): (f32, f32, f32, f32) = self
+            .walls_of_envelope()
+            .map(|w| {
+                let (axu_h, a_h) = self
+                    .windows_of_wall(&w.name)
+                    .map(|win| {
+                        let u_h = self.wincons.get(&win.cons).unwrap().u;
+                        (win.area * u_h, win.area)
+                    })
+                    .fold((0.0, 0.0), |(acc_uxa, acc_a), (win_uxa, win_a)| {
+                        (acc_uxa + win_uxa, acc_a + win_a)
+                    });
+                let multiplier = self.spaces.get(&w.space).unwrap().multiplier;
+                (
+                    self.u_for_wall(&w) * w.area * multiplier,
+                    w.area * multiplier,
+                    axu_h * multiplier,
+                    a_h * multiplier,
+                )
+            })
+            .fold(
+                (0.0, 0.0, 0.0, 0.0),
+                |(acc_wall_uxa, acc_wall_a, acc_win_uxa, acc_win_a),
+                 (wall_uxa, wall_a, win_uxa, win_a)| {
+                    (
+                        acc_wall_uxa + wall_uxa,
+                        acc_wall_a + wall_a,
+                        acc_win_uxa + win_uxa,
+                        acc_win_a + win_a,
+                    )
+                },
+            );
+        let (L, psiL): (f32, f32) = self
+            .thermal_bridges
+            .values()
+            .map(|tb| (tb.l, tb.psi * tb.l))
+            .fold((0.0, 0.0), |(acc_l, acc_psil), (e_l, e_psil)| {
+                (acc_l + e_l, acc_psil + e_psil)
+            });
+
+        let total_axu = walls_axu + windows_axu + psiL;
+        let total_a = walls_a + windows_a;
+
+        let K = if total_a <= 0.01 {
+            0.0
+        } else {
+            total_axu / total_a
+        };
+        info!(
+            "K={:.2} W/m²K, A_o={:.2} m², (A.U)_o={:.2} W/K, A_h={:.2} m², (A.U)_h={:.2} W/K, L_pt={:.2} m, Psi.L_pt={:.2} W/K",
+            K, walls_a, walls_axu, windows_a, windows_axu, L, psiL
+        );
+
+        K
+    }
+
     }
 
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
@@ -141,7 +303,6 @@ impl Model {
     ///     - en HULC los valores por defecto de Ra y D se indican en las opciones generales de
     ///       las construcciones por defecto
     /// - los elementos adiabáticos se reportan con valor 0.0
-    #[allow(non_snake_case)]
     pub fn u_for_wall(&self, wall: &Wall) -> f32 {
         use {BoundaryType::*, SpaceType::*, Tilt::*};
 
@@ -164,23 +325,23 @@ impl Model {
             // Elementos adiabáticos -----------------------------
             (ADIABATIC, _) => {
                 let U = 0.0;
-                info!("{} (adiabático) U={:.2}", wall.name, U);
+                debug!("{} (adiabático) U={:.2}", wall.name, U);
                 U
             }
             // Elementos en contacto con el exterior -------------
             (EXTERIOR, BOTTOM) => {
                 let U = 1.0 / (R_intrinsic + RSI_DESCENDENTE + RSE);
-                info!("{} (suelo) U={:.2}", wall.name, U);
+                debug!("{} (suelo) U={:.2}", wall.name, U);
                 U
             }
             (EXTERIOR, TOP) => {
                 let U = 1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE);
-                info!("{} (cubierta) U={:.2}", wall.name, U);
+                debug!("{} (cubierta) U={:.2}", wall.name, U);
                 U
             }
             (EXTERIOR, SIDE) => {
                 let U = 1.0 / (R_intrinsic + RSI_HORIZONTAL + RSE);
-                info!("{} (muro) U={:.2}", wall.name, U);
+                debug!("{} (muro) U={:.2}", wall.name, U);
                 U
             }
             // Elementos enterrados ------------------------------
@@ -225,7 +386,7 @@ impl Model {
 
                 let U = U_bf + 2.0 * psi_ge / B_1; // H_g sería U * A
 
-                info!(
+                debug!(
                     "{} (suelo de sótano) U={:.2} (R_n={:.2}, D={:.2}, A={:.2}, P={:.2}, B'={:.2}, z={:.2}, d_t={:.2}, R_f={:.3}, U_bf={:.2}, psi_ge = {:.3})",
                     wall.name,
                     U,
@@ -305,7 +466,7 @@ impl Model {
                     (z * U_bw + h * U_w) / space.height_net
                 };
 
-                info!(
+                debug!(
                     "{} (muro enterrado) U={:.2} (z={:.2}, h={:.2}, U_w={:.2}, U_bw={:.2}, d_t={:.2}, d_w={:.2})",
                     wall.name, U, z, h, U_w, U_bw, d_t, d_w,
                 );
@@ -314,7 +475,7 @@ impl Model {
             // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
             (GROUND, TOP) => {
                 let U = 1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE);
-                info!(
+                debug!(
                     "{} (cubierta enterrada) U={:.2} (R_f={:.3})",
                     wall.name, U, R_intrinsic
                 );
@@ -334,7 +495,7 @@ impl Model {
                     // Elemento interior con otro espacio acondicionado
                     // HULC no diferencia entre RS según posiciones para elementos interiores
                     let U = 1.0 / (R_intrinsic + 2.0 * RSI_HORIZONTAL);
-                    info!(
+                    debug!(
                         "{} ({} acondicionado-acondicionado) U_int={:.2}",
                         wall.name, posname, U
                     );
@@ -396,7 +557,7 @@ impl Model {
                     let R_u = A_i / H_ue;
                     let U = 1.0 / (R_f + R_u);
 
-                    info!(
+                    debug!(
                             "{} ({} acondicionado-no acondicionado/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
                             wall.name, posname, U, R_f, R_u, A_i, 1.0/R_f
                         );
