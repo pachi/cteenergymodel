@@ -292,6 +292,10 @@ impl Model {
         K
     }
 
+    /// Calcula el parámetro de control solar
+    /// TODO: habría que traerse los cálculos solares a Rust...
+    pub fn q_soljul(&self) -> f32 {
+        unimplemented!()
     }
 
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
