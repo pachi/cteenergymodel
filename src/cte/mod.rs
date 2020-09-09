@@ -4,6 +4,7 @@
 
 //! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
 
+pub mod climatedata;
 pub mod common;
 pub(crate) mod from_ctehexml;
 pub mod model_impl;
@@ -13,6 +14,7 @@ use std::collections::BTreeMap;
 use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
+pub use climatedata::*;
 pub use common::{BoundaryType, Orientation, SpaceType, Tilt};
 
 // ---------- Estructura general de datos --------------

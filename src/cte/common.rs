@@ -107,7 +107,7 @@ impl From<f32> for Tilt {
     }
 }
 
-/// Nombres para la orientación de un elemento, según los puntos cardinales
+/// Nombres para la orientación de un elemento, según los puntos cardinales y elemento horizontal
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub enum Orientation {
     /// Norte
@@ -126,6 +126,8 @@ pub enum Orientation {
     W,
     /// Noroeste
     NW,
+    /// Horizontal
+    HZ,
 }
 
 impl Display for Orientation {
@@ -139,6 +141,7 @@ impl Display for Orientation {
             Orientation::SW => "SW",
             Orientation::W => "W",
             Orientation::NW => "NW",
+            Orientation::HZ => "Horiz.",
         };
         write!(f, "{}", printable)
     }
@@ -178,4 +181,110 @@ impl From<f32> for Orientation {
             Self::S
         }
     }
+}
+
+/// Convierte str a Orientation
+impl From<&str> for Orientation {
+    fn from(azimuth: &str) -> Self {
+        match azimuth {
+            "S" => Self::S,
+            "SE" => Self::SE,
+            "E" => Self::E,
+            "NE" => Self::NE,
+            "N" => Self::N,
+            "NW" => Self::NW,
+            "W" => Self::W,
+            "SW" => Self::SW,
+            _ => Self::HZ,
+        }
+    }
+}
+
+/// Datos mensuales de radiación por superficie
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SurfaceMonthlyRadiation {
+    /// Zona climática
+    pub zone: ClimateZone,
+    /// Orientación u horizontal
+    pub orientation: Orientation,
+    /// Inclinación (Horiz=0, vertical=90)
+    pub beta: f32,
+    /// Orientación (N=0, E=-90, W=+90, S=180)
+    /// TODO: convertir a orientación UNE-EN ISO 52016-1, medido desde el sur, positivo al este, negativo al oeste (S=0, E=+90, W=-90)
+    pub gamma: f32,
+    /// Radiación mensual directa
+    pub dir: [f32; 12],
+    /// Radiación mensual difusa
+    pub dif: [f32; 12],
+    /// Radiación mensual total
+    pub tot: [f32; 12],
+}
+
+/// Nombres para la orientación de un elemento, según los puntos cardinales
+#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+pub enum ClimateZone {
+    /// A1 Canarias
+    A1c,
+    /// A2 Canarias
+    A2c,
+    /// A3 Canarias
+    A3c,
+    /// A4 Canarias
+    A4c,
+    /// Alfa1 Canarias
+    Alfa1c,
+    /// Alfa2 Canarias
+    Alfa2c,
+    /// Alfa3 Canarias
+    Alfa3c,
+    /// Alfa4 Canarias
+    Alfa4c,
+    /// B1 Canarias
+    B1c,
+    /// B2 Canarias
+    B2c,
+    /// B3 Canarias
+    B3c,
+    /// B4 Canarias
+    B4c,
+    /// C1 Canarias
+    C1c,
+    /// C2 Canarias
+    C2c,
+    /// C3 Canarias
+    C3c,
+    /// C4 Canarias
+    C4c,
+    /// D1 Canarias
+    D1c,
+    /// D2 Canarias
+    D2c,
+    /// D3 Canarias
+    D3c,
+    /// E1 Canarias
+    E1c,
+    /// A3
+    A3,
+    /// A4
+    A4,
+    /// B3
+    B3,
+    /// B4
+    B4,
+    /// C1
+    C1,
+    /// C2
+    C2,
+    /// C3
+    C3,
+    /// C4
+    C4,
+    /// D1
+    D1,
+    /// D2
+    D2,
+    /// D3
+    D3,
+    /// E1
+    E1,
 }
