@@ -218,6 +218,12 @@ pub struct SurfaceMonthlyRadiation {
     pub dif: [f32; 12],
     /// Radiación mensual total
     pub tot: [f32; 12],
+    /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 200W/m2
+    pub f_shwith200: [f32; 12],
+    /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 300W/m2
+    pub f_shwith300: [f32; 12],
+    /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 500W/m2
+    pub f_shwith500: [f32; 12],
 }
 
 /// Nombres para la orientación de un elemento, según los puntos cardinales
