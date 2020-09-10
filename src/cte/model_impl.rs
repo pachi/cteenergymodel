@@ -50,6 +50,15 @@ impl Model {
             .filter(move |w| self.spaces.get(&w.space).unwrap().inside_tenv)
     }
 
+    /// Iterador de los huecos de la envolvente térmica en contacto con el aire exterior
+    pub fn windows_of_envelope(&self) -> impl Iterator<Item = &Window> {
+        self.walls
+            .values()
+            .filter(|w| w.bounds == BoundaryType::EXTERIOR)
+            .filter(move |w| self.spaces.get(&w.space).unwrap().inside_tenv)
+            .flat_map(move |wall| self.windows.values().filter(move |w| w.wall == wall.name))
+    }
+
     /// Calcula la superficie útil de los espacios habitables de la envolvente térmica [m²]
     pub fn a_ref(&self) -> f32 {
         let a_util: f32 = self
