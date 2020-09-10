@@ -6,7 +6,7 @@ use std::convert::TryFrom;
 
 use hulc2envolventecte::{
     collect_hulc_data,
-    cte::Model,
+    cte::{ClimateZone, Model},
     parsers::{bdl, ctehexml, kyg, tbl},
     utils::{fround2, read_latin1_file},
 };
@@ -209,7 +209,7 @@ fn test_caso_a() {
     let tblpath = tbl::find_tbl("tests/casoA").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_ref(), 400.0);
-    assert_eq!(data.meta.climate, "D3");
+    assert_eq!(data.meta.climate, ClimateZone::D3);
     assert_eq!(data.windows.len(), 10);
     assert_eq!(data.walls.len(), 35); // 19 en ET
     assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
@@ -276,7 +276,7 @@ fn test_caso_c() {
     let tblpath = tbl::find_tbl("tests/casoC").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_ref(), 400.0);
-    assert_eq!(data.meta.climate, "D3");
+    assert_eq!(data.meta.climate, ClimateZone::D3);
     assert_eq!(data.windows.len(), 9);
     assert_eq!(data.walls.len(), 33); // 27 en ET
     assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
@@ -290,7 +290,7 @@ fn parse_test_data() {
     let tblpath = tbl::find_tbl("tests/data").unwrap();
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_ref(), 1673.92);
-    assert_eq!(data.meta.climate, "D3");
+    assert_eq!(data.meta.climate, ClimateZone::D3);
     assert_eq!(data.windows.len(), 92);
     assert_eq!(data.walls.len(), 127); // 68 en ET
     assert_eq!(data.thermal_bridges.len(), 10); // 6 en kyg
@@ -310,7 +310,7 @@ fn parse_test_data2() {
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath).unwrap();
     assert_eq!(data.a_ref(), 1063.03);
-    assert_eq!(data.meta.climate, "B3");
+    assert_eq!(data.meta.climate, ClimateZone::B3);
     assert_eq!(data.windows.len(), 29);
     assert_eq!(data.walls.len(), 95); // 60 en ET
     assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg

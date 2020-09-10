@@ -4,9 +4,9 @@
 
 //! Conversión desde CtehexmlData a cte::Model
 
-use std::{collections::BTreeMap, convert::TryFrom};
+use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
-use anyhow::{format_err, Error};
+use anyhow::{anyhow, format_err, Error};
 
 use crate::{
     bdl::{self, Data},
@@ -65,7 +65,11 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             is_new_building: dg.tipo_definicion.as_str() == "Nuevo",
             is_dwelling,
             num_dwellings: dg.num_viviendas_bloque,
-            climate: dg.archivo_climatico.clone(),
+            climate: dg
+                .archivo_climatico
+                .as_str()
+                .try_into()
+                .map_err(|e| anyhow!("ERROR: {}", e))?,
             global_ventilation_l_s: if is_dwelling {
                 Some(dg.valor_impulsion_aire)
             } else {

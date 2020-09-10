@@ -123,12 +123,7 @@ pub fn cli_main() -> Result<()> {
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath)?;
 
     // Información general
-    let climatezone = data
-        .meta
-        .climate
-        .as_str()
-        .try_into()
-        .map_err(|e| anyhow!("ERROR: {}", e))?;
+    let climatezone = data.meta.climate;
     let totradjul =
         hulc2envolventecte::cte::climatedata::total_radiation_in_july_by_orientation(&climatezone);
     eprintln!(
