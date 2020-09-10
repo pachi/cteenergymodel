@@ -8,7 +8,7 @@
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
 #![allow(non_snake_case)]
 
-use std::f32::consts::PI;
+use std::{collections::HashMap, f32::consts::PI};
 
 use log::{debug, info};
 
@@ -301,10 +301,32 @@ impl Model {
         K
     }
 
-    /// Calcula el parámetro de control solar
-    /// TODO: habría que traerse los cálculos solares a Rust...
-    pub fn q_soljul(&self) -> f32 {
-        unimplemented!()
+    /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
+    pub fn q_soljul(&self, totradjul: &HashMap<Orientation, f32>) -> f32 {
+        let Q_soljul = self
+            .windows_of_envelope()
+            .map(|w| {
+                let wall = self.walls.get(&w.wall).unwrap();
+                let wincons = self.wincons.get(&w.cons).unwrap();
+                let orientation = match Tilt::from(wall.tilt) {
+                    Tilt::SIDE => wall.azimuth.into(),
+                    _ => Orientation::HZ,
+                };
+                let radjul = totradjul.get(&orientation).unwrap();
+                debug!(
+                    "qsoljul de {}: A {:.2}, orient {}, ff {:.2}, gglshwi {:.2}, fshobst {:.2}, H_sol;jul {:.2}",
+                    w.name, w.area, orientation, wincons.ff, wincons.gglshwi, w.fshobst, radjul
+                );
+                w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * w.area * radjul
+            })
+            .sum::<f32>();
+        let a_ref = self.a_ref();
+        let qsoljul = Q_soljul / a_ref;
+        info!(
+            "q_sol;jul={:.2} kWh/m².mes, Q_soljul={:.2} kWh/mes, A_ref={:.2}",
+            qsoljul, Q_soljul, a_ref
+        );
+        qsoljul
     }
 
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
