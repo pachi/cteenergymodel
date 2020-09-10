@@ -108,7 +108,7 @@ impl From<f32> for Tilt {
 }
 
 /// Nombres para la orientación de un elemento, según los puntos cardinales y elemento horizontal
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub enum Orientation {
     /// Norte
     N,
@@ -221,7 +221,7 @@ pub struct SurfaceMonthlyRadiation {
 }
 
 /// Nombres para la orientación de un elemento, según los puntos cardinales
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub enum ClimateZone {
     /// A1 Canarias
     A1c,
