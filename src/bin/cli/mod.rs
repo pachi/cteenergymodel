@@ -3,9 +3,9 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use std::process::exit;
+use std::{convert::TryInto, process::exit};
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 
 use hulc2envolventecte::{
     collect_hulc_data, get_copytxt,
@@ -123,11 +123,21 @@ pub fn cli_main() -> Result<()> {
     let data = collect_hulc_data(ctehexmlpath, kygpath, tblpath)?;
 
     // Información general
+    let climatezone = data
+        .meta
+        .climate
+        .as_str()
+        .try_into()
+        .map_err(|e| anyhow!("ERROR: {}", e))?;
+    let totradjul =
+        hulc2envolventecte::cte::climatedata::total_radiation_in_july_by_orientation(&climatezone);
     eprintln!(
-        "A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, n50(he2019)={:.2} 1/h, C_o(he2019)={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
+        "ZC: {}, A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, q_sol;jul={:.2} kWh/m².mes, n50(he2019)={:.2} 1/h, C_o(he2019)={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
+        climatezone,
         data.a_ref(),
         data.compacity(),
         data.K_he2019(),
+        data.q_soljul(&totradjul),
         data.n50_he2019(),
         data.C_o_he2019(),
         data.n50(),
