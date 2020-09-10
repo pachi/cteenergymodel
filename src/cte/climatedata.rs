@@ -5,9 +5,20 @@
 //! Datos de radiación mensuales para superficies
 //! TODO: Convertir a orientación UNE-EN ISO 52016-1, medido desde el sur, positivo al este, negativo al oeste (S=0, E=+90, W=-90)
 
+use std::collections::HashMap;
+
 use super::common::{ClimateZone, Orientation, SurfaceMonthlyRadiation};
 use ClimateZone::*;
 use Orientation::*;
+
+/// Diccionario con el valor de la radiación total por orientación para el mes de julio
+pub fn total_radiation_in_july_by_orientation(climate: ClimateZone) -> HashMap<Orientation, f32> {
+    RADDATA
+        .iter()
+        .filter(|e| e.zone == climate)
+        .map(|e| (e.orientation, e.tot[6]))
+        .collect()
+}
 
 /// Array de (20 climas canarios y 12 climas peninsulares) * 8 orientaciones con datos de radiación mensual
 /// Estos datos nos permiten calcular de forma aproximada q_soljul
