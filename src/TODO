@@ -4,8 +4,7 @@
 - TODO: Comprobar si las z de los muros enterrados (y suelos) son > 0 o no (para calcular U en impl_u_for_walls)
 
 - Calcular más cosas:
-    - qsoljul
-    - Estructura de elementos que pertenecen a la envolvente (agrupados por condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR*)
+    - Estructura de elementos que pertenecen a la envolvente (agrupados por condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR*) con sus datos
         - los elementos interiores solo son aquellos que no comunican con otros espacios interiores a la envolvente
     - Calcular estructura con las U de los elementos del edificio (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> }) para usar como caché
         - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos si usamos caché
