@@ -28,7 +28,9 @@ use winapi::um::libloaderapi::GetModuleHandleW;
 use winapi::um::winuser::*;
 
 use hulc2envolventecte::{
-    collect_hulc_data, get_copytxt,
+    collect_hulc_data,
+    cte::climatedata::total_radiation_in_july_by_orientation,
+    get_copytxt,
     parsers::{ctehexml, kyg, tbl},
 };
 
@@ -478,6 +480,23 @@ fn do_convert() {
             return;
         }
     };
+
+    let climatezone = envolvente_data.meta.climate;
+    let totradjul = total_radiation_in_july_by_orientation(&climatezone);
+    append_to_edit(
+        &format!(
+            "ZC: {}, A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, q_sol;jul={:.2} kWh/m².mes, n50(he2019)={:.2} 1/h, C_o(he2019)={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
+            climatezone,
+            envolvente_data.a_ref(),
+            envolvente_data.compacity(),
+            envolvente_data.K_he2019(),
+            envolvente_data.q_soljul(&totradjul),
+            envolvente_data.n50_he2019(),
+            envolvente_data.C_o_he2019(),
+            envolvente_data.n50(),
+            envolvente_data.C_o()
+        )
+    );
 }
 
 // Guarda archivo a disco
