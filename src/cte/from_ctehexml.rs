@@ -107,6 +107,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
                 Space {
                     name: s.name.clone(),
                     area,
+                    z: s.z,
                     exposed_perimeter,
                     height_net,
                     height_gross,
@@ -151,7 +152,6 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
                     bounds,
                     azimuth: fround2(orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?)),
                     tilt,
-                    zground: wall.zground.map(|z| z.abs()),
                 },
             ))
         })

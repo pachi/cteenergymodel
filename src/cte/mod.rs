@@ -165,9 +165,6 @@ pub struct Wall {
     /// Inclinación (beta) [0, 180]
     /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
     pub tilt: f32,
-    /// Profundidad del elemento en el terreno [0.0, -] (m)
-    /// (solo en cerramientos en contacto con el terreno)
-    pub zground: Option<f32>,
 }
 
 /// Puente térmico
@@ -191,6 +188,8 @@ pub struct Space {
     pub name: String,
     /// Superficie útil del espacio (m2)
     pub area: f32,
+    /// Cota del espacio respecto al suelo (m)
+    pub z: f32,
     /// Perímetro expuesto del espacio (suelos) (m)
     /// Incluye la parte del perímetro que separa el espacio del exterior
     /// y excluye que lo separa de otros espacios acondicionados.

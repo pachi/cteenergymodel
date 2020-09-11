@@ -83,10 +83,6 @@ pub struct Wall {
     /// Espacio adyacente que conecta con el espacio padre
     /// (solo en algunos tipos de cerramientos interiores (no adiabático o superficie interior))
     pub nextto: Option<String>,
-    /// Profundidad del elemento en el terreno (m)
-    /// (solo en cerramientos en contacto con el terreno)
-    /// Toma valores negativos y nunca positivos (solo 0.0)
-    pub zground: Option<f32>,
 }
 
 impl Wall {
@@ -376,6 +372,7 @@ impl TryFrom<BdlBlock> for Wall {
     /// ```
     /// XXX: No se han trasladado las variables de AREA y PERIMETRO porque se pueden calcular
     /// y los valores comprobados en algunos archivos no son correctos
+    /// XXX: Ignoramos "Z-GROUND", la profundidad del elemento en el terreno, ya que no es del BDL y es menos fiable que min(space.z, 0.0)
     ///
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
@@ -442,11 +439,6 @@ impl TryFrom<BdlBlock> for Wall {
             BoundaryType::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
         };
-        let zground = match bounds {
-            BoundaryType::GROUND => Some(attrs.remove_f32("Z-GROUND")?),
-            _ => None,
-        };
-
         let geometry = WallGeometry::parse_wallgeometry(attrs)?;
         Ok(Self {
             name,
@@ -457,7 +449,6 @@ impl TryFrom<BdlBlock> for Wall {
             tilt,
             geometry,
             nextto,
-            zground,
         })
     }
 }
