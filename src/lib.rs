@@ -105,7 +105,7 @@ pub fn spaces_from_bdl(bdl: &bdl::Data) -> Result<Vec<Space>, failure::Error> {
                 height_net,
                 height_gross,
                 inside_tenv: s.insidete,
-                multiplier: s.multiplier,
+                multiplier: s.multiplier * s.floor_multiplier,
                 space_type: match s.stype.as_ref() {
                     "CONDITIONED" => "CONDITIONED",
                     "UNHABITED" => "UNINHABITED",
