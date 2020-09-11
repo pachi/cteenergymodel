@@ -1,7 +1,7 @@
 # TAREAS PENDIENTES
 
 ## cte::Data
-- TODO: Comprobar si las z de los muros enterrados (y suelos) son > 0 o no (para calcular U en impl_u_for_walls)
+- TODO: No guardar Z-GROUND de los muros enterrados / suelos. Guardar Z de espacios y usar eso
 
 - Calcular más cosas:
     - Estructura de elementos que pertenecen a la envolvente (agrupados por condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR*) con sus datos
