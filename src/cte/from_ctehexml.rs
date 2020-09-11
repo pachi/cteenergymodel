@@ -111,7 +111,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
                     height_net,
                     height_gross,
                     inside_tenv: s.insidete,
-                    multiplier: s.multiplier,
+                    multiplier: s.multiplier * s.floor_multiplier,
                     space_type: match s.stype.as_ref() {
                         "CONDITIONED" => SpaceType::CONDITIONED,
                         "UNHABITED" => SpaceType::UNINHABITED,

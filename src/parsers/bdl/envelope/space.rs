@@ -50,7 +50,9 @@ pub struct Space {
     pub spaceconds: String,
     /// Condiciones de operación de los sistemas
     pub systemconds: String,
-    /// Multiplicador
+    /// Multiplicador de planta
+    pub floor_multiplier: f32,
+    /// Multiplicador de espacio
     pub multiplier: f32,
     /// Si es un espacio multiplicado
     pub ismultiplied: bool,
@@ -260,6 +262,8 @@ impl TryFrom<BdlBlock> for Space {
         let systemconds = attrs
             .remove_str("SYSTEM-CONDITIONS")
             .unwrap_or_else(|_| spacetype.clone());
+        // XXX: Usamos por defecto un valor 1.0, ya que se obtiene de la planta
+        let floor_multiplier = 1.0;
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
         // XXX: Es un booleano codificado como entero que se parse como número
         let ismultiplied = (attrs.remove_f32("MULTIPLIED")? - 1.0).abs() < 0.1;
@@ -287,6 +291,7 @@ impl TryFrom<BdlBlock> for Space {
             spacetype,
             spaceconds,
             systemconds,
+            floor_multiplier,
             multiplier,
             ismultiplied,
             airchanges_h

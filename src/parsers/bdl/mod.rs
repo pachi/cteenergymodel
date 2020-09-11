@@ -168,7 +168,7 @@ impl Data {
                     space.polygon = polygon;
 
                     // Incorporamos datos de planta ----------
-                    // Trasladamos la cota Z y la altura de planta
+                    // Trasladamos la cota Z, el multiplicador de planta y la altura de planta
                     // HULC Solamente considera la altura de la planta para los espacios
                     // NOTA: los espacios con cubierta inclinada podrían llegar a tener otra altura
                     let floor = floors.get(&space.floor).ok_or_else(|| {
@@ -180,6 +180,7 @@ impl Data {
                     })?;
                     space.height = floor.height;
                     space.z = floor.z;
+                    space.floor_multiplier = floor.multiplier;
 
                     bdldata.spaces.push(space);
                 }
