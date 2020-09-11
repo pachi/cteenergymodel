@@ -85,6 +85,7 @@ pub struct Wall {
     pub nextto: Option<String>,
     /// Profundidad del elemento en el terreno (m)
     /// (solo en cerramientos en contacto con el terreno)
+    /// Toma valores negativos y nunca positivos (solo 0.0)
     pub zground: Option<f32>,
 }
 

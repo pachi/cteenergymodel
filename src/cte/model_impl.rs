@@ -10,7 +10,7 @@
 
 use std::{collections::HashMap, f32::consts::PI};
 
-use log::{debug, info};
+use log::{debug, info, warn};
 
 use super::*;
 use crate::utils::fround2;
@@ -443,8 +443,8 @@ impl Model {
                 let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
 
                 // Muros que realmente no son enterrados
-                if z.abs() < 0.1 {
-                    info!(
+                if z.abs() < 0.01 {
+                    warn!(
                         "{} (muro de sótano no enterrado z=0) U_w={:.2} (z={:.2})",
                         wall.name, U_w, z,
                     );

@@ -151,7 +151,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
                     bounds,
                     azimuth: fround2(orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?)),
                     tilt,
-                    zground: wall.zground,
+                    zground: wall.zground.map(|z| z.abs()),
                 },
             ))
         })

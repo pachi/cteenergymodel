@@ -165,7 +165,7 @@ pub struct Wall {
     /// Inclinación (beta) [0, 180]
     /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
     pub tilt: f32,
-    /// Profundidad del elemento en el terreno (m)
+    /// Profundidad del elemento en el terreno [0.0, -] (m)
     /// (solo en cerramientos en contacto con el terreno)
     pub zground: Option<f32>,
 }
