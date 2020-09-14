@@ -6,3 +6,4 @@ tests/**
 salida.json
 perf.data*
 salida*.json*
+*.log
