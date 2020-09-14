@@ -7,6 +7,7 @@
 use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, format_err, Error};
+use log::warn;
 
 use crate::{
     bdl::{self, Data},
@@ -218,20 +219,27 @@ fn wallcons_from_bdl(
                 .db
                 .wallcons
                 .get(wcons)
-                .and_then(|cons| {
-                    let absorptance = cons.absorptance;
-                    let r_intrinsic = match cons.r_intrinsic(&bdl.db.materials) {
-                        Ok(r) => fround3(r),
-                        _ => return None,
-                    };
-                    Some(WallCons {
+                .and_then(|cons| match cons.r_intrinsic(&bdl.db.materials) {
+                    Ok(r) => Some(WallCons {
                         name: cons.name.clone(),
                         group: cons.group.clone(),
-                        r_intrinsic,
-                        absorptance,
-                    })
+                        r_intrinsic: fround3(r),
+                        absorptance: cons.absorptance,
+                    }),
+                    _ => {
+                        warn!(
+                            "ERROR: No es posible calcular la R intrínseca de la construcción: {:?}\n",
+                            cons,
+                        );
+                        None
+                    }
                 })
-                .ok_or_else(|| format_err!("Construcción de muro no encontrada: {}", wcons))?;
+                .ok_or_else(|| {
+                    format_err!(
+                        "Construcción de muro no encontrada o incorrecta: '{}'\n",
+                        wcons,
+                    )
+                })?;
             Ok((wallcons.name.clone(), wallcons))
         })
         .collect::<Result<BTreeMap<_, _>, _>>()

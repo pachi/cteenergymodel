@@ -9,6 +9,7 @@
 use std::{collections::HashMap, convert::TryFrom};
 
 use anyhow::{format_err, Error};
+use log::warn;
 
 use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock, Material};
 
@@ -57,7 +58,13 @@ impl WallCons {
             .map(|(mat, thk)| match mat.properties {
                 Some(props) if props.conductivity != 0.0 => Some(thk / props.conductivity),
                 None => mat.resistance,
-                _ => None,
+                _ => {
+                    warn!(
+                        "Material no definido por conductividad o resistencia: {:?}",
+                        mat
+                    );
+                    None
+                }
             })
             // Resistencia térmica total
             .try_fold(0.0_f32, |acc, x| x.map(|res| res + acc))
