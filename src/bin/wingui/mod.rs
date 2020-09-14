@@ -291,6 +291,7 @@ unsafe fn create_gui(hparent: HWND) {
         to_wstring(&get_copytxt()).as_ptr(),
         WS_VSCROLL
             | WS_BORDER
+            | WS_SIZEBOX
             | WS_CHILD
             | ES_MULTILINE
             | ES_READONLY
@@ -471,7 +472,7 @@ fn do_convert() {
             append_to_edit(
                 "\n\nSe ha guardado el archivo de resultados en formato JSON de EnvolventeCTE:\n",
             );
-            append_to_edit(&format!("    {}", path.display()));
+            append_to_edit(&format!("\n\n    {}", path.display()));
         }
         _ => {
             append_to_edit(
