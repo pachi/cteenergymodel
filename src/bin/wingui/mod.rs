@@ -17,6 +17,7 @@
 
 use std::collections::hash_map::DefaultHasher;
 use std::error::Error;
+// use std::fs;
 use std::hash::{Hash, Hasher};
 use std::path::Path;
 use std::ptr::null_mut;
@@ -27,12 +28,20 @@ use winapi::shared::windef::*;
 use winapi::um::libloaderapi::GetModuleHandleW;
 use winapi::um::winuser::*;
 
+use log::LevelFilter;
+use log::{error, info, warn};
+use log4rs::append::file::FileAppender;
+use log4rs::config::{Appender, Config, Root};
+use log4rs::encode::pattern::PatternEncoder;
+
 use hulc2envolventecte::{
     collect_hulc_data,
     cte::climatedata::total_radiation_in_july_by_orientation,
     get_copytxt,
     parsers::{ctehexml, kyg, tbl},
 };
+
+const LOGFILENAME: &str = "hulc2envolventecte.log";
 
 // Global Model to keep state
 struct Model {
@@ -71,7 +80,11 @@ fn setup_folders() {
                 0,
                 buffer.as_mut_ptr(),
             )) {
-                return; // TODO: sacar error
+                error!(
+                    "No se ha localizado el directorio de proyectos por defecto en {}",
+                    DEFAULT_DIR_IN
+                );
+                return;
             }
             let len = (0_usize..MAX_PATH)
                 .find(|&n| buffer[n] == 0)
@@ -423,6 +436,7 @@ fn do_convert() {
                 "\nAVISO: No se ha encontrado el archivo .kyg en el directorio de proyecto {}.",
                 dir_in
             ));
+            warn!("Obteniendo datos sin usar achivo KyGananciasSolares.txt");
             return;
         }
     };
@@ -438,25 +452,32 @@ fn do_convert() {
                 "\nAVISO: No se ha encontrado el archivo .tbl en el directorio de proyecto {}.",
                 dir_in
             ));
+            warn!("Obteniendo datos sin usar achivo .tbl");
             return;
         }
     };
 
-    let envolvente_data = match collect_hulc_data(ctehexmlpath, kygpath, tblpath) {
+    let envolvente_data = match collect_hulc_data(
+        ctehexmlpath.as_ref(),
+        kygpath.as_ref(),
+        tblpath.as_ref(),
+    ) {
         Ok(data) => {
             append_to_edit("\nLeídos datos envolvente");
+            info!("Cargados datos de archivo {:?}", ctehexmlpath.unwrap());
             data
         }
         Err(error) => {
             append_to_edit("\nERROR: No se han podido encontrar las definiciones de elementos de la envolvente");
             append_to_edit(&format!("\nERROR: {}", error));
+            error!("Error al leer archivo {:?}", ctehexmlpath.unwrap());
             return;
         }
     };
 
     // Salida en JSON
 
-    match serde_json::to_string_pretty(&envolvente_data) {
+    let path = match serde_json::to_string_pretty(&envolvente_data) {
         Ok(json) => {
             // Generamos un hash sencillo del resultado
             let mut hasher = DefaultHasher::new();
@@ -468,11 +489,13 @@ fn do_convert() {
                     "\nERROR: no se ha podido escribir en la ruta {}",
                     path.display()
                 ));
+                return;
             }
             append_to_edit(
                 "\n\nSe ha guardado el archivo de resultados en formato JSON de EnvolventeCTE:\n",
             );
             append_to_edit(&format!("\n\n    {}", path.display()));
+            path
         }
         _ => {
             append_to_edit(
@@ -486,7 +509,7 @@ fn do_convert() {
     let totradjul = total_radiation_in_july_by_orientation(&climatezone);
     append_to_edit(
         &format!(
-            "ZC: {}, A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, q_sol;jul={:.2} kWh/m².mes, n50(he2019)={:.2} 1/h, C_o(he2019)={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
+            "\n\nDatos generales:\n\nZC: {}, A_ref={:.2} m², V/A={:.2} m³/m²\n- K={:.2} W/m²a\n- q_sol;jul={:.2} kWh/m².mes\n- n50(he2019)={:.2} 1/h, C_o(he2019)={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
             climatezone,
             envolvente_data.a_ref(),
             envolvente_data.compacity(),
@@ -498,6 +521,19 @@ fn do_convert() {
             envolvente_data.C_o()
         )
     );
+
+    // let logdata = fs::read_to_string(LOGFILENAME).expect("Something went wrong reading the file");
+    // append_to_edit(&format!("\n\nLOG:\n====\n\n{}", logdata));
+
+    append_to_edit(&format!(
+        "\n\nArchivo .json guardado en {}\nArchivo de log guardado en {:?}",
+        path.display(),
+        std::env::current_exe()
+            .unwrap()
+            .parent()
+            .unwrap()
+            .join(LOGFILENAME),
+    ));
 }
 
 // Guarda archivo a disco
@@ -509,7 +545,29 @@ fn write_file(path: &std::path::Path, data: &str) -> std::io::Result<()> {
     file.write_all(data.as_bytes())
 }
 
+fn setup_log() {
+    let logfile = FileAppender::builder()
+        .encoder(Box::new(PatternEncoder::new(
+            "{d(%Y-%m-%d %H:%M:%S)}- {l} - {m}\n",
+        )))
+        .append(false) // Sobreescribe archivo en lugar de añadir
+        .build(LOGFILENAME)
+        .unwrap();
+
+    let config = Config::builder()
+        .appender(Appender::builder().build("logfile", Box::new(logfile)))
+        .build(
+            Root::builder()
+                .appender("logfile")
+                .build(LevelFilter::Debug),
+        )
+        .unwrap();
+
+    log4rs::init_config(config).unwrap();
+}
+
 pub fn run_wingui() {
+    setup_log();
     setup_folders();
     let hwnd = create_main_window(
         "hulc2envolventecte_gui",
