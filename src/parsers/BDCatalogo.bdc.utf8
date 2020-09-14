@@ -1050,119 +1050,119 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 2400" = MATERIAL
+"Hormigón convencional d 2400" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  1.9
      DENSITY       =  2400
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 2400"
-     NAME_CALENER  ="Hormigón convencional  d 2400"
+     NAME          ="Hormigón convencional d 2400"
+     NAME_CALENER  ="Hormigón convencional d 2400"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 2300" = MATERIAL
+"Hormigón convencional d 2300" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  1.72
      DENSITY       =  2300
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 2300"
-     NAME_CALENER  ="Hormigón convencional  d 2300"
+     NAME          ="Hormigón convencional d 2300"
+     NAME_CALENER  ="Hormigón convencional d 2300"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 2200" = MATERIAL
+"Hormigón convencional d 2200" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  1.57
      DENSITY       =  2200
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 2200"
-     NAME_CALENER  ="Hormigón convencional  d 2200"
+     NAME          ="Hormigón convencional d 2200"
+     NAME_CALENER  ="Hormigón convencional d 2200"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 2100" = MATERIAL
+"Hormigón convencional d 2100" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  1.44
      DENSITY       =  2100
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 2100"
-     NAME_CALENER  ="Hormigón convencional  d 2100"
+     NAME          ="Hormigón convencional d 2100"
+     NAME_CALENER  ="Hormigón convencional d 2100"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 2000" = MATERIAL
+"Hormigón convencional d 2000" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  1.32
      DENSITY       =  2000
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 2000"
-     NAME_CALENER  ="Hormigón convencional  d 2000"
+     NAME          ="Hormigón convencional d 2000"
+     NAME_CALENER  ="Hormigón convencional d 2000"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 1900" = MATERIAL
+"Hormigón convencional d 1900" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  1.2
      DENSITY       =  1900
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 1900"
-     NAME_CALENER  ="Hormigón convencional  d 1900"
+     NAME          ="Hormigón convencional d 1900"
+     NAME_CALENER  ="Hormigón convencional d 1900"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 1800" = MATERIAL
+"Hormigón convencional d 1800" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  1.12
      DENSITY       =  1800
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 1800"
-     NAME_CALENER  ="Hormigón convencional  d 1800"
+     NAME          ="Hormigón convencional d 1800"
+     NAME_CALENER  ="Hormigón convencional d 1800"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 1700" = MATERIAL
+"Hormigón convencional d 1700" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  1.03
      DENSITY       =  1700
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 1700"
-     NAME_CALENER  ="Hormigón convencional  d 1700"
+     NAME          ="Hormigón convencional d 1700"
+     NAME_CALENER  ="Hormigón convencional d 1700"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
 ..
-"Hormigón convencional  d 1600" = MATERIAL
+"Hormigón convencional d 1600" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  .97
      DENSITY       =  1600
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  120
-     NAME          ="Hormigón convencional  d 1600"
-     NAME_CALENER  ="Hormigón convencional  d 1600"
+     NAME          ="Hormigón convencional d 1600"
+     NAME_CALENER  ="Hormigón convencional d 1600"
      GROUP         ="Hormigones"
      IMAGE         = "hormigon.bmp"
      LIBRARY       = YES
@@ -1817,15 +1817,15 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "mortero.bmp"
      LIBRARY       = YES
 ..
-"Yeso baja dureza  d < 600" = MATERIAL
+"Yeso baja dureza d < 600" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  .18
      DENSITY       =  500
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  4
-     NAME          ="Yeso baja dureza  d < 600"
-     NAME_CALENER  ="Yeso baja dureza  d < 600"
+     NAME          ="Yeso baja dureza d < 600"
+     NAME_CALENER  ="Yeso baja dureza d < 600"
      GROUP         ="Yesos"
      IMAGE         = "mortero.bmp"
      LIBRARY       = YES
@@ -2844,27 +2844,27 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "aislante.bmp"
      LIBRARY       = YES
 ..
-"PUR Plancha con  HFC o Pentano y rev. permeable a gases [ 0.03 W/[mK]]" = MATERIAL
+"PUR Plancha con HFC o Pentano y rev. permeable a gases [ 0.03 W/[mK]]" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  .03
      DENSITY       =  45
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  60
-     NAME          ="PUR Plancha con  HFC o Pentano y rev. permeable a gases [ 0.03 W/[mK]]"
+     NAME          ="PUR Plancha con HFC o Pentano y rev. permeable a gases [ 0.03 W/[mK]]"
      NAME_CALENER  ="permeable a gases [ 0.03 W/[mK"
      GROUP         ="Aislantes"
      IMAGE         = "aislante.bmp"
      LIBRARY       = YES
 ..
-"PUR Plancha con  HFC o Pentano y rev. impermeable a gases [ 0.025 W/[mK]]" = MATERIAL
+"PUR Plancha con HFC o Pentano y rev. impermeable a gases [ 0.025 W/[mK]]" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  .025
      DENSITY       =  45
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  1E+30
-     NAME          ="PUR Plancha con  HFC o Pentano y rev. impermeable a gases [ 0.025 W/[mK]]"
+     NAME          ="PUR Plancha con HFC o Pentano y rev. impermeable a gases [ 0.025 W/[mK]]"
      NAME_CALENER  ="ermeable a gases [ 0.025 W/[mK"
      GROUP         ="Aislantes"
      IMAGE         = "aislante.bmp"
@@ -2896,15 +2896,15 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "aislante.bmp"
      LIBRARY       = YES
 ..
-"Panel de perlita expandida  [EPB] [>80%]" = MATERIAL
+"Panel de perlita expandida [EPB] [>80%]" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     = 0.02
      CONDUCTIVITY  =  .062
      DENSITY       =  190
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  5
-     NAME          ="Panel de perlita expandida  [EPB] [>80%]"
-     NAME_CALENER  =" perlita expandida  [EPB] [>80"
+     NAME          ="Panel de perlita expandida [EPB] [>80%]"
+     NAME_CALENER  =" perlita expandida [EPB] [>80"
      GROUP         ="Aislantes"
      IMAGE         = "aislante.bmp"
      LIBRARY       = YES
@@ -2937,7 +2937,7 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"Tabicón de LH doble  [60 mm < E < 90 mm]" = MATERIAL
+"Tabicón de LH doble [60 mm < E < 90 mm]" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .06
      THICKNESS_MIN =  .06
@@ -2946,8 +2946,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  930
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="Tabicón de LH doble  [60 mm < E < 90 mm]"
-     NAME_CALENER  ="de LH doble  [60 mm < E < 90 m"
+     NAME          ="Tabicón de LH doble [60 mm < E < 90 mm]"
+     NAME_CALENER  ="de LH doble [60 mm < E < 90 m"
      GROUP         ="Fábricas de ladrillo"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
@@ -3132,7 +3132,7 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"BC con mortero convencional  espesor 140 mm" = MATERIAL
+"BC con mortero convencional espesor 140 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .14
      THICKNESS_CHANGE = NO
@@ -3140,13 +3140,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1170
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="BC con mortero convencional  espesor 140 mm"
-     NAME_CALENER  ="ero convencional  espesor 140 "
+     NAME          ="BC con mortero convencional espesor 140 mm"
+     NAME_CALENER  ="ero convencional espesor 140 "
      GROUP         ="Fábricas de bloque cerámico de arcilla aligerada"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"BC con mortero convencional  espesor 190 mm" = MATERIAL
+"BC con mortero convencional espesor 190 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .19
      THICKNESS_CHANGE = NO
@@ -3154,13 +3154,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1080
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="BC con mortero convencional  espesor 190 mm"
-     NAME_CALENER  ="ero convencional  espesor 190 "
+     NAME          ="BC con mortero convencional espesor 190 mm"
+     NAME_CALENER  ="ero convencional espesor 190 "
      GROUP         ="Fábricas de bloque cerámico de arcilla aligerada"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"BC con mortero convencional  espesor 240 mm" = MATERIAL
+"BC con mortero convencional espesor 240 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .24
      THICKNESS_CHANGE = NO
@@ -3168,13 +3168,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1090
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="BC con mortero convencional  espesor 240 mm"
-     NAME_CALENER  ="ero convencional  espesor 240 "
+     NAME          ="BC con mortero convencional espesor 240 mm"
+     NAME_CALENER  ="ero convencional espesor 240 "
      GROUP         ="Fábricas de bloque cerámico de arcilla aligerada"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"BC con mortero convencional  espesor 290 mm" = MATERIAL
+"BC con mortero convencional espesor 290 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .29
      THICKNESS_CHANGE = NO
@@ -3182,13 +3182,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1080
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="BC con mortero convencional  espesor 290 mm"
-     NAME_CALENER  ="ero convencional  espesor 290 "
+     NAME          ="BC con mortero convencional espesor 290 mm"
+     NAME_CALENER  ="ero convencional espesor 290 "
      GROUP         ="Fábricas de bloque cerámico de arcilla aligerada"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"BC con mortero aislante  espesor 140 mm" = MATERIAL
+"BC con mortero aislante espesor 140 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .14
      THICKNESS_CHANGE = NO
@@ -3196,13 +3196,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1020
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="BC con mortero aislante  espesor 140 mm"
-     NAME_CALENER  ="mortero aislante  espesor 140 "
+     NAME          ="BC con mortero aislante espesor 140 mm"
+     NAME_CALENER  ="mortero aislante espesor 140 "
      GROUP         ="Fábricas de bloque cerámico de arcilla aligerada"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"BC con mortero aislante  espesor 190 mm" = MATERIAL
+"BC con mortero aislante espesor 190 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .19
      THICKNESS_CHANGE = NO
@@ -3210,13 +3210,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  910
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="BC con mortero aislante  espesor 190 mm"
-     NAME_CALENER  ="mortero aislante  espesor 190 "
+     NAME          ="BC con mortero aislante espesor 190 mm"
+     NAME_CALENER  ="mortero aislante espesor 190 "
      GROUP         ="Fábricas de bloque cerámico de arcilla aligerada"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"BC con mortero aislante  espesor 240 mm" = MATERIAL
+"BC con mortero aislante espesor 240 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .24
      THICKNESS_CHANGE = NO
@@ -3224,13 +3224,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  920
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="BC con mortero aislante  espesor 240 mm"
-     NAME_CALENER  ="mortero aislante  espesor 240 "
+     NAME          ="BC con mortero aislante espesor 240 mm"
+     NAME_CALENER  ="mortero aislante espesor 240 "
      GROUP         ="Fábricas de bloque cerámico de arcilla aligerada"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"BC con mortero aislante  espesor 290 mm" = MATERIAL
+"BC con mortero aislante espesor 290 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .29
      THICKNESS_CHANGE = NO
@@ -3238,8 +3238,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  910
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="BC con mortero aislante  espesor 290 mm"
-     NAME_CALENER  ="mortero aislante  espesor 290 "
+     NAME          ="BC con mortero aislante espesor 290 mm"
+     NAME_CALENER  ="mortero aislante espesor 290 "
      GROUP         ="Fábricas de bloque cerámico de arcilla aligerada"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
@@ -3482,7 +3482,7 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FU Entrevigado de hormigón  -Canto 250 mm" = MATERIAL
+"FU Entrevigado de hormigón -Canto 250 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .25
      THICKNESS_CHANGE = NO
@@ -3490,13 +3490,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1330
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  80
-     NAME          ="FU Entrevigado de hormigón  -Canto 250 mm"
-     NAME_CALENER  ="igado de hormigón  -Canto 250 "
+     NAME          ="FU Entrevigado de hormigón -Canto 250 mm"
+     NAME_CALENER  ="igado de hormigón -Canto 250 "
      GROUP         ="Forjados unidireccionales"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FU Entrevigado de hormigón  -Canto 300 mm" = MATERIAL
+"FU Entrevigado de hormigón -Canto 300 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .3
      THICKNESS_CHANGE = NO
@@ -3504,13 +3504,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1240
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  80
-     NAME          ="FU Entrevigado de hormigón  -Canto 300 mm"
-     NAME_CALENER  ="igado de hormigón  -Canto 300 "
+     NAME          ="FU Entrevigado de hormigón -Canto 300 mm"
+     NAME_CALENER  ="igado de hormigón -Canto 300 "
      GROUP         ="Forjados unidireccionales"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FU Entrevigado de hormigón  -Canto 350 mm" = MATERIAL
+"FU Entrevigado de hormigón -Canto 350 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .35
      THICKNESS_CHANGE = NO
@@ -3518,8 +3518,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1180
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  80
-     NAME          ="FU Entrevigado de hormigón  -Canto 350 mm"
-     NAME_CALENER  ="igado de hormigón  -Canto 350 "
+     NAME          ="FU Entrevigado de hormigón -Canto 350 mm"
+     NAME_CALENER  ="igado de hormigón -Canto 350 "
      GROUP         ="Forjados unidireccionales"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
@@ -3804,7 +3804,7 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FR Entrevigado de hormigón  -Canto 250 mm" = MATERIAL
+"FR Entrevigado de hormigón -Canto 250 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .25
      THICKNESS_CHANGE = NO
@@ -3812,13 +3812,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1740
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="FR Entrevigado de hormigón  -Canto 250 mm"
-     NAME_CALENER  ="igado de hormigón  -Canto 25 "
+     NAME          ="FR Entrevigado de hormigón -Canto 250 mm"
+     NAME_CALENER  ="igado de hormigón -Canto 25 "
      GROUP         ="Forjados reticulares"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FR Entrevigado de hormigón  -Canto 300 mm" = MATERIAL
+"FR Entrevigado de hormigón -Canto 300 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .3
      THICKNESS_CHANGE = NO
@@ -3826,13 +3826,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1670
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="FR Entrevigado de hormigón  -Canto 300 mm"
-     NAME_CALENER  ="igado de hormigón  -Canto 30 "
+     NAME          ="FR Entrevigado de hormigón -Canto 300 mm"
+     NAME_CALENER  ="igado de hormigón -Canto 30 "
      GROUP         ="Forjados reticulares"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FR Entrevigado de hormigón  -Canto 350 mm" = MATERIAL
+"FR Entrevigado de hormigón -Canto 350 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .35
      THICKNESS_CHANGE = NO
@@ -3840,13 +3840,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1610
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="FR Entrevigado de hormigón  -Canto 350 mm"
-     NAME_CALENER  ="igado de hormigón  -Canto 35 "
+     NAME          ="FR Entrevigado de hormigón -Canto 350 mm"
+     NAME_CALENER  ="igado de hormigón -Canto 35 "
      GROUP         ="Forjados reticulares"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FR Entrevigado de hormigón  -Canto 400 mm" = MATERIAL
+"FR Entrevigado de hormigón -Canto 400 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .4
      THICKNESS_CHANGE = NO
@@ -3854,13 +3854,13 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1570
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="FR Entrevigado de hormigón  -Canto 400 mm"
-     NAME_CALENER  ="igado de hormigón  -Canto 400 "
+     NAME          ="FR Entrevigado de hormigón -Canto 400 mm"
+     NAME_CALENER  ="igado de hormigón -Canto 400 "
      GROUP         ="Forjados reticulares"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FR Entrevigado de hormigón  -Canto 450 mm" = MATERIAL
+"FR Entrevigado de hormigón -Canto 450 mm" = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .45
      THICKNESS_CHANGE = NO
@@ -3868,8 +3868,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1540
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  10
-     NAME          ="FR Entrevigado de hormigón  -Canto 450 mm"
-     NAME_CALENER  ="igado de hormigón  -Canto 450 "
+     NAME          ="FR Entrevigado de hormigón -Canto 450 mm"
+     NAME_CALENER  ="igado de hormigón -Canto 450 "
      GROUP         ="Forjados reticulares"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
@@ -4000,7 +4000,7 @@ $ ----------------------------------------------------------------------------
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
 ..
-"FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm " = MATERIAL
+"FR Entrevigado de EPS moldeado enrasado -Canto 300 mm " = MATERIAL
      TYPE          = PROPERTIES
      THICKNESS     =  .3
      THICKNESS_CHANGE = NO
@@ -4008,8 +4008,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       =  1460
      SPECIFIC-HEAT =  1000
      VAPOUR-DIFFUSIVITY-FACTOR =  60
-     NAME          ="FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm "
-     NAME_CALENER  ="oldeado enrasado  -Canto 300 m"
+     NAME          ="FR Entrevigado de EPS moldeado enrasado -Canto 300 mm "
+     NAME_CALENER  ="oldeado enrasado -Canto 300 m"
      GROUP         ="Forjados reticulares"
      IMAGE         = "ladrillo.bmp"
      LIBRARY       = YES
@@ -5949,8 +5949,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 2400.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 2400"
-     NAME_CALENER  = "Hormigón convencional  d 2400"
+     NAME          = "Hormigón convencional d 2400"
+     NAME_CALENER  = "Hormigón convencional d 2400"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -5966,8 +5966,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 2300.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 2300"
-     NAME_CALENER  = "Hormigón convencional  d 2300"
+     NAME          = "Hormigón convencional d 2300"
+     NAME_CALENER  = "Hormigón convencional d 2300"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -5983,8 +5983,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 2200.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 2200"
-     NAME_CALENER  = "Hormigón convencional  d 2200"
+     NAME          = "Hormigón convencional d 2200"
+     NAME_CALENER  = "Hormigón convencional d 2200"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -6000,8 +6000,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 2100.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 2100"
-     NAME_CALENER  = "Hormigón convencional  d 2100"
+     NAME          = "Hormigón convencional d 2100"
+     NAME_CALENER  = "Hormigón convencional d 2100"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -6017,8 +6017,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 2000.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 2000"
-     NAME_CALENER  = "Hormigón convencional  d 2000"
+     NAME          = "Hormigón convencional d 2000"
+     NAME_CALENER  = "Hormigón convencional d 2000"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -6034,8 +6034,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 1900.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 1900"
-     NAME_CALENER  = "Hormigón convencional  d 1900"
+     NAME          = "Hormigón convencional d 1900"
+     NAME_CALENER  = "Hormigón convencional d 1900"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -6051,8 +6051,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 1800.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 1800"
-     NAME_CALENER  = "Hormigón convencional  d 1800"
+     NAME          = "Hormigón convencional d 1800"
+     NAME_CALENER  = "Hormigón convencional d 1800"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -6068,8 +6068,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 1700.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 1700"
-     NAME_CALENER  = "Hormigón convencional  d 1700"
+     NAME          = "Hormigón convencional d 1700"
+     NAME_CALENER  = "Hormigón convencional d 1700"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -6085,8 +6085,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 1600.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 120.0
-     NAME          = "Hormigón convencional  d 1600"
-     NAME_CALENER  = "Hormigón convencional  d 1600"
+     NAME          = "Hormigón convencional d 1600"
+     NAME_CALENER  = "Hormigón convencional d 1600"
      GROUP         = "Hormigones"
      LEVEL1        = "Hormigones para piezas prefabricadas"
      LEVEL2        = "Hormigón convencional"
@@ -6880,8 +6880,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 450.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 4.0
-     NAME          = "Yeso baja dureza  d < 600"
-     NAME_CALENER  = "Yeso baja dureza  d < 600"
+     NAME          = "Yeso baja dureza d < 600"
+     NAME_CALENER  = "Yeso baja dureza d < 600"
      GROUP         = "Yesos"
      LEVEL1        = "Yesos"
      SOURCE        = "CEC2009"
@@ -7059,8 +7059,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 190.0
      SPECIFIC-HEAT = 900.0
      VAPOUR-DIFFUSIVITY-FACTOR = 5.0
-     NAME          = "Panel de perlita expandida  [EPB] [>80%]"
-     NAME_CALENER  = " perlita expandida  [EPB] [>80"
+     NAME          = "Panel de perlita expandida [EPB] [>80%]"
+     NAME_CALENER  = " perlita expandida [EPB] [>80"
      GROUP         = "Aislantes"
      LEVEL1        = "Aislantes térmicos"
      LEVEL2        = "Otros materiales aislantes)"
@@ -7311,7 +7311,7 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 45.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 60.0
-     NAME          = "PUR Plancha con  HFC o Pentano y rev. permeable a gases [ 0.03 W/[mK]]"
+     NAME          = "PUR Plancha con HFC o Pentano y rev. permeable a gases [ 0.03 W/[mK]]"
      NAME_CALENER  = "permeable a gases [ 0.03 W/[mK"
      GROUP         = "Aislantes"
      LEVEL1        = "Aislantes térmicos"
@@ -7328,7 +7328,7 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 45.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 1E+30
-     NAME          = "PUR Plancha con  HFC o Pentano y rev. impermeable a gases [ 0.025 W/[mK]]"
+     NAME          = "PUR Plancha con HFC o Pentano y rev. impermeable a gases [ 0.025 W/[mK]]"
      NAME_CALENER  = "ermeable a gases [ 0.025 W/[mK"
      GROUP         = "Aislantes"
      LEVEL1        = "Aislantes térmicos"
@@ -8257,8 +8257,8 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 930.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
-     NAME          = "Tabicón de LH doble  [60 mm < E < 90 mm]"
-     NAME_CALENER  = "de LH doble  [60 mm < E < 90 m"
+     NAME          = "Tabicón de LH doble [60 mm < E < 90 mm]"
+     NAME_CALENER  = "de LH doble [60 mm < E < 90 m"
      GROUP         = "Fábricas de ladrillo"
      LEVEL1        = "Fábrica de ladrillo cerámico"
      LEVEL2        = "Ladrillo hueco LH"
@@ -8548,8 +8548,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "BC con mortero convencional  espesor 140 mm"
-     NAME_CALENER  = "ero convencional  espesor 140 "
+     NAME          = "BC con mortero convencional espesor 140 mm"
+     NAME_CALENER  = "ero convencional espesor 140 "
      GROUP         = "Fábricas de bloque cerámico de arcilla aligerada"
      LEVEL1        = "Fábrica de bloque cerámico aligerado"
      LEVEL2        = "BC con mortero convencional"
@@ -8566,8 +8566,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "BC con mortero convencional  espesor 190 mm"
-     NAME_CALENER  = "ero convencional  espesor 190 "
+     NAME          = "BC con mortero convencional espesor 190 mm"
+     NAME_CALENER  = "ero convencional espesor 190 "
      GROUP         = "Fábricas de bloque cerámico de arcilla aligerada"
      LEVEL1        = "Fábrica de bloque cerámico aligerado"
      LEVEL2        = "BC con mortero convencional"
@@ -8584,8 +8584,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "BC con mortero convencional  espesor 240 mm"
-     NAME_CALENER  = "ero convencional  espesor 240 "
+     NAME          = "BC con mortero convencional espesor 240 mm"
+     NAME_CALENER  = "ero convencional espesor 240 "
      GROUP         = "Fábricas de bloque cerámico de arcilla aligerada"
      LEVEL1        = "Fábrica de bloque cerámico aligerado"
      LEVEL2        = "BC con mortero convencional"
@@ -8602,8 +8602,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "BC con mortero convencional  espesor 290 mm"
-     NAME_CALENER  = "ero convencional  espesor 290 "
+     NAME          = "BC con mortero convencional espesor 290 mm"
+     NAME_CALENER  = "ero convencional espesor 290 "
      GROUP         = "Fábricas de bloque cerámico de arcilla aligerada"
      LEVEL1        = "Fábrica de bloque cerámico aligerado"
      LEVEL2        = "BC con mortero convencional"
@@ -8620,8 +8620,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "BC con mortero aislante  espesor 140 mm"
-     NAME_CALENER  = "mortero aislante  espesor 140 "
+     NAME          = "BC con mortero aislante espesor 140 mm"
+     NAME_CALENER  = "mortero aislante espesor 140 "
      GROUP         = "Fábricas de bloque cerámico de arcilla aligerada"
      LEVEL1        = "Fábrica de bloque cerámico aligerado"
      LEVEL2        = "BC con mortero aislante"
@@ -8638,8 +8638,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "BC con mortero aislante  espesor 190 mm"
-     NAME_CALENER  = "mortero aislante  espesor 190 "
+     NAME          = "BC con mortero aislante espesor 190 mm"
+     NAME_CALENER  = "mortero aislante espesor 190 "
      GROUP         = "Fábricas de bloque cerámico de arcilla aligerada"
      LEVEL1        = "Fábrica de bloque cerámico aligerado"
      LEVEL2        = "BC con mortero aislante"
@@ -8656,8 +8656,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "BC con mortero aislante  espesor 240 mm"
-     NAME_CALENER  = "mortero aislante  espesor 240 "
+     NAME          = "BC con mortero aislante espesor 240 mm"
+     NAME_CALENER  = "mortero aislante espesor 240 "
      GROUP         = "Fábricas de bloque cerámico de arcilla aligerada"
      LEVEL1        = "Fábrica de bloque cerámico aligerado"
      LEVEL2        = "BC con mortero aislante"
@@ -8674,8 +8674,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "BC con mortero aislante  espesor 290 mm"
-     NAME_CALENER  = "mortero aislante  espesor 290 "
+     NAME          = "BC con mortero aislante espesor 290 mm"
+     NAME_CALENER  = "mortero aislante espesor 290 "
      GROUP         = "Fábricas de bloque cerámico de arcilla aligerada"
      LEVEL1        = "Fábrica de bloque cerámico aligerado"
      LEVEL2        = "BC con mortero aislante"
@@ -9286,8 +9286,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 80.0
      THICKNESS_CHANGE = NO
-     NAME          = "FU Entrevigado de hormigón  -Canto 250 mm"
-     NAME_CALENER  = "igado de hormigón  -Canto 250 "
+     NAME          = "FU Entrevigado de hormigón -Canto 250 mm"
+     NAME_CALENER  = "igado de hormigón -Canto 250 "
      GROUP         = "Forjados unidireccionales"
      LEVEL1        = "Forjados unidireccionales"
      LEVEL2        = "Piezas de entrevigado de hormigón"
@@ -9304,8 +9304,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 80.0
      THICKNESS_CHANGE = NO
-     NAME          = "FU Entrevigado de hormigón  -Canto 300 mm"
-     NAME_CALENER  = "igado de hormigón  -Canto 300 "
+     NAME          = "FU Entrevigado de hormigón -Canto 300 mm"
+     NAME_CALENER  = "igado de hormigón -Canto 300 "
      GROUP         = "Forjados unidireccionales"
      LEVEL1        = "Forjados unidireccionales"
      LEVEL2        = "Piezas de entrevigado de hormigón"
@@ -9322,8 +9322,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 80.0
      THICKNESS_CHANGE = NO
-     NAME          = "FU Entrevigado de hormigón  -Canto 350 mm"
-     NAME_CALENER  = "igado de hormigón  -Canto 350 "
+     NAME          = "FU Entrevigado de hormigón -Canto 350 mm"
+     NAME_CALENER  = "igado de hormigón -Canto 350 "
      GROUP         = "Forjados unidireccionales"
      LEVEL1        = "Forjados unidireccionales"
      LEVEL2        = "Piezas de entrevigado de hormigón"
@@ -9730,8 +9730,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "FR Entrevigado de hormigón  -Canto 250 mm"
-     NAME_CALENER  = "igado de hormigón  -Canto 25 "
+     NAME          = "FR Entrevigado de hormigón -Canto 250 mm"
+     NAME_CALENER  = "igado de hormigón -Canto 25 "
      GROUP         = "Forjados reticulares"
      LEVEL1        = "Forjados reticulares"
      LEVEL2        = "Piezas de entrevigado de hormigón"
@@ -9748,8 +9748,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "FR Entrevigado de hormigón  -Canto 300 mm"
-     NAME_CALENER  = "igado de hormigón  -Canto 30 "
+     NAME          = "FR Entrevigado de hormigón -Canto 300 mm"
+     NAME_CALENER  = "igado de hormigón -Canto 30 "
      GROUP         = "Forjados reticulares"
      LEVEL1        = "Forjados reticulares"
      LEVEL2        = "Piezas de entrevigado de hormigón"
@@ -9766,8 +9766,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "FR Entrevigado de hormigón  -Canto 350 mm"
-     NAME_CALENER  = "igado de hormigón  -Canto 35 "
+     NAME          = "FR Entrevigado de hormigón -Canto 350 mm"
+     NAME_CALENER  = "igado de hormigón -Canto 35 "
      GROUP         = "Forjados reticulares"
      LEVEL1        = "Forjados reticulares"
      LEVEL2        = "Piezas de entrevigado de hormigón"
@@ -9784,8 +9784,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "FR Entrevigado de hormigón  -Canto 400 mm"
-     NAME_CALENER  = "igado de hormigón  -Canto 400 "
+     NAME          = "FR Entrevigado de hormigón -Canto 400 mm"
+     NAME_CALENER  = "igado de hormigón -Canto 400 "
      GROUP         = "Forjados reticulares"
      LEVEL1        = "Forjados reticulares"
      LEVEL2        = "Piezas de entrevigado de hormigón"
@@ -9802,8 +9802,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 10.0
      THICKNESS_CHANGE = NO
-     NAME          = "FR Entrevigado de hormigón  -Canto 450 mm"
-     NAME_CALENER  = "igado de hormigón  -Canto 450 "
+     NAME          = "FR Entrevigado de hormigón -Canto 450 mm"
+     NAME_CALENER  = "igado de hormigón -Canto 450 "
      GROUP         = "Forjados reticulares"
      LEVEL1        = "Forjados reticulares"
      LEVEL2        = "Piezas de entrevigado de hormigón"
@@ -9954,7 +9954,7 @@ $ ----------------------------------------------------------------------------
      DENSITY       = 1115.0
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 6.0
-     NAME          = "FR entrevigado de hormigón d < 1200 con  áridos ligeros de canto 400 mm"
+     NAME          = "FR entrevigado de hormigón d < 1200 con áridos ligeros de canto 400 mm"
      GROUP         = "Forjados reticulares"
      LEVEL1        = "Forjados reticulares"
      LEVEL2        = "Piezas de entrevigado de hormigón de áridos ligeros"
@@ -10087,8 +10087,8 @@ $ ----------------------------------------------------------------------------
      SPECIFIC-HEAT = 1000.0
      VAPOUR-DIFFUSIVITY-FACTOR = 60.0
      THICKNESS_CHANGE = NO
-     NAME          = "FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm "
-     NAME_CALENER  = "oldeado enrasado  -Canto 300 m"
+     NAME          = "FR Entrevigado de EPS moldeado enrasado -Canto 300 mm "
+     NAME_CALENER  = "oldeado enrasado -Canto 300 m"
      GROUP         = "Forjados reticulares"
      LEVEL1        = "Forjados reticulares"
      LEVEL2        = "Piezas de entrevigado de EPS moldeadas enrasadas"
@@ -13507,7 +13507,7 @@ $ ============================================================================
 ..
 "Fc1_14" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero aislante  espesor 140 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BC con mortero aislante espesor 140 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.14, 0.02)
     VIGENCIA     = ( "E", "F", "G")
 	BUILDING     = ( "Unifamiliar")
@@ -13519,7 +13519,7 @@ $ ============================================================================
 ..
 "Fc1_24" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero aislante  espesor 240 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BC con mortero aislante espesor 240 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.24, 0.02)
     VIGENCIA     = ( "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -13531,7 +13531,7 @@ $ ============================================================================
 ..
 "Fc2c" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "BC con mortero convencional  espesor 140 mm", "Cámara de aire ligeramente ventilada vertical 2 cm", "Tabique de LH sencillo [40 mm < Espesor < 60 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "BC con mortero convencional espesor 140 mm", "Cámara de aire ligeramente ventilada vertical 2 cm", "Tabique de LH sencillo [40 mm < Espesor < 60 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.14, 0.03, 0.05, 0.02)
     VIGENCIA     = ( "E", "F", "G")
 	BUILDING     = ( "Unifamiliar")
@@ -13543,7 +13543,7 @@ $ ============================================================================
 ..
 "Fc2a" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "BC con mortero convencional  espesor 140 mm", "AT", "Tabique de LH sencillo [40 mm < Espesor < 60 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "BC con mortero convencional espesor 140 mm", "AT", "Tabique de LH sencillo [40 mm < Espesor < 60 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.14, 0.0000001, 0.05, 0.02)
     VIGENCIA     = ( "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -13660,7 +13660,7 @@ $ ----------------------------------------------------------------------------
 ..
 "Qpca_re" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "AT", "FR Entrevigado de EPS moldeado enrasado  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "AT", "FR Entrevigado de EPS moldeado enrasado -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.02, 0.0000001, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "E", "F", "G")
@@ -13674,7 +13674,7 @@ $ ----------------------------------------------------------------------------
 ..
 "Qpca_rh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "AT", "FR Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "AT", "FR Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.02, 0.0000001, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "E", "F", "G")
@@ -13732,7 +13732,7 @@ LIBRARY       = YES
 ..
 "Qpca_uh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "AT", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "AT", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.02, 0.0000001, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "E", "F", "G")
@@ -13777,7 +13777,7 @@ LIBRARY       = YES
 ..
 "Qpc_re" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "FR Entrevigado de EPS moldeado enrasado  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "FR Entrevigado de EPS moldeado enrasado -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.02, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -13791,7 +13791,7 @@ LIBRARY       = YES
 ..
 "Qpc_rh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "FR Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "FR Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.02, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -13850,7 +13850,7 @@ LIBRARY       = YES
 ..
 "Qpc_uh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]", "Cámara de aire ligeramente ventilada horizontal 2 cm", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.02, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -13893,7 +13893,7 @@ LIBRARY       = YES
 ..
 "Qpa_re" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("AT", "Hormigón con áridos ligeros 1800 < d < 2000", "FR Entrevigado de EPS moldeado enrasado  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("AT", "Hormigón con áridos ligeros 1800 < d < 2000", "FR Entrevigado de EPS moldeado enrasado -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.0000001, 0.05, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "E", "F", "G")
@@ -13907,7 +13907,7 @@ LIBRARY       = YES
 ..
 "Qpa_rh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("AT", "Hormigón con áridos ligeros 1800 < d < 2000", "FR Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("AT", "Hormigón con áridos ligeros 1800 < d < 2000", "FR Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.0000001, 0.05, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "E", "F", "G")
@@ -13963,7 +13963,7 @@ LIBRARY       = YES
 ..
 "Qpa_uh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("AT", "Hormigón con áridos ligeros 1800 < d < 2000", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("AT", "Hormigón con áridos ligeros 1800 < d < 2000", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.0000001, 0.05, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "E", "F", "G")
@@ -14005,7 +14005,7 @@ LIBRARY       = YES
 ..
 "Qp_re" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000", "FR Entrevigado de EPS moldeado enrasado  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000", "FR Entrevigado de EPS moldeado enrasado -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.05, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -14019,7 +14019,7 @@ LIBRARY       = YES
 ..
 "Qp_rh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000", "FR Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000", "FR Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.05, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -14075,7 +14075,7 @@ LIBRARY       = YES
 ..
 "Qp_uh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.05, 0.25, 0.02)
     TYPE =  ("PLANA")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -14142,7 +14142,7 @@ LIBRARY       = YES
 ..
 "Qifa_uh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Teja de arcilla cocida", "Cámara de aire ligeramente ventilada horizontal 2 cm", "AT", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Teja de arcilla cocida", "Cámara de aire ligeramente ventilada horizontal 2 cm", "AT", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.0000001, 0.25, 0.02)
     TYPE =  ("INCLINADA")
     VIGENCIA     = ( "E", "F", "G")
@@ -14212,7 +14212,7 @@ LIBRARY       = YES
 ..
 "Qif_uh" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Teja de arcilla cocida", "Cámara de aire ligeramente ventilada horizontal 2 cm", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Teja de arcilla cocida", "Cámara de aire ligeramente ventilada horizontal 2 cm", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.25, 0.02)
     TYPE =  ("INCLINADA")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -14226,7 +14226,7 @@ LIBRARY       = YES
 $ ----------------------------------------------------------------------------
 "Suelo por defecto A, B, C, D, E" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón  -Canto 250 mm")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón -Canto 250 mm")
     THICKNESS = (0.03, 0.04, 0.25)
     TYPE =  ( "TERRENO")
     VIGENCIA     = ( "A", "B", "C", "D", "E")
@@ -14239,7 +14239,7 @@ $ ----------------------------------------------------------------------------
 
 "Ssa_uc" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FU Entrevigado de hormigón  -Canto 250 mm")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FU Entrevigado de hormigón -Canto 250 mm")
     THICKNESS = (0.03, 0.04, 0.0000001, 0.25)
     TYPE =  ( "TERRENO")
     VIGENCIA     = ( "F", "G")
@@ -14251,7 +14251,7 @@ $ ----------------------------------------------------------------------------
 ..
 "Ss_uc" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón  -Canto 250 mm")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón -Canto 250 mm")
     THICKNESS = (0.03, 0.04, 0.25)
     TYPE =  ( "TERRENO")
     VIGENCIA     = ( "A", "B", "C", "D", "E")
@@ -14288,7 +14288,7 @@ LIBRARY       = YES
 ..
 "Se_re" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FR Entrevigado de EPS moldeado enrasado  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FR Entrevigado de EPS moldeado enrasado -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.03, 0.04, 0.25, 0.02)
     TYPE =  ( "EXTERIOR", "FORJADO")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -14300,7 +14300,7 @@ LIBRARY       = YES
 ..
 "Se_rh" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FR Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FR Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.03, 0.04, 0.25, 0.02)
     TYPE =  ( "EXTERIOR", "FORJADO")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -14347,7 +14347,7 @@ LIBRARY       = YES
 ..
 "Se_uh" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.03, 0.04, 0.25, 0.02)
     TYPE =  ( "EXTERIOR", "FORJADO")
     VIGENCIA     = ( "A", "B", "C", "D")
@@ -14383,7 +14383,7 @@ LIBRARY       = YES
 ..
 "Sea_re" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FR Entrevigado de EPS moldeado enrasado  -Canto 250 mm", "AT", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FR Entrevigado de EPS moldeado enrasado -Canto 250 mm", "AT", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000")
     THICKNESS = (0.03, 0.04, 0.25, 0.0000001, 0.02)
     TYPE =  ( "EXTERIOR")
     VIGENCIA     = ( "E", "F", "G")
@@ -14395,7 +14395,7 @@ LIBRARY       = YES
 ..
 "Sea_rh" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FR Entrevigado de hormigón  -Canto 250 mm", "AT", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FR Entrevigado de hormigón -Canto 250 mm", "AT", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000")
     THICKNESS = (0.03, 0.04, 0.25, 0.0000001, 0.02)
     TYPE =  ( "EXTERIOR")
     VIGENCIA     = ( "E", "F", "G")
@@ -14443,7 +14443,7 @@ LIBRARY       = YES
 ..
 "Sea_uh" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón  -Canto 250 mm", "AT", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón -Canto 250 mm", "AT", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000")
     THICKNESS = (0.03, 0.04, 0.25, 0.0000001, 0.02)
     TYPE =  ( "EXTERIOR")
     VIGENCIA     = ( "E", "F", "G")
@@ -14479,7 +14479,7 @@ LIBRARY       = YES
 ..
 "Ss_uh" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón  -Canto 250 mm")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "FU Entrevigado de hormigón -Canto 250 mm")
     THICKNESS = (0.03, 0.04, 0.25)
     TYPE =  ( "TERRENO")
     VIGENCIA     = ( "F", "G")
@@ -14503,7 +14503,7 @@ LIBRARY       = YES
 ..
 "Ssa_uh" = LAYERS
     GROUP        = "Suelos"
-    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FU Entrevigado de hormigón  -Canto 250 mm")
+    MATERIAL     = ("Piedra artificial", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FU Entrevigado de hormigón -Canto 250 mm")
     THICKNESS = (0.03, 0.04, 0.0000001, 0.25)
     TYPE =  ( "TERRENO")
     VIGENCIA     = ( "F", "G")
@@ -14547,7 +14547,7 @@ LIBRARY       = YES
 ..
 "PIH_uh" = LAYERS
     GROUP        = "Partición interior horizontal"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Arena y grava [1700 < d < 2200]", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Arena y grava [1700 < d < 2200]", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.25, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14577,7 +14577,7 @@ LIBRARY       = YES
 ..
 "PIH_rh" = LAYERS
     GROUP        = "Partición interior horizontal"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Arena y grava [1700 < d < 2200]", "FR Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Arena y grava [1700 < d < 2200]", "FR Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.25, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14587,7 +14587,7 @@ LIBRARY       = YES
 ..
 "PIH_re" = LAYERS
     GROUP        = "Partición interior horizontal"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Arena y grava [1700 < d < 2200]", "FR Entrevigado de EPS moldeado enrasado  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "Arena y grava [1700 < d < 2200]", "FR Entrevigado de EPS moldeado enrasado -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.05, 0.25, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14627,7 +14627,7 @@ LIBRARY       = YES
 ..
 "PIHa_uh" = LAYERS
     GROUP        = "Partición interior horizontal"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FU Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FU Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.0000001, 0.25, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14657,7 +14657,7 @@ LIBRARY       = YES
 ..
 "PIHa_rh" = LAYERS
     GROUP        = "Partición interior horizontal"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FR Entrevigado de hormigón  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FR Entrevigado de hormigón -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.0000001, 0.25, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14667,7 +14667,7 @@ LIBRARY       = YES
 ..
 "PIHa_re" = LAYERS
     GROUP        = "Partición interior horizontal"
-    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FR Entrevigado de EPS moldeado enrasado  -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerámica", "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000", "AT", "FR Entrevigado de EPS moldeado enrasado -Canto 250 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.02, 0.0000001, 0.25, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14697,7 +14697,7 @@ LIBRARY       = YES
 ..
 "PIV por defecto" = LAYERS
     GROUP        = "Partición interior vertical"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble  [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.08, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14707,7 +14707,7 @@ LIBRARY       = YES
 ..
 "PIV_f" = LAYERS
     GROUP        = "Partición interior vertical"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble  [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.08, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14717,7 +14717,7 @@ LIBRARY       = YES
 ..
 "PIV_fa" = LAYERS
     GROUP        = "Partición interior vertical"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble  [60 mm < E < 90 mm]", "AT", "Tabicón de LH doble  [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble [60 mm < E < 90 mm]", "AT", "Tabicón de LH doble [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.08, 0.0000001, 0.08, 0.02)
 	VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14749,7 +14749,7 @@ LIBRARY       = YES
 $ ----------------------------------------------------------------------------
 "MED por defecto C, D, E" = LAYERS
     GROUP        = "Medianeras"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble  [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.08, 0.02)
     VIGENCIA     = ( "C", "D", "E")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14779,7 +14779,7 @@ $ ----------------------------------------------------------------------------
 ..
 "MED por defecto F" = LAYERS
     GROUP        = "Medianeras"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble  [60 mm < E < 90 mm]", "AT", "Tabicón de LH doble  [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble [60 mm < E < 90 mm]", "AT", "Tabicón de LH doble [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.08, 0.0000001, 0.08, 0.02)
     VIGENCIA     = ( "F" )
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14789,7 +14789,7 @@ $ ----------------------------------------------------------------------------
 ..
 "MED por defecto G" = LAYERS
     GROUP        = "Medianeras"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble  [60 mm < E < 90 mm]", "AT", "Tabicón de LH doble  [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble [60 mm < E < 90 mm]", "AT", "Tabicón de LH doble [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.08, 0.0000001, 0.08, 0.02)
     VIGENCIA     = ( "G" )
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14801,7 +14801,7 @@ $ ----------------------------------------------------------------------------
 
 "MED_l" = LAYERS
     GROUP        = "Medianeras"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble  [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.08, 0.02)
     VIGENCIA     = ( "A", "B", "C", "D", "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14811,7 +14811,7 @@ $ ----------------------------------------------------------------------------
 ..
 "MED_la" = LAYERS
     GROUP        = "Medianeras"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble  [60 mm < E < 90 mm]", "AT", "Tabicón de LH doble  [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "Tabicón de LH doble [60 mm < E < 90 mm]", "AT", "Tabicón de LH doble [60 mm < E < 90 mm]", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.08, 0.0000001, 0.08, 0.02)
     VIGENCIA     = ( "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14842,7 +14842,7 @@ $ ----------------------------------------------------------------------------
 ..
 "MED_c" = LAYERS
     GROUP        = "Medianeras"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "BC con mortero convencional  espesor 140 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "BC con mortero convencional espesor 140 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.14, 0.02)
     VIGENCIA     = ( "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -14852,7 +14852,7 @@ $ ----------------------------------------------------------------------------
 ..
 "MED_ca" = LAYERS
     GROUP        = "Medianeras"
-    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "BC con mortero convencional  espesor 140 mm", "AT", "BC con mortero convencional  espesor 140 mm", "Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Enlucido de yeso 1000 < d < 1300", "BC con mortero convencional espesor 140 mm", "AT", "BC con mortero convencional espesor 140 mm", "Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02, 0.14, 0.0000001, 0.14, 0.02)
     VIGENCIA     = ( "E", "F", "G")
 	BUILDING     = ( "Unifamiliar", "Bloque")
@@ -15363,13 +15363,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 01con.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.002,0.0,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 01con.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.002,0.0,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15381,7 +15381,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 01con.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.002,0.0,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15411,13 +15411,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 01inv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 01inv.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.0,0.002,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15429,7 +15429,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 01inv.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15459,13 +15459,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 02.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.03,0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 02.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.03,0.0,0.002,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15477,7 +15477,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 02.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Hormigón con áridos ligeros 1800 < d < 2000","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.03,0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15507,13 +15507,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 03lv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.002,0.035,0.0,0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 03lv.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.002,0.035,0.0,0.0,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15525,7 +15525,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 03lv.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Plaqueta o baldosa cerámica","Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000","Cloruro de polivinilo [PVC]","Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.015,0.04,0.002,0.035,0.0,0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15555,13 +15555,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 03mv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 03mv.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15573,7 +15573,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 03mv.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15603,13 +15603,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 04con.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.0,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 04con.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.0,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15621,7 +15621,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 04con.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.0,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15651,13 +15651,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 04inv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 04inv.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.002,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15669,7 +15669,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 04inv.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15699,13 +15699,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 05con.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Arena y grava [1700 < d < 2200]","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Arena y grava [1700 < d < 2200]","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.05,0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 05con.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Arena y grava [1700 < d < 2200]","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Arena y grava [1700 < d < 2200]","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.05,0.0,0.002,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15717,7 +15717,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 05con.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Arena y grava [1700 < d < 2200]","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Arena y grava [1700 < d < 2200]","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.05,0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15759,13 +15759,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 06.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.0,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 06.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.0,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15777,7 +15777,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 06.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.0,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15813,13 +15813,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 07con.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.3,0.001,0.002,0.0,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 07con.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.3,0.001,0.002,0.0,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15831,7 +15831,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 07con.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Cloruro de polivinilo [PVC]","Aquí va el aislante","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.3,0.001,0.002,0.0,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15861,13 +15861,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 07inv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.3,0.001,0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 07inv.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.3,0.001,0.0,0.002,0.07,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15879,7 +15879,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 07inv.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Tierra vegetal [d < 2050]","Subcapa fieltro","Aquí va el aislante","Cloruro de polivinilo [PVC]","Hormigón con áridos ligeros 1800 < d < 2000","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.3,0.001,0.0,0.002,0.07,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15909,13 +15909,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 08lv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Tabicón de LH doble Gran Formato 60 mm < E < 90 mm","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Tabicón de LH doble Gran Formato 60 mm < E < 90 mm","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.04,0.0,0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 08lv.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Tabicón de LH doble Gran Formato 60 mm < E < 90 mm","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Tabicón de LH doble Gran Formato 60 mm < E < 90 mm","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.04,0.0,0.0,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15927,7 +15927,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 08lv.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Tabicón de LH doble Gran Formato 60 mm < E < 90 mm","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Tabicón de LH doble Gran Formato 60 mm < E < 90 mm","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.04,0.0,0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -15957,13 +15957,13 @@ $ ----------------------------------------------------------------------------
 ..
 "C 08mv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
 "C 08mv.4" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","FR Entrevigado de EPS moldeado enrasado  -Canto 300 mm ","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","FR Entrevigado de EPS moldeado enrasado -Canto 300 mm ","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.3,0.015)
 	LIBRARY       = YES
 ..
@@ -15975,7 +15975,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 08mv.6" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","FR Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","FR Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -16005,7 +16005,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 09con.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Teja de arcilla cocida","Cloruro de polivinilo [PVC]","Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Teja de arcilla cocida","Cloruro de polivinilo [PVC]","Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.02,0.002,0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -16041,7 +16041,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 09inv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Teja de arcilla cocida","Aquí va el aislante","Cloruro de polivinilo [PVC]","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Teja de arcilla cocida","Aquí va el aislante","Cloruro de polivinilo [PVC]","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.02,0.0,0.002,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -16077,7 +16077,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 10.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Cloruro de polivinilo [PVC]","Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.002,0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -16113,7 +16113,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 11lv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Teja de arcilla cocida","Cloruro de polivinilo [PVC]","Tablero contrachapado 700 < d < 900 ","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Teja de arcilla cocida","Cloruro de polivinilo [PVC]","Tablero contrachapado 700 < d < 900 ","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.02,0.002,0.03,0.0,0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -16137,7 +16137,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 11mv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -16161,7 +16161,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 12lv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Teja de arcilla cocida","Cloruro de polivinilo [PVC]","Tablero cerámico","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Teja de arcilla cocida","Cloruro de polivinilo [PVC]","Tablero cerámico","Cámara de aire ligeramente ventilada horizontal 2 cm","Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.02,0.002,0.04,0.0,0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -16185,7 +16185,7 @@ $ ----------------------------------------------------------------------------
 ..
 "C 12mv.3" = LAYERS
     GROUP        = "Cubiertas"
-    MATERIAL     = ("Aquí va el aislante","FU Entrevigado de hormigón  -Canto 250 mm","Enlucido de yeso d < 1000")
+    MATERIAL     = ("Aquí va el aislante","FU Entrevigado de hormigón -Canto 250 mm","Enlucido de yeso d < 1000")
     THICKNESS = (0.0,0.25,0.015)
 	LIBRARY       = YES
 ..
@@ -16221,13 +16221,13 @@ $ ----------------------------------------------------------------------------
 
 "F 1.01" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.115,0.02,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 1.02" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.115,0.02,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16245,13 +16245,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 1.05" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("1 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("1 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.24,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 1.06" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("1 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("1 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.24,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16269,13 +16269,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 1.09" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BH convencional espesor 150 mm","Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BH convencional espesor 150 mm","Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.15,0.02,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 1.10" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BH convencional espesor 150 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BH convencional espesor 150 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.15,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16323,7 +16323,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 2.01" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16335,7 +16335,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 2.03" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16365,13 +16365,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 3.01" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.115,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 3.02" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.115,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16389,13 +16389,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 3.05" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","1 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","1 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.24,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 3.06" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","1 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","1 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.24,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16413,13 +16413,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 3.09" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BH convencional espesor 150 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BH convencional espesor 150 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.15,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 3.10" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BH convencional espesor 150 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BH convencional espesor 150 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.15,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16449,13 +16449,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 3.15" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BH convencional espesor 250 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BH convencional espesor 250 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.25,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 3.16" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BH convencional espesor 250 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BH convencional espesor 250 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.25,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16485,49 +16485,49 @@ $ ----------------------------------------------------------------------------
 ..
 "F 3.21" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 140 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 140 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.14,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 3.22" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 140 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 140 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]")
     THICKNESS = (0.02,0.14,0.00,0,0.07)
 	LIBRARY       = YES
 ..
 "F 3.23" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 140 mm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 140 mm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0.02,0.14,0,0.02)
 	LIBRARY       = YES
 ..
 "F 3.24" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 140 mm","Cámara de aire sin ventilar horizontal 1 cm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 140 mm","Cámara de aire sin ventilar horizontal 1 cm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0.02,0.14,0,0,0.02)
 	LIBRARY       = YES
 ..
 "F 3.25" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 240 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 240 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.24,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 3.26" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 240 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 240 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.24,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 3.27" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 240 mm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 240 mm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0.02,0.24,0,0.02)
 	LIBRARY       = YES
 ..
 "F 3.28" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 240 mm","Cámara de aire sin ventilar horizontal 1 cm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 240 mm","Cámara de aire sin ventilar horizontal 1 cm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0.02,0.24,0,0,0.02)
 	LIBRARY       = YES
 ..
@@ -16617,13 +16617,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 4.05" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Aquí va el aislante","BC con mortero convencional  espesor 140 mm","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Aquí va el aislante","BC con mortero convencional espesor 140 mm","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0,0.14,0.02)
 	LIBRARY       = YES
 ..
 "F 4.06" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Aquí va el aislante","BC con mortero convencional  espesor 240 mm","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","Aquí va el aislante","BC con mortero convencional espesor 240 mm","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0,0.24,0.02)
 	LIBRARY       = YES
 ..
@@ -16647,7 +16647,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 5.01" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16659,7 +16659,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 5.03" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16707,13 +16707,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 6.01" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.115,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 6.02" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.115,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16731,13 +16731,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 6.05" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("1 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("1 pie LP métrico o catalán 40 mm< G < 60 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.24,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 6.06" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("1 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("1 pie LP métrico o catalán 40 mm< G < 60 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.24,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16755,13 +16755,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 6.09" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BH convencional espesor 150 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BH convencional espesor 150 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.15,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 6.10" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BH convencional espesor 150 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BH convencional espesor 150 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.15,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16791,13 +16791,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 6.15" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BH convencional espesor 250 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BH convencional espesor 250 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.25,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 6.16" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BH convencional espesor 250 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BH convencional espesor 250 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.25,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16827,49 +16827,49 @@ $ ----------------------------------------------------------------------------
 ..
 "F 6.21" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero convencional  espesor 140 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BC con mortero convencional espesor 140 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.14,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 6.22" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero convencional  espesor 140 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BC con mortero convencional espesor 140 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.14,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 6.23" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero convencional  espesor 140 mm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("BC con mortero convencional espesor 140 mm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0.14,0,0.02)
 	LIBRARY       = YES
 ..
 "F 6.24" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero convencional  espesor 140 mm","Cámara de aire sin ventilar horizontal 1 cm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("BC con mortero convencional espesor 140 mm","Cámara de aire sin ventilar horizontal 1 cm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0.14,0,0,0.02)
 	LIBRARY       = YES
 ..
 "F 6.25" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero convencional  espesor 240 mm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BC con mortero convencional espesor 240 mm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.24,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 6.26" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero convencional  espesor 240 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("BC con mortero convencional espesor 240 mm","Cámara de aire sin ventilar vertical 2 cm","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.24,0.00,0,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 6.27" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero convencional  espesor 240 mm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("BC con mortero convencional espesor 240 mm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0.24,0,0.02)
 	LIBRARY       = YES
 ..
 "F 6.28" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("BC con mortero convencional  espesor 240 mm","Cámara de aire sin ventilar horizontal 1 cm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("BC con mortero convencional espesor 240 mm","Cámara de aire sin ventilar horizontal 1 cm","Aquí va el aislante","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0.24,0,0,0.02)
 	LIBRARY       = YES
 ..
@@ -16935,7 +16935,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 7.01" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16947,7 +16947,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 7.03" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","1/2 pie LP métrico o catalán 40 mm< G < 60 mm","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.115,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16959,7 +16959,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 7.05" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16977,7 +16977,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 7.08" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","BH convencional espesor 150 mm","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","BH convencional espesor 150 mm","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.15,0.07,0.02)
 	LIBRARY       = YES
 ..
@@ -16995,13 +16995,13 @@ $ ----------------------------------------------------------------------------
 ..
 "F 7.11" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","BC con mortero convencional  espesor 140 mm","Tabicón de LH doble  [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","BC con mortero convencional espesor 140 mm","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.14,0.07,0.02)
 	LIBRARY       = YES
 ..
 "F 7.12" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","BC con mortero convencional  espesor 140 mm","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","BC con mortero convencional espesor 140 mm","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = (0,0,0.14,0.02)
 	LIBRARY       = YES
 ..
@@ -17079,7 +17079,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 8.03" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","BC con mortero convencional  espesor 140 mm","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Cámara de aire ventilada","Aquí va el aislante","BC con mortero convencional espesor 140 mm","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0,0,0.14,0.02)
 	LIBRARY       = YES
 ..
@@ -17103,7 +17103,7 @@ $ ----------------------------------------------------------------------------
 ..
 "F 9.01" = LAYERS
     GROUP        = "Fachadas"
-    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional  espesor 290 mm","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000","BC con mortero convencional espesor 290 mm","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = (0.02,0.29,0.02)
 	LIBRARY       = YES
 ..

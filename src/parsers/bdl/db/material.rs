@@ -80,8 +80,11 @@ impl TryFrom<BdlBlock> for Material {
     /// TODO: THICKNESS_CHANGE, THICKNESS_MAX, THICKNESS_MIN, IMAGE, NAME_CALENER, LIBRARY, UTIL, OBSOLETE
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
-            name, mut attrs, ..
+            mut name,
+            mut attrs,
+            ..
         } = value;
+        name = name.replace("  ", " ");
         // El LIDER antiguo no guardaba grupos
         let group = attrs
             .remove_str("GROUP")
