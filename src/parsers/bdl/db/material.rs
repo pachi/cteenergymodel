@@ -46,6 +46,7 @@ impl TryFrom<BdlBlock> for Material {
     type Error = Error;
 
     /// Conversión de bloque BDL a material
+    /// NOTE: La base de datos tiene algunos nombres con dobles espacios, que se convierten a espacios simples
     ///
     /// Ejemplo en BDL:
     /// ```text
