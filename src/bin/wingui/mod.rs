@@ -419,7 +419,7 @@ fn do_convert() {
         Ok(None) => None,
         _ => {
             append_to_edit(&format!(
-                "\nERROR: No se ha encontrado el archivo .kyg en el directorio de proyecto {}.",
+                "\nAVISO: No se ha encontrado el archivo .kyg en el directorio de proyecto {}.",
                 dir_in
             ));
             return;
@@ -434,7 +434,7 @@ fn do_convert() {
         Ok(None) => None,
         _ => {
             append_to_edit(&format!(
-                "\nERROR: No se ha encontrado el archivo .tbl en el directorio de proyecto {}.",
+                "\nAVISO: No se ha encontrado el archivo .tbl en el directorio de proyecto {}.",
                 dir_in
             ));
             return;
