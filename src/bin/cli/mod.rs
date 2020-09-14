@@ -3,9 +3,9 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use std::{convert::TryInto, process::exit};
+use std::process::exit;
 
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 
 use hulc2envolventecte::{
     collect_hulc_data, get_copytxt,
