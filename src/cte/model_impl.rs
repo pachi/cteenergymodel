@@ -349,12 +349,6 @@ impl Model {
         let cons = self.wallcons.get(&wall.cons).unwrap();
         let R_intrinsic = cons.r_intrinsic;
 
-        let posname = match position {
-            BOTTOM => "suelo",
-            TOP => "techo",
-            SIDE => "muro",
-        };
-
         match (bounds, position) {
             // Elementos adiabáticos -----------------------------
             (ADIABATIC, _) => {
@@ -527,6 +521,12 @@ impl Model {
                 let nextspace = self.spaces.get(nextto.as_str()).unwrap();
                 let nexttype = nextspace.space_type;
 
+                let posname = match position {
+                    BOTTOM => "suelo",
+                    TOP => "techo",
+                    SIDE => "muro",
+                };
+
                 if nexttype == CONDITIONED && space.space_type == CONDITIONED {
                     // Elemento interior con otro espacio acondicionado
                     // HULC no diferencia entre RS según posiciones para elementos interiores
@@ -546,10 +546,10 @@ impl Model {
                         (nextspace, true)
                     };
 
-                    // Resistencia del elemento teniendo en cuenta el flujo de calor
+                    // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789 Tabla 8)
                     let R_f = match (position, thiscondspace) {
                         // Suelo de espacio acondicionado hacia no acondicionado inferior
-                        // Suelo de espacio no acondicionado hacia acondicionado inferior
+                        // Techo de espacio no acondicionado hacia acondicionado inferior
                         (BOTTOM, true) | (TOP, false) => R_intrinsic + 2.0 * RSI_DESCENDENTE,
                         // Techo de espacio acondicionado hacia no acondicionado superior
                         // Suelo de espacio no acondicionado hacia acondicionado superior
