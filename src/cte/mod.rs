@@ -25,18 +25,18 @@ pub use common::{BoundaryType, ClimateZone, Orientation, SpaceType, Tilt};
 pub struct Model {
     /// Metadatos
     pub meta: Meta,
-    /// Huecos
-    pub windows: BTreeMap<String, Window>,
-    /// Opacos
-    pub walls: BTreeMap<String, Wall>,
-    /// Puentes térmicos
-    pub thermal_bridges: BTreeMap<String, ThermalBridge>,
     /// Espacios
     pub spaces: BTreeMap<String, Space>,
-    /// Construcciones de huecos
-    pub wincons: BTreeMap<String, WindowCons>,
+    /// Opacos
+    pub walls: BTreeMap<String, Wall>,
+    /// Huecos
+    pub windows: BTreeMap<String, Window>,
+    /// Puentes térmicos
+    pub thermal_bridges: BTreeMap<String, ThermalBridge>,
     /// Construcciones de opacos
     pub wallcons: BTreeMap<String, WallCons>,
+    /// Construcciones de huecos
+    pub wincons: BTreeMap<String, WindowCons>,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
     pub extra: Option<Vec<ExtraData>>,
 }
