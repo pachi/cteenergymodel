@@ -4,9 +4,11 @@
 
 // Funciones relacionadas con la interpretación de archivos .ctehexml
 
+use std::io::Read;
 use std::path::{Path, PathBuf};
 
 use anyhow::{format_err, Error};
+use flate2::read::GzDecoder;
 
 use crate::bdl::Data;
 use crate::utils::{find_file_in_basedir, read_file};
@@ -171,16 +173,18 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
     })
 }
 
-// TODO: convertir a DB sin datos innecesarios del catálogo
-static LIDERCATSTR: &str = include_str!("BDCatalogo.bdc.utf8");
+static LIDERCATSTRZ: &[u8] = include_bytes!("BDCatalogo.bdc.utf8.gz");
 
 /// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
 pub fn parse_with_catalog<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
     // Carga archivo .ctehexml
     let mut ctehexmldata = parse(path.as_ref())?;
     let mut db = ctehexmldata.bdldata.db;
-    // Carga datos del catálogo
-    let catdb = Data::new(&LIDERCATSTR)?.db;
+    // Carga datos del catálogo comprimido
+    let mut gz = GzDecoder::new(LIDERCATSTRZ);
+    let mut dbstring = String::new();
+    gz.read_to_string(&mut dbstring)?;
+    let catdb = Data::new(&dbstring)?.db;
     db.materials.extend(catdb.materials);
     db.wallcons.extend(catdb.wallcons);
     db.windowcons.extend(catdb.windowcons);
