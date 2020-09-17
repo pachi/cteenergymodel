@@ -30,6 +30,7 @@ pub use construction::Construction;
 pub use frame::Frame;
 pub use glass::Glass;
 pub use material::Material;
+pub use material::MaterialProperties;
 pub use wallcons::WallCons;
 pub use windowcons::WindowCons;
 
