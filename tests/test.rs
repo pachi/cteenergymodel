@@ -84,6 +84,28 @@ fn test_polygon2() {
 }
 
 #[test]
+fn test_walcons() {
+    use bdl::{BdlBlock, WallCons};
+    let wcblk: BdlBlock =
+r#"\"Forjado interior\" = LAYERS
+    GROUP        = "Forjados Interiores"
+    NAME_CALENER = ""
+    NAME         = "Forjado interior"
+    TYPE-DEFINITION = 1
+    MATERIAL     = ("Frondosa ligera 435 < d < 565","Cámara de aire sin ventilar horizontal 2 cm","FUr310_12","Mortero de yeso")
+    THICKNESS = (           0.01,           0.05,           0.31,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  YES
+    IMAGE = ""
+    DEFAULT = NO
+..
+"#        .parse()
+.unwrap();
+    let wc = WallCons::try_from(wcblk).unwrap();
+    assert_eq!(wc.thickness, vec![0.01, 0.02, 0.31, 0.01]);
+}
+
+#[test]
 fn test_test_spaces_caso_a() {
     let tbl = tbl::parse("tests/casoA/NewBDL_O.tbl").unwrap();
     let ctehexmlpath = ctehexml::find_ctehexml("tests/casoA").unwrap();

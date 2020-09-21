@@ -115,11 +115,38 @@ impl TryFrom<BdlBlock> for WallCons {
             .unwrap_or_else(|_| "Capas".to_string());
         let material = extract_namesvec(attrs.remove_str("MATERIAL")?);
         let thickness = extract_f32vec(attrs.remove_str("THICKNESS")?)?;
+        if material.len() != thickness.len() {
+            return Err(format_err!(
+                "El material {} tiene una lista de materiales y de grosores de distinta longitud",
+                name
+            ));
+        }
+        // Los grosores de las capas no son correctas en el caso de Cámaras de aire,
+        // ya que HULC no está definido el grosor en los materiales y las considera con un grosor por defecto de 5cm
+        // Aquí corregimos los grosores
+        let fixed_thickness: Vec<f32> = material
+            .iter()
+            .zip(thickness.iter())
+            .map(|(name, thickness)| {
+                if name.starts_with("Cámara de aire ") {
+                    match &name[name.len() - 5..] {
+                        " 1 cm" => 0.01,
+                        " 2 cm" => 0.02,
+                        " 5 cm" => 0.05,
+                        "10 cm" => 0.10,
+                        _ => *thickness,
+                    }
+                } else {
+                    *thickness
+                }
+            })
+            .collect();
+
         Ok(Self {
             name,
             group,
             material,
-            thickness,
+            thickness: fixed_thickness,
             absorptance: 0.0,
         })
     }
