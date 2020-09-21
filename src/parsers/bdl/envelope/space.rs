@@ -85,8 +85,17 @@ impl Space {
                     self.name
                 )
             })?;
-        let topheight = db.db.wallcons.get(&topwall.cons)
-            .ok_or_else(|| format_err!("No se encuentra la composición de capas \"{}\"", &topwall.cons))?.total_thickness();
+        let topheight = db
+            .db
+            .wallcons
+            .get(&topwall.cons)
+            .ok_or_else(|| {
+                format_err!(
+                    "No se encuentra la composición de capas \"{}\"",
+                    &topwall.cons
+                )
+            })?
+            .total_thickness();
         Ok(self.height - topheight)
     }
 
@@ -117,26 +126,34 @@ impl Space {
 
         // Localizar los muros (verticales) interiores (según ISO 13770), que lindan con otros espacios acondicionados
         let interior_walls = db
-        .walls
-        .iter()
-        .filter(|w| {
-            // Muros que pertenecen al espacio o en contacto con el espacio
-            &w.space == &self.name || &w.nextto.as_deref().unwrap_or("") == &self.name
-        }) 
-        .filter(|w| {
-            // Muros interiores y solo aquellos para los que sabemos restar longitudes (muros definidos por vértices)
-            w.location.is_some() && w.bounds == super::BoundaryType::INTERIOR
-        })
-        .filter(|w| {
-            // comprobamos si el espacio es acondicionado
-            (match &w.space == &self.name {
-                true => w.nextto.as_deref(), // Muro perteneciente al espacio
-                _ => Some(w.space.as_ref()), // Muro perteneciente a otro espacio
-            }).and_then(|spc| db.spaces.iter().find(|s| &s.name == spc).map(|s| &s.stype == "CONDITIONED"))
-            .unwrap_or(false)
-        });
-        
-        let int_walls_length: f32 = interior_walls.map(|w| poly.edge_length(&w.location.as_deref().unwrap())).sum();
+            .walls
+            .iter()
+            .filter(|w| {
+                // Muros que pertenecen al espacio o en contacto con el espacio
+                &w.space == &self.name || &w.nextto.as_deref().unwrap_or("") == &self.name
+            })
+            .filter(|w| {
+                // Muros interiores y solo aquellos para los que sabemos restar longitudes (muros definidos por vértices)
+                w.location.is_some() && w.bounds == super::BoundaryType::INTERIOR
+            })
+            .filter(|w| {
+                // comprobamos si el espacio es acondicionado
+                (match &w.space == &self.name {
+                    true => w.nextto.as_deref(), // Muro perteneciente al espacio
+                    _ => Some(w.space.as_ref()), // Muro perteneciente a otro espacio
+                })
+                .and_then(|spc| {
+                    db.spaces
+                        .iter()
+                        .find(|s| &s.name == spc)
+                        .map(|s| &s.stype == "CONDITIONED")
+                })
+                .unwrap_or(false)
+            });
+
+        let int_walls_length: f32 = interior_walls
+            .map(|w| poly.edge_length(&w.location.as_deref().unwrap()))
+            .sum();
         // longitud sin muros interiores
         perim - int_walls_length
     }
@@ -268,12 +285,15 @@ impl TryFrom<BdlBlock> for Space {
         let ismultiplied = (attrs.remove_f32("MULTIPLIED")? - 1.0).abs() < 0.1;
         let airchanges_h = match (stype.as_str(), spaceconds.as_str()) {
             // Usamos la ventilación según niveles de estanqueidad de la UNE-EN ISO 13789:2017 (HULC usa 0 renh para nivel1)
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_1") => {Some(0.1)},
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_2") => {Some(0.5)},
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_3") => {Some(1.0)},
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_4") => {Some(3.0)},
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_5") => {Some(10.0)},
-            _ => attrs.remove_f32("AIR-CHANGES/HR").map(|v| Some(v)).unwrap_or( None)
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_1") => Some(0.1),
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_2") => Some(0.5),
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_3") => Some(1.0),
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_4") => Some(3.0),
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_5") => Some(10.0),
+            _ => attrs
+                .remove_f32("AIR-CHANGES/HR")
+                .map(|v| Some(v))
+                .unwrap_or(None),
         };
 
         Ok(Self {
@@ -293,7 +313,7 @@ impl TryFrom<BdlBlock> for Space {
             floor_multiplier,
             multiplier,
             ismultiplied,
-            airchanges_h
+            airchanges_h,
         })
     }
 }
