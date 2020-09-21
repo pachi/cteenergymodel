@@ -76,7 +76,7 @@ impl Space {
                 } else {
                     w.nextto.as_ref().map(|s| 
                         // Es un cerramiento interior sobre este espacio
-                        s == &self.name
+                        s == &self.name && w.position() == Tilt::BOTTOM
                     ).unwrap_or(false)
                 }
             })
