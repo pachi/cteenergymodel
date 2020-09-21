@@ -70,14 +70,13 @@ impl Space {
             .walls
             .iter()
             .find(|w| {
-                // Muros exteriores o cubiertas sobre el espacio
-                if w.position() == Tilt::TOP {
-                    &w.space == &self.name
-                } else {
-                    w.nextto.as_ref().map(|s| 
-                        // Es un cerramiento interior sobre este espacio
-                        s == &self.name && w.position() == Tilt::BOTTOM
-                    ).unwrap_or(false)
+                match w.position() {
+                    // Muros exteriores o cubiertas sobre el espacio
+                    Tilt::TOP => &w.space == &self.name,
+                    // Es un cerramiento interior sobre este espacio
+                    Tilt::BOTTOM => {
+                        w.nextto.as_ref().map(|s| s == &self.name).unwrap_or(false)}
+                    _ => false
                 }
             })
             .ok_or_else(|| {
