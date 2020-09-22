@@ -4,7 +4,6 @@
 - Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabáticos
 
 ## cte::Data
-- ¿Sería mejor tener la altura neta de los espacios y definir el grosor de los opacos? Así tendríamos una función que calcularía la altura bruta...
 
 - Calcular más cosas:
     - Reporte de cálculos de U, K, qsoljul, n50, etc. (datos + resultados intermedios y localizando los que pertenecen a la ET)

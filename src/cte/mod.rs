@@ -117,11 +117,8 @@ pub struct Space {
     pub space_type: SpaceType,
     /// Pertenencia al interior de la envolvente térmica
     pub inside_tenv: bool,
-    /// Altura libre (suelo a techo) del espacio (m)
-    /// No incluye el volumen de forjados o cubiertas.
-    pub height_net: f32,
     /// Altura bruta (suelo a suelo) del espacio (m)
-    pub height_gross: f32,
+    pub height: f32,
     /// Ventilación, en ren/h
     pub n_v: Option<f32>,
     /// Cota del espacio respecto al suelo (m)
@@ -197,6 +194,8 @@ pub struct WallCons {
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
+    /// Grosor del elemento (m) [0.0-]
+    pub thickness: f32,
     /// Resistencia térmica total sin resistencias superficiales (resistencia intrínseca) [m2K/W]
     #[serde(rename = "R_intrinsic")]
     pub r_intrinsic: f32,

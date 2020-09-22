@@ -83,7 +83,7 @@ impl Model {
             .values()
             .map(|s| {
                 if s.inside_tenv {
-                    s.area * s.height_gross * s.multiplier
+                    s.area * s.height * s.multiplier
                 } else {
                     0.0
                 }
@@ -100,7 +100,11 @@ impl Model {
             .values()
             .map(|s| {
                 if s.inside_tenv {
-                    s.area * s.height_net * s.multiplier
+                    let topwallthickness = self
+                        .top_wall_of_space(&s.name)
+                        .map(|w| self.wall_thickness(&w.name))
+                        .unwrap_or(0.0);
+                    s.area * (s.height - topwallthickness) * s.multiplier
                 } else {
                     0.0
                 }
@@ -117,7 +121,11 @@ impl Model {
             .values()
             .map(|s| {
                 if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
-                    s.area * s.height_net * s.multiplier
+                    let topwallthickness = self
+                        .top_wall_of_space(&s.name)
+                        .map(|w| self.wall_thickness(&w.name))
+                        .unwrap_or(0.0);
+                    s.area * (s.height - topwallthickness) * s.multiplier
                 } else {
                     0.0
                 }
@@ -480,12 +488,15 @@ impl Model {
                     U_w
                 };
 
+                // Grosor de forjado superior y altura neta
+                let topwallthickness = self
+                    .top_wall_of_space(&space.name)
+                    .map(|w| self.wall_thickness(&w.name))
+                    .unwrap_or(0.0);
+                let height_net = space.height - topwallthickness;
+
                 // Altura sobre el terreno (muro no enterrado)
-                let h = if space.height_net > z {
-                    space.height_net - z
-                } else {
-                    0.0
-                };
+                let h = if height_net > z { height_net - z } else { 0.0 };
 
                 // Si el muro no es enterrado en toda su altura ponderamos U por altura
                 let U = if h == 0.0 {
@@ -493,7 +504,7 @@ impl Model {
                     U_bw
                 } else {
                     // Muro con z parcialmente enterrado
-                    (z * U_bw + h * U_w) / space.height_net
+                    (z * U_bw + h * U_w) / height_net
                 };
 
                 debug!(
@@ -512,7 +523,7 @@ impl Model {
                 U
             }
             // Elementos en contacto con otros espacios ---------------------
-            (INTERIOR, position @ _) => {
+            (INTERIOR, position) => {
                 // Dos casos:
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
@@ -559,7 +570,13 @@ impl Model {
                     };
 
                     // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
-                    let uncondspace_v = uncondspace.height_net * uncondspace.area;
+                    // Grosor de forjado superior y altura neta
+                    let topwallthickness = self
+                        .top_wall_of_space(&uncondspace.name)
+                        .map(|w| self.wall_thickness(&w.name))
+                        .unwrap_or(0.0);
+                    let uncondspace_height_net = uncondspace.height - topwallthickness;
+                    let uncondspace_v = uncondspace_height_net * uncondspace.area;
                     let n_ven = match uncondspace.n_v {
                         Some(n_v) => n_v,
                         _ => {
@@ -601,5 +618,26 @@ impl Model {
                 }
             }
         }
+    }
+
+    /// Elemento opaco de techo de un espacio
+    fn top_wall_of_space<'a>(&'a self, space: &'a str) -> Option<&'a Wall> {
+        self.walls.values().find(move |w| {
+            match w.tilt.into() {
+                // Muros exteriores o cubiertas sobre el espacio
+                Tilt::TOP => &w.space == &space,
+                // Es un cerramiento interior sobre este espacio
+                Tilt::BOTTOM => w.nextto.as_ref().map(|s| s == &space).unwrap_or(false),
+                _ => false,
+            }
+        })
+    }
+
+    /// Grosor de un elemento opaco
+    fn wall_thickness(&self, wall: &str) -> f32 {
+        self.walls
+            .get(wall)
+            .and_then(|w| self.wallcons.get(&w.cons).map(|c| c.thickness))
+            .unwrap_or(0.0)
     }
 }

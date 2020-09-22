@@ -100,8 +100,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
         .iter()
         .map(|s| {
             let area = fround2(s.area());
-            let height_net = fround2(s.space_height(&bdl)?);
-            let height_gross = fround2(s.height);
+            let height = fround2(s.height);
             let exposed_perimeter = Some(fround2(s.exposed_perimeter(&bdl)));
             Ok((
                 s.name.clone(),
@@ -110,8 +109,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
                     area,
                     z: s.z,
                     exposed_perimeter,
-                    height_net,
-                    height_gross,
+                    height,
                     inside_tenv: s.insidete,
                     multiplier: s.multiplier * s.floor_multiplier,
                     space_type: match s.stype.as_ref() {
@@ -223,6 +221,7 @@ fn wallcons_from_bdl(
                     Ok(r) => Some(WallCons {
                         name: cons.name.clone(),
                         group: cons.group.clone(),
+                        thickness: fround2(cons.total_thickness()),
                         r_intrinsic: fround3(r),
                         absorptance: cons.absorptance,
                     }),
