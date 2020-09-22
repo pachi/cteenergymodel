@@ -213,7 +213,8 @@ impl Data {
                     // La absortividad ya está correcta en el muro y así podemos eliminar constructions
                     let cons = constructions.get(&wall.cons).ok_or_else(|| {
                         format_err!(
-                            "No se ha definido la construcción del cerramiento {}",
+                            "No se ha definido la construcción {} del cerramiento {}",
+                            wall.cons,
                             wall.name
                         )
                     })?;
