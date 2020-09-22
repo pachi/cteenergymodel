@@ -65,7 +65,7 @@ impl std::str::FromStr for BdlBlock {
         };
         // Lee atributos
         let attrs = parse_attributes(bdata)?;
-        let name = name.to_string();
+        let name = name.trim().to_string();
         // Construye el objeto
         Ok(BdlBlock {
             name,
