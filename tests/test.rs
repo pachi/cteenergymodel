@@ -153,7 +153,7 @@ fn test_bdl_parse() {
     // Espacio
     let s = bdldb.get_space("P02_E01").unwrap();
     assert_almost_eq!(s.height, 3.0, 0.001); // Altura
-    assert_almost_eq!(s.space_height(bdldb).unwrap(), 2.62, 0.001); // Altura libre
+    assert_almost_eq!(s.space_height(bdldb).unwrap(), 2.65, 0.001); // Altura libre
     assert_almost_eq!(s.area(), 150.0, 0.001); // Área 10m x 15m
     assert_almost_eq!(s.perimeter(), 50.0, 0.001); // Perímetro (10 + 15) x 2
 
@@ -271,7 +271,7 @@ fn test_caso_a() {
     assert_almost_eq!(fround2(data.u_for_wall(&wall)), 1.37, 0.001);
     // Partición interior vertical con espacio no habitable, HULC=0.81
     let wall = data.walls.get("P01_E01_Med001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(&wall)), 0.82, 0.001);
+    assert_almost_eq!(fround2(data.u_for_wall(&wall)), 0.81, 0.001);
     // Partición interior horizontal (suelo) con espacio no habitable y enterrado, HULC=0.65
     let wall = data.walls.get("P02_E01_FI002").unwrap();
     assert_almost_eq!(fround2(data.u_for_wall(&wall)), 0.54, 0.001);
@@ -284,11 +284,11 @@ fn test_caso_a() {
 
     // Cálculo de K, n50, C_o
     assert_almost_eq!(fround2(data.K_he2019()), 0.51, 0.001);
-    assert_almost_eq!(fround2(data.n50_he2019()), 4.60, 0.001);
+    assert_almost_eq!(fround2(data.n50_he2019()), 4.58, 0.001);
     assert_almost_eq!(fround2(data.n50()), 5.32, 0.001);
-    assert_almost_eq!(fround2(data.n50_he2019()), 4.60, 0.001);
+    assert_almost_eq!(fround2(data.n50_he2019()), 4.58, 0.001);
     assert_almost_eq!(fround2(data.C_o_he2019()), 16.00, 0.001);
-    assert_almost_eq!(fround2(data.C_o()), 18.86, 0.001);
+    assert_almost_eq!(fround2(data.C_o()), 18.97, 0.001);
 }
 
 #[test]
