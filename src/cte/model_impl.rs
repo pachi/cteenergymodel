@@ -100,11 +100,7 @@ impl Model {
             .values()
             .map(|s| {
                 if s.inside_tenv {
-                    let topwallthickness = self
-                        .top_wall_of_space(&s.name)
-                        .map(|w| self.wall_thickness(&w.name))
-                        .unwrap_or(0.0);
-                    s.area * (s.height - topwallthickness) * s.multiplier
+                    s.area * (s.height - self.top_wall_thickness(&s.name)) * s.multiplier
                 } else {
                     0.0
                 }
@@ -121,11 +117,7 @@ impl Model {
             .values()
             .map(|s| {
                 if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
-                    let topwallthickness = self
-                        .top_wall_of_space(&s.name)
-                        .map(|w| self.wall_thickness(&w.name))
-                        .unwrap_or(0.0);
-                    s.area * (s.height - topwallthickness) * s.multiplier
+                    s.area * (s.height - self.top_wall_thickness(&s.name)) * s.multiplier
                 } else {
                     0.0
                 }
@@ -488,12 +480,8 @@ impl Model {
                     U_w
                 };
 
-                // Grosor de forjado superior y altura neta
-                let topwallthickness = self
-                    .top_wall_of_space(&space.name)
-                    .map(|w| self.wall_thickness(&w.name))
-                    .unwrap_or(0.0);
-                let height_net = space.height - topwallthickness;
+                // Altura neta
+                let height_net = space.height - self.top_wall_thickness(&space.name);
 
                 // Altura sobre el terreno (muro no enterrado)
                 let h = if height_net > z { height_net - z } else { 0.0 };
@@ -570,13 +558,9 @@ impl Model {
                     };
 
                     // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
-                    // Grosor de forjado superior y altura neta
-                    let topwallthickness = self
-                        .top_wall_of_space(&uncondspace.name)
-                        .map(|w| self.wall_thickness(&w.name))
-                        .unwrap_or(0.0);
-                    let uncondspace_height_net = uncondspace.height - topwallthickness;
-                    let uncondspace_v = uncondspace_height_net * uncondspace.area;
+                    let uncondspace_v = (uncondspace.height
+                        - self.top_wall_thickness(&uncondspace.name))
+                        * uncondspace.area;
                     let n_ven = match uncondspace.n_v {
                         Some(n_v) => n_v,
                         _ => {
@@ -638,6 +622,15 @@ impl Model {
         self.walls
             .get(wall)
             .and_then(|w| self.wallcons.get(&w.cons).map(|c| c.thickness))
+            .unwrap_or(0.0)
+    }
+
+    /// Grosor del forjado superior de un espacio
+    /// TODO: la altura neta debería calcularse promediando los grosores de todos los muros que cierren el espacio,
+    /// TODO: estos podrían ser más de uno pero este cálculo ahora se hace con el primero que se localiza
+    fn top_wall_thickness(&self, space: &str) -> f32 {
+        self.top_wall_of_space(&space)
+            .map(|w| self.wall_thickness(&w.name))
             .unwrap_or(0.0)
     }
 }
