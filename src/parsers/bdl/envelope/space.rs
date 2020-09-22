@@ -13,10 +13,10 @@ use std::convert::TryFrom;
 
 use anyhow::{bail, format_err, Error};
 
+use super::super::BdlBlock;
+use super::super::Data;
 use super::geom::Polygon;
-use super::walls::Tilt;
-use crate::bdl::BdlBlock;
-use crate::bdl::Data;
+use super::walls::{Tilt, Wall};
 
 /// Espacio
 #[derive(Debug, Clone, Default)]
@@ -66,25 +66,7 @@ impl Space {
     ///
     /// Usa la altura bruta y resta espesores de cubiertas y forjados
     pub fn space_height(&self, db: &Data) -> Result<f32, Error> {
-        let topwall = db
-            .walls
-            .iter()
-            .find(|w| {
-                match w.position() {
-                    // Muros exteriores o cubiertas sobre el espacio
-                    Tilt::TOP => &w.space == &self.name,
-                    // Es un cerramiento interior sobre este espacio
-                    Tilt::BOTTOM => {
-                        w.nextto.as_ref().map(|s| s == &self.name).unwrap_or(false)}
-                    _ => false
-                }
-            })
-            .ok_or_else(|| {
-                format_err!(
-                    "Cerramiento superior del espacio {} no encontrado. No se puede calcular la altura libre",
-                    self.name
-                )
-            })?;
+        let topwall = &self.top_wall(db)?;
         let topheight = db
             .db
             .wallcons
@@ -170,6 +152,29 @@ impl Space {
     /// Usa el área y la altura libre (suelo a techo) del espacio
     pub fn net_volume(&self, db: &Data) -> Result<f32, Error> {
         Ok(self.area() * self.space_height(db)?)
+    }
+
+    /// Muro superior de un espacio
+    pub fn top_wall<'a>(&self, db: &'a Data) -> Result<&'a Wall, Error> {
+        db
+            .walls
+            .iter()
+            .find(|w| {
+                match w.position() {
+                    // Muros exteriores o cubiertas sobre el espacio
+                    Tilt::TOP => &w.space == &self.name,
+                    // Es un cerramiento interior sobre este espacio
+                    Tilt::BOTTOM => {
+                        w.nextto.as_ref().map(|s| s == &self.name).unwrap_or(false)}
+                    _ => false
+                }
+            })
+            .ok_or_else(|| {
+                format_err!(
+                    "Cerramiento superior del espacio {} no encontrado. No se puede calcular la altura libre",
+                    self.name
+                )
+            })
     }
 }
 
