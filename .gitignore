@@ -2,6 +2,7 @@
 /target/
 /.vscode/
 **/*.rs.bk
+dist/
 tests/**
 salida.json
 perf.data*
