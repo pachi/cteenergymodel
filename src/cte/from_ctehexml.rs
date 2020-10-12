@@ -20,6 +20,10 @@ pub use super::{
     Window, WindowCons,
 };
 
+// UUID (v3) basado en URL https://gitlab.codigotecnico.org/HULC
+
+const HULCUUID: &str = "67941a40-dcae-3f12-ad40-d4d05afa1ea2";
+
 // Conversiones de BDL a tipos CTE -------------------
 
 impl From<bdl::BoundaryType> for BoundaryType {
