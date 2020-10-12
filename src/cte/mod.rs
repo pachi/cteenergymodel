@@ -8,6 +8,7 @@ pub mod climatedata;
 pub mod common;
 pub(crate) mod from_ctehexml;
 pub mod model_impl;
+pub(crate) mod simplemodel;
 
 use std::collections::BTreeMap;
 
@@ -16,12 +17,13 @@ use serde::{Deserialize, Serialize};
 
 pub use climatedata::*;
 pub use common::{BoundaryType, ClimateZone, Orientation, SpaceType, Tilt};
+use simplemodel::SimpleModel;
 
 // ---------- Estructura general de datos --------------
 
 /// Modelo del edificio
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
-#[serde(default)]
+#[serde(into = "SimpleModel", from = "SimpleModel", default)]
 pub struct Model {
     /// Metadatos
     pub meta: Meta,
