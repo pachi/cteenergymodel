@@ -98,17 +98,26 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
     }
 }
 
+fn id_from_parent_and_name(parent: &str, name: &str) -> String {
+    let h = format!("{:x}", md5::compute(format!("{}{}", parent, name).as_bytes()));
+    format!("{}-{}-{}-{}-{}", &h[0..8], &h[8..12], &h[12..16], &h[16..20], &h[20..32])
+}
+
 /// Construye diccionario de espacios a partir de datos BDL (Data)
 fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
+    let proj_name = bdl.meta.get("GENERAL-DATA")
+        .expect("Nombre de proyecto no encontrado").attrs.get_str("NAME-PROJECT")?;
     bdl.spaces
         .iter()
         .map(|s| {
+            let id = id_from_parent_and_name(&proj_name, &s.name);
             let area = fround2(s.area());
             let height = fround2(s.height);
             let exposed_perimeter = Some(fround2(s.exposed_perimeter(&bdl)));
             Ok((
                 s.name.clone(),
                 Space {
+                    id,
                     name: s.name.clone(),
                     area,
                     z: s.z,

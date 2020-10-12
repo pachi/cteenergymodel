@@ -105,6 +105,8 @@ impl Default for Meta {
 /// XXX: consideraremos que cada espacio se corresponde con una ZT.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Space {
+    /// ID del espacio
+    pub id: String,
     /// Nombre del espacio
     pub name: String,
     /// Superficie útil del espacio (m2)
