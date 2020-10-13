@@ -54,7 +54,7 @@ pub fn collect_hulc_data<T: AsRef<Path>>(
     Ok(ecdata)
 }
 
-/// Incorpora datos que no se obtienen desde el xml y añade datos extra cuando el valor calculado y el obtenido no coinciden
+/// Incorpora datos que no se obtienen desde el xml y añade datos extra cuando el valor de U calculado y el obtenido no coinciden
 pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     ecdata: &mut Model,
     kygpath: Option<T>,

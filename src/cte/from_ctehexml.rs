@@ -4,7 +4,7 @@
 
 //! Conversión desde CtehexmlData a cte::Model
 
-use std::{convert::TryFrom, convert::TryInto};
+use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, format_err, Error};
 use log::warn;
@@ -38,12 +38,42 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
     fn try_from(d: &ctehexml::CtehexmlData) -> Result<Self, Self::Error> {
         let bdl = &d.bdldata;
 
-        let walls = walls_from_bdl(&bdl)?;
-        let windows = windows_from_bdl(&walls, &bdl);
+        let mut walls = walls_from_bdl(&bdl)?;
+        let mut windows = windows_from_bdl(&walls, &bdl);
         let thermal_bridges = thermal_bridges_from_bdl(&bdl);
         let wallcons = wallcons_from_bdl(&walls, &bdl)?;
         let wincons = windowcons_from_bdl(&bdl)?;
         let spaces = spaces_from_bdl(&bdl)?;
+
+        // Cambia referencias a nombres por id's
+        let spaceids = spaces
+            .iter()
+            .map(|s| (s.name.clone(), s.id.clone()))
+            .collect::<BTreeMap<String, String>>();
+        let wallids = walls
+            .iter()
+            .map(|s| (s.name.clone(), s.id.clone()))
+            .collect::<BTreeMap<String, String>>();
+        let wallconsids = wallcons
+            .iter()
+            .map(|s| (s.name.clone(), s.id.clone()))
+            .collect::<BTreeMap<String, String>>();
+        let winconsids = wincons
+            .iter()
+            .map(|s| (s.name.clone(), s.id.clone()))
+            .collect::<BTreeMap<String, String>>();
+
+        walls.iter_mut().for_each(|w| {
+            w.cons = wallconsids.get(&w.cons).unwrap().to_owned();
+            w.space = spaceids.get(&w.space).unwrap().to_owned();
+            if let Some(ref nxt) = w.nextto {
+                w.nextto = Some(spaceids.get(nxt).unwrap().to_owned())
+            };
+        });
+        windows.iter_mut().for_each(|w| {
+            w.cons = winconsids.get(&w.cons).unwrap().to_owned();
+            w.wall = wallids.get(&w.wall).unwrap().to_owned();
+        });
 
         // Completa metadatos desde ctehexml y el bdl
         // Desviación general respecto al Norte (criterio BDL)

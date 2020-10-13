@@ -26,36 +26,56 @@ const LAMBDA_INS: f32 = 0.035;
 
 impl Model {
     /// Localiza espacio
-    pub fn get_space<'a>(&'a self, spacename: &'a str) -> Option<&'a Space> {
+    pub fn get_space<'a>(&'a self, spaceid: &'a str) -> Option<&'a Space> {
+        self.spaces.iter().find(|s| s.id == spaceid)
+    }
+
+    /// Localiza espacio por nombre
+    pub fn get_space_by_name<'a>(&'a self, spacename: &'a str) -> Option<&'a Space> {
         self.spaces.iter().find(|s| s.name == spacename)
     }
 
     /// Localiza opaco
-    pub fn get_wall<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
+    pub fn get_wall<'a>(&'a self, wallid: &'a str) -> Option<&'a Wall> {
+        self.walls.iter().find(|w| w.id == wallid)
+    }
+
+    /// Localiza opaco por nombre
+    pub fn get_wall_by_name<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
         self.walls.iter().find(|w| w.name == wallname)
     }
 
     /// Localiza construcción de opaco
-    pub fn get_wallcons<'a>(&'a self, wallconsname: &'a str) -> Option<&'a WallCons> {
+    pub fn get_wallcons<'a>(&'a self, wallconsid: &'a str) -> Option<&'a WallCons> {
+        self.wallcons.iter().find(|wc| wc.id == wallconsid)
+    }
+
+    /// Localiza construcción de opaco por nombre
+    pub fn get_wallcons_by_name<'a>(&'a self, wallconsname: &'a str) -> Option<&'a WallCons> {
         self.wallcons.iter().find(|wc| wc.name == wallconsname)
     }
 
     /// Localiza construcción de hueco
-    pub fn get_wincons<'a>(&'a self, winconsname: &'a str) -> Option<&'a WindowCons> {
+    pub fn get_wincons<'a>(&'a self, winconsid: &'a str) -> Option<&'a WindowCons> {
+        self.wincons.iter().find(|wc| wc.id == winconsid)
+    }
+
+    /// Localiza construcción de hueco por nombre
+    pub fn get_wincons_by_name<'a>(&'a self, winconsname: &'a str) -> Option<&'a WindowCons> {
         self.wincons.iter().find(|wc| wc.name == winconsname)
     }
 
     /// Iterador de los huecos pertenecientes a un muro
-    pub fn windows_of_wall<'a>(&'a self, wallname: &'a str) -> impl Iterator<Item = &'a Window> {
-        self.windows.iter().filter(move |w| w.wall == wallname)
+    pub fn windows_of_wall<'a>(&'a self, wallid: &'a str) -> impl Iterator<Item = &'a Window> {
+        self.windows.iter().filter(move |w| w.wall == wallid)
     }
 
     /// Iterador de los cerramientos (incluyendo muros, suelos y techos) que delimitan un espacio
-    pub fn walls_of_space<'a>(&'a self, space: &'a str) -> impl Iterator<Item = &'a Wall> {
+    pub fn walls_of_space<'a>(&'a self, spaceid: &'a str) -> impl Iterator<Item = &'a Wall> {
         self.walls.iter().filter(move |w| {
-            w.space == space
+            w.space == spaceid
                 || (if let Some(ref spc) = w.nextto {
-                    spc == space
+                    spc == spaceid
                 } else {
                     false
                 })
@@ -76,7 +96,7 @@ impl Model {
             .iter()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .filter(move |w| self.get_space(&w.space).unwrap().inside_tenv)
-            .flat_map(move |wall| self.windows.iter().filter(move |w| w.wall == wall.name))
+            .flat_map(move |wall| self.windows.iter().filter(move |w| w.wall == wall.id))
     }
 
     /// Calcula la superficie útil de los espacios habitables de la envolvente térmica [m²]
@@ -120,7 +140,7 @@ impl Model {
             .iter()
             .map(|s| {
                 if s.inside_tenv {
-                    s.area * (s.height - self.top_wall_thickness(&s.name)) * s.multiplier
+                    s.area * (s.height - self.top_wall_thickness(&s.id)) * s.multiplier
                 } else {
                     0.0
                 }
@@ -137,7 +157,7 @@ impl Model {
             .iter()
             .map(|s| {
                 if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
-                    s.area * (s.height - self.top_wall_thickness(&s.name)) * s.multiplier
+                    s.area * (s.height - self.top_wall_thickness(&s.id)) * s.multiplier
                 } else {
                     0.0
                 }
@@ -156,7 +176,7 @@ impl Model {
             .walls_of_envelope()
             .map(|w| {
                 let multiplier = self.get_space(&w.space).unwrap().multiplier;
-                let win_area: f32 = self.windows_of_wall(&w.name).map(|win| win.area).sum();
+                let win_area: f32 = self.windows_of_wall(&w.id).map(|win| win.area).sum();
                 (w.area + win_area) * multiplier
             })
             .sum();
@@ -214,7 +234,7 @@ impl Model {
             .map(|w| {
                 let multiplier = self.get_space(&w.space).unwrap().multiplier;
                 let axc_h: f32 = self
-                    .windows_of_wall(&w.name)
+                    .windows_of_wall(&w.id)
                     .map(|win| {
                         let c_inf = self.get_wincons(&win.cons).unwrap().infcoeff_100;
                         win.area * c_inf
@@ -239,7 +259,7 @@ impl Model {
             .map(|w| {
                 let multiplier = self.get_space(&w.space).unwrap().multiplier;
                 let axc_h: f32 = self
-                    .windows_of_wall(&w.name)
+                    .windows_of_wall(&w.id)
                     .map(|win| {
                         let c_inf = self.get_wincons(&win.cons).unwrap().infcoeff_100;
                         win.area * c_inf
@@ -269,7 +289,7 @@ impl Model {
             .walls_of_envelope()
             .map(|w| {
                 let (axu_h, a_h) = self
-                    .windows_of_wall(&w.name)
+                    .windows_of_wall(&w.id)
                     .map(|win| {
                         let u_h = self.get_wincons(&win.cons).unwrap().u;
                         (win.area * u_h, win.area)
@@ -471,7 +491,7 @@ impl Model {
                 // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
                 // Usamos el promedio de los suelos del espacio
                 let mut d_t = self
-                    .walls_of_space(&space.name)
+                    .walls_of_space(&space.id)
                     .filter(|w| Tilt::from(w.tilt) == BOTTOM)
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
@@ -501,7 +521,7 @@ impl Model {
                 };
 
                 // Altura neta
-                let height_net = space.height - self.top_wall_thickness(&space.name);
+                let height_net = space.height - self.top_wall_thickness(&space.id);
 
                 // Altura sobre el terreno (muro no enterrado)
                 let h = if height_net > z { height_net - z } else { 0.0 };
@@ -579,7 +599,7 @@ impl Model {
 
                     // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
                     let uncondspace_v = (uncondspace.height
-                        - self.top_wall_thickness(&uncondspace.name))
+                        - self.top_wall_thickness(&uncondspace.id))
                         * uncondspace.area;
                     let n_ven = match uncondspace.n_v {
                         Some(n_v) => n_v,
@@ -594,13 +614,13 @@ impl Model {
                     // Como hemos asignado U_bw y U_bf a los muros y suelos en contacto con el terreno, ya se tiene en cuenta
                     // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
                     let UA_e_k = self
-                        .walls_of_space(&uncondspace.name)
+                        .walls_of_space(&uncondspace.id)
                         .filter(|w| w.bounds == GROUND || w.bounds == EXTERIOR)
                         .map(|w| {
                             // A·U de muros (y suelos) + A.U de sus huecos
                             w.area * self.u_for_wall(w)
                                 + self
-                                    .windows_of_wall(&w.name)
+                                    .windows_of_wall(&w.id)
                                     .map(|win| win.area * self.get_wincons(&win.cons).unwrap().u)
                                     .sum::<f32>()
                         })
@@ -625,21 +645,21 @@ impl Model {
     }
 
     /// Elemento opaco de techo de un espacio
-    fn top_wall_of_space<'a>(&'a self, space: &'a str) -> Option<&'a Wall> {
+    fn top_wall_of_space<'a>(&'a self, spaceid: &'a str) -> Option<&'a Wall> {
         self.walls.iter().find(move |w| {
             match w.tilt.into() {
                 // Muros exteriores o cubiertas sobre el espacio
-                Tilt::TOP => &w.space == &space,
+                Tilt::TOP => &w.space == &spaceid,
                 // Es un cerramiento interior sobre este espacio
-                Tilt::BOTTOM => w.nextto.as_ref().map(|s| s == &space).unwrap_or(false),
+                Tilt::BOTTOM => w.nextto.as_ref().map(|s| s == &spaceid).unwrap_or(false),
                 _ => false,
             }
         })
     }
 
     /// Grosor de un elemento opaco
-    fn wall_thickness(&self, wall: &str) -> f32 {
-        self.get_wall(wall)
+    fn wall_thickness(&self, wallid: &str) -> f32 {
+        self.get_wall(wallid)
             .and_then(|w| self.get_wallcons(&w.cons).map(|c| c.thickness))
             .unwrap_or(0.0)
     }
@@ -647,9 +667,9 @@ impl Model {
     /// Grosor del forjado superior de un espacio
     /// TODO: la altura neta debería calcularse promediando los grosores de todos los muros que cierren el espacio,
     /// TODO: estos podrían ser más de uno pero este cálculo ahora se hace con el primero que se localiza
-    fn top_wall_thickness(&self, space: &str) -> f32 {
-        self.top_wall_of_space(&space)
-            .map(|w| self.wall_thickness(&w.name))
+    fn top_wall_thickness(&self, spaceid: &str) -> f32 {
+        self.top_wall_of_space(&spaceid)
+            .map(|w| self.wall_thickness(&w.id))
             .unwrap_or(0.0)
     }
 }

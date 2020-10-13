@@ -27,9 +27,6 @@
 
 ## EnvolventeCTE
 
-- Pensar cómo mantenemos sincronizados los datos entre cte::Data y EnvolventeCTE:
-    - tal vez usando un Map de JS para BTreeMap (ver cómo funciona con serde-JSON
-    - devolviendo datos en estructuras aparte (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> })
 - Intentar llevar el trabajo a wasm
     - calcular K, qsoljul, n50, V/A, U de elementos, etc
     - calcular elementos (propiedades de vidrios, Fshobst de huecos según retranqueos, voladizos, aletas, etc)
