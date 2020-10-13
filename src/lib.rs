@@ -120,7 +120,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
         }
     }
 
-    extra.retain(|e| f32::abs(e.u - e.computed_u) < 0.001);
+    extra.retain(|e| f32::abs(e.u - e.computed_u) > 0.001);
 
     ecdata.extra = Some(extra);
 }
