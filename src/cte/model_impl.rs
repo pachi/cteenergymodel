@@ -25,6 +25,26 @@ const LAMBDA_GND: f32 = 2.0;
 const LAMBDA_INS: f32 = 0.035;
 
 impl Model {
+    /// Localiza espacio
+    pub fn get_space<'a>(&'a self, spacename: &'a str) -> Option<&'a Space> {
+        self.spaces.get(spacename)
+    }
+
+    /// Localiza opaco
+    pub fn get_wall<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
+        self.walls.get(wallname)
+    }
+
+    /// Localiza construcción de opaco
+    pub fn get_wallcons<'a>(&'a self, wallconsname: &'a str) -> Option<&'a WallCons> {
+        self.wallcons.get(wallconsname)
+    }
+
+    /// Localiza construcción de hueco
+    pub fn get_wincons<'a>(&'a self, winconsname: &'a str) -> Option<&'a WindowCons> {
+        self.wincons.get(winconsname)
+    }
+
     /// Iterador de los huecos pertenecientes a un muro
     pub fn windows_of_wall<'a>(&'a self, wallname: &'a str) -> impl Iterator<Item = &'a Window> {
         self.windows.values().filter(move |w| w.wall == wallname)
@@ -47,7 +67,7 @@ impl Model {
         self.walls
             .values()
             .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
-            .filter(move |w| self.spaces.get(&w.space).unwrap().inside_tenv)
+            .filter(move |w| self.get_space(&w.space).unwrap().inside_tenv)
     }
 
     /// Iterador de los huecos de la envolvente térmica en contacto con el aire exterior
@@ -55,7 +75,7 @@ impl Model {
         self.walls
             .values()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
-            .filter(move |w| self.spaces.get(&w.space).unwrap().inside_tenv)
+            .filter(move |w| self.get_space(&w.space).unwrap().inside_tenv)
             .flat_map(move |wall| self.windows.values().filter(move |w| w.wall == wall.name))
     }
 
@@ -135,7 +155,7 @@ impl Model {
         let area: f32 = self
             .walls_of_envelope()
             .map(|w| {
-                let multiplier = self.spaces.get(&w.space).unwrap().multiplier;
+                let multiplier = self.get_space(&w.space).unwrap().multiplier;
                 let win_area: f32 = self.windows_of_wall(&w.name).map(|win| win.area).sum();
                 (w.area + win_area) * multiplier
             })
@@ -192,11 +212,11 @@ impl Model {
             .walls_of_envelope()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .map(|w| {
-                let multiplier = self.spaces.get(&w.space).unwrap().multiplier;
+                let multiplier = self.get_space(&w.space).unwrap().multiplier;
                 let axc_h: f32 = self
                     .windows_of_wall(&w.name)
                     .map(|win| {
-                        let c_inf = self.wincons.get(&win.cons).unwrap().infcoeff_100;
+                        let c_inf = self.get_wincons(&win.cons).unwrap().infcoeff_100;
                         win.area * c_inf
                     })
                     .sum();
@@ -217,11 +237,11 @@ impl Model {
             .walls_of_envelope()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .map(|w| {
-                let multiplier = self.spaces.get(&w.space).unwrap().multiplier;
+                let multiplier = self.get_space(&w.space).unwrap().multiplier;
                 let axc_h: f32 = self
                     .windows_of_wall(&w.name)
                     .map(|win| {
-                        let c_inf = self.wincons.get(&win.cons).unwrap().infcoeff_100;
+                        let c_inf = self.get_wincons(&win.cons).unwrap().infcoeff_100;
                         win.area * c_inf
                     })
                     .sum();
@@ -251,13 +271,13 @@ impl Model {
                 let (axu_h, a_h) = self
                     .windows_of_wall(&w.name)
                     .map(|win| {
-                        let u_h = self.wincons.get(&win.cons).unwrap().u;
+                        let u_h = self.get_wincons(&win.cons).unwrap().u;
                         (win.area * u_h, win.area)
                     })
                     .fold((0.0, 0.0), |(acc_uxa, acc_a), (win_uxa, win_a)| {
                         (acc_uxa + win_uxa, acc_a + win_a)
                     });
-                let multiplier = self.spaces.get(&w.space).unwrap().multiplier;
+                let multiplier = self.get_space(&w.space).unwrap().multiplier;
                 (
                     self.u_for_wall(&w) * w.area * multiplier,
                     w.area * multiplier,
@@ -306,8 +326,8 @@ impl Model {
         let Q_soljul = self
             .windows_of_envelope()
             .map(|w| {
-                let wall = self.walls.get(&w.wall).unwrap();
-                let wincons = self.wincons.get(&w.cons).unwrap();
+                let wall = self.get_wall(&w.wall).unwrap();
+                let wincons = self.get_wincons(&w.cons).unwrap();
                 let orientation = match Tilt::from(wall.tilt) {
                     Tilt::SIDE => wall.azimuth.into(),
                     _ => Orientation::HZ,
@@ -346,7 +366,7 @@ impl Model {
         let R_n_perim_ins = self.meta.rn_perim_insulation;
         let D_perim_ins = self.meta.d_perim_insulation;
 
-        let cons = self.wallcons.get(&wall.cons).unwrap();
+        let cons = self.get_wallcons(&wall.cons).unwrap();
         let R_intrinsic = cons.r_intrinsic;
 
         match (bounds, position) {
@@ -386,7 +406,7 @@ impl Model {
                 // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
                 // Calculamos la dimensión característica del **espacio** en el que sitúa el suelo
                 // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
-                let wspace = self.spaces.get(&wall.space).unwrap();
+                let wspace = self.get_space(&wall.space).unwrap();
                 let gnd_A = wspace.area;
                 let gnd_P = wspace
                     .exposed_perimeter
@@ -436,7 +456,7 @@ impl Model {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
                 let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
 
-                let space = self.spaces.get(&wall.space).unwrap();
+                let space = self.get_space(&wall.space).unwrap();
                 let z = if space.z < 0.0 { -space.z } else { 0.0 };
                 // Muros que realmente no son enterrados
                 if z.abs() < 0.01 {
@@ -457,7 +477,7 @@ impl Model {
                     .fold(0.0, |mean, (w, i)| {
                         (W + LAMBDA_GND
                             * (RSI_DESCENDENTE
-                                + self.wallcons.get(&w.cons).unwrap().r_intrinsic
+                                + self.get_wallcons(&w.cons).unwrap().r_intrinsic
                                 + RSE)
                             + mean * (i - 1) as f32)
                             / i as f32
@@ -515,9 +535,9 @@ impl Model {
                 // Dos casos:
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
-                let space = self.spaces.get(&wall.space).unwrap();
+                let space = self.get_space(&wall.space).unwrap();
                 let nextto = wall.nextto.as_ref().unwrap();
-                let nextspace = self.spaces.get(nextto.as_str()).unwrap();
+                let nextspace = self.get_space(nextto.as_str()).unwrap();
                 let nexttype = nextspace.space_type;
 
                 let posname = match position {
@@ -581,7 +601,7 @@ impl Model {
                             w.area * self.u_for_wall(w)
                                 + self
                                     .windows_of_wall(&w.name)
-                                    .map(|win| win.area * self.wincons.get(&win.cons).unwrap().u)
+                                    .map(|win| win.area * self.get_wincons(&win.cons).unwrap().u)
                                     .sum::<f32>()
                         })
                         .sum::<f32>();
@@ -619,9 +639,8 @@ impl Model {
 
     /// Grosor de un elemento opaco
     fn wall_thickness(&self, wall: &str) -> f32 {
-        self.walls
-            .get(wall)
-            .and_then(|w| self.wallcons.get(&w.cons).map(|c| c.thickness))
+        self.get_wall(wall)
+            .and_then(|w| self.get_wallcons(&w.cons).map(|c| c.thickness))
             .unwrap_or(0.0)
     }
 
