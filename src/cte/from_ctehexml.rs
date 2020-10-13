@@ -12,17 +12,13 @@ use log::warn;
 use crate::{
     bdl::{self, Data},
     parsers::ctehexml,
-    utils::{fround2, fround3, orientation_bdl_to_52016},
+    utils::{fround2, fround3, orientation_bdl_to_52016, uuid_from_obj},
 };
 
 pub use super::{
     BoundaryType, Meta, Model, Orientation, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
     Window, WindowCons,
 };
-
-// UUID (v3) basado en URL https://gitlab.codigotecnico.org/HULC
-
-const HULCUUID: &str = "67941a40-dcae-3f12-ad40-d4d05afa1ea2";
 
 // Conversiones de BDL a tipos CTE -------------------
 
@@ -98,19 +94,12 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
     }
 }
 
-fn id_from_parent_and_name(parent: &str, name: &str) -> String {
-    let h = format!("{:x}", md5::compute(format!("{}{}", parent, name).as_bytes()));
-    format!("{}-{}-{}-{}-{}", &h[0..8], &h[8..12], &h[12..16], &h[16..20], &h[20..32])
-}
-
 /// Construye diccionario de espacios a partir de datos BDL (Data)
 fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
-    let proj_name = bdl.meta.get("GENERAL-DATA")
-        .expect("Nombre de proyecto no encontrado").attrs.get_str("NAME-PROJECT")?;
     bdl.spaces
         .iter()
         .map(|s| {
-            let id = id_from_parent_and_name(&proj_name, &s.name);
+            let id = uuid_from_obj(&s);
             let area = fround2(s.area());
             let height = fround2(s.height);
             let exposed_perimeter = Some(fround2(s.exposed_perimeter(&bdl)));
@@ -151,11 +140,13 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
         .walls
         .iter()
         .map(|wall| -> Result<(String, Wall), Error> {
+            let id = uuid_from_obj(wall);
             let bounds = wall.bounds.into();
             let tilt = fround2(wall.tilt);
             Ok((
                 wall.name.clone(),
                 Wall {
+                    id,
                     name: wall.name.clone(),
                     cons: wall.cons.to_string(),
                     area: fround2(wall.net_area(bdl)?),
@@ -175,12 +166,14 @@ fn windows_from_bdl(walls: &BTreeMap<String, Wall>, bdl: &Data) -> BTreeMap<Stri
     bdl.windows
         .iter()
         .map(|win| {
+            let id = uuid_from_obj(win);
             let wall = walls.get(&win.wall).unwrap();
             let fshobst =
                 fshobst_for_setback(wall.tilt, wall.azimuth, win.width, win.height, win.setback);
             (
                 win.name.clone(),
                 Window {
+                    id,
                     name: win.name.clone(),
                     cons: win.cons.to_string(),
                     wall: win.wall.clone(),
@@ -199,9 +192,11 @@ fn thermal_bridges_from_bdl(bdl: &Data) -> BTreeMap<String, ThermalBridge> {
         .iter()
         .filter(|tb| tb.name != "LONGITUDES_CALCULADAS")
         .map(|tb| {
+            let id = uuid_from_obj(tb);
             (
                 tb.name.clone(),
                 ThermalBridge {
+                    id,
                     name: tb.name.clone(),
                     l: fround2(tb.length.unwrap_or(0.0)),
                     psi: tb.psi,
@@ -230,22 +225,25 @@ fn wallcons_from_bdl(
                 .db
                 .wallcons
                 .get(wcons)
-                .and_then(|cons| match cons.r_intrinsic(&bdl.db.materials) {
-                    Ok(r) => Some(WallCons {
-                        name: cons.name.clone(),
-                        group: cons.group.clone(),
-                        thickness: fround2(cons.total_thickness()),
-                        r_intrinsic: fround3(r),
-                        absorptance: cons.absorptance,
-                    }),
-                    _ => {
-                        warn!(
-                            "ERROR: No es posible calcular la R intrínseca de la construcción: {:?}\n",
-                            cons,
-                        );
-                        None
-                    }
-                })
+                .and_then(|cons|{
+                    let id = uuid_from_obj(wcons);
+                    match cons.r_intrinsic(&bdl.db.materials) {
+                        Ok(r) => Some(WallCons {
+                            id,
+                            name: cons.name.clone(),
+                            group: cons.group.clone(),
+                            thickness: fround2(cons.total_thickness()),
+                            r_intrinsic: fround3(r),
+                            absorptance: cons.absorptance,
+                        }),
+                        _ => {
+                            warn!(
+                                "ERROR: No es posible calcular la R intrínseca de la construcción: {:?}\n",
+                                cons,
+                            );
+                            None
+                        }
+                }})
                 .ok_or_else(|| {
                     format_err!(
                         "Construcción de muro no encontrada o incorrecta: '{}'\n",
@@ -274,6 +272,7 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error
                 .windowcons
                 .get(wcons)
                 .and_then(|cons| {
+                    let id = uuid_from_obj(cons);
                     // Vidrio del hueco (Glass)
                     let glass = match bdl
                         .db
@@ -292,6 +291,7 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error
                     Some((
                         cons.name.clone(),
                         WindowCons {
+                            id,
                             name: cons.name.clone(),
                             group: cons.group.clone(),
                             u,

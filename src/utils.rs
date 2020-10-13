@@ -133,3 +133,18 @@ pub fn angle_name(angle: f32) -> String {
     };
     name.to_string()
 }
+
+/// Calcula UUID a partir de hash MD5 del objeto
+///
+/// Este no es un método muy robusto pero da valores estables para los mismos objetos
+pub fn uuid_from_obj(obj: &impl std::fmt::Debug) -> String {
+    let h = format!("{:x}", md5::compute(format!("{:?}", obj).as_bytes()));
+    format!(
+        "{}-{}-{}-{}-{}",
+        &h[0..8],
+        &h[8..12],
+        &h[12..16],
+        &h[16..20],
+        &h[20..32]
+    )
+}

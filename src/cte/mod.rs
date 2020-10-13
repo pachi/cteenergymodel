@@ -105,7 +105,7 @@ impl Default for Meta {
 /// XXX: consideraremos que cada espacio se corresponde con una ZT.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Space {
-    /// ID del espacio
+    /// ID del espacio (en formato UUID)
     pub id: String,
     /// Nombre del espacio
     pub name: String,
@@ -136,6 +136,8 @@ pub struct Space {
 /// Elemento opaco (muro, cubierta, suelo, partición)
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Wall {
+    /// ID del espacio (en formato UUID)
+    pub id: String,
     /// Nombre del elemento opaco
     pub name: String,
     /// Superficie neta (sin huecos) del elemento opaco (m2)
@@ -166,6 +168,8 @@ pub struct Wall {
 /// Hueco
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Window {
+    /// ID del espacio (en formato UUID)
+    pub id: String,
     /// Nombre del hueco
     pub name: String,
     /// Superficie del hueco (m2)
@@ -182,6 +186,8 @@ pub struct Window {
 /// Puente térmico
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ThermalBridge {
+    /// ID del espacio (en formato UUID)
+    pub id: String,
     /// Nombre del puente térmico
     pub name: String,
     /// Longitud del puente térmico (m)
@@ -194,6 +200,8 @@ pub struct ThermalBridge {
 /// Definición de construcción de elemento opaco
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WallCons {
+    /// ID del espacio (en formato UUID)
+    pub id: String,
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
@@ -210,6 +218,8 @@ pub struct WallCons {
 /// Definición de construcción de hueco o lucernario
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WindowCons {
+    /// ID del espacio (en formato UUID)
+    pub id: String,
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
