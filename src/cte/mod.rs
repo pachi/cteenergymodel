@@ -8,37 +8,33 @@ pub mod climatedata;
 pub mod common;
 pub(crate) mod from_ctehexml;
 pub mod model_impl;
-pub(crate) mod simplemodel;
-
-use std::collections::BTreeMap;
 
 use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 pub use climatedata::*;
 pub use common::{BoundaryType, ClimateZone, Orientation, SpaceType, Tilt};
-use simplemodel::SimpleModel;
 
 // ---------- Estructura general de datos --------------
 
 /// Modelo del edificio
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
-#[serde(into = "SimpleModel", from = "SimpleModel", default)]
+#[serde(default)]
 pub struct Model {
     /// Metadatos
     pub meta: Meta,
     /// Espacios
-    pub spaces: BTreeMap<String, Space>,
+    pub spaces: Vec<Space>,
     /// Opacos
-    pub walls: BTreeMap<String, Wall>,
+    pub walls: Vec<Wall>,
     /// Huecos
-    pub windows: BTreeMap<String, Window>,
+    pub windows: Vec<Window>,
     /// Puentes térmicos
-    pub thermal_bridges: BTreeMap<String, ThermalBridge>,
+    pub thermal_bridges: Vec<ThermalBridge>,
     /// Construcciones de opacos
-    pub wallcons: BTreeMap<String, WallCons>,
+    pub wallcons: Vec<WallCons>,
     /// Construcciones de huecos
-    pub wincons: BTreeMap<String, WindowCons>,
+    pub wincons: Vec<WindowCons>,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
     pub extra: Option<Vec<ExtraData>>,
 }

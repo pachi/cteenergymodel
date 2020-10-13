@@ -62,16 +62,16 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
 ) {
     let mut extra = ecdata
         .walls
-        .values()
+        .iter()
         .map(|w| ExtraData {
             name: w.name.clone(),
             bounds: w.bounds,
-            spacetype: ecdata.spaces.get(&w.space).unwrap().space_type,
+            spacetype: ecdata.get_space(&w.space).unwrap().space_type,
             nextspace: w.nextto.clone(),
             nextspacetype: w
                 .nextto
                 .as_ref()
-                .and_then(|s| ecdata.spaces.get(s))
+                .and_then(|s| ecdata.get_space(s))
                 .map(|s| s.space_type),
             tilt: w.tilt.into(),
             cons: w.cons.clone(),
@@ -99,7 +99,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
         }
 
         // Modifica fshobst con datos del .kyg
-        for win in ecdata.windows.values_mut() {
+        for win in ecdata.windows.iter_mut() {
             let kygwin = kygdata.windows.get(&win.name);
             if let Some(kw) = kygwin {
                 win.fshobst = fround2(kw.fshobst);

@@ -4,7 +4,7 @@
 
 //! Conversión desde CtehexmlData a cte::Model
 
-use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
+use std::{convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, format_err, Error};
 use log::warn;
@@ -95,7 +95,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
 }
 
 /// Construye diccionario de espacios a partir de datos BDL (Data)
-fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
+fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
     bdl.spaces
         .iter()
         .map(|s| {
@@ -103,31 +103,28 @@ fn spaces_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Space>, Error> {
             let area = fround2(s.area());
             let height = fround2(s.height);
             let exposed_perimeter = Some(fround2(s.exposed_perimeter(&bdl)));
-            Ok((
-                s.name.clone(),
-                Space {
-                    id,
-                    name: s.name.clone(),
-                    area,
-                    z: s.z,
-                    exposed_perimeter,
-                    height,
-                    inside_tenv: s.insidete,
-                    multiplier: s.multiplier * s.floor_multiplier,
-                    space_type: match s.stype.as_ref() {
-                        "CONDITIONED" => SpaceType::CONDITIONED,
-                        "UNHABITED" => SpaceType::UNINHABITED,
-                        _ => SpaceType::UNCONDITIONED,
-                    },
-                    n_v: s.airchanges_h,
+            Ok(Space {
+                id,
+                name: s.name.clone(),
+                area,
+                z: s.z,
+                exposed_perimeter,
+                height,
+                inside_tenv: s.insidete,
+                multiplier: s.multiplier * s.floor_multiplier,
+                space_type: match s.stype.as_ref() {
+                    "CONDITIONED" => SpaceType::CONDITIONED,
+                    "UNHABITED" => SpaceType::UNINHABITED,
+                    _ => SpaceType::UNCONDITIONED,
                 },
-            ))
+                n_v: s.airchanges_h,
+            })
         })
-        .collect::<Result<BTreeMap<String, Space>, Error>>()
+        .collect::<Result<Vec<Space>, Error>>()
 }
 
 /// Construye muros de la envolvente a partir de datos BDL
-fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
+fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
     // Desviación general respecto al Norte (criterio BDL)
     let northangle = bdl
         .meta
@@ -139,80 +136,68 @@ fn walls_from_bdl(bdl: &Data) -> Result<BTreeMap<String, Wall>, Error> {
     Ok(bdl
         .walls
         .iter()
-        .map(|wall| -> Result<(String, Wall), Error> {
+        .map(|wall| -> Result<Wall, Error> {
             let id = uuid_from_obj(wall);
             let bounds = wall.bounds.into();
             let tilt = fround2(wall.tilt);
-            Ok((
-                wall.name.clone(),
-                Wall {
-                    id,
-                    name: wall.name.clone(),
-                    cons: wall.cons.to_string(),
-                    area: fround2(wall.net_area(bdl)?),
-                    space: wall.space.clone(),
-                    nextto: wall.nextto.clone(),
-                    bounds,
-                    azimuth: fround2(orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?)),
-                    tilt,
-                },
-            ))
+            Ok(Wall {
+                id,
+                name: wall.name.clone(),
+                cons: wall.cons.to_string(),
+                area: fround2(wall.net_area(bdl)?),
+                space: wall.space.clone(),
+                nextto: wall.nextto.clone(),
+                bounds,
+                azimuth: fround2(orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?)),
+                tilt,
+            })
         })
-        .collect::<Result<BTreeMap<String, Wall>, _>>()?)
+        .collect::<Result<Vec<Wall>, _>>()?)
 }
 
 /// Construye huecos de la envolvente a partir de datos BDL
-fn windows_from_bdl(walls: &BTreeMap<String, Wall>, bdl: &Data) -> BTreeMap<String, Window> {
+fn windows_from_bdl(walls: &Vec<Wall>, bdl: &Data) -> Vec<Window> {
     bdl.windows
         .iter()
         .map(|win| {
             let id = uuid_from_obj(win);
-            let wall = walls.get(&win.wall).unwrap();
+            let wall = walls.iter().find(|w| w.name == win.wall).unwrap();
             let fshobst =
                 fshobst_for_setback(wall.tilt, wall.azimuth, win.width, win.height, win.setback);
-            (
-                win.name.clone(),
-                Window {
-                    id,
-                    name: win.name.clone(),
-                    cons: win.cons.to_string(),
-                    wall: win.wall.clone(),
-                    area: fround2(win.width * win.height),
-                    fshobst: fround2(fshobst),
-                },
-            )
+            Window {
+                id,
+                name: win.name.clone(),
+                cons: win.cons.to_string(),
+                wall: win.wall.clone(),
+                area: fround2(win.width * win.height),
+                fshobst: fround2(fshobst),
+            }
         })
         .collect()
 }
 
 /// Construye puentes térmicos de la envolvente a partir de datos BDL
-fn thermal_bridges_from_bdl(bdl: &Data) -> BTreeMap<String, ThermalBridge> {
+fn thermal_bridges_from_bdl(bdl: &Data) -> Vec<ThermalBridge> {
     // PTs
     bdl.tbridges
         .iter()
         .filter(|tb| tb.name != "LONGITUDES_CALCULADAS")
         .map(|tb| {
             let id = uuid_from_obj(tb);
-            (
-                tb.name.clone(),
-                ThermalBridge {
-                    id,
-                    name: tb.name.clone(),
-                    l: fround2(tb.length.unwrap_or(0.0)),
-                    psi: tb.psi,
-                },
-            )
+            ThermalBridge {
+                id,
+                name: tb.name.clone(),
+                l: fround2(tb.length.unwrap_or(0.0)),
+                psi: tb.psi,
+            }
         })
         .collect()
 }
 
 /// Construcciones de muros a partir de datos BDL
-fn wallcons_from_bdl(
-    walls: &BTreeMap<String, Wall>,
-    bdl: &Data,
-) -> Result<BTreeMap<String, WallCons>, Error> {
+fn wallcons_from_bdl(walls: &Vec<Wall>, bdl: &Data) -> Result<Vec<WallCons>, Error> {
     let mut wcnames = walls
-        .values()
+        .iter()
         .map(|w| w.cons.clone())
         .collect::<Vec<String>>();
     wcnames.sort();
@@ -220,7 +205,7 @@ fn wallcons_from_bdl(
 
     wcnames
         .iter()
-        .map(|wcons| -> Result<(String, WallCons), Error> {
+        .map(|wcons| {
             let wallcons = bdl
                 .db
                 .wallcons
@@ -250,13 +235,13 @@ fn wallcons_from_bdl(
                         wcons,
                     )
                 })?;
-            Ok((wallcons.name.clone(), wallcons))
+            Ok(wallcons)
         })
-        .collect::<Result<BTreeMap<_, _>, _>>()
+        .collect::<Result<Vec<_>, _>>()
 }
 
 /// Construcciones de huecos a partir de datos BDL
-fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error> {
+fn windowcons_from_bdl(bdl: &Data) -> Result<Vec<WindowCons>, Error> {
     let mut wcnames: Vec<String> = bdl
         .windows
         .iter()
@@ -288,19 +273,16 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error
                     let gglshwi = cons.gglshwi.unwrap_or(gglwi);
                     let infcoeff_100 = cons.infcoeff;
                     let u = fround2(cons.u(&bdl.db.frames, &bdl.db.glasses).unwrap_or_default());
-                    Some((
-                        cons.name.clone(),
-                        WindowCons {
-                            id,
-                            name: cons.name.clone(),
-                            group: cons.group.clone(),
-                            u,
-                            ff,
-                            gglwi,
-                            gglshwi,
-                            infcoeff_100,
-                        },
-                    ))
+                    Some(WindowCons {
+                        id,
+                        name: cons.name.clone(),
+                        group: cons.group.clone(),
+                        u,
+                        ff,
+                        gglwi,
+                        gglshwi,
+                        infcoeff_100,
+                    })
                 })
                 .ok_or_else(|| {
                     format_err!(
@@ -309,7 +291,7 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<BTreeMap<String, WindowCons>, Error
                     )
                 })
         })
-        .collect::<Result<BTreeMap<_, _>, _>>()
+        .collect::<Result<Vec<_>, _>>()
 }
 
 /// Factor de obstáculos remotos (Fshobst) en función del retranqueo, orientación y geometría del hueco

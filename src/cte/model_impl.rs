@@ -27,32 +27,32 @@ const LAMBDA_INS: f32 = 0.035;
 impl Model {
     /// Localiza espacio
     pub fn get_space<'a>(&'a self, spacename: &'a str) -> Option<&'a Space> {
-        self.spaces.get(spacename)
+        self.spaces.iter().find(|s| s.name == spacename)
     }
 
     /// Localiza opaco
     pub fn get_wall<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
-        self.walls.get(wallname)
+        self.walls.iter().find(|w| w.name == wallname)
     }
 
     /// Localiza construcción de opaco
     pub fn get_wallcons<'a>(&'a self, wallconsname: &'a str) -> Option<&'a WallCons> {
-        self.wallcons.get(wallconsname)
+        self.wallcons.iter().find(|wc| wc.name == wallconsname)
     }
 
     /// Localiza construcción de hueco
     pub fn get_wincons<'a>(&'a self, winconsname: &'a str) -> Option<&'a WindowCons> {
-        self.wincons.get(winconsname)
+        self.wincons.iter().find(|wc| wc.name == winconsname)
     }
 
     /// Iterador de los huecos pertenecientes a un muro
     pub fn windows_of_wall<'a>(&'a self, wallname: &'a str) -> impl Iterator<Item = &'a Window> {
-        self.windows.values().filter(move |w| w.wall == wallname)
+        self.windows.iter().filter(move |w| w.wall == wallname)
     }
 
     /// Iterador de los cerramientos (incluyendo muros, suelos y techos) que delimitan un espacio
     pub fn walls_of_space<'a>(&'a self, space: &'a str) -> impl Iterator<Item = &'a Wall> {
-        self.walls.values().filter(move |w| {
+        self.walls.iter().filter(move |w| {
             w.space == space
                 || (if let Some(ref spc) = w.nextto {
                     spc == space
@@ -65,7 +65,7 @@ impl Model {
     /// Iterador de los cerramientos de la envolvente térmica en contacto con el aire o el terreno
     pub fn walls_of_envelope(&self) -> impl Iterator<Item = &Wall> {
         self.walls
-            .values()
+            .iter()
             .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
             .filter(move |w| self.get_space(&w.space).unwrap().inside_tenv)
     }
@@ -73,17 +73,17 @@ impl Model {
     /// Iterador de los huecos de la envolvente térmica en contacto con el aire exterior
     pub fn windows_of_envelope(&self) -> impl Iterator<Item = &Window> {
         self.walls
-            .values()
+            .iter()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .filter(move |w| self.get_space(&w.space).unwrap().inside_tenv)
-            .flat_map(move |wall| self.windows.values().filter(move |w| w.wall == wall.name))
+            .flat_map(move |wall| self.windows.iter().filter(move |w| w.wall == wall.name))
     }
 
     /// Calcula la superficie útil de los espacios habitables de la envolvente térmica [m²]
     pub fn a_ref(&self) -> f32 {
         let a_util: f32 = self
             .spaces
-            .values()
+            .iter()
             .map(|s| {
                 if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
                     s.area * s.multiplier
@@ -100,7 +100,7 @@ impl Model {
     pub fn vol_env_gross(&self) -> f32 {
         let v_env: f32 = self
             .spaces
-            .values()
+            .iter()
             .map(|s| {
                 if s.inside_tenv {
                     s.area * s.height * s.multiplier
@@ -117,7 +117,7 @@ impl Model {
     pub fn vol_env_net(&self) -> f32 {
         let v_env: f32 = self
             .spaces
-            .values()
+            .iter()
             .map(|s| {
                 if s.inside_tenv {
                     s.area * (s.height - self.top_wall_thickness(&s.name)) * s.multiplier
@@ -134,7 +134,7 @@ impl Model {
     pub fn vol_env_inh_net(&self) -> f32 {
         let v_env: f32 = self
             .spaces
-            .values()
+            .iter()
             .map(|s| {
                 if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
                     s.area * (s.height - self.top_wall_thickness(&s.name)) * s.multiplier
@@ -299,7 +299,7 @@ impl Model {
             );
         let (L, psiL): (f32, f32) = self
             .thermal_bridges
-            .values()
+            .iter()
             .map(|tb| (tb.l, tb.psi * tb.l))
             .fold((0.0, 0.0), |(acc_l, acc_psil), (e_l, e_psil)| {
                 (acc_l + e_l, acc_psil + e_psil)
@@ -626,7 +626,7 @@ impl Model {
 
     /// Elemento opaco de techo de un espacio
     fn top_wall_of_space<'a>(&'a self, space: &'a str) -> Option<&'a Wall> {
-        self.walls.values().find(move |w| {
+        self.walls.iter().find(move |w| {
             match w.tilt.into() {
                 // Muros exteriores o cubiertas sobre el espacio
                 Tilt::TOP => &w.space == &space,
