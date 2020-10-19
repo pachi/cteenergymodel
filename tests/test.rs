@@ -6,9 +6,9 @@ use std::convert::TryFrom;
 
 use hulc2envolventecte::{
     collect_hulc_data,
-    cte::{ClimateZone, Model},
+    cte::{climatedata, ClimateZone, Model},
     parsers::{bdl, ctehexml, kyg, tbl},
-    utils::{fround2, read_latin1_file},
+    utils::{fround2, read_file, read_latin1_file},
 };
 
 macro_rules! assert_almost_eq {
@@ -354,4 +354,22 @@ fn parse_lider_bdl() {
         count += 1;
     }
     println!("Comprobados {} archivos antiguos", count);
+}
+
+#[test]
+fn parse_json_to_model() {
+    let strdata = read_file("tests/data/e4h_medianeras.json").unwrap();
+    let model = Model::from_json(&strdata).unwrap();
+    let climatezone = model.meta.climate;
+    let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
+    assert_eq!(model.a_ref(), 1673.92);
+    assert_almost_eq!(model.compacity(), 3.17, 0.01);
+    assert_almost_eq!(model.K_he2019(), 0.37, 0.01);
+    assert_almost_eq!(model.q_soljul(&totradjul), 0.43, 0.01);
+    assert_almost_eq!(model.n50(), 2.96, 0.01);
+    assert_almost_eq!(model.n50_he2019(), 2.96, 0.01);
+    assert_eq!(model.C_o(), 16.0);
+    assert_eq!(model.C_o_he2019(), 16.0);
+    assert_eq!(model.vol_env_net(), 4666.05);
+    assert_eq!(model.vol_env_gross(), 5231.0);
 }
