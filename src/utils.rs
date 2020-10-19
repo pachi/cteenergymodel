@@ -50,7 +50,12 @@ pub fn read_latin1_file<T: AsRef<Path>>(path: T) -> Result<String, Error> {
         let mut buf = Vec::new();
         BufReader::new(File::open(path.as_ref())?)
             .read_to_end(&mut buf)
-            .context("No se ha podido leer el archivo")?;
+            .with_context(|| {
+                format!(
+                    "No se ha podido leer el archivo {}",
+                    path.as_ref().display()
+                )
+            })?;
         buf
     };
 
@@ -68,7 +73,12 @@ pub fn read_file<T: AsRef<Path>>(path: T) -> anyhow::Result<String> {
     let mut buf = String::new();
     BufReader::new(File::open(path.as_ref())?)
         .read_to_string(&mut buf)
-        .with_context(|| "No se ha podido leer el archivo")?;
+        .with_context(|| {
+            format!(
+                "No se ha podido leer el archivo {}",
+                path.as_ref().display()
+            )
+        })?;
     Ok(buf)
 }
 
