@@ -378,3 +378,49 @@ impl TryFrom<&str> for ClimateZone {
         }
     }
 }
+
+/// Nivel de aviso para condiciones de chequeo del modelo
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WarningLevel {
+    SUCCESS,
+    DANGER,
+    WARNING,
+    INFO,
+}
+
+/// Muestra WarningLevel
+impl Display for WarningLevel {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        use WarningLevel::*;
+        let printable = match *self {
+            SUCCESS => "SUCCESS",
+            DANGER => "DANGER",
+            WARNING => "WARNING",
+            _ => "INFO",
+        };
+        write!(f, "{}", printable)
+    }
+}
+
+/// Convierte str a WarningLevel
+impl From<&str> for WarningLevel {
+    fn from(level: &str) -> Self {
+        match level.to_uppercase().as_str() {
+            "SUCCESS" => Self::SUCCESS,
+            "DANGER" => Self::DANGER,
+            "WARNING" => Self::WARNING,
+            _ => Self::INFO,
+        }
+    }
+}
+
+/// Estructura para reportar avisos
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Warning {
+    /// Nivel de afectación
+    pub level: WarningLevel,
+    /// Id del elemento afectado, en su caso
+    pub id: Option<String>,
+    /// Mensaje del aviso
+    pub msg: String,
+}

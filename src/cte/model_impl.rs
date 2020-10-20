@@ -15,7 +15,10 @@ use std::{
 
 use log::{debug, info, warn};
 
-use super::*;
+use super::{
+    common::{Warning, WarningLevel},
+    BoundaryType, Model, Orientation, Space, SpaceType, Tilt, Wall, WallCons, Window, WindowCons,
+};
 use crate::utils::fround2;
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
@@ -764,7 +767,9 @@ impl Model {
     ///     - Muros sin referencias de espacios válidas
     ///     - Muros sin referencias de construcciones válidas
     ///     - Muros con nextto con referencia no válida
-    pub fn check_model(&self) -> Vec<(String, String)> {
+    pub fn check_model(&self) -> Vec<Warning> {
+        use WarningLevel::WARNING;
+
         let spaceids: HashSet<&str> = self.spaces.iter().map(|s| s.id.as_str()).collect();
         let wallids: HashSet<&str> = self.walls.iter().map(|w| w.id.as_str()).collect();
         let wallconsids: HashSet<&str> = self.wallcons.iter().map(|c| c.id.as_str()).collect();
@@ -774,54 +779,59 @@ impl Model {
 
         self.walls.iter().for_each(|w| {
             if !spaceids.contains(w.space.as_str()) {
-                warnings.push((
-                    w.id.clone(),
-                    format!(
+                warnings.push(Warning {
+                    level: WARNING,
+                    id: Some(w.id.clone()),
+                    msg: format!(
                         "Muro {} ({}) con referencia incorrecta de espacio {}",
                         w.id, w.name, w.space
                     ),
-                ))
+                })
             };
             if !wallconsids.contains(w.cons.as_str()) {
-                warnings.push((
-                    w.id.clone(),
-                    format!(
+                warnings.push(Warning {
+                    level: WARNING,
+                    id: Some(w.id.clone()),
+                    msg: format!(
                         "Muro {} ({}) con referencia incorrecta de construcción {}",
                         w.id, w.name, w.cons
                     ),
-                ))
+                })
             };
             if w.nextto.is_some() && !spaceids.contains(w.nextto.clone().unwrap().as_str()) {
-                warnings.push((
-                    w.id.clone(),
-                    format!(
+                warnings.push(Warning {
+                    level: WARNING,
+                    id: Some(w.id.clone()),
+                    msg: format!(
                         "Muro {} ({}) con referencia incorrecta de espacio adyacente {}",
                         w.id,
                         w.name,
                         w.nextto.clone().unwrap()
                     ),
-                ))
+                })
             };
         });
 
         self.windows.iter().for_each(|w| {
             if !wallids.contains(w.wall.as_str()) {
-                warnings.push((
-                    w.id.clone(),
-                    format!(
+                warnings.push(Warning {
+                    level: WARNING,
+                    id: Some(w.id.clone()),
+                    msg: format!(
                         "Hueco {} ({}) con referencia incorrecta de opaco {}",
                         w.id, w.name, w.wall
                     ),
-                ))
+                })
             };
             if !winconsids.contains(w.cons.as_str()) {
-                warnings.push((
-                    w.id.clone(),
-                    format!(
+                warnings.push(Warning {
+                    level: WARNING,
+                    id: Some(w.id.clone()),
+                    msg: format!(
                         "Hueco {} ({}) con referencia incorrecta de construcción {}",
                         w.id, w.name, w.cons
                     ),
-                ))
+                })
             };
         });
         warnings

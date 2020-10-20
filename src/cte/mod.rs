@@ -13,7 +13,7 @@ use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 pub use climatedata::*;
-pub use common::{BoundaryType, ClimateZone, Orientation, SpaceType, Tilt};
+pub use common::{BoundaryType, ClimateZone, Orientation, SpaceType, Tilt, Warning};
 
 // ---------- Estructura general de datos --------------
 
