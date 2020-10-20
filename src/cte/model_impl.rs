@@ -8,7 +8,10 @@
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
 #![allow(non_snake_case)]
 
-use std::{collections::HashMap, f32::consts::PI};
+use std::{
+    collections::{HashMap, HashSet},
+    f32::consts::PI,
+};
 
 use log::{debug, info, warn};
 
@@ -751,5 +754,76 @@ impl Model {
         self.top_wall_of_space(&spaceid)
             .map(|w| self.wall_thickness(&w.id))
             .unwrap_or(0.0)
+    }
+
+    /// Comprueba consistencia del modelo y devuelve lista de avisos / errores detectados
+    ///
+    /// 1. Elementos mal definidos que se ignorarán en el cálculo:
+    ///     - Huecos sin referencias de construcciones válidas
+    ///     - Huecos sin referencias de muros válidas
+    ///     - Muros sin referencias de espacios válidas
+    ///     - Muros sin referencias de construcciones válidas
+    ///     - Muros con nextto con referencia no válida
+    pub fn check_model(&self) -> Vec<(String, String)> {
+        let spaceids: HashSet<&str> = self.spaces.iter().map(|s| s.id.as_str()).collect();
+        let wallids: HashSet<&str> = self.walls.iter().map(|w| w.id.as_str()).collect();
+        let wallconsids: HashSet<&str> = self.wallcons.iter().map(|c| c.id.as_str()).collect();
+        let winconsids: HashSet<&str> = self.wincons.iter().map(|c| c.id.as_str()).collect();
+
+        let mut warnings = Vec::new();
+
+        self.walls.iter().for_each(|w| {
+            if !spaceids.contains(w.space.as_str()) {
+                warnings.push((
+                    w.id.clone(),
+                    format!(
+                        "Muro {} ({}) con referencia incorrecta de espacio {}",
+                        w.id, w.name, w.space
+                    ),
+                ))
+            };
+            if !wallconsids.contains(w.cons.as_str()) {
+                warnings.push((
+                    w.id.clone(),
+                    format!(
+                        "Muro {} ({}) con referencia incorrecta de construcción {}",
+                        w.id, w.name, w.cons
+                    ),
+                ))
+            };
+            if w.nextto.is_some() && !spaceids.contains(w.nextto.clone().unwrap().as_str()) {
+                warnings.push((
+                    w.id.clone(),
+                    format!(
+                        "Muro {} ({}) con referencia incorrecta de espacio adyacente {}",
+                        w.id,
+                        w.name,
+                        w.nextto.clone().unwrap()
+                    ),
+                ))
+            };
+        });
+
+        self.windows.iter().for_each(|w| {
+            if !wallids.contains(w.wall.as_str()) {
+                warnings.push((
+                    w.id.clone(),
+                    format!(
+                        "Hueco {} ({}) con referencia incorrecta de opaco {}",
+                        w.id, w.name, w.wall
+                    ),
+                ))
+            };
+            if !winconsids.contains(w.cons.as_str()) {
+                warnings.push((
+                    w.id.clone(),
+                    format!(
+                        "Hueco {} ({}) con referencia incorrecta de construcción {}",
+                        w.id, w.name, w.cons
+                    ),
+                ))
+            };
+        });
+        warnings
     }
 }
