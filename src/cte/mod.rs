@@ -257,3 +257,20 @@ pub struct ExtraData {
     // U calculada con UNE-EN ISO 13789
     pub computed_u: f32,
 }
+
+/// Convierte de muro a enum Tilt
+impl From<&Wall> for Tilt {
+    fn from(wall: &Wall) -> Self {
+        Tilt::from(wall.tilt)
+    }
+}
+
+/// Convierte opaco a Orientation
+impl From<&Wall> for Orientation {
+    fn from(wall: &Wall) -> Self {
+        match Tilt::from(wall.tilt) {
+            Tilt::SIDE => wall.azimuth.into(),
+            _ => Orientation::HZ,
+        }
+    }
+}

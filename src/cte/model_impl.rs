@@ -40,29 +40,57 @@ impl Model {
         self.walls.iter().find(|w| w.id == wallid)
     }
 
+    /// Localiza espacio de opaco
+    pub fn get_wallspace<'a>(&'a self, wall: &'a Wall) -> Option<&'a Space> {
+        let maybespace = self.get_space(&wall.space);
+        if maybespace.is_none() {
+            warn!(
+                "Muro {} ({}) con definición de espacio incorrecta {}",
+                wall.id, wall.name, wall.space
+            );
+        }
+        maybespace
+    }
+
     /// Localiza opaco por nombre
     pub fn get_wall_by_name<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
         self.walls.iter().find(|w| w.name == wallname)
     }
 
     /// Localiza construcción de opaco
-    pub fn get_wallcons<'a>(&'a self, wallconsid: &'a str) -> Option<&'a WallCons> {
-        self.wallcons.iter().find(|wc| wc.id == wallconsid)
+    pub fn get_wallcons<'a>(&'a self, wall: &'a Wall) -> Option<&'a WallCons> {
+        let maybecons = self.wallcons.iter().find(|wc| wc.id == wall.cons);
+        if maybecons.is_none() {
+            warn!(
+                "Muro {} ({}) con definición de construcción incorrecta {}",
+                wall.id, wall.name, wall.cons
+            );
+        };
+        maybecons
     }
 
-    /// Localiza construcción de opaco por nombre
-    pub fn get_wallcons_by_name<'a>(&'a self, wallconsname: &'a str) -> Option<&'a WallCons> {
-        self.wallcons.iter().find(|wc| wc.name == wallconsname)
+    /// Localiza muro de hueco
+    pub fn get_windowwall<'a>(&'a self, window: &'a Window) -> Option<&'a Wall> {
+        let maybewall = self.get_wall(&window.wall);
+        if maybewall.is_none() {
+            warn!(
+                "Hueco {} ({}) con definición de muro incorrecta {}",
+                window.id, window.name, window.wall
+            );
+        }
+        maybewall
     }
 
     /// Localiza construcción de hueco
-    pub fn get_wincons<'a>(&'a self, winconsid: &'a str) -> Option<&'a WindowCons> {
-        self.wincons.iter().find(|wc| wc.id == winconsid)
-    }
-
-    /// Localiza construcción de hueco por nombre
-    pub fn get_wincons_by_name<'a>(&'a self, winconsname: &'a str) -> Option<&'a WindowCons> {
-        self.wincons.iter().find(|wc| wc.name == winconsname)
+    pub fn get_wincons<'a>(&'a self, win: &'a Window) -> Option<&'a WindowCons> {
+        let maybecons = self.wincons.iter().find(|wc| wc.id == win.cons);
+        if maybecons.is_none() {
+            warn!(
+                "Hueco {}({}) con definición de construcción incorrecta {}",
+                win.id, win.name, win.cons
+            );
+        }
+        maybecons
     }
 
     /// Iterador de los huecos pertenecientes a un muro
@@ -83,6 +111,7 @@ impl Model {
     }
 
     /// Iterador de los cerramientos de la envolvente térmica en contacto con el aire o el terreno
+    /// Se excluyen los opacos sin espacio definido
     pub fn walls_of_envelope(&self) -> impl Iterator<Item = &Wall> {
         self.walls
             .iter()
@@ -90,20 +119,20 @@ impl Model {
             .filter(move |w| {
                 // Si el espacio no está definido se considera que no pertenece a la envolvente
                 self.get_space(&w.space)
-                    .and_then(|s| Some(s.inside_tenv))
+                    .map(|s| s.inside_tenv)
                     .unwrap_or(false)
             })
     }
 
     /// Iterador de los huecos de la envolvente térmica en contacto con el aire exterior
+    /// Se excluyen los huecos sin espacio definido
     pub fn windows_of_envelope(&self) -> impl Iterator<Item = &Window> {
         self.walls
             .iter()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .filter(move |w| {
-                // Si el espacio no está definido se considera que no pertenece a la envolvente
                 self.get_space(&w.space)
-                    .and_then(|s| Some(s.inside_tenv))
+                    .map(|s| s.inside_tenv)
                     .unwrap_or(false)
             })
             .flat_map(move |wall| self.windows.iter().filter(move |w| w.wall == wall.id))
@@ -114,11 +143,11 @@ impl Model {
         let a_util: f32 = self
             .spaces
             .iter()
-            .map(|s| {
+            .filter_map(|s| {
                 if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
-                    s.area * s.multiplier
+                    Some(s.area * s.multiplier)
                 } else {
-                    0.0
+                    None
                 }
             })
             .sum();
@@ -131,11 +160,11 @@ impl Model {
         let v_env: f32 = self
             .spaces
             .iter()
-            .map(|s| {
+            .filter_map(|s| {
                 if s.inside_tenv {
-                    s.area * s.height * s.multiplier
+                    Some(s.area * s.height * s.multiplier)
                 } else {
-                    0.0
+                    None
                 }
             })
             .sum();
@@ -148,11 +177,11 @@ impl Model {
         let v_env: f32 = self
             .spaces
             .iter()
-            .map(|s| {
+            .filter_map(|s| {
                 if s.inside_tenv {
-                    s.area * (s.height - self.top_wall_thickness(&s.id)) * s.multiplier
+                    Some(s.area * (s.height - self.top_wall_thickness(&s.id)) * s.multiplier)
                 } else {
-                    0.0
+                    None
                 }
             })
             .sum();
@@ -165,11 +194,11 @@ impl Model {
         let v_env: f32 = self
             .spaces
             .iter()
-            .map(|s| {
+            .filter_map(|s| {
                 if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
-                    s.area * (s.height - self.top_wall_thickness(&s.id)) * s.multiplier
+                    Some(s.area * (s.height - self.top_wall_thickness(&s.id)) * s.multiplier)
                 } else {
-                    0.0
+                    None
                 }
             })
             .sum();
@@ -180,16 +209,13 @@ impl Model {
     /// De acuerdo con la definición del DB-HE comprende el volumen interior de la envolvente térmica (V)
     /// y la superficie de muros y huecos con intercambio térmico con el aire exterior o el terreno (A)
     /// Esta superficie tiene en cuenta los multiplicadores de espacios
+    /// Se excluyen los huecos sin muro definido y los muros sin espacio definido
     pub fn compacity(&self) -> f32 {
         let vol: f32 = self.vol_env_gross();
         let area: f32 = self
             .walls_of_envelope()
             .map(|w| {
-                // Si no está definido el espacio se usa como multiplicador 1 (pero esto no debería suceder ya que no debería llegar de walls_of_envelope)
-                let multiplier = self
-                    .get_space(&w.space)
-                    .and_then(|s| Some(s.multiplier))
-                    .unwrap_or(1.0);
+                let multiplier = self.get_wallspace(&w).map(|s| s.multiplier).unwrap_or(1.0);
                 let win_area: f32 = self.windows_of_wall(&w.id).map(|win| win.area).sum();
                 (w.area + win_area) * multiplier
             })
@@ -234,6 +260,7 @@ impl Model {
     /// - los huecos de las superficies opacas anteriores
     /// - la permeabilidad al aire de huecos definida en su construcción
     /// - el volumen interior de la envolvente térmica ()
+    /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
     pub fn n50_he2019(&self) -> f32 {
         let vol: f32 = self.vol_env_net();
         if vol <= 0.01 {
@@ -241,30 +268,16 @@ impl Model {
             return 0.0;
         };
         let c_o = self.C_o_he2019();
-
         let sum_axc: f32 = self
             .walls_of_envelope()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .map(|w| {
-                // Si no está definido el espacio se usa como multiplicador 1 (pero esto no debería suceder ya que no debería llegar de walls_of_envelope)
-                let multiplier = self
-                    .get_space(&w.space)
-                    .and_then(|s| Some(s.multiplier))
-                    .unwrap_or(1.0);
+                let multiplier = self.get_wallspace(&w).map(|s| s.multiplier).unwrap_or(1.0);
                 let axc_h: f32 = self
                     .windows_of_wall(&w.id)
-                    .map(|win| {
-                        match self.get_wincons(&win.cons) {
-                            Some(wincons) => win.area * wincons.infcoeff_100,
-                            // Si no está definida la construcción no participa de la envolvente
-                            _ => {
-                                warn!(
-                                    "Hueco {}({}) con definición de construcción incorrecta {}",
-                                    w.id, w.name, w.cons
-                                );
-                                0.0
-                            }
-                        }
+                    .filter_map(|win| {
+                        self.get_wincons(&win)
+                            .map(|wincons| Some(win.area * wincons.infcoeff_100))?
                     })
                     .sum();
                 (w.area * c_o + axc_h) * multiplier
@@ -278,33 +291,21 @@ impl Model {
         n50
     }
     /// Calcula la permeabilidad de opacos a partir de un ensayo de puerta soplante
+    /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
     pub fn wall_inf_100_from_n50(&self, n50: f32) -> f32 {
         let vol: f32 = self.vol_env_net();
         let (sum_wall_area, sum_axc_h): (f32, f32) = self
             .walls_of_envelope()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .map(|w| {
-                // Si no está definido el espacio se usa como multiplicador 1 (pero esto no debería suceder ya que no debería llegar de walls_of_envelope)
-                let multiplier = self
-                    .get_space(&w.space)
-                    .and_then(|s| Some(s.multiplier))
-                    .unwrap_or(1.0);
                 let axc_h: f32 = self
                     .windows_of_wall(&w.id)
-                    .map(|win| {
-                        match self.get_wincons(&win.cons) {
-                            Some(wincons) => win.area * wincons.infcoeff_100,
-                            _ => {
-                                // Si no está definida la construcción no consideramos la aportación del hueco
-                                warn!(
-                                    "Hueco {} ({}) con definición de construcción incorrecta {}",
-                                    win.id, win.name, win.cons
-                                );
-                                0.0
-                            }
-                        }
+                    .filter_map(|win| {
+                        self.get_wincons(&win)
+                            .map(|wincons| Some(win.area * wincons.infcoeff_100))?
                     })
                     .sum();
+                let multiplier = self.get_wallspace(&w).map(|s| s.multiplier).unwrap_or(1.0);
                 (w.area * multiplier, axc_h * multiplier)
             })
             .fold(
@@ -324,39 +325,31 @@ impl Model {
     /// Calcula la transmitancia térmica global K (W/m2K)
     /// Transmitancia media de los elementos en contacto con el aire exterior o con el terreno
     /// Incluye los puentes térmicos
+    /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
     pub fn K_he2019(&self) -> f32 {
         let (walls_axu, walls_a, windows_axu, windows_a): (f32, f32, f32, f32) = self
             .walls_of_envelope()
-            .map(|w| {
+            .filter_map(|wall| {
                 let (axu_h, a_h) = self
-                    .windows_of_wall(&w.id)
-                    .map(|win| {
-                        match self.get_wincons(&win.cons) {
-                            Some(wincons) => (win.area * wincons.u, win.area),
-                            // Si no está definida la construcción del hueco, no consideramos su aportación
-                            _ => {
-                                warn!(
-                                    "Hueco {} ({}) con definición de construcción {} incorrecta",
-                                    win.id, win.name, win.cons
-                                );
-                                return (0.0, 0.0);
-                            }
-                        }
+                    .windows_of_wall(&wall.id)
+                    .filter_map(|win| {
+                        self.get_wincons(&win)
+                            .map(|wincons| Some((win.area * wincons.u, win.area)))?
                     })
                     .fold((0.0, 0.0), |(acc_uxa, acc_a), (win_uxa, win_a)| {
                         (acc_uxa + win_uxa, acc_a + win_a)
                     });
-                // Si no está definido el espacio se usa como multiplicador 1 (pero esto no debería suceder ya que no debería llegar de walls_of_envelope)
                 let multiplier = self
-                    .get_space(&w.space)
-                    .and_then(|s| Some(s.multiplier))
+                    .get_wallspace(&wall)
+                    .map(|s| s.multiplier)
                     .unwrap_or(1.0);
-                (
-                    self.u_for_wall(&w) * w.area * multiplier,
-                    w.area * multiplier,
+                let wall_u = self.u_for_wall(&wall)?;
+                Some((
+                    wall_u * wall.area * multiplier,
+                    wall.area * multiplier,
                     axu_h * multiplier,
                     a_h * multiplier,
-                )
+                ))
             })
             .fold(
                 (0.0, 0.0, 0.0, 0.0),
@@ -395,36 +388,20 @@ impl Model {
     }
 
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
+    /// Los huecos para los que no está definido su opaco o su construcción no se consideran en el cálculo
     pub fn q_soljul(&self, totradjul: &HashMap<Orientation, f32>) -> f32 {
         let Q_soljul = self
             .windows_of_envelope()
-            .map(|w| {
-                let wall = match self.get_wall(&w.wall) {
-                    Some(w) => w,
-                    // Si no está definido el muro no participa de la envolvente
-                    _ => {
-                        warn!("Hueco {}({}) sin muro definido {}", w.id, w.name, w.wall);
-                        return 0.0
-                    }
-                };
-                let wincons = match self.get_wincons(&w.cons) {
-                    Some(c) => c,
-                    // Si no está definida la construcción no participa de la envolvente
-                    _=> {
-                        warn!("Hueco {}({}) con definición de construcción incorrecta {}", w.id, w.name, w.cons);
-                        return 0.0
-                    }
-                };
-                let orientation = match Tilt::from(wall.tilt) {
-                    Tilt::SIDE => wall.azimuth.into(),
-                    _ => Orientation::HZ,
-                };
+            .filter_map(|w| {
+                let wall = self.get_windowwall(&w)?;
+                let wincons = self.get_wincons(&w)?;
+                let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
                 debug!(
                     "qsoljul de {}: A {:.2}, orient {}, ff {:.2}, gglshwi {:.2}, fshobst {:.2}, H_sol;jul {:.2}",
                     w.name, w.area, orientation, wincons.ff, wincons.gglshwi, w.fshobst, radjul
                 );
-                w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * w.area * radjul
+                Some(w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * w.area * radjul)
             })
             .sum::<f32>();
         let a_ref = self.a_ref();
@@ -446,24 +423,15 @@ impl Model {
     ///       las construcciones por defecto
     /// - los elementos adiabáticos se reportan con valor 0.0
     /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
-    pub fn u_for_wall(&self, wall: &Wall) -> f32 {
+    pub fn u_for_wall(&self, wall: &Wall) -> Option<f32> {
         use {BoundaryType::*, SpaceType::*, Tilt::*};
 
-        let position: Tilt = wall.tilt.into();
+        let position = Tilt::from(wall);
         let bounds: BoundaryType = wall.bounds.into();
         let R_n_perim_ins = self.meta.rn_perim_insulation;
         let D_perim_ins = self.meta.d_perim_insulation;
 
-        let cons = match self.get_wallcons(&wall.cons) {
-            Some(c) => c,
-            _ => {
-                warn!(
-                    "Muro {} ({}) con definición de construcción incorrecta {}",
-                    wall.id, wall.name, wall.cons
-                );
-                return 0.0;
-            }
-        };
+        let cons = self.get_wallcons(&wall)?;
         let R_intrinsic = cons.r_intrinsic;
 
         match (bounds, position) {
@@ -471,23 +439,23 @@ impl Model {
             (ADIABATIC, _) => {
                 let U = 0.0;
                 debug!("{} (adiabático) U={:.2}", wall.name, U);
-                U
+                Some(U)
             }
             // Elementos en contacto con el exterior -------------
             (EXTERIOR, BOTTOM) => {
                 let U = 1.0 / (R_intrinsic + RSI_DESCENDENTE + RSE);
                 debug!("{} (suelo) U={:.2}", wall.name, U);
-                U
+                Some(U)
             }
             (EXTERIOR, TOP) => {
                 let U = 1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE);
                 debug!("{} (cubierta) U={:.2}", wall.name, U);
-                U
+                Some(U)
             }
             (EXTERIOR, SIDE) => {
                 let U = 1.0 / (R_intrinsic + RSI_HORIZONTAL + RSE);
                 debug!("{} (muro) U={:.2}", wall.name, U);
-                U
+                Some(U)
             }
             // Elementos enterrados ------------------------------
             (GROUND, BOTTOM) => {
@@ -503,16 +471,7 @@ impl Model {
                 // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
                 // Calculamos la dimensión característica del **espacio** en el que sitúa el suelo
                 // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
-                let wspace = match self.get_space(&wall.space) {
-                    Some(s) => s,
-                    _ => {
-                        warn!(
-                            "Muro {} ({}) con definición de espacio incorrecta {}",
-                            wall.id, wall.name, wall.space
-                        );
-                        return 0.0;
-                    }
-                };
+                let wspace = self.get_wallspace(&wall)?;
                 let gnd_A = wspace.area;
                 let gnd_P = wspace
                     .exposed_perimeter
@@ -556,21 +515,12 @@ impl Model {
                     U_bf,
                     psi_ge
                 );
-                U
+                Some(U)
             }
             (GROUND, SIDE) => {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
                 let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
-                let space = match self.get_space(&wall.space) {
-                    Some(s) => s,
-                    _ => {
-                        warn!(
-                            "Muro {} ({}) con definición de espacio incorrecta {}",
-                            wall.id, wall.name, wall.space
-                        );
-                        return 0.0;
-                    }
-                };
+                let space = self.get_wallspace(&wall)?;
                 let z = if space.z < 0.0 { -space.z } else { 0.0 };
                 // Muros que realmente no son enterrados
                 if z.abs() < 0.01 {
@@ -578,7 +528,7 @@ impl Model {
                         "{} (muro de sótano no enterrado z=0) U_w={:.2} (z={:.2})",
                         wall.name, U_w, z,
                     );
-                    return U_w;
+                    return Some(U_w);
                 };
 
                 // Dimensión característica del suelo del sótano.
@@ -586,24 +536,17 @@ impl Model {
                 // Usamos el promedio de los suelos del espacio
                 let mut d_t = self
                     .walls_of_space(&space.id)
-                    .filter(|w| Tilt::from(w.tilt) == BOTTOM)
+                    .filter(|w| Tilt::from(*w) == BOTTOM)
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
-                        match self.get_wallcons(&w.cons) {
-                            Some(wallcons) => {
+                        // Si no está definida la construcción no participa de la envolvente
+                        self.get_wallcons(&w)
+                            .map(|wallcons| {
                                 (W + LAMBDA_GND * (RSI_DESCENDENTE + wallcons.r_intrinsic + RSE)
                                     + mean * (i - 1) as f32)
                                     / i as f32
-                            }
-                            // Si no está definida la construcción no participa de la envolvente
-                            _ => {
-                                warn!(
-                                    "Muro {}({}) con definición de construcción incorrecta {}",
-                                    w.id, w.name, w.cons
-                                );
-                                0.0
-                            }
-                        }
+                            })
+                            .unwrap_or(0.0)
                     });
                 const W: f32 = 0.3;
 
@@ -642,7 +585,7 @@ impl Model {
                     "{} (muro enterrado) U={:.2} (z={:.2}, h={:.2}, U_w={:.2}, U_bw={:.2}, d_t={:.2}, d_w={:.2})",
                     wall.name, U, z, h, U_w, U_bw, d_t, d_w,
                 );
-                U
+                Some(U)
             }
             // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
             (GROUND, TOP) => {
@@ -651,24 +594,14 @@ impl Model {
                     "{} (cubierta enterrada) U={:.2} (R_f={:.3})",
                     wall.name, U, R_intrinsic
                 );
-                U
+                Some(U)
             }
             // Elementos en contacto con otros espacios ---------------------
             (INTERIOR, position) => {
                 // Dos casos:
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
-                let space = match self.get_space(&wall.space) {
-                    Some(s) => s,
-                    _ => {
-                        warn!(
-                            "Muro {} ({}) con definición de espacio incorrecta {}",
-                            wall.id, wall.name, wall.space
-                        );
-                        return 0.0;
-                    }
-                };
-
+                let space = self.get_wallspace(&wall)?;
                 let nextto = match wall.nextto.as_ref() {
                     Some(s) => s,
                     _ => {
@@ -676,7 +609,7 @@ impl Model {
                             "Muro {} ({}) sin definición de espacio adyacente",
                             wall.id, wall.name
                         );
-                        return 0.0;
+                        return None;
                     }
                 };
 
@@ -689,7 +622,7 @@ impl Model {
                             wall.name,
                             nextto.as_str()
                         );
-                        return 0.0;
+                        return None;
                     }
                 };
 
@@ -709,7 +642,7 @@ impl Model {
                         "{} ({} acondicionado-acondicionado) U_int={:.2}",
                         wall.name, posname, U
                     );
-                    U
+                    Some(U)
                 } else {
                     // Comunica un espacio acondicionado con otro no acondicionado
 
@@ -757,23 +690,19 @@ impl Model {
                     // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
                     let UA_e_k = self
                         .walls_of_space(&uncondspace.id)
-                        .filter(|w| w.bounds == GROUND || w.bounds == EXTERIOR)
-                        .map(|w| {
+                        .filter(|wall| wall.bounds == GROUND || wall.bounds == EXTERIOR)
+                        .filter_map(|wall| {
                             // A·U de muros (y suelos) + A.U de sus huecos
-                            w.area * self.u_for_wall(w)
-                                + self
-                                    .windows_of_wall(&w.id)
-                                    .map(|win| {
-                                        match self.get_wincons(&w.cons) {
-                                            Some(wincons) => win.area * wincons.u,
-                                            // Si no está definida la construcción no participa de la envolvente
-                                            _=> {
-                                                warn!("Hueco {}({}) con definición de construcción incorrecta {}", w.id, w.name, w.cons);
-                                                0.0
-                                            }
-                                        }
-                                    })
-                                    .sum::<f32>()
+                            let wall_u = self.u_for_wall(wall)?;
+                            let win_axu = self
+                                .windows_of_wall(&wall.id)
+                                .filter_map(|win| {
+                                    self.get_wincons(&win)
+                                        // Si no está definida la construcción no participa de la envolvente
+                                        .map(|wincons| Some(win.area * wincons.u))?
+                                })
+                                .sum::<f32>();
+                            Some(wall.area * wall_u + win_axu)
                         })
                         .sum::<f32>();
                     // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
@@ -789,7 +718,7 @@ impl Model {
                             "{} ({} acondicionado-no acondicionado/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
                             wall.name, posname, U, R_f, R_u, A_i, 1.0/R_f
                         );
-                    U
+                    Some(U)
                 }
             }
         }
@@ -811,7 +740,7 @@ impl Model {
     /// Grosor de un elemento opaco
     fn wall_thickness(&self, wallid: &str) -> f32 {
         self.get_wall(wallid)
-            .and_then(|w| self.get_wallcons(&w.cons).map(|c| c.thickness))
+            .and_then(|w| self.get_wallcons(&w).map(|c| c.thickness))
             .unwrap_or(0.0)
     }
 
