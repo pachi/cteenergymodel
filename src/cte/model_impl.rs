@@ -216,6 +216,7 @@ impl Model {
     /// y la superficie de muros y huecos con intercambio térmico con el aire exterior o el terreno (A)
     /// Esta superficie tiene en cuenta los multiplicadores de espacios
     /// Se excluyen los huecos sin muro definido y los muros sin espacio definido
+    /// Para area expuesta => compacidad = 0.0
     pub fn compacity(&self) -> f32 {
         let vol: f32 = self.vol_env_gross();
         let area: f32 = self
@@ -226,7 +227,7 @@ impl Model {
                 (w.area + win_area) * multiplier
             })
             .sum();
-        let compac = vol / area;
+        let compac = if area == 0.0 { 0.0 } else { vol / area };
         info!("V/A={:.2} m³/m², V={:.2} m³, A={:.2} m²", compac, vol, area);
         compac
     }
