@@ -2,6 +2,7 @@
 
 # Comprobaciones
 - Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabáticos
+- Ver qué falla cuando se eliminan todos los datos (PTs fallan)
 
 ## cte::Data
 
@@ -17,6 +18,7 @@
         y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
     - propiedades de vidrios con protecciones móviles, etc
     - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
+    - Generador de construcciones a partir de defnición por capas
 
 - Nuevos datos / campos:
     - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
