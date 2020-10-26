@@ -16,8 +16,8 @@ use std::{
 use log::{debug, info, warn};
 
 use super::{
-    common::{Warning, WarningLevel},
-    BoundaryType, Model, Orientation, Space, SpaceType, Tilt, Wall, WallCons, Window, WindowCons,
+    BoundaryType, KDetail, Model, Orientation, Space, SpaceType, Tilt, Wall, WallCons, Warning,
+    WarningLevel, Window, WindowCons,
 };
 use crate::utils::fround2;
 
@@ -333,18 +333,18 @@ impl Model {
     /// Transmitancia media de los elementos en contacto con el aire exterior o con el terreno
     /// Incluye los puentes térmicos
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
-    pub fn K_he2019(&self) -> f32 {
-        let (walls_axu, walls_a, windows_axu, windows_a): (f32, f32, f32, f32) = self
+    pub fn K_he2019(&self) -> KDetail {
+        let (walls_a_u, walls_a, windows_a_u, windows_a): (f32, f32, f32, f32) = self
             .walls_of_envelope()
             .filter_map(|wall| {
-                let (axu_h, a_h) = self
+                let (win_w_a_u, win_w_a) = self
                     .windows_of_wall(&wall.id)
-                    .filter_map(|win| {
-                        self.get_wincons(&win)
-                            .map(|wincons| Some((win.area * wincons.u, win.area)))?
+                    .filter_map(|win_i| {
+                        self.get_wincons(&win_i)
+                            .map(|wincons| Some((win_i.area * wincons.u, win_i.area)))?
                     })
-                    .fold((0.0, 0.0), |(acc_uxa, acc_a), (win_uxa, win_a)| {
-                        (acc_uxa + win_uxa, acc_a + win_a)
+                    .fold((0.0, 0.0), |(acc_a_u, acc_a), (win_i_a_u, win_i_a)| {
+                        (acc_a_u + win_i_a_u, acc_a + win_i_a)
                     });
                 let multiplier = self
                     .get_wallspace(&wall)
@@ -354,44 +354,52 @@ impl Model {
                 Some((
                     wall_u * wall.area * multiplier,
                     wall.area * multiplier,
-                    axu_h * multiplier,
-                    a_h * multiplier,
+                    win_w_a_u * multiplier,
+                    win_w_a * multiplier,
                 ))
             })
             .fold(
                 (0.0, 0.0, 0.0, 0.0),
-                |(acc_wall_uxa, acc_wall_a, acc_win_uxa, acc_win_a),
-                 (wall_uxa, wall_a, win_uxa, win_a)| {
+                |(acc_wall_a_u, acc_wall_a, acc_win_a_u, acc_win_a),
+                 (wall_a_u, wall_a, win_a_u, win_a)| {
                     (
-                        acc_wall_uxa + wall_uxa,
+                        acc_wall_a_u + wall_a_u,
                         acc_wall_a + wall_a,
-                        acc_win_uxa + win_uxa,
+                        acc_win_a_u + win_a_u,
                         acc_win_a + win_a,
                     )
                 },
             );
-        let (L, psiL): (f32, f32) = self
+        let (thermal_bridges_l, thermal_bridges_psi_l): (f32, f32) = self
             .thermal_bridges
             .iter()
             .map(|tb| (tb.l, tb.psi * tb.l))
-            .fold((0.0, 0.0), |(acc_l, acc_psil), (e_l, e_psil)| {
-                (acc_l + e_l, acc_psil + e_psil)
+            .fold((0.0, 0.0), |(acc_l, acc_psi_l), (e_l, e_psi_l)| {
+                (acc_l + e_l, acc_psi_l + e_psi_l)
             });
 
-        let total_axu = walls_axu + windows_axu + psiL;
+        let total_a_u = walls_a_u + windows_a_u + thermal_bridges_psi_l;
         let total_a = walls_a + windows_a;
 
         let K = if total_a <= 0.01 {
             0.0
         } else {
-            total_axu / total_a
+            total_a_u / total_a
         };
         info!(
             "K={:.2} W/m²K, A_o={:.2} m², (A.U)_o={:.2} W/K, A_h={:.2} m², (A.U)_h={:.2} W/K, L_pt={:.2} m, Psi.L_pt={:.2} W/K",
-            K, walls_a, walls_axu, windows_a, windows_axu, L, psiL
+            K, walls_a, walls_a_u, windows_a, windows_a_u, thermal_bridges_l, thermal_bridges_psi_l
         );
 
-        K
+        KDetail {
+            K,
+            walls_a,
+            walls_a_u,
+            windows_a,
+            windows_a_u,
+            thermal_bridges_l,
+            thermal_bridges_psi_l,
+        }
     }
 
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio

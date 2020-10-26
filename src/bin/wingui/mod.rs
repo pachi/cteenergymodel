@@ -513,7 +513,7 @@ fn do_convert() {
             climatezone,
             envolvente_data.a_ref(),
             envolvente_data.compacity(),
-            envolvente_data.K_he2019(),
+            envolvente_data.K_he2019().K,
             envolvente_data.q_soljul(&totradjul),
             envolvente_data.n50_he2019(),
             envolvente_data.C_o_he2019(),

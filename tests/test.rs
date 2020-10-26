@@ -284,7 +284,7 @@ fn test_caso_a() {
     assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.66, 0.001);
 
     // Cálculo de K, n50, C_o
-    assert_almost_eq!(fround2(data.K_he2019()), 0.51, 0.001);
+    assert_almost_eq!(fround2(data.K_he2019().K), 0.51, 0.001);
     assert_almost_eq!(fround2(data.n50_he2019()), 4.58, 0.001);
     assert_almost_eq!(fround2(data.n50()), 5.32, 0.001);
     assert_almost_eq!(fround2(data.n50_he2019()), 4.58, 0.001);
@@ -364,7 +364,7 @@ fn parse_json_to_model() {
     let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
     assert_eq!(model.a_ref(), 1673.92);
     assert_almost_eq!(model.compacity(), 3.17, 0.01);
-    assert_almost_eq!(model.K_he2019(), 0.37, 0.01);
+    assert_almost_eq!(model.K_he2019().K, 0.37, 0.01);
     assert_almost_eq!(model.q_soljul(&totradjul), 0.43, 0.01);
     assert_almost_eq!(model.n50(), 2.96, 0.01);
     assert_almost_eq!(model.n50_he2019(), 2.96, 0.01);

@@ -414,7 +414,7 @@ impl From<&str> for WarningLevel {
     }
 }
 
-/// Estructura para reportar avisos
+/// Reporte de avisos
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Warning {
     /// Nivel de afectación
@@ -423,4 +423,24 @@ pub struct Warning {
     pub id: Option<String>,
     /// Mensaje del aviso
     pub msg: String,
+}
+
+/// Reporte de cálculo de K (HE2019)
+#[allow(non_snake_case)]
+#[derive(Debug, Default, Copy, Clone, Serialize, Deserialize)]
+pub struct KDetail {
+    /// K
+    pub K: f32,
+    /// A de los opacos que participan en la K (m2)
+    pub walls_a: f32,
+    /// A·U de los opacos que participan en la K (W/K)
+    pub walls_a_u: f32,
+    /// A de los huecos que participan en la K (m2)
+    pub windows_a: f32,
+    /// A·U de los huecos que participan en la K (W/K)
+    pub windows_a_u: f32,
+    /// L de los puentes térmicos que participan en la K (m)
+    pub thermal_bridges_l: f32,
+    /// ψ·L de los puentes térmicos que participan en la K (m)
+    pub thermal_bridges_psi_l: f32,
 }
