@@ -112,7 +112,7 @@ impl Space {
             .iter()
             .filter(|w| {
                 // Muros que pertenecen al espacio o en contacto con el espacio
-                &w.space == &self.name || &w.nextto.as_deref().unwrap_or("") == &self.name
+                w.space == self.name || w.nextto.as_deref().unwrap_or("") == self.name
             })
             .filter(|w| {
                 // Muros interiores y solo aquellos para los que sabemos restar longitudes (muros definidos por vértices)
