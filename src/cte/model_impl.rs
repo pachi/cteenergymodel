@@ -16,8 +16,8 @@ use std::{
 use log::{debug, info, warn};
 
 use super::{
-    BoundaryType, KDetail, Model, Orientation, Space, SpaceType, Tilt, Wall, WallCons, Warning,
-    WarningLevel, Window, WindowCons,
+    BoundaryType, KDetail, Model, N50HEDetail, Orientation, Space, SpaceType, Tilt, Wall, WallCons,
+    Warning, WarningLevel, Window, WindowCons,
 };
 use crate::utils::fround2;
 
@@ -256,7 +256,7 @@ impl Model {
         if let Some(n50test) = self.meta.n50_test_ach {
             n50test
         } else {
-            self.n50_he2019()
+            self.n50_he2019().n50
         }
     }
 
@@ -268,35 +268,51 @@ impl Model {
     /// - la permeabilidad al aire de huecos definida en su construcción
     /// - el volumen interior de la envolvente térmica ()
     /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
-    pub fn n50_he2019(&self) -> f32 {
+    pub fn n50_he2019(&self) -> N50HEDetail {
         let vol: f32 = self.vol_env_net();
         if vol <= 0.01 {
-            info!("n_50=0.00 1/h, Σ(A.C)=- m³/h, vol={:.2} m³", vol);
-            return 0.0;
+            info!(
+                "n_50=0.00 1/h, Σ(A_o.C_o)=- m³/h, Σ(A_h.C_h)=- m³/h, vol={:.2} m³",
+                vol
+            );
+            return N50HEDetail {
+                n50: 0.0,
+                walls_c_a: 0.0,
+                windows_c_a: 0.0,
+                vol,
+            };
         };
         let c_o = self.C_o_he2019();
-        let sum_axc: f32 = self
+        let (walls_c_a, windows_c_a) = self
             .walls_of_envelope()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .map(|w| {
                 let multiplier = self.get_wallspace(&w).map(|s| s.multiplier).unwrap_or(1.0);
-                let axc_h: f32 = self
+                let wall_ah_ch: f32 = self
                     .windows_of_wall(&w.id)
                     .filter_map(|win| {
                         self.get_wincons(&win)
                             .map(|wincons| Some(win.area * wincons.infcoeff_100))?
                     })
                     .sum();
-                (w.area * c_o + axc_h) * multiplier
+                (w.area * c_o * multiplier, wall_ah_ch * multiplier)
             })
-            .sum();
-        let n50 = 0.629 * sum_axc / vol;
+            .fold((0.0, 0.0), |(acc_ao_co, acc_ah_ch), (e_ao_co, e_ah_ch)| {
+                (acc_ao_co + e_ao_co, acc_ah_ch + e_ah_ch)
+            });
+        let n50 = 0.629 * (walls_c_a + windows_c_a) / vol;
         info!(
-            "n_50={:.2} 1/h, Σ(A.C)={:.2} m³/h, vol={:.2} m³",
-            n50, sum_axc, vol
+            "n_50={:.2} 1/h, Σ(A_o.C_o)={:.2} m³/h, Σ(A_h.C_h)={:.2} m³/h, vol={:.2} m³",
+            n50, walls_c_a, windows_c_a, vol
         );
-        n50
+        N50HEDetail {
+            n50,
+            walls_c_a,
+            windows_c_a,
+            vol,
+        }
     }
+
     /// Calcula la permeabilidad de opacos a partir de un ensayo de puerta soplante
     /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
     pub fn wall_inf_100_from_n50(&self, n50: f32) -> f32 {

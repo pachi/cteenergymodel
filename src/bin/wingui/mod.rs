@@ -515,7 +515,7 @@ fn do_convert() {
             envolvente_data.compacity(),
             envolvente_data.K_he2019().K,
             envolvente_data.q_soljul(&totradjul),
-            envolvente_data.n50_he2019(),
+            envolvente_data.n50_he2019().n50,
             envolvente_data.C_o_he2019(),
             envolvente_data.n50(),
             envolvente_data.C_o()

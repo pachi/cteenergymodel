@@ -285,9 +285,9 @@ fn test_caso_a() {
 
     // Cálculo de K, n50, C_o
     assert_almost_eq!(fround2(data.K_he2019().K), 0.51, 0.001);
-    assert_almost_eq!(fround2(data.n50_he2019()), 4.58, 0.001);
+    assert_almost_eq!(fround2(data.n50_he2019().n50), 4.58, 0.001);
     assert_almost_eq!(fround2(data.n50()), 5.32, 0.001);
-    assert_almost_eq!(fround2(data.n50_he2019()), 4.58, 0.001);
+    assert_almost_eq!(fround2(data.n50_he2019().n50), 4.58, 0.001);
     assert_almost_eq!(fround2(data.C_o_he2019()), 16.00, 0.001);
     assert_almost_eq!(fround2(data.C_o()), 18.97, 0.001);
 }
@@ -367,7 +367,7 @@ fn parse_json_to_model() {
     assert_almost_eq!(model.K_he2019().K, 0.37, 0.01);
     assert_almost_eq!(model.q_soljul(&totradjul), 0.43, 0.01);
     assert_almost_eq!(model.n50(), 2.96, 0.01);
-    assert_almost_eq!(model.n50_he2019(), 2.96, 0.01);
+    assert_almost_eq!(model.n50_he2019().n50, 2.96, 0.01);
     assert_eq!(model.C_o(), 16.0);
     assert_eq!(model.C_o_he2019(), 16.0);
     assert_eq!(model.vol_env_net(), 4666.05);

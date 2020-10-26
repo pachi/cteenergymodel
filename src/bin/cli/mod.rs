@@ -133,7 +133,7 @@ pub fn cli_main() -> Result<()> {
         data.compacity(),
         data.K_he2019().K,
         data.q_soljul(&totradjul),
-        data.n50_he2019(),
+        data.n50_he2019().n50,
         data.C_o_he2019(),
         data.n50(),
         data.C_o()

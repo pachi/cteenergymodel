@@ -444,3 +444,17 @@ pub struct KDetail {
     /// ψ·L de los puentes térmicos que participan en la K (m)
     pub thermal_bridges_psi_l: f32,
 }
+
+/// Reporte de cálculo de n50_he2019
+#[allow(non_snake_case)]
+#[derive(Debug, Default, Copy, Clone, Serialize, Deserialize)]
+pub struct N50HEDetail {
+    /// n50
+    pub n50: f32,
+    /// C_o · A_o de los opacos que participan en la n_50 (m³/h)
+    pub walls_c_a: f32,
+    /// A·U de los huecos que participan en la n_50 (m³/h)
+    pub windows_c_a: f32,
+    /// Volumen interior de los espacios interiores a la envolvente térmica (m³)
+    pub vol: f32,
+}
