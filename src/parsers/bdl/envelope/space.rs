@@ -97,47 +97,56 @@ impl Space {
 
     /// Calcula el perímetro expuesto del espacio (m)
     ///
-    /// El perímetro expuesto es el que separa el espacio del exterior y excluye
-    /// las parte que separa el espacio con otros espacios calefactados
+    /// El perímetro expuesto es el que separa el espacio del exterior o de un espacio no calefactado fuera de la estructura aislada
+    /// Excluye las parte que separan el espacio con otros espacios calefactados
     pub fn exposed_perimeter(&self, db: &Data) -> f32 {
-        // return self.polygon.perimeter();
+        use super::BoundaryType::{ADIABATIC, EXTERIOR, GROUND, INTERIOR};
+        // Solo se computa el de los espacios acondicionados
+        if self.stype != "CONDITIONED" {
+            return 0.0;
+        };
 
-        // Polígono que define el espacio
-        let poly = &self.polygon;
-        let perim = self.polygon.perimeter();
-
-        // Localizar los muros (verticales) interiores (según ISO 13770), que lindan con otros espacios acondicionados
-        let interior_walls = db
+        // Muros exteriores (verticales)
+        let vertical_walls_for_space = db
             .walls
             .iter()
-            .filter(|w| {
-                // Muros que pertenecen al espacio o en contacto con el espacio
-                w.space == self.name || w.nextto.as_deref().unwrap_or("") == self.name
+            .filter(|w| w.space == self.name && w.position() == Tilt::SIDE);
+
+        // Area bruta total de muros y área bruta de muros exteriores
+        let (total_vwalls_area, exterior_vwalls_area) = vertical_walls_for_space
+            .map(|w| {
+                let area = w.gross_area(db).unwrap_or(0.0);
+                match w.bounds {
+                    // Contactos con el exterior o el terreno
+                    EXTERIOR | GROUND => (area, area),
+                    // Contactos con otros espacios no acondicionados o no habitables
+                    INTERIOR => {
+                        w.nextto
+                            .as_deref()
+                            .and_then(|nxts| db.spaces.iter().find(|s| s.name == nxts))
+                            .and_then(|nextspace| {
+                                if nextspace.stype != "CONDITIONED" {
+                                    // tenemos en cuenta el contacto de espacios acondicionados con otros tipos
+                                    Some((area, area))
+                                } else {
+                                    None
+                                }
+                            })
+                            // El resto no se considera contacto con el exterior
+                            .unwrap_or((area, 0.0))
+                    }
+                    ADIABATIC => (area, 0.0),
+                }
             })
-            .filter(|w| {
-                // Muros interiores y solo aquellos para los que sabemos restar longitudes (muros definidos por vértices)
-                w.location.is_some() && w.bounds == super::BoundaryType::INTERIOR
-            })
-            .filter(|w| {
-                // comprobamos si el espacio es acondicionado
-                (match &w.space == &self.name {
-                    true => w.nextto.as_deref(), // Muro perteneciente al espacio
-                    _ => Some(w.space.as_ref()), // Muro perteneciente a otro espacio
-                })
-                .and_then(|spc| {
-                    db.spaces
-                        .iter()
-                        .find(|s| &s.name == spc)
-                        .map(|s| &s.stype == "CONDITIONED")
-                })
-                .unwrap_or(false)
+            .fold((0.0, 0.0), |(acc_tot, acc_ext), (el_tot, el_ext)| {
+                (acc_tot + el_tot, acc_ext + el_ext)
             });
 
-        let int_walls_length: f32 = interior_walls
-            .map(|w| poly.edge_length(&w.location.as_deref().unwrap()))
-            .sum();
-        // longitud sin muros interiores
-        perim - int_walls_length
+        if total_vwalls_area < 0.01 {
+            0.0
+        } else {
+            self.polygon.perimeter() * exterior_vwalls_area / total_vwalls_area
+        }
     }
 
     /// Volumen bruto del espacio (m3)

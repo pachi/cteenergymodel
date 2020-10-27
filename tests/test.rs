@@ -266,7 +266,7 @@ fn test_caso_a() {
     assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.59, 0.001);
     // Solera (z=0), HULC=0.47
     let wall = data.get_wall_by_name("P01_E01_FTER001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.35, 0.001);
+    assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.34, 0.001);
     // Forjado interior, HULC=1.37
     let wall = data.get_wall_by_name("P03_E01_FI003").unwrap();
     assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 1.37, 0.001);
