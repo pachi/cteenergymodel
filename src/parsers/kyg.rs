@@ -117,7 +117,7 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
 
     for line in lines {
         // Comentarios y líneas en blanco
-        if line.starts_with("#") || line.is_empty() {
+        if line.starts_with('#') || line.is_empty() {
             continue;
         }
         // Datos de elemento
