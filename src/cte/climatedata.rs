@@ -20,7 +20,7 @@ pub fn total_radiation_in_july_by_orientation(climate: &ClimateZone) -> HashMap<
         .collect()
 }
 
-/// Array de (20 climas canarios y 12 climas peninsulares) * 8 orientaciones con datos de radiación mensual
+/// Array de (20 climas canarios y 12 climas peninsulares) * 9 orientaciones (N, S, E, W, NE, NW, SE, SW, HZ) con datos de radiación mensual
 /// Estos datos nos permiten calcular de forma aproximada q_soljul
 pub static RADDATA: [SurfaceMonthlyRadiation; 288] = [
     SurfaceMonthlyRadiation {
