@@ -1,8 +1,10 @@
 # TAREAS PENDIENTES
 
+Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K.
+    - añadiendo un identificador en el nombre (p.e. EXCLUYE_HE1_K)
+
 # Comprobaciones
-- Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabáticos
-- Ver qué falla cuando se eliminan todos los datos (PTs fallan)
+- Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabático
 
 ## cte::Data
 
@@ -13,12 +15,13 @@
     - Calcular estructura con las U de los elementos del edificio (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> }) para usar como caché
         - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos si usamos caché
         - Si no, con una caché en u_for_wall() debería dar casi igual
+
 - Módulo para calcular propiedades de elementos
     - Calculador de elementos para obtener % de afección de U según intercalarios
         y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
     - propiedades de vidrios con protecciones móviles, etc
     - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
-    - Generador de construcciones a partir de defnición por capas
+    - Generador de construcciones a partir de definición por capas
 
 - Nuevos datos / campos:
     - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
@@ -26,13 +29,6 @@
     - Incorporar datos de materiales para poder calcular U de composiciones
         - Necesita biblioteca base en Rust para interpretar construcciones:
         - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
-
-## EnvolventeCTE
-
-- Intentar llevar el trabajo a wasm
-    - calcular K, qsoljul, n50, V/A, U de elementos, etc
-    - calcular elementos (propiedades de vidrios, Fshobst de huecos según retranqueos, voladizos, aletas, etc)
-- Eliminar uso de data.autil y usar data.a_ref()
 
 ## BDL
 
