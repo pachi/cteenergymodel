@@ -43,4 +43,21 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
     - condiciones operacionales
     - consignas
 - Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1 y reutilizar módulo nuevo
+    - Calcular dirección del rayo en cada hora
+    - Calcular proyección horizontal del hueco en Z=0 (comprobar que el rayo iría del exterior al interior (la normal y el rayo solar proyectado sobre la normal tienen sentidos opuestos))
+    - Calcular proyección horizontal de las sombras en Z=0
+    - Calcular intersección entre proyecciones del hueco y sombras en Z=0 y ver qué fracción del hueco se tapa.
+    - https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm
+    - https://rosettacode.org/wiki/Sutherland-Hodgman_polygon_clipping#Rust
+    - https://en.wikipedia.org/wiki/Vatti_clipping_algorithm
+    - https://en.wikipedia.org/wiki/Weiler%E2%80%93Atherton_clipping_algorithm
+    - https://github.com/lempiy/Weiler-Atherton-Clipping
+    - https://github.com/georust/geo/issues/80
+    - http://www.cs.ucr.edu/~vbz/cs230papers/martinez_boolean.pdf
+    - https://github.com/21re/rust-geo-booleanop
+    
+    - http://www.angusj.com/delphi/clipper.php
+    - https://docs.rs/geo-clipper/0.4.0/geo_clipper/
+    - https://www.boost.org/doc/libs/1_53_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
+
 - Idea: hacer visualizador 3d (con 3djs).
