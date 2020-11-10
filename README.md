@@ -1,4 +1,4 @@
-# hulc2envolventecte
+# hulc2model
 
 Exportación de datos de HULC a EnvolventeCTE
 
@@ -8,14 +8,14 @@ Esta versión está preparada para funcionar con las versiones de HULC adaptadas
 
 ## Instalación
 
-En la [página de versiones publicadas del proyecto](http://github.com/pachi/hulc2envolventecte/releases) puede encontrar los archivos necesarios para el funcionamiento del programa, que no necesita instalación.
+En la [página de versiones publicadas del proyecto](http://github.com/pachi/hulc2model/releases) puede encontrar los archivos necesarios para el funcionamiento del programa, que no necesita instalación.
 
 Los archivos distribuidos permiten el uso de la aplicación en sistemas GNU/Linux y MS-Windows:
 
-- `hulc2envolventecte` - ejecutable para GNU/Linux
-- `hulc2envolventecte.exe` - ejecutable para MS-Windows
-- `hulc2envolventecte.zip` - código fuente comprimido en formato ZIP
-- `hulc2envolventecte.tar.gz` - código fuente comprimido en formato .tar.gz
+- `hulc2model` - ejecutable para GNU/Linux
+- `hulc2model.exe` - ejecutable para MS-Windows
+- `hulc2model.zip` - código fuente comprimido en formato ZIP
+- `hulc2model.tar.gz` - código fuente comprimido en formato .tar.gz
 
 
 ## Uso
@@ -23,7 +23,7 @@ Los archivos distribuidos permiten el uso de la aplicación en sistemas GNU/Linu
 Esta aplicación se utiliza desde la línea de comandos, y debe inidicar como parámetro el directorio del proyecto de HULC que desea exportar, redirigiendo la salida a un archivo para su posterior importación desde la interfaz web de EnvolventeCTE:
 
 ```
-    $ hulc2envolventecte datos/proyecto/hulc > salida.json
+    $ hulc2model datos/proyecto/hulc > salida.json
 ```
 
 En sistemas MS-Windows al ejecutar el programa se lanza una interfaz gráfica simple en la que se puede indicar el directorio de proyecto de HULC sobre el que se quiere trabajar, y en el que se realizará la exportación del archivo `.json` generado.
@@ -32,7 +32,7 @@ En sistemas MS-Windows al ejecutar el programa se lanza una interfaz gráfica si
 
 Esta aplicación es software libre y se distribuye bajo una licencia MIT. Consulte el archivo LICENSE para el texto completo.
 
-El código fuente se encuentra disponible en http://github.com/pachi/hulc2envolventecte
+El código fuente se encuentra disponible en http://github.com/pachi/hulc2model
 
 ## Autores
 

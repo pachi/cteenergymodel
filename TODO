@@ -1,0 +1,67 @@
+# TAREAS PENDIENTES
+
+- Con makefile generar .json y llevar a tests de hulc a bemodel en .json y copiar archivos .ctehexml, .tbl y .kyg a hulc2model
+- En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
+- mover cosas de climas a otro crate
+
+Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K.
+    - añadiendo un identificador en el nombre (p.e. EXCLUYE_HE1_K)
+
+# Comprobaciones
+- Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabático
+
+## cte::Data
+
+- Calcular más cosas:
+    - Reporte de cálculos de U, K, qsoljul, n50, etc. (datos + resultados intermedios y localizando los que pertenecen a la ET)
+    - Estructura de elementos que pertenecen a la envolvente (agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR*)
+        - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
+    - Calcular estructura con las U de los elementos del edificio (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> }) para usar como caché
+        - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos si usamos caché
+        - Si no, con una caché en u_for_wall() debería dar casi igual
+
+- Módulo para calcular propiedades de elementos
+    - Calculador de elementos para obtener % de afección de U según intercalarios
+        y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
+    - propiedades de vidrios con protecciones móviles, etc
+    - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
+    - Generador de construcciones a partir de definición por capas
+
+- Nuevos datos / campos:
+    - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
+    - Incorporar en construcciones la composición de capas (capas: Vec<(String, f32)>)
+    - Incorporar datos de materiales para poder calcular U de composiciones
+        - Necesita biblioteca base en Rust para interpretar construcciones:
+        - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+
+## BDL
+
+- Se podría eliminar la referencia entre muros y espacios, generando el polígono del muro a partir de su referencia al polígono del espacios
+    - así eliminamos referencias a vértices de polígonos y también location
+- Quitar de los elementos aquellas cosas que necesitan consultas globales (con acceso a bdldata)
+- Comprobar qué se cambia en las plantas o en el edificio cuando se indica una cota base distinta a la 0.0 (ver si se pone la Z de la planta P01 distinta a "")
+- Convertir definición de muros de polygon o location a (X, Y, Z, WIDTH, HEIGHT, AZIMUTH)
+- Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL:
+    - metadatos
+    - horarios
+    - condiciones operacionales
+    - consignas
+- Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1 y reutilizar módulo nuevo
+    - Calcular dirección del rayo en cada hora
+    - Calcular proyección horizontal del hueco en Z=0 (comprobar que el rayo iría del exterior al interior (la normal y el rayo solar proyectado sobre la normal tienen sentidos opuestos))
+    - Calcular proyección horizontal de las sombras en Z=0
+    - Calcular intersección entre proyecciones del hueco y sombras en Z=0 y ver qué fracción del hueco se tapa.
+    - https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm
+    - https://rosettacode.org/wiki/Sutherland-Hodgman_polygon_clipping#Rust
+    - https://en.wikipedia.org/wiki/Vatti_clipping_algorithm
+    - https://en.wikipedia.org/wiki/Weiler%E2%80%93Atherton_clipping_algorithm
+    - https://github.com/lempiy/Weiler-Atherton-Clipping
+    - https://github.com/georust/geo/issues/80
+    - http://www.cs.ucr.edu/~vbz/cs230papers/martinez_boolean.pdf
+    - https://github.com/21re/rust-geo-booleanop
+    
+    - http://www.angusj.com/delphi/clipper.php
+    - https://docs.rs/geo-clipper/0.4.0/geo_clipper/
+    - https://www.boost.org/doc/libs/1_53_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
+
+- Idea: hacer visualizador 3d (con 3djs).

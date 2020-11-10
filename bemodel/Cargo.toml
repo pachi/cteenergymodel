@@ -1,0 +1,19 @@
+[package]
+name = "bemodel"
+version = "1.0.0"
+authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+edition = "2018"
+description = "Data model for energy modelling of buildings under the CTE DB-HE"
+repository = "https://github.com/pachi/bemodel"
+readme = "README.md"
+keywords = ["buildings", "energy", "ISO EN 52000", "CTE", "EnvolventeCTE"]
+categories = ["science"]
+license = "MIT"
+
+[dependencies]
+hulc = { path = "../hulc" }
+anyhow = "1.0"
+log = "0.4"
+md5 = "0.7.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

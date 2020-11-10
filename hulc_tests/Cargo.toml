@@ -1,0 +1,23 @@
+[package]
+name = "hulc_tests"
+version = "1.0.0"
+authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+edition = "2018"
+description = "Tests for hulc and hulc2model"
+repository = "https://github.com/pachi/hulc_tests"
+readme = "README.md"
+keywords = ["buildings", "energy", "ISO EN 52000", "CTE", "EnvolventeCTE"]
+categories = ["science"]
+license = "MIT"
+
+[dependencies]
+bemodel = { path = "../bemodel" }
+hulc = { path = "../hulc" }
+hulc2model = { path = "../hulc2model" }
+
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "benchmark_types"
+harness = false

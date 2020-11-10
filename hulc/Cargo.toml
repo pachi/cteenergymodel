@@ -1,0 +1,19 @@
+[package]
+name = "hulc"
+version = "1.0.0"
+authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+edition = "2018"
+description = "Data model for the HULC energy modelling application formats"
+repository = "https://github.com/pachi/hulc"
+readme = "README.md"
+keywords = ["buildings", "energy", "ISO EN 52000", "CTE", "EnvolventeCTE"]
+categories = ["science"]
+license = "MIT"
+
+[dependencies]
+encoding = "0.2"
+anyhow = "1.0"
+flate2 = "1"
+glob = "0.3"
+log = "0.4"
+roxmltree = "0.13"
