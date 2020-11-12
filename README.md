@@ -8,7 +8,7 @@ Este conjunto de librerías y aplicaciones busca definir un formato de intercamb
 
 La biblioteca ```bemodel``` define la estructura de datos y métodos del modelo energético básico.
 
-Este modelo se usa en las aplicaciones ```hulc2model``` y ```EnvolventeCTE```.
+Este modelo se usa en las aplicaciones ```hulc2model``` y [`EnvolventeCTE`](https://pachi.github.io/envolventecte).
 
 ## hulc
 
@@ -36,7 +36,7 @@ Los archivos distribuidos permiten el uso de la aplicación en sistemas GNU/Linu
 
 Esta aplicación se utiliza desde la línea de comandos, y debe inidicar como parámetro el directorio del proyecto de HULC que desea exportar, redirigiendo la salida a un archivo para su posterior importación desde la interfaz web de EnvolventeCTE:
 
-```
+```bash
     $ hulc2model datos/proyecto/hulc > salida.json
 ```
 
@@ -46,7 +46,7 @@ En sistemas MS-Windows al ejecutar el programa se lanza una interfaz gráfica si
 
 Estas librerías y aplicaciones relacionadas son software libre y se distribuyen bajo una licencia MIT. Consulte el archivo LICENSE para el texto completo.
 
-El código fuente se encuentra disponible en http://github.com/pachi/cteenergymodel
+El código fuente se encuentra disponible en [http://github.com/pachi/cteenergymodel]
 
 ## Autores
 
