@@ -36,7 +36,7 @@ Los archivos distribuidos permiten el uso de la aplicación en sistemas GNU/Linu
 Esta aplicación se utiliza desde la línea de comandos, y debe inidicar como parámetro el directorio del proyecto de HULC que desea exportar, redirigiendo la salida a un archivo para su posterior importación desde la interfaz web de EnvolventeCTE:
 
 ```bash
-    \$ hulc2model datos/proyecto/hulc > salida.json
+    hulc2model datos/proyecto/hulc > salida.json
 ```
 
 En sistemas MS-Windows al ejecutar el programa se lanza una interfaz gráfica simple en la que se puede indicar el directorio de proyecto de HULC sobre el que se quiere trabajar, y en el que se realizará la exportación del archivo `.json` generado.
