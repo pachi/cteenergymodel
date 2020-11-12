@@ -31,7 +31,7 @@ impl TryFrom<BdlBlock> for Glass {
     /// Conversión de bloque BDL a vidrio (GLASS-TYPE)
     ///
     /// Conductividad en GLASS-CONDUCTANCE (W/m2K)
-    /// Factor solar (g) en SHADING-COEF * 0.85 (-)
+    /// Factor solar (g) en SHADING-COEF * 0.86 (-)
     ///
     /// Ejemplo:
     /// ```text
