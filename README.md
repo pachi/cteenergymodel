@@ -1,12 +1,26 @@
-# hulc2model
+# CTE Energy Model
 
-Exportación de datos de HULC a EnvolventeCTE
+Modelo energético para cálculo de indicadores de eficiencia energética
 
-Esta aplicación permite exportar los datos de un proyecto de la `Herramienta unificada LIDER-CALENER (HULC)` al formato JSON que utiliza la aplicación web para el cálculo de parámetros energéticos de la envolvente térmica [`EnvolventeCTE`](https://pachi.github.io/envolventecte).
+Este conjunto de librerías y aplicaciones busca definir un formato de intercambio sencillo para la modelización energética orientada a la evaluación y cumplimiento de indicadores reglamentarios basados en la EPBD y el CTE.
+
+## bemodel
+
+La biblioteca ```bemodel``` define la estructura de datos y métodos del modelo energético básico.
+
+Este modelo se usa en las aplicaciones ```hulc2model``` y ```EnvolventeCTE```.
+
+## hulc
+
+La biblioteca ```hulc``` permite la intepretación de archivos usados por la Herramienta Unificada LIDER-CALENER (HULC).
+
+## hulc2model
+
+La aplicación ```hulc2model```  permite exportar los datos de un proyecto de la `Herramienta unificada LIDER-CALENER (HULC)` al formato JSON que utiliza la aplicación web para el cálculo de parámetros energéticos de la envolvente térmica [`EnvolventeCTE`](https://pachi.github.io/envolventecte).
 
 Esta versión está preparada para funcionar con las versiones de HULC adaptadas al CTE DB-HE 2019.
 
-## Instalación
+### Instalación
 
 En la [página de versiones publicadas del proyecto](http://github.com/pachi/hulc2model/releases) puede encontrar los archivos necesarios para el funcionamiento del programa, que no necesita instalación.
 
@@ -18,7 +32,7 @@ Los archivos distribuidos permiten el uso de la aplicación en sistemas GNU/Linu
 - `hulc2model.tar.gz` - código fuente comprimido en formato .tar.gz
 
 
-## Uso
+### Uso
 
 Esta aplicación se utiliza desde la línea de comandos, y debe inidicar como parámetro el directorio del proyecto de HULC que desea exportar, redirigiendo la salida a un archivo para su posterior importación desde la interfaz web de EnvolventeCTE:
 
@@ -30,9 +44,9 @@ En sistemas MS-Windows al ejecutar el programa se lanza una interfaz gráfica si
 
 ## Licencia
 
-Esta aplicación es software libre y se distribuye bajo una licencia MIT. Consulte el archivo LICENSE para el texto completo.
+Estas librerías y aplicaciones relacionadas son software libre y se distribuyen bajo una licencia MIT. Consulte el archivo LICENSE para el texto completo.
 
-El código fuente se encuentra disponible en http://github.com/pachi/hulc2model
+El código fuente se encuentra disponible en http://github.com/pachi/cteenergymodel
 
 ## Autores
 
