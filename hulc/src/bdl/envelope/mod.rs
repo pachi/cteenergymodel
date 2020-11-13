@@ -21,7 +21,7 @@ mod window;
 
 pub use floor::Floor;
 pub use geom::*;
-pub use shadings::Shade;
+pub use shadings::Shading;
 pub use space::Space;
 pub use thermalbridge::ThermalBridge;
 pub use walls::{BoundaryType, Tilt, Wall};

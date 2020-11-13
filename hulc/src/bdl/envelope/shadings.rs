@@ -16,7 +16,7 @@ use crate::bdl::{envelope::Vertex3D, BdlBlock};
 
 /// Defininición de gometría de sombra como rectángulo
 #[derive(Debug, Clone, Default)]
-pub struct ShadeGeometry {
+pub struct ShadingGeometry {
     /// Coordenada X de la esquina inferior izquierda
     pub x: f32,
     /// Coordenada Y de la esquina inferior izquierda
@@ -37,7 +37,7 @@ pub struct ShadeGeometry {
 
 /// Sombra (BUILDING-SHADE)
 #[derive(Debug, Clone, Default)]
-pub struct Shade {
+pub struct Shading {
     /// Nombre
     pub name: String,
     /// Transmisividad de la radiación solar de la superficie (-)
@@ -45,12 +45,12 @@ pub struct Shade {
     /// Reflectividad visible de la superficie (-)
     pub refl: f32,
     /// Geometría por rectángulos
-    pub geometry: Option<ShadeGeometry>,
+    pub geometry: Option<ShadingGeometry>,
     /// Geometría por vértices
     pub vertices: Option<Vec<Vertex3D>>,
 }
 
-impl TryFrom<BdlBlock> for Shade {
+impl TryFrom<BdlBlock> for Shading {
     type Error = Error;
 
     /// Conversión de bloque BDL a sombra
@@ -92,7 +92,7 @@ impl TryFrom<BdlBlock> for Shade {
         let (geometry, vertices) = if attrs.get_f32("X").is_ok() {
             // Definición por rectángulo
             (
-                Some(ShadeGeometry {
+                Some(ShadingGeometry {
                     x: attrs.remove_f32("X")?,
                     y: attrs.remove_f32("Y")?,
                     z: attrs.remove_f32("Z")?,

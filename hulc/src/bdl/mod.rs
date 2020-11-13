@@ -26,7 +26,9 @@ mod envelope;
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
 pub use db::{Construction, Frame, Glass, Material, MaterialProperties, WallCons, WindowCons, DB};
-pub use envelope::{BoundaryType, Floor, Polygon, Shade, Space, ThermalBridge, Tilt, Wall, Window};
+pub use envelope::{
+    BoundaryType, Floor, Polygon, Shading, Space, ThermalBridge, Tilt, Wall, Window,
+};
 
 // ------------------------- BDL ----------------------------
 
@@ -46,7 +48,7 @@ pub struct Data {
     /// Puentes térmicos
     pub tbridges: Vec<ThermalBridge>,
     /// Sombras exteriores del edificio
-    pub shadings: Vec<Shade>,
+    pub shadings: Vec<Shading>,
     /// Condiciones de uso de los espacios
     pub spaceconds: HashMap<String, BdlBlock>,
     /// Consignas de los sistemas
@@ -254,7 +256,7 @@ impl Data {
 
                 // Sombras --------------------------------------
                 "BUILDING-SHADE" => {
-                    bdldata.shadings.push(Shade::try_from(block)?);
+                    bdldata.shadings.push(Shading::try_from(block)?);
                 }
 
                 // Elemento desconocido -------------------------
