@@ -440,3 +440,149 @@ fn bdl_thermalbridge() {
     assert_almost_eq!(catalog.firstelems[0], 0.23, 0.01);
     assert_almost_eq!(catalog.secondelems.as_ref().unwrap()[0], 0.20, 0.01);
 }
+
+#[test]
+fn bdl_wall_location_space() {
+    use bdl::{BdlBlock, BoundaryType, Wall};
+    let mut blk: BdlBlock = r#""P01_E02_PE006" = EXTERIOR-WALL
+    ABSORPTANCE   =            0.6
+    COMPROBAR-REQUISITOS-MINIMOS = YES
+    TYPE_ABSORPTANCE    = 1
+    COLOR_ABSORPTANCE   = 0
+    DEGREE_ABSORPTANCE   = 2
+    CONSTRUCCION_MURO  = "muro_opaco"
+    CONSTRUCTION  = "muro_opaco0.60"
+    LOCATION      = SPACE-V11
+    ..
+"#
+    .parse()
+    .unwrap();
+    // Espacio madre
+    blk.parent = Some("P01_E02".to_string());
+    let elem = Wall::try_from(blk).unwrap();
+    assert_eq!(elem.name, "P01_E02_PE006");
+    assert_eq!(elem.space, "P01_E02");
+    assert_eq!(elem.cons, "muro_opaco0.60");
+    assert_eq!(elem.location, Some("V11".to_string()));
+    assert_eq!(elem.bounds, BoundaryType::EXTERIOR);
+    assert_almost_eq!(elem.tilt, 90.0, 0.1);
+    assert_eq!(elem.nextto, None);
+    assert!(elem.geometry.is_none());
+}
+
+#[test]
+fn bdl_wall_location_top() {
+    use bdl::{BdlBlock, BoundaryType, Wall};
+    let mut blk: BdlBlock = r#""P03_E01_CUB001" = ROOF
+    ABSORPTANCE   =            0.6
+    COMPROBAR-REQUISITOS-MINIMOS = YES
+    TYPE_ABSORPTANCE    = 0
+    COLOR_ABSORPTANCE   = 0
+    DEGREE_ABSORPTANCE   = 2
+    CONSTRUCTION  = "cubierta"
+    LOCATION      = TOP
+    ..
+"#
+    .parse()
+    .unwrap();
+    // Espacio madre
+    blk.parent = Some("P03_E01".to_string());
+    let elem = Wall::try_from(blk).unwrap();
+    assert_eq!(elem.name, "P03_E01_CUB001");
+    assert_eq!(elem.space, "P03_E01");
+    assert_eq!(elem.cons, "cubierta");
+    assert_eq!(elem.location, Some("TOP".to_string()));
+    assert_eq!(elem.bounds, BoundaryType::EXTERIOR);
+    assert_almost_eq!(elem.tilt, 0.0, 0.1);
+    assert_eq!(elem.nextto, None);
+    assert!(elem.geometry.is_none());
+}
+
+#[test]
+fn bdl_wall_polygon() {
+    use bdl::{BdlBlock, BoundaryType, Wall};
+    let mut blk: BdlBlock = r#""P03_E01_CUB001" = ROOF
+    ABSORPTANCE   =            0.6
+    COMPROBAR-REQUISITOS-MINIMOS = YES
+    TYPE_ABSORPTANCE    = 0
+    COLOR_ABSORPTANCE   = 0
+    DEGREE_ABSORPTANCE   = 2
+    CONSTRUCTION  = "SATE"
+    X             =          2.496
+    Y             =         -4.888
+    Z             =              3
+    AZIMUTH       =            180
+    LOCATION      = TOP
+    POLYGON       = "P03_E01_FE004_Poligono3"
+    ..
+"#
+    .parse()
+    .unwrap();
+    // Espacio madre
+    blk.parent = Some("P03_E01".to_string());
+    let elem = Wall::try_from(blk).unwrap();
+    assert_eq!(elem.name, "P03_E01_CUB001");
+    assert_eq!(elem.space, "P03_E01");
+    assert_eq!(elem.cons, "SATE");
+    assert_eq!(elem.location, Some("TOP".to_string()));
+    assert_eq!(elem.bounds, BoundaryType::EXTERIOR);
+    assert_almost_eq!(elem.tilt, 0.0, 0.1);
+    assert_eq!(elem.nextto, None);
+    let geom = elem.geometry.as_ref().unwrap();
+    // El nombre del polígono se fija en el postproceso
+    assert_eq!(geom.polygon.name, "");
+    assert_almost_eq!(geom.x, 2.496, 0.001);
+    assert_almost_eq!(geom.y, -4.888, 0.001);
+    assert_almost_eq!(geom.z, 3.0, 0.001);
+    assert_almost_eq!(geom.azimuth, 180.0, 0.1);
+}
+
+#[test]
+fn bdl_window() {
+    use bdl::{BdlBlock, Window};
+    let mut blk: BdlBlock = r#""P01_E02_PE005_V" = WINDOW
+    X              =            0.2
+    Y              =            0.1
+    SETBACK        =              0
+    HEIGHT         =            2.6
+    WIDTH          =              5
+    GAP            = "muro_cortina_controlsolar"
+    COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+    transmisividadJulio        = 0.220000
+    GLASS-TYPE     = "Doble baja emisividad argon"
+    FRAME-WIDTH   =      0.1329403
+    FRAME-CONDUCT =       5.299999
+    FRAME-ABS     =            0.7
+    INF-COEF       =              9
+    OVERHANG-A     =              0
+    OVERHANG-B     =              0
+    OVERHANG-W     =              0
+    OVERHANG-D     =              0
+    OVERHANG-ANGLE =              0
+    LEFT-FIN-A     =              0
+    LEFT-FIN-B     =              0
+    LEFT-FIN-H     =              0
+    LEFT-FIN-D     =              0
+    RIGHT-FIN-A    =              0
+    RIGHT-FIN-B    =              0
+    RIGHT-FIN-H    =              0
+    RIGHT-FIN-D    =              0
+    ..
+"#
+    .parse()
+    .unwrap();
+    // Espacio madre
+    blk.parent = Some("P03_E01_M01".to_string());
+    let elem = Window::try_from(blk).unwrap();
+    assert_eq!(elem.name, "P01_E02_PE005_V");
+    assert_eq!(elem.wall, "P03_E01_M01");
+    assert_eq!(elem.cons, "muro_cortina_controlsolar");
+    assert_almost_eq!(elem.x, 0.2, 0.001);
+    assert_almost_eq!(elem.y, 0.1, 0.001);
+    assert_almost_eq!(elem.height, 2.6, 0.1);
+    assert_almost_eq!(elem.width, 5.0, 0.1);
+    assert_almost_eq!(elem.setback, 0.0, 0.1);
+    let coefs = elem.coefs.unwrap();
+    assert_eq!(coefs.len(), 4);
+    assert_almost_eq!(coefs[0], 1.0, 0.1);
+}
