@@ -120,12 +120,7 @@ impl TryFrom<BdlBlock> for ThermalBridge {
                 partition: attrs.remove_str("PARTITION")?,
             }),
         };
-
-        let defn = attrs
-            .remove_f32("DEFINICION")
-            .and_then(|v| Ok(v as i32))
-            .ok(); // El LIDER antiguo no usa la definición del tipo
-
+        let defn = attrs.remove_f32("DEFINICION").map(|v| v as i32).ok(); // El LIDER antiguo no usa la definición del tipo
         let catalog = match defn {
             // Definido con valor por defecto o por el usuario
             Some(1) | Some(2) | None => None,

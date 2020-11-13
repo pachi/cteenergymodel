@@ -171,7 +171,7 @@ impl Space {
             .find(|w| {
                 match w.position() {
                     // Muros exteriores o cubiertas sobre el espacio
-                    Tilt::TOP => &w.space == &self.name,
+                    Tilt::TOP => w.space == self.name,
                     // Es un cerramiento interior sobre este espacio
                     Tilt::BOTTOM => {
                         w.nextto.as_ref().map(|s| s == &self.name).unwrap_or(false)}
@@ -304,10 +304,7 @@ impl TryFrom<BdlBlock> for Space {
             ("UNHABITED", "NIVEL_ESTANQUEIDAD_3") => Some(1.0),
             ("UNHABITED", "NIVEL_ESTANQUEIDAD_4") => Some(3.0),
             ("UNHABITED", "NIVEL_ESTANQUEIDAD_5") => Some(10.0),
-            _ => attrs
-                .remove_f32("AIR-CHANGES/HR")
-                .map(|v| Some(v))
-                .unwrap_or(None),
+            _ => attrs.remove_f32("AIR-CHANGES/HR").map(Some).unwrap_or(None),
         };
 
         Ok(Self {
