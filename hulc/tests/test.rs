@@ -266,3 +266,177 @@ fn bdl_frame() {
     assert_almost_eq!(elem.absorptivity, 0.7, 0.01);
     assert_almost_eq!(elem.width, 0.1, 0.01);
 }
+
+#[test]
+fn bdl_floor() {
+    use bdl::{BdlBlock, Floor};
+    let blk: BdlBlock = r#""P02" = FLOOR
+    Z             =               3
+    POLYGON       =  "P02_Poligono1"
+    FLOOR-HEIGHT  =              3
+    SPACE-HEIGHT  =              3
+    MULTIPLIER    = 12
+    SHAPE         =  POLYGON
+    PREVIOUS      =  "P01"
+    ..
+"#
+    .parse()
+    .unwrap();
+    let elem = Floor::try_from(blk).unwrap();
+    assert_eq!(elem.name, "P02");
+    assert_almost_eq!(elem.z, 3.0, 0.01);
+    assert_almost_eq!(elem.height, 3.0, 0.01);
+    assert_almost_eq!(elem.multiplier, 12.0, 0.1);
+    assert_eq!(elem.previous, "P01");
+}
+
+#[test]
+fn bdl_shading_geometry() {
+    use bdl::{BdlBlock, Shading};
+    let blk: BdlBlock = r#""patio1_lateral2" = BUILDING-SHADE
+    BULB-TRA = "Default.bulb"
+    BULB-REF = "Default.bulb"
+    TRAN     =              0
+    REFL     =            0.7
+    X        = 18.200001
+    Y        = 9.030000
+    Z        = 0.000000
+    HEIGHT   = 12.500000
+    WIDTH    = 3.500000
+    TILT     = 90.000000
+    AZIMUTH  = 180.000000
+    ..
+"#
+    .parse()
+    .unwrap();
+    let elem = Shading::try_from(blk).unwrap();
+    assert_eq!(elem.name, "patio1_lateral2");
+    assert_almost_eq!(elem.tran, 0.0, 0.01);
+    assert_almost_eq!(elem.refl, 0.7, 0.01);
+    let geom = elem.geometry.unwrap();
+    assert_almost_eq!(geom.x, 18.20, 0.01);
+    assert_almost_eq!(geom.y, 9.03, 0.01);
+    assert_almost_eq!(geom.z, 0.0, 0.01);
+    assert_almost_eq!(geom.height, 12.5, 0.1);
+    assert_almost_eq!(geom.width, 3.5, 0.1);
+    assert_almost_eq!(geom.tilt, 90.0, 0.1);
+    assert_almost_eq!(geom.azimuth, 180.0, 0.1);
+}
+
+#[test]
+fn bdl_shading_vertices() {
+    use bdl::{BdlBlock, Shading};
+    let blk: BdlBlock = r#""Sombra016" = BUILDING-SHADE
+    BULB-TRA = "Default.bulb"
+    BULB-REF = "Default.bulb"
+    TRAN     =              0
+    REFL     =            0.7
+    V1       =( 9.11, 25.7901, 12.5 )
+    V2       =( 9.11, 27.04, 12.5 )
+    V3       =( 6, 27.04, 12.5 )
+    V4       =( 6, 25.7901, 12.5 )
+    ..
+"#
+    .parse()
+    .unwrap();
+    let elem = Shading::try_from(blk).unwrap();
+    assert_eq!(elem.name, "Sombra016");
+    assert_almost_eq!(elem.tran, 0.0, 0.01);
+    assert_almost_eq!(elem.refl, 0.7, 0.01);
+    let vertices = elem.vertices.unwrap();
+    assert_eq!(vertices.len(), 4);
+    assert_eq!(vertices[0].name, "V1");
+    assert_almost_eq!(vertices[0].vector.x, 9.11, 0.01);
+    assert_almost_eq!(vertices[0].vector.y, 25.7901, 0.0001);
+    assert_almost_eq!(vertices[0].vector.z, 12.5, 0.01);
+}
+
+#[test]
+fn bdl_space() {
+    use bdl::{BdlBlock, Space};
+    let mut blk: BdlBlock = r#""P01_E01" = SPACE
+    nCompleto = "P01_E01"
+    HEIGHT        =            3.5
+    SHAPE             = POLYGON
+    POLYGON           = "P01_E01_Pol2"
+    TYPE              = CONDITIONED
+    SPACE-TYPE        = "Residencial"
+    SYSTEM-CONDITIONS = "Residencial"
+    SPACE-CONDITIONS  = "Residencial"
+    FLOOR-WEIGHT      =              0
+    MULTIPLIER        = 1
+    MULTIPLIED        = 0
+    PILLARS-NUMBERS   = 0
+    FactorSuperficieUtil   = 1.0
+    perteneceALaEnvolventeTermica   = SI
+    INTERIOR-RADIATION  = FIXED
+    POWER     = 4.4
+    VEEI-OBJ  = 7.000000
+    VEEI-REF  = 10.000000
+    ..
+"#
+    .parse()
+    .unwrap();
+    blk.parent = Some("P01".to_string());
+    let elem = Space::try_from(blk).unwrap();
+    assert_eq!(elem.name, "P01_E01");
+    assert_eq!(elem.stype, "CONDITIONED");
+    // El polígono se inserta en el postproceso de bloques
+    assert_eq!(elem.polygon.name, "");
+    assert_almost_eq!(elem.height, 3.5, 0.1);
+    // La cota se recibe del objeto floor en el postproceso. Inicialmente se pone a cero
+    assert_almost_eq!(elem.z, 0.0, 0.1);
+    assert_eq!(elem.insidete, true);
+    assert_eq!(elem.floor, "P01");
+    assert_almost_eq!(elem.power, 4.4, 0.1);
+    assert_almost_eq!(elem.veeiobj, 7.0, 0.1);
+    assert_almost_eq!(elem.veeiref, 10.0, 0.1);
+    assert_eq!(elem.spacetype, "Residencial");
+    assert_eq!(elem.spaceconds, "Residencial");
+    assert_eq!(elem.systemconds, "Residencial");
+    assert_almost_eq!(elem.floor_multiplier, 1.0, 0.1);
+    assert_almost_eq!(elem.multiplier, 1.0, 0.1);
+    assert_eq!(elem.ismultiplied, false);
+    assert_eq!(elem.airchanges_h, None);
+}
+
+#[test]
+fn bdl_thermalbridge() {
+    use bdl::{BdlBlock, ThermalBridge};
+    let blk: BdlBlock = r#""UNION_CUBIERTA" = THERMAL-BRIDGE
+    LONG-TOTAL = 148.341034
+    DEFINICION = 3
+    TTL    = 0.226667
+    LISTA-N   = ( "Cubiertas planas - Forjado no interrumpe el aislamiento en fachada")
+    LISTA-L   = ( 100)
+    LISTA-MURO   = ( 0.230000)
+    LISTA-MARCO   = ( 0.200000)
+    FRSI        = 0.28
+    ANGLE-MIN   = 0
+    ANGLE-MAX   = 135
+    TYPE        = SLAB
+    PARTITION   = BOTH
+    ..
+"#
+    .parse()
+    .unwrap();
+    let elem = ThermalBridge::try_from(blk).unwrap();
+    assert_eq!(elem.name, "UNION_CUBIERTA");
+    assert_almost_eq!(elem.length.unwrap(), 148.34, 0.01);
+    assert_almost_eq!(elem.psi, 0.227, 0.001);
+    assert_almost_eq!(elem.frsi, 0.28, 0.01);
+    assert_eq!(elem.tbtype, "SLAB");
+    let geom = elem.geometry.unwrap();
+    assert_almost_eq!(geom.anglemin, 0.0, 0.1);
+    assert_almost_eq!(geom.anglemax, 135.0, 0.1);
+    assert_eq!(geom.partition, "BOTH");
+    let catalog = elem.catalog.unwrap();
+    assert_eq!(catalog.classes.len(), 1);
+    assert_eq!(
+        catalog.classes[0],
+        "Cubiertas planas - Forjado no interrumpe el aislamiento en fachada"
+    );
+    assert_almost_eq!(catalog.pcts[0], 100.0, 0.1);
+    assert_almost_eq!(catalog.firstelems[0], 0.23, 0.01);
+    assert_almost_eq!(catalog.secondelems.as_ref().unwrap()[0], 0.20, 0.01);
+}
