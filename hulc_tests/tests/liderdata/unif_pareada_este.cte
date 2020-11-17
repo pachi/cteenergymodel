@@ -1,0 +1,2702 @@
+$ ------------------------------------------------------------------
+$ Fichero de entrada de datos LIDER
+$PROGRAM = LIDER
+$
+CAMBIO = NO
+CAMBIO-CALENER = NO
+$ ------------------------------------------------------------------
+$
+$ -----------------------------------
+$          Datos Generales
+$ -----------------------------------
+$
+"Defecto" = DESCRIPTION
+    PROJECTNAME    = ""
+    COMMUNITY      = ""
+    LOCALITY       = ""
+    ADDRESS        = ""
+    AUTHOR         = ""
+    AUTHOR-VALUE   = ""
+    E-MAIL         = ""
+    PHONE          = "000000000"
+    COMON-LOCALITY = "Sevilla"
+    ANGLE          =  90.000000
+    ..
+$ -----------------------------------
+$         Valores por Defecto
+$ -----------------------------------
+$
+"Por Defecto" = DEFECTOS
+   PEInclinacion   =             90
+   PEConstruccionV = "Muro Exterior Aislado"
+   PEConstruccionH = "Forjado Cerámico Aislado"
+   CUConstruccion  = "Cub. Incl. Aislada"
+   TEConstruccion  = "Muro Enterrado Aislado"
+   MedianerasConstruccion  = "Tabique Interior Aislado"
+   ParticionesInterioresConstruccion  = "Tabique Interior Aislado"
+   ForjadosExteriores  = "Forjado Cerámico Aislado"
+   ForjadosTerreno = "Forjado Cerámico Aislado"
+   VX              =              0
+   VY              =              1
+   VAnchura        =              1
+   VAltura         =              1
+   VRetranqueo     =            0.1
+   VlongLD         =              0
+   VlongLA         =              0
+   VlongLB         =              0
+   VlongLH         =              0
+   VlongOD         =              0
+   VlongOA         =              0
+   VlongOB         =              0
+   VlongOW         =              0
+   VlongRD         =              0
+   VlongRA         =              0
+   VlongRB         =              0
+   VlongRH         =              0
+   Vangulo         =              0
+   VTIPO           = "Ventana"
+   POSITION-LAMAS      = Ninguno
+   LAMAS-WIDTH         =              0
+   LAMAS-DISTANCE      =              0
+   LAMAS-ANGLE         =              0
+   LAMAS-TRANSMISIVITY =              0
+   LAMAS-REFLECTIVITY  =              0
+   ETAncho         =             60
+   ETAlto          =             60
+   REPREEJE        = 1
+   GAlturaEspacios =              3
+   Radio           =            0.5
+   RadioSeleccion  =            0.5
+   UCubierta       =            0.2
+   UCExterior      =            0.3
+   UCTerreno       =            0.3
+   UForjado        =            0.8
+   UMedianera      =              1
+   PesoCubierta    =           0
+   PesoCExterior   =           0
+   PesoCTerreno    =           0
+   PesoForjado     =           0
+   PesoMedianera   =           0
+   PosicionCubierta  =           0
+   PosicionCExterior =           0
+   PosicionCTerreno  =           0
+   PosicionForjado   =           0
+   PosicionMedianera =           0
+   Moneda            = €
+   COPCal            =            0.6
+   COPRef            =            2.1
+   CosteEnerCal      =           0.15
+   CosteEnerRef      =           0.15
+   CosteInstalCal    =             15
+   CosteInstalRef    =            250
+   FSimultCal        =             80
+   FSimultRef        =             80
+   TamCuad           =            0.5
+   Marcar3D          =          1
+   MarcarCub         =          1
+   Triangular        =          0
+   cbDatosGeneralesD =          1
+   cbCarConst        =          1
+   cbInformeDemanda  =          1
+   cbResEdiD         =          1
+   cbResPorEspD      =          0
+   cbResEsp          =          0
+   cbDesgloseConcept =          0
+   cbDesgloseCompo   =          0
+   cbInformePunta    =          1
+   cbTPCal           =          1
+   cbTPRef           =          1
+   cbEvoCalLoc       =          0
+   cbEvoRefLoc       =          0
+   cbEvoCalBat       =          0
+   cbEvoRefBat       =          0
+   cbTPCalC          =          0
+   cbTPRefC          =          0
+   cbEvoCalLocC      =          0
+   cbEvoRefLocC      =          0
+   cbEvoCalBatC      =          0
+   cbEvoRefBatC      =          0
+   cbGraficosAd      =          0
+   NPERF             =           0
+   CostePerfiles = (  )
+   calDemanda          =          1
+   calPunta          =          1
+   ..
+$ -----------------------------------
+$         Espacio de Trabajo
+$ -----------------------------------
+$
+"Espacio de Trabajo" = WORK-SPACE
+    WIDTH      =             60
+    HIGHT      =             60
+    Z          =              0
+    BULB-TRA   = "Default.bulb"
+    BULB-REF   = "Default.bulb"
+    TRAN       =              0
+    REFL       =            0.7
+      ..
+
+$
+$ -----------------------------------
+$      Datos de Base de Datos
+$ -----------------------------------
+$$ -----------------------------------
+$         Sombras exteriores
+$ -----------------------------------
+$
+$ -----------------------------------
+$         Sombras Del Edificio
+$ -----------------------------------
+$
+$ -----------------------------------
+$         Lineas Auxiliares
+$ -----------------------------------
+$
+"Linea5" = AUX-LINE
+           TYPE = 2
+           X0   = 3.129765
+           Y0   = -0.017763
+           Z0   = 0.000000
+           X1   = 0.000000
+           Y1   = 0.000000
+           Z1   = 0.000000
+           OWNERF = "P2"
+           OWNERS = "P2_E1"
+           ..
+$ -----------------------------------
+$              Planos
+$ -----------------------------------
+$
+
+$ -----------------------------------
+$             POLIGONOS
+$ -----------------------------------
+$
+"P1_Poligono1" = POLYGON
+    V1   =( 0, 1 )
+    V2   =( 2, 1 )
+    V3   =( 2, 0 )
+    V4   =( 5.5, 0 )
+    V5   =( 5.5, 5 )
+    V6   =( 5.5, 10 )
+    V7   =( 0, 10 )
+    V8   =( 0, 5 )
+    ..
+"P1_E1_Poligono1" = POLYGON
+    V1   =( 0, 1 )
+    V2   =( 2, 1 )
+    V3   =( 2, 5 )
+    V4   =( 0, 5 )
+    ..
+"P1_E2_Poligono2" = POLYGON
+    V1   =( 2, 0 )
+    V2   =( 5.5, 0 )
+    V3   =( 5.5, 5 )
+    V4   =( 2, 5 )
+    V5   =( 2, 1 )
+    ..
+"P1_E3_Poligono3" = POLYGON
+    V1   =( 0, 5 )
+    V2   =( 2, 5 )
+    V3   =( 5.5, 5 )
+    V4   =( 5.5, 10 )
+    V5   =( 0, 10 )
+    ..
+"P2_Poligono1" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 2, 0 )
+    V3   =( 5.5, 0 )
+    V4   =( 5.5, 3 )
+    V5   =( 5.5, 5 )
+    V6   =( 5.5, 8.5 )
+    V7   =( 3, 8.5 )
+    V8   =( 0, 8.5 )
+    V9   =( 0, 5 )
+    V10  =( 0, 3 )
+    ..
+"P2_E1_Poligono1" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 2, 0 )
+    V3   =( 5.5, 0 )
+    V4   =( 5.5, 3 )
+    V5   =( 0, 3 )
+    ..
+"P2_E2_Poligono2" = POLYGON
+    V1   =( 0, 3 )
+    V2   =( 5.5, 3 )
+    V3   =( 5.5, 5 )
+    V4   =( 3, 5 )
+    V5   =( 0, 5 )
+    ..
+"P2_E3_Poligono1" = POLYGON
+    V1   =( 3, 5 )
+    V2   =( 5.5, 5 )
+    V3   =( 5.5, 8.5 )
+    V4   =( 3, 8.5 )
+    ..
+"P2_E4_Poligono2" = POLYGON
+    V1   =( 0, 5 )
+    V2   =( 3, 5 )
+    V3   =( 3, 8.5 )
+    V4   =( 0, 8.5 )
+    ..
+"P2_E1_FI001_Poligono001" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 2, 0 )
+    V3   =( 2, 2 )
+    V4   =( 0, 2 )
+    ..
+"P2_E1_FI002_Poligono002" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 3, 0 )
+    V3   =( 3, 3.5 )
+    V4   =( 0, 3.5 )
+    ..
+"P2_E1_FE001_Poligono003" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 2, 0 )
+    V3   =( 2, 1 )
+    V4   =( 0, 1 )
+    ..
+"P2_E2_FI003_Poligono004" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 2, 0 )
+    V3   =( 2, 2 )
+    V4   =( 0, 2 )
+    ..
+"P2_E2_FI004_Poligono005" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 2, 0 )
+    V3   =( 2, 3.5 )
+    V4   =( 0, 3.5 )
+    ..
+"P1_E3_FE003_Poligono006" = POLYGON
+    V1   =( 0, 0 )
+    V2   =( 5.5, 0 )
+    V3   =( 5.5, 1.5 )
+    V4   =( 0, 1.5 )
+    ..
+
+$
+$ -----------------------------------
+$      Datos de Base de Datos
+$ -----------------------------------
+$
+TEMPLARY = USER
+$++++++++++++++++++++++++++++++
+$           MATERIALES
+ $++++++++++++++++++++++++++++++
+"Teja arcilla" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Teja arcilla"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Impermeabilizante(Betun fieltro)" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Impermeabilizante(Betun fieltro)"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Mortero de cemento" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Mortero de cemento"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Horm celular aridos siliceos 2" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Horm celular aridos siliceos 2"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Camara aire horizontal(>15cm)" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Camara aire horizontal(>15cm)"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Lana mineral MW42" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Lana mineral MW42"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Forjado de hormigon" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Forjado de hormigon"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Enlucido de yeso" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Enlucido de yeso"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Baldosin catalan(Plaquetas)" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Baldosin catalan(Plaquetas)"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Horm masa aridos ord sin vibrar" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Horm masa aridos ord sin vibrar"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Poliestireno expandido Tipo IV" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Poliestireno expandido Tipo IV"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Forjado ceramico" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Forjado ceramico"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Grava rodada o de machaqueo" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Grava rodada o de machaqueo"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    ..
+"Poliestireno extruido C 0.034" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Poliestireno extruido C 0.034"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Terrazo(Horm.dens.media)" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Terrazo(Horm.dens.media)"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Poliestireno expandido Tipo VI" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Poliestireno expandido Tipo VI"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Bloque hueco de hormigon 2" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Bloque hueco de hormigon 2"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Ladrillo macizo(Fabrica)" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Ladrillo macizo(Fabrica)"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Ladrillo hueco(Fabrica)" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Ladrillo hueco(Fabrica)"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+"Poliuretano Proyectado" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.1
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.6
+    DENSITY           =           1500
+    SPECIFIC-HEAT     =            800
+    VAPOUR-DIFFUSIVITY-FACTOR =              1
+    NAME          = "Poliuretano Proyectado"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ARCHIV~1\CTE\Lider\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  YES
+    ..
+$++++++++++++++++++++++++++++++
+$         CERRAMIENTOS
+ $++++++++++++++++++++++++++++++
+"Cub. Incl. Aislada" = LAYERS
+    GROUP        = "Otro"
+    NAME_CALENER = ""
+    MATERIAL     = ("Teja arcilla","Impermeabilizante(Betun fieltro)","Mortero de cemento","Horm celular aridos siliceos 2","Camara aire horizontal(>15cm)","Lana mineral MW42","Forjado de hormigon","Enlucido de yeso")
+    THICKNESS = ( 0.015000, 0.005000, 0.010000, 0.050000, 0.020000, 0.080000, 0.200000,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  NO
+..
+"Cub. Incl. Camara de Aire" = LAYERS
+    GROUP        = "Otro"
+    NAME_CALENER = ""
+    MATERIAL     = ("Teja arcilla","Impermeabilizante(Betun fieltro)","Mortero de cemento","Horm celular aridos siliceos 2","Camara aire horizontal(>15cm)","Lana mineral MW42","Forjado de hormigon","Enlucido de yeso")
+    THICKNESS = ( 0.015000, 0.005000, 0.010000, 0.050000, 0.020000, 0.060000, 0.200000,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  NO
+..
+"Cub. Plana Aislada" = LAYERS
+    GROUP        = "Otro"
+    NAME_CALENER = ""
+    MATERIAL     = ("Baldosin catalan(Plaquetas)","Horm masa aridos ord sin vibrar","Impermeabilizante(Betun fieltro)","Poliestireno expandido Tipo IV","Impermeabilizante(Betun fieltro)","Mortero de cemento","Forjado ceramico","Enlucido de yeso")
+    THICKNESS = ( 0.020000, 0.050000, 0.005000, 0.060000, 0.005000, 0.010000, 0.200000,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  NO
+..
+"Cub. Plana Invertida Aislada" = LAYERS
+    GROUP        = "Otro"
+    NAME_CALENER = ""
+    MATERIAL     = ("Grava rodada o de machaqueo","Poliestireno extruido C 0.034","Impermeabilizante(Betun fieltro)","Horm masa aridos ord sin vibrar","Forjado ceramico","Enlucido de yeso")
+    THICKNESS = ( 0.050000, 0.050000, 0.005000, 0.050000, 0.200000,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  NO
+..
+"Forjado Cerámico Aislado" = LAYERS
+    GROUP        = "Otro"
+    NAME_CALENER = ""
+    MATERIAL     = ("Terrazo(Horm.dens.media)","Mortero de cemento","Poliestireno extruido C 0.034","Forjado ceramico","Enlucido de yeso")
+    THICKNESS = ( 0.020000, 0.040000, 0.040000, 0.210000,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  YES
+..
+"Muro Enterrado Aislado" = LAYERS
+    GROUP        = "Otro"
+    NAME_CALENER = ""
+    MATERIAL     = ("Poliestireno expandido Tipo VI","Impermeabilizante(Betun fieltro)","Bloque hueco de hormigon 2","Enlucido de yeso")
+    THICKNESS = ( 0.060000, 0.005000, 0.120000,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  YES
+..
+"Muro Exterior Aislado" = LAYERS
+    GROUP        = "Otro"
+    NAME_CALENER = ""
+    MATERIAL     = ("Ladrillo macizo(Fabrica)","Mortero de cemento","Poliestireno extruido C 0.034","Ladrillo hueco(Fabrica)","Enlucido de yeso")
+    THICKNESS = ( 0.120000, 0.010000, 0.050000, 0.040000,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  YES
+..
+"Tabique Interior Aislado" = LAYERS
+    GROUP        = "Otro"
+    NAME_CALENER = ""
+    MATERIAL     = ("Enlucido de yeso","Ladrillo hueco(Fabrica)","Poliuretano Proyectado","Ladrillo hueco(Fabrica)","Enlucido de yeso")
+    THICKNESS = ( 0.010000, 0.080000, 0.040000, 0.080000,           0.01)
+    LIBRARY       =  NO
+    UTIL          =  YES
+..
+$++++++++++++++++++++++++++++++
+$  ACRISTALAMIENTOS - VIDRIOS
+$++++++++++++++++++++++++++++++
+"Doble Claro 4mm/6mm Aire" = GLASS-TYPE
+     GROUP             = "Otro"
+     TYPE              = SHADING-COEF
+     SHADING-COEF      =      0.8823529
+     GLASS-CONDUCTANCE =            5.6
+     NAME_CALENER      = ""
+     LIBRARY       =  NO
+    UTIL          =  YES
+    ..
+"Puerta metálica opaca" = GLASS-TYPE
+     GROUP             = "Otro"
+     TYPE              = SHADING-COEF
+     SHADING-COEF      =      -1.176471
+     GLASS-CONDUCTANCE =            5.6
+     NAME_CALENER      = ""
+     LIBRARY       =  NO
+    UTIL          =  NO
+    ..
+++++++++++++++++++++++++++++++
+            MARCOS
+ ++++++++++++++++++++++++++++++
+ "Metálico con rotura de puente térmico" = NAME-FRAME
+      GROUP         = "Otro"
+      FRAME-WIDTH   =            0.1
+      FRAME-CONDUCT =            5.6
+      FRAME-ABS     =            0.9
+      NAME_CALENER  = ""
+                LIBRARY       = NO
+    UTIL          =  NO
+..
+ "Metálico" = NAME-FRAME
+      GROUP         = "Otro"
+      FRAME-WIDTH   =            0.1
+      FRAME-CONDUCT =            5.6
+      FRAME-ABS     =            0.9
+      NAME_CALENER  = ""
+                LIBRARY       = NO
+    UTIL          =  YES
+..
+++++++++++++++++++++++++++++++
+            HUECOS
+ ++++++++++++++++++++++++++++++
+"Ventana" = GAP
+     GROUP          = "Otro"
+     GROUP-GLASS         = "Otro"
+     GLASS-TYPE          = "Doble Claro 4mm/6mm Aire"
+     GROUP-FRAME       = "Otro"
+     NAME-FRAME        = "Metálico"
+     PORCENTAGE        = 13.000000
+     INF-COEF          = 50.000000
+     NAME_CALENER      = ""
+     LIBRARY           =  NO
+     UTIL              =  YES
+     ISDOOR            =  NO
+    ..
+"Puertas" = GAP
+     GROUP          = "Otro"
+     GROUP-GLASS         = "Otro"
+     GLASS-TYPE          = "Puerta metálica opaca"
+     GROUP-FRAME       = "Otro"
+     NAME-FRAME        = "Metálico"
+     PORCENTAGE        = 10.000000
+     INF-COEF          = 60.000000
+     NAME_CALENER      = ""
+     LIBRARY           =  NO
+     UTIL              =  NO
+     ISDOOR            =  YES
+    ..
+++++++++++++++++++++++++++++++
+        PUENTES TERMICOS
+ ++++++++++++++++++++++++++++++
+$ ------------------------------------------------------------------
+$ Final de la base de datos 
+$ ------------------------------------------------------------------
+$ ------------------------------------------------------------------
+$ DATOS GEOMÉTRICOS 
+$ ------------------------------------------------------------------
+         "Run Period 1" = RUN-PERIOD-PD
+           END-MONTH = 12
+           END-DAY   = 31
+           ..
+    "Edificio" = BUILD-PARAMETERS
+$          NOMBRE    = "Edificio"
+           LATITUDE  = 37.369999
+           ALTITUDE  = 31.000000
+           ISPENINSULAR  = NO
+           AZIMUTH   = 90.000000
+$          LOCALIDAD = "Sevilla"
+$          ZONE      = "B4"
+           CLASE-HIGROMETRIA  = 3
+           ANGLE              = 90.000000
+$          COND-OPER = "Residencial"
+$          TYPE-OPER = "Acondicionado"
+           X-REF     = 0.000000
+           Y-REF     = 0.000000
+           HEATING-PERIOD = (  1, 2, 3, 4, 5, 10, 11, 12)
+           COOLING-PERIOD = (  6, 7, 8, 9)
+           INTERNAL-PARTITIONS = CUSTOM
+           TYPE-BUILD         = Unifamiliar
+           HR                 = 1.000000
+           STOP-AFTER-MINIMUM-REQUIREMENTS = "NO"
+           ..
+$ -----------------------------------
+$
+    SET-DEFAULT FOR EXTERIOR-WALL
+      BULB-TRA = "default.bulb"
+      BULB-REF = "default.bulb"
+      TRA      =            0
+      REF      =            0.7
+      ABS      =            0.3
+      RADIANT-POINTS = 4
+..
+    SET-DEFAULT FOR INTERIOR-WALL
+      BULB-TRA = "default.bulb"
+      BULB-REF = "default.bulb"
+      TRA      =            0
+      REF      =            0.7
+      ABS      =            0.3
+      RADIANT-POINTS = 4
+..
+    SET-DEFAULT FOR WINDOW
+      BULB-TRA = "default.bulb"
+      BULB-REF = "default.bulb"
+      TRA      =            0.9
+      REF      =            0.1
+      ABS      =            0.0
+      RADIANT-POINTS = 4
+..ÿ
+"P1" = FLOOR
+      POLYGON       =  "P1_Poligono1"
+      FLOOR-HEIGHT  =              3
+      SPACE-HEIGHT  =              3
+      SHAPE         =  POLYGON
+      PREVIOUS      =  "Ninguna"
+      ..
+    "P1_E1" = SPACE
+             HEIGHT        =              3
+            SHAPE             = POLYGON 
+            POLYGON           = "P1_E1_Poligono1"
+            TYPE              = CONDITIONED
+            SPACE-TYPE        = "Residencial"
+            SYSTEM-CONDITIONS = "Res-Acondicionado"
+            SPACE-CONDITIONS  = "Res-Acondicionado"
+            FLOOR-WEIGHT      =              0
+            MULTIPLIER        = 1
+            MULTIPLIED        = 0
+            PILLARS-NUMBERS   = 0
+           INTERIOR-RADIATION  = FIXED
+           CLASE-HIGROMETRIA  = 3
+           POWER     = 4.4
+           VEEI-OBJ  = 7.000000
+           VEEI-REF  = 10.000000
+           AIR-CHANGES/HR        = 1.000000
+            ..
+            "P1_E1_PE1" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V1  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P1_E1_PE1_V" = WINDOW
+                        X              =            0.3
+                        Y              =              0
+                        SETBACK        =              0
+                        HEIGHT         =            2.2
+                        WIDTH          =              1
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.04601061
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        POSITION-LAMAS      = Vertical
+                        LAMAS-WIDTH         =              0
+                        LAMAS-DISTANCE      =              0
+                        LAMAS-ANGLE         =              0
+                        LAMAS-TRANSMISIVITY =              0
+                        LAMAS-REFLECTIVITY  =              0
+                        ..
+            "P1_E1_Med1" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E2"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V2  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P1_E1_Med2" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E3"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V3  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P1_E1_MED1" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V4  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P1_E1Suelo_1" = UNDERGROUND-WALL
+                  Z-GROUND      =              0
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Enterrado Aislado"  
+                  LOCATION      = BOTTOM  
+                   AREA          =              53
+                   PERIMETRO     =              22
+                      ..
+                  "Muro Enterrado Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Enterrado Aislado" 
+                        ..
+    "P1_E2" = SPACE
+             HEIGHT        =              3
+            SHAPE             = POLYGON 
+            POLYGON           = "P1_E2_Poligono2"
+            TYPE              = CONDITIONED
+            SPACE-TYPE        = "Residencial"
+            SYSTEM-CONDITIONS = "Res-Acondicionado"
+            SPACE-CONDITIONS  = "Res-Acondicionado"
+            FLOOR-WEIGHT      =              0
+            MULTIPLIER        = 1
+            MULTIPLIED        = 0
+            PILLARS-NUMBERS   = 0
+           INTERIOR-RADIATION  = FIXED
+           CLASE-HIGROMETRIA  = 3
+           POWER     = 4.4
+           VEEI-OBJ  = 7.000000
+           VEEI-REF  = 10.000000
+           AIR-CHANGES/HR        = 1.000000
+            ..
+            "P1_E2_PE3" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V1  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P1_E2_PE3_V" = WINDOW
+                        X              =            0.8
+                        Y              =              1
+                        SETBACK        =            0.1
+                        HEIGHT         =              1
+                        WIDTH          =            1.7
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.04224807
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        ..
+            "P1_E2_PE5" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V5  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+            "P1_E2_ME001" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V2  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P1_E2_ME001_V" = WINDOW
+                        X              =           0.69
+                        Y              =              1
+                        SETBACK        =            0.1
+                        HEIGHT         =              1
+                        WIDTH          =              1
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.03363105
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        ..
+                  "P1_E2_ME001_V001" = WINDOW
+                        X              =           3.84
+                        Y              =              1
+                        SETBACK        =            0.1
+                        HEIGHT         =              1
+                        WIDTH          =           0.41
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.01943657
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        ..
+            "P1_E2_Med3" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E3"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V3  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P1_E2Suelo_2" = UNDERGROUND-WALL
+                  Z-GROUND      =              0
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Enterrado Aislado"  
+                  LOCATION      = BOTTOM  
+                   AREA          =              53
+                   PERIMETRO     =              22
+                      ..
+                  "Muro Enterrado Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Enterrado Aislado" 
+                        ..
+    "P1_E3" = SPACE
+             HEIGHT        =              3
+            SHAPE             = POLYGON 
+            POLYGON           = "P1_E3_Poligono3"
+            TYPE              = CONDITIONED
+            SPACE-TYPE        = "Residencial"
+            SYSTEM-CONDITIONS = "Res-Acondicionado"
+            SPACE-CONDITIONS  = "Res-Acondicionado"
+            FLOOR-WEIGHT      =              0
+            MULTIPLIER        = 1
+            MULTIPLIED        = 0
+            PILLARS-NUMBERS   = 0
+           INTERIOR-RADIATION  = FIXED
+           CLASE-HIGROMETRIA  = 3
+           POWER     = 4.4
+           VEEI-OBJ  = 7.000000
+           VEEI-REF  = 10.000000
+           AIR-CHANGES/HR        = 1.000000
+            ..
+            "P1_E3_PE2" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V4  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P1_E3_PE2_V" = WINDOW
+                        X              =              1
+                        Y              =              0
+                        SETBACK        =              0
+                        HEIGHT         =            2.2
+                        WIDTH          =            3.6
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.09165542
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        POSITION-LAMAS      = Vertical
+                        LAMAS-WIDTH         =              0
+                        LAMAS-DISTANCE      =              0
+                        LAMAS-ANGLE         =              0
+                        LAMAS-TRANSMISIVITY =              0
+                        LAMAS-REFLECTIVITY  =              0
+                        ..
+            "P1_E3_FE003" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  X             =              0
+                  Y             =            8.5
+                  Z             =              3
+                  AZIMUTH       =            180
+                  LOCATION      = TOP  
+                  POLYGON       = "P1_E3_FE003_Poligono006"
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+            "P1_E3_ME001" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V3  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+            "P1_E3_MED1" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V5  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P1_E3Suelo_3" = UNDERGROUND-WALL
+                  Z-GROUND      =              0
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Enterrado Aislado"  
+                  LOCATION      = BOTTOM  
+                   AREA          =              53
+                   PERIMETRO     =              22
+                      ..
+                  "Muro Enterrado Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Enterrado Aislado" 
+                        ..
+"P2" = FLOOR
+      Z             =               3
+      POLYGON       =  "P2_Poligono1"
+      FLOOR-HEIGHT  =              3
+      SPACE-HEIGHT  =              3
+      SHAPE         =  POLYGON
+      PREVIOUS      =  "P1"
+      ..
+    "P2_E1" = SPACE
+             HEIGHT        =              3
+            SHAPE             = POLYGON 
+            POLYGON           = "P2_E1_Poligono1"
+            TYPE              = CONDITIONED
+            SPACE-TYPE        = "Residencial"
+            SYSTEM-CONDITIONS = "Res-Acondicionado"
+            SPACE-CONDITIONS  = "Res-Acondicionado"
+            FLOOR-WEIGHT      =              0
+            MULTIPLIER        = 1
+            MULTIPLIED        = 0
+            PILLARS-NUMBERS   = 0
+           INTERIOR-RADIATION  = FIXED
+           CLASE-HIGROMETRIA  = 3
+           POWER     = 4.4
+           VEEI-OBJ  = 7.000000
+           VEEI-REF  = 10.000000
+           AIR-CHANGES/HR        = 1.000000
+            ..
+            "P2_E1_PE1" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V1  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P2_E1_PE1_V" = WINDOW
+                        X              =              2
+                        Y              =              1
+                        SETBACK        =              0
+                        HEIGHT         =              1
+                        WIDTH          =            2.4
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.04719243
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        POSITION-LAMAS      = Vertical
+                        LAMAS-WIDTH         =              0
+                        LAMAS-DISTANCE      =              0
+                        LAMAS-ANGLE         =              0
+                        LAMAS-TRANSMISIVITY =              0
+                        LAMAS-REFLECTIVITY  =              0
+                        ..
+            "P2_E1_PE2" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V2  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+            "P2_E1_FE2" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  LOCATION      = TOP  
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+            "P2_E1_FE001" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  X             =              0
+                  Y             =              1
+                  Z             =              0
+                  AZIMUTH       =            180
+                  TILT          =            180
+                  POLYGON       = "P2_E1_FE001_Poligono003"
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+            "P2_E1_ME001" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V3  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P2_E1_ME001_V" = WINDOW
+                        X              =           0.78
+                        Y              =              1
+                        SETBACK        =            0.1
+                        HEIGHT         =              1
+                        WIDTH          =              1
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.03363105
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        ..
+            "P2_E1_Med1" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P2_E2"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V4  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P2_E1_MED1" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V5  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P2_E1_FI001" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E1"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  X             =              2
+                  Y             =              3
+                  Z             =              0
+                  AZIMUTH       =            270
+                  TILT          =            180
+                  POLYGON       = "P2_E1_FI001_Poligono001"
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+            "P2_E1_FI002" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E2"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  X             =              2
+                  Y             =              0
+                  Z             =              0
+                  AZIMUTH       =             90
+                  TILT          =            180
+                  POLYGON       = "P2_E1_FI002_Poligono002"
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+    "P2_E2" = SPACE
+             HEIGHT        =              3
+            SHAPE             = POLYGON 
+            POLYGON           = "P2_E2_Poligono2"
+            TYPE              = CONDITIONED
+            SPACE-TYPE        = "Residencial"
+            SYSTEM-CONDITIONS = "Res-Acondicionado"
+            SPACE-CONDITIONS  = "Res-Acondicionado"
+            FLOOR-WEIGHT      =              0
+            MULTIPLIER        = 1
+            MULTIPLIED        = 0
+            PILLARS-NUMBERS   = 0
+           INTERIOR-RADIATION  = FIXED
+           CLASE-HIGROMETRIA  = 3
+           POWER     = 4.4
+           VEEI-OBJ  = 7.000000
+           VEEI-REF  = 10.000000
+           AIR-CHANGES/HR        = 1.000000
+            ..
+            "P2_E2_FE3" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  LOCATION      = TOP  
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+            "P2_E2_ME001" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V2  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P2_E2_ME001_V" = WINDOW
+                        X              =           0.81
+                        Y              =              1
+                        SETBACK        =            0.1
+                        HEIGHT         =              1
+                        WIDTH          =           0.41
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.01943657
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        ..
+            "P2_E2_Med3" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P2_E3"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V3  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P2_E2_Med4" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P2_E4"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V4  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P2_E2_MED1" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V5  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P2_E2_FI003" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E1"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  X             =              0
+                  Y             =              3
+                  Z             =              0
+                  AZIMUTH       =             90
+                  TILT          =            180
+                  POLYGON       = "P2_E2_FI003_Poligono004"
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+            "P2_E2_FI004" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E2"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  X             =              2
+                  Y             =              3
+                  Z             =              0
+                  AZIMUTH       =             90
+                  TILT          =            180
+                  POLYGON       = "P2_E2_FI004_Poligono005"
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+    "P2_E3" = SPACE
+             HEIGHT        =              3
+            SHAPE             = POLYGON 
+            POLYGON           = "P2_E3_Poligono1"
+            TYPE              = CONDITIONED
+            SPACE-TYPE        = "Residencial"
+            SYSTEM-CONDITIONS = "Res-Acondicionado"
+            SPACE-CONDITIONS  = "Res-Acondicionado"
+            FLOOR-WEIGHT      =              0
+            MULTIPLIER        = 1
+            MULTIPLIED        = 0
+            PILLARS-NUMBERS   = 0
+           INTERIOR-RADIATION  = FIXED
+           CLASE-HIGROMETRIA  = 3
+           POWER     = 4.4
+           VEEI-OBJ  = 7.000000
+           VEEI-REF  = 10.000000
+           AIR-CHANGES/HR        = 1.000000
+            ..
+            "P2_E3_PE2" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V3  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P2_E3_PE2_V" = WINDOW
+                        X              =            0.8
+                        Y              =              0
+                        SETBACK        =              0
+                        HEIGHT         =            2.2
+                        WIDTH          =              1
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.04601061
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        POSITION-LAMAS      = Vertical
+                        LAMAS-WIDTH         =              0
+                        LAMAS-DISTANCE      =              0
+                        LAMAS-ANGLE         =              0
+                        LAMAS-TRANSMISIVITY =              0
+                        LAMAS-REFLECTIVITY  =              0
+                        ..
+            "P2_E3_FE4" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  LOCATION      = TOP  
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+            "P2_E3_ME001" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.6
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V2  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+            "P2_E3_Med2" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P2_E4"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V4  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P2_E3_FI005" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E3"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  LOCATION      = BOTTOM  
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+    "P2_E4" = SPACE
+             HEIGHT        =              3
+            SHAPE             = POLYGON 
+            POLYGON           = "P2_E4_Poligono2"
+            TYPE              = CONDITIONED
+            SPACE-TYPE        = "Residencial"
+            SYSTEM-CONDITIONS = "Res-Acondicionado"
+            SPACE-CONDITIONS  = "Res-Acondicionado"
+            FLOOR-WEIGHT      =              0
+            MULTIPLIER        = 1
+            MULTIPLIED        = 0
+            PILLARS-NUMBERS   = 0
+           INTERIOR-RADIATION  = FIXED
+           CLASE-HIGROMETRIA  = 3
+           POWER     = 4.4
+           VEEI-OBJ  = 7.000000
+           VEEI-REF  = 10.000000
+           AIR-CHANGES/HR        = 1.000000
+            ..
+            "P2_E4_PE1" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Muro Exterior Aislado"  
+                  LOCATION      = SPACE-V3  
+                      ..
+                  "Muro Exterior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Muro Exterior Aislado" 
+                        ..
+                  "P2_E4_PE1_V" = WINDOW
+                        X              =            0.9
+                        Y              =              1
+                        SETBACK        =            0.1
+                        HEIGHT         =              1
+                        WIDTH          =            1.2
+                        GAP            = "Ventana"
+                        COEFF = ( 1.000000, 1.000000, 1.000000, 1.000000)
+                        GLASS-TYPE     = "Doble Claro 4mm/6mm Aire"
+                        FRAME-WIDTH   =     0.03667749
+                        FRAME-CONDUCT =            5.6
+                        FRAME-ABS     =            0.9
+                        INF-COEF       =             50
+                        OVERHANG-A     =              0
+                        OVERHANG-B     =              0
+                        OVERHANG-W     =              0
+                        OVERHANG-D     =              0
+                        OVERHANG-ANGLE =              0
+                        LEFT-FIN-A     =              0
+                        LEFT-FIN-B     =              0
+                        LEFT-FIN-H     =              0
+                        LEFT-FIN-D     =              0
+                        RIGHT-FIN-A    =              0
+                        RIGHT-FIN-B    =              0
+                        RIGHT-FIN-H    =              0
+                        RIGHT-FIN-D    =              0
+                        ..
+            "P2_E4_FE5" = EXTERIOR-WALL
+                  ABSORPTANCE   =            0.7
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  LOCATION      = TOP  
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+            "P2_E4_MED7" = INTERIOR-WALL
+                  INT-WALL-TYPE = ADIABATIC  
+   COMPROBAR-REQUISITOS-MINIMOS = YES
+                  CONSTRUCTION  = "Tabique Interior Aislado"  
+                  LOCATION      = SPACE-V4  
+                      ..
+                  "Tabique Interior Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Tabique Interior Aislado" 
+                        ..
+            "P2_E4_FI006" = INTERIOR-WALL
+                  INT-WALL-TYPE = STANDARD  
+                  NEXT-TO       = "P1_E3"  
+   COMPROBAR-REQUISITOS-MINIMOS = NO
+                  CONSTRUCTION  = "Forjado Cerámico Aislado"  
+                  LOCATION      = BOTTOM  
+                      ..
+                  "Forjado Cerámico Aislado" =  CONSTRUCTION
+                        TYPE   = LAYERS  
+                        LAYERS = "Forjado Cerámico Aislado" 
+                        ..
+$ ------------------------------------------------------------------
+$  CONDICIONES OPERACIONALES 
+$ ------------------------------------------------------------------
+"Res-Acondicionado" = SPACE-CONDITIONS
+    NAME               = "Residencial"
+    TEMPERATURE        = 22.5
+    PEOPLE-SCHEDULE    = "Ocupacion-Residencia"
+    PEOPLE-HG-LAT      =          45.42
+    PEOPLE-HG-SENS     =          71.79
+    PEOPLE-SPLIT-CR    =            0.4
+    LIGHTING-SCHEDULE  = "Iluminacion-Residencia"
+    AREA/PERSON        =          33.33
+    LIGHTING-TYPE      = SUS-FLUOR
+    LIGHTING-W/AREA    =            4.4
+    LIGHTING-SPLIT-CR =             0.5
+    EQUIP-SCHEDULE        = "Iluminacion-Residencia"
+    EQUIP-SENSIBLE        =             90
+    EQUIP-LATENT          =             10
+    EQUIPMENT-SPLIT-CR    =            0.3
+    EQUIPMENT-W/AREA      =            4.4
+    FURN-FRACTION         =            0.5
+    FURN-WEIGHT           =             45
+    FRACCION-SOLAR-SUELO  =            0.6
+    INF-SCHEDULE          = "Infiltracion-Residencia"
+    AIR-CHANGES/HR        =              4
+    INF-METHOD            = CRACK
+    PEAK-LOAD-TYPE        = CONDITIONED
+    MET-LEVEL           = 1
+      ..
+"Res-Acondicionado" = SYSTEM-CONDITIONS
+    NAME               = "Residencial"
+    ZONAL-ZONE-METHOD  = FULLY-MIXED
+    HEAT-TEMP-SCH      = "Horario-Calefaccion"
+    COOL-TEMP-SCH      = "Horario-Refrigeracion"
+    TYPE               = CONDITIONED
+    MAX-HEAT-RATE      = -1e20
+    MAX-COOL-RATE      = 1e20
+    HEATING-SCHEDULE   = "Funcionam-Residencia"
+    COOLING-SCHEDULE   = "Funcionam-Residencia"
+    FLOW/AREA          = 0
+    FAN-SCHEDULE       = "Funcionam-Residencia"
+    SEASON-SCH         = "SSHA"
+    OUTSIDE-AIR-FLOW   = 0
+    RECOV-TEMP         = 0
+    RECOV-KW           = 0
+    RECOV-EFF          = 0
+    THROTTLING-RANGE   = 0
+    OA-CONTROL         = TEMP
+            ..
+
+"SSHDV" = DAY-SCHEDULE-PD
+  TYPE  = FRACTION
+  VALUES  = ( 0)
+  ..
+"SSHDI" = DAY-SCHEDULE-PD
+  TYPE  = FRACTION
+  VALUES  = ( 1)
+  ..
+"SSHSV" = WEEK-SCHEDULE-PD
+  TYPE  = FRACTION
+  DAY-SCHEDULES = ( "SSHDV")
+  ..
+"SSHSI" = WEEK-SCHEDULE-PD
+  TYPE  = FRACTION
+  DAY-SCHEDULES = ( "SSHDI")
+  ..
+"SSHA" = SCHEDULE-PD
+  TYPE  = FRACTION
+  MONTH = ( 3, 10, 12)
+  DAY   = ( 31, 31, 31)
+  WEEK-SCHEDULES = ( "SSHSI", "SSHSV", "SSHSI")
+  ..
+$ -----------------------------------
+$             HORARIOS
+$ -----------------------------------
+$
+"HA0_D-Refrig-Temp-Lab" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 0
+    VALUES  = ( 27.0, 27.0, 27.0, 27.0, 27.0, 27.0, 27.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 27.0)
+    ..
+"HA0_D-Refrig-Temp-Sab" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 1
+    VALUES  = ( 27.0, 27.0, 27.0, 27.0, 27.0, 27.0, 27.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 27.0)
+    ..
+"HA0_D-Refrig-Temp-Fest" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 2
+    VALUES  = ( 27.0, 27.0, 27.0, 27.0, 27.0, 27.0, 27.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 99.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 27.0)
+    ..
+  "HA0_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    DAY-SCHEDULES = ( "HA0_D-Refrig-Temp-Lab",
+                      "HA0_D-Refrig-Temp-Lab",
+                      "HA0_D-Refrig-Temp-Lab",
+                      "HA0_D-Refrig-Temp-Lab",
+                      "HA0_D-Refrig-Temp-Lab",
+                      "HA0_D-Refrig-Temp-Sab",
+                      "HA0_D-Refrig-Temp-Fest")
+    ..
+"Horario-Refrigeracion" = SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA0_HS0")
+    ..
+"HA1_D-Calef-Temp-Lab" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 0
+    VALUES  = ( 17.0, 17.0, 17.0, 17.0, 17.0, 17.0, 17.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 17.0)
+    ..
+"HA1_D-Calef-Temp-Sab" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 1
+    VALUES  = ( 17.0, 17.0, 17.0, 17.0, 17.0, 17.0, 17.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 17.0)
+    ..
+"HA1_D-Calef-Temp-Fest" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 2
+    VALUES  = ( 17.0, 17.0, 17.0, 17.0, 17.0, 17.0, 17.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 17.0)
+    ..
+  "HA1_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    DAY-SCHEDULES = ( "HA1_D-Calef-Temp-Lab",
+                      "HA1_D-Calef-Temp-Lab",
+                      "HA1_D-Calef-Temp-Lab",
+                      "HA1_D-Calef-Temp-Lab",
+                      "HA1_D-Calef-Temp-Lab",
+                      "HA1_D-Calef-Temp-Sab",
+                      "HA1_D-Calef-Temp-Fest")
+    ..
+"Horario-Calefaccion" = SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA1_HS0")
+    ..
+"HA2_D-Refrig-Temp-Lab-t" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 0
+    VALUES  = ( 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0)
+    ..
+"HA2_D-Refrig-Temp-Sab-t" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 1
+    VALUES  = ( 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0)
+    ..
+"HA2_D-Refrig-Temp-Fest-t" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 2
+    VALUES  = ( 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0)
+    ..
+  "HA2_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    DAY-SCHEDULES = ( "HA2_D-Refrig-Temp-Lab-t",
+                      "HA2_D-Refrig-Temp-Lab-t",
+                      "HA2_D-Refrig-Temp-Lab-t",
+                      "HA2_D-Refrig-Temp-Lab-t",
+                      "HA2_D-Refrig-Temp-Lab-t",
+                      "HA2_D-Refrig-Temp-Sab-t",
+                      "HA2_D-Refrig-Temp-Fest-t")
+    ..
+"Horario-Refrigeracion-t" = SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA2_HS0")
+    ..
+"HA3_D-Calef-Temp-Lab-t" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 0
+    VALUES  = ( 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0)
+    ..
+"HA3_D-Calef-Temp-Sab-t" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 1
+    VALUES  = ( 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0)
+    ..
+"HA3_D-Calef-Temp-Fest-t" = DAY-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    INDEX = 2
+    VALUES  = ( 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0, 20.0)
+    ..
+  "HA3_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    DAY-SCHEDULES = ( "HA3_D-Calef-Temp-Lab-t",
+                      "HA3_D-Calef-Temp-Lab-t",
+                      "HA3_D-Calef-Temp-Lab-t",
+                      "HA3_D-Calef-Temp-Lab-t",
+                      "HA3_D-Calef-Temp-Lab-t",
+                      "HA3_D-Calef-Temp-Sab-t",
+                      "HA3_D-Calef-Temp-Fest-t")
+    ..
+"Horario-Calefaccion-t" = SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    GROUP = Temperaturas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA3_HS0")
+    ..
+"HA4_D-8h-Lab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 0
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA4_D-8h-Sab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA4_D-8h-Fest" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA4_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA4_D-8h-Lab",
+                      "HA4_D-8h-Lab",
+                      "HA4_D-8h-Lab",
+                      "HA4_D-8h-Lab",
+                      "HA4_D-8h-Lab",
+                      "HA4_D-8h-Sab",
+                      "HA4_D-8h-Fest")
+    ..
+"UsoEspacio-8h" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA4_HS0")
+    ..
+"HA5_D-8h-Lab_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 0
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+"HA5_D-8h-Sab_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 1
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+"HA5_D-8h-Fest_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 2
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+  "HA5_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = ON/OFF
+    DAY-SCHEDULES = ( "HA5_D-8h-Lab_eq",
+                      "HA5_D-8h-Lab_eq",
+                      "HA5_D-8h-Lab_eq",
+                      "HA5_D-8h-Lab_eq",
+                      "HA5_D-8h-Lab_eq",
+                      "HA5_D-8h-Sab_eq",
+                      "HA5_D-8h-Fest_eq")
+    ..
+"UsoEspacio-8h_eq" = SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA5_HS0")
+    ..
+"HA6_D-8h-Lab_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 0
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA6_D-8h-Sab_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA6_D-8h-Fest_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA6_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA6_D-8h-Lab_vent",
+                      "HA6_D-8h-Lab_vent",
+                      "HA6_D-8h-Lab_vent",
+                      "HA6_D-8h-Lab_vent",
+                      "HA6_D-8h-Lab_vent",
+                      "HA6_D-8h-Sab_vent",
+                      "HA6_D-8h-Fest_vent")
+    ..
+"UsoEspacio-8h_vent" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA6_HS0")
+    ..
+"HA7_D-12h-Lab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 0
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA7_D-12h-Sab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA7_D-12h-Fest" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA7_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA7_D-12h-Lab",
+                      "HA7_D-12h-Lab",
+                      "HA7_D-12h-Lab",
+                      "HA7_D-12h-Lab",
+                      "HA7_D-12h-Lab",
+                      "HA7_D-12h-Sab",
+                      "HA7_D-12h-Fest")
+    ..
+"UsoEspacio-12h" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA7_HS0")
+    ..
+"HA8_D-12h-Lab_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 0
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0)
+    ..
+"HA8_D-12h-Sab_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 1
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+"HA8_D-12h-Fest_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 2
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+  "HA8_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = ON/OFF
+    DAY-SCHEDULES = ( "HA8_D-12h-Lab_eq",
+                      "HA8_D-12h-Lab_eq",
+                      "HA8_D-12h-Lab_eq",
+                      "HA8_D-12h-Lab_eq",
+                      "HA8_D-12h-Lab_eq",
+                      "HA8_D-12h-Sab_eq",
+                      "HA8_D-12h-Fest_eq")
+    ..
+"UsoEspacio-12h_eq" = SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA8_HS0")
+    ..
+"HA9_D-12h-Lab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 0
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA9_D-12h-Sab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA9_D-12h-Fest" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA9_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA9_D-12h-Lab",
+                      "HA9_D-12h-Lab",
+                      "HA9_D-12h-Lab",
+                      "HA9_D-12h-Lab",
+                      "HA9_D-12h-Lab",
+                      "HA9_D-12h-Sab",
+                      "HA9_D-12h-Fest")
+    ..
+"UsoEspacio-12h_vent" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA9_HS0")
+    ..
+"HA10_D-16h-Lab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 0
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00)
+    ..
+"HA10_D-16h-Sab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA10_D-16h-Fest" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA10_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA10_D-16h-Lab",
+                      "HA10_D-16h-Lab",
+                      "HA10_D-16h-Lab",
+                      "HA10_D-16h-Lab",
+                      "HA10_D-16h-Lab",
+                      "HA10_D-16h-Sab",
+                      "HA10_D-16h-Fest")
+    ..
+"UsoEspacio-16h" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA10_HS0")
+    ..
+"HA11_D-16h-Lab_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 0
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0)
+    ..
+"HA11_D-16h-Sab_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 1
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+"HA11_D-16h-Fest_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 2
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+  "HA11_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = ON/OFF
+    DAY-SCHEDULES = ( "HA11_D-16h-Lab_eq",
+                      "HA11_D-16h-Lab_eq",
+                      "HA11_D-16h-Lab_eq",
+                      "HA11_D-16h-Lab_eq",
+                      "HA11_D-16h-Lab_eq",
+                      "HA11_D-16h-Sab_eq",
+                      "HA11_D-16h-Fest_eq")
+    ..
+"UsoEspacio-16h_eq" = SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA11_HS0")
+    ..
+"HA12_D-16h-Lab_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 0
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00)
+    ..
+"HA12_D-16h-Sab_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA12_D-16h-Fest_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA12_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA12_D-16h-Lab_vent",
+                      "HA12_D-16h-Lab_vent",
+                      "HA12_D-16h-Lab_vent",
+                      "HA12_D-16h-Lab_vent",
+                      "HA12_D-16h-Lab_vent",
+                      "HA12_D-16h-Sab_vent",
+                      "HA12_D-16h-Fest_vent")
+    ..
+"UsoEspacio-16h_vent" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA12_HS0")
+    ..
+"HA13_D-24h-Lab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 0
+    VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    ..
+"HA13_D-24h-Sab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA13_D-24h-Fest" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA13_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA13_D-24h-Lab",
+                      "HA13_D-24h-Lab",
+                      "HA13_D-24h-Lab",
+                      "HA13_D-24h-Lab",
+                      "HA13_D-24h-Lab",
+                      "HA13_D-24h-Sab",
+                      "HA13_D-24h-Fest")
+    ..
+"UsoEspacio-24h" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA13_HS0")
+    ..
+"HA14_D-24h-Lab_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 0
+    VALUES  = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+    ..
+"HA14_D-24h-Sab_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 1
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+"HA14_D-24h-Fest_eq" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 2
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+  "HA14_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = ON/OFF
+    DAY-SCHEDULES = ( "HA14_D-24h-Lab_eq",
+                      "HA14_D-24h-Lab_eq",
+                      "HA14_D-24h-Lab_eq",
+                      "HA14_D-24h-Lab_eq",
+                      "HA14_D-24h-Lab_eq",
+                      "HA14_D-24h-Sab_eq",
+                      "HA14_D-24h-Fest_eq")
+    ..
+"UsoEspacio-24h_eq" = SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA14_HS0")
+    ..
+"HA15_D-24h-Lab_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 0
+    VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    ..
+"HA15_D-24h-Sab_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA15_D-24h-Fest_vent" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA15_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA15_D-24h-Lab_vent",
+                      "HA15_D-24h-Lab_vent",
+                      "HA15_D-24h-Lab_vent",
+                      "HA15_D-24h-Lab_vent",
+                      "HA15_D-24h-Lab_vent",
+                      "HA15_D-24h-Sab_vent",
+                      "HA15_D-24h-Fest_vent")
+    ..
+"UsoEspacio-24h_vent" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA15_HS0")
+    ..
+"HA16_D-Resid-Ocup-Lab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 0
+    VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 1.00)
+    ..
+"HA16_D-Resid-Ocup-Sab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 1
+    VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    ..
+"HA16_D-Resid-Ocup-Fest" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 2
+    VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    ..
+  "HA16_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA16_D-Resid-Ocup-Lab",
+                      "HA16_D-Resid-Ocup-Lab",
+                      "HA16_D-Resid-Ocup-Lab",
+                      "HA16_D-Resid-Ocup-Lab",
+                      "HA16_D-Resid-Ocup-Lab",
+                      "HA16_D-Resid-Ocup-Sab",
+                      "HA16_D-Resid-Ocup-Fest")
+    ..
+"Ocupacion-Residencia" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA16_HS0")
+    ..
+"HA17_D-Resid-ilum-Lab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 0
+    VALUES  = ( 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.50, 1.00, 1.00, 1.00, 1.00, 0.50)
+    ..
+"HA17_D-Resid-ilum-Sab" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 1
+    VALUES  = ( 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.50, 1.00, 1.00, 1.00, 1.00, 0.50)
+    ..
+"HA17_D-Resid-ilum-Fest" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 2
+    VALUES  = ( 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.50, 1.00, 1.00, 1.00, 1.00, 0.50)
+    ..
+  "HA17_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA17_D-Resid-ilum-Lab",
+                      "HA17_D-Resid-ilum-Lab",
+                      "HA17_D-Resid-ilum-Lab",
+                      "HA17_D-Resid-ilum-Lab",
+                      "HA17_D-Resid-ilum-Lab",
+                      "HA17_D-Resid-ilum-Sab",
+                      "HA17_D-Resid-ilum-Fest")
+    ..
+"Iluminacion-Residencia" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA17_HS0")
+    ..
+"HA18_D-Resid-Func-Lab" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 0
+    VALUES  = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+    ..
+"HA18_D-Resid-Func-Sab" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 1
+    VALUES  = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+    ..
+"HA18_D-Resid-Func-Fest" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 2
+    VALUES  = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+    ..
+  "HA18_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = ON/OFF
+    DAY-SCHEDULES = ( "HA18_D-Resid-Func-Lab",
+                      "HA18_D-Resid-Func-Lab",
+                      "HA18_D-Resid-Func-Lab",
+                      "HA18_D-Resid-Func-Lab",
+                      "HA18_D-Resid-Func-Lab",
+                      "HA18_D-Resid-Func-Sab",
+                      "HA18_D-Resid-Func-Fest")
+    ..
+"Funcionam-Residencia" = SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA18_HS0")
+    ..
+"HA19_D-Resid-Inf-Inv" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 0
+    VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    ..
+"HA19_D-Resid-Inf-Ver" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 1
+    VALUES  = ( 4.00, 4.00, 4.00, 4.00, 4.00, 4.00, 4.00, 4.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    ..
+  "HA19_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv")
+    ..
+  "HA19_HS1" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Inv",
+                      "HA19_D-Resid-Inf-Ver",
+                      "HA19_D-Resid-Inf-Ver",
+                      "HA19_D-Resid-Inf-Ver")
+    ..
+  "HA19_HS2" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA19_D-Resid-Inf-Ver",
+                      "HA19_D-Resid-Inf-Ver",
+                      "HA19_D-Resid-Inf-Ver",
+                      "HA19_D-Resid-Inf-Ver",
+                      "HA19_D-Resid-Inf-Ver",
+                      "HA19_D-Resid-Inf-Ver",
+                      "HA19_D-Resid-Inf-Ver")
+    ..
+"Infiltracion-Residencia" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    MONTH = ( 5, 6, 10, 12)
+    DAY   = ( 27, 3, 0, 31)
+    WEEK-SCHEDULES = ( "HA19_HS0",
+                       "HA19_HS1",
+                       "HA19_HS2",
+                       "HA19_HS0")
+    ..
+"HA20_D-No-Habitable" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    INDEX = 0
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA20_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA20_D-No-Habitable",
+                      "HA20_D-No-Habitable",
+                      "HA20_D-No-Habitable",
+                      "HA20_D-No-Habitable",
+                      "HA20_D-No-Habitable",
+                      "HA20_D-No-Habitable",
+                      "HA20_D-No-Habitable")
+    ..
+"Anual-No-Habitable" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Internas
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA20_HS0")
+    ..
+"HA21_D-No-habitable-Func" = DAY-SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    INDEX = 0
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+  "HA21_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = ON/OFF
+    DAY-SCHEDULES = ( "HA21_D-No-habitable-Func",
+                      "HA21_D-No-habitable-Func",
+                      "HA21_D-No-habitable-Func",
+                      "HA21_D-No-habitable-Func",
+                      "HA21_D-No-habitable-Func",
+                      "HA21_D-No-habitable-Func",
+                      "HA21_D-No-habitable-Func")
+    ..
+"Anual-No-habitable-Func" = SCHEDULE-PD
+    TYPE  = ON/OFF
+    GROUP = Equipos
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA21_HS0")
+    ..
+"HA22_D-No-habitable-Inf" = DAY-SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    INDEX = 0
+    VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    ..
+  "HA22_HS0" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA22_D-No-habitable-Inf",
+                      "HA22_D-No-habitable-Inf",
+                      "HA22_D-No-habitable-Inf",
+                      "HA22_D-No-habitable-Inf",
+                      "HA22_D-No-habitable-Inf",
+                      "HA22_D-No-habitable-Inf",
+                      "HA22_D-No-habitable-Inf")
+    ..
+"Anual-No-habitable-Inf" = SCHEDULE-PD
+    TYPE  = FRACTION
+    GROUP = Ventilación
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA22_HS0")
+    ..
+$ ------------------------------------------------------------------
+$  DESCRIPCIÓN DE CONDICIONES
+$ ------------------------------------------------------------------
+"Ocupación de sala" = DESCRIPTION-CONDICTION
+    TYPE                = "Ocupación"
+    FRACTION-LATENT     =           0.65
+    FRACTION-SENSIBLE   =            0.4
+    FRACTION-CONVECTIVE =            0.3
+    FRACTION-RADIANT    =            0.1
+..
+"Mi primera descripción" = DESCRIPTION-CONDICTION
+    TYPE                = "Ocupación"
+    FRACTION-LATENT     =             30
+    FRACTION-SENSIBLE   =          71.79
+    FRACTION-CONVECTIVE =          10.62
+    FRACTION-RADIANT    =          61.17
+..
+"Mi segunda Descripción" = DESCRIPTION-CONDICTION
+    TYPE                = "Ocupación"
+    FRACTION-LATENT     =             21
+    FRACTION-SENSIBLE   =          91.17
+    FRACTION-CONVECTIVE =             30
+    FRACTION-RADIANT    =          61.17
+..
+"mI TERCERA DESCRIPCIÓN" = DESCRIPTION-CONDICTION
+    TYPE                = "Ocupación"
+    FRACTION-LATENT     =             21
+    FRACTION-SENSIBLE   =          91.17
+    FRACTION-CONVECTIVE =          22.57
+    FRACTION-RADIANT    =           68.6
+..
+"Descripción de equipos" = DESCRIPTION-CONDICTION
+    TYPE                = "Equipo"
+    FRACTION-LATENT     =             21
+    FRACTION-SENSIBLE   =          91.17
+    FRACTION-CONVECTIVE =          22.57
+    FRACTION-RADIANT    =           68.6
+..
+"Descripción ilu" = DESCRIPTION-CONDICTION
+    TYPE                = "Iluminación"
+    FRACTION-LATENT     =          45.42
+    FRACTION-SENSIBLE   =          71.79
+    FRACTION-CONVECTIVE =          40.79
+    FRACTION-RADIANT    =             31
+..
+
+$ -----------------------------------
+$          Puentes Térmicos
+"FRENTE_FORJADO" = THERMAL-BRIDGE
+      BRIDGE-NAME = "F2"
+      TTL         = 0.420000
+      FRSI        = 0.720000
+      ANGLE-MIN   = 135
+      ANGLE-MAX   = 225
+      TYPE        = SLAB
+      PARTITION   = YES
+    ..
+"UNION_CUBIERTA" = THERMAL-BRIDGE
+      BRIDGE-NAME = "R1"
+      TTL         = 0.430000
+      FRSI        = 0.710000
+      ANGLE-MIN   = 0
+      ANGLE-MAX   = 135
+      TYPE        = SLAB
+      PARTITION   = BOTH
+    ..
+"ESQUINA_CONVEXA_FORJADO" = THERMAL-BRIDGE
+      BRIDGE-NAME = "R1"
+      TTL         = 0.430000
+      FRSI        = 0.710000
+      ANGLE-MIN   = 225
+      ANGLE-MAX   = 360
+      TYPE        = SLAB
+      PARTITION   = BOTH
+    ..
+"ESQUINA_CONCAVA_CERRAMIENTO" = THERMAL-BRIDGE
+      BRIDGE-NAME = "C1"
+      TTL         = 0.150000
+      FRSI        = 0.780000
+      ANGLE-MIN   = 0
+      ANGLE-MAX   = 135
+      TYPE        = MASONRY
+      PARTITION   = BOTH
+    ..
+"ESQUINA_CONVEXA_CERRAMIENTO" = THERMAL-BRIDGE
+      BRIDGE-NAME = "C7"
+      TTL         = -0.130000
+      FRSI        = 0.800000
+      ANGLE-MIN   = 225
+      ANGLE-MAX   = 360
+      TYPE        = MASONRY
+      PARTITION   = BOTH
+    ..
+"PILAR" = THERMAL-BRIDGE
+      BRIDGE-NAME = "P4"
+      TTL         = 0.840000
+      FRSI        = 0.590000
+      TYPE        = PILLAR
+    ..
+"HUECO_VENTANA" = THERMAL-BRIDGE
+      BRIDGE-NAME = "W18"
+      TTL         = 0.240000
+      FRSI        = 0.630000
+      TYPE        = WINDOW-FRAME
+    ..
+"UNION_SOLERA_PAREDEXT" = THERMAL-BRIDGE
+      BRIDGE-NAME = "SM1"
+      TTL         = 0.130000
+      FRSI        = 0.730000
+      ANGLE-MIN   = 135
+      ANGLE-MAX   = 225
+      TYPE        = UNDER-EXT
+      PARTITION   = BOTH
+    ..
+$ ------------------------------------------------------------------
+$ Final del fichero 
+$ ------------------------------------------------------------------
+$ -----------------------------------
+$      Fin del Fichero de Datos
+$ -----------------------------------
+$#?¿
+
+$CODE = 5B693D492C0845FB3CB07241433D1F00

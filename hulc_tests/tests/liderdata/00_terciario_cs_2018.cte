@@ -10,7 +10,7 @@ $          Datos Generales
 $ -----------------------------------
 $
 "Defecto" = DESCRIPTION
-    PROJECTNAME    = "CENTRO DE SALUD "
+    PROJECTNAME    = "CENTRO SANITARIO"
     COMMUNITY      = "CASTILLA LEON"
     LOCALITY       = "AVILA"
     ADDRESS        = ""
@@ -18,7 +18,7 @@ $
     AUTHOR-VALUE   = ""
     E-MAIL         = ""
     PHONE          = ""
-    COMON-LOCALITY = "Ávila"
+    COMON-LOCALITY = "ï¿½vila"
     ANGLE          =  334.000000
     ..
 $ -----------------------------------
@@ -81,7 +81,7 @@ $
    PosicionCTerreno  =           0
    PosicionForjado   =           0
    PosicionMedianera =           0
-   Moneda            = €
+   Moneda            = ï¿½
    COPCal            =            0.6
    COPRef            =            2.1
    CosteEnerCal      =           0.15
@@ -790,7 +790,7 @@ $           MATERIALES
     LIBRARY       = NO
     UTIL          =  NO
     ..
-"Teja cerámica-porcelana" = MATERIAL
+"Teja cerï¿½mica-porcelana" = MATERIAL
     TYPE              = PROPERTIES
     THICKNESS         =           0.02
     THICKNESS_CHANGE         = YES
@@ -800,10 +800,10 @@ $           MATERIALES
     DENSITY           =           2300
     SPECIFIC-HEAT     =            840
     VAPOUR-DIFFUSIVITY-FACTOR =             30
-    NAME          = "Teja cerámica-porcelana"
-    GROUP         = "Cerámicos"
+    NAME          = "Teja cerï¿½mica-porcelana"
+    GROUP         = "Cerï¿½micos"
     IMAGE          = "arcilla.bmp"
-    NAME_CALENER   = "Teja cerámica-porcelana"
+    NAME_CALENER   = "Teja cerï¿½mica-porcelana"
     LIBRARY       = NO
     UTIL          =  NO
     ..
@@ -813,7 +813,7 @@ $         CERRAMIENTOS
 "FORJADO EN CONTACTO CON SOTANO" = LAYERS
     GROUP        = "ENVOLVENTE"
     NAME_CALENER = ""
-    MATERIAL     = ("Gres calcáreo 2000 < d < 2700","Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250","EPS Poliestireno Expandido [ 0.029 W/[mK]]","Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250","FU Entrevigado de hormigón aligerado -Canto 350 mm")
+    MATERIAL     = ("Gres calcï¿½reo 2000 < d < 2700","Mortero de cemento o cal para albaï¿½ilerï¿½a y para revoco/enlucido 1000 < d < 1250","EPS Poliestireno Expandido [ 0.029 W/[mK]]","Mortero de cemento o cal para albaï¿½ilerï¿½a y para revoco/enlucido 1000 < d < 1250","FU Entrevigado de hormigï¿½n aligerado -Canto 350 mm")
     THICKNESS = ( 0.015000, 0.050000, 0.040000, 0.020000,           0.35)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -821,7 +821,7 @@ $         CERRAMIENTOS
 "CUBIERTA PLANA" = LAYERS
     GROUP        = "ENVOLVENTE"
     NAME_CALENER = ""
-    MATERIAL     = ("Hormigón celular curado en autoclave d 1000","Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250","Asfalto","XPS Expandido con hidrofluorcarbonos HFC [ 0.032 W/[mK]]","Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250","Hormigón con otros áridos ligeros d 1000","FU Entrevigado de hormigón -Canto 350 mm","Cámara de aire ligeramente ventilada horizontal 1 cm","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Hormigï¿½n celular curado en autoclave d 1000","Mortero de cemento o cal para albaï¿½ilerï¿½a y para revoco/enlucido 1000 < d < 1250","Asfalto","XPS Expandido con hidrofluorcarbonos HFC [ 0.032 W/[mK]]","Mortero de cemento o cal para albaï¿½ilerï¿½a y para revoco/enlucido 1000 < d < 1250","Hormigï¿½n con otros ï¿½ridos ligeros d 1000","FU Entrevigado de hormigï¿½n -Canto 350 mm","Cï¿½mara de aire ligeramente ventilada horizontal 1 cm","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = ( 0.025000, 0.020000, 0.005000, 0.050000, 0.030000, 0.120000, 0.350000, 0.050000,           0.02)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -829,7 +829,7 @@ $         CERRAMIENTOS
 "FORJADO ENTRE PLANTAS HAB" = LAYERS
     GROUP        = "PARTICIONES"
     NAME_CALENER = ""
-    MATERIAL     = ("Gres calcáreo 2000 < d < 2700","Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250","EPS Poliestireno Expandido [ 0.029 W/[mK]]","Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250","FU Entrevigado de hormigón -Canto 350 mm","Cámara de aire sin ventilar horizontal 10 cm","Placa de yeso o escayola 750 < d < 900")
+    MATERIAL     = ("Gres calcï¿½reo 2000 < d < 2700","Mortero de cemento o cal para albaï¿½ilerï¿½a y para revoco/enlucido 1000 < d < 1250","EPS Poliestireno Expandido [ 0.029 W/[mK]]","Mortero de cemento o cal para albaï¿½ilerï¿½a y para revoco/enlucido 1000 < d < 1250","FU Entrevigado de hormigï¿½n -Canto 350 mm","Cï¿½mara de aire sin ventilar horizontal 10 cm","Placa de yeso o escayola 750 < d < 900")
     THICKNESS = ( 0.015000, 0.080000, 0.040000, 0.020000, 0.350000, 0.050000,           0.02)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -837,7 +837,7 @@ $         CERRAMIENTOS
 "FACHADAS" = LAYERS
     GROUP        = "ENVOLVENTE"
     NAME_CALENER = ""
-    MATERIAL     = ("Plaqueta o baldosa cerámica","Cámara de aire ligeramente ventilada vertical 5 cm","MW Lana mineral [0.04 W/[mK]]","Tabicón de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
+    MATERIAL     = ("Plaqueta o baldosa cerï¿½mica","Cï¿½mara de aire ligeramente ventilada vertical 5 cm","MW Lana mineral [0.04 W/[mK]]","Tabicï¿½n de LH doble [60 mm < E < 90 mm]","Enlucido de yeso 1000 < d < 1300")
     THICKNESS = ( 0.020000, 0.050000, 0.050000, 0.070000,           0.02)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -845,7 +845,7 @@ $         CERRAMIENTOS
 "FACHADA PATIOS uglass" = LAYERS
     GROUP        = "ENVOLVENTE"
     NAME_CALENER = ""
-    MATERIAL     = ("Vidrio prensado","Cámara de aire sin ventilar vertical 10 cm","Vidrio prensado")
+    MATERIAL     = ("Vidrio prensado","Cï¿½mara de aire sin ventilar vertical 10 cm","Vidrio prensado")
     THICKNESS = ( 0.020000, 0.050000,           0.02)
     LIBRARY       =  NO
     UTIL          =  NO
@@ -853,7 +853,7 @@ $         CERRAMIENTOS
 "MEDIANERA" = LAYERS
     GROUP        = "PARTICIONES"
     NAME_CALENER = ""
-    MATERIAL     = ("Placa de yeso laminado [PYL] 750 < d < 900","Cámara de aire sin ventilar vertical 5 cm","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Placa de yeso laminado [PYL] 750 < d < 900","Cï¿½mara de aire sin ventilar vertical 5 cm","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = ( 0.020000, 0.050000,           0.02)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -861,7 +861,7 @@ $         CERRAMIENTOS
 "MURO TERRENO" = LAYERS
     GROUP        = "ENVOLVENTE"
     NAME_CALENER = ""
-    MATERIAL     = ("Hormigón armado 2300 < d < 2500")
+    MATERIAL     = ("Hormigï¿½n armado 2300 < d < 2500")
     THICKNESS = (           0.25)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -869,7 +869,7 @@ $         CERRAMIENTOS
 "SOLERA" = LAYERS
     GROUP        = "ENVOLVENTE"
     NAME_CALENER = ""
-    MATERIAL     = ("Asfalto","Hormigón armado 2300 < d < 2500","Arena y grava [1700 < d < 2200]")
+    MATERIAL     = ("Asfalto","Hormigï¿½n armado 2300 < d < 2500","Arena y grava [1700 < d < 2200]")
     THICKNESS = ( 0.020000, 0.150000,           0.15)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -877,7 +877,7 @@ $         CERRAMIENTOS
 "TABIQUERIA SOTANO" = LAYERS
     GROUP        = "PARTICIONES"
     NAME_CALENER = ""
-    MATERIAL     = ("Placa de yeso laminado [PYL] 750 < d < 900","MW Lana mineral [0.04 W/[mK]]","Cámara de aire sin ventilar vertical 1 cm","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Placa de yeso laminado [PYL] 750 < d < 900","MW Lana mineral [0.04 W/[mK]]","Cï¿½mara de aire sin ventilar vertical 1 cm","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = ( 0.026000, 0.040000, 0.050000,          0.026)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -885,7 +885,7 @@ $         CERRAMIENTOS
 "MURO TERRENO AISLADO" = LAYERS
     GROUP        = "ENVOLVENTE"
     NAME_CALENER = ""
-    MATERIAL     = ("Hormigón armado 2300 < d < 2500","Cámara de aire sin ventilar vertical 1 cm","MW Lana mineral [0.04 W/[mK]]","Placa de yeso laminado [PYL] 750 < d < 900")
+    MATERIAL     = ("Hormigï¿½n armado 2300 < d < 2500","Cï¿½mara de aire sin ventilar vertical 1 cm","MW Lana mineral [0.04 W/[mK]]","Placa de yeso laminado [PYL] 750 < d < 900")
     THICKNESS = ( 0.250000, 0.050000, 0.020000,           0.02)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -893,7 +893,7 @@ $         CERRAMIENTOS
 "FORJADO EN CONTACTO CON AIRE EXT" = LAYERS
     GROUP        = "ENVOLVENTE"
     NAME_CALENER = ""
-    MATERIAL     = ("Gres calcáreo 2000 < d < 2700","Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250","FU Entrevigado de hormigón aligerado -Canto 350 mm","MW Lana mineral [0.04 W/[mK]]","Cámara de aire ligeramente ventilada horizontal 10 cm","Plaqueta o baldosa cerámica")
+    MATERIAL     = ("Gres calcï¿½reo 2000 < d < 2700","Mortero de cemento o cal para albaï¿½ilerï¿½a y para revoco/enlucido 1000 < d < 1250","FU Entrevigado de hormigï¿½n aligerado -Canto 350 mm","MW Lana mineral [0.04 W/[mK]]","Cï¿½mara de aire ligeramente ventilada horizontal 10 cm","Plaqueta o baldosa cerï¿½mica")
     THICKNESS = ( 0.015000, 0.080000, 0.350000, 0.050000, 0.050000,           0.02)
     LIBRARY       =  NO
     UTIL          =  YES
@@ -902,7 +902,7 @@ $++++++++++++++++++++++++++++++
 $  ACRISTALAMIENTOS - VIDRIOS
 $++++++++++++++++++++++++++++++
 "VER_DC_4-12-6" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8117648
      GLASS-CONDUCTANCE =            2.8
@@ -912,7 +912,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-12-331" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.8
@@ -922,7 +922,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-12-4" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.8
@@ -932,7 +932,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-12-441a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.8
@@ -942,7 +942,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-12-551a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.8
@@ -952,7 +952,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-12-661a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.8
@@ -962,7 +962,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-15-331" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -972,7 +972,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-15-4" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -982,7 +982,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-15-441a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -992,7 +992,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-15-551a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -1002,7 +1002,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-15-6" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -1012,7 +1012,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-15-661a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.4705882
      GLASS-CONDUCTANCE =            2.7
@@ -1022,7 +1022,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-20-331" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -1032,7 +1032,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-20-4" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -1042,7 +1042,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-20-441a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -1052,7 +1052,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-20-551a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -1062,7 +1062,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-20-6" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -1072,7 +1072,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-20-661a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.7
@@ -1082,7 +1082,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-6-331" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            3.2
@@ -1092,7 +1092,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-6-4" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            3.3
@@ -1102,7 +1102,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-6-441a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            3.2
@@ -1112,7 +1112,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-6-551a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            3.2
@@ -1122,7 +1122,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-6-6" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            3.3
@@ -1132,7 +1132,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-6-661a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            3.2
@@ -1142,7 +1142,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-9-331" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =              3
@@ -1152,7 +1152,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-9-4" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =              3
@@ -1162,7 +1162,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-9-441a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =              3
@@ -1172,7 +1172,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-9-551a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =            2.9
@@ -1182,7 +1182,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-9-6" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8823529
      GLASS-CONDUCTANCE =              3
@@ -1192,7 +1192,7 @@ $++++++++++++++++++++++++++++++
     CHANGE          =  NO
     ..
 "VER_DC_4-9-661a" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.4705882
      GLASS-CONDUCTANCE =            2.9
@@ -1211,7 +1211,7 @@ $++++++++++++++++++++++++++++++
     UTIL          =  NO
     ..
 "UGLASS" = GLASS-TYPE
-     GROUP             = "Dobles en posición vertical"
+     GROUP             = "Dobles en posiciï¿½n vertical"
      TYPE              = SHADING-COEF
      SHADING-COEF      =      0.8235294
      GLASS-CONDUCTANCE =              3
@@ -1236,10 +1236,10 @@ $++++++++++++++++++++++++++++++
  ++++++++++++++++++++++++++++++
 "Hueco" = GAP
      GROUP          = "VENTANAS"
-     GROUP-GLASS         = "Dobles en posición vertical"
+     GROUP-GLASS         = "Dobles en posiciï¿½n vertical"
      GLASS-TYPE          = "VER_DC_4-15-6"
-     GROUP-FRAME       = "Metálicos en posición vertical"
-     NAME-FRAME        = "VER_Con rotura de puente térmico entre 4 y 12 mm"
+     GROUP-FRAME       = "Metï¿½licos en posiciï¿½n vertical"
+     NAME-FRAME        = "VER_Con rotura de puente tï¿½rmico entre 4 y 12 mm"
      PORCENTAGE        = 10.000000
      INF-COEF          = 27.000000
      NAME_CALENER      = ""
@@ -1249,10 +1249,10 @@ $++++++++++++++++++++++++++++++
     ..
 "puerta" = GAP
      GROUP          = "VENTANAS"
-     GROUP-GLASS         = "Dobles en posición vertical"
+     GROUP-GLASS         = "Dobles en posiciï¿½n vertical"
      GLASS-TYPE          = "VER_DC_4-15-6"
-     GROUP-FRAME       = "Metálicos en posición vertical"
-     NAME-FRAME        = "VER_Con rotura de puente térmico entre 4 y 12 mm"
+     GROUP-FRAME       = "Metï¿½licos en posiciï¿½n vertical"
+     NAME-FRAME        = "VER_Con rotura de puente tï¿½rmico entre 4 y 12 mm"
      PORCENTAGE        = 15.000000
      INF-COEF          = 60.000000
      NAME_CALENER      = ""
@@ -1262,10 +1262,10 @@ $++++++++++++++++++++++++++++++
     ..
 "U-GLASS" = GAP
      GROUP          = "VENTANAS"
-     GROUP-GLASS         = "Dobles en posición vertical"
+     GROUP-GLASS         = "Dobles en posiciï¿½n vertical"
      GLASS-TYPE          = "UGLASS"
-     GROUP-FRAME       = "Metálicos en posición vertical"
-     NAME-FRAME        = "VER_Con rotura de puente térmico entre 4 y 12 mm"
+     GROUP-FRAME       = "Metï¿½licos en posiciï¿½n vertical"
+     NAME-FRAME        = "VER_Con rotura de puente tï¿½rmico entre 4 y 12 mm"
      PORCENTAGE        = 1.000000
      INF-COEF          = 27.000000
      NAME_CALENER      = ""
@@ -1275,10 +1275,10 @@ $++++++++++++++++++++++++++++++
     ..
 "hueco OESTE" = GAP
      GROUP          = "VENTANAS"
-     GROUP-GLASS         = "Dobles en posición vertical"
+     GROUP-GLASS         = "Dobles en posiciï¿½n vertical"
      GLASS-TYPE          = "VER_DC_4-15-661a"
-     GROUP-FRAME       = "Metálicos en posición vertical"
-     NAME-FRAME        = "VER_Con rotura de puente térmico entre 4 y 12 mm"
+     GROUP-FRAME       = "Metï¿½licos en posiciï¿½n vertical"
+     NAME-FRAME        = "VER_Con rotura de puente tï¿½rmico entre 4 y 12 mm"
      PORCENTAGE        = 10.000000
      INF-COEF          = 27.000000
      NAME_CALENER      = ""
@@ -1293,7 +1293,7 @@ $ ------------------------------------------------------------------
 $ Final de la base de datos 
 $ ------------------------------------------------------------------
 $ ------------------------------------------------------------------
-$ DATOS GEOMÉTRICOS 
+$ DATOS GEOMï¿½TRICOS 
 $ ------------------------------------------------------------------
          "Run Period 1" = RUN-PERIOD-PD
            END-MONTH = 12
@@ -1305,7 +1305,7 @@ $          NOMBRE    = "Edificio"
            ALTITUDE  = 1130.000000
            ISPENINSULAR  = NO
            AZIMUTH   = 334.000000
-$          LOCALIDAD = "Ávila"
+$          LOCALIDAD = "ï¿½vila"
 $          ZONE      = "E1"
            CLASE-HIGROMETRIA  = 3
            ANGLE              = 334.000000
@@ -1343,7 +1343,7 @@ $
       REF      =            0.1
       ABS      =            0.0
       RADIANT-POINTS = 4
-..ÿ
+..
 "P01" = FLOOR
       Z             =              -3
       POLYGON       =  "P01_Poligono001"
@@ -8046,10 +8046,10 @@ $
     WEEK-SCHEDULES = ( "HA22_HS0_SS_")
     ..
 $ ------------------------------------------------------------------
-$  DESCRIPCIÓN DE CONDICIONES
+$  DESCRIPCIï¿½N DE CONDICIONES
 $ ------------------------------------------------------------------
-"Ocupación de sala" = DESCRIPTION-CONDICTION
-    TYPE                = "Ocupación"
+"Ocupaciï¿½n de sala" = DESCRIPTION-CONDICTION
+    TYPE                = "Ocupaciï¿½n"
     FRACTION-LATENT     =              0
     FRACTION-SENSIBLE   =              0
     FRACTION-CONVECTIVE =              0
@@ -8057,7 +8057,7 @@ $ ------------------------------------------------------------------
 ..
 
 $ -----------------------------------
-$          Puentes Térmicos
+$          Puentes Tï¿½rmicos
 
 $ -----------------------------------
 "FRENTE_FORJADO" = THERMAL-BRIDGE
@@ -8132,6 +8132,6 @@ $ ------------------------------------------------------------------
 $ -----------------------------------
 $      Fin del Fichero de Datos
 $ -----------------------------------
-$#?¿
+$#?ï¿½
 
 $CODE = 5653386BBDCE3D64773C1A09E0463113

@@ -70,10 +70,10 @@ fn test_caso_a() {
     assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 1.37, 0.001);
     // Partición interior vertical con espacio no habitable, HULC=0.81
     let wall = data.get_wall_by_name("P01_E01_Med001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.81, 0.001);
+    assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.64, 0.001);
     // Partición interior horizontal (suelo) con espacio no habitable y enterrado, HULC=0.65
     let wall = data.get_wall_by_name("P02_E01_FI002").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.54, 0.001);
+    assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.41, 0.001);
     // Partición interior horizontal (techo) con espacio no habitable/acondicionado, HULC=0.77
     let wall = data.get_wall_by_name("P03_E01_FI001").unwrap();
     assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.46, 0.001);
