@@ -863,6 +863,7 @@ impl Model {
                     ),
                 })
             };
+            // TODO: avisar con elemento horizontal en contacto con el terreno y con p_ext == 0
         });
 
         self.windows.iter().for_each(|w| {
