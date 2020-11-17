@@ -19,6 +19,9 @@ pub use common::{
     WarningLevel,
 };
 
+/// Versión del programa
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 // ---------- Estructura general de datos --------------
 
 /// Modelo del edificio
