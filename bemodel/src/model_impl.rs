@@ -507,6 +507,16 @@ impl Model {
                 let gnd_P = wspace
                     .exposed_perimeter
                     .unwrap_or_else(|| 4.0 * f32::sqrt(gnd_A));
+
+                // Soleras sin contacto perimetral con el exterior B' -> inf -> U -> 0
+                if gnd_P.abs() < 0.001 {
+                    warn!(
+                        "{} (solera con perímetro expuesto nulo o casi nulo {:.2}. U = 0.00)",
+                        wall.name, gnd_P,
+                    );
+                    return Some(0.0);
+                };
+
                 let B_1 = gnd_A / (0.5 * gnd_P);
 
                 let z = if wspace.z < 0.0 { -wspace.z } else { 0.0 };
