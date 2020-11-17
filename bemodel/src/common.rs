@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use std::{convert::TryFrom, error::Error, fmt::Display};
+use std::{collections::HashMap, convert::TryFrom, error::Error, fmt::Display};
 
 use serde::{Deserialize, Serialize};
 
@@ -457,4 +457,13 @@ pub struct N50HEDetail {
     pub windows_c_a: f32,
     /// Volumen interior de los espacios interiores a la envolvente térmica (m³)
     pub vol: f32,
+}
+
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+/// Reporte de cálculo de las transmitancias de los elementos
+pub struct UValues {
+    /// U de muros
+    pub walls: HashMap<String, Option<f32>>,
+    /// U de huecos
+    pub windows: HashMap<String, Option<f32>>,
 }

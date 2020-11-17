@@ -16,8 +16,8 @@ use std::{
 use log::{debug, info, warn};
 
 use super::{
-    BoundaryType, KDetail, Model, N50HEDetail, Orientation, Space, SpaceType, Tilt, Wall, WallCons,
-    Warning, WarningLevel, Window, WindowCons,
+    BoundaryType, KDetail, Model, N50HEDetail, Orientation, Space, SpaceType, Tilt, UValues, Wall,
+    WallCons, Warning, WarningLevel, Window, WindowCons,
 };
 use crate::utils::fround2;
 
@@ -442,6 +442,24 @@ impl Model {
             qsoljul, Q_soljul, a_ref
         );
         qsoljul
+    }
+
+    /// Diccionario de transmitancias de elementos (walls, windows, pts)
+    pub fn u_values(&self) -> UValues {
+        let wallsmap: HashMap<String, Option<f32>> = self
+            .walls
+            .iter()
+            .map(|w| (w.id.clone(), self.u_for_wall(w)))
+            .collect();
+        let windowsmap: HashMap<String, Option<f32>> = self
+            .windows
+            .iter()
+            .map(|w| (w.id.clone(), self.get_wincons(w).map(|w| w.u)))
+            .collect();
+        UValues {
+            walls: wallsmap,
+            windows: windowsmap,
+        }
     }
 
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K

@@ -15,8 +15,8 @@ use serde::{Deserialize, Serialize};
 
 pub use climatedata::*;
 pub use common::{
-    BoundaryType, ClimateZone, KDetail, N50HEDetail, Orientation, SpaceType, Tilt, Warning,
-    WarningLevel,
+    BoundaryType, ClimateZone, KDetail, N50HEDetail, Orientation, SpaceType, Tilt, UValues,
+    Warning, WarningLevel,
 };
 
 /// Versión del programa
