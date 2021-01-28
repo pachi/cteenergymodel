@@ -1,12 +1,12 @@
 [package]
 name = "hulc2model"
-version = "2.1.0"
+version = "2.2.0"
 authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
 edition = "2018"
 description = "Export data from a HULC project to the EnvolventeCTE JSON format"
 repository = "https://github.com/pachi/hulc2model"
 readme = "README.md"
-keywords = ["buildings", "energy", "ISO EN 52000", "CTE", "EnvolventeCTE"]
+keywords = ["buildings", "energy", "ISO_EN_52000", "CTE", "EnvolventeCTE"]
 categories = ["command-line-utilities", "science"]
 license = "MIT"
 
@@ -23,4 +23,4 @@ env_logger = "0.8"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["wingdi", "winuser", "libloaderapi", "combaseapi", "objbase", "shobjidl", "shlobj", "winerror"] }
-log4rs = { version = "0.13.0", features =["file_appender"] }
+log4rs = { version = "1.0", features =["file_appender"] }
