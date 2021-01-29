@@ -59,7 +59,8 @@ impl TryFrom<BdlBlock> for Floor {
     /// LIDER no usa bien la propiedad SPACE-HEIGHT, que permitiría definir plenum (o reducir la altura de forjados)
     /// sino que la usa como si fuese FLOOR-HEIGHT. HULC pone igual FLOOR-HEIGHT y SPACE-HEIGHT
     /// (la altura de los espacios de tipo PLENUM es floorheight - spaceheight)
-    /// XXX: SHAPE y POLYGON no tienen información relevante, solo vale para exportar a BDL
+    /// XXX: SHAPE y POLYGON no tienen información relevante, solo vale para exportar a BDL.
+    /// XXX: POLYGON es en cuadrado (2D) con lado 1 situado en el origen (no tiene Z)
     /// XXX: HULC solo maneja plantas con SHAPE = POLYGON
 
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {

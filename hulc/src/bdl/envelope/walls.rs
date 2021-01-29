@@ -63,7 +63,9 @@ pub struct Wall {
     /// Definición de la composición de capas del cerramiento
     /// Incialmente contiene un elemento CONSTRUCTION y se sustituye en el postproceso por LAYERS
     pub cons: String,
-    /// Posición respecto al espacio asociado (TOP, BOTTOM, nombreespacio)
+    /// Posición respecto al espacio asociado (TOP | BOTTOM | SPACE-V{vertexnum})
+    /// Cuando se define por top, también tiene POLYGON, cuando es BOTTOM no lo define
+    /// Cuando LOCATION es SPACE-Vn remite al polígono del espacio (POLYGON), empezando en el vértice n
     pub location: Option<String>,
     /// Inclinación (grados sexagesimales)
     /// Ángulo entre el eje Z y la normal exterior del muro
@@ -108,6 +110,7 @@ impl Wall {
             // Elementos definidos por vértice (location contiene el nombre del vértice)
             } else {
                 let poly = &space.polygon;
+                println!("Poligono: {:?}", &poly.vertices.iter().map(|v| &v.name).cloned().collect::<Vec<_>>());
                 let height = space.height;
                 let length = poly.edge_length(&location);
                 Ok(height * length)

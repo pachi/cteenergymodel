@@ -252,7 +252,7 @@ impl TryFrom<BdlBlock> for Space {
                 name
             )
         };
-
+        // CONDITIONED|UNHABITED|No acondiconado
         let stype = attrs.remove_str("TYPE")?;
         // Generamos un polígono por defecto, ya que se inserta en el postproceso de bloques
         let polygon = Polygon::default();
@@ -280,9 +280,11 @@ impl TryFrom<BdlBlock> for Space {
                 name
             )
         })?;
+        // Potencia de iluminación
         let power = attrs.remove_f32("POWER")?;
         let veeiobj = attrs.remove_f32("VEEI-OBJ")?;
         let veeiref = attrs.remove_f32("VEEI-REF")?;
+        // Condiciones operacionales Nombre o #n
         let spacetype = attrs.remove_str("SPACE-TYPE")?;
         // No existe en LIDER antiguo
         let spaceconds = attrs
