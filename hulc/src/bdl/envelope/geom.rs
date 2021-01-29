@@ -76,13 +76,11 @@ impl Polygon {
             .unwrap_or(0.0)
     }
 
-    /// Vértices del lado que empieza en el vértice con el nombre indicdo
+    /// Vértices del lado que empieza en el vértice con el nombre indicdo (Vnn)
     /// El lado que empieza en el último vértice continua en el vértice inicial
     pub fn edge_vertices(&self, vertexname: &str) -> Option<[&Vertex2D; 2]> {
-        let vv = &self.vertices;
-        vv.iter()
-            .position(|v| v.name == vertexname)
-            .map(|pos| [&vv[pos], &vv[(pos + 1) % vv.len()]])
+        let num_vertex: usize = vertexname.strip_prefix("V").map(str::parse::<usize>).unwrap().ok()? - 1;
+        Some([&self.vertices[num_vertex], &self.vertices[(num_vertex + 1) % self.vertices.len()]])
     }
 
     /// Ángulo con el sur de la normal del lado definido por el vértice
