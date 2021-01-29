@@ -41,8 +41,8 @@ fn bdl_polygon() {
     .unwrap();
     let pol: Polygon = Polygon::try_from(polblk).unwrap();
     assert_almost_eq!(pol.area(), 76.307, 0.001);
-    assert_eq!(pol.edge_indices("V1").unwrap(), [0, 1]);
-    assert_eq!(pol.edge_indices("V6").unwrap(), [5, 0]);
+    assert_eq!(pol.edge_vertices("V1").map(|[v1, v2]| [&v1.name, &v2.name]).unwrap(), ["V1", "V2"]);
+    assert_eq!(pol.edge_vertices("V6").map(|[v1, v2]| [&v1.name, &v2.name]).unwrap(), ["V6", "V1"]);
     assert_almost_eq!(pol.edge_length("V3"), 18.22 - 10.86, 0.001);
 }
 
@@ -62,8 +62,8 @@ fn bdl_polygon2() {
     let pol: Polygon = Polygon::try_from(polblk).unwrap();
     assert_almost_eq!(pol.area(), 4.5, 0.001);
     assert_almost_eq!(pol.perimeter(), 8.2426405, 0.001);
-    assert_eq!(pol.edge_indices("V1").unwrap(), [0, 1]);
-    assert_eq!(pol.edge_indices("V6").unwrap(), [5, 0]);
+    assert_eq!(pol.edge_vertices("V1").map(|[v1, v2]| [&v1.name, &v2.name]).unwrap(), ["V1", "V2"]);
+    assert_eq!(pol.edge_vertices("V6").map(|[v1, v2]| [&v1.name, &v2.name]).unwrap(), ["V6", "V1"]);
     assert_almost_eq!(pol.edge_length("V3"), 1.0, 0.001);
     // lado horizontal hacia la derecha
     assert_almost_eq!(pol.edge_orient("V1", 0.0), 0.0, 0.001);

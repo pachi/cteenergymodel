@@ -8,9 +8,11 @@
 //! - Polígono (POLYGON)
 //! - Vector
 
-use std::convert::TryFrom;
+use std::{convert::TryFrom, f32::consts::FRAC_PI_2};
 
 use anyhow::{bail, Error};
+
+use na::{Point2, Rotation2, Vector2};
 
 use crate::bdl::BdlBlock;
 use crate::utils::normalize;
@@ -67,58 +69,42 @@ impl Polygon {
         }
     }
 
-    /// Longitud del lado que empieza en el vértice indicado
+    /// Longitud del lado que empieza en el vértice con el nombre indicado
     pub fn edge_length(&self, vertexname: &str) -> f32 {
-        let vv = &self.vertices;
-        let [n, m] = self.edge_indices(vertexname).unwrap_or([0, 0]);
-        let Vector2D { x: xn, y: yn } = unsafe { vv.get_unchecked(n).vector };
-        let Vector2D { x: xm, y: ym } = unsafe { vv.get_unchecked(m).vector };
-        (xn - xm).hypot(yn - ym)
+        self.edge_vertices(vertexname)
+            .map(|[p_n, p_m]| (p_n.vector - p_m.vector).magnitude())
+            .unwrap_or(0.0)
     }
 
-    /// Índices del lado que empieza en el vértice dado
+    /// Vértices del lado que empieza en el vértice con el nombre indicdo
     /// El lado que empieza en el último vértice continua en el vértice inicial
-    pub fn edge_indices(&self, vertexname: &str) -> Option<[usize; 2]> {
+    pub fn edge_vertices(&self, vertexname: &str) -> Option<[&Vertex2D; 2]> {
         let vv = &self.vertices;
-        let nvertsmax = vv.len() - 1;
-        let maybepos = vv.iter().position(|v| v.name == vertexname);
-        match maybepos {
-            Some(pos) if pos == nvertsmax => Some([pos, 0]),
-            Some(pos) if pos < nvertsmax => Some([pos, pos + 1]),
-            _ => None,
-        }
+        vv.iter()
+            .position(|v| v.name == vertexname)
+            .map(|pos| [&vv[pos], &vv[(pos + 1) % vv.len()]])
     }
 
     /// Ángulo con el sur de la normal del lado definido por el vértice
     /// northangle es la desviación global respecto al norte
     /// Los ángulos se dan en grados sexagesimales
-    /// TODO: hacer versión segura, comprobando existencia de vértices
     pub fn edge_orient(&self, vertexname: &str, northangle: f32) -> f32 {
-        let vv = &self.vertices;
-        let [n, m] = self.edge_indices(vertexname).unwrap_or([0, 0]);
-        // m y n siempre son inferiores a vv.len()
-        let Vector2D { x: xn, y: yn } = unsafe { vv.get_unchecked(n).vector };
-        let Vector2D { x: xm, y: ym } = unsafe { vv.get_unchecked(m).vector };
-        // vector director del lado
-        let dx = xm - xn;
-        let dy = ym - yn;
-        // normal al vector director (hay dos, (dy, -dx) y (-dy, dx))
-        let nx = dy;
-        let ny = -dx;
-        // vector del sur (0, -1)
-        let sx = 0.0;
-        let sy = -1.0;
-        // ángulo entre la normal y el sur
-        let dot = sx * nx + sy * ny;
-        let mag_n = nx.hypot(ny);
-        let mag_s = 1.0;
-        // Para las normales en el semiplano nx <= 0 cogemos el ángulo largo
-        let sign = f32::signum(nx);
-        normalize(
-            sign * f32::acos(dot / (mag_n * mag_s)).to_degrees() - northangle,
-            0.0,
-            360.0,
-        )
+        self.edge_vertices(vertexname)
+            .map(|[p_n, p_m]| {
+                // normal al vector director del lado (hay dos, (dy, -dx) y (-dy, dx) y cogemos (dy, -dx), un giro de -90º)
+                let n = Rotation2::new(-FRAC_PI_2) * (p_m.vector - p_n.vector);
+                // vector del sur (0, -1)
+                let s = -Vector2::y();
+                // ángulo entre la normal y el sur
+                let angle = n.angle(&s);
+                // Para las normales en el semiplano nx <= 0 cogemos el ángulo largo
+                normalize(
+                    f32::signum(n.x) * angle.to_degrees() - northangle,
+                    0.0,
+                    360.0,
+                )
+            })
+            .unwrap_or(0.0)
     }
 }
 
@@ -151,7 +137,7 @@ impl TryFrom<BdlBlock> for Polygon {
             if let Ok(vdata) = attrs.remove_str(&name) {
                 vertices.push(Vertex2D {
                     name,
-                    vector: vdata.parse()?,
+                    vector: point2_from_str(&vdata)?,
                 });
             } else {
                 break;
@@ -162,12 +148,12 @@ impl TryFrom<BdlBlock> for Polygon {
 }
 
 /// Vertex2D - Vértice, conjunto de nombre y vector 2d (x, y)
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct Vertex2D {
     /// Nombre del vértice
     pub name: String,
     /// Coordenadas del vértice
-    pub vector: Vector2D,
+    pub vector: Point2<f32>,
 }
 
 /// Vector 2D (x,y)
@@ -179,29 +165,16 @@ pub struct Vector2D {
     pub y: f32,
 }
 
-impl std::str::FromStr for Vector2D {
-    type Err = Error;
-
-    /// Convierte de cadena a vector de coordenadas
-    ///
-    /// Ejemplo:
-    /// ```text
-    ///     ( 14.97, 11.39 )
-    /// ```
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let [x, y] = s
-            .split(',')
-            .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
-            .collect::<Vec<_>>()
-            .as_slice()
-        {
-            Ok(Self {
-                x: x.parse::<f32>()?,
-                y: y.parse::<f32>()?,
-            })
-        } else {
-            bail!("Fallo al generar vector 2D con los datos '{}'", s)
-        }
+fn point2_from_str(s: &str) -> Result<Point2<f32>, Error> {
+    if let [x, y] = s
+        .split(',')
+        .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
+        .collect::<Vec<_>>()
+        .as_slice()
+    {
+        Ok(Point2::new(x.parse::<f32>()?, y.parse::<f32>()?))
+    } else {
+        bail!("Fallo al generar vector 2D con los datos '{}'", s)
     }
 }
 
