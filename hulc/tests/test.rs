@@ -5,6 +5,7 @@
 use std::convert::TryFrom;
 
 use hulc::bdl;
+use na::Point2;
 
 // Utilidades para tests ------------------
 
@@ -41,8 +42,8 @@ fn bdl_polygon() {
     .unwrap();
     let pol: Polygon = Polygon::try_from(polblk).unwrap();
     assert_almost_eq!(pol.area(), 76.307, 0.001);
-    assert_eq!(pol.edge_vertices("V1").map(|[v1, v2]| [&v1.name, &v2.name]).unwrap(), ["V1", "V2"]);
-    assert_eq!(pol.edge_vertices("V6").map(|[v1, v2]| [&v1.name, &v2.name]).unwrap(), ["V6", "V1"]);
+    assert_eq!(pol.edge_vertices("V1").unwrap(), [&Point2::new(14.97, 11.39), &Point2::new(10.84, 11.39)]);
+    assert_eq!(pol.edge_vertices("V6").unwrap(), [&Point2::new(14.97, 9.04), &Point2::new(14.97, 11.39)]);
     assert_almost_eq!(pol.edge_length("V3"), 18.22 - 10.86, 0.001);
 }
 
@@ -62,8 +63,8 @@ fn bdl_polygon2() {
     let pol: Polygon = Polygon::try_from(polblk).unwrap();
     assert_almost_eq!(pol.area(), 4.5, 0.001);
     assert_almost_eq!(pol.perimeter(), 8.2426405, 0.001);
-    assert_eq!(pol.edge_vertices("V1").map(|[v1, v2]| [&v1.name, &v2.name]).unwrap(), ["V1", "V2"]);
-    assert_eq!(pol.edge_vertices("V6").map(|[v1, v2]| [&v1.name, &v2.name]).unwrap(), ["V6", "V1"]);
+    assert_eq!(pol.edge_vertices("V1").unwrap(), [&Point2::new(1.0, 1.0), &Point2::new(2.0, 1.0)]);
+    assert_eq!(pol.edge_vertices("V6").unwrap(), [&Point2::new(0.0, 2.0), &Point2::new(1.0, 1.0)]);
     assert_almost_eq!(pol.edge_length("V3"), 1.0, 0.001);
     // lado horizontal hacia la derecha
     assert_almost_eq!(pol.edge_orient("V1", 0.0), 0.0, 0.001);
@@ -345,10 +346,9 @@ fn bdl_shading_vertices() {
     assert_almost_eq!(elem.refl, 0.7, 0.01);
     let vertices = elem.vertices.unwrap();
     assert_eq!(vertices.len(), 4);
-    assert_eq!(vertices[0].name, "V1");
-    assert_almost_eq!(vertices[0].vector.x, 9.11, 0.01);
-    assert_almost_eq!(vertices[0].vector.y, 25.7901, 0.0001);
-    assert_almost_eq!(vertices[0].vector.z, 12.5, 0.01);
+    assert_almost_eq!(vertices[0].x, 9.11, 0.01);
+    assert_almost_eq!(vertices[0].y, 25.7901, 0.0001);
+    assert_almost_eq!(vertices[0].z, 12.5, 0.01);
 }
 
 #[test]

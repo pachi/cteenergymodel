@@ -110,7 +110,6 @@ impl Wall {
             // Elementos definidos por vértice (location contiene el nombre del vértice)
             } else {
                 let poly = &space.polygon;
-                println!("Poligono: {:?}", &poly.vertices.iter().map(|v| &v.name).cloned().collect::<Vec<_>>());
                 let height = space.height;
                 let length = poly.edge_length(&location);
                 Ok(height * length)

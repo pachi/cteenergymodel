@@ -12,7 +12,7 @@ use std::{convert::TryFrom, f32::consts::FRAC_PI_2};
 
 use anyhow::{bail, Error};
 
-use na::{Point2, Rotation2, Vector2};
+use na::{Matrix2, Point2, Point3, Rotation2, Vector2};
 
 use crate::bdl::BdlBlock;
 use crate::utils::normalize;
@@ -24,7 +24,7 @@ pub struct Polygon {
     /// Nombre del polígono
     pub name: String,
     /// Lista de vectores que definen el polígono
-    pub vertices: Vec<Vertex2D>,
+    pub vertices: Vec<Point2<f32>>,
 }
 
 impl Polygon {
@@ -33,54 +33,56 @@ impl Polygon {
         // https://www.mathopenref.com/coordpolygonarea2.html
         // https://www.mathopenref.com/coordpolygonarea.html
         // 0.5 * ( \SUM( x_i * y_i+1 - y_i * x_i+1)_(i = de 1 a n) + (x_n * y_1 - y_n * x_1) )
-        let vertices = &self.vertices;
-        let nverts = vertices.len();
-
-        let mut area = 0.0;
-        for i in 0..nverts {
-            let nexti = (i + 1) % nverts; // el último vértice vuelve a cero
-            let vi = &vertices[i].vector;
-            let vj = &vertices[nexti].vector;
-            area += vi.x * vj.y - vi.y * vj.x;
-        }
-
+        let area = match self.vertices.len() {
+            0 => 0.0,
+            1 => 0.0,
+            n => self
+                .vertices
+                .iter()
+                .enumerate()
+                .map(|(i, v)| {
+                    Matrix2::from_columns(&[v.coords, self.vertices[(i + 1) % n].coords])
+                        .determinant()
+                })
+                .sum(),
+        };
         f32::abs(0.5 * area)
     }
 
     /// Perímetro de un polígono (m)
     pub fn perimeter(&self) -> f32 {
-        let nlen = self.vertices.len();
-        match nlen {
+        match self.vertices.len() {
             0 => 0.0,
             1 => 0.0,
-            _ => {
-                let first = self.vertices.get(0).unwrap().clone();
-                let mut vecs = self.vertices.clone();
-                vecs.push(first);
-                vecs.as_slice()
-                    .windows(2)
-                    .map(|win| {
-                        let vn = &win[0].vector;
-                        let vm = &win[1].vector;
-                        (vn.x - vm.x).hypot(vn.y - vm.y)
-                    })
-                    .sum()
-            }
+            n => self
+                .vertices
+                .iter()
+                .enumerate()
+                .map(|(i, v)| (v - self.vertices[(i + 1) % n]).magnitude())
+                .sum(),
         }
     }
 
     /// Longitud del lado que empieza en el vértice con el nombre indicado
     pub fn edge_length(&self, vertexname: &str) -> f32 {
         self.edge_vertices(vertexname)
-            .map(|[p_n, p_m]| (p_n.vector - p_m.vector).magnitude())
+            .map(|[p_n, p_m]| (p_n - p_m).magnitude())
             .unwrap_or(0.0)
     }
 
     /// Vértices del lado que empieza en el vértice con el nombre indicdo (Vnn)
     /// El lado que empieza en el último vértice continua en el vértice inicial
-    pub fn edge_vertices(&self, vertexname: &str) -> Option<[&Vertex2D; 2]> {
-        let num_vertex: usize = vertexname.strip_prefix("V").map(str::parse::<usize>).unwrap().ok()? - 1;
-        Some([&self.vertices[num_vertex], &self.vertices[(num_vertex + 1) % self.vertices.len()]])
+    pub fn edge_vertices(&self, vertexname: &str) -> Option<[&Point2<f32>; 2]> {
+        let num_vertex: usize = vertexname
+            .strip_prefix("V")
+            .map(str::parse::<usize>)
+            .unwrap()
+            .ok()?
+            - 1;
+        Some([
+            &self.vertices[num_vertex],
+            &self.vertices[(num_vertex + 1) % self.vertices.len()],
+        ])
     }
 
     /// Ángulo con el sur de la normal del lado definido por el vértice
@@ -90,7 +92,7 @@ impl Polygon {
         self.edge_vertices(vertexname)
             .map(|[p_n, p_m]| {
                 // normal al vector director del lado (hay dos, (dy, -dx) y (-dy, dx) y cogemos (dy, -dx), un giro de -90º)
-                let n = Rotation2::new(-FRAC_PI_2) * (p_m.vector - p_n.vector);
+                let n = Rotation2::new(-FRAC_PI_2) * (p_m - p_n);
                 // vector del sur (0, -1)
                 let s = -Vector2::y();
                 // ángulo entre la normal y el sur
@@ -133,10 +135,7 @@ impl TryFrom<BdlBlock> for Polygon {
         for i in 1.. {
             let name = format!("V{}", i);
             if let Ok(vdata) = attrs.remove_str(&name) {
-                vertices.push(Vertex2D {
-                    name,
-                    vector: point2_from_str(&vdata)?,
-                });
+                vertices.push(point2_from_str(&vdata)?);
             } else {
                 break;
             }
@@ -145,25 +144,13 @@ impl TryFrom<BdlBlock> for Polygon {
     }
 }
 
-/// Vertex2D - Vértice, conjunto de nombre y vector 2d (x, y)
-#[derive(Debug, Clone)]
-pub struct Vertex2D {
-    /// Nombre del vértice
-    pub name: String,
-    /// Coordenadas del vértice
-    pub vector: Point2<f32>,
-}
-
-/// Vector 2D (x,y)
-#[derive(Debug, Copy, Clone, Default)]
-pub struct Vector2D {
-    /// Coordenada x
-    pub x: f32,
-    /// Coordenada y
-    pub y: f32,
-}
-
-fn point2_from_str(s: &str) -> Result<Point2<f32>, Error> {
+/// Convierte de cadena a Point2 de coordenadas
+///
+/// Ejemplo:
+/// ```text
+///     ( 14.97, 11.39 )
+/// ```
+pub fn point2_from_str(s: &str) -> Result<Point2<f32>, Error> {
     if let [x, y] = s
         .split(',')
         .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
@@ -172,54 +159,29 @@ fn point2_from_str(s: &str) -> Result<Point2<f32>, Error> {
     {
         Ok(Point2::new(x.parse::<f32>()?, y.parse::<f32>()?))
     } else {
-        bail!("Fallo al generar vector 2D con los datos '{}'", s)
+        bail!("Fallo al generar punto 2D con los datos '{}'", s)
     }
 }
 
-/// Vertex3D - Vértice, conjunto de nombre y vector 3d (x, y, z)
-/// Se usan para definir sombras
-#[derive(Debug, Clone, Default)]
-pub struct Vertex3D {
-    /// Nombre del vértice
-    pub name: String,
-    /// Coordenadas del vértice
-    pub vector: Vector3D,
-}
-
-/// Vector 3D (x,y,z)
-#[derive(Debug, Copy, Clone, Default)]
-pub struct Vector3D {
-    /// Coordenada x
-    pub x: f32,
-    /// Coordenada y
-    pub y: f32,
-    /// Coordenada z
-    pub z: f32,
-}
-
-impl std::str::FromStr for Vector3D {
-    type Err = Error;
-
-    /// Convierte de cadena a vector de coordenadas
-    ///
-    /// Ejemplo:
-    /// ```text
-    ///     ( 14.97, 11.39, 2.0 )
-    /// ```
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let [x, y, z] = s
-            .split(',')
-            .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
-            .collect::<Vec<_>>()
-            .as_slice()
-        {
-            Ok(Self {
-                x: x.parse::<f32>()?,
-                y: y.parse::<f32>()?,
-                z: z.parse::<f32>()?,
-            })
-        } else {
-            bail!("Fallo al generar vector 3D con los datos '{}'", s)
-        }
+/// Convierte de cadena a Point3 de coordenadas
+///
+/// Ejemplo:
+/// ```text
+///     ( 14.97, 11.39, 2.0 )
+/// ```
+pub fn point3_from_str(s: &str) -> Result<Point3<f32>, Error> {
+    if let [x, y, z] = s
+        .split(',')
+        .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
+        .collect::<Vec<_>>()
+        .as_slice()
+    {
+        Ok(Point3::new(
+            x.parse::<f32>()?,
+            y.parse::<f32>()?,
+            z.parse::<f32>()?,
+        ))
+    } else {
+        bail!("Fallo al generar punto 3D con los datos '{}'", s)
     }
 }

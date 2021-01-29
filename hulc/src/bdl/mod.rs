@@ -168,10 +168,10 @@ impl Data {
                         .clone();
                     // Desplazamos el polígono
                     if let Ok(xval) = x {
-                        polygon.vertices.iter_mut().for_each(|v| v.vector.x += xval);
+                        polygon.vertices.iter_mut().for_each(|v| v.x += xval);
                     }
                     if let Ok(yval) = y {
-                        polygon.vertices.iter_mut().for_each(|v| v.vector.y += yval);
+                        polygon.vertices.iter_mut().for_each(|v| v.y += yval);
                     }
                     // Insertamos el polígono
                     space.polygon = polygon;

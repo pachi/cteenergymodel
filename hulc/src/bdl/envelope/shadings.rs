@@ -9,8 +9,11 @@
 use std::convert::TryFrom;
 
 use anyhow::Error;
+use na::Point3;
 
-use crate::bdl::{envelope::Vertex3D, BdlBlock};
+use crate::bdl::{BdlBlock};
+
+use super::point3_from_str;
 
 // Sombras ---------------------
 
@@ -47,7 +50,7 @@ pub struct Shading {
     /// Geometría por rectángulos
     pub geometry: Option<ShadingGeometry>,
     /// Geometría por vértices
-    pub vertices: Option<Vec<Vertex3D>>,
+    pub vertices: Option<Vec<Point3<f32>>>,
 }
 
 impl TryFrom<BdlBlock> for Shading {
@@ -109,10 +112,7 @@ impl TryFrom<BdlBlock> for Shading {
             for i in 1.. {
                 let name = format!("V{}", i);
                 if let Ok(vdata) = attrs.remove_str(&name) {
-                    verts.push(Vertex3D {
-                        name,
-                        vector: vdata.parse()?,
-                    });
+                    verts.push(point3_from_str(&vdata)?);
                 } else {
                     break;
                 }
