@@ -8,8 +8,9 @@ use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, format_err, Error};
 use log::warn;
+use na::Point3;
 
-use crate::utils::{fround2, fround3, orientation_bdl_to_52016, uuid_from_obj};
+use crate::utils::{fround2, fround3, orientation_bdl_to_52016, polygon2vec, uuid_from_obj};
 use hulc::{
     bdl::{self, Data},
     ctehexml,
@@ -148,10 +149,27 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
                     _ => SpaceType::UNCONDITIONED,
                 },
                 n_v: s.airchanges_h,
+                polygon: polygon2vec(&s.polygon, s.z),
             })
         })
         .collect::<Result<Vec<Space>, Error>>()
 }
+
+/// Construye polígono de muro a partir de su location y space
+fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point3<f32>> {
+    let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
+    let spacepoly = &space.polygon;
+    let polygon = match (wall.location.as_deref(), &wall.polygon) {
+        // TODO: necesitamos: rotar y después trasladar los polígonos según X, Y, Z de la geometría y del espacio
+        (None, Some(ref polygon)) => polygon2vec(&polygon, space.z + wall.z),
+        (Some("TOP"), Some(ref polygon)) => polygon2vec(&polygon, space.z + wall.z),
+        (Some("BOTTOM"), _) => polygon2vec(&spacepoly, space.z),
+        (Some(vertex), _) => Default::default(),
+        _ => Default::default(),
+    };
+    polygon
+}
+
 
 /// Construye muros de la envolvente a partir de datos BDL
 fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
@@ -180,6 +198,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 bounds,
                 azimuth: fround2(orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?)),
                 tilt,
+                polygon: wall_polygon(&wall, bdl),
             })
         })
         .collect::<Result<Vec<Wall>, _>>()?)

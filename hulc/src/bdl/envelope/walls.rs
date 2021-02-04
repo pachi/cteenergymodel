@@ -16,7 +16,7 @@ use std::convert::TryFrom;
 
 use anyhow::{bail, format_err, Error};
 
-use crate::bdl::{envelope::Polygon, AttrMap, BdlBlock, Data};
+use crate::bdl::{envelope::Polygon, BdlBlock, Data};
 use crate::utils::normalize;
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
@@ -67,11 +67,26 @@ pub struct Wall {
     /// Cuando se define por top, también tiene POLYGON, cuando es BOTTOM no lo define
     /// Cuando LOCATION es SPACE-Vn remite al polígono del espacio (POLYGON), empezando en el vértice n
     pub location: Option<String>,
+    /// Coordenada X de la esquina inferior izquierda
+    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
+    pub x: f32,
+    /// Coordenada Y de la esquina inferior izquierda
+    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
+    pub y: f32,
+    /// Coordenada Z de la esquina inferior izquierda
+    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
+    pub z: f32,
+    /// Azimut (grados sexagesimales)
+    /// Ángulo entre el eje Y (norte) del espacio y la proyección horizontal de la normal exterior del muro
+    /// 0 -> orientación norte, 90 -> orientación este, 180 -> orientación sur y 270 -> orientación oeste
+    pub azimuth: f32,
     /// Inclinación (grados sexagesimales)
     /// Ángulo entre el eje Z y la normal exterior del muro
     pub tilt: f32,
-    /// Posición definida por polígono
-    pub geometry: Option<WallGeometry>,
+    /// Nombre del polígono que define la geometría
+    /// Definición geométrica de un muro (EXTERIOR-WALL, ROOF o INTERIOR-WALL)
+    /// Se usa cuando no se define respecto a un vértice del espacio padre sino por polígono
+    pub polygon: Option<Polygon>,
     /// Tipos de cerramiento:
     /// - UNDERGROUND: cerramiento en contacto con el terreno (UNDERGROUND-WALL)
     /// - EXTERIOR: cerramiento en contacto con el aire exterior (EXTERIOR-WALL, ROOF)
@@ -92,9 +107,9 @@ impl Wall {
     ///
     /// TODO: la búsqueda de polígonos y espacios no es óptima (se podría cachear)
     pub fn gross_area(&self, db: &Data) -> Result<f32, Error> {
-        if let Some(geom) = &self.geometry {
+        if let Some(polygon) = &self.polygon {
             // Superficie para muros definidos por polígono
-            Ok(geom.polygon.area())
+            Ok(polygon.area())
         } else if let Some(location) = self.location.as_deref() {
             // Superficie para muros definidos por posición, en un espacio
             let space = db.get_space(self.space.as_str()).ok_or_else(|| {
@@ -137,9 +152,9 @@ impl Wall {
         // 2. Elementos definidos por posición TOP, BOTTOM o SPACE-Vxx
         // 2.1 Elementos TOP o BOTTOM -> perímetro del polígono del espacio
         // 2.2 Elementos definidos por vértice en el espacio -> longitud de lado * altura
-        if let Some(geom) = &self.geometry {
+        if let Some(polygon) = &self.polygon {
             // 1. Muros definidos por geometría (polígono)
-            Ok(geom.polygon.perimeter())
+            Ok(polygon.perimeter())
         } else if let Some(location) = self.location.as_deref() {
             // 2. Muros definidos por posición, en un espacio (polígono del espacio)
             let space = db.get_space(self.space.as_str()).ok_or_else(|| {
@@ -183,8 +198,8 @@ impl Wall {
         }
         // Elementos definidos por geometría (no horizontales), con azimuth
         // Se guarda el ángulo respecto al eje Y del espacio (norte, si la desviación global es cero)
-        else if let Some(geom) = &self.geometry {
-            Ok(geom.azimuth)
+        else if self.polygon.is_some() {
+            Ok(self.azimuth)
         }
         // Elementos definidos por vértice del polígono de un espacio
         else if let Some(vertex) = self.location.as_deref() {
@@ -220,53 +235,6 @@ impl Wall {
             Tilt::SIDE
         } else {
             Tilt::TOP
-        }
-    }
-}
-
-/// Definición geométrica de un muro (EXTERIOR-WALL, ROOF o INTERIOR-WALL)
-/// Se usa cuando no se define respecto a un vértice del espacio padre sino por polígono
-#[derive(Debug, Clone, Default)]
-pub struct WallGeometry {
-    /// Nombre del polígono que define la geometría
-    pub polygon: Polygon,
-    /// Coordenada X de la esquina inferior izquierda
-    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
-    pub x: f32,
-    /// Coordenada Y de la esquina inferior izquierda
-    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
-    pub y: f32,
-    /// Coordenada Z de la esquina inferior izquierda
-    /// usa coordenadas del espacio y es el cerramiento visto desde fuera
-    pub z: f32,
-    /// Acimut (grados sexagesimales)
-    /// Ángulo entre el eje Y (norte) del espacio y la proyección horizontal de la normal exterior del muro
-    /// 0 -> orientación norte, 90 -> orientación este, 180 -> orientación sur y 270 -> orientación oeste
-    pub azimuth: f32,
-}
-
-impl WallGeometry {
-    /// Detectamos si se define la geometría por polígono
-    /// Como guardaremos el polígono no por su nombre sino como objeto aquí usamos un default
-    /// y lo corregimos en el postproceso
-    pub fn parse_wallgeometry(mut attrs: AttrMap) -> Result<Option<Self>, Error> {
-        if attrs.remove_str("POLYGON").is_ok() {
-            let polygon = Default::default();
-            // XXX: en LIDER antiguo pueden no aparecer algunas de estas coordenadas
-            let x = attrs.remove_f32("X").unwrap_or_default();
-            let y = attrs.remove_f32("Y").unwrap_or_default();
-            let z = attrs.remove_f32("Z").unwrap_or_default();
-            let azimuth = attrs.remove_f32("AZIMUTH")?;
-
-            Ok(Some(WallGeometry {
-                polygon,
-                x,
-                y,
-                z,
-                azimuth,
-            }))
-        } else {
-            Ok(None)
         }
     }
 }
@@ -422,6 +390,11 @@ impl TryFrom<BdlBlock> for Wall {
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
 
+        // En LIDER antiguo pueden no aparecer algunas de las coordenadas
+        let x = attrs.remove_f32("X").unwrap_or_default();
+        let y = attrs.remove_f32("Y").unwrap_or_default();
+        let z = attrs.remove_f32("Z").unwrap_or_default();
+        let azimuth = attrs.remove_f32("AZIMUTH").unwrap_or_default();
         // Si la inclinación es None (se define location)
         // Solamente se define explícitamente cuando se define el cerramiento por geometría
         let tilt = match attrs.remove_f32("TILT").ok() {
@@ -435,21 +408,32 @@ impl TryFrom<BdlBlock> for Wall {
                 _ => 90.0,
             },
         };
+        // Detectamos si se define la geometría por polígono
+        // Como guardaremos el polígono no por su nombre sino como objeto aquí usamos un default
+        // y lo corregimos en el postproceso
+        let polygon = attrs.remove_str("POLYGON").ok().map(|polygon_name| {
+            let mut polygon: Polygon = Default::default();
+            polygon.name = polygon_name;
+            polygon
+        });
 
         // Propiedades específicas
         let nextto = match bounds {
             BoundaryType::INTERIOR => attrs.remove_str("NEXT-TO").ok(),
             _ => None,
         };
-        let geometry = WallGeometry::parse_wallgeometry(attrs)?;
         Ok(Self {
             name,
             bounds,
             space,
             cons,
             location,
+            x,
+            y,
+            z,
+            azimuth,
             tilt,
-            geometry,
+            polygon,
             nextto,
         })
     }

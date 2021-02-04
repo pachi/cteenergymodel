@@ -31,9 +31,16 @@ pub struct Space {
     /// Altura (suelo a suelo) del espacio
     /// (HULC solo permite que los espacios tengan la altura de la planta)
     pub height: f32,
-    /// Cota Z del espacio
-    /// Se define en la planta inicialmente
+    /// Cota X del espacio en el espacio de coordenadas de la planta
+    pub x: f32,
+    /// Cota Y del espacio en el espacio de coordenadas de la planta
+    pub y: f32,
+    /// Cota Z del espacio en el espacio de coordenadas de la planta
     pub z: f32,
+    /// Azimuth del espacio en el sistema coordenado de la planta (grados) [0-360]
+    /// Ángulo del eje +Y respecto al eje +Y del edificio (eje de rotación Z).
+    /// Sentido horario (x+/E+)
+    pub azimuth: f32,
     /// Pertenencia a la envolvente térmica
     pub insidete: bool,
     /// Planta a la que pertenece el espacio
@@ -255,14 +262,17 @@ impl TryFrom<BdlBlock> for Space {
         // CONDITIONED|UNHABITED|No acondiconado
         let stype = attrs.remove_str("TYPE")?;
         // Generamos un polígono por defecto, ya que se inserta en el postproceso de bloques
-        let polygon = Polygon::default();
+        let mut polygon = Polygon::default();
+        polygon.name = attrs.remove_str("POLYGON")?;
         // HULC no define a veces la altura pero para el cálculo de volúmenes y alturas
         // usa la altura de la planta
         // XXX: podríamos ver si esos casos se corresponden a espacios con cubierta inclinada
         // XXX: y calcular la altura media en función de la geometría de la cubierta
         let height = attrs.remove_f32("HEIGHT").unwrap_or_default();
-        // La cota Z se define en los objetos FLOOR, pero la guardamos luego aquí para eliminarlos
-        let z = 0.0;
+        let x = attrs.remove_f32("X").unwrap_or_default();
+        let y = attrs.remove_f32("Y").unwrap_or_default();
+        let z = attrs.remove_f32("Z").unwrap_or_default();
+        let azimuth = attrs.remove_f32("AZIMUTH").unwrap_or_default();
         let insidete = attrs
             .remove_str("perteneceALaEnvolventeTermica")
             .ok()
@@ -314,7 +324,10 @@ impl TryFrom<BdlBlock> for Space {
             stype,
             polygon,
             height,
+            x,
+            y,
             z,
+            azimuth,
             insidete,
             floor,
             power,

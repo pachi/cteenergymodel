@@ -382,7 +382,7 @@ fn bdl_space() {
     assert_eq!(elem.name, "P01_E01");
     assert_eq!(elem.stype, "CONDITIONED");
     // El polígono se inserta en el postproceso de bloques
-    assert_eq!(elem.polygon.name, "");
+    assert_eq!(elem.polygon.name, "P01_E01_Pol2");
     assert_almost_eq!(elem.height, 3.5, 0.1);
     // La cota se recibe del objeto floor en el postproceso. Inicialmente se pone a cero
     assert_almost_eq!(elem.z, 0.0, 0.1);
@@ -467,7 +467,7 @@ fn bdl_wall_location_space() {
     assert_eq!(elem.bounds, BoundaryType::EXTERIOR);
     assert_almost_eq!(elem.tilt, 90.0, 0.1);
     assert_eq!(elem.nextto, None);
-    assert!(elem.geometry.is_none());
+    assert!(elem.polygon.is_none());
 }
 
 #[test]
@@ -495,7 +495,7 @@ fn bdl_wall_location_top() {
     assert_eq!(elem.bounds, BoundaryType::EXTERIOR);
     assert_almost_eq!(elem.tilt, 0.0, 0.1);
     assert_eq!(elem.nextto, None);
-    assert!(elem.geometry.is_none());
+    assert!(elem.polygon.is_none());
 }
 
 #[test]
@@ -528,13 +528,13 @@ fn bdl_wall_polygon() {
     assert_eq!(elem.bounds, BoundaryType::EXTERIOR);
     assert_almost_eq!(elem.tilt, 0.0, 0.1);
     assert_eq!(elem.nextto, None);
-    let geom = elem.geometry.as_ref().unwrap();
     // El nombre del polígono se fija en el postproceso
-    assert_eq!(geom.polygon.name, "");
-    assert_almost_eq!(geom.x, 2.496, 0.001);
-    assert_almost_eq!(geom.y, -4.888, 0.001);
-    assert_almost_eq!(geom.z, 3.0, 0.001);
-    assert_almost_eq!(geom.azimuth, 180.0, 0.1);
+    assert_eq!(elem.polygon.unwrap().name, "P03_E01_FE004_Poligono3");
+    assert_almost_eq!(elem.x, 2.496, 0.001);
+    assert_almost_eq!(elem.y, -4.888, 0.001);
+    assert_almost_eq!(elem.z, 3.0, 0.001);
+    assert_almost_eq!(elem.azimuth, 180.0, 0.1);
+    assert_almost_eq!(elem.tilt, 0.0, 0.1);
 }
 
 #[test]

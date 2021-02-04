@@ -67,6 +67,9 @@ impl Data {
     pub fn new<T: AsRef<str>>(input: T) -> Result<Self, Error> {
         let blocks = build_blocks(input.as_ref())?;
 
+        // Primero recogemos objetos generales como POLYGON, FLOOR y CONSTRUCTION
+        // que necesitamos que estén procesados previamente por aparecer en otros
+
         // Separa polígonos (POLYGON) -----------
         // luego los sustituiremos en los objetos que los usan
         let (poly_blocks, blocks): (Vec<BdlBlock>, Vec<BdlBlock>) =
@@ -79,6 +82,7 @@ impl Data {
         }
 
         // Separa plantas (FLOOR) --------------
+        // Estos objetos los eliminamos del modelo, sumando sus X,Y,Z, Azimuth a los del espacio
         // luego los sustituiremos en los objetos que los usan
         let (floor_blocks, blocks): (Vec<BdlBlock>, Vec<BdlBlock>) =
             blocks.into_iter().partition(|b| &b.btype == "FLOOR");
@@ -100,10 +104,17 @@ impl Data {
             constructions.insert(block.name.clone(), Construction::try_from(block)?);
         }
 
+        // Localizamos el azimuth
+        let building_azimuth = blocks
+            .iter()
+            .find(|b| b.btype.as_str() == "BUILD-PARAMETERS")
+            .and_then(|v| v.attrs.get_f32("AZIMUTH").ok())
+            .unwrap_or_default();
+
         // Resto de bloques -------------------------------
         let mut bdldata: Self = Default::default();
         for block in blocks {
-            match block.btype.as_ref() {
+            match block.btype.as_str() {
                 // Elementos generales =========================
                 // Valores por defecto, Datos generales, espacio de trabajo y edificio
                 "DEFECTOS" | "GENERAL-DATA" | "WORK-SPACE" | "BUILD-PARAMETERS" => {
@@ -148,33 +159,19 @@ impl Data {
                 // Elementos geométricos y espacios -----------
                 // Espacios
                 "SPACE" => {
-                    let polygon_name = block.attrs.get_str("POLYGON")?;
-                    // Se puede copiar un polígono con desplazamiento ------------
-                    // Ver caso 14_BloqueH5P.CTE y espacios P1E5A-Hall, P1E5B-Hall
-                    let x = block.attrs.get_f32("X");
-                    let y = block.attrs.get_f32("Y");
-
-                    // Copiamos polígono ----------
+                    // let polygon_name = block.attrs.get_str("POLYGON")?;
                     let mut space = Space::try_from(block)?;
-                    let mut polygon = polygons
-                        .get(&polygon_name)
+                    // Insertamos el polígono -------
+                    space.polygon = polygons
+                        .get(&space.polygon.name)
                         .ok_or_else(|| {
                             format_err!(
                                 "Polígono {} no encontrado para el espacio {}",
-                                &polygon_name,
+                                &space.polygon.name,
                                 &space.name,
                             )
                         })?
                         .clone();
-                    // Desplazamos el polígono
-                    if let Ok(xval) = x {
-                        polygon.vertices.iter_mut().for_each(|v| v.x += xval);
-                    }
-                    if let Ok(yval) = y {
-                        polygon.vertices.iter_mut().for_each(|v| v.y += yval);
-                    }
-                    // Insertamos el polígono
-                    space.polygon = polygon;
 
                     // Incorporamos datos de planta ----------
                     // Trasladamos la cota Z, el multiplicador de planta y la altura de planta
@@ -187,8 +184,12 @@ impl Data {
                             space.name
                         )
                     })?;
+                    // let building_azimuth = bdldata.meta.get("BUILD-PARAMETERS").unwrap().attrs.get_f32("AZIMUTH").unwrap_or_default();
                     space.height = floor.height;
-                    space.z = floor.z;
+                    space.x += floor.x;
+                    space.y += floor.y;
+                    space.z += floor.z;
+                    space.azimuth += floor.azimuth + building_azimuth;
                     space.floor_multiplier = floor.multiplier;
 
                     bdldata.spaces.push(space);
@@ -201,21 +202,18 @@ impl Data {
 
                 // Cerramientos opacos de la envolvente -----------
                 "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL" => {
-                    let maybe_polygon_name = block.attrs.get_str("POLYGON");
+                    // let maybe_polygon_name = block.attrs.get_str("POLYGON");
                     let mut wall = Wall::try_from(block)?;
-
-                    // Insertamos los polígonos -----------
-                    if let Some(mut geom) = wall.geometry.as_mut() {
-                        let wall_name = wall.name.clone();
-                        let polygon_name = maybe_polygon_name.unwrap();
-                        let new_polygon = polygons.remove(&polygon_name).ok_or_else(|| {
+                    wall.polygon = if let Some(polygon) = &wall.polygon {
+                        Some(polygons.remove(&polygon.name).ok_or_else(|| {
                             format_err!(
                                 "Polígono {} no encontrado para definición de muro {}",
-                                &polygon_name,
-                                &wall_name,
+                                &polygon.name,
+                                &wall.name,
                             )
-                        })?;
-                        geom.polygon = new_polygon;
+                        })?)
+                    } else {
+                        None
                     };
 
                     // Sustituimos la construcción por el nombre de la composición de capas

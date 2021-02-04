@@ -4,6 +4,7 @@
 
 //! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
 
+use na::Point3;
 use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
@@ -124,6 +125,8 @@ pub struct Space {
     /// Incluye la parte del perímetro que separa el espacio del exterior
     /// y excluye que lo separa de otros espacios acondicionados.
     pub exposed_perimeter: Option<f32>,
+    /// Polígono del espacio
+    pub polygon: Vec<Point3<f32>>,
 }
 
 /// Elemento opaco (muro, cubierta, suelo, partición)
@@ -156,6 +159,8 @@ pub struct Wall {
     /// Inclinación (beta) [0, 180]
     /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
     pub tilt: f32,
+    /// Polígono del muro
+    pub polygon: Vec<Point3<f32>>,
 }
 
 /// Hueco
