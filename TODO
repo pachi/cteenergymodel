@@ -39,11 +39,27 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 
 ## BDL
 
-- Se podría eliminar la referencia entre muros y espacios, generando el polígono del muro a partir de su referencia al polígono del espacios
-    - así eliminamos referencias a vértices de polígonos y también location
+- Definir polígonos:
+    https://doe2.com/Download/DOE-23/DOE23Vol3-Topics_50h.pdf p.152
+
+    Vamos a guardar polígonos 3D de muros y huecos y solamente quedaría por corregir la desviación al norte global, que guardamos en Meta
+    Así solo usamos datos de espacio y muro/hueco
+
+    - En Meta
+        - tenemos el azimuth global del edificio
+    - Empezar por SPACE
+        - x, y, z, azimut, (provisional: polygon (3D)?)
+    - Después seguimos con Walls
+        - x, y, z, azimuth, tilt, polygon (2D)
+        - Esto sería una alternativa a una definición simple, igual que en las ventanas
+    - Ver si después se podría eliminar el polígono del espacio
+        - en energyplus no tiene polígono pero sí área y volumen
+        - necesitaríamos su area, si dejamos solo los polígonos de los cerramientos el cálculo de la superficie de zona como suma de suelos ¿¿puede ser poco fiable??
+    - ¿podríamos tener?
+        Geometry_full(x, y, z, polygon)
+        Geometry_simple(z, area, ??)
 - Quitar de los elementos aquellas cosas que necesitan consultas globales (con acceso a bdldata)
 - Comprobar qué se cambia en las plantas o en el edificio cuando se indica una cota base distinta a la 0.0 (ver si se pone la Z de la planta P01 distinta a "")
-- Convertir definición de muros de polygon o location a (X, Y, Z, WIDTH, HEIGHT, AZIMUTH)
 - Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL:
     - metadatos
     - horarios
