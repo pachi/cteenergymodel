@@ -77,7 +77,6 @@ impl Data {
 
         let mut polygons: HashMap<String, Polygon> = Default::default();
         for block in poly_blocks {
-            // Polígonos
             polygons.insert(block.name.clone(), Polygon::try_from(block)?);
         }
 
@@ -89,7 +88,6 @@ impl Data {
 
         let mut floors: HashMap<String, Floor> = Default::default();
         for block in floor_blocks {
-            // Plantas
             floors.insert(block.name.clone(), Floor::try_from(block)?);
         }
 
@@ -100,7 +98,6 @@ impl Data {
 
         let mut constructions: HashMap<String, Construction> = Default::default();
         for block in cons_blocks {
-            // Construcciones
             constructions.insert(block.name.clone(), Construction::try_from(block)?);
         }
 
