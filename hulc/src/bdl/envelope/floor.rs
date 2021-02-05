@@ -21,16 +21,8 @@ use crate::bdl::BdlBlock;
 pub struct Floor {
     /// Nombre de la planta
     pub name: String,
-    /// Cota X de la planta en el sistema coordenado del edificio
-    pub x: f32,
-    /// Cota Y de la planta en el sistema coordenado del edificio
-    pub y: f32,
     /// Cota Z de la planta en el sistema coordenado del edificio
     pub z: f32,
-    /// Azimuth de la planta en el sistema coordenado del edificio (grados) [0-360]
-    /// Ángulo del eje +Y respecto al eje +Y del edificio (eje de rotación Z).
-    /// Sentido horario (x+/E+)
-    pub azimuth: f32,
     /// Altura suelo a suelo de la planta (incluye plenum y forjados)
     pub height: f32,
     /// Multiplicador de planta
@@ -63,6 +55,7 @@ impl TryFrom<BdlBlock> for Floor {
     ///         PREVIOUS      =  "P01"
     ///         ..
     /// ```
+    /// HULC no usa las propiedades X, Y, AZIMUTH de la planta, solo la Z
     /// XXX: Atributos no trasladados: FLOOR-HEIGHT, POLYGON, SHAPE
     /// LIDER no usa bien la propiedad SPACE-HEIGHT, que permitiría definir plenum (o reducir la altura de forjados)
     /// sino que la usa como si fuese FLOOR-HEIGHT. HULC pone igual FLOOR-HEIGHT y SPACE-HEIGHT
@@ -75,10 +68,7 @@ impl TryFrom<BdlBlock> for Floor {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
-        let x = attrs.remove_f32("X").unwrap_or_default();
-        let y = attrs.remove_f32("Y").unwrap_or_default();
         let z = attrs.remove_f32("Z").unwrap_or_default();
-        let azimuth = attrs.remove_f32("AZIMUTH").unwrap_or_default();
         // Las versiones antiguas de LIDER usan SPACE-HEIGHT y dejan a cero FLOOR-HEIGHT
         // HULC escribe FLOOR-HEIGHT con el mismo valor que SPACE-HEIGHT
         let height = attrs.remove_f32("SPACE-HEIGHT")?;
@@ -86,10 +76,7 @@ impl TryFrom<BdlBlock> for Floor {
         let previous = attrs.remove_str("PREVIOUS")?;
         Ok(Self {
             name,
-            x,
-            y,
             z,
-            azimuth,
             height,
             multiplier,
             previous,

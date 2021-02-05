@@ -36,6 +36,7 @@ pub struct Space {
     /// Cota Y del espacio en el espacio de coordenadas de la planta
     pub y: f32,
     /// Cota Z del espacio en el espacio de coordenadas de la planta
+    /// XXX: HULC no usa esta coordenada en los espacios, solo los sitúa en el plano de la planta
     pub z: f32,
     /// Azimuth del espacio en el sistema coordenado de la planta (grados) [0-360]
     /// Ángulo del eje +Y respecto al eje +Y del edificio (eje de rotación Z).
@@ -262,8 +263,7 @@ impl TryFrom<BdlBlock> for Space {
         // CONDITIONED|UNHABITED|No acondiconado
         let stype = attrs.remove_str("TYPE")?;
         // Generamos un polígono por defecto, ya que se inserta en el postproceso de bloques
-        let mut polygon = Polygon::default();
-        polygon.name = attrs.remove_str("POLYGON")?;
+        let polygon = Polygon::default();
         // HULC no define a veces la altura pero para el cálculo de volúmenes y alturas
         // usa la altura de la planta
         // XXX: podríamos ver si esos casos se corresponden a espacios con cubierta inclinada

@@ -17,15 +17,17 @@ use na::{Matrix2, Point2, Point3, Rotation2, Vector2};
 use crate::bdl::BdlBlock;
 use crate::utils::normalize;
 
+// pub struct Polygon {
+//     /// Nombre del polígono
+//     pub name: String,
+//     /// Lista de vectores que definen el polígono
+//     pub vertices: Vec<Point2<f32>>,
+// }
+
 /// Polígono
 /// Solo pueden ser polígonos con vértices 2D
 #[derive(Debug, Clone, Default)]
-pub struct Polygon {
-    /// Nombre del polígono
-    pub name: String,
-    /// Lista de vectores que definen el polígono
-    pub vertices: Vec<Point2<f32>>,
-}
+pub struct Polygon(pub Vec<Point2<f32>>);
 
 impl Polygon {
     /// Área del polígono definido por vértices (m2)
@@ -33,16 +35,15 @@ impl Polygon {
         // https://www.mathopenref.com/coordpolygonarea2.html
         // https://www.mathopenref.com/coordpolygonarea.html
         // 0.5 * ( \SUM( x_i * y_i+1 - y_i * x_i+1)_(i = de 1 a n) + (x_n * y_1 - y_n * x_1) )
-        let area = match self.vertices.len() {
+        let area = match self.0.len() {
             0 => 0.0,
             1 => 0.0,
             n => self
-                .vertices
+                .0
                 .iter()
                 .enumerate()
                 .map(|(i, v)| {
-                    Matrix2::from_columns(&[v.coords, self.vertices[(i + 1) % n].coords])
-                        .determinant()
+                    Matrix2::from_columns(&[v.coords, self.0[(i + 1) % n].coords]).determinant()
                 })
                 .sum(),
         };
@@ -51,14 +52,14 @@ impl Polygon {
 
     /// Perímetro de un polígono (m)
     pub fn perimeter(&self) -> f32 {
-        match self.vertices.len() {
+        match self.0.len() {
             0 => 0.0,
             1 => 0.0,
             n => self
-                .vertices
+                .0
                 .iter()
                 .enumerate()
-                .map(|(i, v)| (v - self.vertices[(i + 1) % n]).magnitude())
+                .map(|(i, v)| (v - self.0[(i + 1) % n]).magnitude())
                 .sum(),
         }
     }
@@ -80,8 +81,8 @@ impl Polygon {
             .ok()?
             - 1;
         Some([
-            &self.vertices[num_vertex],
-            &self.vertices[(num_vertex + 1) % self.vertices.len()],
+            &self.0[num_vertex],
+            &self.0[(num_vertex + 1) % self.0.len()],
         ])
     }
 
@@ -128,9 +129,7 @@ impl TryFrom<BdlBlock> for Polygon {
     ///     ..
     /// ```
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
-        let BdlBlock {
-            name, mut attrs, ..
-        } = value;
+        let BdlBlock { mut attrs, .. } = value;
         let mut vertices = Vec::new();
         for i in 1.. {
             let name = format!("V{}", i);
@@ -140,7 +139,7 @@ impl TryFrom<BdlBlock> for Polygon {
                 break;
             }
         }
-        Ok(Self { name, vertices })
+        Ok(Self(vertices))
     }
 }
 

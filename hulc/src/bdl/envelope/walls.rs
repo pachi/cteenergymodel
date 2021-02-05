@@ -411,11 +411,7 @@ impl TryFrom<BdlBlock> for Wall {
         // Detectamos si se define la geometría por polígono
         // Como guardaremos el polígono no por su nombre sino como objeto aquí usamos un default
         // y lo corregimos en el postproceso
-        let polygon = attrs.remove_str("POLYGON").ok().map(|polygon_name| {
-            let mut polygon: Polygon = Default::default();
-            polygon.name = polygon_name;
-            polygon
-        });
+        let polygon = attrs.remove_str("POLYGON").ok().map(|_| Default::default());
 
         // Propiedades específicas
         let nextto = match bounds {

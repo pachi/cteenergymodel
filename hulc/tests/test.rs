@@ -382,7 +382,6 @@ fn bdl_space() {
     assert_eq!(elem.name, "P01_E01");
     assert_eq!(elem.stype, "CONDITIONED");
     // El polígono se inserta en el postproceso de bloques
-    assert_eq!(elem.polygon.name, "P01_E01_Pol2");
     assert_almost_eq!(elem.height, 3.5, 0.1);
     // La cota se recibe del objeto floor en el postproceso. Inicialmente se pone a cero
     assert_almost_eq!(elem.z, 0.0, 0.1);
@@ -528,8 +527,7 @@ fn bdl_wall_polygon() {
     assert_eq!(elem.bounds, BoundaryType::EXTERIOR);
     assert_almost_eq!(elem.tilt, 0.0, 0.1);
     assert_eq!(elem.nextto, None);
-    // El nombre del polígono se fija en el postproceso
-    assert_eq!(elem.polygon.unwrap().name, "P03_E01_FE004_Poligono3");
+    // El nombre del polígono se fija en el postproceso, no probamos que hay un polígono
     assert_almost_eq!(elem.x, 2.496, 0.001);
     assert_almost_eq!(elem.y, -4.888, 0.001);
     assert_almost_eq!(elem.z, 3.0, 0.001);

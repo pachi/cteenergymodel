@@ -101,13 +101,6 @@ impl Data {
             constructions.insert(block.name.clone(), Construction::try_from(block)?);
         }
 
-        // Localizamos el azimuth
-        let building_azimuth = blocks
-            .iter()
-            .find(|b| b.btype.as_str() == "BUILD-PARAMETERS")
-            .and_then(|v| v.attrs.get_f32("AZIMUTH").ok())
-            .unwrap_or_default();
-
         // Resto de bloques -------------------------------
         let mut bdldata: Self = Default::default();
         for block in blocks {
@@ -156,15 +149,15 @@ impl Data {
                 // Elementos geométricos y espacios -----------
                 // Espacios
                 "SPACE" => {
-                    // let polygon_name = block.attrs.get_str("POLYGON")?;
+                    let polygon_name = block.attrs.get_str("POLYGON")?;
                     let mut space = Space::try_from(block)?;
                     // Insertamos el polígono -------
                     space.polygon = polygons
-                        .get(&space.polygon.name)
+                        .get(&polygon_name)
                         .ok_or_else(|| {
                             format_err!(
                                 "Polígono {} no encontrado para el espacio {}",
-                                &space.polygon.name,
+                                &polygon_name,
                                 &space.name,
                             )
                         })?
@@ -183,10 +176,7 @@ impl Data {
                     })?;
                     // let building_azimuth = bdldata.meta.get("BUILD-PARAMETERS").unwrap().attrs.get_f32("AZIMUTH").unwrap_or_default();
                     space.height = floor.height;
-                    space.x += floor.x;
-                    space.y += floor.y;
-                    space.z += floor.z;
-                    space.azimuth += floor.azimuth + building_azimuth;
+                    space.z += floor.z; // Esto es siempre la z de la planta, ya que HULC no admite espacios a otro nivel distinto al de la planta
                     space.floor_multiplier = floor.multiplier;
 
                     bdldata.spaces.push(space);
@@ -199,13 +189,13 @@ impl Data {
 
                 // Cerramientos opacos de la envolvente -----------
                 "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL" => {
-                    // let maybe_polygon_name = block.attrs.get_str("POLYGON");
+                    let maybe_polygon_name = block.attrs.get_str("POLYGON").ok();
                     let mut wall = Wall::try_from(block)?;
-                    wall.polygon = if let Some(polygon) = &wall.polygon {
-                        Some(polygons.remove(&polygon.name).ok_or_else(|| {
+                    wall.polygon = if let Some(polygon_name) = maybe_polygon_name {
+                        Some(polygons.remove(&polygon_name).ok_or_else(|| {
                             format_err!(
                                 "Polígono {} no encontrado para definición de muro {}",
-                                &polygon.name,
+                                &polygon_name,
                                 &wall.name,
                             )
                         })?)
