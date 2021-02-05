@@ -10,9 +10,9 @@ use anyhow::{anyhow, format_err, Error};
 use log::warn;
 use na::Point3;
 
-use crate::utils::{fround2, fround3, orientation_bdl_to_52016, polygon2vec, uuid_from_obj};
+use crate::utils::{fround2, fround3, orientation_bdl_to_52016, uuid_from_obj};
 use hulc::{
-    bdl::{self, Data},
+    bdl::{self, Data, Polygon},
     ctehexml,
 };
 
@@ -20,6 +20,11 @@ pub use super::{
     BoundaryType, Meta, Model, Orientation, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
     Window, WindowCons,
 };
+
+/// Convierte de bdl.Polygon a Vec<Point3<f32>>
+pub fn polygon2vec(polygon: &Polygon, z: f32) -> Vec<Point3<f32>> {
+    polygon.0.iter().map(|p| Point3::new(p.x, p.y, z)).collect()
+}
 
 // Conversiones de BDL a tipos CTE -------------------
 
@@ -79,6 +84,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         // Completa metadatos desde ctehexml y el bdl
         // Desviación general respecto al Norte (criterio BDL)
         let buildparams = bdl.meta.get("BUILD-PARAMETERS").unwrap();
+        let north_angle = buildparams.attrs.get_f32("AZIMUTH").unwrap_or_default();
         let d_perim_insulation = buildparams
             .attrs
             .get_f32("D-AISLAMIENTO-PERIMETRAL")
@@ -108,6 +114,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
                 None
             },
             n50_test_ach: dg.valor_n50_medido,
+            north_angle,
             d_perim_insulation,
             rn_perim_insulation,
         };
