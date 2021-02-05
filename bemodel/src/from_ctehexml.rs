@@ -162,12 +162,12 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
         .collect::<Result<Vec<Space>, Error>>()
 }
 
-/// Construye polígono de muro a partir de su location y space
+/// Construye polígono 3D de muro a partir de sus datos de muro y del espacio
 fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point3<f32>> {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
     let spacepoly = &space.polygon;
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
-        // TODO: necesitamos: rotar y después trasladar los polígonos según X, Y, Z de la geometría y del espacio
+        // TODO: necesitamos: rotar y después trasladar los polígonos según X, Y, Z de la geometría y del espacio (la global del edificio la dejamos externa en metadatos)
         (None, Some(ref polygon)) => polygon2vec(&polygon, space.z + wall.z),
         (Some("TOP"), Some(ref polygon)) => polygon2vec(&polygon, space.z + wall.z),
         (Some("BOTTOM"), _) => polygon2vec(&spacepoly, space.z),
