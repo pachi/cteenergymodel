@@ -191,7 +191,7 @@ fn test_bdl_parse() {
     assert_almost_eq!(w.net_area(bdldb).unwrap(), 49.985004, 0.001);
     assert_eq!(w.space, "P02_E01");
     assert_almost_eq!(w.tilt, 180.0, 0.001);
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0, 0.001); // Horizontal
+    assert_almost_eq!(w.angle_with_space_north, 0.0, 0.001); // Horizontal
 
     // Solera
     let w = bdldb.get_wall("P01_E01_FTER001").unwrap();
@@ -199,22 +199,22 @@ fn test_bdl_parse() {
     assert_almost_eq!(w.net_area(bdldb).unwrap(), 50.0, 0.001);
     assert_eq!(w.space, "P01_E01");
     assert_almost_eq!(w.tilt, 180.0, 0.001);
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0, 0.001); // Horizontal
+    assert_almost_eq!(w.angle_with_space_north, 0.0, 0.001); // Horizontal
 
     // Pared exterior
     let w = bdldb.get_wall("P01_E01_PE003").unwrap();
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0, 0.001); // Norte
+    assert_almost_eq!(w.angle_with_space_north, 0.0, 0.001); // Norte
     let w = bdldb.get_wall("P04_E01_ME001").unwrap();
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0, 0.001); // Norte
+    assert_almost_eq!(w.angle_with_space_north, 0.0, 0.001); // Norte
     assert_almost_eq!(w.gross_area(bdldb).unwrap(), 17.5, 0.001);
 
     // Muro exterior
     let w = bdldb.get_wall("P01_E01_PE001").unwrap();
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 180.0, 0.001); // Sur
+    assert_almost_eq!(w.angle_with_space_north, 180.0, 0.001); // Sur
 
     // Muro exterior
     let w = bdldb.get_wall("P02_E01_PE003").unwrap();
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 90.0, 0.001); // Este
+    assert_almost_eq!(w.angle_with_space_north, 90.0, 0.001); // Este
 
     // Muro interior
     let w = bdldb.get_wall("P02_E01_PE001").unwrap();
@@ -222,22 +222,20 @@ fn test_bdl_parse() {
     assert_almost_eq!(w.net_area(bdldb).unwrap(), 28.0, 0.001);
     assert_eq!(w.space, "P02_E01");
     assert_almost_eq!(w.tilt, 90.0, 0.001);
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 270.0, 0.001); // Oeste
+    assert_almost_eq!(w.angle_with_space_north, 270.0, 0.001); // Oeste
 
     let v = bdldb.get_window("P02_E01_PE001_V").unwrap();
     assert_almost_eq!(v.area(), 2.0, 0.001);
     assert_eq!(v.wall, "P02_E01_PE001");
-    assert_almost_eq!(v.tilt(bdldb).unwrap(), 90.0, 0.001);
-    assert_almost_eq!(v.azimuth(0.0, bdldb).unwrap(), 270.0, 0.001); // Oeste
 
     // Cubiertas
     let w = bdldb.get_wall("P03_E01_CUB001").unwrap();
     assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.0, 0.005);
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 0.0, 0.001); // Horizontal
+    assert_almost_eq!(w.angle_with_space_north, 0.0, 0.001); // Horizontal
     assert_almost_eq!(w.tilt, 0.0, 0.001); // Horizontal
     let w = bdldb.get_wall("P04_E01_CUB001").unwrap();
     assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.9902, 0.005);
-    assert_almost_eq!(w.azimuth(0.0, bdldb).unwrap(), 90.0, 0.001); // Este
+    assert_almost_eq!(w.angle_with_space_north, 90.0, 0.001); // Este
     assert_almost_eq!(w.tilt, 11.30993, 0.001);
 
     // // Volumen acondicionado de la envolvente:

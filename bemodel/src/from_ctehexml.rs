@@ -8,11 +8,11 @@ use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, format_err, Error};
 use log::warn;
-use na::Point3;
+use na::{Point2, Point3};
 
 use crate::utils::{fround2, fround3, orientation_bdl_to_52016, uuid_from_obj};
 use hulc::{
-    bdl::{self, Data, Polygon},
+    bdl::{self, Data},
     ctehexml,
 };
 
@@ -20,11 +20,6 @@ pub use super::{
     BoundaryType, Meta, Model, Orientation, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
     Window, WindowCons,
 };
-
-/// Convierte de bdl.Polygon a Vec<Point3<f32>>
-pub fn polygon2vec(polygon: &Polygon, z: f32) -> Vec<Point3<f32>> {
-    polygon.0.iter().map(|p| Point3::new(p.x, p.y, z)).collect()
-}
 
 // Conversiones de BDL a tipos CTE -------------------
 
@@ -84,7 +79,6 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         // Completa metadatos desde ctehexml y el bdl
         // Desviación general respecto al Norte (criterio BDL)
         let buildparams = bdl.meta.get("BUILD-PARAMETERS").unwrap();
-        let north_angle = buildparams.attrs.get_f32("AZIMUTH").unwrap_or_default();
         let d_perim_insulation = buildparams
             .attrs
             .get_f32("D-AISLAMIENTO-PERIMETRAL")
@@ -114,7 +108,6 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
                 None
             },
             n50_test_ach: dg.valor_n50_medido,
-            north_angle,
             d_perim_insulation,
             rn_perim_insulation,
         };
@@ -156,32 +149,32 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
                     _ => SpaceType::UNCONDITIONED,
                 },
                 n_v: s.airchanges_h,
-                polygon: polygon2vec(&s.polygon, s.z),
             })
         })
         .collect::<Result<Vec<Space>, Error>>()
 }
 
 /// Construye polígono 3D de muro a partir de sus datos de muro y del espacio
-fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point3<f32>> {
+/// Para cada nivel, primero se gira el azimuth y luego se desplaza x, y, z
+fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point2<f32>> {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
     let spacepoly = &space.polygon;
+    // TODO: ver si necesitamos sacarlo del espacio o del muro, también si necesitamos corregir la Z en el muro... (no se haría aquí)
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
-        // TODO: necesitamos: rotar y después trasladar los polígonos según X, Y, Z de la geometría y del espacio (la global del edificio la dejamos externa en metadatos)
-        (None, Some(ref polygon)) => polygon2vec(&polygon, space.z + wall.z),
-        (Some("TOP"), Some(ref polygon)) => polygon2vec(&polygon, space.z + wall.z),
-        (Some("BOTTOM"), _) => polygon2vec(&spacepoly, space.z),
+        (None, Some(ref polygon)) => polygon.as_vec(),
+        (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
+        (Some("BOTTOM"), _) => spacepoly.as_vec(),
         (Some(vertex), _) => Default::default(),
         _ => Default::default(),
     };
     polygon
 }
 
-
 /// Construye muros de la envolvente a partir de datos BDL
+// Convertimos la posición del muro a coordenadas globales y el polígono está en coordenadas de muro
 fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
     // Desviación general respecto al Norte (criterio BDL)
-    let northangle = bdl
+    let global_deviation_from_north = bdl
         .meta
         .get("BUILD-PARAMETERS")
         .unwrap()
@@ -192,9 +185,27 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
         .walls
         .iter()
         .map(|wall| -> Result<Wall, Error> {
+            let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
             let id = uuid_from_obj(wall);
             let bounds = wall.bounds.into();
             let tilt = fround2(wall.tilt);
+            let azimuth = fround2(orientation_bdl_to_52016(
+                global_deviation_from_north
+                    + space.angle_with_building_north
+                    + wall.angle_with_space_north,
+            ));
+
+            // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
+            // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
+            // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
+            let angle =
+                -(space.angle_with_building_north + global_deviation_from_north).to_radians();
+            let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
+            let position =
+                Some(rot * Point3::new(wall.x + space.x, wall.y + space.y, wall.z + space.z));
+
+            let polygon = Some(wall_polygon(&wall, bdl));
+
             Ok(Wall {
                 id,
                 name: wall.name.clone(),
@@ -203,9 +214,11 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 space: wall.space.clone(),
                 nextto: wall.nextto.clone(),
                 bounds,
-                azimuth: fround2(orientation_bdl_to_52016(wall.azimuth(northangle, &bdl)?)),
+                azimuth,
                 tilt,
                 polygon: wall_polygon(&wall, bdl),
+                position,
+                polygon,
             })
         })
         .collect::<Result<Vec<Wall>, _>>()?)

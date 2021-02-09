@@ -48,32 +48,6 @@ impl Window {
         self.width * self.height
     }
 
-    /// Inclinación de la ventana (grados)
-    /// Es el ángulo respecto al eje Z de la normal a la superficie en la que está la ventana
-    pub fn tilt(&self, db: &Data) -> Result<f32, Error> {
-        let wall = db.get_wall(&self.wall).ok_or_else(|| {
-            format_err!(
-                "Muro {} al que pertenece la ventana {} no encontrado. No se puede calcular la inclinación",
-                self.wall,
-                self.name
-            )
-        })?;
-        Ok(wall.tilt)
-    }
-
-    /// Azimut de la ventana (grados)
-    /// Es el ángulo respecto al eje Z de la normal a la superficie en la que está la ventana
-    pub fn azimuth(&self, northangle: f32, db: &Data) -> Result<f32, Error> {
-        let wall = db.get_wall(&self.wall).ok_or_else(|| {
-            format_err!(
-                "Muro {} al que pertenece la ventana {} no encontrado. No se puede calcular el azimut",
-                self.wall,
-                self.name
-            )
-        })?;
-        wall.azimuth(northangle, db)
-    }
-
     /// Perímetro del hueco [m]
     pub fn perimeter(&self) -> f32 {
         2.0 * (self.width + self.height)

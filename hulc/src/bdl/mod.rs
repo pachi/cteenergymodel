@@ -224,6 +224,10 @@ impl Data {
                     layers.absorptance = absorptance;
                     wall.cons = layersname;
 
+                    // Corregimos el ángulo con el norte para los casos con polígono o definidos por posición
+                    let north_angle = wall.compute_angle_with_space_north(&bdldata)?;
+                    wall.angle_with_space_north = north_angle;
+
                     // Guardamos el muro
                     bdldata.walls.push(wall);
                 }

@@ -38,10 +38,10 @@ pub struct Space {
     /// Cota Z del espacio en el espacio de coordenadas de la planta
     /// XXX: HULC no usa esta coordenada en los espacios, solo los sitúa en el plano de la planta
     pub z: f32,
-    /// Azimuth del espacio en el sistema coordenado de la planta (grados) [0-360]
+    /// Desviación de la Y+ del espacio respecto al sistema coordenado del edificio (grados) [0-360]
     /// Ángulo del eje +Y respecto al eje +Y del edificio (eje de rotación Z).
     /// Sentido horario (x+/E+)
-    pub azimuth: f32,
+    pub angle_with_building_north: f32,
     /// Pertenencia a la envolvente térmica
     pub insidete: bool,
     /// Planta a la que pertenece el espacio
@@ -272,7 +272,7 @@ impl TryFrom<BdlBlock> for Space {
         let x = attrs.remove_f32("X").unwrap_or_default();
         let y = attrs.remove_f32("Y").unwrap_or_default();
         let z = attrs.remove_f32("Z").unwrap_or_default();
-        let azimuth = attrs.remove_f32("AZIMUTH").unwrap_or_default();
+        let bdl_azimuth = attrs.remove_f32("AZIMUTH").unwrap_or_default();
         let insidete = attrs
             .remove_str("perteneceALaEnvolventeTermica")
             .ok()
@@ -327,7 +327,7 @@ impl TryFrom<BdlBlock> for Space {
             x,
             y,
             z,
-            azimuth,
+            angle_with_building_north: bdl_azimuth,
             insidete,
             floor,
             power,

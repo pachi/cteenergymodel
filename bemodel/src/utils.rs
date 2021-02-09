@@ -24,7 +24,7 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     (offset - (f32::floor(offset / width) * width)) + start
 }
 
-/// Convierte ángulo (azimuth) desde el criterio del BDL al criterio de la 52016-1
+/// Convierte el azimuth desde el criterio del BDL al criterio de la 52016-1
 /// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
 /// UNE-EN ISO 52016-1: S=0, E=+90, W=-90
 pub fn orientation_bdl_to_52016(azimuth: f32) -> f32 {

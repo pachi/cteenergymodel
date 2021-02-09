@@ -69,6 +69,11 @@ impl TryFrom<BdlBlock> for Floor {
             name, mut attrs, ..
         } = value;
         let z = attrs.remove_f32("Z").unwrap_or_default();
+
+        // El espacio coordenado de planta es igual al del edificio, salvo por la Z
+        assert!(attrs.remove_f32("X").unwrap_or_default() == 0.0);
+        assert!(attrs.remove_f32("Y").unwrap_or_default() == 0.0);
+
         // Las versiones antiguas de LIDER usan SPACE-HEIGHT y dejan a cero FLOOR-HEIGHT
         // HULC escribe FLOOR-HEIGHT con el mismo valor que SPACE-HEIGHT
         let height = attrs.remove_f32("SPACE-HEIGHT")?;

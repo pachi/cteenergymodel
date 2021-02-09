@@ -86,27 +86,32 @@ impl Polygon {
         ])
     }
 
-    /// Ángulo con el sur de la normal del lado definido por el vértice
-    /// northangle es la desviación global respecto al norte
-    /// Los ángulos se dan en grados sexagesimales
-    pub fn edge_orient(&self, vertexname: &str, northangle: f32) -> f32 {
+    /// Ángulo con el norte (Y+) de la normal del lado definido por el vértice
+    /// Los ángulos se dan en grados sexagesimales, sentido horario desde Y+ (E+, W-)
+    pub fn edge_orient(&self, vertexname: &str) -> f32 {
         self.edge_vertices(vertexname)
             .map(|[p_n, p_m]| {
                 // normal al vector director del lado (hay dos, (dy, -dx) y (-dy, dx) y cogemos (dy, -dx), un giro de -90º)
                 let n = Rotation2::new(-FRAC_PI_2) * (p_m - p_n);
                 // vector del sur (0, -1)
-                let s = -Vector2::y();
+                let s = Vector2::y();
                 // ángulo entre la normal y el sur
                 let angle = n.angle(&s);
                 // Para las normales en el semiplano nx <= 0 cogemos el ángulo largo
                 normalize(
-                    f32::signum(n.x) * angle.to_degrees() - northangle,
+                    f32::signum(n.x) * angle.to_degrees(),
                     0.0,
                     360.0,
                 )
             })
             .unwrap_or(0.0)
     }
+
+    /// Devuelve copia como Vec<Point2<f32>>
+    pub fn as_vec(&self) -> Vec<Point2<f32>> {
+        self.0.clone()
+    }
+
 }
 
 impl TryFrom<BdlBlock> for Polygon {

@@ -17,7 +17,6 @@ use std::convert::TryFrom;
 use anyhow::{bail, format_err, Error};
 
 use crate::bdl::{envelope::Polygon, BdlBlock, Data};
-use crate::utils::normalize;
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
@@ -76,10 +75,9 @@ pub struct Wall {
     /// Coordenada Z de la esquina inferior izquierda
     /// usa coordenadas del espacio y es el cerramiento visto desde fuera
     pub z: f32,
-    /// Azimut (grados sexagesimales)
-    /// Ángulo entre el eje Y (norte) del espacio y la proyección horizontal de la normal exterior del muro
+    /// Desviación de la proyeccción horizontal de la normal del muro con la Y+ del espacio (grados sexagesimales, sentido horario, 0-360)
     /// 0 -> orientación norte, 90 -> orientación este, 180 -> orientación sur y 270 -> orientación oeste
-    pub azimuth: f32,
+    pub angle_with_space_north: f32,
     /// Inclinación (grados sexagesimales)
     /// Ángulo entre el eje Z y la normal exterior del muro
     pub tilt: f32,
@@ -179,7 +177,7 @@ impl Wall {
         }
     }
 
-    /// Azimut, ángulo del muro respecto al norte (grados sexagesimales)
+    /// Ángulo del muro respecto al norte (grados sexagesimales, sentido horario, [0, 360])
     ///
     /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
     /// Se puede indicar una desviación del norte geográfico respecto al geométrico (northangle)
@@ -187,8 +185,8 @@ impl Wall {
     /// Se calcula:
     /// 1. Los elementos horizontales se definen con azimut igual a 0.0
     /// 2. Los elementos definidos por geometría ya tiene definido su azimut
-    /// 3. Los elementos definidos por vértice de polígono del espacio consultan el azimuth del polígono del espacio
-    pub fn azimuth(&self, northangle: f32, db: &Data) -> Result<f32, Error> {
+    /// 3. Los elementos definidos por vértice de polígono del espacio consultan la orientación del polígono del espacio
+    pub(crate) fn compute_angle_with_space_north(&self, db: &Data) -> Result<f32, Error> {
         // Elementos horizontales (hacia arriba o hacia abajo) con tilt definido
         // tilt == 0 o tilt == 180 -> azimuth 0
         if self.tilt.abs() < 10.0 * std::f32::EPSILON
@@ -199,7 +197,7 @@ impl Wall {
         // Elementos definidos por geometría (no horizontales), con azimuth
         // Se guarda el ángulo respecto al eje Y del espacio (norte, si la desviación global es cero)
         else if self.polygon.is_some() {
-            Ok(self.azimuth)
+            Ok(self.angle_with_space_north)
         }
         // Elementos definidos por vértice del polígono de un espacio
         else if let Some(vertex) = self.location.as_deref() {
@@ -210,11 +208,7 @@ impl Wall {
                     self.name
                 )
             })?;
-            Ok(normalize(
-                180.0 - &space.polygon.edge_orient(vertex, northangle),
-                0.0,
-                360.0,
-            ))
+            Ok(space.polygon.edge_orient(vertex))
         }
         // Resto de casos
         else {
@@ -390,11 +384,6 @@ impl TryFrom<BdlBlock> for Wall {
             _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
         };
 
-        // En LIDER antiguo pueden no aparecer algunas de las coordenadas
-        let x = attrs.remove_f32("X").unwrap_or_default();
-        let y = attrs.remove_f32("Y").unwrap_or_default();
-        let z = attrs.remove_f32("Z").unwrap_or_default();
-        let azimuth = attrs.remove_f32("AZIMUTH").unwrap_or_default();
         // Si la inclinación es None (se define location)
         // Solamente se define explícitamente cuando se define el cerramiento por geometría
         let tilt = match attrs.remove_f32("TILT").ok() {
@@ -408,10 +397,18 @@ impl TryFrom<BdlBlock> for Wall {
                 _ => 90.0,
             },
         };
+
+        // En LIDER antiguo pueden no aparecer algunas de las coordenadas
+        let x = attrs.remove_f32("X").unwrap_or_default();
+        let y = attrs.remove_f32("Y").unwrap_or_default();
+        let z = attrs.remove_f32("Z").unwrap_or_default();
+
         // Detectamos si se define la geometría por polígono
         // Como guardaremos el polígono no por su nombre sino como objeto aquí usamos un default
         // y lo corregimos en el postproceso
         let polygon = attrs.remove_str("POLYGON").ok().map(|_| Default::default());
+
+        let bdl_azimuth = attrs.remove_f32("AZIMUTH").unwrap_or_default();
 
         // Propiedades específicas
         let nextto = match bounds {
@@ -427,7 +424,10 @@ impl TryFrom<BdlBlock> for Wall {
             x,
             y,
             z,
-            azimuth,
+            // Temporalmente guardamos el ángulo con el norte definido explícitamente
+            // Debe corregirse en el bucle global (para acceder a los polígonos) cuando
+            // location se defina por polígono o sea top o bottom
+            angle_with_space_north: bdl_azimuth,
             tilt,
             polygon,
             nextto,

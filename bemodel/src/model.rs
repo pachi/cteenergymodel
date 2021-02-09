@@ -4,7 +4,7 @@
 
 //! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
 
-use na::Point3;
+use na::{Point2, Point3};
 use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
@@ -70,9 +70,6 @@ pub struct Meta {
     pub global_ventilation_l_s: Option<f32>,
     /// n50 medido mediante ensayo [renh]
     pub n50_test_ach: Option<f32>,
-    /// Desviación global respecto al norte geográfico (N=0, E=90, S=180, W=270)
-    #[serde(default)]
-    pub north_angle: f32,
     /// Anchura o profundidad del aislamiento perimetral horizontal o vertical de la solera [m]
     pub d_perim_insulation: f32,
     /// Resistencia térmica del aislamiento perimetral horizontal o vertical de la solera [m2K/W]
@@ -89,7 +86,6 @@ impl Default for Meta {
             climate: ClimateZone::D3,
             global_ventilation_l_s: None,
             n50_test_ach: None,
-            north_angle: 0.0,
             d_perim_insulation: 0.0,
             rn_perim_insulation: 0.0,
         }
@@ -129,8 +125,6 @@ pub struct Space {
     /// Incluye la parte del perímetro que separa el espacio del exterior
     /// y excluye que lo separa de otros espacios acondicionados.
     pub exposed_perimeter: Option<f32>,
-    /// Polígono del espacio
-    pub polygon: Vec<Point3<f32>>,
 }
 
 /// Elemento opaco (muro, cubierta, suelo, partición)
@@ -155,16 +149,18 @@ pub struct Wall {
     pub space: String,
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
     pub nextto: Option<String>,
-    /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90)
+    /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90, sentido antihorario)
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
     /// Coincide con el criterio de la UNE-EN ISO 52016-1
-    /// Difiere del criterio BDL, que parte del norte, con E+ y W-
+    /// Difiere del criterio BDL, que parte del norte, con E+ y W- y sentido horario
     pub azimuth: f32,
     /// Inclinación (beta) [0, 180]
     /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
     pub tilt: f32,
-    /// Polígono del muro
-    pub polygon: Vec<Point3<f32>>,
+    /// Posición del muro, en coordenadas de espacio
+    pub position: Option<Point3<f32>>,
+    /// Polígono del muro, en coordenadas de muro
+    pub polygon: Option<Vec<Point2<f32>>>,
 }
 
 /// Hueco
