@@ -48,7 +48,7 @@ fn test_caso_a() {
         .walls_of_space(&space.id)
         .map(|w| w.name.as_str())
         .collect::<Vec<_>>();
-    wallsofspace.sort();
+    wallsofspace.sort_unstable();
     assert_eq!(wallsofspace, results);
     // Suelo al exterior (aire), HULC=0.34
     let wall = data.get_wall_by_name("P02_E01_ME001").unwrap();
@@ -173,10 +173,6 @@ fn test_bdl_parse() {
     // println!("{:#?}", shadings);
 
     // Cálculos básicos sobre elementos de la envolvente
-
-    // TODO: Hacer más casos de orientación respecto al sur, con muros definidos con AZIMUTH
-    // ya que ahora mismo solo se prueban los definidos por vértices y no está claro
-    // si los valores que se obtienen en ese parámetro son respecto al norte (los de espacios sí)
 
     // Espacio
     let s = bdldb.get_space("P02_E01").unwrap();
