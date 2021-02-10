@@ -158,14 +158,28 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
 /// Para cada nivel, primero se gira el azimuth y luego se desplaza x, y, z
 fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point2<f32>> {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
-    let spacepoly = &space.polygon;
-    // TODO: ver si necesitamos sacarlo del espacio o del muro, también si necesitamos corregir la Z en el muro... (no se haría aquí)
+    let space_polygon = &space.polygon;
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         (None, Some(ref polygon)) => polygon.as_vec(),
         (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
-        (Some("BOTTOM"), _) => spacepoly.as_vec(),
-        (Some(vertex), _) => Default::default(),
-        _ => Default::default(),
+        (Some("TOP"), None) | (Some("BOTTOM"), _) => space_polygon.as_vec(),
+        (Some(vertex), _) => {
+            // Definimos el polígono con inicio en 0,0 y ancho y alto según vértices y espacio
+            // La "position (x, y, z)" que define el origen de coordenadas del muro será la del primer vértice
+            // Pero se calcula fuera de esta función
+            let [p1, p2] = space_polygon.edge_vertices(vertex).unwrap();
+            let width = (p2 - p1).magnitude();
+            let height = space.height;
+            vec![
+                Point2::new(0.0, 0.0),
+                Point2::new(width, 0.0),
+                Point2::new(width, height),
+                Point2::new(0.0, height),
+            ]
+        }
+        _ => {
+            panic!("Definición de polígono de muro {} desconocida", wall.name)
+        }
     };
     polygon
 }
@@ -201,8 +215,15 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
             let angle =
                 -(space.angle_with_building_north + global_deviation_from_north).to_radians();
             let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
-            let position =
-                Some(rot * Point3::new(wall.x + space.x, wall.y + space.y, wall.z + space.z));
+            let position = Some(
+                rot * match wall.location.as_deref() {
+                    Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
+                        let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
+                        Point3::new(p1.x, p1.y, 0.0)
+                    }
+                    _ => Point3::new(wall.x + space.x, wall.y + space.y, wall.z + space.z),
+                },
+            );
 
             let polygon = Some(wall_polygon(&wall, bdl));
 
@@ -216,7 +237,6 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 bounds,
                 azimuth,
                 tilt,
-                polygon: wall_polygon(&wall, bdl),
                 position,
                 polygon,
             })

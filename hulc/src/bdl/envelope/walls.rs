@@ -208,7 +208,7 @@ impl Wall {
                     self.name
                 )
             })?;
-            Ok(space.polygon.edge_orient(vertex))
+            Ok(space.polygon.edge_normal_to_y(vertex))
         }
         // Resto de casos
         else {

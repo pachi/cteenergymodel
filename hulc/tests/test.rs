@@ -67,17 +67,17 @@ fn bdl_polygon2() {
     assert_eq!(pol.edge_vertices("V6").unwrap(), [&Point2::new(0.0, 2.0), &Point2::new(1.0, 1.0)]);
     assert_almost_eq!(pol.edge_length("V3"), 1.0, 0.001);
     // lado horizontal hacia la derecha
-    assert_almost_eq!(pol.edge_orient("V1"), 180.0, 0.001);
+    assert_almost_eq!(pol.edge_normal_to_y("V1"), 180.0, 0.001);
     // lado inclinado 45º hacia la derecha-arriba
-    assert_almost_eq!(pol.edge_orient("V2"), 135.0, 0.001);
+    assert_almost_eq!(pol.edge_normal_to_y("V2"), 135.0, 0.001);
     // lado vertical hacia arriba
-    assert_almost_eq!(pol.edge_orient("V3"), 90.0, 0.001);
+    assert_almost_eq!(pol.edge_normal_to_y("V3"), 90.0, 0.001);
     // lado horizontal hacia la izquierda
-    assert_almost_eq!(pol.edge_orient("V4"), 0.0, 0.001);
+    assert_almost_eq!(pol.edge_normal_to_y("V4"), 0.0, 0.001);
     // lado inclinado 45º hacia la izquierda-abajo
-    assert_almost_eq!(pol.edge_orient("V5"), 315.0, 0.001);
+    assert_almost_eq!(pol.edge_normal_to_y("V5"), 315.0, 0.001);
     // lado inclinado 45º hacia la derecha-abajo
-    assert_almost_eq!(pol.edge_orient("V6"), 225.0, 0.001);
+    assert_almost_eq!(pol.edge_normal_to_y("V6"), 225.0, 0.001);
 }
 
 #[test]

@@ -77,7 +77,7 @@ impl Polygon {
         let num_vertex: usize = vertexname
             .strip_prefix("V")
             .map(str::parse::<usize>)
-            .unwrap()
+            .unwrap_or_else(|| panic!("Vértice {} desconocido de polígono", vertexname))
             .ok()?
             - 1;
         Some([
@@ -88,7 +88,7 @@ impl Polygon {
 
     /// Ángulo con el norte (Y+) de la normal del lado definido por el vértice
     /// Los ángulos se dan en grados sexagesimales, sentido horario desde Y+ (E+, W-)
-    pub fn edge_orient(&self, vertexname: &str) -> f32 {
+    pub fn edge_normal_to_y(&self, vertexname: &str) -> f32 {
         self.edge_vertices(vertexname)
             .map(|[p_n, p_m]| {
                 // normal al vector director del lado (hay dos, (dy, -dx) y (-dy, dx) y cogemos (dy, -dx), un giro de -90º)

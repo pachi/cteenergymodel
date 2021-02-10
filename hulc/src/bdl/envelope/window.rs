@@ -10,7 +10,7 @@ use std::convert::TryFrom;
 
 use anyhow::{bail, format_err, Error};
 
-use crate::bdl::{extract_f32vec, BdlBlock, Data};
+use crate::bdl::{extract_f32vec, BdlBlock};
 
 // Hueco (WINDOW) -------------------------------------------------
 
