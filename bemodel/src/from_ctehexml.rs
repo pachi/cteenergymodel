@@ -219,7 +219,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 rot * match wall.location.as_deref() {
                     Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
                         let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
-                        Point3::new(p1.x, p1.y, 0.0)
+                        Point3::new(p1.x + wall.x + space.x, p1.y + wall.y + space.y, wall.z + space.z)
                     }
                     _ => Point3::new(wall.x + space.x, wall.y + space.y, wall.z + space.z),
                 },
