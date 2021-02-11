@@ -1,9 +1,11 @@
 run:
 	$(info [INFO]: Ejecutando ejemplo)
+	RUST_LOG=info cargo run hulc_tests/tests/cubo/ > cubo.json
 	RUST_LOG=info cargo run hulc_tests/tests/data/ > salida.json
 	RUST_LOG=info cargo run hulc_tests/tests/casoA/ > salida_a.json
 	cp salida.json bemodel/tests/data/e4h_medianeras.json
 	cp salida_a.json bemodel/tests/data/caso_a.json
+	cp cubo.json bemodel/tests/data/cubo.json
 runskip:
 	cargo run -- --skip-extra hulc_tests/tests/data/ > salida.json.skip
 	cargo run -- --skip-extra hulc_tests/tests/casoA/ > salida_a.json.skip

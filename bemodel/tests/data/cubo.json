@@ -1,0 +1,448 @@
+{
+  "meta": {
+    "name": "Nombre del Proyecto",
+    "is_new_building": true,
+    "is_dwelling": true,
+    "num_dwellings": 1,
+    "climate": "D3",
+    "global_ventilation_l_s": 1.0,
+    "n50_test_ach": null,
+    "d_perim_insulation": 1.0,
+    "rn_perim_insulation": 1.0
+  },
+  "spaces": [
+    {
+      "id": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
+      "name": "P01_E01",
+      "area": 100.0,
+      "multiplier": 1.0,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 3.0,
+      "n_v": null,
+      "z": 0.0,
+      "exposed_perimeter": 40.0
+    }
+  ],
+  "walls": [
+    {
+      "id": "4b311879-86c7-8e23-09d9-4218f64b93ea",
+      "name": "P01_E01_FTER001",
+      "A": 100.0,
+      "bounds": "GROUND",
+      "cons": "6058e362-fe85-048e-7cbf-0ddf2d7c1085",
+      "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
+      "nextto": null,
+      "azimuth": -180.0,
+      "tilt": 180.0,
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          10.0
+        ],
+        [
+          0.0,
+          10.0
+        ]
+      ]
+    },
+    {
+      "id": "42cdcf2a-f472-f1a1-93ee-1b4be91c8f49",
+      "name": "P01_E01C001",
+      "A": 50.0,
+      "bounds": "EXTERIOR",
+      "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
+      "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
+      "nextto": null,
+      "azimuth": -180.0,
+      "tilt": 0.0,
+      "position": [
+        0.0,
+        10.0,
+        3.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          10.0
+        ]
+      ]
+    },
+    {
+      "id": "ff15e9e0-4050-a452-0e11-99e60b3ca6d6",
+      "name": "P01_E01C002",
+      "A": 50.0,
+      "bounds": "EXTERIOR",
+      "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
+      "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
+      "nextto": null,
+      "azimuth": -180.0,
+      "tilt": 0.0,
+      "position": [
+        0.0,
+        10.0,
+        3.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          14.14214,
+          0.0
+        ],
+        [
+          7.071068,
+          7.071068
+        ]
+      ]
+    },
+    {
+      "id": "8cd1c70c-fc07-56f5-7968-75aa06e41c10",
+      "name": "P01_E01_PE001",
+      "A": 28.0,
+      "bounds": "EXTERIOR",
+      "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
+      "nextto": null,
+      "azimuth": 0.0,
+      "tilt": 90.0,
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          3.0
+        ],
+        [
+          0.0,
+          3.0
+        ]
+      ]
+    },
+    {
+      "id": "40a45c08-4627-ba91-d653-4f937f749989",
+      "name": "P01_E01_PE002",
+      "A": 30.0,
+      "bounds": "EXTERIOR",
+      "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
+      "nextto": null,
+      "azimuth": 90.0,
+      "tilt": 90.0,
+      "position": [
+        10.0,
+        0.0,
+        0.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          3.0
+        ],
+        [
+          0.0,
+          3.0
+        ]
+      ]
+    },
+    {
+      "id": "a0f9aa63-199f-7d43-aa56-9f69aa958856",
+      "name": "P01_E01_PE003",
+      "A": 30.0,
+      "bounds": "EXTERIOR",
+      "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
+      "nextto": null,
+      "azimuth": -180.0,
+      "tilt": 90.0,
+      "position": [
+        10.0,
+        10.0,
+        0.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          3.0
+        ],
+        [
+          0.0,
+          3.0
+        ]
+      ]
+    },
+    {
+      "id": "53ec49df-5b64-5b3a-11fa-91a87ad6cff7",
+      "name": "P01_E01_PE004",
+      "A": 30.0,
+      "bounds": "EXTERIOR",
+      "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
+      "nextto": null,
+      "azimuth": -90.0,
+      "tilt": 90.0,
+      "position": [
+        0.0,
+        10.0,
+        0.0
+      ],
+      "polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          3.0
+        ],
+        [
+          0.0,
+          3.0
+        ]
+      ]
+    }
+  ],
+  "windows": [
+    {
+      "id": "d893eb2f-e846-2e55-724c-7737b1c5633c",
+      "name": "P01_E01_PE001_V",
+      "A": 2.0,
+      "cons": "586cacdb-0937-fe9e-6692-d73af19b880e",
+      "wall": "8cd1c70c-fc07-56f5-7968-75aa06e41c10",
+      "fshobst": 0.76
+    }
+  ],
+  "thermal_bridges": [
+    {
+      "id": "a6ef68ff-81b4-5582-1547-3ab8d816347f",
+      "name": "FRENTE_FORJADO",
+      "L": -1.0,
+      "psi": 0.97
+    },
+    {
+      "id": "3f912f0d-4934-aea7-cdf2-50fc92cc75a4",
+      "name": "UNION_CUBIERTA",
+      "L": -1.0,
+      "psi": 0.96
+    },
+    {
+      "id": "6471271b-b2de-c10a-9e54-5bbefb768b67",
+      "name": "ESQUINA_CONVEXA_FORJADO",
+      "L": -1.0,
+      "psi": 0.86
+    },
+    {
+      "id": "462490d8-e475-19be-6949-46f2d06f66b9",
+      "name": "ESQUINA_CONCAVA",
+      "L": -1.0,
+      "psi": -0.16
+    },
+    {
+      "id": "3e814ff0-a48f-e12b-225c-8cfb40691766",
+      "name": "ESQUINA_CONVEXA",
+      "L": -1.0,
+      "psi": 0.11
+    },
+    {
+      "id": "b9ef5f8e-ef25-1cf6-8b47-89288e3b9541",
+      "name": "PILAR",
+      "L": -1.0,
+      "psi": 1.2
+    },
+    {
+      "id": "5fd04389-7277-010a-c94c-654146c4776c",
+      "name": "HUECO_CAPIALZADO",
+      "L": -1.0,
+      "psi": 0.82
+    },
+    {
+      "id": "7357e89d-6962-b295-9d00-da25eebae363",
+      "name": "HUECO_JAMBA",
+      "L": -1.0,
+      "psi": 0.53
+    },
+    {
+      "id": "700bb01b-d562-57d3-9f6d-771722796574",
+      "name": "HUECO_ALFEIZAR",
+      "L": -1.0,
+      "psi": 0.44
+    },
+    {
+      "id": "ec61a313-c64d-f3ff-826b-a2ef6c13d4e7",
+      "name": "UNION_SOLERA_PAREDEXT",
+      "L": -1.0,
+      "psi": 0.57
+    }
+  ],
+  "wallcons": [
+    {
+      "id": "6058e362-fe85-048e-7cbf-0ddf2d7c1085",
+      "name": "Contacto por defecto",
+      "group": "Cerramientos en contacto con el terreno",
+      "thickness": 0.32,
+      "R_intrinsic": 0.131,
+      "absorptance": 0.0
+    },
+    {
+      "id": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "name": "Fachada por defecto D",
+      "group": "Fachadas",
+      "thickness": 0.21,
+      "R_intrinsic": 0.412,
+      "absorptance": 0.0
+    },
+    {
+      "id": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
+      "name": "PIV por defecto",
+      "group": "Partición interior vertical",
+      "thickness": 0.12,
+      "R_intrinsic": 0.255,
+      "absorptance": 0.0
+    }
+  ],
+  "wincons": [
+    {
+      "id": "586cacdb-0937-fe9e-6692-d73af19b880e",
+      "name": "Doble -- Mrpt - Gris claro",
+      "group": "Huecos",
+      "U": 3.29,
+      "Ff": 0.1,
+      "gglwi": 0.72,
+      "gglshwi": 0.72,
+      "C_100": 25.0
+    }
+  ],
+  "extra": [
+    {
+      "name": "P01_E01_FTER001",
+      "bounds": "GROUND",
+      "spacetype": "CONDITIONED",
+      "nextspace": null,
+      "nextspacetype": null,
+      "tilt": "BOTTOM",
+      "cons": "6058e362-fe85-048e-7cbf-0ddf2d7c1085",
+      "u": 0.0,
+      "computed_u": 0.57
+    },
+    {
+      "name": "P01_E01C001",
+      "bounds": "EXTERIOR",
+      "spacetype": "CONDITIONED",
+      "nextspace": null,
+      "nextspacetype": null,
+      "tilt": "TOP",
+      "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
+      "u": 0.0,
+      "computed_u": 2.53
+    },
+    {
+      "name": "P01_E01C002",
+      "bounds": "EXTERIOR",
+      "spacetype": "CONDITIONED",
+      "nextspace": null,
+      "nextspacetype": null,
+      "tilt": "TOP",
+      "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
+      "u": 0.0,
+      "computed_u": 2.53
+    },
+    {
+      "name": "P01_E01_PE001",
+      "bounds": "EXTERIOR",
+      "spacetype": "CONDITIONED",
+      "nextspace": null,
+      "nextspacetype": null,
+      "tilt": "SIDE",
+      "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "u": 0.0,
+      "computed_u": 1.72
+    },
+    {
+      "name": "P01_E01_PE002",
+      "bounds": "EXTERIOR",
+      "spacetype": "CONDITIONED",
+      "nextspace": null,
+      "nextspacetype": null,
+      "tilt": "SIDE",
+      "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "u": 0.0,
+      "computed_u": 1.72
+    },
+    {
+      "name": "P01_E01_PE003",
+      "bounds": "EXTERIOR",
+      "spacetype": "CONDITIONED",
+      "nextspace": null,
+      "nextspacetype": null,
+      "tilt": "SIDE",
+      "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "u": 0.0,
+      "computed_u": 1.72
+    },
+    {
+      "name": "P01_E01_PE004",
+      "bounds": "EXTERIOR",
+      "spacetype": "CONDITIONED",
+      "nextspace": null,
+      "nextspacetype": null,
+      "tilt": "SIDE",
+      "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+      "u": 0.0,
+      "computed_u": 1.72
+    }
+  ]
+}
