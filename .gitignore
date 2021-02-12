@@ -7,7 +7,7 @@ hulc_tests/target/**
 hulc_tests/**/*.json
 hulc_tests/**/*.png
 hulc_tests/**/Documentacion/*
-salida.json
 perf.data*
+cubo.json
 salida*.json*
 *.log
