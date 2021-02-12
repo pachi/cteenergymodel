@@ -26,14 +26,14 @@
   ],
   "walls": [
     {
-      "id": "4b311879-86c7-8e23-09d9-4218f64b93ea",
+      "id": "2dbc83af-1d3e-983b-5eba-f56ed3c8d65d",
       "name": "P01_E01_FTER001",
       "A": 100.0,
       "bounds": "GROUND",
       "cons": "6058e362-fe85-048e-7cbf-0ddf2d7c1085",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 0.0,
       "tilt": 180.0,
       "position": [
         0.0,
@@ -43,31 +43,31 @@
       "polygon": [
         [
           0.0,
-          0.0
-        ],
-        [
-          10.0,
-          0.0
-        ],
-        [
-          10.0,
-          10.0
+          -0.0
         ],
         [
           0.0,
-          10.0
+          -10.0
+        ],
+        [
+          10.0,
+          -10.0
+        ],
+        [
+          10.0,
+          -0.0
         ]
       ]
     },
     {
-      "id": "42cdcf2a-f472-f1a1-93ee-1b4be91c8f49",
+      "id": "f71883bc-274c-0255-a71a-37198f0ef22e",
       "name": "P01_E01C001",
       "A": 50.0,
       "bounds": "EXTERIOR",
       "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": -90.0,
       "tilt": 0.0,
       "position": [
         0.0,
@@ -90,14 +90,14 @@
       ]
     },
     {
-      "id": "ff15e9e0-4050-a452-0e11-99e60b3ca6d6",
+      "id": "01b99742-0b14-63fb-6ea7-c8846baaaedc",
       "name": "P01_E01C002",
       "A": 50.0,
       "bounds": "EXTERIOR",
       "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": -45.0,
       "tilt": 0.0,
       "position": [
         0.0,

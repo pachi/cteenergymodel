@@ -17,15 +17,7 @@ use na::{Matrix2, Point2, Point3, Rotation2, Vector2};
 use crate::bdl::BdlBlock;
 use crate::utils::normalize;
 
-// pub struct Polygon {
-//     /// Nombre del polígono
-//     pub name: String,
-//     /// Lista de vectores que definen el polígono
-//     pub vertices: Vec<Point2<f32>>,
-// }
-
-/// Polígono
-/// Solo pueden ser polígonos con vértices 2D
+/// Polígono - conjunto de vértices 2D
 #[derive(Debug, Clone, Default)]
 pub struct Polygon(pub Vec<Point2<f32>>);
 
@@ -112,6 +104,13 @@ impl Polygon {
         self.0.clone()
     }
 
+    /// Devuelve un polígono que es un espejo respecto al eje X
+    pub fn mirror_y(&self) -> Self {
+        let mirror: Vec<_> = self.0.iter().map(|p| Point2::new(p.x, -p.y)).collect();
+        let mut counterclockwise = vec![mirror[0]];
+        counterclockwise.extend(mirror[1..].iter().rev());
+        Self (counterclockwise)
+    }
 }
 
 impl TryFrom<BdlBlock> for Polygon {

@@ -1,19 +1,18 @@
 run:
 	$(info [INFO]: Ejecutando ejemplo)
 	RUST_LOG=info cargo run hulc_tests/tests/cubo/ > cubo.json
-	RUST_LOG=info cargo run hulc_tests/tests/data/ > salida.json
-	RUST_LOG=info cargo run hulc_tests/tests/casoA/ > salida_a.json
-	cp salida.json bemodel/tests/data/e4h_medianeras.json
-	cp salida_a.json bemodel/tests/data/caso_a.json
-	cp cubo.json bemodel/tests/data/cubo.json
+	RUST_LOG=info cargo run hulc_tests/tests/data/ > e4h_medianeras.json
+	RUST_LOG=info cargo run hulc_tests/tests/casoA/ > caso_a.json
+	$(info [INFO]: Actualizando ejemplos en bemodel/tests/data)
+	mv e4h_medianeras.json bemodel/tests/data/e4h_medianeras.json
+	mv caso_a.json bemodel/tests/data/caso_a.json
+	mv cubo.json bemodel/tests/data/cubo.json
 runskip:
-	cargo run -- --skip-extra hulc_tests/tests/data/ > salida.json.skip
+	cargo run -- --skip-extra hulc_tests/tests/data/ > e4h_medianeras.json.skip
 	cargo run -- --skip-extra hulc_tests/tests/casoA/ > salida_a.json.skip
+	cargo run -- --skip-extra hulc_tests/tests/data/cubo.json > cubo.json.skip
 compare: run runskip
-	(meld salida.json salida.json.skip&) && (meld -n salida_a.json salida_a.json.skip&)
-updatejson: run
-	cp salida.json bemodel/tests/data/e4h_medianeras.json
-	cp salida_a.json bemodel/tests/data/caso_a.json
+	(meld bemodel/tests/data/e4h_medianeras.json e4h_medianeras.json.skip&) && (meld -n bemodel/tests/data/caso_a.json salida_a.json.skip&) && (meld -n bemodel/tests/data/cubo.json cubo.json.skip&)
 linux:
 	$(info [INFO]: Versión de producción para linux)
 	cargo build --release

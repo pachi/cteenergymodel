@@ -15,7 +15,7 @@ use std::collections::HashMap;
 use std::convert::TryFrom;
 use std::path::Path;
 
-use anyhow::{format_err, Error};
+use anyhow::{bail, format_err, Error};
 use log::warn;
 
 mod blocks;
@@ -225,8 +225,9 @@ impl Data {
                     wall.cons = layersname;
 
                     // Corregimos el ángulo con el norte para los casos con polígono o definidos por posición
-                    let north_angle = wall.compute_angle_with_space_north(&bdldata)?;
-                    wall.angle_with_space_north = north_angle;
+                    // En el caso de elementos BOTTOM tenemos que, al exportar, alterar el polígno para que con tilt 180 se quede bien
+                    wall.angle_with_space_north =
+                        compute_wall_angle_with_space_north(&wall, &bdldata)?;
 
                     // Guardamos el muro
                     bdldata.walls.push(wall);
@@ -276,5 +277,49 @@ impl Data {
     /// Localiza espacio
     pub fn get_space<T: AsRef<str>>(&self, name: T) -> Option<&Space> {
         self.spaces.iter().find(|w| w.name == name.as_ref())
+    }
+}
+
+/// Ángulo del muro respecto al norte (grados sexagesimales, sentido horario, [0, 360])
+///
+/// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
+/// Se puede indicar una desviación del norte geográfico respecto al geométrico (northangle)
+///
+/// Se calcula:
+/// 1. Los elementos horizontales se definen con azimut igual a 0.0
+/// 2. Los elementos definidos por geometría ya tiene definido su azimut
+/// 3. Los elementos definidos por vértice de polígono del espacio consultan la orientación del polígono del espacio
+fn compute_wall_angle_with_space_north(wall: &Wall, db: &Data) -> Result<f32, Error> {
+    // Elementos horizontales (hacia arriba o hacia abajo) con tilt definido o elementos definidos por polígono
+    // tilt == 0 -> azimuth 0
+    // tilt == 180 -> tenemos que hacer un espejo del polígono
+
+    // En DOE2.3 Volume 3 Topics p.153 se indica cómo obtener el AZIMUTH para superficies horizontales:
+    // - se gira virtualmente el muro a una posición vertical (90º con el eje Z del espacio)
+    // - sin que se mueva el origen del muro.
+    // El azimuth es el ángulo entre la proyección horizontal de la normal del muro así levantado con
+    // el eje Y del espacio.
+    if wall.location.as_deref() == Some("BOTTOM")
+        || wall.location.as_deref() == Some("TOP")
+        || wall.tilt.abs() < 10.0 * std::f32::EPSILON
+        || (wall.tilt.abs() - 180.0).abs() < 10.0 * std::f32::EPSILON
+        || wall.polygon.is_some()
+    {
+        Ok(wall.angle_with_space_north)
+    }
+    // Elementos definidos por vértice del polígono de un espacio
+    else if let Some(vertex) = wall.location.as_deref() {
+        let space = db.get_space(wall.space.as_str()).ok_or_else(|| {
+            format_err!(
+                "Espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
+                wall.space,
+                wall.name
+            )
+        })?;
+        Ok(space.polygon.edge_normal_to_y(vertex))
+    }
+    // Resto de casos
+    else {
+        bail!("Imposible calcular azimut del muro {}", wall.name)
     }
 }

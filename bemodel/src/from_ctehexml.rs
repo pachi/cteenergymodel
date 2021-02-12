@@ -162,7 +162,9 @@ fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point2<f32>> {
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         (None, Some(ref polygon)) => polygon.as_vec(),
         (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
-        (Some("TOP"), None) | (Some("BOTTOM"), _) => space_polygon.as_vec(),
+        (Some("TOP"), None) => space_polygon.as_vec(),
+        // Con elementos de suelo hacemos el mirror (y -> -y para cada punto) del polígono sobre el eje X para que al girarlo con el tilt 180 quede igual
+        (Some("BOTTOM"), _) => space_polygon.mirror_y().as_vec(),
         (Some(vertex), _) => {
             // Definimos el polígono con inicio en 0,0 y ancho y alto según vértices y espacio
             // La "position (x, y, z)" que define el origen de coordenadas del muro será la del primer vértice
@@ -208,7 +210,6 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                     + space.angle_with_building_north
                     + wall.angle_with_space_north,
             ));
-
             // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
             // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
             // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
@@ -219,7 +220,11 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 rot * match wall.location.as_deref() {
                     Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
                         let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
-                        Point3::new(p1.x + wall.x + space.x, p1.y + wall.y + space.y, wall.z + space.z)
+                        Point3::new(
+                            p1.x + wall.x + space.x,
+                            p1.y + wall.y + space.y,
+                            wall.z + space.z,
+                        )
                     }
                     _ => Point3::new(wall.x + space.x, wall.y + space.y, wall.z + space.z),
                 },

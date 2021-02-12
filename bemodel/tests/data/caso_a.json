@@ -188,14 +188,14 @@
       ]
     },
     {
-      "id": "bc801f7f-4e21-5169-7937-bc4745905576",
+      "id": "c0a62ac5-18f5-2384-fd66-505b5fe86c9f",
       "name": "P01_E01_FTER001",
       "A": 50.0,
       "bounds": "GROUND",
       "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
       "space": "7c0ca34a-5851-7a8f-6345-a2e0f74ab1c9",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 0.0,
       "tilt": 180.0,
       "position": [
         0.0,
@@ -205,19 +205,19 @@
       "polygon": [
         [
           -2.503992,
-          5.111458
+          -5.111458
+        ],
+        [
+          2.496008,
+          -5.111458
+        ],
+        [
+          2.496008,
+          4.888542
         ],
         [
           -2.503992,
-          -4.888542
-        ],
-        [
-          2.496008,
-          -4.888542
-        ],
-        [
-          2.496008,
-          5.111458
+          4.888542
         ]
       ]
     },
@@ -324,14 +324,14 @@
       ]
     },
     {
-      "id": "08c516e7-a6ac-9471-ba4f-1905615c6ef9",
+      "id": "45bf4c7b-5df4-f36a-9d5c-0a2bac79773f",
       "name": "P01_E02_TER002",
       "A": 50.0,
       "bounds": "GROUND",
       "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
       "space": "44263914-c661-a4ff-4c8c-03ece95d11a8",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 0.0,
       "tilt": 180.0,
       "position": [
         0.0,
@@ -341,19 +341,19 @@
       "polygon": [
         [
           -2.503992,
-          5.111458
-        ],
-        [
-          -7.503992,
-          5.111458
-        ],
-        [
-          -7.503992,
-          -4.888542
+          -5.111458
         ],
         [
           -2.503992,
-          -4.888542
+          4.888542
+        ],
+        [
+          -7.503992,
+          4.888542
+        ],
+        [
+          -7.503992,
+          -5.111458
         ]
       ]
     },
@@ -494,14 +494,14 @@
       ]
     },
     {
-      "id": "c36e18ac-692d-4af5-c637-470c7587d960",
+      "id": "5d17d0d2-e977-7b9b-8761-54d4c49fb4e2",
       "name": "P02_E01_ME001",
       "A": 50.0,
       "bounds": "EXTERIOR",
       "cons": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 0.0,
       "tilt": 180.0,
       "position": [
         2.496,
@@ -528,14 +528,14 @@
       ]
     },
     {
-      "id": "dde1d08b-7ea6-34a8-71ce-6b27d1b9d639",
+      "id": "851de9f2-d6f7-53bb-2f28-89a51a4ddc1f",
       "name": "P02_E01_FI001",
       "A": 49.99,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": "7c0ca34a-5851-7a8f-6345-a2e0f74ab1c9",
-      "azimuth": -180.0,
+      "azimuth": 90.0,
       "tilt": 180.0,
       "position": [
         -2.503,
@@ -562,14 +562,14 @@
       ]
     },
     {
-      "id": "2f147875-10ea-1474-f3da-577dcbae2d01",
+      "id": "f9ffdbf8-5718-8be2-ded8-9ba0b71d3457",
       "name": "P02_E01_FI002",
       "A": 50.0,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": "44263914-c661-a4ff-4c8c-03ece95d11a8",
-      "azimuth": -180.0,
+      "azimuth": 0.0,
       "tilt": 180.0,
       "position": [
         -7.503,
@@ -732,14 +732,14 @@
       ]
     },
     {
-      "id": "d36637fb-fac0-b568-7efa-41a0d2d17295",
+      "id": "8b2011b5-1fe6-cc84-7cdf-ea25e639415f",
       "name": "P03_E01_FE004",
       "A": 50.0,
       "bounds": "EXTERIOR",
       "cons": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 0.0,
       "tilt": 0.0,
       "position": [
         2.496,
@@ -766,14 +766,14 @@
       ]
     },
     {
-      "id": "04291451-16e9-f55e-bef0-5112ac315b54",
+      "id": "e606c221-da3a-727e-4246-fddfc70d027f",
       "name": "P03_E01_FI003",
       "A": 150.0,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
-      "azimuth": -180.0,
+      "azimuth": 0.0,
       "tilt": 180.0,
       "position": [
         0.0,
@@ -783,19 +783,19 @@
       "polygon": [
         [
           -7.503992,
-          5.111458
+          -5.111458
+        ],
+        [
+          7.496008,
+          -5.111458
+        ],
+        [
+          7.496008,
+          4.888542
         ],
         [
           -7.503992,
-          -4.888542
-        ],
-        [
-          7.496008,
-          -4.888542
-        ],
-        [
-          7.496008,
-          5.111458
+          4.888542
         ]
       ]
     },
@@ -970,14 +970,14 @@
       ]
     },
     {
-      "id": "eadd0558-770e-b59e-10a0-87f6c2c1b03b",
+      "id": "444108d8-ca30-54ab-22b9-cb362bd791f6",
       "name": "P04_E01_FI001",
       "A": 49.99,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
-      "azimuth": -180.0,
+      "azimuth": 0.0,
       "tilt": 180.0,
       "position": [
         -2.503,
@@ -1038,14 +1038,14 @@
       ]
     },
     {
-      "id": "05a4e957-2a13-d4fa-43af-a44330013c46",
+      "id": "2c1b524d-3af0-572d-4078-35afd8f85ef5",
       "name": "P04_E01C003",
       "A": 25.0,
       "bounds": "EXTERIOR",
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 90.0,
       "tilt": 0.0,
       "position": [
         2.496008,
@@ -1068,14 +1068,14 @@
       ]
     },
     {
-      "id": "2d34368f-a977-7ee6-52c7-068f878b5ae3",
+      "id": "e00b95bb-0511-aa4d-b38e-19700befef69",
       "name": "P04_E01C004",
       "A": 25.0,
       "bounds": "EXTERIOR",
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 116.57,
       "tilt": 0.0,
       "position": [
         2.496008,
@@ -1200,14 +1200,14 @@
       ]
     },
     {
-      "id": "7440e73b-935d-9451-8b64-700ea63acc89",
+      "id": "f52b7865-57f2-fca8-ccdd-8130e461fc53",
       "name": "P04_E02C001",
       "A": 25.0,
       "bounds": "EXTERIOR",
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "579eca30-bf03-11b0-f291-ae42df76f7b6",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 90.0,
       "tilt": 180.0,
       "position": [
         -7.503992,
@@ -1230,14 +1230,14 @@
       ]
     },
     {
-      "id": "dcd0f24c-e1eb-c5b5-f9e1-ea72fe023f27",
+      "id": "88b1ba62-ed72-40f5-772a-c15eb8e3f746",
       "name": "P04_E02C002",
       "A": 25.0,
       "bounds": "EXTERIOR",
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "579eca30-bf03-11b0-f291-ae42df76f7b6",
       "nextto": null,
-      "azimuth": -180.0,
+      "azimuth": 63.44,
       "tilt": 180.0,
       "position": [
         -7.503992,

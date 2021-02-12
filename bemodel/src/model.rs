@@ -150,7 +150,7 @@ pub struct Wall {
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
     pub nextto: Option<String>,
     /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90, sentido antihorario)
-    /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie
+    /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie con el eje Y del espacio
     /// Coincide con el criterio de la UNE-EN ISO 52016-1
     /// Difiere del criterio BDL, que parte del norte, con E+ y W- y sentido horario
     pub azimuth: f32,

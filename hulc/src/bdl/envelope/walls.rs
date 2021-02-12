@@ -177,45 +177,6 @@ impl Wall {
         }
     }
 
-    /// Ángulo del muro respecto al norte (grados sexagesimales, sentido horario, [0, 360])
-    ///
-    /// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
-    /// Se puede indicar una desviación del norte geográfico respecto al geométrico (northangle)
-    ///
-    /// Se calcula:
-    /// 1. Los elementos horizontales se definen con azimut igual a 0.0
-    /// 2. Los elementos definidos por geometría ya tiene definido su azimut
-    /// 3. Los elementos definidos por vértice de polígono del espacio consultan la orientación del polígono del espacio
-    pub(crate) fn compute_angle_with_space_north(&self, db: &Data) -> Result<f32, Error> {
-        // Elementos horizontales (hacia arriba o hacia abajo) con tilt definido
-        // tilt == 0 o tilt == 180 -> azimuth 0
-        if self.tilt.abs() < 10.0 * std::f32::EPSILON
-            || (self.tilt - 180.0).abs() < 10.0 * std::f32::EPSILON
-        {
-            Ok(0.0)
-        }
-        // Elementos definidos por geometría (no horizontales), con azimuth
-        // Se guarda el ángulo respecto al eje Y del espacio (norte, si la desviación global es cero)
-        else if self.polygon.is_some() {
-            Ok(self.angle_with_space_north)
-        }
-        // Elementos definidos por vértice del polígono de un espacio
-        else if let Some(vertex) = self.location.as_deref() {
-            let space = db.get_space(self.space.as_str()).ok_or_else(|| {
-                format_err!(
-                    "Espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
-                    self.space,
-                    self.name
-                )
-            })?;
-            Ok(space.polygon.edge_normal_to_y(vertex))
-        }
-        // Resto de casos
-        else {
-            bail!("Imposible calcular azimut del muro {}", self.name)
-        }
-    }
-
     /// Posición del elemento (TOP, BOTTOM, SIDE) según su inclinación
     /// Los elementos con inclinación > 60º Con la horizontal son verticales.
     pub fn position(&self) -> Tilt {
@@ -408,7 +369,12 @@ impl TryFrom<BdlBlock> for Wall {
         // y lo corregimos en el postproceso
         let polygon = attrs.remove_str("POLYGON").ok().map(|_| Default::default());
 
-        let bdl_azimuth = attrs.remove_f32("AZIMUTH").unwrap_or_default();
+        let bdl_azimuth = if location.as_deref() == Some("BOTTOM") {
+            // En los elementos bottom, que giramos el suelo del espacio queremos dejar la orientación sin mover respecto al sur
+            180.0
+        } else {
+            attrs.remove_f32("AZIMUTH").unwrap_or_default()
+        };
 
         // Propiedades específicas
         let nextto = match bounds {
