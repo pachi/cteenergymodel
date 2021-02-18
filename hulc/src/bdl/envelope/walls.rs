@@ -369,11 +369,12 @@ impl TryFrom<BdlBlock> for Wall {
         // y lo corregimos en el postproceso
         let polygon = attrs.remove_str("POLYGON").ok().map(|_| Default::default());
 
-        let bdl_azimuth = if location.as_deref() == Some("BOTTOM") {
-            // En los elementos bottom, que giramos el suelo del espacio queremos dejar la orientación sin mover respecto al sur
-            180.0
-        } else {
-            attrs.remove_f32("AZIMUTH").unwrap_or_default()
+        let bdl_azimuth = match location.as_deref() {
+            Some("BOTTOM") => {
+                // En los elementos bottom, que giramos el suelo del espacio queremos dejar la orientación sin mover respecto al sur
+                180.0
+            }
+            _ => attrs.remove_f32("AZIMUTH").unwrap_or_default(),
         };
 
         // Propiedades específicas
