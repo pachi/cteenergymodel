@@ -157,10 +157,21 @@ pub struct Wall {
     /// Inclinación (beta) [0, 180]
     /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
     pub tilt: f32,
+    /// Geometría del muro
+    pub geometry: Option<WallGeometry>,
+    // /// Posición del muro, en coordenadas de espacio
+    // pub position: Option<Point3<f32>>,
+    // /// Polígono del muro, en coordenadas de muro
+    // pub polygon: Option<Vec<Point2<f32>>>,
+}
+
+/// Geometría de muro
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WallGeometry {
     /// Posición del muro, en coordenadas de espacio
-    pub position: Option<Point3<f32>>,
+    pub position: Point3<f32>,
     /// Polígono del muro, en coordenadas de muro
-    pub polygon: Option<Vec<Point2<f32>>>,
+    pub polygon: Vec<Point2<f32>>,
 }
 
 /// Hueco
@@ -179,6 +190,21 @@ pub struct Window {
     pub wall: String,
     /// Factor de obstáculos remotos
     pub fshobst: f32,
+    /// Geometría de hueco
+    pub geometry: Option<WindowGeometry>,
+}
+
+/// Geometría de hueco
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WindowGeometry {
+    /// Posición del muro, en coordenadas de muro
+    pub position: Point2<f32>,
+    /// Altura del hueco, m
+    pub height: f32,
+    /// Anchuro del hueco, m
+    pub width: f32,
+    /// Retranqueo, m
+    pub setback: f32,
 }
 
 /// Puente térmico

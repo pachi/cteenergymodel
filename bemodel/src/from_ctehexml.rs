@@ -18,7 +18,7 @@ use hulc::{
 
 pub use super::{
     BoundaryType, Meta, Model, Orientation, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
-    Window, WindowCons,
+    WallGeometry, Window, WindowCons, WindowGeometry,
 };
 
 // Conversiones de BDL a tipos CTE -------------------
@@ -210,14 +210,15 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                     + space.angle_with_building_north
                     + wall.angle_with_space_north,
             ));
+
             // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
             // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
             // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
             let angle =
                 -(space.angle_with_building_north + global_deviation_from_north).to_radians();
             let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
-            let position = Some(
-                rot * match wall.location.as_deref() {
+            let position = rot
+                * match wall.location.as_deref() {
                     Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
                         let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
                         Point3::new(
@@ -227,10 +228,10 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                         )
                     }
                     _ => Point3::new(wall.x + space.x, wall.y + space.y, wall.z + space.z),
-                },
-            );
+                };
 
-            let polygon = Some(wall_polygon(&wall, bdl));
+            let polygon = wall_polygon(&wall, bdl);
+            let geometry = Some(WallGeometry { position, polygon });
 
             Ok(Wall {
                 id,
@@ -242,8 +243,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 bounds,
                 azimuth,
                 tilt,
-                position,
-                polygon,
+                geometry,
             })
         })
         .collect::<Result<Vec<Wall>, _>>()?)
@@ -258,6 +258,12 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> Vec<Window> {
             let wall = walls.iter().find(|w| w.name == win.wall).unwrap();
             let fshobst =
                 fshobst_for_setback(wall.tilt, wall.azimuth, win.width, win.height, win.setback);
+            let geometry = Some(WindowGeometry {
+                position: Point2::new(win.x, win.y),
+                width: win.width,
+                height: win.height,
+                setback: win.setback,
+            });
             Window {
                 id,
                 name: win.name.clone(),
@@ -265,6 +271,7 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> Vec<Window> {
                 wall: win.wall.clone(),
                 area: fround2(win.width * win.height),
                 fshobst: fround2(fshobst),
+                geometry,
             }
         })
         .collect()
