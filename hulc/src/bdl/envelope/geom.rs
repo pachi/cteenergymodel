@@ -111,6 +111,12 @@ impl Polygon {
         counterclockwise.extend(mirror[1..].iter().rev());
         Self (counterclockwise)
     }
+
+    /// Devuelve un polígono rotado angle radianes respecto al origen
+    pub fn rotate(&self, angle: f32) -> Self {
+        let rot = Rotation2::new(angle);
+        Self (self.0.iter().map(|p| rot * p).collect())
+    }
 }
 
 impl TryFrom<BdlBlock> for Polygon {

@@ -8,7 +8,7 @@ use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, format_err, Error};
 use log::warn;
-use na::{Point2, Point3};
+use na::{Point2, Point3, Rotation3, Translation3, Vector3};
 
 use crate::utils::{fround2, fround3, orientation_bdl_to_52016, uuid_from_obj};
 use hulc::{
@@ -17,8 +17,8 @@ use hulc::{
 };
 
 pub use super::{
-    BoundaryType, Meta, Model, Orientation, Space, SpaceType, ThermalBridge, Tilt, Wall, WallCons,
-    WallGeometry, Window, WindowCons, WindowGeometry,
+    BoundaryType, Meta, Model, Orientation, Shade, Space, SpaceType, ThermalBridge, Tilt, Wall,
+    WallCons, WallGeometry, Window, WindowCons, WindowGeometry,
 };
 
 // Conversiones de BDL a tipos CTE -------------------
@@ -42,6 +42,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let mut walls = walls_from_bdl(&bdl)?;
         let mut windows = windows_from_bdl(&walls, &bdl);
         let thermal_bridges = thermal_bridges_from_bdl(&bdl);
+        let shades = shades_from_bdl(&bdl);
         let wallcons = wallcons_from_bdl(&walls, &bdl)?;
         let wincons = windowcons_from_bdl(&bdl)?;
         let spaces = spaces_from_bdl(&bdl)?;
@@ -117,6 +118,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             walls,
             windows,
             thermal_bridges,
+            shades,
             spaces,
             wincons,
             wallcons,
@@ -162,9 +164,18 @@ fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point2<f32>> {
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         (None, Some(ref polygon)) => polygon.as_vec(),
         (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
-        (Some("TOP"), None) => space_polygon.as_vec(),
+        (Some("TOP"), None) => {
+            let p = space_polygon.as_vec();
+            let global_deviation = global_deviation_from_north(bdl).unwrap_or(0.0);
+            let azimuth = orientation_bdl_to_52016(
+                global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
+            );
+            bdl::Polygon(p).rotate(azimuth.to_radians()).as_vec()
+        }
         // Con elementos de suelo hacemos el mirror (y -> -y para cada punto) del polígono sobre el eje X para que al girarlo con el tilt 180 quede igual
-        (Some("BOTTOM"), _) => space_polygon.mirror_y().as_vec(),
+        (Some("BOTTOM"), _) => { 
+            space_polygon.mirror_y().as_vec()
+        },
         (Some(vertex), _) => {
             // Definimos el polígono con inicio en 0,0 y ancho y alto según vértices y espacio
             // La "position (x, y, z)" que define el origen de coordenadas del muro será la del primer vértice
@@ -189,13 +200,7 @@ fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point2<f32>> {
 /// Construye muros de la envolvente a partir de datos BDL
 // Convertimos la posición del muro a coordenadas globales y el polígono está en coordenadas de muro
 fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
-    // Desviación general respecto al Norte (criterio BDL)
-    let global_deviation_from_north = bdl
-        .meta
-        .get("BUILD-PARAMETERS")
-        .unwrap()
-        .attrs
-        .get_f32("ANGLE")?;
+    let global_deviation = global_deviation_from_north(bdl)?;
 
     Ok(bdl
         .walls
@@ -206,16 +211,13 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
             let bounds = wall.bounds.into();
             let tilt = fround2(wall.tilt);
             let azimuth = fround2(orientation_bdl_to_52016(
-                global_deviation_from_north
-                    + space.angle_with_building_north
-                    + wall.angle_with_space_north,
+                global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
             ));
 
             // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
             // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
             // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
-            let angle =
-                -(space.angle_with_building_north + global_deviation_from_north).to_radians();
+            let angle = -(space.angle_with_building_north + global_deviation).to_radians();
             let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
             let position = rot
                 * match wall.location.as_deref() {
@@ -227,9 +229,18 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                             wall.z + space.z,
                         )
                     }
-                    _ => Point3::new(wall.x + space.x, wall.y + space.y, wall.z + space.z),
+                    _ => {
+                        let height = match wall.location.as_ref() {
+                            Some(loc) if loc == "TOP" => space.height,
+                            _ => 0.0,
+                        };
+                        Point3::new(
+                            wall.x + space.x,
+                            wall.y + space.y,
+                            wall.z + space.z + height,
+                        )
+                    }
                 };
-
             let polygon = wall_polygon(&wall, bdl);
             let geometry = Some(WallGeometry { position, polygon });
 
@@ -247,6 +258,15 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
             })
         })
         .collect::<Result<Vec<Wall>, _>>()?)
+}
+
+/// Obtén desviacion global del edificio respecto al norte
+fn global_deviation_from_north(bdl: &Data) -> Result<f32, Error> {
+    bdl.meta
+        .get("BUILD-PARAMETERS")
+        .unwrap()
+        .attrs
+        .get_f32("ANGLE")
 }
 
 /// Construye huecos de la envolvente a partir de datos BDL
@@ -290,6 +310,75 @@ fn thermal_bridges_from_bdl(bdl: &Data) -> Vec<ThermalBridge> {
                 name: tb.name.clone(),
                 l: fround2(tb.length.unwrap_or(0.0)),
                 psi: tb.psi,
+            }
+        })
+        .collect()
+}
+
+/// Construye sombras del edificio partir de datos BDL
+/// Hay dos tipos de sombra:
+/// - BUILDING-SHADE, que son relativas al edificio (giran y se desplazan con el edificio)
+/// - FIXED-SHADE, que no giran ni se desplazan (coordenadas globales)
+/// Las BUILDING-SHADE, además, se pueden definir:
+/// - por geometría, con X, Y, Z, WIDTH, HEIGHT
+/// - por vértices
+/// Ver BDL Topics p.158
+/// Convertimos todos los casos a geometría como la de los muros: position + tilt + azimuth + Pol2D
+fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
+    bdl.shadings
+        .iter()
+        .filter_map(|sh| {
+            let id = uuid_from_obj(sh);
+            let name = sh.name.clone();
+            if let Some(geom) = sh.geometry.as_ref() {
+                if geom.height.abs() < 1e-3 && geom.height.abs() < 1e-3 {
+                    return None;
+                };
+                Some(Shade {
+                    id,
+                    name,
+                    position: Point3::new(geom.x, geom.y, geom.z),
+                    tilt: geom.tilt,
+                    azimuth: fround2(orientation_bdl_to_52016(
+                        global_deviation_from_north(bdl).unwrap_or(0.0) + geom.azimuth,
+                    )),
+                    polygon: vec![
+                        Point2::new(0.0, 0.0),
+                        Point2::new(geom.width, 0.0),
+                        Point2::new(geom.width, geom.height),
+                        Point2::new(0.0, geom.height),
+                    ],
+                })
+            } else if let Some(vertices) = sh.vertices.as_ref() {
+                let v_z = Vector3::z_axis();
+                let v_y_neg = -Vector3::y_axis();
+                let position = vertices[0];
+                let trans = Translation3::from(Point3::origin() - position);
+                let vertices: Vec<_> = vertices.iter().map(|p| trans * p).collect();
+                let normal = (vertices[2] - vertices[1])
+                    .cross(&(vertices[1] - vertices[0]))
+                    .normalize();
+                let tilt = v_z.angle(&normal);
+                let azimuth = if (tilt % std::f32::consts::PI).abs() < 10.0 * f32::EPSILON {
+                    // Si es una superficie horizontal el azimuth se calcula como si estuviese vertical la superficie -> -Y -> +Z
+                    v_z.angle(&normal)
+                } else {
+                    v_y_neg.angle(&normal)
+                };
+                // Colocamos el polígono teniendo en cuenta la inclinación (giro en x) y el azimut (giro eje z)
+                let mat = Rotation3::from_axis_angle(&v_z, -azimuth)
+                    * Rotation3::from_axis_angle(&Vector3::x_axis(), -tilt);
+                let polygon = vertices.iter().map(|p| (mat * p).xy()).collect();
+                Some(Shade {
+                    id,
+                    name,
+                    position,
+                    tilt: tilt.to_degrees(),
+                    azimuth: azimuth.to_degrees(),
+                    polygon,
+                })
+            } else {
+                panic!("Definición inesperada de elemento de sombra");
             }
         })
         .collect()

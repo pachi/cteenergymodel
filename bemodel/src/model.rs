@@ -29,6 +29,8 @@ pub struct Model {
     pub windows: Vec<Window>,
     /// Puentes térmicos
     pub thermal_bridges: Vec<ThermalBridge>,
+    /// Sombras
+    pub shades: Vec<Shade>,
     /// Construcciones de opacos
     pub wallcons: Vec<WallCons>,
     /// Construcciones de huecos
@@ -150,7 +152,7 @@ pub struct Wall {
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
     pub nextto: Option<String>,
     /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90, sentido antihorario)
-    /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie con el eje Y del espacio
+    /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie con el eje -Y del espacio
     /// Coincide con el criterio de la UNE-EN ISO 52016-1
     /// Difiere del criterio BDL, que parte del norte, con E+ y W- y sentido horario
     pub azimuth: f32,
@@ -171,6 +173,26 @@ pub struct WallGeometry {
     /// Posición del muro, en coordenadas de espacio
     pub position: Point3<f32>,
     /// Polígono del muro, en coordenadas de muro
+    pub polygon: Vec<Point2<f32>>,
+}
+
+/// Elemento de sombra
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Shade {
+    /// ID del elemento de sombra (en formato UUID)
+    pub id: String,
+    /// Nombre del elemento opaco
+    pub name: String,
+    /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90, sentido antihorario)
+    /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie con el eje -Y del espacio
+    /// Coincide con el criterio de la UNE-EN ISO 52016-1
+    pub azimuth: f32,
+    /// Inclinación (beta) [0, 180]
+    /// Medido como ángulo de la normal con el eje +Z (0 -> suelo, 180 -> techo)
+    pub tilt: f32,
+    /// Posición del elemento de sombra, en coordenadas de edificio
+    pub position: Point3<f32>,
+    /// Polígono del muro, en coordenadas de elemento
     pub polygon: Vec<Point2<f32>>,
 }
 
