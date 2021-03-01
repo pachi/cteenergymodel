@@ -166,7 +166,6 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
     let space_polygon = &space.polygon;
     let global_deviation = global_deviation_from_north(bdl);
-    warn!("Global deviation!: {}", global_deviation);
 
     // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
     // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
@@ -184,9 +183,9 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
                 )
             }
             _ => {
-                let height = match wall.location.as_ref() {
+                let height = match wall.location.as_deref() {
                     // Los elementos definidos por polígono (sin ser el de espacio) ya tiene en la Z la cota final
-                    Some(loc) if loc == "TOP" && wall.polygon.is_none() => space.height,
+                    Some("TOP") if wall.polygon.is_none() => space.height,
                     _ => 0.0,
                 };
                 Point3::new(
@@ -197,6 +196,9 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
             }
         };
 
+    if wall.name == "P03_E01_FE004" {
+        warn!("Posición de {}: {}", wall.name, position);
+    }
     // Solamente en el caso de elemntos TOP y BOTTOM de espacio estamos haciendo el giro... deberíamos ver si al resto le hace falta o no
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         (None, Some(ref polygon)) => polygon.as_vec(),
@@ -205,14 +207,15 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
         (Some("TOP"), None) => {
             let p = bdl::Polygon(space_polygon.as_vec());
             let azimuth = orientation_bdl_to_52016(
-                global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
+                space.angle_with_building_north + wall.angle_with_space_north,
             );
             p.rotate(azimuth.to_radians()).as_vec()
         }
         // Con elementos de suelo hacemos el mirror (y -> -y para cada punto) del polígono sobre el eje X para que al girarlo con el tilt 180 quede igual
+        // El azimuth global ya está incluido
         (Some("BOTTOM"), _) => {
             let azimuth = orientation_bdl_to_52016(
-                global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
+                space.angle_with_building_north + wall.angle_with_space_north,
             );
             space_polygon
                 .rotate(azimuth.to_radians())
@@ -276,11 +279,10 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
 
 /// Desviacion global del edificio respecto al norte
 fn global_deviation_from_north(bdl: &Data) -> f32 {
-    bdl.meta.get("BUILD-PARAMETERS").map(|params| {
-        params
-            .attrs
-            .get_f32("AZIMUTH").unwrap_or_default()
-    }).unwrap_or_default()
+    bdl.meta
+        .get("BUILD-PARAMETERS")
+        .map(|params| params.attrs.get_f32("AZIMUTH").unwrap_or_default())
+        .unwrap_or_default()
 }
 
 /// Construye huecos de la envolvente a partir de datos BDL
@@ -348,14 +350,16 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                 if geom.height.abs() < 1e-3 && geom.height.abs() < 1e-3 {
                     return None;
                 };
+                let position = Point3::new(geom.x, geom.y, geom.z);
+                let azimuth = fround2(orientation_bdl_to_52016(
+                    global_deviation_from_north(bdl) + geom.azimuth,
+                ));
                 Some(Shade {
                     id,
                     name,
-                    position: Point3::new(geom.x, geom.y, geom.z),
+                    position,
                     tilt: geom.tilt,
-                    azimuth: fround2(orientation_bdl_to_52016(
-                        global_deviation_from_north(bdl) + geom.azimuth,
-                    )),
+                    azimuth,
                     polygon: vec![
                         Point2::new(0.0, 0.0),
                         Point2::new(geom.width, 0.0),
@@ -364,31 +368,41 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                     ],
                 })
             } else if let Some(vertices) = sh.vertices.as_ref() {
-                let v_z = Vector3::z_axis();
-                let v_y_neg = -Vector3::y_axis();
-                let position = vertices[0];
-                let trans = Translation3::from(Point3::origin() - position);
-                let vertices: Vec<_> = vertices.iter().map(|p| trans * p).collect();
+                let global_azimuth = global_deviation_from_north(bdl);
                 let normal = (vertices[2] - vertices[1])
                     .cross(&(vertices[1] - vertices[0]))
                     .normalize();
-                let tilt = v_z.angle(&normal);
-                let azimuth = if (tilt % std::f32::consts::PI).abs() < 10.0 * f32::EPSILON {
+                let tilt = Vector3::z_axis().angle(&normal);
+                let shade_azimuth = if (tilt % std::f32::consts::PI).abs() < 10.0 * f32::EPSILON {
                     // Si es una superficie horizontal el azimuth se calcula como si estuviese vertical la superficie -> -Y -> +Z
-                    v_z.angle(&normal)
+                    Vector3::z_axis().angle(&normal).to_degrees()
                 } else {
-                    v_y_neg.angle(&normal)
+                    // En el resto, el azimuth es el ángulo con -Y
+                    orientation_bdl_to_52016((-Vector3::y_axis()).angle(&normal).to_degrees()).to_radians()
                 };
-                // Colocamos el polígono teniendo en cuenta la inclinación (giro en x) y el azimut (giro eje z)
-                let mat = Rotation3::from_axis_angle(&v_z, -azimuth)
-                    * Rotation3::from_axis_angle(&Vector3::x_axis(), -tilt);
-                let polygon = vertices.iter().map(|p| (mat * p).xy()).collect();
+
+                let v0 = vertices[0];
+                let position = Rotation3::from_axis_angle(&Vector3::z_axis(), -(shade_azimuth + global_azimuth).to_radians()) * v0;
+                warn!(
+                    "Sombra: {}, position {}, shade_azimuth: {}, global_azimuth: {}",
+                    sh.name,
+                    position,
+                    shade_azimuth.to_degrees(),
+                    global_azimuth
+
+                );
+
+                // Trasladamos al primer vértice y luego deshacemos la inclinación / tilt (giro en x) y luego el azimut (giro eje z)
+                let transform = Rotation3::from_axis_angle(&Vector3::z_axis(), -shade_azimuth)
+                    * Rotation3::from_axis_angle(&Vector3::x_axis(), -tilt)
+                    * Translation3::from(Point3::origin() - v0);
+                let polygon = vertices.iter().map(|p| (transform * p).xy()).collect();
                 Some(Shade {
                     id,
                     name,
                     position,
                     tilt: tilt.to_degrees(),
-                    azimuth: azimuth.to_degrees(),
+                    azimuth: shade_azimuth.to_degrees() - global_azimuth,
                     polygon,
                 })
             } else {
