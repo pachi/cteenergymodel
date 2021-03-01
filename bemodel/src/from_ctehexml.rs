@@ -184,7 +184,8 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
             }
             _ => {
                 let height = match wall.location.as_ref() {
-                    Some(loc) if loc == "TOP" => space.height,
+                    // Los elementos definidos por polígono (sin ser el de espacio) ya tiene en la Z la cota final
+                    Some(loc) if loc == "TOP" && wall.polygon.is_none() => space.height,
                     _ => 0.0,
                 };
                 Point3::new(
