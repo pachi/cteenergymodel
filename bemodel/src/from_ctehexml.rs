@@ -346,14 +346,15 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
         .filter_map(|sh| {
             let id = uuid_from_obj(sh);
             let name = sh.name.clone();
+            let global_azimuth = global_deviation_from_north(bdl);
             if let Some(geom) = sh.geometry.as_ref() {
                 if geom.height.abs() < 1e-3 && geom.height.abs() < 1e-3 {
                     return None;
                 };
-                let position = Point3::new(geom.x, geom.y, geom.z);
                 let azimuth = fround2(orientation_bdl_to_52016(
                     global_deviation_from_north(bdl) + geom.azimuth,
                 ));
+                let position = Rotation3::from_axis_angle(&Vector3::z_axis(), -(global_azimuth).to_radians()) * Point3::new(geom.x, geom.y, geom.z);
                 Some(Shade {
                     id,
                     name,
@@ -368,7 +369,6 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                     ],
                 })
             } else if let Some(vertices) = sh.vertices.as_ref() {
-                let global_azimuth = global_deviation_from_north(bdl);
                 let normal = (vertices[2] - vertices[1])
                     .cross(&(vertices[1] - vertices[0]))
                     .normalize();
@@ -378,22 +378,24 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                     Vector3::z_axis().angle(&normal).to_degrees()
                 } else {
                     // En el resto, el azimuth es el ángulo con -Y
-                    orientation_bdl_to_52016((-Vector3::y_axis()).angle(&normal).to_degrees()).to_radians()
+                    (-Vector3::y_axis()).angle(&normal).to_degrees()
                 };
 
+                let azimuth = shade_azimuth + global_azimuth;
                 let v0 = vertices[0];
-                let position = Rotation3::from_axis_angle(&Vector3::z_axis(), -(shade_azimuth + global_azimuth).to_radians()) * v0;
+                let position = Rotation3::from_axis_angle(&Vector3::z_axis(), -azimuth.to_radians()) * v0;
                 warn!(
-                    "Sombra: {}, position {}, shade_azimuth: {}, global_azimuth: {}",
+                    "Sombra: {}, position {}, shade_azimuth: {}, global_azimuth: {}, total azimuth: {}",
                     sh.name,
                     position,
-                    shade_azimuth.to_degrees(),
-                    global_azimuth
+                    shade_azimuth,
+                    global_azimuth,
+                    azimuth
 
                 );
 
                 // Trasladamos al primer vértice y luego deshacemos la inclinación / tilt (giro en x) y luego el azimut (giro eje z)
-                let transform = Rotation3::from_axis_angle(&Vector3::z_axis(), -shade_azimuth)
+                let transform = Rotation3::from_axis_angle(&Vector3::z_axis(), -(azimuth - global_azimuth).to_radians())
                     * Rotation3::from_axis_angle(&Vector3::x_axis(), -tilt)
                     * Translation3::from(Point3::origin() - v0);
                 let polygon = vertices.iter().map(|p| (transform * p).xy()).collect();
@@ -402,7 +404,9 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                     name,
                     position,
                     tilt: tilt.to_degrees(),
-                    azimuth: shade_azimuth.to_degrees() - global_azimuth,
+                    // Aquí añadimos el azimuth global, que no está contemplado en el polígono de la sombra
+                    // XXX: esto y el transform creo que todavía no está bien...
+                    azimuth: -azimuth,
                     polygon,
                 })
             } else {
