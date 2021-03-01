@@ -165,7 +165,8 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
 fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
     let space_polygon = &space.polygon;
-    let global_deviation = global_deviation_from_north(bdl).unwrap_or(0.0);
+    let global_deviation = global_deviation_from_north(bdl);
+    warn!("Global deviation!: {}", global_deviation);
 
     // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
     // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
@@ -243,7 +244,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
 /// Construye muros de la envolvente a partir de datos BDL
 // Convertimos la posición del muro a coordenadas globales y el polígono está en coordenadas de muro
 fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
-    let global_deviation = global_deviation_from_north(bdl)?;
+    let global_deviation = global_deviation_from_north(bdl);
 
     Ok(bdl
         .walls
@@ -273,13 +274,13 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
         .collect::<Result<Vec<Wall>, _>>()?)
 }
 
-/// Obtén desviacion global del edificio respecto al norte
-fn global_deviation_from_north(bdl: &Data) -> Result<f32, Error> {
-    bdl.meta
-        .get("BUILD-PARAMETERS")
-        .unwrap()
-        .attrs
-        .get_f32("ANGLE")
+/// Desviacion global del edificio respecto al norte
+fn global_deviation_from_north(bdl: &Data) -> f32 {
+    bdl.meta.get("BUILD-PARAMETERS").map(|params| {
+        params
+            .attrs
+            .get_f32("AZIMUTH").unwrap_or_default()
+    }).unwrap_or_default()
 }
 
 /// Construye huecos de la envolvente a partir de datos BDL
@@ -353,7 +354,7 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                     position: Point3::new(geom.x, geom.y, geom.z),
                     tilt: geom.tilt,
                     azimuth: fround2(orientation_bdl_to_52016(
-                        global_deviation_from_north(bdl).unwrap_or(0.0) + geom.azimuth,
+                        global_deviation_from_north(bdl) + geom.azimuth,
                     )),
                     polygon: vec![
                         Point2::new(0.0, 0.0),
