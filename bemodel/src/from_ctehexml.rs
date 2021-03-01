@@ -156,26 +156,67 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
         .collect::<Result<Vec<Space>, Error>>()
 }
 
-/// Construye polígono 3D de muro a partir de sus datos de muro y del espacio
+/// Construye geometría de muro
+///
+/// La posición se calcula en coordenadas globales, teniendo en cuenta las coordenadas de espacio y las desviaciones global y de espacio.
+///
+/// El polígono 3D del muro se obtiene a partir de los datos de muro y del espacio
 /// Para cada nivel, primero se gira el azimuth y luego se desplaza x, y, z
-fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point2<f32>> {
+fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
     let space_polygon = &space.polygon;
+    let global_deviation = global_deviation_from_north(bdl).unwrap_or(0.0);
+
+    // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
+    // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
+    // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
+    let angle = -(space.angle_with_building_north + global_deviation).to_radians();
+    let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
+    let position = rot
+        * match wall.location.as_deref() {
+            Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
+                let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
+                Point3::new(
+                    p1.x + wall.x + space.x,
+                    p1.y + wall.y + space.y,
+                    wall.z + space.z,
+                )
+            }
+            _ => {
+                let height = match wall.location.as_ref() {
+                    Some(loc) if loc == "TOP" => space.height,
+                    _ => 0.0,
+                };
+                Point3::new(
+                    wall.x + space.x,
+                    wall.y + space.y,
+                    wall.z + space.z + height,
+                )
+            }
+        };
+
+    // Solamente en el caso de elemntos TOP y BOTTOM de espacio estamos haciendo el giro... deberíamos ver si al resto le hace falta o no
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         (None, Some(ref polygon)) => polygon.as_vec(),
         (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
+        // En los elementos TOP no necesitamos hacer el tilt, ya que es cero
         (Some("TOP"), None) => {
-            let p = space_polygon.as_vec();
-            let global_deviation = global_deviation_from_north(bdl).unwrap_or(0.0);
+            let p = bdl::Polygon(space_polygon.as_vec());
             let azimuth = orientation_bdl_to_52016(
                 global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
             );
-            bdl::Polygon(p).rotate(azimuth.to_radians()).as_vec()
+            p.rotate(azimuth.to_radians()).as_vec()
         }
         // Con elementos de suelo hacemos el mirror (y -> -y para cada punto) del polígono sobre el eje X para que al girarlo con el tilt 180 quede igual
-        (Some("BOTTOM"), _) => { 
-            space_polygon.mirror_y().as_vec()
-        },
+        (Some("BOTTOM"), _) => {
+            let azimuth = orientation_bdl_to_52016(
+                global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
+            );
+            space_polygon
+                .rotate(azimuth.to_radians())
+                .mirror_y()
+                .as_vec()
+        }
         (Some(vertex), _) => {
             // Definimos el polígono con inicio en 0,0 y ancho y alto según vértices y espacio
             // La "position (x, y, z)" que define el origen de coordenadas del muro será la del primer vértice
@@ -194,7 +235,8 @@ fn wall_polygon(wall: &hulc::bdl::Wall, bdl: &Data) -> Vec<Point2<f32>> {
             panic!("Definición de polígono de muro {} desconocida", wall.name)
         }
     };
-    polygon
+
+    WallGeometry { position, polygon }
 }
 
 /// Construye muros de la envolvente a partir de datos BDL
@@ -213,37 +255,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
             let azimuth = fround2(orientation_bdl_to_52016(
                 global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
             ));
-
-            // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
-            // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
-            // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
-            let angle = -(space.angle_with_building_north + global_deviation).to_radians();
-            let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
-            let position = rot
-                * match wall.location.as_deref() {
-                    Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
-                        let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
-                        Point3::new(
-                            p1.x + wall.x + space.x,
-                            p1.y + wall.y + space.y,
-                            wall.z + space.z,
-                        )
-                    }
-                    _ => {
-                        let height = match wall.location.as_ref() {
-                            Some(loc) if loc == "TOP" => space.height,
-                            _ => 0.0,
-                        };
-                        Point3::new(
-                            wall.x + space.x,
-                            wall.y + space.y,
-                            wall.z + space.z + height,
-                        )
-                    }
-                };
-            let polygon = wall_polygon(&wall, bdl);
-            let geometry = Some(WallGeometry { position, polygon });
-
+            let geometry = Some(wall_geometry(&wall, bdl));
             Ok(Wall {
                 id,
                 name: wall.name.clone(),
