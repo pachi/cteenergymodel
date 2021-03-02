@@ -20,12 +20,12 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     let width = end - start;
     // convertimos el intervalo a [0, ancho] restando el valor inicial
     let offset = value - start;
-    // volvemos a sumar el valor incial para volver al intervalo [start, end]
+    // volvemos a sumar el valor inicial para volver al intervalo [start, end]
     (offset - (f32::floor(offset / width) * width)) + start
 }
 
 /// Convierte el azimuth desde el criterio del BDL al criterio de la 52016-1
-/// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
+/// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro (N=0, E=+90, W=-90)
 /// UNE-EN ISO 52016-1: S=0, E=+90, W=-90
 pub fn orientation_bdl_to_52016(azimuth: f32) -> f32 {
     normalize(180.0 - azimuth, -180.0, 180.0)

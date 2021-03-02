@@ -10,7 +10,7 @@ use anyhow::{anyhow, format_err, Error};
 use log::warn;
 use na::{Point2, Point3, Rotation3, Translation3, Vector3};
 
-use crate::utils::{fround2, fround3, orientation_bdl_to_52016, uuid_from_obj};
+use crate::utils::{fround2, fround3, normalize, orientation_bdl_to_52016, uuid_from_obj};
 use hulc::{
     bdl::{self, Data},
     ctehexml,
@@ -348,71 +348,75 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
             let id = uuid_from_obj(sh);
             let name = sh.name.clone();
             let global_deviation = global_deviation_from_north(bdl);
-            if let Some(geom) = sh.geometry.as_ref() {
+            let (position, tilt, azimuth, polygon) = if let Some(geom) = sh.geometry.as_ref() {
+                // 1. Sombras definidas por posición, ancho y alto
+                // Sombras de área nula
                 if geom.height.abs() < 1e-3 && geom.height.abs() < 1e-3 {
                     return None;
                 };
-                let azimuth = fround2(orientation_bdl_to_52016(global_deviation + geom.azimuth));
-                let position = Rotation3::from_axis_angle(&Vector3::z_axis(), -(global_deviation).to_radians()) * Point3::new(geom.x, geom.y, geom.z);
-                Some(Shade {
-                    id,
-                    name,
-                    position,
-                    tilt: geom.tilt,
-                    azimuth,
-                    polygon: vec![
-                        Point2::new(0.0, 0.0),
-                        Point2::new(geom.width, 0.0),
-                        Point2::new(geom.width, geom.height),
-                        Point2::new(0.0, geom.height),
-                    ],
-                })
+                // El origen simplemente se traslada la desviación global (en sentido inverso a los ángulos en coordenadas (X,-Y))
+                let position =
+                    Rotation3::from_axis_angle(&Vector3::z_axis(), -global_deviation.to_radians())
+                        * Point3::new(geom.x, geom.y, geom.z);
+                // El azimuth acumula la orientación de la sombra y la desviación del norte (tienen el mismo criterio de giro)
+                let azimuth = fround2(orientation_bdl_to_52016(geom.azimuth + global_deviation));
+                let polygon = vec![
+                    Point2::new(0.0, 0.0),
+                    Point2::new(geom.width, 0.0),
+                    Point2::new(geom.width, geom.height),
+                    Point2::new(0.0, geom.height),
+                ];
+
+                (position, geom.tilt, azimuth, polygon)
             } else if let Some(vertices) = sh.vertices.as_ref() {
+                // 2. Sombras definidas por vértices
+                // Aquí tenemos que tener cuidado con las operaciones de giros ya que tienen criterios de medición distintos
                 let normal = (vertices[2] - vertices[1])
                     .cross(&(vertices[1] - vertices[0]))
                     .normalize();
                 let tilt = Vector3::z_axis().angle(&normal);
+                // Azimuth del elemento de sombra (¡Atención! Criterio EN S=0, E=+90, W=-90)
                 let shade_azimuth = if (tilt % std::f32::consts::PI).abs() < 10.0 * f32::EPSILON {
-                    // Si es una superficie horizontal el azimuth se calcula como si estuviese vertical la superficie -> -Y -> +Z
-                    Vector3::z_axis().angle(&normal).to_degrees()
+                    // Si es una superficie horizontal el azimuth (con el Sur) se calcula como si estuviese vertical la superficie -> -Y -> +Z
+                    Vector3::z_axis().angle(&normal)
                 } else {
-                    // En el resto, el azimuth es el ángulo con -Y
-                    (-Vector3::y_axis()).angle(&normal).to_degrees()
+                    // En el resto, el azimuth (con el Sur) es el ángulo con -Y
+                    (-Vector3::y_axis()).angle(&normal)
                 };
 
-                let azimuth = shade_azimuth + global_deviation;
+                // La desviación global gira en sentido negativo el origen (sentido horario)
                 let v0 = vertices[0];
-                let position = Rotation3::from_axis_angle(&Vector3::z_axis(), -azimuth.to_radians()) * v0;
+                let position =
+                    Rotation3::from_axis_angle(&Vector3::z_axis(), -global_deviation.to_radians())
+                        * v0;
 
-                
-                warn!(
-                    "Sombra: {}, position {}, shade_azimuth: {}, global_azimuth: {}, total azimuth: {}",
-                    sh.name,
-                    position,
-                    shade_azimuth,
-                    global_deviation,
-                    azimuth
+                // El giro global produce un giro en sentido negativo (sentido horario) frente al azimuth de la sombra (antihorario)
+                let azimuth = fround2(normalize(
+                    shade_azimuth.to_degrees() - global_deviation,
+                    -180.0,
+                    180.0,
+                ));
 
-                );
-
-                // Trasladamos al primer vértice y luego deshacemos la inclinación / tilt (giro en x) y luego el azimut (giro eje z)
-                let transform = Rotation3::from_axis_angle(&Vector3::z_axis(), -(azimuth - global_deviation).to_radians())
+                // Trasladamos al primer vértice y luego deshacemos la inclinación / tilt (giro en x) y luego el azimut de la sombra (giro eje z)
+                // El azimuth derivado de la desviación global la transmitimos en el valor final de azimuth y la hemos incorporado en la posición
+                // así que no debemos descontarla aquí de la geometría de la sombra
+                let transform = Rotation3::from_axis_angle(&Vector3::z_axis(), -shade_azimuth)
                     * Rotation3::from_axis_angle(&Vector3::x_axis(), -tilt)
                     * Translation3::from(Point3::origin() - v0);
                 let polygon = vertices.iter().map(|p| (transform * p).xy()).collect();
-                Some(Shade {
-                    id,
-                    name,
-                    position,
-                    tilt: tilt.to_degrees(),
-                    // Aquí añadimos el azimuth global, que no está contemplado en el polígono de la sombra
-                    // XXX: esto y el transform todavía no está bien... porque el valor en el caso del cubo_rot debería ser 45, no -45
-                    azimuth: -azimuth,
-                    polygon,
-                })
+                (position, tilt.to_degrees(), azimuth, polygon)
             } else {
                 panic!("Definición inesperada de elemento de sombra");
-            }
+            };
+
+            Some(Shade {
+                id,
+                name,
+                position,
+                tilt,
+                azimuth,
+                polygon,
+            })
         })
         .collect()
 }
