@@ -205,6 +205,7 @@ impl Data {
 
                     // Sustituimos la construcción por el nombre de la composición de capas
                     // La absortividad ya está correcta en el muro y así podemos eliminar constructions
+                    // XXX: El problema es que algunas construcciones comparten layers pero no absortividad
                     let cons = constructions.get(&wall.cons).ok_or_else(|| {
                         format_err!(
                             "No se ha definido la construcción {} del cerramiento {}",
@@ -212,7 +213,8 @@ impl Data {
                             wall.name
                         )
                     })?;
-                    let absorptance = cons.absorptance.unwrap_or(0.0);
+                    // HULC: en muros exteriores el valor por defecto es 0.6 (en cubiertas 0.7 y marcos de hueco 0.9)
+                    let absorptance = cons.absorptance.unwrap_or(0.6);
                     let layersname = cons.wallcons.clone();
                     let mut layers = bdldata.db.wallcons.get_mut(&layersname).ok_or_else(|| {
                         format_err!(
