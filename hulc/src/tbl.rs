@@ -44,6 +44,8 @@ pub enum ElemType {
     EXTWALL = 0,
     /// Hueco
     WINDOW = 1,
+    /// Puerta
+    DOOR = 2,
     /// Muro adiabático
     ADBWALL = -2,
     /// Muro o suelo en contacto con el terreno
@@ -61,6 +63,7 @@ impl FromStr for ElemType {
         match s {
             "0" => Ok(ElemType::EXTWALL),
             "1" => Ok(ElemType::WINDOW),
+            "2" => Ok(ElemType::DOOR),
             "-2" => Ok(ElemType::ADBWALL),
             "-3" => Ok(ElemType::GNDWALL),
             "-4" => Ok(ElemType::INTWALL),
