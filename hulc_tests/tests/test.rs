@@ -137,7 +137,7 @@ fn test_kyg() {
 fn test_test_spaces_caso_a() {
     let tbl = tbl::parse("tests/casoA/NewBDL_O.tbl").unwrap();
     let ctehexmlpath = ctehexml::find_ctehexml("tests/casoA").unwrap();
-    let xmldata = ctehexml::parse(&ctehexmlpath.unwrap()).unwrap();
+    let xmldata = ctehexml::parse_from_path(&ctehexmlpath.unwrap()).unwrap();
     let bdl = xmldata.bdldata;
 
     for (name, space) in tbl.spaces {
@@ -149,9 +149,10 @@ fn test_test_spaces_caso_a() {
 
 #[test]
 fn test_bdl_parse() {
-    let _data = ctehexml::parse("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
-    let _data = ctehexml::parse("tests/casoA/casoa.ctehexml").unwrap();
-    let data = ctehexml::parse("tests/casoC/casoc.ctehexml").unwrap();
+    let _data =
+        ctehexml::parse_from_path("tests/00_plurif_s3_v0_d3/00_plurif_s3_v0_d3.ctehexml").unwrap();
+    let _data = ctehexml::parse_from_path("tests/casoA/casoa.ctehexml").unwrap();
+    let data = ctehexml::parse_from_path("tests/casoC/casoc.ctehexml").unwrap();
     let bdldb = &data.bdldata;
 
     #[allow(unused_variables)]

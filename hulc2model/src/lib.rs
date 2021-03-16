@@ -56,7 +56,7 @@ pub fn collect_hulc_data<T: AsRef<str>>(
         format_err!("No se ha podido localizar el archivo .ctehexml del proyecto")
     })?;
     // Genera Model desde BDL
-    let ctehexmldata = ctehexml::parse_with_catalog(&ctehexmlpath)?;
+    let ctehexmldata = ctehexml::parse_with_catalog_from_path(&ctehexmlpath)?;
 
     let mut ecdata = Model::try_from(&ctehexmldata)?;
     // Interpreta .kyg y añade datos que faltan con archivos adicionales

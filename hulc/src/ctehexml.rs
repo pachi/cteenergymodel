@@ -100,11 +100,9 @@ fn get_tag_as_i32(parent: &roxmltree::Node, tag: &str) -> Result<i32, Error> {
 }
 
 /// Lee estructura de datos desde cadena con formato de archivo .ctehexml
-pub fn parse<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
-    let utf8buf = read_file(path.as_ref())?;
-
+pub fn parse(data: &str) -> Result<CtehexmlData, Error> {
     // Localiza datos en XML
-    let doc = roxmltree::Document::parse(&utf8buf)?;
+    let doc = roxmltree::Document::parse(data)?;
 
     // Datos generales
     let datos_generales = doc
@@ -173,12 +171,19 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
     })
 }
 
+/// Lee estructura de datos desde patch de archivo .ctehexml
+pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
+    let utf8data = read_file(path.as_ref())?;
+    parse(&utf8data)
+}
+
+
 static LIDERCATSTRZ: &[u8] = include_bytes!("BDCatalogo.bdc.utf8.gz");
 
 /// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
-pub fn parse_with_catalog<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
-    // Carga archivo .ctehexml
-    let mut ctehexmldata = parse(path.as_ref())?;
+pub fn parse_with_catalog(data: &str) -> Result<CtehexmlData, Error> {
+    // Carga datos del .ctehexml
+    let mut ctehexmldata = parse(data)?;
     let mut db = ctehexmldata.bdldata.db;
     // Carga datos del catálogo comprimido
     let mut gz = GzDecoder::new(LIDERCATSTRZ);
@@ -192,4 +197,12 @@ pub fn parse_with_catalog<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error
     db.frames.extend(catdb.frames);
     ctehexmldata.bdldata.db = db;
     Ok(ctehexmldata)
+}
+
+
+/// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
+pub fn parse_with_catalog_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
+    // Carga archivo .ctehexml
+    let data = read_file(path.as_ref())?;
+    parse_with_catalog(&data)
 }
