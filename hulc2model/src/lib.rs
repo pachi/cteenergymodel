@@ -94,7 +94,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     // Actualizaciones de los datos del ctehexmldata con valores del archivo kyg -------
     // Interpreta .kyg y añade datos que faltan
     if let Some(kygpath) = &kygpath {
-        let kygdata = kyg::parse(&kygpath).unwrap();
+        let kygdata = kyg::parse_from_path(&kygpath).unwrap();
 
         // Modifica U de muros con datos del .kyg
         // XXX: hay que tener cuidado porque estos valores tienen desviaciones con los que se muestran en

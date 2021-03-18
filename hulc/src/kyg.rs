@@ -103,10 +103,8 @@ pub struct ThermalBridge {
 }
 
 // Lee estructura de datos desde cadena con formato de archivo KyGananciasSolares.txt
-pub fn parse<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
-    let utf8buf = read_latin1_file(path.as_ref())?;
-
-    let lines = utf8buf
+pub fn parse(data: &str) -> Result<KyGElements, Error> {
+    let lines = data
         .lines()
         .map(|e| e.trim())
         .collect::<Vec<&str>>()
@@ -274,4 +272,10 @@ pub fn parse<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
     }
 
     Ok(kyg)
+}
+
+// Lee estructura de datos desde una ruta de archivo KyGananciasSolares.txt
+pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<KyGElements, Error> {
+    let utf8buf = read_latin1_file(path.as_ref())?;
+    parse(&utf8buf)
 }

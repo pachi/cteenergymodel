@@ -125,7 +125,7 @@ fn parse_test_data2() {
 #[test]
 fn test_kyg() {
     let kygpath = kyg::find_kyg("tests/casoA").unwrap().unwrap();
-    let kyg = kyg::parse(kygpath).unwrap();
+    let kyg = kyg::parse_from_path(kygpath).unwrap();
     assert_eq!(kyg.walls.len(), 19);
     assert_eq!(kyg.windows.len(), 10);
     assert_eq!(kyg.thermal_bridges.len(), 7);
