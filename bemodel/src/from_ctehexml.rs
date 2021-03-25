@@ -400,8 +400,8 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                 // Trasladamos al primer vértice y luego deshacemos la inclinación / tilt (giro en x) y luego el azimut de la sombra (giro eje z)
                 // El azimuth derivado de la desviación global la transmitimos en el valor final de azimuth y la hemos incorporado en la posición
                 // así que no debemos descontarla aquí de la geometría de la sombra
-                let transform = Rotation3::from_axis_angle(&Vector3::z_axis(), -shade_azimuth)
-                    * Rotation3::from_axis_angle(&Vector3::x_axis(), -tilt)
+                let transform = Rotation3::from_axis_angle(&Vector3::x_axis(), -tilt)
+                    * Rotation3::from_axis_angle(&Vector3::z_axis(), -shade_azimuth)
                     * Translation3::from(Point3::origin() - v0);
                 let polygon = vertices.iter().map(|p| (transform * p).xy()).collect();
                 (position, tilt.to_degrees(), azimuth, polygon)
