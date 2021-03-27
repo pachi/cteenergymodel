@@ -346,8 +346,8 @@ impl Model {
     }
 
     /// Calcula la transmitancia térmica global K (W/m2K)
-    /// Transmitancia media de los elementos en contacto con el aire exterior o con el terreno
-    /// Incluye los puentes térmicos
+    /// Transmitancia media de opacos, huecos y puentes térmicos en contacto con el aire exterior o con el terreno
+    ///
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
     pub fn K_he2019(&self) -> KDetail {
         let (walls_a_u, walls_a, windows_a_u, windows_a): (f32, f32, f32, f32) = self
@@ -465,11 +465,6 @@ impl Model {
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
     /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
     /// Notas:
-    /// - en particiones interiores NO se considera el factor b, reductor de temperatura
-    /// - NO se ha implementado el cálculo de elementos en contacto con espacios no habitables
-    /// - NO se ha implementado el cálculo de cerramientos en contacto con el terreno
-    ///     - en HULC los valores por defecto de Ra y D se indican en las opciones generales de
-    ///       las construcciones por defecto
     /// - los elementos adiabáticos se reportan con valor 0.0
     /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
     pub fn u_for_wall(&self, wall: &Wall) -> Option<f32> {
@@ -510,7 +505,7 @@ impl Model {
             (GROUND, BOTTOM) => {
                 // 1. Solera sobre el terreno: UNE-EN ISO 13370:2010 Apartado 9.1 y 9.3.2
                 // Simplificaciones:
-                // - forma cuadrada para calcular el perímetro
+                // - forma cuadrada para calcular el perímetro si no está disponible
                 // - ancho de muros externos w = 0.3m
                 // - lambda de aislamiento = 0,035 W/mK
                 //
@@ -522,25 +517,28 @@ impl Model {
                 // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
                 let wspace = self.get_wallspace(&wall)?;
                 let gnd_A = wspace.area;
-                let gnd_P = wspace
+                let mut gnd_P = wspace
                     .exposed_perimeter
                     .unwrap_or_else(|| 4.0 * f32::sqrt(gnd_A));
 
-                // Soleras sin contacto perimetral con el exterior B' -> inf -> U -> 0
+                // Soleras sin contacto perimetral con el exterior P=0 -> B' -> inf. Cambiamos P a un valor pequeño
                 if gnd_P.abs() < 0.001 {
                     warn!(
-                        "{} (solera con perímetro expuesto nulo o casi nulo {:.2}. U = 0.00)",
+                        "{} (solera con perímetro expuesto nulo o casi nulo {:.2})",
                         wall.name, gnd_P,
                     );
-                    return Some(0.0);
+                    gnd_P = 0.000001;
                 };
 
                 let B_1 = gnd_A / (0.5 * gnd_P);
-
                 let z = if wspace.z < 0.0 { -wspace.z } else { 0.0 };
                 const W: f32 = 0.3; // Simplificación: espesor supuesto de los muros perimetrales
                 let d_t = W + LAMBDA_GND * (RSI_DESCENDENTE + R_intrinsic + RSE);
 
+                // 2 casos:
+                // 1. Es un suelo de un espacio acondicionado (9.1 y 9.3.2)
+                // 2. Es un suelo de un espacio no acondicionado (9.2 - tomamos U_bg igual a U_g, según 9.2 (8) o a U_bf según E.2)
+                // Los dos casos equivalen aproximadamente al U_bf de 9.3.2
                 let U_bf = if (d_t + 0.5 * z) < B_1 {
                     // Soleras sin aislar y moderadamente aisladas
                     (2.0 * LAMBDA_GND / (PI * B_1 + d_t + 0.5 * z))
@@ -550,7 +548,7 @@ impl Model {
                     LAMBDA_GND / (0.457 * B_1 + d_t + 0.5 * z)
                 };
 
-                // Efecto del aislamiento perimetral 13770 Anexo B.
+                // Efecto del aislamiento perimetral 13770 Anexo B (B.4).
                 // Espesor aislamiento perimetral d_n = r_n_perim_ins * lambda_ins
                 // Espesor equivalente adicional resultante del aislamiento perimetral (d')
                 let D_1 = R_n_perim_ins * (LAMBDA_GND - LAMBDA_INS);

@@ -106,14 +106,9 @@ impl Space {
     /// Calcula el perímetro expuesto del espacio (m)
     ///
     /// El perímetro expuesto es el que separa el espacio del exterior o de un espacio no calefactado fuera de la estructura aislada
-    /// Excluye las parte que separan el espacio con otros espacios calefactados
+    /// Excluye las parte que separan un espacio calefactado con otros espacios calefactados
     pub fn exposed_perimeter(&self, db: &Data) -> f32 {
         use super::BoundaryType::{ADIABATIC, EXTERIOR, GROUND, INTERIOR};
-        // Solo se computa el de los espacios acondicionados
-        if self.stype != "CONDITIONED" {
-            return 0.0;
-        };
-
         // Muros exteriores (verticales)
         let vertical_walls_for_space = db
             .walls
@@ -133,7 +128,7 @@ impl Space {
                             .as_deref()
                             .and_then(|nxts| db.spaces.iter().find(|s| s.name == nxts))
                             .and_then(|nextspace| {
-                                if nextspace.stype != "CONDITIONED" {
+                                if self.stype == "CONDITIONED" && nextspace.stype != "CONDITIONED" {
                                     // tenemos en cuenta el contacto de espacios acondicionados con otros tipos
                                     Some((area, area))
                                 } else {
