@@ -17,8 +17,8 @@ use hulc::{
 };
 
 pub use super::{
-    BoundaryType, Meta, Model, Orientation, Shade, Space, SpaceType, ThermalBridge, Tilt, Wall,
-    WallCons, WallGeometry, Window, WindowCons, WindowGeometry,
+    BoundaryType, Meta, Model, Orientation, Shade, Space, SpaceType, ThermalBridge,
+    ThermalBridgeKind, Tilt, Wall, WallCons, WallGeometry, Window, WindowCons, WindowGeometry,
 };
 
 // Conversiones de BDL a tipos CTE -------------------
@@ -316,15 +316,32 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> Vec<Window> {
 
 /// Construye puentes térmicos de la envolvente a partir de datos BDL
 fn thermal_bridges_from_bdl(bdl: &Data) -> Vec<ThermalBridge> {
-    // PTs
     bdl.tbridges
         .iter()
         .filter(|tb| tb.name != "LONGITUDES_CALCULADAS")
         .map(|tb| {
+            use ThermalBridgeKind::*;
             let id = uuid_from_obj(tb);
+            let kind = match tb.name.as_str() {
+                "UNION_CUBIERTA" => Roof,
+                "ESQUINA_CONVEXA_FORJADO" => Roof,
+                "ESQUINA_CONCAVA" => Corner,
+                "ESQUINA_CONVEXA" => Corner,
+                "ESQUINA_CONCAVA_CERRAMIENTO" => Corner,
+                "ESQUINA_CONVEXA_CERRAMIENTO" => Corner,
+                "FRENTE_FORJADO" => IntermediateFloor,
+                "PILAR" => Pillar,
+                "UNION_SOLERA_PAREDEXT" => GroundFloor,
+                "HUECO_VENTANA" => Window,
+                "HUECO_ALFEIZAR" => Window,
+                "HUECO_CAPIALZADO" => Window,
+                "HUECO_JAMBA" => Window,
+                _ => Generic,
+            };
             ThermalBridge {
                 id,
                 name: tb.name.clone(),
+                kind,
                 l: fround2(tb.length.unwrap_or(0.0)),
                 psi: tb.psi,
             }

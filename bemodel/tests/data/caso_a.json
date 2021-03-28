@@ -33,7 +33,7 @@
       "height": 3.0,
       "n_v": 0.1,
       "z": 0.0,
-      "exposed_perimeter": 0.0
+      "exposed_perimeter": 22.5
     },
     {
       "id": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
@@ -81,7 +81,7 @@
       "height": 3.0,
       "n_v": 0.1,
       "z": 9.0,
-      "exposed_perimeter": 0.0
+      "exposed_perimeter": 22.5
     }
   ],
   "walls": [
@@ -1506,60 +1506,70 @@
     {
       "id": "70e025a1-00d3-f0ab-27f1-122de0e16526",
       "name": "FRENTE_FORJADO",
+      "kind": "IntermediateFloor",
       "L": 110.0,
       "psi": 0.0
     },
     {
       "id": "70bd7afb-545b-07b0-7447-5f77a4c882ab",
       "name": "UNION_CUBIERTA",
+      "kind": "Roof",
       "L": 113.54,
       "psi": 0.25875
     },
     {
       "id": "11947c7e-e42b-2068-cea8-465d6d505d04",
       "name": "ESQUINA_CONVEXA_FORJADO",
+      "kind": "Roof",
       "L": 30.0,
       "psi": 0.86
     },
     {
       "id": "2c119ae1-3a06-35b9-dbba-0f7ec63a74fd",
       "name": "ESQUINA_CONCAVA",
+      "kind": "Corner",
       "L": 0.0,
       "psi": -0.08
     },
     {
       "id": "117889b4-b7c4-d5c7-fb82-8cdc860ef53b",
       "name": "ESQUINA_CONVEXA",
+      "kind": "Corner",
       "L": 48.0,
       "psi": 0.06
     },
     {
       "id": "376f6485-168b-9c7d-1ad1-7e5fbcfec7bc",
       "name": "PILAR",
+      "kind": "Pillar",
       "L": 1.0,
       "psi": 0.0
     },
     {
       "id": "013e6448-15b9-c20f-bac2-2012298ba400",
       "name": "HUECO_CAPIALZADO",
+      "kind": "Window",
       "L": 12.0,
       "psi": 0.111
     },
     {
       "id": "5fc380b0-85c3-c70b-0f43-d7617b333046",
       "name": "HUECO_JAMBA",
+      "kind": "Window",
       "L": 24.0,
       "psi": 0.01
     },
     {
       "id": "a539a5c6-3bff-1d56-0ed2-ea1c3f177ba1",
       "name": "HUECO_ALFEIZAR",
+      "kind": "Window",
       "L": 12.0,
       "psi": 0.08
     },
     {
       "id": "3a69243d-28aa-7dfc-c781-60528b9eea21",
       "name": "UNION_SOLERA_PAREDEXT",
+      "kind": "GroundFloor",
       "L": 40.0,
       "psi": 0.3975
     }
@@ -1580,7 +1590,7 @@
       "group": "Forjados Interiores",
       "thickness": 0.35,
       "R_intrinsic": 0.471,
-      "absorptance": 0.0
+      "absorptance": 0.6
     },
     {
       "id": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
@@ -1588,7 +1598,7 @@
       "group": "Tabiques",
       "thickness": 0.09,
       "R_intrinsic": 0.34,
-      "absorptance": 0.0
+      "absorptance": 0.6
     },
     {
       "id": "5904daa6-22de-1811-f735-cc4c3059de46",
@@ -1596,7 +1606,7 @@
       "group": "Fachada",
       "thickness": 0.25,
       "R_intrinsic": 3.192,
-      "absorptance": 0.0
+      "absorptance": 0.6
     },
     {
       "id": "e10cece0-793f-ff77-2bcb-35576380274f",
@@ -1604,7 +1614,7 @@
       "group": "Soleras",
       "thickness": 0.48,
       "R_intrinsic": 1.523,
-      "absorptance": 0.0
+      "absorptance": 0.6
     }
   ],
   "wincons": [
@@ -1629,7 +1639,7 @@
       "tilt": "SIDE",
       "cons": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
       "u": 1.67,
-      "computed_u": 0.64
+      "computed_u": 0.81
     },
     {
       "name": "P01_E01_FTER001",
@@ -1665,6 +1675,17 @@
       "computed_u": 0.59
     },
     {
+      "name": "P01_E02_TER002",
+      "bounds": "GROUND",
+      "spacetype": "UNINHABITED",
+      "nextspace": null,
+      "nextspacetype": null,
+      "tilt": "BOTTOM",
+      "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
+      "u": 0.0,
+      "computed_u": 0.33
+    },
+    {
       "name": "P01_E02_TER003",
       "bounds": "GROUND",
       "spacetype": "UNINHABITED",
@@ -1695,7 +1716,7 @@
       "tilt": "BOTTOM",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "u": 1.37,
-      "computed_u": 0.41
+      "computed_u": 0.54
     },
     {
       "name": "P03_E01_FI001",

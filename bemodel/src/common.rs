@@ -427,22 +427,132 @@ pub struct Warning {
 
 /// Reporte de cálculo de K (HE2019)
 #[allow(non_snake_case)]
-#[derive(Debug, Default, Copy, Clone, Serialize, Deserialize)]
-pub struct KDetail {
-    /// K
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize)]
+pub struct KData {
+    /// K global [W/m²K]
     pub K: f32,
-    /// A de los opacos que participan en la K (m2)
-    pub walls_a: f32,
-    /// A·U de los opacos que participan en la K (W/K)
-    pub walls_a_u: f32,
-    /// A de los huecos que participan en la K (m2)
+    /// Resumen (K, opacos, huecos, tb)
+    pub summary: KSummary,
+    /// Cubiertas (aire)
+    pub roofs: KElementProps,
+    /// Suelos (aire)
+    pub floors: KElementProps,
+    /// Muros (aire)
+    pub walls: KElementProps,
+    /// Huecos
+    pub windows: KElementProps,
+    /// Elementos en contacto con el terreno (de cualquier tipo)
+    pub ground: KElementProps,
+    /// Puentes térmicos
+    pub tbs: KTBElements,
+}
+
+/// Resumen de resultados de K
+#[allow(non_snake_case)]
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize)]
+pub struct KSummary {
+    /// Superficie total [m²]
+    pub a: f32,
+    /// AU + ψL total [W/K]
+    pub au: f32,
+    /// A de opacos [m²]
+    pub opaques_a: f32,
+    /// AU de opacos [W/K]
+    pub opaques_au: f32,
+    /// A de huecos [m²]
     pub windows_a: f32,
-    /// A·U de los huecos que participan en la K (W/K)
-    pub windows_a_u: f32,
-    /// L de los puentes térmicos que participan en la K (m)
-    pub thermal_bridges_l: f32,
-    /// ψ·L de los puentes térmicos que participan en la K (m)
-    pub thermal_bridges_psi_l: f32,
+    /// AU de huecos [W/K]
+    pub windows_au: f32,
+    /// L de puentes térmicos [m]
+    pub tbs_l: f32,
+    /// ψL de puenstes térmicos [W/K]
+    pub tbs_psil: f32,
+}
+/// Propiedades de cada elemento de K
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize)]
+pub struct KElementProps {
+    /// A del elemento [m²]
+    pub a: f32,
+    /// A·U del elemento [W/K]
+    pub au: f32,
+}
+
+/// Tipos de elementos térmicos y sus propiedades
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize)]
+pub struct KTBElements {
+    /// Puentes térmicos fachada-cubierta (R)
+    pub roof: KTBElementProps,
+    /// Puentes térmicos balcón (B)
+    pub balcony: KTBElementProps,
+    /// Puentes térmicos fachada-fachada (C)
+    pub corner: KTBElementProps,
+    /// Puentes térmicos forjado-fachada (IF)
+    pub intermediate_floor: KTBElementProps,
+    /// Puentes térmicos muro-fachada/cubierta (IW)
+    pub internal_wall: KTBElementProps,
+    /// Puentes térmicos solera/cámara sanitaria/muro ent.-fachada (GF)
+    pub ground_floor: KTBElementProps,
+    /// Puentes térmicos pilares (P)
+    pub pillar: KTBElementProps,
+    /// Puentes térmicos contorno de hueco (W)
+    pub window: KTBElementProps,
+    /// Puentes térmicos genéricos (G)
+    pub generic: KTBElementProps,
+}
+
+/// Propiedades de cada elemento de K
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize)]
+pub struct KTBElementProps {
+    /// L del elemento [m]
+    pub l: f32,
+    /// ψ·L del elemento [W/K]
+    pub psil: f32,
+}
+
+impl KData {
+    /// Rellena datos del resumen de cálculo de K
+    pub fn compute(&mut self) {
+        #[allow(non_snake_case)]
+        let Self {
+            roofs,
+            floors,
+            walls,
+            ground,
+            tbs,
+            windows,
+            summary,
+            K,
+        } = self;
+        summary.opaques_a = roofs.a + floors.a + walls.a + ground.a;
+        summary.opaques_au = roofs.au + floors.au + walls.au + ground.au;
+        summary.windows_a = windows.a;
+        summary.windows_au = windows.au;
+        summary.tbs_l = tbs.roof.l
+            + tbs.balcony.l
+            + tbs.corner.l
+            + tbs.intermediate_floor.l
+            + tbs.internal_wall.l
+            + tbs.ground_floor.l
+            + tbs.pillar.l
+            + tbs.window.l
+            + tbs.generic.l;
+        summary.tbs_psil = tbs.roof.psil
+            + tbs.balcony.psil
+            + tbs.corner.psil
+            + tbs.intermediate_floor.psil
+            + tbs.internal_wall.psil
+            + tbs.ground_floor.psil
+            + tbs.pillar.psil
+            + tbs.window.psil
+            + tbs.generic.psil;
+        summary.a = summary.opaques_a + summary.windows_a;
+        summary.au = summary.opaques_au + summary.windows_au + summary.tbs_psil;
+        *K = if summary.a < 0.01 {
+            0.0
+        } else {
+            summary.au / summary.a
+        };
+    }
 }
 
 /// Reporte de cálculo de n50_he2019

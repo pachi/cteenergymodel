@@ -83,7 +83,7 @@ fn test_caso_a() {
 
     // Cálculo de K, n50, C_o
     assert_almost_eq!(fround2(data.K_he2019().K), 0.51, 0.001);
-    assert_almost_eq!(fround2(data.n50_he2019().n50), 4.58, 0.001);
+    assert_almost_eq!(fround2(data.n50_he2019().n50), 4.58, 0.001); // HULC 4.33
     assert_almost_eq!(fround2(data.n50()), 5.32, 0.001);
     assert_almost_eq!(fround2(data.n50_he2019().n50), 4.58, 0.001);
     assert_almost_eq!(fround2(data.C_o_he2019()), 16.00, 0.001);

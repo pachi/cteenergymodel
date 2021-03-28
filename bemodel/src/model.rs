@@ -9,7 +9,7 @@ use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 pub use super::{
-    BoundaryType, ClimateZone, KDetail, N50HEDetail, Orientation, SpaceType, Tilt, UValues,
+    BoundaryType, ClimateZone, N50HEDetail, Orientation, SpaceType, Tilt, UValues,
     Warning, WarningLevel,
 };
 
@@ -236,11 +236,48 @@ pub struct ThermalBridge {
     pub id: String,
     /// Nombre del puente térmico
     pub name: String,
+    /// Tipo de puente térmico
+    /// Roof|Balcony|Corner|IntermediateFloor|InternalWall|GroundFloor|Pillar|Window|Generic
+    pub kind: ThermalBridgeKind,
     /// Longitud del puente térmico (m)
     #[serde(rename = "L")]
     pub l: f32,
     /// Transmitancia térmica lineal del puente térmico (W/mK)
     pub psi: f32,
+}
+
+/// Tipo de puente térmico según el tipo de elementos conectados
+///
+/// Los elementos conectados pueden ser:
+///     cubiertas, balcones, fachadas, soleras / cámaras sanitarias,
+///     pilares, huecos, particiones interiores, forjados (suelos interiores)
+/// Usamos abreviaturas similares a las de la norma UNE-EN ISO 14683
+#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+pub enum ThermalBridgeKind {
+    /// Cubierta-fachada (R)
+    Roof,
+    /// Balcón-fachada (B)
+    Balcony,
+    /// Fachada-fachada (C)
+    Corner,
+    /// Suelo interior-fachada (IF)
+    IntermediateFloor,
+    /// Partición interior (muro)-fachada o Partición interior(muro)-cubierta (IW)
+    InternalWall,
+    /// Solera-fachada, Cámara sanitaria-fachada o Muro enterrado-fachada (GF)
+    GroundFloor,
+    /// Pilar (P)
+    Pillar,
+    /// Contorno de hueco, ventana o puerta (W)
+    Window,
+    /// Genérico, otros (G)
+    Generic
+}
+
+impl Default for ThermalBridgeKind {
+    fn default() -> Self {
+        Self::Generic
+    }
 }
 
 /// Definición de construcción de elemento opaco

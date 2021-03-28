@@ -16,8 +16,8 @@ use std::{
 use log::{debug, info, warn};
 
 use super::{
-    BoundaryType, KDetail, Model, N50HEDetail, Orientation, Space, SpaceType, Tilt, UValues, Wall,
-    WallCons, Warning, WarningLevel, Window, WindowCons,
+    BoundaryType, KData, Model, N50HEDetail, Orientation, Space, SpaceType, ThermalBridgeKind,
+    Tilt, UValues, Wall, WallCons, Warning, WarningLevel, Window, WindowCons,
 };
 use crate::utils::fround2;
 
@@ -349,73 +349,65 @@ impl Model {
     /// Transmitancia media de opacos, huecos y puentes térmicos en contacto con el aire exterior o con el terreno
     ///
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
-    pub fn K_he2019(&self) -> KDetail {
-        let (walls_a_u, walls_a, windows_a_u, windows_a): (f32, f32, f32, f32) = self
-            .walls_of_envelope()
-            .filter_map(|wall| {
-                let (win_w_a_u, win_w_a) = self
-                    .windows_of_wall(&wall.id)
-                    .filter_map(|win_i| {
-                        self.get_wincons(&win_i)
-                            .map(|wincons| Some((win_i.area * wincons.u, win_i.area)))?
-                    })
-                    .fold((0.0, 0.0), |(acc_a_u, acc_a), (win_i_a_u, win_i_a)| {
-                        (acc_a_u + win_i_a_u, acc_a + win_i_a)
-                    });
-                let multiplier = self
-                    .get_wallspace(&wall)
-                    .map(|s| s.multiplier)
-                    .unwrap_or(1.0);
-                let wall_u = self.u_for_wall(&wall)?;
-                Some((
-                    wall_u * wall.area * multiplier,
-                    wall.area * multiplier,
-                    win_w_a_u * multiplier,
-                    win_w_a * multiplier,
-                ))
-            })
-            .fold(
-                (0.0, 0.0, 0.0, 0.0),
-                |(acc_wall_a_u, acc_wall_a, acc_win_a_u, acc_win_a),
-                 (wall_a_u, wall_a, win_a_u, win_a)| {
-                    (
-                        acc_wall_a_u + wall_a_u,
-                        acc_wall_a + wall_a,
-                        acc_win_a_u + win_a_u,
-                        acc_win_a + win_a,
-                    )
-                },
-            );
-        let (thermal_bridges_l, thermal_bridges_psi_l): (f32, f32) = self
-            .thermal_bridges
-            .iter()
-            .map(|tb| (tb.l, tb.psi * tb.l))
-            .fold((0.0, 0.0), |(acc_l, acc_psi_l), (e_l, e_psi_l)| {
-                (acc_l + e_l, acc_psi_l + e_psi_l)
-            });
+    pub fn K_he2019(&self) -> KData {
+        let mut k = KData::default();
+        for wall in self.walls_of_envelope() {
+            let multiplier = self
+                .get_wallspace(wall)
+                .map(|s| s.multiplier)
+                .unwrap_or(1.0);
+            for win in self.windows_of_wall(&wall.id) {
+                let wincons = match self.get_wincons(win) {
+                    Some(wincons) => wincons,
+                    _ => continue,
+                };
+                let area = multiplier * win.area;
+                k.windows.a += area;
+                k.windows.au += area * wincons.u
+            }
+            let wall_u = match self.u_for_wall(wall) {
+                Some(u) => u,
+                _ => continue,
+            };
+            let area = multiplier * wall.area;
+            let area_u = area * wall_u;
+            let mut element_case = match (wall.bounds, Tilt::from(wall)) {
+                (BoundaryType::GROUND, _) => &mut k.ground,
+                (_, Tilt::TOP) => &mut k.roofs,
+                (_, Tilt::BOTTOM) => &mut k.floors,
+                (_, Tilt::SIDE) => &mut k.walls,
+            };
+            element_case.a += area;
+            element_case.au += area_u;
+        }
+        for tb in &self.thermal_bridges {
+            use ThermalBridgeKind::*;
+            let l = tb.l;
+            let psil = tb.psi * l;
+            let mut tb_case = match tb.kind {
+                Roof => &mut k.tbs.roof,
+                Balcony => &mut k.tbs.balcony,
+                Corner => &mut k.tbs.corner,
+                IntermediateFloor => &mut k.tbs.intermediate_floor,
+                InternalWall => &mut k.tbs.internal_wall,
+                GroundFloor => &mut k.tbs.ground_floor,
+                Pillar => &mut k.tbs.pillar,
+                Window => &mut k.tbs.window,
+                Generic => &mut k.tbs.generic,
+            };
+            tb_case.l += l;
+            tb_case.psil += psil;
+        }
 
-        let total_a_u = walls_a_u + windows_a_u + thermal_bridges_psi_l;
-        let total_a = walls_a + windows_a;
+        k.compute();
 
-        let K = if total_a <= 0.01 {
-            0.0
-        } else {
-            total_a_u / total_a
-        };
+        let s = k.summary;
         info!(
             "K={:.2} W/m²K, A_o={:.2} m², (A.U)_o={:.2} W/K, A_h={:.2} m², (A.U)_h={:.2} W/K, L_pt={:.2} m, Psi.L_pt={:.2} W/K",
-            K, walls_a, walls_a_u, windows_a, windows_a_u, thermal_bridges_l, thermal_bridges_psi_l
+            k.K, s.opaques_a, s.opaques_au, s.windows_a, s.windows_au, s.tbs_l, s.tbs_psil
         );
 
-        KDetail {
-            K,
-            walls_a,
-            walls_a_u,
-            windows_a,
-            windows_a_u,
-            thermal_bridges_l,
-            thermal_bridges_psi_l,
-        }
+        k
     }
 
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
