@@ -9,6 +9,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 
 # hulc
 - completar obtención de puntos que definen geometría de cada elemento como lista de Vertex3D (x, y, z), para poder calcular sombras (por ejemplo roof, etc)
+- comprobar que los multiplicadores están correctamente implementados
 
 # Comprobaciones
 - Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabático
@@ -16,12 +17,11 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 ## cte::Data
 
 - Calcular más cosas:
-    - Reporte de cálculos de U, K, qsoljul, n50, etc. (datos + resultados intermedios y localizando los que pertenecen a la ET)
-    - Estructura de elementos que pertenecen a la envolvente (agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR*)
+    - Completar estructura UValues indicando elementos que pertenecen a la envolvente (agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR*)
         - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
-    - Calcular estructura con las U de los elementos del edificio (u_values: { windows: BTreeMap<&Window>, walls:BTreeMap<&Wall> }) para usar como caché
-        - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos si usamos caché
-        - Si no, con una caché en u_for_wall() debería dar casi igual
+        - Podríamos usar esa estructura como caché
+            - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos si usamos caché
+            - Si no, con una caché en u_for_wall() debería dar casi igual
 
 - Módulo para calcular propiedades de elementos
     - Calculador de elementos para obtener % de afección de U según intercalarios
@@ -39,13 +39,6 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 
 ## BDL
 
-- Definir polígonos:
-    https://doe2.com/Download/DOE-23/DOE23Vol3-Topics_50h.pdf p.152
-
-    Vamos a guardar posición 3D de muros y polígono 2D de los mismos
-    Así solo usamos datos de espacio y muro/hueco
-    - Ver cómo definimos las ventanas
-    - Acabar de exportar polígonos de muros
 - Quitar de los elementos aquellas cosas que necesitan consultas globales (con acceso a bdldata)
 - Comprobar qué se cambia en las plantas o en el edificio cuando se indica una cota base distinta a la 0.0 (ver si se pone la Z de la planta P01 distinta a "")
 - Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL:
@@ -70,5 +63,3 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
     - http://www.angusj.com/delphi/clipper.php
     - https://docs.rs/geo-clipper/0.4.0/geo_clipper/
     - https://www.boost.org/doc/libs/1_53_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
-
-- Idea: hacer visualizador 3d (con 3djs).
