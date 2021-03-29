@@ -385,15 +385,15 @@ impl Model {
             let l = tb.l;
             let psil = tb.psi * l;
             let mut tb_case = match tb.kind {
-                Roof => &mut k.tbs.roof,
-                Balcony => &mut k.tbs.balcony,
-                Corner => &mut k.tbs.corner,
-                IntermediateFloor => &mut k.tbs.intermediate_floor,
-                InternalWall => &mut k.tbs.internal_wall,
-                GroundFloor => &mut k.tbs.ground_floor,
-                Pillar => &mut k.tbs.pillar,
-                Window => &mut k.tbs.window,
-                Generic => &mut k.tbs.generic,
+                ROOF => &mut k.tbs.roof,
+                BALCONY => &mut k.tbs.balcony,
+                CORNER => &mut k.tbs.corner,
+                INTERMEDIATEFLOOR => &mut k.tbs.intermediate_floor,
+                INTERNALWALL => &mut k.tbs.internal_wall,
+                GROUNDFLOOR => &mut k.tbs.ground_floor,
+                PILLAR => &mut k.tbs.pillar,
+                WINDOW => &mut k.tbs.window,
+                GENERIC => &mut k.tbs.generic,
             };
             tb_case.l += l;
             tb_case.psil += psil;

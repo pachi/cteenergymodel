@@ -67,6 +67,41 @@ impl Default for SpaceType {
     }
 }
 
+
+/// Tipo de puente térmico según el tipo de elementos conectados
+///
+/// Los elementos conectados pueden ser:
+///     cubiertas, balcones, fachadas, soleras / cámaras sanitarias,
+///     pilares, huecos, particiones interiores, forjados (suelos interiores)
+/// Usamos abreviaturas similares a las de la norma UNE-EN ISO 14683
+#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+pub enum ThermalBridgeKind {
+    /// Cubierta-fachada (R)
+    ROOF,
+    /// Balcón-fachada (B)
+    BALCONY,
+    /// Fachada-fachada (C)
+    CORNER,
+    /// Suelo interior-fachada (IF)
+    INTERMEDIATEFLOOR,
+    /// Partición interior (muro)-fachada o Partición interior(muro)-cubierta (IW)
+    INTERNALWALL,
+    /// Solera-fachada, Cámara sanitaria-fachada o Muro enterrado-fachada (GF)
+    GROUNDFLOOR,
+    /// Pilar (P)
+    PILLAR,
+    /// Contorno de hueco, ventana o puerta (W)
+    WINDOW,
+    /// Genérico, otros (G)
+    GENERIC
+}
+
+impl Default for ThermalBridgeKind {
+    fn default() -> Self {
+        Self::GENERIC
+    }
+}
+
 /// Posiciones de los cerramientos según su inclinación
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Tilt {
