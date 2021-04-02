@@ -11,6 +11,7 @@
 //! - UNDERGROUND-WALL
 //!
 //! Todos tienen una construcción y pertenecen a un espacio (location)
+#![allow(clippy::upper_case_acronyms)]
 
 use std::convert::TryFrom;
 
