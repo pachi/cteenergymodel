@@ -1,6 +1,7 @@
 // Copyright (c) 2018-2020 Rafael Villar Burke <pachi@ietcc.csic.es>
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
+#![allow(clippy::upper_case_acronyms)]
 
 use std::{collections::HashMap, convert::TryFrom, error::Error, fmt::Display};
 
@@ -468,16 +469,16 @@ pub struct KData {
     pub K: f32,
     /// Resumen (K, opacos, huecos, tb)
     pub summary: KSummary,
+    /// Muros (aire)
+    pub walls: KElementProps,
     /// Cubiertas (aire)
     pub roofs: KElementProps,
     /// Suelos (aire)
     pub floors: KElementProps,
-    /// Muros (aire)
-    pub walls: KElementProps,
-    /// Huecos
-    pub windows: KElementProps,
     /// Elementos en contacto con el terreno (de cualquier tipo)
     pub ground: KElementProps,
+    /// Huecos
+    pub windows: KElementProps,
     /// Puentes térmicos
     pub tbs: KTBElements,
 }
