@@ -16,8 +16,8 @@ use std::{
 use log::{debug, info, warn};
 
 use super::{
-    BoundaryType, KData, Model, N50HEDetail, Orientation, Space, SpaceType, ThermalBridgeKind,
-    Tilt, UValues, Wall, WallCons, Warning, WarningLevel, Window, WindowCons,
+    BoundaryType, KData, Model, N50HEDetail, Orientation, QSolJulData, Space, SpaceType,
+    ThermalBridgeKind, Tilt, UValues, Wall, WallCons, Warning, WarningLevel, Window, WindowCons,
 };
 use crate::utils::fround2;
 
@@ -412,7 +412,9 @@ impl Model {
 
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
     /// Los huecos para los que no está definido su opaco o su construcción no se consideran en el cálculo
-    pub fn q_soljul(&self, totradjul: &HashMap<Orientation, f32>) -> f32 {
+    pub fn q_soljul(&self, totradjul: &HashMap<Orientation, f32>) -> QSolJulData {
+        let mut Q_soljul_orient: HashMap<Orientation, f32> = HashMap::new();
+
         let Q_soljul = self
             .windows_of_envelope()
             .filter_map(|w| {
@@ -420,20 +422,28 @@ impl Model {
                 let wincons = self.get_wincons(&w)?;
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
+                let qsoljul = w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * w.area * radjul;
+                let curval = Q_soljul_orient.entry(orientation).or_insert(0.0);
+                *curval += qsoljul;
                 debug!(
                     "qsoljul de {}: A {:.2}, orient {}, ff {:.2}, gglshwi {:.2}, fshobst {:.2}, H_sol;jul {:.2}",
                     w.name, w.area, orientation, wincons.ff, wincons.gglshwi, w.fshobst, radjul
                 );
-                Some(w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * w.area * radjul)
+                Some(qsoljul)
             })
             .sum::<f32>();
         let a_ref = self.a_ref();
-        let qsoljul = Q_soljul / a_ref;
+        let q_soljul = Q_soljul / a_ref;
         info!(
             "q_sol;jul={:.2} kWh/m².mes, Q_soljul={:.2} kWh/mes, A_ref={:.2}",
-            qsoljul, Q_soljul, a_ref
+            q_soljul, Q_soljul, a_ref
         );
-        qsoljul
+
+        QSolJulData {
+            q_soljul,
+            Q_soljul,
+            Q_soljul_orient,
+        }
     }
 
     /// Diccionario de transmitancias de elementos (walls, windows, pts)

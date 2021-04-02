@@ -68,7 +68,6 @@ impl Default for SpaceType {
     }
 }
 
-
 /// Tipo de puente térmico según el tipo de elementos conectados
 ///
 /// Los elementos conectados pueden ser:
@@ -94,7 +93,7 @@ pub enum ThermalBridgeKind {
     /// Contorno de hueco, ventana o puerta (W)
     WINDOW,
     /// Genérico, otros (G)
-    GENERIC
+    GENERIC,
 }
 
 impl Default for ThermalBridgeKind {
@@ -589,6 +588,18 @@ impl KData {
             summary.au / summary.a
         };
     }
+}
+
+/// Reporte de cálculo del parámetro de control solar q_sol:jul (HE2019)
+#[allow(non_snake_case)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct QSolJulData {
+    /// Parámetro de control solar q_sol:jul [kWh/m²·mes]
+    pub q_soljul: f32,
+    /// Ganancias para el mes de julio Q_soljul [kWh/mes]
+    pub Q_soljul: f32,
+    /// Resumen por ganancias por orientaciones (Orientación -> Q_sol;jul) [kWh/mes]
+    pub Q_soljul_orient: HashMap<Orientation, f32>,
 }
 
 /// Reporte de cálculo de n50_he2019

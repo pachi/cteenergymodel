@@ -90,7 +90,7 @@ pub fn cli_main() -> Result<()> {
         data.a_ref(),
         data.compacity(),
         data.K_he2019().K,
-        data.q_soljul(&totradjul),
+        data.q_soljul(&totradjul).q_soljul,
         data.n50_he2019().n50,
         data.C_o_he2019(),
         data.n50(),

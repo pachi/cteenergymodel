@@ -33,7 +33,7 @@ fn model_json_conversion() {
     assert_almost_eq!(model.a_ref(), 1673.92, 0.01);
     assert_almost_eq!(model.compacity(), 3.17, 0.01);
     assert_almost_eq!(model.K_he2019().K, 0.37, 0.01);
-    assert_almost_eq!(model.q_soljul(&totradjul), 0.43, 0.01);
+    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.43, 0.01);
     assert_almost_eq!(model.n50(), 2.96, 0.01);
     assert_almost_eq!(model.n50_he2019().n50, 2.96, 0.01);
     assert_almost_eq!(model.C_o(), 16.0, 0.01);
