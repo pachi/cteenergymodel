@@ -84,7 +84,7 @@ fn clean_lines(input: &str) -> String {
         .lines()
         .map(str::trim)
         .filter(|l| {
-            *l != "" // Líneas en blanco
+            !l.is_empty() // Líneas en blanco
             && !l.starts_with('$') // Comentarios
             && !l.starts_with('+') // Encabezados de LIDER (antiguo)
             && !l.starts_with("TEMPLARY") // Separador de parte de lider del BDL "estándar"

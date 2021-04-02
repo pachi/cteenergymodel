@@ -38,6 +38,7 @@ pub fn find_tbl<T: AsRef<str>>(basedir: T) -> Result<Option<PathBuf>, Error> {
 }
 
 /// Tipos de elementos definidos en archivo .tbl
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug)]
 pub enum ElemType {
     /// Elemento opaco (muro, suelo o cubierta) en contacto con el aire exterior

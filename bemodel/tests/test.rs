@@ -14,10 +14,10 @@ pub fn fround2(val: f32) -> f32 {
 macro_rules! assert_almost_eq {
     ($a:expr, $b:expr, $c:expr) => {
         if ($a - $b).abs() > $c {
-            panic!(format!(
+            panic!(
                 "assertion failed: `abs(left - right) < {}`, (left: `{}`, right: `{}`)",
                 $c, $a, $b
-            ));
+            );
         }
     };
 }

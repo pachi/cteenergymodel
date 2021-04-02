@@ -175,7 +175,7 @@ pub fn extract_namesvec<S: AsRef<str>>(input: S) -> Vec<String> {
         .trim_matches(&[' ', '(', ')'] as &[_])
         .split('"')
         .map(str::trim)
-        .filter(|v| *v != "," && *v != "")
+        .filter(|v| *v != "," && !v.is_empty())
         .map(|v| v.to_string())
         .collect::<Vec<_>>()
 }

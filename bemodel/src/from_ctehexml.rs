@@ -249,8 +249,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
 fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
     let global_deviation = global_deviation_from_north(bdl);
 
-    Ok(bdl
-        .walls
+    bdl.walls
         .iter()
         .map(|wall| -> Result<Wall, Error> {
             let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
@@ -274,7 +273,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 geometry,
             })
         })
-        .collect::<Result<Vec<Wall>, _>>()?)
+        .collect::<Result<Vec<Wall>, _>>()
 }
 
 /// Desviacion global del edificio respecto al norte

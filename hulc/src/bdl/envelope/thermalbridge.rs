@@ -32,14 +32,14 @@ pub struct ThermalBridge {
     /// Fractor de resistencia superficial frsi (condensaciones)
     pub frsi: f32,
     /// Propiedades geométricas de los encuentros (anglemin, anglemax, partition)
-    pub geometry: Option<TBGeometry>,
+    pub geometry: Option<TbGeometry>,
     /// Datos para definición por catálogo (tipo 3)
-    pub catalog: Option<TBByCatalog>,
+    pub catalog: Option<TbByCatalog>,
 }
 
 /// Definición por usuario (definition 2)
 #[derive(Debug, Clone, Default)]
-pub struct TBGeometry {
+pub struct TbGeometry {
     /// Tipo de encuentro entre elementos:
     /// - YES -> frente de forjado
     /// - BOTH -> encuentros entre dos particiones exteriores
@@ -52,7 +52,7 @@ pub struct TBGeometry {
 
 /// Definición por catálogo (definition 3)
 #[derive(Debug, Clone, Default)]
-pub struct TBByCatalog {
+pub struct TbByCatalog {
     /// Lista de tipos
     pub classes: Vec<String>,
     /// Lista de porcentajes de la longitud total
@@ -114,7 +114,7 @@ impl TryFrom<BdlBlock> for ThermalBridge {
         let tbtype = attrs.remove_str("TYPE").ok().unwrap_or_default();
         let geometry = match tbtype.as_str() {
             "WINDOW-FRAME" | "PILLAR" | "" => None,
-            _ => Some(TBGeometry {
+            _ => Some(TbGeometry {
                 anglemin: attrs.remove_f32("ANGLE-MIN")?,
                 anglemax: attrs.remove_f32("ANGLE-MAX")?,
                 partition: attrs.remove_str("PARTITION")?,
@@ -125,7 +125,7 @@ impl TryFrom<BdlBlock> for ThermalBridge {
             // Definido con valor por defecto o por el usuario
             Some(1) | Some(2) | None => None,
             // Definido por catálogo de PTs
-            Some(3) => Some(TBByCatalog {
+            Some(3) => Some(TbByCatalog {
                 classes: extract_namesvec(attrs.remove_str("LISTA-N")?),
                 pcts: extract_f32vec(attrs.remove_str("LISTA-L")?)?,
                 firstelems: extract_f32vec(attrs.remove_str("LISTA-MURO")?)?,
