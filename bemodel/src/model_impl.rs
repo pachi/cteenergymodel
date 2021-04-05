@@ -300,6 +300,7 @@ impl Model {
             .fold((0.0, 0.0), |(acc_ao_co, acc_ah_ch), (e_ao_co, e_ah_ch)| {
                 (acc_ao_co + e_ao_co, acc_ah_ch + e_ah_ch)
             });
+        // 0.629 = (50/100)^0.67 -> factor de cambio de presiones
         let n50 = 0.629 * (walls_c_a + windows_c_a) / vol;
         info!(
             "n_50={:.2} 1/h, Σ(A_o.C_o)={:.2} m³/h, Σ(A_h.C_h)={:.2} m³/h, vol={:.2} m³",
