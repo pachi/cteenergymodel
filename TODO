@@ -7,10 +7,6 @@
 Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K.
     - añadiendo un identificador en el nombre (p.e. EXCLUYE_HE1_K)
 
-# hulc
-- completar obtención de puntos que definen geometría de cada elemento como lista de Vertex3D (x, y, z), para poder calcular sombras (por ejemplo roof, etc)
-- comprobar que los multiplicadores están correctamente implementados
-
 # Comprobaciones
 - Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabático
 
