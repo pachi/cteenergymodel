@@ -9,7 +9,7 @@ use na::{Point2, Point3};
 use serde::{Deserialize, Serialize};
 
 pub use super::{
-    BoundaryType, ClimateZone, N50HEDetail, Orientation, SpaceType, ThermalBridgeKind, Tilt,
+    BoundaryType, ClimateZone, N50HeData, Orientation, SpaceType, ThermalBridgeKind, Tilt,
     UValues, Warning, WarningLevel,
 };
 

@@ -596,16 +596,46 @@ impl KData {
 pub struct QSolJulData {
     /// Parámetro de control solar q_sol:jul [kWh/m²·mes]
     pub q_soljul: f32,
-    /// Ganancias para el mes de julio Q_soljul [kWh/mes]
+    /// Ganancias para el mes de julio (Q_soljul) [kWh/mes]
     pub Q_soljul: f32,
-    /// Resumen por ganancias por orientaciones (Orientación -> Q_sol;jul) [kWh/mes]
-    pub Q_soljul_orient: HashMap<Orientation, f32>,
+    /// Superficie total de huecos [m²]
+    pub a_wp: f32,
+    /// Irradiación solar acumulada, media ponderada por superficie de huecos [kWh/m²·mes]
+    pub irradiance_mean: f32,
+    /// Factor de obstáculos remoto, media ponderada por superficie de huecos [-]
+    pub fshobst_mean: f32,
+    /// Factor solar del hueco con los elementos de sombra activados, media ponderada por superficie de huecos [-]
+    pub gglshwi_mean: f32,
+    /// Fracción de marco, media ponderada por superficie de huecos [-]
+    #[serde(rename = "Ff_mean")]
+    pub ff_mean: f32,
+    /// Datos de ganancias solares (Q_soljul) resumidos por orientaciones
+    pub detail: HashMap<Orientation, QSolJulDetail>,
+}
+
+/// Detalles del parámetro de control solar q_sol:jul (HE2019) por orientación
+#[allow(non_snake_case)]
+#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize)]
+pub struct QSolJulDetail {
+    /// Ganancias para el mes de julio (Q_soljul) para la orientación [kWh/mes]
+    pub gains: f32,
+    /// Superficie de huecos por orientación [m²]
+    pub a: f32,
+    /// Irradiación solar acumulada en el mes de julio (H_sol;jul) para la orientación [kWh/m²·mes]
+    pub irradiance: f32,
+    /// Fracción de marco media de la orientación, ponderada por superficie de huecos [-]
+    #[serde(rename = "Ff_mean")]
+    pub ff_mean: f32,
+    /// Factor solar con sombras móviles activadas medio de la orientación, ponderada por superficie de huecos [-]
+    pub gglshwi_mean: f32,
+    /// Factor de obstáculos remotos medio de la orientación, ponderado por superficie de huecos [-]
+    pub fshobst_mean: f32,
 }
 
 /// Reporte de cálculo de n50_he2019
 #[allow(non_snake_case)]
 #[derive(Debug, Default, Copy, Clone, Serialize, Deserialize)]
-pub struct N50HEDetail {
+pub struct N50HeData {
     /// n50
     pub n50: f32,
     /// C_o · A_o de los opacos que participan en la n_50 (m³/h)

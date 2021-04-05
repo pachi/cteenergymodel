@@ -16,7 +16,7 @@ use std::{
 use log::{debug, info, warn};
 
 use super::{
-    BoundaryType, KData, Model, N50HEDetail, Orientation, QSolJulData, Space, SpaceType,
+    BoundaryType, KData, Model, N50HeData, Orientation, QSolJulData, Space, SpaceType,
     ThermalBridgeKind, Tilt, UValues, Wall, WallCons, Warning, WarningLevel, Window, WindowCons,
 };
 use crate::utils::fround2;
@@ -268,14 +268,14 @@ impl Model {
     /// - la permeabilidad al aire de huecos definida en su construcción
     /// - el volumen interior de la envolvente térmica ()
     /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
-    pub fn n50_he2019(&self) -> N50HEDetail {
+    pub fn n50_he2019(&self) -> N50HeData {
         let vol: f32 = self.vol_env_net();
         if vol <= 0.01 {
             info!(
                 "n_50=0.00 1/h, Σ(A_o.C_o)=- m³/h, Σ(A_h.C_h)=- m³/h, vol={:.2} m³",
                 vol
             );
-            return N50HEDetail {
+            return N50HeData {
                 n50: 0.0,
                 walls_c_a: 0.0,
                 windows_c_a: 0.0,
@@ -305,7 +305,7 @@ impl Model {
             "n_50={:.2} 1/h, Σ(A_o.C_o)={:.2} m³/h, Σ(A_h.C_h)={:.2} m³/h, vol={:.2} m³",
             n50, walls_c_a, windows_c_a, vol
         );
-        N50HEDetail {
+        N50HeData {
             n50,
             walls_c_a,
             windows_c_a,
@@ -413,7 +413,7 @@ impl Model {
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
     /// Los huecos para los que no está definido su opaco o su construcción no se consideran en el cálculo
     pub fn q_soljul(&self, totradjul: &HashMap<Orientation, f32>) -> QSolJulData {
-        let mut Q_soljul_orient: HashMap<Orientation, f32> = HashMap::new();
+        let mut q_soljul_data = QSolJulData::default();
 
         let Q_soljul = self
             .windows_of_envelope()
@@ -422,14 +422,27 @@ impl Model {
                 let wincons = self.get_wincons(&w)?;
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
-                let qsoljul = w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * w.area * radjul;
-                let curval = Q_soljul_orient.entry(orientation).or_insert(0.0);
-                *curval += qsoljul;
+                let area = w.area;
+                let Q_soljul_orient = w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * area * radjul;
+                // Datos de detalle
+                let mut detail = q_soljul_data.detail.entry(orientation).or_default();
+                detail.a += area;
+                detail.gains += Q_soljul_orient;
+                detail.irradiance = *radjul;
+                detail.ff_mean += wincons.ff * area;
+                detail.gglshwi_mean += wincons.gglshwi * area;
+                detail.fshobst_mean += w.fshobst * area;
+                // Valores medios y acumulados
+                q_soljul_data.a_wp += area;
+                q_soljul_data.irradiance_mean += *radjul * area;
+                q_soljul_data.fshobst_mean += w.fshobst * area;
+                q_soljul_data.gglshwi_mean += wincons.gglshwi * area;
+                q_soljul_data.ff_mean += wincons.ff * area;
                 debug!(
                     "qsoljul de {}: A {:.2}, orient {}, ff {:.2}, gglshwi {:.2}, fshobst {:.2}, H_sol;jul {:.2}",
-                    w.name, w.area, orientation, wincons.ff, wincons.gglshwi, w.fshobst, radjul
+                    w.name, area, orientation, wincons.ff, wincons.gglshwi, w.fshobst, radjul
                 );
-                Some(qsoljul)
+                Some(Q_soljul_orient)
             })
             .sum::<f32>();
         let a_ref = self.a_ref();
@@ -439,11 +452,22 @@ impl Model {
             q_soljul, Q_soljul, a_ref
         );
 
-        QSolJulData {
-            q_soljul,
-            Q_soljul,
-            Q_soljul_orient,
+        // Guarda datos globales y corrige medias globales
+        q_soljul_data.q_soljul = q_soljul;
+        q_soljul_data.Q_soljul = Q_soljul;
+        q_soljul_data.irradiance_mean /= q_soljul_data.a_wp;
+        q_soljul_data.fshobst_mean /= q_soljul_data.a_wp;
+        q_soljul_data.gglshwi_mean /= q_soljul_data.a_wp;
+        q_soljul_data.ff_mean /= q_soljul_data.a_wp;
+
+        // Completa cálcula de medias por orientación (dividiendo por area de cada orientación)
+        for (_, detail) in q_soljul_data.detail.iter_mut() {
+            detail.ff_mean /= detail.a;
+            detail.gglshwi_mean /= detail.a;
+            detail.fshobst_mean /= detail.a;
         }
+
+        q_soljul_data
     }
 
     /// Diccionario de transmitancias de elementos (walls, windows, pts)
