@@ -419,10 +419,14 @@ impl Model {
             .windows_of_envelope()
             .filter_map(|w| {
                 let wall = self.get_windowwall(&w)?;
+                let multiplier = self
+                .get_wallspace(wall)
+                .map(|s| s.multiplier)
+                .unwrap_or(1.0);
                 let wincons = self.get_wincons(&w)?;
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
-                let area = w.area;
+                let area = w.area * multiplier;
                 let Q_soljul_orient = w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * area * radjul;
                 // Datos de detalle
                 let mut detail = q_soljul_data.detail.entry(orientation).or_default();
