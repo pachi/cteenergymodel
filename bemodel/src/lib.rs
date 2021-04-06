@@ -13,7 +13,7 @@ mod utils;
 
 pub use climatedata::*;
 pub use common::{
-    BoundaryType, ClimateZone, KData, N50HeData, Orientation, QSolJulData, SpaceType,
+    BoundaryType, ClimateZone, KData, N50Data, Orientation, QSolJulData, SpaceType,
     ThermalBridgeKind, Tilt, UValues, Warning, WarningLevel,
 };
 pub use model::*;

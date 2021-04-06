@@ -82,12 +82,12 @@ fn test_caso_a() {
     assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.66, 0.001);
 
     // Cálculo de K, n50, C_o
-    assert_almost_eq!(fround2(data.K_he2019().K), 0.51, 0.001);
-    assert_almost_eq!(fround2(data.n50_he2019().n50), 4.58, 0.001); // HULC 4.33
-    assert_almost_eq!(fround2(data.n50()), 5.32, 0.001);
-    assert_almost_eq!(fround2(data.n50_he2019().n50), 4.58, 0.001);
-    assert_almost_eq!(fround2(data.C_o_he2019()), 16.00, 0.001);
-    assert_almost_eq!(fround2(data.C_o()), 18.97, 0.001);
+    let n50data = data.n50();
+    assert_almost_eq!(fround2(data.K().K), 0.51, 0.001);
+    assert_almost_eq!(fround2(n50data.n50_ref), 4.58, 0.001); // HULC 4.33
+    assert_almost_eq!(fround2(n50data.n50), 5.32, 0.001);
+    assert_almost_eq!(fround2(n50data.walls_c_ref), 16.00, 0.001);
+    assert_almost_eq!(fround2(n50data.walls_c), 18.97, 0.001);
 }
 
 #[test]

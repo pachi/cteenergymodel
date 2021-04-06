@@ -632,17 +632,32 @@ pub struct QSolJulDetail {
     pub fshobst_mean: f32,
 }
 
-/// Reporte de cálculo de n50_he2019
-#[allow(non_snake_case)]
+/// Reporte de cálculo de n50 con valores de referencia (teóricos) y de ensayo (si está disponible)
+/// El valor teórico usa las permeabilidades del CTE DB-HE 2019
+/// Cuando se dispone de valor de ensayo n50 se utiliza para calcular la permeabilidad de opacos
 #[derive(Debug, Default, Copy, Clone, Serialize, Deserialize)]
-pub struct N50HeData {
-    /// n50
+pub struct N50Data {
+    /// Relación de cambio de aire a 50 Pa (n50) calculado con valor de ensayo, si está disponible, o valor de referencia [1/h]
     pub n50: f32,
-    /// C_o · A_o de los opacos que participan en la n_50 (m³/h)
+    /// Relación de cambio de aire a 50 Pa (n50) calculado con la permeabilidad de opacos de referencia [1/h]
+    pub n50_ref: f32,
+    /// Superficie (A_o) de los opacos que participan en la n_50 [m²]
+    pub walls_a: f32,
+    /// Permeabilidad de referencia (C_o) de los opacos [m³/h·m²]
+    pub walls_c_ref: f32,
+    /// C_o_ref · A_o de los opacos con valor de permeabilidad de referencia [m³/h]
+    pub walls_c_a_ref: f32,
+    /// Permeabilidad (C_o) de los opacos que participan en la n_50 obtenida de ensayo, si está disponible, o igual al de referencia [m³/h·m²]
+    pub walls_c: f32,
+    /// C_o · A_o de los opacos que participan en la n_50, usando valor de ensayo, si está disponible, o de referencia [m³/h]
     pub walls_c_a: f32,
-    /// C_h · A_h de los huecos que participan en la n_50 (m³/h)
+    /// Superficie (A_h) de los huecos que participan en la n_50 [m²]
+    pub windows_a: f32,
+    /// Permeabilidad (C_h) de los huecos que participan en la n_50 [m³/h·m²]
+    pub windows_c: f32,
+    /// C_h · A_h de los huecos que participan en la n_50 [m³/h]
     pub windows_c_a: f32,
-    /// Volumen interior de los espacios interiores a la envolvente térmica (m³)
+    /// Volumen interior de los espacios interiores a la envolvente térmica [m³]
     pub vol: f32,
 }
 

@@ -30,14 +30,15 @@ fn model_json_conversion() {
     let model = Model::from_json(&strdata).unwrap();
     let climatezone = model.meta.climate;
     let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
+    let n50data = model.n50();
     assert_almost_eq!(model.a_ref(), 1673.92, 0.01);
     assert_almost_eq!(model.compacity(), 3.17, 0.01);
-    assert_almost_eq!(model.K_he2019().K, 0.37, 0.01);
+    assert_almost_eq!(model.K().K, 0.37, 0.01);
     assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.43, 0.01);
-    assert_almost_eq!(model.n50(), 2.96, 0.01);
-    assert_almost_eq!(model.n50_he2019().n50, 2.96, 0.01);
-    assert_almost_eq!(model.C_o(), 16.0, 0.01);
-    assert_almost_eq!(model.C_o_he2019(), 16.0, 0.01);
+    assert_almost_eq!(n50data.n50, 2.96, 0.01);
+    assert_almost_eq!(n50data.n50_ref, 2.96, 0.01);
+    assert_almost_eq!(n50data.walls_c_ref, 16.0, 0.01);
+    assert_almost_eq!(n50data.walls_c, 16.0, 0.01);
     assert_almost_eq!(model.vol_env_net(), 4666.05, 0.01);
     assert_almost_eq!(model.vol_env_gross(), 5231.0, 0.1);
 

@@ -84,17 +84,18 @@ pub fn cli_main() -> Result<()> {
     // Información general
     let climatezone = data.meta.climate;
     let totradjul = bemodel::climatedata::total_radiation_in_july_by_orientation(&climatezone);
+    let n50data = data.n50();
     eprintln!(
-        "ZC: {}, A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, q_sol;jul={:.2} kWh/m².mes, n50(he2019)={:.2} 1/h, C_o(he2019)={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
+        "ZC: {}, A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, q_sol;jul={:.2} kWh/m².mes, n50_ref={:.2} 1/h, C_o_ref={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
         climatezone,
         data.a_ref(),
         data.compacity(),
-        data.K_he2019().K,
+        data.K().K,
         data.q_soljul(&totradjul).q_soljul,
-        data.n50_he2019().n50,
-        data.C_o_he2019(),
-        data.n50(),
-        data.C_o()
+        n50data.n50_ref,
+        n50data.walls_c_ref,
+        n50data.n50,
+        n50data.walls_c
     );
 
     // Convierte a JSON

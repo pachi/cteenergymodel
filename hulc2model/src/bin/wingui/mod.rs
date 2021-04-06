@@ -457,18 +457,19 @@ fn do_convert() {
 
     let climatezone = envolvente_data.meta.climate;
     let totradjul = total_radiation_in_july_by_orientation(&climatezone);
+    let n50data = envolvente_data.n50();
     append_to_edit(
         &format!(
-            "\n\nDatos generales:\n\nZC: {}, A_ref={:.2} m², V/A={:.2} m³/m²\n- K={:.2} W/m²a\n- q_sol;jul={:.2} kWh/m².mes\n- n50(he2019)={:.2} 1/h, C_o(he2019)={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
+            "\n\nDatos generales:\n\nZC: {}, A_ref={:.2} m², V/A={:.2} m³/m²\n- K={:.2} W/m²a\n- q_sol;jul={:.2} kWh/m².mes\n- n50_ref={:.2} 1/h, C_o_ref={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
             climatezone,
             envolvente_data.a_ref(),
             envolvente_data.compacity(),
-            envolvente_data.K_he2019().K,
+            envolvente_data.K().K,
             envolvente_data.q_soljul(&totradjul),
-            envolvente_data.n50_he2019().n50,
-            envolvente_data.C_o_he2019(),
-            envolvente_data.n50(),
-            envolvente_data.C_o()
+            n50data.n50_ref,
+            n50data.walls_c_ref,
+            n50data.n50,
+            n50data.walls_c
         )
     );
 

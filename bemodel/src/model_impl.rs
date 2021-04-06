@@ -16,7 +16,7 @@ use std::{
 use log::{debug, info, warn};
 
 use super::{
-    BoundaryType, KData, Model, N50HeData, Orientation, QSolJulData, Space, SpaceType,
+    BoundaryType, KData, Model, N50Data, Orientation, QSolJulData, Space, SpaceType,
     ThermalBridgeKind, Tilt, UValues, Wall, WallCons, Warning, WarningLevel, Window, WindowCons,
 };
 use crate::utils::fround2;
@@ -232,34 +232,6 @@ impl Model {
         compac
     }
 
-    /// Permeabilidad de opacos calculada según criterio de edad por defecto DB-HE2019 (1/h)
-    /// TODO: usamos is_new_building pero igual merecería la pena una variable para permeabilidad mejorada
-    pub fn C_o_he2019(&self) -> f32 {
-        if self.meta.is_new_building {
-            16.0
-        } else {
-            29.0
-        }
-    }
-
-    /// Permeabilidad de opacos por defecto o, si hay ensayo de permeabilidad, el resultante del ensayo
-    pub fn C_o(&self) -> f32 {
-        if let Some(n50test) = self.meta.n50_test_ach {
-            self.wall_inf_100_from_n50(n50test)
-        } else {
-            self.C_o_he2019()
-        }
-    }
-
-    /// Devuelve valor de la relación de cambio de aire por defecto o, en su caso, de ensayo
-    pub fn n50(&self) -> f32 {
-        if let Some(n50test) = self.meta.n50_test_ach {
-            n50test
-        } else {
-            self.n50_he2019().n50
-        }
-    }
-
     /// Calcula la tasa teórica de intercambio de aire a 50Pa según DB-HE2019 (1/h)
     /// Se considera:
     /// - las superficies opacos en contacto con el aire exterior
@@ -268,89 +240,80 @@ impl Model {
     /// - la permeabilidad al aire de huecos definida en su construcción
     /// - el volumen interior de la envolvente térmica ()
     /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
-    pub fn n50_he2019(&self) -> N50HeData {
-        let vol: f32 = self.vol_env_net();
-        if vol <= 0.01 {
-            info!(
-                "n_50=0.00 1/h, Σ(A_o.C_o)=- m³/h, Σ(A_h.C_h)=- m³/h, vol={:.2} m³",
-                vol
-            );
-            return N50HeData {
-                n50: 0.0,
-                walls_c_a: 0.0,
-                windows_c_a: 0.0,
-                vol,
-            };
+    pub fn n50(&self) -> N50Data {
+        let mut data = N50Data {
+            vol: self.vol_env_net(),
+            ..Default::default()
         };
-        let c_o = self.C_o_he2019();
-        let (walls_c_a, windows_c_a) = self
-            .walls_of_envelope()
-            .filter(|w| w.bounds == BoundaryType::EXTERIOR)
-            .map(|w| {
-                let multiplier = self.get_wallspace(&w).map(|s| s.multiplier).unwrap_or(1.0);
-                let wall_ah_ch: f32 = self
-                    .windows_of_wall(&w.id)
-                    .filter_map(|win| {
-                        self.get_wincons(&win)
-                            .map(|wincons| Some(win.area * wincons.infcoeff_100))?
-                    })
-                    .sum();
-                (w.area * c_o * multiplier, wall_ah_ch * multiplier)
-            })
-            .fold((0.0, 0.0), |(acc_ao_co, acc_ah_ch), (e_ao_co, e_ah_ch)| {
-                (acc_ao_co + e_ao_co, acc_ah_ch + e_ah_ch)
-            });
-        // 0.629 = (50/100)^0.67 -> factor de cambio de presiones
-        let n50 = 0.629 * (walls_c_a + windows_c_a) / vol;
-        info!(
-            "n_50={:.2} 1/h, Σ(A_o.C_o)={:.2} m³/h, Σ(A_h.C_h)={:.2} m³/h, vol={:.2} m³",
-            n50, walls_c_a, windows_c_a, vol
-        );
-        N50HeData {
-            n50,
-            walls_c_a,
-            windows_c_a,
-            vol,
-        }
-    }
 
-    /// Calcula la permeabilidad de opacos a partir de un ensayo de puerta soplante
-    /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
-    pub fn wall_inf_100_from_n50(&self, n50: f32) -> f32 {
-        let vol: f32 = self.vol_env_net();
-        let (sum_wall_area, sum_axc_h): (f32, f32) = self
-            .walls_of_envelope()
-            .filter(|w| w.bounds == BoundaryType::EXTERIOR)
-            .map(|w| {
-                let axc_h: f32 = self
-                    .windows_of_wall(&w.id)
-                    .filter_map(|win| {
-                        self.get_wincons(&win)
-                            .map(|wincons| Some(win.area * wincons.infcoeff_100))?
-                    })
-                    .sum();
-                let multiplier = self.get_wallspace(&w).map(|s| s.multiplier).unwrap_or(1.0);
-                (w.area * multiplier, axc_h * multiplier)
-            })
-            .fold(
-                (0.0, 0.0),
-                |(acc_wall_area, acc_axc_h), (e_wall_area, e_axc_h)| {
-                    (acc_wall_area + e_wall_area, acc_axc_h + e_axc_h)
-                },
-            );
-        let C_o = ((n50 * vol) / 0.629 - sum_axc_h) / sum_wall_area;
+        self.walls_of_envelope()
+            .filter(|wall| wall.bounds == BoundaryType::EXTERIOR)
+            .for_each(|wall| {
+                let multiplier = self
+                    .get_wallspace(&wall)
+                    .map(|s| s.multiplier)
+                    .unwrap_or(1.0);
+                let mut win_ah = 0.0;
+                let mut win_ah_ch = 0.0;
+                for (a, ca) in self.windows_of_wall(&wall.id).filter_map(|win| {
+                    self.get_wincons(&win)
+                        .map(|wincons| Some((win.area, win.area * wincons.infcoeff_100)))?
+                }) {
+                    win_ah += a;
+                    win_ah_ch += ca;
+                }
+
+                data.walls_a += wall.area * multiplier;
+                data.windows_a += win_ah * multiplier;
+                data.windows_c_a += win_ah_ch * multiplier;
+            });
+
+        if data.windows_a > 0.001 {
+            data.windows_c = data.windows_c_a / data.windows_a
+        };
+
+        // Manejo de los opacos según disponibilidad de ensayo
+        // Permeabilidad de opacos calculada según criterio de edad por defecto DB-HE2019 (1/h)
+        // NOTE: usamos is_new_building pero igual merecería la pena una variable para permeabilidad mejorada
+        data.walls_c_ref = if self.meta.is_new_building {
+            16.0
+        } else {
+            29.0
+        };
+        data.walls_c_a_ref = data.walls_a * data.walls_c_ref;
+
+        if data.vol > 0.001 {
+            // 0.629 = (50/100)^0.67 -> factor de cambio de presiones
+            data.n50_ref = 0.629 * (data.walls_c_a_ref + data.windows_c_a) / data.vol
+        };
+
+        if let Some(n50test) = self.meta.n50_test_ach {
+            data.n50 = n50test;
+            if data.walls_a > 0.001 {
+                data.walls_c = ((n50test * data.vol) / 0.629 - data.windows_c_a) / data.walls_a;
+                data.walls_c_a = data.walls_a * data.walls_c;
+            } else {
+                data.walls_c = data.walls_c_ref;
+                data.walls_c_a = data.walls_c_a_ref;
+            }
+        } else {
+            data.n50 = data.n50_ref;
+            data.walls_c = data.walls_c_ref;
+            data.walls_c_a = data.walls_c_a_ref;
+        };
+
         info!(
-            "C_o={:.2}, n_50={:.2}, vol={:.2}, (A_h.C_h)={:.2}, A_o={:.2}",
-            C_o, n50, vol, sum_axc_h, sum_wall_area
+            "n_50={:.2} 1/h, n_50_ref={:.2} 1/h, A_o={:.2} m², C_o={:.2} m³/h·m², Σ(A_o.C_o)={:.2} m³/h, C_o_ref={:.2} m³/h·m², Σ(A_o.C_o_ref)={:.2} m³/h, A_h={:.2} m², C_h={:.2} m³/h·m², Σ(A_h.C_h)={:.2} m³/h, vol={:.2} m³",
+            data.n50, data.n50_ref, data.walls_a, data.walls_c, data.walls_c_a, data.walls_c_ref, data.walls_c_a_ref, data.windows_a, data.windows_c, data.windows_c_a, data.vol
         );
-        C_o
+        data
     }
 
     /// Calcula la transmitancia térmica global K (W/m2K)
     /// Transmitancia media de opacos, huecos y puentes térmicos en contacto con el aire exterior o con el terreno
     ///
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
-    pub fn K_he2019(&self) -> KData {
+    pub fn K(&self) -> KData {
         let mut k = KData::default();
         for wall in self.walls_of_envelope() {
             let multiplier = self
