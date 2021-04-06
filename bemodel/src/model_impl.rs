@@ -268,6 +268,7 @@ impl Model {
                 data.windows_c_a += win_ah_ch * multiplier;
             });
 
+        // Promedio de permeabilidad de huecos
         if data.windows_a > 0.001 {
             data.windows_c = data.windows_c_a / data.windows_a
         };

@@ -653,7 +653,7 @@ pub struct N50Data {
     pub walls_c_a: f32,
     /// Superficie (A_h) de los huecos que participan en la n_50 [m²]
     pub windows_a: f32,
-    /// Permeabilidad (C_h) de los huecos que participan en la n_50 [m³/h·m²]
+    /// Permeabilidad (C_h) media de los huecos que participan en la n_50 [m³/h·m²]
     pub windows_c: f32,
     /// C_h · A_h de los huecos que participan en la n_50 [m³/h]
     pub windows_c_a: f32,
