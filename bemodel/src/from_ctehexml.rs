@@ -17,8 +17,8 @@ use hulc::{
 };
 
 pub use super::{
-    BoundaryType, Meta, Model, Orientation, Shade, Space, SpaceType, ThermalBridge,
-    ThermalBridgeKind, Tilt, Wall, WallCons, WallGeometry, Window, WindowCons, WindowGeometry,
+    BoundaryType, Geometry, Meta, Model, Orientation, Shade, Space, SpaceType, ThermalBridge,
+    ThermalBridgeKind, Tilt, Wall, WallCons, Window, WindowCons, WindowGeometry,
 };
 
 // Conversiones de BDL a tipos CTE -------------------
@@ -162,7 +162,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
 ///
 /// El polígono 3D del muro se obtiene a partir de los datos de muro y del espacio
 /// Para cada nivel, primero se gira el azimuth y luego se desplaza x, y, z
-fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
+fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
     let space_polygon = &space.polygon;
     let global_deviation = global_deviation_from_north(bdl);
@@ -241,25 +241,27 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
         }
     };
 
-    WallGeometry { position, polygon }
+    let tilt = fround2(wall.tilt);
+    let azimuth = fround2(orientation_bdl_to_52016(
+        global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
+    ));
+    Geometry {
+        azimuth,
+        tilt,
+        position: Some(position),
+        polygon,
+    }
 }
 
 /// Construye muros de la envolvente a partir de datos BDL
 // Convertimos la posición del muro a coordenadas globales y el polígono está en coordenadas de muro
 fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
-    let global_deviation = global_deviation_from_north(bdl);
-
     bdl.walls
         .iter()
         .map(|wall| -> Result<Wall, Error> {
-            let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
             let id = uuid_from_obj(wall);
             let bounds = wall.bounds.into();
-            let tilt = fround2(wall.tilt);
-            let azimuth = fround2(orientation_bdl_to_52016(
-                global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
-            ));
-            let geometry = Some(wall_geometry(&wall, bdl));
+            let geometry = wall_geometry(&wall, bdl);
             Ok(Wall {
                 id,
                 name: wall.name.clone(),
@@ -268,8 +270,6 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 space: wall.space.clone(),
                 nextto: wall.nextto.clone(),
                 bounds,
-                azimuth,
-                tilt,
                 geometry,
             })
         })
@@ -292,14 +292,19 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> Vec<Window> {
         .map(|win| {
             let id = uuid_from_obj(win);
             let wall = walls.iter().find(|w| w.name == win.wall).unwrap();
-            let fshobst =
-                fshobst_for_setback(wall.tilt, wall.azimuth, win.width, win.height, win.setback);
-            let geometry = Some(WindowGeometry {
-                position: Point2::new(win.x, win.y),
+            let fshobst = fshobst_for_setback(
+                wall.geometry.tilt,
+                wall.geometry.azimuth,
+                win.width,
+                win.height,
+                win.setback,
+            );
+            let geometry = WindowGeometry {
+                position: Some(Point2::new(win.x, win.y)),
                 width: win.width,
                 height: win.height,
                 setback: win.setback,
-            });
+            };
             Window {
                 id,
                 name: win.name.clone(),
@@ -371,9 +376,10 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                     return None;
                 };
                 // El origen simplemente se traslada la desviación global (en sentido inverso a los ángulos en coordenadas (X,-Y))
-                let position =
+                let position = Some(
                     Rotation3::from_axis_angle(&Vector3::z_axis(), -global_deviation.to_radians())
-                        * Point3::new(geom.x, geom.y, geom.z);
+                        * Point3::new(geom.x, geom.y, geom.z),
+                );
                 // El azimuth acumula la orientación de la sombra y la desviación del norte (tienen el mismo criterio de giro)
                 let azimuth = fround2(orientation_bdl_to_52016(geom.azimuth + global_deviation));
                 let polygon = vec![
@@ -402,9 +408,10 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
 
                 // La desviación global gira en sentido negativo el origen (sentido horario)
                 let v0 = vertices[0];
-                let position =
+                let position = Some(
                     Rotation3::from_axis_angle(&Vector3::z_axis(), -global_deviation.to_radians())
-                        * v0;
+                        * v0,
+                );
 
                 // El giro global produce un giro en sentido negativo (sentido horario) frente al azimuth de la sombra (antihorario)
                 let azimuth = fround2(normalize(
@@ -428,10 +435,12 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
             Some(Shade {
                 id,
                 name,
-                position,
-                tilt,
-                azimuth,
-                polygon,
+                geometry: Geometry {
+                    tilt,
+                    azimuth,
+                    position,
+                    polygon,
+                },
             })
         })
         .collect()

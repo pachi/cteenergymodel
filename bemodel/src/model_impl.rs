@@ -779,7 +779,7 @@ impl Model {
     /// Elemento opaco de techo de un espacio
     fn top_wall_of_space<'a>(&'a self, spaceid: &'a str) -> Option<&'a Wall> {
         self.walls.iter().find(move |w| {
-            match w.tilt.into() {
+            match w.geometry.tilt.into() {
                 // Muros exteriores o cubiertas sobre el espacio
                 Tilt::TOP => w.space == spaceid,
                 // Es un cerramiento interior sobre este espacio

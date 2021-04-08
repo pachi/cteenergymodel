@@ -33,9 +33,9 @@
       "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 0.0,
         "position": [
           0.0,
           0.0,
@@ -69,9 +69,9 @@
       "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": 90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 90.0,
         "position": [
           10.0,
           0.0,
@@ -105,9 +105,9 @@
       "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": -180.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           10.0,
           10.0,
@@ -141,9 +141,9 @@
       "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": -90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -90.0,
         "position": [
           0.0,
           10.0,
@@ -177,9 +177,9 @@
       "cons": "6058e362-fe85-048e-7cbf-0ddf2d7c1085",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 0.0,
         "position": [
           0.0,
           0.0,
@@ -213,9 +213,9 @@
       "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": -90.0,
-      "tilt": 0.0,
       "geometry": {
+        "tilt": 0.0,
+        "azimuth": -90.0,
         "position": [
           0.0,
           10.0,
@@ -245,9 +245,9 @@
       "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
       "space": "f670af8a-e354-487a-71dd-8391f7fdb0f5",
       "nextto": null,
-      "azimuth": -45.0,
-      "tilt": 0.0,
       "geometry": {
+        "tilt": 0.0,
+        "azimuth": -45.0,
         "position": [
           0.0,
           10.0,
@@ -291,35 +291,35 @@
   ],
   "thermal_bridges": [
     {
-      "id": "a6ef68ff-81b4-5582-1547-3ab8d816347f",
+      "id": "965a4dbe-7efe-b5d4-ea0a-9dd1a620e1b7",
       "name": "FRENTE_FORJADO",
       "kind": "INTERMEDIATEFLOOR",
       "L": -1.0,
       "psi": 0.97
     },
     {
-      "id": "3f912f0d-4934-aea7-cdf2-50fc92cc75a4",
+      "id": "9e1d0822-d63f-7fcf-fc4c-b597bca0b442",
       "name": "UNION_CUBIERTA",
       "kind": "ROOF",
       "L": -1.0,
       "psi": 0.96
     },
     {
-      "id": "6471271b-b2de-c10a-9e54-5bbefb768b67",
+      "id": "2510cca0-72c9-df93-6f99-6b6edaaec472",
       "name": "ESQUINA_CONVEXA_FORJADO",
       "kind": "ROOF",
       "L": -1.0,
       "psi": 0.86
     },
     {
-      "id": "462490d8-e475-19be-6949-46f2d06f66b9",
+      "id": "b3128089-515a-b39b-eb3e-3983aefe13a9",
       "name": "ESQUINA_CONCAVA",
       "kind": "CORNER",
       "L": -1.0,
       "psi": -0.16
     },
     {
-      "id": "3e814ff0-a48f-e12b-225c-8cfb40691766",
+      "id": "de359362-e06d-5c8a-bd25-a7d5b9f48285",
       "name": "ESQUINA_CONVEXA",
       "kind": "CORNER",
       "L": -1.0,
@@ -354,7 +354,7 @@
       "psi": 0.44
     },
     {
-      "id": "ec61a313-c64d-f3ff-826b-a2ef6c13d4e7",
+      "id": "56fb0260-473b-afe4-8c88-223bc8556c52",
       "name": "UNION_SOLERA_PAREDEXT",
       "kind": "GROUNDFLOOR",
       "L": -1.0,
@@ -365,31 +365,33 @@
     {
       "id": "aec2ea43-8488-e8a3-c053-f8282dffb775",
       "name": "Sombra007",
-      "azimuth": 0.0,
-      "tilt": 0.0,
-      "position": [
-        2.0,
-        -1.0,
-        2.0
-      ],
-      "polygon": [
-        [
-          0.0,
-          0.0
+      "geometry": {
+        "tilt": 0.0,
+        "azimuth": 0.0,
+        "position": [
+          2.0,
+          -1.0,
+          2.0
         ],
-        [
-          0.0,
-          1.0
-        ],
-        [
-          3.5,
-          0.99999994
-        ],
-        [
-          3.5,
-          0.0
+        "polygon": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ],
+          [
+            3.5,
+            0.99999994
+          ],
+          [
+            3.5,
+            0.0
+          ]
         ]
-      ]
+      }
     }
   ],
   "wallcons": [

@@ -9,8 +9,8 @@ use na::{Point2, Point3};
 use serde::{Deserialize, Serialize};
 
 pub use super::{
-    BoundaryType, ClimateZone, N50Data, Orientation, SpaceType, ThermalBridgeKind, Tilt,
-    UValues, Warning, WarningLevel,
+    BoundaryType, ClimateZone, N50Data, Orientation, SpaceType, ThermalBridgeKind, Tilt, UValues,
+    Warning, WarningLevel,
 };
 
 // ---------- Estructura general de datos --------------
@@ -152,27 +152,24 @@ pub struct Wall {
     pub space: String,
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
     pub nextto: Option<String>,
+    /// Geometría del elemento opaco
+    pub geometry: Geometry,
+}
+
+/// Geometría de muro
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct Geometry {
+    /// Inclinación (beta) [0, 180]
+    /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
+    pub tilt: f32,
     /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90, sentido antihorario)
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie con el eje -Y del espacio
     /// Coincide con el criterio de la UNE-EN ISO 52016-1
     /// Difiere del criterio BDL, que parte del norte, con E+ y W- y sentido horario
     pub azimuth: f32,
-    /// Inclinación (beta) [0, 180]
-    /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
-    pub tilt: f32,
-    /// Geometría del muro
-    pub geometry: Option<WallGeometry>,
-    // /// Posición del muro, en coordenadas de espacio
-    // pub position: Option<Point3<f32>>,
-    // /// Polígono del muro, en coordenadas de muro
-    // pub polygon: Option<Vec<Point2<f32>>>,
-}
-
-/// Geometría de muro
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WallGeometry {
     /// Posición del muro, en coordenadas de espacio
-    pub position: Point3<f32>,
+    /// Un valor None señala que no hay definición geométrica completa
+    pub position: Option<Point3<f32>>,
     /// Polígono del muro, en coordenadas de muro
     pub polygon: Vec<Point2<f32>>,
 }
@@ -184,17 +181,8 @@ pub struct Shade {
     pub id: String,
     /// Nombre del elemento opaco
     pub name: String,
-    /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90, sentido antihorario)
-    /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie con el eje -Y del espacio
-    /// Coincide con el criterio de la UNE-EN ISO 52016-1
-    pub azimuth: f32,
-    /// Inclinación (beta) [0, 180]
-    /// Medido como ángulo de la normal con el eje +Z (0 -> suelo, 180 -> techo)
-    pub tilt: f32,
-    /// Posición del elemento de sombra, en coordenadas de edificio
-    pub position: Point3<f32>,
-    /// Polígono del muro, en coordenadas de elemento
-    pub polygon: Vec<Point2<f32>>,
+    /// Geometría del elemento opaco
+    pub geometry: Geometry,
 }
 
 /// Hueco
@@ -214,7 +202,7 @@ pub struct Window {
     /// Factor de obstáculos remotos
     pub fshobst: f32,
     /// Geometría de hueco
-    pub geometry: Option<WindowGeometry>,
+    pub geometry: WindowGeometry,
 }
 
 /// Geometría de hueco
@@ -222,7 +210,8 @@ pub struct Window {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct WindowGeometry {
     /// Posición del muro, en coordenadas de muro
-    pub position: Point2<f32>,
+    /// Un valor None señala que no hay definición geométrica completa
+    pub position: Option<Point2<f32>>,
     /// Altura del hueco, m
     pub height: f32,
     /// Anchuro del hueco, m
@@ -316,15 +305,15 @@ pub struct ExtraData {
 /// Convierte de muro a enum Tilt
 impl From<&Wall> for Tilt {
     fn from(wall: &Wall) -> Self {
-        Tilt::from(wall.tilt)
+        Tilt::from(wall.geometry.tilt)
     }
 }
 
 /// Convierte opaco a Orientation
 impl From<&Wall> for Orientation {
     fn from(wall: &Wall) -> Self {
-        match Tilt::from(wall.tilt) {
-            Tilt::SIDE => wall.azimuth.into(),
+        match Tilt::from(wall.geometry.tilt) {
+            Tilt::SIDE => wall.geometry.azimuth.into(),
             _ => Orientation::HZ,
         }
     }

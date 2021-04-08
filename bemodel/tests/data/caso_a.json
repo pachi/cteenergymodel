@@ -93,9 +93,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "7c0ca34a-5851-7a8f-6345-a2e0f74ab1c9",
       "nextto": null,
-      "azimuth": 90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 90.0,
         "position": [
           2.496008,
           -4.888542,
@@ -129,9 +129,9 @@
       "cons": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
       "space": "7c0ca34a-5851-7a8f-6345-a2e0f74ab1c9",
       "nextto": "44263914-c661-a4ff-4c8c-03ece95d11a8",
-      "azimuth": -90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -90.0,
         "position": [
           -2.503992,
           5.111458,
@@ -165,9 +165,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "7c0ca34a-5851-7a8f-6345-a2e0f74ab1c9",
       "nextto": null,
-      "azimuth": -180.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           2.496008,
           5.111458,
@@ -201,9 +201,9 @@
       "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
       "space": "7c0ca34a-5851-7a8f-6345-a2e0f74ab1c9",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 0.0,
         "position": [
           0.0,
           0.0,
@@ -237,9 +237,9 @@
       "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
       "space": "7c0ca34a-5851-7a8f-6345-a2e0f74ab1c9",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 0.0,
         "position": [
           -2.503992,
           -4.888542,
@@ -273,9 +273,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "44263914-c661-a4ff-4c8c-03ece95d11a8",
       "nextto": null,
-      "azimuth": -180.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           -2.503992,
           5.111458,
@@ -309,9 +309,9 @@
       "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
       "space": "44263914-c661-a4ff-4c8c-03ece95d11a8",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 0.0,
         "position": [
           -7.503992,
           -4.888542,
@@ -345,9 +345,9 @@
       "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
       "space": "44263914-c661-a4ff-4c8c-03ece95d11a8",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 0.0,
         "position": [
           0.0,
           0.0,
@@ -381,9 +381,9 @@
       "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
       "space": "44263914-c661-a4ff-4c8c-03ece95d11a8",
       "nextto": null,
-      "azimuth": -90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -90.0,
         "position": [
           -7.503992,
           5.111458,
@@ -417,9 +417,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": null,
-      "azimuth": -90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -90.0,
         "position": [
           -7.503992,
           5.111458,
@@ -453,9 +453,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 0.0,
         "position": [
           -7.503992,
           -4.888542,
@@ -489,9 +489,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": null,
-      "azimuth": 90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 90.0,
         "position": [
           7.496008,
           -4.888542,
@@ -525,9 +525,9 @@
       "cons": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 0.0,
         "position": [
           2.496,
           5.111,
@@ -561,9 +561,9 @@
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": "7c0ca34a-5851-7a8f-6345-a2e0f74ab1c9",
-      "azimuth": 90.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 90.0,
         "position": [
           -2.503,
           -4.888,
@@ -597,9 +597,9 @@
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": "44263914-c661-a4ff-4c8c-03ece95d11a8",
-      "azimuth": 0.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 0.0,
         "position": [
           -7.503,
           5.111,
@@ -633,9 +633,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
       "nextto": null,
-      "azimuth": -180.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           7.496008,
           5.111458,
@@ -669,9 +669,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": null,
-      "azimuth": -90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -90.0,
         "position": [
           -7.503992,
           5.111458,
@@ -705,9 +705,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 0.0,
         "position": [
           -7.503992,
           -4.888542,
@@ -741,9 +741,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": null,
-      "azimuth": 90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 90.0,
         "position": [
           7.496008,
           -4.888542,
@@ -777,9 +777,9 @@
       "cons": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 0.0,
       "geometry": {
+        "tilt": 0.0,
+        "azimuth": 0.0,
         "position": [
           2.496,
           -4.888,
@@ -813,9 +813,9 @@
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": "30e14f4a-4603-9d10-899b-029e99c5dd2a",
-      "azimuth": 0.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 0.0,
         "position": [
           0.0,
           0.0,
@@ -849,9 +849,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": null,
-      "azimuth": -180.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           7.496008,
           5.111458,
@@ -885,9 +885,9 @@
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
       "nextto": "579eca30-bf03-11b0-f291-ae42df76f7b6",
-      "azimuth": -180.0,
-      "tilt": 0.0,
       "geometry": {
+        "tilt": 0.0,
+        "azimuth": -180.0,
         "position": [
           -2.503992,
           5.111458,
@@ -921,9 +921,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 0.0,
         "position": [
           -2.503992,
           -4.888542,
@@ -957,9 +957,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": null,
-      "azimuth": 90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 90.0,
         "position": [
           2.496008,
           -4.888542,
@@ -993,9 +993,9 @@
       "cons": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": "579eca30-bf03-11b0-f291-ae42df76f7b6",
-      "azimuth": -90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -90.0,
         "position": [
           -2.503992,
           5.111458,
@@ -1029,9 +1029,9 @@
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": "b2d454b7-8d51-eb48-4b04-c9f0db790de0",
-      "azimuth": 0.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 0.0,
         "position": [
           -2.503,
           5.111,
@@ -1065,9 +1065,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": null,
-      "azimuth": -180.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           2.496008,
           5.111458,
@@ -1101,9 +1101,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": null,
-      "azimuth": 90.0,
-      "tilt": 0.0,
       "geometry": {
+        "tilt": 0.0,
+        "azimuth": 90.0,
         "position": [
           2.496008,
           -4.888542,
@@ -1133,9 +1133,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "d6a88fe7-a5f6-fe39-3a3e-28aa5712502b",
       "nextto": null,
-      "azimuth": 116.57,
-      "tilt": 0.0,
       "geometry": {
+        "tilt": 0.0,
+        "azimuth": 116.57,
         "position": [
           2.496008,
           -4.888542,
@@ -1165,9 +1165,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "579eca30-bf03-11b0-f291-ae42df76f7b6",
       "nextto": null,
-      "azimuth": -90.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -90.0,
         "position": [
           -7.503992,
           5.111458,
@@ -1201,9 +1201,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "579eca30-bf03-11b0-f291-ae42df76f7b6",
       "nextto": null,
-      "azimuth": 0.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": 0.0,
         "position": [
           -7.503992,
           -4.888542,
@@ -1237,9 +1237,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "579eca30-bf03-11b0-f291-ae42df76f7b6",
       "nextto": null,
-      "azimuth": -180.0,
-      "tilt": 90.0,
       "geometry": {
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           -2.503992,
           5.111458,
@@ -1273,9 +1273,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "579eca30-bf03-11b0-f291-ae42df76f7b6",
       "nextto": null,
-      "azimuth": 90.0,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 90.0,
         "position": [
           -7.503992,
           -4.888542,
@@ -1305,9 +1305,9 @@
       "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
       "space": "579eca30-bf03-11b0-f291-ae42df76f7b6",
       "nextto": null,
-      "azimuth": 63.44,
-      "tilt": 180.0,
       "geometry": {
+        "tilt": 180.0,
+        "azimuth": 63.44,
         "position": [
           -7.503992,
           -4.888542,
@@ -1504,70 +1504,70 @@
   ],
   "thermal_bridges": [
     {
-      "id": "70e025a1-00d3-f0ab-27f1-122de0e16526",
+      "id": "9bf65f35-63ba-d976-e9c9-05e201fd1dbf",
       "name": "FRENTE_FORJADO",
       "kind": "INTERMEDIATEFLOOR",
       "L": 110.0,
       "psi": 0.0
     },
     {
-      "id": "70bd7afb-545b-07b0-7447-5f77a4c882ab",
+      "id": "1c64e84e-dfb3-87cf-2924-bfd2dce5251f",
       "name": "UNION_CUBIERTA",
       "kind": "ROOF",
       "L": 113.54,
       "psi": 0.25875
     },
     {
-      "id": "11947c7e-e42b-2068-cea8-465d6d505d04",
+      "id": "2ec0a28d-a4c1-a771-6524-1203fa4082ae",
       "name": "ESQUINA_CONVEXA_FORJADO",
       "kind": "ROOF",
       "L": 30.0,
       "psi": 0.86
     },
     {
-      "id": "2c119ae1-3a06-35b9-dbba-0f7ec63a74fd",
+      "id": "46c39593-0173-ca6d-81fa-a1a9420aae40",
       "name": "ESQUINA_CONCAVA",
       "kind": "CORNER",
       "L": 0.0,
       "psi": -0.08
     },
     {
-      "id": "117889b4-b7c4-d5c7-fb82-8cdc860ef53b",
+      "id": "41082820-1276-0616-fc65-2344a71842c5",
       "name": "ESQUINA_CONVEXA",
       "kind": "CORNER",
       "L": 48.0,
       "psi": 0.06
     },
     {
-      "id": "376f6485-168b-9c7d-1ad1-7e5fbcfec7bc",
+      "id": "eead7979-5cb0-c0a3-20f9-a08fe7b6ebb4",
       "name": "PILAR",
       "kind": "PILLAR",
       "L": 1.0,
       "psi": 0.0
     },
     {
-      "id": "013e6448-15b9-c20f-bac2-2012298ba400",
+      "id": "3aff3f7f-3e73-0c87-c395-3c29d165f50e",
       "name": "HUECO_CAPIALZADO",
       "kind": "WINDOW",
       "L": 12.0,
       "psi": 0.111
     },
     {
-      "id": "5fc380b0-85c3-c70b-0f43-d7617b333046",
+      "id": "a2e634ff-f081-858f-dea5-c59de219ec89",
       "name": "HUECO_JAMBA",
       "kind": "WINDOW",
       "L": 24.0,
       "psi": 0.01
     },
     {
-      "id": "a539a5c6-3bff-1d56-0ed2-ea1c3f177ba1",
+      "id": "4ea4e8b6-1b58-e0e5-4ae7-ddc18374e6ff",
       "name": "HUECO_ALFEIZAR",
       "kind": "WINDOW",
       "L": 12.0,
       "psi": 0.08
     },
     {
-      "id": "3a69243d-28aa-7dfc-c781-60528b9eea21",
+      "id": "b4588da5-e575-e53c-4e0f-c6c16daf1222",
       "name": "UNION_SOLERA_PAREDEXT",
       "kind": "GROUNDFLOOR",
       "L": 40.0,

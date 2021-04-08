@@ -84,7 +84,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
                 .as_ref()
                 .and_then(|s| ecdata.get_space(s))
                 .map(|s| s.space_type),
-            tilt: w.tilt.into(),
+            tilt: w.geometry.tilt.into(),
             cons: w.cons.clone(),
             u: 0.0,
             computed_u: fround2(ecdata.u_for_wall(w).unwrap_or(0.0)),
