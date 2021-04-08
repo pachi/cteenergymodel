@@ -137,6 +137,7 @@ pub struct Wall {
     /// Nombre del elemento opaco
     pub name: String,
     /// Superficie neta (sin huecos) del elemento opaco (m2)
+    /// TODO: a eliminar
     #[serde(rename = "A")]
     pub area: f32,
     /// Condiciones de contorno del cerramiento:
@@ -217,7 +218,8 @@ pub struct Window {
 }
 
 /// Geometría de hueco
-#[derive(Debug, Clone, Serialize, Deserialize)]
+/// TODO: Hacer un default manual
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct WindowGeometry {
     /// Posición del muro, en coordenadas de muro
     pub position: Point2<f32>,

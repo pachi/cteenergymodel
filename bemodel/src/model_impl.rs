@@ -439,7 +439,7 @@ impl Model {
         q_soljul_data
     }
 
-    /// Diccionario de transmitancias de elementos (walls, windows, pts)
+    /// Diccionario de transmitancias de elementos del modelo (walls, windows) según id
     pub fn u_values(&self) -> UValues {
         let wallsmap: HashMap<String, Option<f32>> = self
             .walls
