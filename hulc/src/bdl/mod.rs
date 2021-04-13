@@ -174,7 +174,7 @@ impl Data {
                             space.name
                         )
                     })?;
-                    // let building_azimuth = bdldata.meta.get("BUILD-PARAMETERS").unwrap().attrs.get_f32("AZIMUTH").unwrap_or_default();
+                    // Para la altura de espacios usamos la altura suelo-suelo de las plantas y para la neta descontamos la altura del forjado superior
                     space.height = floor.height;
                     space.z += floor.z; // Esto es siempre la z de la planta, ya que HULC no admite espacios a otro nivel distinto al de la planta
                     space.floor_multiplier = floor.multiplier;

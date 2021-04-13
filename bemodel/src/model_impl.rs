@@ -526,6 +526,7 @@ impl Model {
                 };
 
                 let B_1 = gnd_A / (0.5 * gnd_P);
+                // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
                 let z = if wspace.z < 0.0 { -wspace.z } else { 0.0 };
                 const W: f32 = 0.3; // Simplificación: espesor supuesto de los muros perimetrales
                 let d_t = W + LAMBDA_GND * (RSI_DESCENDENTE + R_intrinsic + RSE);
@@ -573,6 +574,7 @@ impl Model {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
                 let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
                 let space = self.get_wallspace(&wall)?;
+                // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
                 let z = if space.z < 0.0 { -space.z } else { 0.0 };
                 // Muros que realmente no son enterrados
                 if z.abs() < 0.01 {
