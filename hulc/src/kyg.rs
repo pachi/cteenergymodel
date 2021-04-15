@@ -217,17 +217,17 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
             if vv.len() < 8 {
                 bail!("Línea de datos de ganancias solares de hueco con formato desconocido")
             }
-            let (name, azimuth_n, _a, htot, _h1, h2, _h3, _ganancia) = (
+            let (name, azimuth_n, _a, htot, _h1, _h2, h3, _ganancia) = (
                 vv[0].trim_matches('"').to_string(), // name
-                vv[1].parse::<f32>()?,               // azimuth
-                vv[2].parse::<f32>()?,               // a - area
-                vv[3].parse::<f32>()?,               // htot - radiación total
-                vv[4].parse::<f32>()?,               // _h1
-                vv[5].parse::<f32>()?,               // h2 - radiación incidente en el hueco
-                vv[6].parse::<f32>()?,               // _h3
-                vv[7].parse::<f32>()?,               // _ganancia
+                vv[1].parse::<f32>()?,               // azimuth (grados respecto al norte, N=0, NE=45, E=90)
+                vv[2].parse::<f32>()?,               // a - area (m2)
+                vv[3].parse::<f32>()?,               // htot - radiación solar global en el plano del vidrio sin obstáculos (Wh/m2)
+                vv[4].parse::<f32>()?,               // _h1 - radiación solar global en el plano del vidrio tras obstáculos remotos (Wh/m2)
+                vv[5].parse::<f32>()?,               // _h2 - radiación solar global en el plano del vidrio tras obstáculos de fachada (Wh/m2)
+                vv[6].parse::<f32>()?,               // h3 - radiación solar global en el plano del vidrio tras sombras por lamas (Wh/m2)
+                vv[7].parse::<f32>()?,               // _ganancia solar a través de este hueco (Wh/m2)
             );
-            let fshobst = h2 / htot;
+            let fshobst = h3 / htot;
             qsolvalues.insert(name, (azimuth_n, fshobst));
         }
         // K global
