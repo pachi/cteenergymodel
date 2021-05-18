@@ -216,6 +216,16 @@ impl Data {
                     // HULC: en muros exteriores el valor por defecto es 0.6 (en cubiertas 0.7 y marcos de hueco 0.9)
                     let absorptance = cons.absorptance.unwrap_or(0.6);
                     let layersname = cons.wallcons.clone();
+                    // Caso en el que no se han definido las construcciones de los elementos, tienen asignado WallCons "Ninguno"
+                    if &layersname == "Ninguno" && !bdldata.db.wallcons.contains_key(&layersname) {
+                        bdldata.db.wallcons.insert(
+                            "Ninguno".into(),
+                            WallCons {
+                                name: "Ninguno".into(),
+                                ..Default::default()
+                            },
+                        );
+                    };
                     let mut layers = bdldata.db.wallcons.get_mut(&layersname).ok_or_else(|| {
                         format_err!(
                             "No se ha encontrado la definición de capas {} de la construcción {}",
