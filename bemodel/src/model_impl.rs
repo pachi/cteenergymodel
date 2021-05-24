@@ -316,11 +316,13 @@ impl Model {
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
     pub fn K(&self) -> KData {
         let mut k = KData::default();
+        // Opacos
         for wall in self.walls_of_envelope() {
             let multiplier = self
                 .get_wallspace(wall)
                 .map(|s| s.multiplier)
                 .unwrap_or(1.0);
+            // Huecos de los opacos
             for win in self.windows_of_wall(&wall.id) {
                 let wincons = match self.get_wincons(win) {
                     Some(wincons) => wincons,
@@ -328,7 +330,17 @@ impl Model {
                 };
                 let area = multiplier * win.area;
                 k.windows.a += area;
-                k.windows.au += area * wincons.u
+                k.windows.au += area * wincons.u;
+                k.windows.u_max = k
+                    .windows
+                    .u_max
+                    .map(|v| v.max(wincons.u))
+                    .or(Some(wincons.u));
+                k.windows.u_min = k
+                    .windows
+                    .u_min
+                    .map(|v| v.min(wincons.u))
+                    .or(Some(wincons.u));
             }
             let wall_u = match self.u_for_wall(wall) {
                 Some(u) => u,
@@ -344,7 +356,26 @@ impl Model {
             };
             element_case.a += area;
             element_case.au += area_u;
+            element_case.u_max = element_case.u_max.map(|v| v.max(wall_u)).or(Some(wall_u));
+            element_case.u_min = element_case.u_min.map(|v| v.min(wall_u)).or(Some(wall_u));
         }
+        // Valores medios de huecos y opacos
+        if k.windows.a > 0.001 {
+            k.windows.u_mean = Some(k.windows.au / k.windows.a);
+        };
+        if k.ground.a > 0.001 {
+            k.ground.u_mean = Some(k.ground.au / k.ground.a);
+        };
+        if k.roofs.a > 0.001 {
+            k.roofs.u_mean = Some(k.roofs.au / k.roofs.a);
+        };
+        if k.floors.a > 0.001 {
+            k.floors.u_mean = Some(k.floors.au / k.floors.a);
+        };
+        if k.walls.a > 0.001 {
+            k.walls.u_mean = Some(k.walls.au / k.walls.a);
+        };
+        // PTs
         for tb in &self.thermal_bridges {
             use ThermalBridgeKind::*;
             let l = tb.l;
@@ -367,7 +398,7 @@ impl Model {
             tb_case.l += l;
             tb_case.psil += psil;
         }
-
+        // Cálculo de K y resumen
         k.compute();
 
         let s = k.summary;

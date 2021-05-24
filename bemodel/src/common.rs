@@ -510,6 +510,12 @@ pub struct KElementProps {
     pub a: f32,
     /// A·U del elemento [W/K]
     pub au: f32,
+    /// U máximo observado [W/m²K]
+    pub u_max: Option<f32>,
+    /// U mínimo observado [W/m²K]
+    pub u_min: Option<f32>,
+    /// U medio observado [W/m²K]
+    pub u_mean: Option<f32>,
 }
 
 /// Tipos de elementos térmicos y sus propiedades
