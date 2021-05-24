@@ -349,7 +349,9 @@ impl Model {
             use ThermalBridgeKind::*;
             let l = tb.l;
             // A veces se incluyen longitudes < 0 para señalar que no se han medido
-            if l < 0.0 { continue };
+            if l < 0.0 {
+                continue;
+            };
             let psil = tb.psi * l;
             let mut tb_case = match tb.kind {
                 ROOF => &mut k.tbs.roof,
@@ -827,6 +829,7 @@ impl Model {
 
         let mut warnings = Vec::new();
 
+        // Muros con referencias e espacios, construcciones o nextto incorrectas
         self.walls.iter().for_each(|w| {
             if !spaceids.contains(w.space.as_str()) {
                 warnings.push(Warning {
@@ -863,6 +866,7 @@ impl Model {
             // TODO: avisar con elemento horizontal en contacto con el terreno y con p_ext == 0
         });
 
+        // Huecos con referencias de muros o construcciones incorrectas
         self.windows.iter().for_each(|w| {
             if !wallids.contains(w.wall.as_str()) {
                 warnings.push(Warning {
@@ -885,6 +889,20 @@ impl Model {
                 })
             };
         });
+        // Huecos con referencias de muros o construcciones incorrectas
+        self.thermal_bridges.iter().for_each(|tb| {
+            if tb.l < 0.0 {
+                warnings.push(Warning {
+                    level: WARNING,
+                    id: Some(tb.id.clone()),
+                    msg: format!(
+                        "Puente térmico {} ({}) con longitud negativa ({}).",
+                        tb.id, tb.name, tb.l
+                    ),
+                })
+            };
+        });
+
         warnings
     }
 }
