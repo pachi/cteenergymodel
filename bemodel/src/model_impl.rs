@@ -348,6 +348,8 @@ impl Model {
         for tb in &self.thermal_bridges {
             use ThermalBridgeKind::*;
             let l = tb.l;
+            // A veces se incluyen longitudes < 0 para señalar que no se han medido
+            if l < 0.0 { continue };
             let psil = tb.psi * l;
             let mut tb_case = match tb.kind {
                 ROOF => &mut k.tbs.roof,
