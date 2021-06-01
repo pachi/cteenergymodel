@@ -79,15 +79,18 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
 
         // Completa metadatos desde ctehexml y el bdl
         // Desviación general respecto al Norte (criterio BDL)
-        let buildparams = bdl.meta.get("BUILD-PARAMETERS").unwrap();
-        let d_perim_insulation = buildparams
-            .attrs
-            .get_f32("D-AISLAMIENTO-PERIMETRAL")
-            .unwrap_or(0.0);
-        let rn_perim_insulation = buildparams
-            .attrs
-            .get_f32("RA-AISLAMIENTO-PERIMETRAL")
-            .unwrap_or(0.0);
+        let mut d_perim_insulation = 0.0;
+        let mut rn_perim_insulation = 0.0;
+        if let Some(buildparams) = bdl.meta.get("BUILD-PARAMETERS") {
+            d_perim_insulation = buildparams
+                .attrs
+                .get_f32("D-AISLAMIENTO-PERIMETRAL")
+                .unwrap_or(0.0);
+            rn_perim_insulation = buildparams
+                .attrs
+                .get_f32("RA-AISLAMIENTO-PERIMETRAL")
+                .unwrap_or(0.0);
+        };
 
         let dg = &d.datos_generales;
         let is_dwelling =
