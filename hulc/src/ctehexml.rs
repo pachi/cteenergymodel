@@ -14,7 +14,7 @@ use crate::bdl::Data;
 use crate::fileutils::{find_file_in_basedir, read_file};
 
 /// Datos del archivo .ctehexml
-#[derive(Debug, Clone)]
+#[derive(Debug, Default, Clone)]
 pub struct CtehexmlData {
     /// Datos generales
     pub datos_generales: DatosGenerales,
@@ -68,6 +68,22 @@ pub struct DatosGenerales {
     pub valor_n50_medido: Option<f32>,
     /// Contenido del bloque en texto, sin parsear
     pub bloque_raw: String,
+}
+
+impl Default for DatosGenerales {
+    fn default() -> Self {
+        Self {
+            nombre_proyecto: "Proyecto nuevo".into(),
+            tipo_vivienda: "Unifamiliar".into(),
+            tipo_definicion: "Nuevo".into(),
+            num_viviendas_bloque: 1,
+            valor_impulsion_aire: 0.0,
+            zona_climatica: "D3".into(),
+            archivo_climatico: "D3".into(),
+            valor_n50_medido: None,
+            bloque_raw: "".into(),
+        }
+    }
 }
 
 /// Localiza archivo .ctehexml en el directorio de proyecto basedir
@@ -177,7 +193,6 @@ pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
     parse(&utf8data)
 }
 
-
 static LIDERCATSTRZ: &[u8] = include_bytes!("BDCatalogo.bdc.utf8.gz");
 
 /// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
@@ -198,7 +213,6 @@ pub fn parse_with_catalog(data: &str) -> Result<CtehexmlData, Error> {
     ctehexmldata.bdldata.db = db;
     Ok(ctehexmldata)
 }
-
 
 /// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
 pub fn parse_with_catalog_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
