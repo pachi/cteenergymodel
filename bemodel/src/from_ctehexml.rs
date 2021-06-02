@@ -396,17 +396,22 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
             } else if let Some(vertices) = sh.vertices.as_ref() {
                 // 2. Sombras definidas por vértices
                 // Aquí tenemos que tener cuidado con las operaciones de giros ya que tienen criterios de medición distintos
-                let normal = (vertices[2] - vertices[1])
-                    .cross(&(vertices[1] - vertices[0]))
-                    .normalize();
+                let normal = (vertices[1] - vertices[0]).cross(&(vertices[2] - vertices[1]));
+                if normal.magnitude() < 10.0 * f32::EPSILON {
+                    // XXX: Esto se podría evitar iterando hasta encontrar dos segmentos que no sean colineales
+                    // https://community.khronos.org/t/how-to-calculate-polygon-normal/49265/3
+                    panic!("Polígono con puntos colineales");
+                };
                 let tilt = Vector3::z_axis().angle(&normal);
                 // Azimuth del elemento de sombra (¡Atención! Criterio EN S=0, E=+90, W=-90)
-                let shade_azimuth = if (tilt % std::f32::consts::PI).abs() < 10.0 * f32::EPSILON {
-                    // Si es una superficie horizontal el azimuth (con el Sur) se calcula como si estuviese vertical la superficie -> -Y -> +Z
-                    Vector3::z_axis().angle(&normal)
+                let shade_azimuth = if (tilt % std::f32::consts::PI).abs() > (10.0 * f32::EPSILON) {
+                    // No es una superficie horizontal y calculamos el azimuth (con el Sur) como el ángulo de -Y y la proyección horizontal de la normal
+                    na::Rotation2::rotation_between(&-Vector3::<f32>::y_axis().xy(), &normal.xy())
+                        .angle()
                 } else {
-                    // En el resto, el azimuth (con el Sur) es el ángulo con -Y
-                    (-Vector3::y_axis()).angle(&normal)
+                    // Es una superficie horizontal y el azimuth (con el Sur) se calcula como si estuviese vertical la superficie -> -Y -> +Z
+                    // XXX: Esto no lo tengo claro...
+                    Vector3::z_axis().angle(&normal)
                 };
 
                 // La desviación global gira en sentido negativo el origen (sentido horario)
@@ -430,7 +435,12 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                     * Rotation3::from_axis_angle(&Vector3::z_axis(), -shade_azimuth)
                     * Translation3::from(Point3::origin() - v0);
                 let polygon = vertices.iter().map(|p| (transform * p).xy()).collect();
-                (position, tilt.to_degrees(), azimuth, polygon)
+                (
+                    position,
+                    normalize(tilt.to_degrees(), 0.0, 360.0),
+                    azimuth,
+                    polygon,
+                )
             } else {
                 panic!("Definición inesperada de elemento de sombra");
             };

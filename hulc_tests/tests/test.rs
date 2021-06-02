@@ -262,3 +262,55 @@ fn parse_lider_bdl() {
     }
     println!("Comprobados {} archivos antiguos", count);
 }
+
+#[test]
+fn convert_shading_vertices() {
+    use bdl::{BdlBlock, Data};
+    use std::convert::TryInto;
+
+    // Sombra orientada al norte (Azimuth 180º) inclinación (tilt) de 135º sobre la horizontal (hacia abajo)
+    // Normal (0, 0.707, -0.707)
+    let blk1: BdlBlock = r#""Sombra006" = BUILDING-SHADE
+    BULB-TRA = "Default.bulb"
+    BULB-REF = "Default.bulb"
+    TRAN     =              0
+    REFL     =            0.7
+    V1       =( 0, 10, 0 )
+    V2       =( 0, 20, 10 )
+    V3       =( 10, 20, 10 )
+    V4       =( 10, 10, 0 )
+         ..
+"#
+    .parse()
+    .unwrap();
+
+    // Sombra orientada al oeste (Azimuth 270 (o -90)) con inclinación (tilt) de 45º sobre la horizontal (hacia arriba)
+    // Normal (-0.707, 0, 0.707)
+    let blk2: BdlBlock = r#""Sombra007" = BUILDING-SHADE
+    BULB-TRA = "Default.bulb"
+    BULB-REF = "Default.bulb"
+    TRAN     =              0
+    REFL     =            0.7
+    V1       =( 10, 0, 0 )
+    V2       =( 20, 0, 10 )
+    V3       =( 20, 10, 10 )
+    V4       =( 10, 10, 0 )
+         ..
+"#
+    .parse()
+    .unwrap();
+
+    let bdldata = Data {
+        shadings: vec![blk1.try_into().unwrap(), blk2.try_into().unwrap()],
+        ..Default::default()
+    };
+    let hdata = ctehexml::CtehexmlData {
+        bdldata,
+        ..Default::default()
+    };
+    let model: bemodel::Model = (&hdata).try_into().unwrap();
+    assert_almost_eq!(model.shades[0].geometry.tilt, 135.0, 0.1);
+    assert_almost_eq!(model.shades[0].geometry.azimuth, -180.0, 0.1);
+    assert_almost_eq!(model.shades[1].geometry.tilt, 45.0, 0.1);
+    assert_almost_eq!(model.shades[1].geometry.azimuth, -90.0, 0.1);
+}
