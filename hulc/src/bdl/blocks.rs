@@ -178,7 +178,8 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
     let mut attributes = AttrMap::new();
     let mut lines = data.lines().map(str::trim);
     while let Some(l) = lines.next() {
-        if l == ".." {
+        // Continua con marca de fin de bloque o con comillas aisladas, que hemos visto en algún caso raro
+        if l == ".." || l == "\"" {
             continue;
         };
         if let [key, value] = l
@@ -204,8 +205,9 @@ fn parse_attributes(data: &str) -> Result<AttrMap, Error> {
             attributes.insert(key, &value);
         } else {
             bail!(
-                "No se ha podido extraer clave y atributo de la línea '{}'",
-                l
+                "No se ha podido extraer clave y atributo de la línea '{}' en '{:#?}'",
+                l,
+                lines
             )
         }
     }
