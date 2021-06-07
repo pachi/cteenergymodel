@@ -199,9 +199,6 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
             }
         };
 
-    if wall.name == "P03_E01_FE004" {
-        warn!("Posición de {}: {}", wall.name, position);
-    }
     // Solamente en el caso de elemntos TOP y BOTTOM de espacio estamos haciendo el giro... deberíamos ver si al resto le hace falta o no
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         (None, Some(ref polygon)) => polygon.as_vec(),
