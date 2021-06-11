@@ -127,8 +127,14 @@ impl TryFrom<BdlBlock> for ThermalBridge {
             // Definido por catálogo de PTs
             Some(3) => Some(TbByCatalog {
                 classes: extract_namesvec(attrs.remove_str("LISTA-N")?),
-                pcts: extract_f32vec(attrs.remove_str("LISTA-L")?)?,
-                firstelems: extract_f32vec(attrs.remove_str("LISTA-MURO")?)?,
+                pcts: attrs
+                    .remove_str("LISTA-L")
+                    .and_then(extract_f32vec)
+                    .unwrap_or_default(),
+                firstelems: attrs
+                    .remove_str("LISTA-MURO")
+                    .and_then(extract_f32vec)
+                    .unwrap_or_default(),
                 secondelems: if let Ok(list) = attrs.remove_str("LISTA-MARCO") {
                     Some(extract_f32vec(list)?)
                 } else {
