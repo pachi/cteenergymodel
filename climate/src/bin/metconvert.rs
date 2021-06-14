@@ -88,6 +88,12 @@ fn main() {
                 .default_value("zcraddata.json"),
         )
         .arg(
+            Arg::with_name("pretty")
+                .help("Salida en JSON embellecido")
+                .short("-p")
+                .long("pretty"),
+        )
+        .arg(
             Arg::with_name("showlicense")
                 .short("L")
                 .long("licencia")
@@ -104,7 +110,11 @@ fn main() {
 
     let metmonthlydata = met_monthly_data(&climasdir);
 
-    let json = serde_json::to_string_pretty(&metmonthlydata).unwrap_or_else(|e| {
+    let json = match matches.is_present("pretty") {
+        true => serde_json::to_string_pretty(&metmonthlydata),
+        _ => serde_json::to_string(&metmonthlydata),
+    }
+    .unwrap_or_else(|e| {
         eprintln!(
             "ERROR: conversión incorrecta del balance energético a JSON: {}",
             e

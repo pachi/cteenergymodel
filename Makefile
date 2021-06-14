@@ -15,6 +15,7 @@ compare: run runskip
 	(meld bemodel/tests/data/e4h_medianeras.json e4h_medianeras.json.skip&) && (meld -n bemodel/tests/data/caso_a.json salida_a.json.skip&) && (meld -n bemodel/tests/data/cubo.json cubo.json.skip&)
 climatedata:
 	cargo run --bin metconvert ../climascte
+	# cargo run --bin metconvert -- --pretty ../climascte
 linux:
 	$(info [INFO]: Versión de producción para linux)
 	cargo build --release
