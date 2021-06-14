@@ -1,7 +1,8 @@
 [workspace]
 
+repository = "https://github.com/pachi/cteenergymodel"
 members = [
-    "bemodel", "hulc", "hulc2model", "hulc_tests"
+    "bemodel", "climate", "hulc", "hulc2model", "hulc_tests"
 ]
 
 [profile.release]
