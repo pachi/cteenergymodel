@@ -1,5 +1,4 @@
 pub mod met;
-pub mod metutils;
 pub mod solar;
 
 pub use met::*;
@@ -164,7 +163,7 @@ mod tests {
         let albedo = 0.2;
 
         let mdata =
-            metutils::monthly_radiation_for_surface(&metdata, surf_tilt, surf_azimuth, albedo);
+            met::monthly_radiation_for_surface(&metdata, surf_tilt, surf_azimuth, albedo);
         assert_almost_eq!(mdata.dir[0], 32.997);
         assert_almost_eq!(mdata.dif[0], 21.072);
     }

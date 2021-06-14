@@ -3,7 +3,7 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::process::exit;
 
-use climate::metutils::met_monthly_data;
+use climate::met::met_monthly_data;
 
 const APP_TITLE: &str = r#"CteEPBD"#;
 const APP_DESCRIPTION: &str = r#"
