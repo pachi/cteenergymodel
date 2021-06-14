@@ -1,22 +1,108 @@
 # TAREAS PENDIENTES
 
+- Trasladar avisos en la conversión de modelos BDL
+- generar UUID reproducibles, con rnd y una semilla para generar los UUID. https://stackoverflow.com/a/56757552, https://github.com/uuid-rs/uuid/issues/100
 - Con makefile generar .json y llevar a tests de hulc a bemodel en .json y copiar archivos .ctehexml, .tbl y .kyg a hulc2model
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
 - mover cosas de climas a otro crate
+- Validación JSON? https://www.npmjs.com/package/is-my-json-valid
 
 Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K.
     - añadiendo un identificador en el nombre (p.e. EXCLUYE_HE1_K)
+    - pasando una lista de elementos excluidos
 
 # Comprobaciones
+- Ver si se puede calcular bien la altura de espacios / plantas usando altura de espacio y no de planta
 - Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabático
+- Ver si se calcula bien el volumen de espacios con cerramientos inclinados
 
 ## cte::Data
 
+### Sombras
+- http://performativedesign.com/articles/2007/shadingcalculations/
+- http://performativedesign.com/articles/2008/averagehourly/
+- https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf
+- https://idus.us.es/handle/11441/15301 p. 124
+- En el futuro podríamos añadir a las sombras la posibilidad de que tengan o no un elemento asociado
+    - "attached: Option<UUID>"
+    - Las sombras asociadas a un elemento (hueco):
+        - solo arrojan sombras sobre ese elemento
+        - nos permiten modelar aleros y aletas de forma más sencilla sin penalizar mucho el cálculo
+    - Las sombras no asociadas arrojan sombras sobre cualquier hueco
+        - es el procedimiento general
+- Los muros arrojan sombras sobre cualquier hueco
+- Convertimos los aleros y aletas de huecos a sombras generales. Si viésemos que esto penaliza mucho el cálculo las podríamos asociadar al hueco
+- Hacemos cálculos horarios de radiación incidente
+    - ESP-r usa malla de 20x20 elementos por ventana y comprueba la colisión desde el centro, comprobando un día de cada mes (el de declinación media).
+    -  DOE2 usa el primer día del mes.
+- Caso de las lamas (blinds)
+    - Vamos a tantear primero qué valores salen bloqueando solo la radiación directa, comparando con tablas DA DB-HE.
+    - Se puede usar la referencia de EnergyPlus (más sencilla), la ISO 15099 (más precisa) o la UNE-EN ISO 52022-3, aunque esta última considera que no hay transmisión directa.
+    - http://www.ibpsa.org/proceedings/BS2001/BS01_0457_464.pdf
+    - https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#blinds
+        - Se calcula la radiación directa (directa-directa) https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-direct-blind-transmittance
+            - tau_dir,dir = 1 - |s. cos(elev_b - elev_s) / cos elev_s) / h, con |w| <= h
+            - A ver qué sale para el 21 de junio con esto y si se corresponde con lo que tenemos en el DA.
+        - Se calcula la radiación directa a difusa (directa-difusa) https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-diffuse-blind-transmittance-reflectance-and-absorptance
+        - Se calcula la radiación difusa a difusa (difusa-difusa) https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#diffuse-to-diffuse-transmittance-and-reflectance-of-blind
+
+### Importación / Exportación
+
+- importación de OpenStudio
+    - Usa EpJSON, ver OpenStudio/src/epjson/epJSONTranslator.{hpp, cpp}
+    - https://github.com/NREL/OpenStudio/blob/develop/src/epjson/epJSONTranslator.hpp
+    - https://raw.githubusercontent.com/NREL/OpenStudio/develop/resources/model/OpenStudio.idd
+    - https://openstudio-sdk-documentation.s3.amazonaws.com/cpp/OpenStudio-3.1.0-doc/model/html/index.html#object_implementation
+- importación de epJSON: https://bigladdersoftware.com/epx/docs/9-1/essentials/title.html#epjson
+    - https://energyplus.readthedocs.io/en/latest/schema.html
+    - https://energyplus.net/documentation
+    - GlobalGeometryRules
+    - Zone
+    - Material, Material:NoMass, Material:AirGap, WindowMaterial:Glazing, WindowMaterial:Gas
+    - WindowMaterial:SimpleGlazingSystem (WindowMaterial:Glazing + WindowMaterial:Gas, con U + SHGC)
+    - WindowProperty:FrameAndDivider - Puentes térmicos de ventanas
+    - Construction (list of materials)
+    - **BuildingSurface:Detailed, FenestrationSurface:Detailed, and Shading:Zone:Detailed**
+        - Wall:Detailed, Wall:Exterior, Wall:Adiabatic, Wall:Underground, Wall:Interzone
+        - RoofCeiling:Detailed, Roof
+        - Floor:Detailed, Floor:GroundContact, Floor:Adiabatic, Floor:Interzone
+        - Ceiling:Adiabatic, Ceiling:Interzone
+        - Window, Window:Interzone
+        - Door, GlazedDoor, Door:Interzone, GlazedDoor:Interzone
+        - Shading:Site, Shading:Building, Shading:Overhang, Shading:Overhang:Projection, Shading:Fin, Shading:Fin:Projection
+    - SurfaceProperty:ExposedFoundationPerimeter
+- importación de IFC:
+    - https://github.com/tomvandig/web-ifc
+    - https://github.com/opensourceBIM/IfcValidator
+
+### Esquema de datos
+
+- Esquema JSON - https://www.npmjs.com/package/is-my-json-valid
+    - http://json-schema.org/
+
+### Modelo de datos
+
+- Pensar si tiene sentido eliminar las superficies de:
+    - muros calculando desde su polígono
+    - huecos: calculando con su altura, ancho 
+    - ¿espacios?: ¿definiendo su suelo (con polígono)? -> ¿merece la pena otra forma de definir los espacios?
+- El perímetro expuesto se podría eliminar de bemodel/space, calculándolo como en bdl/space l.110 a partir de los muros y suelos
+    - parte del perímetro que tiene muros con el exterior
+- Otra opción es poder calcular algunas cosas a partir del modelo (Volumen de espacios, perímetro expuesto, superficie, etc) pero a petición del usuario.
+
+### Cálculos adicionales
+
 - Calcular más cosas:
-    - Completar estructura UValues indicando elementos que pertenecen a la envolvente (agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR*)
-        - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
+    - Completar estructura UValues?
+        - Walls:  {A_gross, A_net, U, inside_et, space?}
+        - Windows: {A, U, inside_et, wall?, space?}
+        - Spaces: {A, V, p_ext (perimetro expuesto), inside_et}
+        - calcula superficie A con el polígono (y elimina A de propiedades)
+        - indicando elementos que pertenecen a la envolvente
+            - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
+            - ¿ agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR* ?
         - Podríamos usar esa estructura como caché
-            - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos si usamos caché
+            - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos
             - Si no, con una caché en u_for_wall() debería dar casi igual
 
 - Módulo para calcular propiedades de elementos
@@ -26,12 +112,12 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
     - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
     - Generador de construcciones a partir de definición por capas
 
-- Nuevos datos / campos:
-    - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
-    - Incorporar en construcciones la composición de capas (capas: Vec<(String, f32)>)
-    - Incorporar datos de materiales para poder calcular U de composiciones
-        - Necesita biblioteca base en Rust para interpretar construcciones:
-        - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+#### Nuevos datos / campos:
+- Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
+- Incorporar en construcciones la composición de capas (capas: Vec<(String, f32)>)
+- Incorporar datos de materiales para poder calcular U de composiciones
+    - Necesita biblioteca base en Rust para interpretar construcciones:
+    - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 
 ## BDL
 
@@ -59,3 +145,11 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
     - http://www.angusj.com/delphi/clipper.php
     - https://docs.rs/geo-clipper/0.4.0/geo_clipper/
     - https://www.boost.org/doc/libs/1_53_0/libs/geometry/doc/html/geometry/reference/algorithms/intersection.html
+
+## docs
+
+Documentar hipótesis:
+- Suponemos que la cota z de los elementos enterrados es igual a la z del suelo del espacio en el que se encuentran
+- Ignoramos el dato de Z-GROUND de elementos enterrados. Avisar
+- Suponemos que la altura de los espacios es igual a la altura suelo-suelo de las plantas y descontamos el grosor de forjado superior.
+- Avisar de incoherencias entre altura de espacios y plantas (pensar cómo, p.e. altura de planta < altura de espacio?)
