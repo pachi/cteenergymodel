@@ -39,6 +39,14 @@ pub struct Window {
     /// - 2: Corrección de transmitancia térmica fuera de la temporada veraniega (-)
     /// - 3: Corrección de transmitancia térmica dentro de la temporada veraniega (-)
     pub coefs: Option<Vec<f32>>,
+    /// Alero sobre el hueco
+    pub overhang: Option<Overhang>,
+    /// Aleta izquierda
+    pub left_fin: Option<Fin>,
+    /// Aleta derecha
+    pub right_fin: Option<Fin>,
+    /// Lamas fijas horizontales o verticales
+    pub louvres: Option<Louvres>,
 }
 
 // TODO: Muchas de estas cosas seguramente tendrían que ir a types y quedar Window como datos simplemente
@@ -101,11 +109,7 @@ impl TryFrom<BdlBlock> for Window {
     ///     ..
     /// ```
     /// TODO: atributos no trasladados:
-    /// TODO:  GLASS-TYPE, FRAME-WIDTH, FRAME-CONDUCT, FRAME-ABS, INF-COEF,
-    /// TODO: propiedades para definir salientes y voladizos o para lamas:
-    /// TODO: OVERHANG-A, OVERHANG-B, OVERHANG-W, OVERHANG-D, OVERHANG-ANGLE,
-    /// TODO: LEFT-FIN-A, LEFT-FIN-B, LEFT-FIN-H, LEFT-FIN-D, RIGHT-FIN-A, RIGHT-FIN-B, RIGHT-FIN-H, RIGHT-FIN-D
-    /// TODO: propiedades para definición de lamas
+    /// TODO:  GLASS-TYPE, FRAME-WIDTH, FRAME-CONDUCT, FRAME-ABS, INF-COEF
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
@@ -131,6 +135,71 @@ impl TryFrom<BdlBlock> for Window {
             },
         };
 
+        let overhang = {
+            let o = Overhang {
+                a: attrs.remove_f32("OVERHANG-A").unwrap_or_default(),
+                b: attrs.remove_f32("OVERHANG-B").unwrap_or_default(),
+                depth: attrs.remove_f32("OVERHANG-D").unwrap_or_default(),
+                width: attrs.remove_f32("OVERHANG-W").unwrap_or_default(),
+                angle: attrs.remove_f32("OVERHANG-ANGLE").unwrap_or_default(),
+            };
+            if o.depth * o.width > 0.0 {
+                Some(o)
+            } else {
+                None
+            }
+        };
+
+        let left_fin = {
+            let f = Fin {
+                a: attrs.remove_f32("LEFT-FIN-A").unwrap_or_default(),
+                b: attrs.remove_f32("LEFT-FIN-B").unwrap_or_default(),
+                depth: attrs.remove_f32("LEFT-FIN-D").unwrap_or_default(),
+                height: attrs.remove_f32("LEFT-FIN-H").unwrap_or_default(),
+            };
+            if f.depth * f.height > 0.0 {
+                Some(f)
+            } else {
+                None
+            }
+        };
+
+        let right_fin = {
+            let f = Fin {
+                a: attrs.remove_f32("RIGHT-FIN-A").unwrap_or_default(),
+                b: attrs.remove_f32("RIGHT-FIN-B").unwrap_or_default(),
+                depth: attrs.remove_f32("RIGHT-FIN-D").unwrap_or_default(),
+                height: attrs.remove_f32("RIGHT-FIN-H").unwrap_or_default(),
+            };
+            if f.depth * f.height > 0.0 {
+                Some(f)
+            } else {
+                None
+            }
+        };
+
+        let louvres = {
+            let ll = Louvres {
+                is_horizontal: matches!(
+                    attrs
+                        .remove_str("POSITION-LAMAS")
+                        .unwrap_or_default()
+                        .as_str(),
+                    "Horizontal"
+                ),
+                width: attrs.remove_f32("LAMAS-WIDTH").unwrap_or_default(),
+                distance: attrs.remove_f32("LAMAS-DISTANCE").unwrap_or_default(),
+                angle: attrs.remove_f32("LAMAS-ANGLE").unwrap_or_default(),
+                transmisivity: attrs.remove_f32("LAMAS-TRANSMISIVITY").unwrap_or_default(),
+                reflectivity: attrs.remove_f32("LAMAS-REFLECTIVITY").unwrap_or_default(),
+            };
+            if ll.width > 0.0 {
+                Some(ll)
+            } else {
+                None
+            }
+        };
+
         Ok(Self {
             name,
             wall,
@@ -141,6 +210,63 @@ impl TryFrom<BdlBlock> for Window {
             width,
             setback,
             coefs,
+            overhang,
+            left_fin,
+            right_fin,
+            louvres,
         })
     }
+}
+
+/// Aleros sobre huecos
+#[derive(Debug, Clone, Default)]
+pub struct Overhang {
+    /// Distancia horizontal (hacia la izquierda) del vértice superior izquierdo del hueco al vértice izquierdo del alero en el muro [m]
+    pub a: f32,
+    /// Distancia vertical (hacia arriba) del vértice superior izquierdo del hueco al vértice izquierdo del alero en el muro [m]
+    pub b: f32,
+    /// Profundidad del alero [m]
+    pub depth: f32,
+    /// Ancho del alero (hacia la derecha) [m]
+    pub width: f32,
+    /// Inclinación del alero (90 es perpendicular al hueco y 0 es paralelo al hueco) (0 - 360) [º]
+    pub angle: f32,
+}
+
+/// Aletas laterales a los huecos
+/// Puede ser una aleta a la derecha o a la izquierda del hueco
+#[derive(Debug, Clone, Default)]
+pub struct Fin {
+    /// Distancia horizontal desde el lado del hueco al vértice superior de la aleta [m]
+    /// En aletas a la izquierda esta es una distancia hacia la izquierda y en las aletas a la derecha, hacia la derecha desde el lado más próximo
+    pub a: f32,
+    /// Distancia vertical (hacia abajo) desde el lado superior del hueco al vértice superior de la aleta en el muro [m]
+    pub b: f32,
+    /// Profundidad de la aleta (en perpendicular al hueco, desde a) [m]
+    pub depth: f32,
+    /// Altura de la aleta (hacia abajo, desde b) [m]
+    pub height: f32,
+}
+
+/// Lamas horizontales o verticales en el hueco
+///     POSITION-LAMAS      = Horizontal
+///     LAMAS-WIDTH         =            0.2
+///     LAMAS-DISTANCE      =            0.2
+///     LAMAS-ANGLE         =             45
+///     LAMAS-TRANSMISIVITY =              0
+///     LAMAS-REFLECTIVITY  =              0
+#[derive(Debug, Clone, Default)]
+pub struct Louvres {
+    /// Si son lamas horizontales o verticales
+    pub is_horizontal: bool,
+    /// Ancho de las lamas (profundidad) [m]
+    pub width: f32,
+    /// Distancia vertical (lamas horizontales) u horizontal (lamas verticales) entre lamas [m]
+    pub distance: f32,
+    /// Ángulo de inclinación de las lamas (-180, 180) [º]
+    pub angle: f32,
+    /// transmitancia (0-1) [-]
+    pub transmisivity: f32,
+    /// reflectividad (0-1) [-]
+    pub reflectivity: f32,
 }

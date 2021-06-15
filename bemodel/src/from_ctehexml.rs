@@ -38,11 +38,16 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
     type Error = Error;
     fn try_from(d: &ctehexml::CtehexmlData) -> Result<Self, Self::Error> {
         let bdl = &d.bdldata;
+        let mut windows = vec![];
+        let mut shades = vec![];
 
         let mut walls = walls_from_bdl(&bdl)?;
-        let mut windows = windows_from_bdl(&walls, &bdl);
+        let (wins, winshades) = windows_from_bdl(&walls, &bdl);
+        windows.extend_from_slice(&wins);
+        shades.extend_from_slice(&winshades);
+        let othershades = shades_from_bdl(&bdl);
+        shades.extend_from_slice(&othershades);
         let thermal_bridges = thermal_bridges_from_bdl(&bdl);
-        let shades = shades_from_bdl(&bdl);
         let wallcons = wallcons_from_bdl(&walls, &bdl)?;
         let wincons = windowcons_from_bdl(&bdl)?;
         let spaces = spaces_from_bdl(&bdl)?;
@@ -286,36 +291,139 @@ fn global_deviation_from_north(bdl: &Data) -> f32 {
 }
 
 /// Construye huecos de la envolvente a partir de datos BDL
-fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> Vec<Window> {
-    bdl.windows
-        .iter()
-        .map(|win| {
-            let id = uuid_from_obj(win);
-            let wall = walls.iter().find(|w| w.name == win.wall).unwrap();
-            let fshobst = fshobst_for_setback(
-                wall.geometry.tilt,
-                wall.geometry.azimuth,
-                win.width,
-                win.height,
-                win.setback,
-            );
-            let geometry = WindowGeometry {
-                position: Some(Point2::new(win.x, win.y)),
-                width: win.width,
-                height: win.height,
-                setback: win.setback,
+fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
+    //TODO: faltan por crear las sombras de retranqueo (superior y laterales)
+    //TODO: falta por trasladar la definición de lamas (louvres)
+    let mut windows = vec![];
+    let mut shades = vec![];
+
+    for win in &bdl.windows {
+        let id = uuid_from_obj(win);
+        let wall = walls.iter().find(|w| w.name == win.wall).unwrap();
+        // TODO: Calcular fshobst teniendo en cuenta algo más que el setback
+        let fshobst = fshobst_for_setback(
+            wall.geometry.tilt,
+            wall.geometry.azimuth,
+            win.width,
+            win.height,
+            win.setback,
+        );
+        let geometry = WindowGeometry {
+            position: Some(Point2::new(win.x, win.y)),
+            width: win.width,
+            height: win.height,
+            setback: win.setback,
+        };
+
+        windows.push(Window {
+            id,
+            name: win.name.clone(),
+            cons: win.cons.to_string(),
+            wall: win.wall.clone(),
+            area: fround2(win.width * win.height),
+            fshobst: fround2(fshobst),
+            geometry,
+        });
+
+        if win.overhang.is_some() || win.left_fin.is_some() || win.right_fin.is_some() {
+            let wall2world =
+                Rotation3::from_axis_angle(&Vector3::z_axis(), wall.geometry.azimuth.to_radians())
+                    * Rotation3::from_axis_angle(
+                        &Vector3::x_axis(),
+                        wall.geometry.tilt.to_radians(),
+                    );
+            let wallpos = wall
+                .geometry
+                .position
+                .unwrap_or_else(|| Point3::new(0.0, 0.0, 0.0));
+
+            // Alero sobre el hueco
+            if let Some(overhang) = &win.overhang {
+                let pos = wall2world
+                    * Point3::new(win.x - overhang.a, win.y + win.height + overhang.b, 0.0);
+                let position = Some(Point3::new(
+                    pos.x + wallpos.x,
+                    pos.y + wallpos.y,
+                    pos.z + wallpos.z,
+                ));
+                let polygon = vec![
+                    Point2::new(0.0, 0.0),
+                    Point2::new(0.0, -overhang.depth),
+                    Point2::new(overhang.width, -overhang.depth),
+                    Point2::new(overhang.width, 0.0),
+                ];
+
+                shades.push(Shade {
+                    id: uuid_from_obj(overhang),
+                    name: format!("{}_overhang", win.name),
+                    geometry: Geometry {
+                        // inclinación: overhang.angle (0 es paralelo al hueco y 90 es perpendicular al hueco)
+                        tilt: wall.geometry.tilt - overhang.angle,
+                        azimuth: wall.geometry.azimuth,
+                        position,
+                        polygon,
+                    },
+                })
             };
-            Window {
-                id,
-                name: win.name.clone(),
-                cons: win.cons.to_string(),
-                wall: win.wall.clone(),
-                area: fround2(win.width * win.height),
-                fshobst: fround2(fshobst),
-                geometry,
+
+            // Aleta izquierda
+            if let Some(lfin) = &win.left_fin {
+                let pos =
+                    wall2world * Point3::new(win.x - lfin.a, win.y + win.height - lfin.b, 0.0);
+                let position = Some(Point3::new(
+                    pos.x + wallpos.x,
+                    pos.y + wallpos.y,
+                    pos.z + wallpos.z,
+                ));
+                let polygon = vec![
+                    Point2::new(0.0, 0.0),
+                    Point2::new(0.0, -lfin.height),
+                    Point2::new(lfin.depth, -lfin.height),
+                    Point2::new(lfin.depth, 0.0),
+                ];
+
+                shades.push(Shade {
+                    id: uuid_from_obj(lfin),
+                    name: format!("{}_left_fin", win.name),
+                    geometry: Geometry {
+                        tilt: wall.geometry.tilt,
+                        azimuth: wall.geometry.azimuth - 90.0,
+                        position,
+                        polygon,
+                    },
+                })
             }
-        })
-        .collect()
+
+            // Aleta derecha
+            if let Some(rfin) = &win.right_fin {
+                let pos = wall2world
+                    * Point3::new(win.x + win.width + rfin.a, win.y + win.height - rfin.b, 0.0);
+                let position = Some(Point3::new(
+                    pos.x + wallpos.x,
+                    pos.y + wallpos.y,
+                    pos.z + wallpos.z,
+                ));
+                let polygon = vec![
+                    Point2::new(0.0, 0.0),
+                    Point2::new(0.0, -rfin.height),
+                    Point2::new(rfin.depth, -rfin.height),
+                    Point2::new(rfin.depth, 0.0),
+                ];
+
+                shades.push(Shade {
+                    id: uuid_from_obj(rfin),
+                    name: format!("{}_right_fin", win.name),
+                    geometry: Geometry {
+                        tilt: wall.geometry.tilt,
+                        azimuth: wall.geometry.azimuth - 90.0,
+                        position,
+                        polygon,
+                    },
+                })
+            }
+        }
+    }
+    (windows, shades)
 }
 
 /// Construye puentes térmicos de la envolvente a partir de datos BDL

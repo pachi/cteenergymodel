@@ -18,20 +18,16 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 
 ## cte::Data
 
+# Lamas en huecos
+- Dar soporte a lamas horizontales y verticales, igual que hacemos con el retranqueo
+
 ### Sombras
 - http://performativedesign.com/articles/2007/shadingcalculations/
 - http://performativedesign.com/articles/2008/averagehourly/
 - https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf
 - https://idus.us.es/handle/11441/15301 p. 124
-- En el futuro podríamos añadir a las sombras la posibilidad de que tengan o no un elemento asociado
-    - "attached: Option<UUID>"
-    - Las sombras asociadas a un elemento (hueco):
-        - solo arrojan sombras sobre ese elemento
-        - nos permiten modelar aleros y aletas de forma más sencilla sin penalizar mucho el cálculo
-    - Las sombras no asociadas arrojan sombras sobre cualquier hueco
-        - es el procedimiento general
+- En el futuro podríamos añadir a las sombras la posibilidad de que tengan o no un elemento asociado para evitar calcular las sombras de otros huecos
 - Los muros arrojan sombras sobre cualquier hueco
-- Convertimos los aleros y aletas de huecos a sombras generales. Si viésemos que esto penaliza mucho el cálculo las podríamos asociadar al hueco
 - Hacemos cálculos horarios de radiación incidente
     - ESP-r usa malla de 20x20 elementos por ventana y comprueba la colisión desde el centro, comprobando un día de cada mes (el de declinación media).
     -  DOE2 usa el primer día del mes.
