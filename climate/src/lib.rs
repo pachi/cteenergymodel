@@ -3,10 +3,45 @@ pub mod solar;
 
 pub use met::*;
 pub use solar::{
-    nday_from_str, nday_from_ymd, radiation_for_surface, sun_position, sunsurface_angles,
-    CTE_latitude, Location, SolarRadiation, SunPosition, SunSurfaceAngles, CTE_LATCANARIAS,
-    CTE_LATPENINSULA,
+    nday_from_md, nday_from_str, nday_from_ymd, radiation_for_surface, sun_position,
+    sunsurface_angles, Location, SolarRadiation, SunPosition, SunSurfaceAngles,
 };
+
+pub const MONTH_N: [u32; 12] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+pub const MONTH_DAYS: [u32; 12] = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+// Orientaciones tipo
+pub const ORIENTATIONS: [(f32, f32, &str); 9] = [
+    // (tilt (beta), azimuth (gamma), name)
+    (0.0, 0.0, "Horiz."),
+    (90.0, -135.0, "NE"),
+    (90.0, -90.0, "E"),
+    (90.0, -45.0, "SE"),
+    (90.0, 0.0, "S"),
+    (90.0, 45.0, "SW"),
+    (90.0, 90.0, "W"),
+    (90.0, 135.0, "NW"),
+    (90.0, 180.0, "N"),
+];
+
+pub const CTE_CLIMATEZONES: [&str; 32] = [
+    "A1c", "A2c", "A3c", "A4c", "Alfa1c", "Alfa2c", "Alfa3c", "Alfa4c", "B1c", "B2c", "B3c", "B4c",
+    "C1c", "C2c", "C3c", "C4c", "D1c", "D2c", "D3c", "E1c", "A3", "A4", "B3", "B4", "C1", "C2",
+    "C3", "C4", "D1", "D2", "D3", "E1",
+];    
+
+pub const CTE_LATPENINSULA: f32 = 40.7;
+pub const CTE_LATCANARIAS: f32 = 28.3;
+
+// Latitude for location ('peninsula' or 'canarias')
+pub fn cte_latitude_from_str(location: &str) -> f32 {
+    match location {
+        "peninsula" => CTE_LATPENINSULA,
+        "canarias" => CTE_LATCANARIAS,
+        // TODO: esto era un error
+        _ => 0.0,
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -34,7 +69,7 @@ mod tests {
     fn met_parsing() {
         let metdata = met::parsemet(METDATA).unwrap();
         assert_eq!(metdata.meta.zc, "D3");
-        assert_almost_eq!(metdata.data[8759].dirviento, 178.0);
+        assert_almost_eq!(metdata.data[8759].wind_dir, 178.0);
     }
 
     #[test]
@@ -43,6 +78,7 @@ mod tests {
         // Hay alguna pequeña diferencia en la declinación 23.053 -> 23.11
         let nday1 = nday_from_str("2001-6-11");
         let nday2 = nday_from_ymd(2001, 6, 11);
+        let nday3 = nday_from_md(6, 11);
         let loc = Location {
             latitude: 40.0,
             longitude: 0.0,
@@ -51,6 +87,7 @@ mod tests {
 
         assert_eq!(nday1, 162);
         assert_eq!(nday2, 162);
+        assert_eq!(nday3, 162);
         let declination = solar::declination_from_nday(162);
         assert_almost_eq!(declination, 23.053);
         assert_almost_eq!(solar::t_eq(nday1), -0.354);
@@ -114,35 +151,35 @@ mod tests {
     fn met_check() {
         // Comparamos resultados de radiación total calculada con modelo y suma de .met
         let metdata = met::parsemet(METDATA).unwrap();
-        let latitud = metdata.meta.latitud;
+        let latitude = metdata.meta.latitude;
 
-        let july_data: Vec<_> = metdata.data.iter().filter(|d| d.mes == 7).collect();
+        let july_data: Vec<_> = metdata.data.iter().filter(|d| d.month == 7).collect();
         let surf_tilt = 0.0;
         let surf_azimuth = 0.0;
         let albedo = 0.2;
         let d = july_data[6];
-        let altsol = 90.0 - d.cenit;
+        let altsol = 90.0 - d.zenith;
         let gsolbeam = G_sol_b(d.rdirhor, altsol);
 
         let idirtot = solar::I_dir_tot(
-            d.mes,
-            d.dia,
-            d.hora,
+            d.month,
+            d.day,
+            d.hour,
             gsolbeam,
             d.rdifhor,
             altsol,
-            latitud,
+            latitude,
             surf_tilt,
             surf_azimuth,
         );
         let idiftot = solar::I_dif_tot(
-            d.mes,
-            d.dia,
-            d.hora,
+            d.month,
+            d.day,
+            d.hour,
             gsolbeam,
             d.rdifhor,
             altsol,
-            latitud,
+            latitude,
             surf_tilt,
             surf_azimuth,
             albedo,
@@ -162,8 +199,7 @@ mod tests {
         let surf_azimuth = 0.0;
         let albedo = 0.2;
 
-        let mdata =
-            met::monthly_radiation_for_surface(&metdata, surf_tilt, surf_azimuth, albedo);
+        let mdata = met::monthly_radiation_for_surface(&metdata, surf_tilt, surf_azimuth, albedo);
         assert_almost_eq!(mdata.dir[0], 32.997);
         assert_almost_eq!(mdata.dif[0], 21.072);
     }

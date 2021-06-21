@@ -24,6 +24,7 @@
 //
 // Authors: Rafael Villar Burke <pachi@rvburke.com>
 
+use super::MONTH_DAYS;
 /// # Solar functions for building science
 ///
 /// Implementation based on formulas from ISO/FDIS 52010-1:2015
@@ -101,6 +102,15 @@ fn acosd(rcos: f32) -> f32 {
 // function atand(rtan) { f32::atan(rtan).to_degrees() }
 
 // --------------- Number of day of the year -------------------
+
+/// Number of day in the year for a given day and month [1, 365]
+/// month [1-12]
+/// day [1-31]
+pub fn nday_from_md(month: u32, day: u32) -> u32 {
+    assert!(month < 13 && day < 31);
+    let past_months_days: u32 = MONTH_DAYS[..(month - 1) as usize].iter().sum();
+    past_months_days + day
+}
 
 /// Number of day of the year for a given date [1, 366]
 /// isodatestring: date string in iso format, e.g. "2016-12-23"
@@ -379,13 +389,7 @@ pub fn radiation_for_surface(
 ) -> SolarRadiation {
     let declination = declination_from_nday(nday);
     let hourangle = hourangle_from_tsol(hour);
-    let anglesolsurf = angle_sol_surf(
-        declination,
-        hourangle,
-        latitude,
-        surf_tilt,
-        surf_azimuth,
-    );
+    let anglesolsurf = angle_sol_surf(declination, hourangle, latitude, surf_tilt, surf_azimuth);
     let altsol = altitude_sol_from_data(declination, hourangle, latitude);
     let gsolbeam = G_sol_b(gsol.dir, altsol);
     let DiffuseParams { a, b, F1, F2 } =
@@ -787,19 +791,4 @@ pub fn I_tot(
     ) + I_dif_tot(
         month, day, hour, gsolbeam, gsoldiff, altsol, latitude, betasurf, gammasurf, albedo,
     )
-}
-
-// ------------------------ CTE weather data ---------------------------------
-
-pub const CTE_LATPENINSULA: f32 = 40.7;
-pub const CTE_LATCANARIAS: f32 = 28.3;
-
-// Latitude for location ('peninsula' or 'canarias')
-pub fn CTE_latitude(location: &str) -> f32 {
-    match location {
-        "peninsula" => CTE_LATPENINSULA,
-        "canarias" => CTE_LATCANARIAS,
-        // TODO: esto era un error
-        _ => 0.0,
-    }
 }

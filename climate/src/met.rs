@@ -52,29 +52,7 @@ use std::path::Path;
 use anyhow::{Context, Error, bail};
 use serde::{ser::SerializeSeq, Deserialize, Serialize, Serializer};
 
-use super::solar::{nday_from_ymd, radiation_for_surface, SolarRadiation};
-
-pub const MESES: [u32; 12] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-pub const CLIMATEZONES: [&str; 32] = [
-    "A1c", "A2c", "A3c", "A4c", "Alfa1c", "Alfa2c", "Alfa3c", "Alfa4c", "B1c", "B2c", "B3c", "B4c",
-    "C1c", "C2c", "C3c", "C4c", "D1c", "D2c", "D3c", "E1c", "A3", "A4", "B3", "B4", "C1", "C2",
-    "C3", "C4", "D1", "D2", "D3", "E1",
-];
-
-// Orientaciones tipo
-pub const ORIENTACIONES: [(f32, f32, &str); 9] = [
-    // (tilt (beta), azimuth (gamma), name)
-    (0.0, 0.0, "Horiz."),
-    (90.0, -135.0, "NE"),
-    (90.0, -90.0, "E"),
-    (90.0, -45.0, "SE"),
-    (90.0, 0.0, "S"),
-    (90.0, 45.0, "SW"),
-    (90.0, 90.0, "W"),
-    (90.0, 135.0, "NW"),
-    (90.0, 180.0, "N"),
-];
+use super::{solar::{nday_from_ymd, radiation_for_surface, SolarRadiation}, ORIENTATIONS, MONTH_N, CTE_CLIMATEZONES};
 
 /// Datos climáticos de archivo .met
 #[derive(Debug, Clone, Default)]
@@ -86,49 +64,49 @@ pub struct MetData {
 /// Metadatos de archivo .met
 #[derive(Debug, Clone, Default)]
 pub struct Meta {
-    /// nombre de archivo de clima. e.g. zonaD3.met
+    /// Climate file name. e.g. zonaD3.met
     pub metname: String,
-    /// Zona climática. e.g. D3
+    /// Climatic Zone (CTE). e.g. D3
     pub zc: String,
-    /// latitud, grados
-    pub latitud: f32,
-    /// longitud, grados
-    pub longitud: f32,
-    /// altitud, metros
-    pub altitud: f32,
-    /// longitud de referencia, grados
-    pub longref: f32,
+    /// latitude, degrees
+    pub latitude: f32,
+    /// longitude, degrees
+    pub longitude: f32,
+    /// altitude, metres
+    pub altitude: f32,
+    /// reference longitude, degrees
+    pub reflong: f32,
 }
 
 /// Valores horarios de archivo .met
 #[derive(Debug, Clone, Default)]
 pub struct HourlyData {
     /// Mes (1 a 12)
-    pub mes: u32,
+    pub month: u32,
     /// Día (1 a 31)
-    pub dia: u32,
+    pub day: u32,
     /// Hora (1 a 24)
-    pub hora: f32,
+    pub hour: f32,
     /// - Temperatura seca (◦C);
-    pub tempseca: f32,
+    pub db_temp: f32,
     /// - Temperatura efectiva del cielo (◦C);
-    pub tempcielo: f32,
+    pub sky_temp: f32,
     /// - Irradiancia solar directa sobre una superficie horizontal (W/m² );
     pub rdirhor: f32,
     /// - Irradiancia solar difusa sobre una superficie horizontal (W/m² );
     pub rdifhor: f32,
     /// - Humedad específica (kgH2O/kgaire seco);
-    pub humedadabs: f32,
+    pub abs_humidity: f32,
     /// - Humedad relativa (%);
-    pub humedadrel: f32,
+    pub rel_humidity: f32,
     /// - Velocidad del viento (m/s);
-    pub velviento: f32,
+    pub wind_speed: f32,
     /// - Dirección del viento (grados respecto al norte, E+, O-);
-    pub dirviento: f32,
+    pub wind_dir: f32,
     /// - Azimut solar (grados);
-    pub azimut: f32,
+    pub azimuth: f32,
     /// - Cénit solar (grados).
-    pub cenit: f32,
+    pub zenith: f32,
 }
 
 
@@ -207,10 +185,10 @@ pub fn parsemet<S: AsRef<str>>(metstring: S) -> Result<MetData, Error> {
     let meta = Meta {
         metname: metname.to_string(),
         zc,
-        latitud: loc[0],
-        longitud: loc[1],
-        altitud: loc[2],
-        longref: loc[3],
+        latitude: loc[0],
+        longitude: loc[1],
+        altitude: loc[2],
+        reflong: loc[3],
     };
     // datalines
     let data: Vec<_> = datalines[2..].iter().map(|x| x.trim()).filter(|x| !x.is_empty()).map(|x| {
@@ -225,12 +203,12 @@ pub fn parsemet<S: AsRef<str>>(metstring: S) -> Result<MetData, Error> {
         {
           if let [ mes, dia] = date[..] {
             if let [hora, tempseca, tempcielo, rdirhor, rdifhor, humedadabs, humedadrel, velviento, dirviento, azimut, cenit ] = values[..] {
-              return Some(HourlyData { mes, dia, hora,
-                tempseca, tempcielo,
+              return Some(HourlyData { month: mes, day: dia, hour: hora,
+                db_temp: tempseca, sky_temp: tempcielo,
                 rdirhor, rdifhor,
-                humedadabs, humedadrel,
-                velviento, dirviento,
-                azimut, cenit })
+                abs_humidity: humedadabs, rel_humidity: humedadrel,
+                wind_speed: velviento, wind_dir: dirviento,
+                azimuth: azimut, zenith: cenit })
             }
           };
           None
@@ -241,7 +219,7 @@ pub fn parsemet<S: AsRef<str>>(metstring: S) -> Result<MetData, Error> {
     Ok(MetData { meta, data })
 }
 
-/// Lee estructura de datos desde patch de archivo .ctehexml
+/// Lee estructura de datos desde path de archivo .met
 pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<MetData, Error> {
   let mut utf8data = String::new();
     BufReader::new(File::open(path.as_ref())?)
@@ -259,7 +237,7 @@ pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<MetData, Error> {
 pub fn met_monthly_data(metdir: &str) -> Vec<MonthlySurfaceRadData> {
     let albedo = 0.2;
     let mut data = vec![];
-    for zona in &CLIMATEZONES {
+    for zona in &CTE_CLIMATEZONES {
         let mstr = format!("{}/zona{}.met", metdir, zona);
         let metpath = Path::new(&mstr);
         if !metpath.exists() {
@@ -268,7 +246,7 @@ pub fn met_monthly_data(metdir: &str) -> Vec<MonthlySurfaceRadData> {
         };
         println!("Leyendo archivo {}", metpath.display());
         let metdata = parse_from_path(&metpath).unwrap();
-        for &(tilt, azimuth, name) in &ORIENTACIONES {
+        for &(tilt, azimuth, name) in &ORIENTATIONS {
             let MonthlyRadData {
                 dir,
                 dif,
@@ -322,14 +300,14 @@ fn period_radiation_for_surface(
     hourlydata
         .iter()
         .map(|d| {
-            let nday = nday_from_ymd(2001, d.mes, d.dia);
+            let nday = nday_from_ymd(2001, d.month, d.day);
             let gsol = SolarRadiation {
                 dir: d.rdirhor,
                 dif: d.rdifhor,
             };
             let radiation = radiation_for_surface(
                 nday,
-                d.hora,
+                d.hour,
                 gsol,
                 latitude,
                 surface_tilt,
@@ -337,9 +315,9 @@ fn period_radiation_for_surface(
                 albedo,
             );
             RadData {
-                mes: d.mes,
-                dia: d.dia,
-                hora: d.hora,
+                mes: d.month,
+                dia: d.day,
+                hora: d.hour,
                 dir: radiation.dir,
                 dif: radiation.dif,
             }
@@ -369,7 +347,7 @@ pub (crate) fn monthly_radiation_for_surface(
     surf_azimuth: f32,
     albedo: f32,
 ) -> MonthlyRadData {
-    let latitude = metdata.meta.latitud;
+    let latitude = metdata.meta.latitude;
     let surf_radiation =
         period_radiation_for_surface(&metdata.data, latitude, surf_tilt, surf_azimuth, albedo);
 
@@ -379,7 +357,7 @@ pub (crate) fn monthly_radiation_for_surface(
     let mut fshwi200 = vec![];
     let mut fshwi300 = vec![];
     let mut fshwi500 = vec![];
-    for &imes in &MESES {
+    for &imes in &MONTH_N {
         let surfrad = surf_radiation.iter().filter(|&d| d.mes == imes);
         let mut t_dir = 0.0;
         let mut t_dif = 0.0;
