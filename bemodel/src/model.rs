@@ -206,10 +206,9 @@ pub struct Window {
 }
 
 /// Geometría de hueco
-/// TODO: Hacer un default manual
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WindowGeometry {
-    /// Posición del muro, en coordenadas de muro
+    /// Posición del hueco, en coordenadas de muro
     /// Un valor None señala que no hay definición geométrica completa
     pub position: Option<Point2<f32>>,
     /// Altura del hueco, m
@@ -218,6 +217,17 @@ pub struct WindowGeometry {
     pub width: f32,
     /// Retranqueo, m
     pub setback: f32,
+}
+
+impl Default for WindowGeometry {
+    fn default() -> Self {
+        WindowGeometry {
+            position: None,
+            height: 1.0,
+            width: 1.0,
+            setback: 0.0,
+        }
+    }
 }
 
 /// Puente térmico
