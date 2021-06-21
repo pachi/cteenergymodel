@@ -6,7 +6,7 @@
 
 use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
-use anyhow::{anyhow, format_err, Error};
+use anyhow::{anyhow, bail, format_err, Error};
 use log::warn;
 use na::{Point2, Point3, Rotation3, Translation3, Vector3};
 
@@ -70,13 +70,22 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             .map(|s| (s.name.clone(), s.id.clone()))
             .collect::<BTreeMap<String, String>>();
 
-        walls.iter_mut().for_each(|w| {
+        for mut w in &mut walls {
             w.cons = wallconsids.get(&w.cons).unwrap().to_owned();
             w.space = spaceids.get(&w.space).unwrap().to_owned();
             if let Some(ref nxt) = w.nextto {
-                w.nextto = Some(spaceids.get(nxt).unwrap().to_owned())
+                w.nextto = match spaceids.get(nxt) {
+                    None => {
+                        bail!(
+                            "ERROR: No se localiza el espacio adyacente {} en el muro {}.",
+                            nxt,
+                            w.name
+                        )
+                    }
+                    Some(id) => Some(id.clone()),
+                };
             };
-        });
+        }
         windows.iter_mut().for_each(|w| {
             w.cons = winconsids.get(&w.cons).unwrap().to_owned();
             w.wall = wallids.get(&w.wall).unwrap().to_owned();
