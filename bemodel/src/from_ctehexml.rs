@@ -191,6 +191,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
     let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
     let position = rot
         * match wall.location.as_deref() {
+            // Casos definidos por vértice
             Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
                 let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
                 Point3::new(
@@ -199,10 +200,12 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
                     wall.z + space.z,
                 )
             }
+            // Resto de casos, definidos mediante polígono o por el espacio
             _ => {
                 let height = match wall.location.as_deref() {
-                    // Los elementos definidos por polígono (sin ser el de espacio) ya tiene en la Z la cota final
+                    // Los elementos top definidos por el polígono del espacio necesitan añadir la altura en su z
                     Some("TOP") if wall.polygon.is_none() => space.height,
+                    // El resto de los definidos por polígono (sin ser el de espacio) ya tienen en la Z la cota final
                     _ => 0.0,
                 };
                 Point3::new(
@@ -215,19 +218,23 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
 
     // Solamente en el caso de elemntos TOP y BOTTOM de espacio estamos haciendo el giro... deberíamos ver si al resto le hace falta o no
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
+        // 1. Elementos definidos por polígono
         (None, Some(ref polygon)) => polygon.as_vec(),
+        // 2. Elementos TOP definidos por polígono (su tilt es 0)
         (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
-        // En los elementos TOP no necesitamos hacer el tilt, ya que es cero
+        // 3. Elementos TOP definidos por la geometría de su espacio (su tilt es 0)
         (Some("TOP"), None) => {
-            let p = bdl::Polygon(space_polygon.as_vec());
+            // Giramos el polígono según la desviación respecto al norte del muro y el espacio
             let azimuth = orientation_bdl_to_52016(
                 space.angle_with_building_north + wall.angle_with_space_north,
             );
-            p.rotate(azimuth.to_radians()).as_vec()
+            space_polygon.rotate(azimuth.to_radians()).as_vec()
         }
-        // Con elementos de suelo hacemos el mirror (y -> -y para cada punto) del polígono sobre el eje X para que al girarlo con el tilt 180 quede igual
+        // 4. Elementos BOTTOM
+        // Hacemos el mirror (y -> -y para cada punto) del polígono sobre el eje X para que al girarlo con el tilt 180 quede igual
         // El azimuth global ya está incluido
         (Some("BOTTOM"), _) => {
+            // Giramos el polígono según la desviación respecto al norte del muro y el espacio
             let azimuth = orientation_bdl_to_52016(
                 space.angle_with_building_north + wall.angle_with_space_north,
             );
@@ -236,6 +243,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
                 .mirror_y()
                 .as_vec()
         }
+        // 5. Elementos definidos por un vértice del espacio
         (Some(vertex), _) => {
             // Definimos el polígono con inicio en 0,0 y ancho y alto según vértices y espacio
             // La "position (x, y, z)" que define el origen de coordenadas del muro será la del primer vértice
@@ -301,7 +309,7 @@ fn global_deviation_from_north(bdl: &Data) -> f32 {
 
 /// Construye huecos de la envolvente a partir de datos BDL
 fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
-    //TODO: faltan por crear las sombras de retranqueo (superior y laterales)
+    //TODO: faltan por crear las sombras de retranqueo (superior, inferior y laterales)
     //TODO: falta por trasladar la definición de lamas (louvres)
     let mut windows = vec![];
     let mut shades = vec![];
