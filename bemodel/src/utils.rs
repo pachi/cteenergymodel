@@ -24,11 +24,17 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     (offset - (f32::floor(offset / width) * width)) + start
 }
 
-/// Convierte el azimuth desde el criterio del BDL al criterio de la 52016-1
+/// Normaliza aziimuth [-180, 180]
+#[inline]
+pub fn normalize_azimuth(azimuth: f32) -> f32 {
+    normalize(azimuth, -180.0, 180.0)
+}
+
+/// Convierte el azimuth desde el criterio del BDL al criterio de la 52016-1 y normaliza
 /// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro (N=0, E=+90, W=-90)
 /// UNE-EN ISO 52016-1: S=0, E=+90, W=-90
 pub fn orientation_bdl_to_52016(azimuth: f32) -> f32 {
-    normalize(180.0 - azimuth, -180.0, 180.0)
+    normalize_azimuth(180.0 - azimuth)
 }
 
 /// Calcula UUID a partir de hash MD5 del objeto
