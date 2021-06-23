@@ -185,13 +185,13 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
     let global_deviation = global_deviation_from_north(bdl);
 
     // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
-    // La posición del muro es en coordenadas de espacio == coordenadas de planta == (coordenadas de edificio salvo por Z)
+    // La posición del muro es en coordenadas globales, incluyendo un giro en Z según desviación global del norte y la desviación del espacio
     // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
     let angle = -(space.angle_with_building_north + global_deviation).to_radians();
     let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
     let position = rot
         * match wall.location.as_deref() {
-            // Casos definidos por vértice
+            // 1. Casos definidos por vértice
             Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
                 let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
                 Point3::new(
@@ -200,7 +200,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
                     wall.z + space.z,
                 )
             }
-            // Resto de casos, definidos mediante polígono o por el espacio
+            // 2. Casos definidos mediante polígono o por el espacio
             _ => {
                 let height = match wall.location.as_deref() {
                     // Los elementos top definidos por el polígono del espacio necesitan añadir la altura en su z
@@ -216,28 +216,28 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
             }
         };
 
-    // Solamente en el caso de elemntos TOP y BOTTOM de espacio estamos haciendo el giro... deberíamos ver si al resto le hace falta o no
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         // 1. Elementos definidos por polígono
         (None, Some(ref polygon)) => polygon.as_vec(),
-        // 2. Elementos TOP definidos por polígono (su tilt es 0)
+        // 2. Elementos TOP definidos por polígono
         (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
-        // 3. Elementos TOP definidos por la geometría de su espacio (su tilt es 0)
+        // 3. Elementos TOP definidos por la geometría de su espacio
         (Some("TOP"), None) => {
             // Giramos el polígono según la desviación respecto al norte del muro y el espacio
+            // El giro global del edificio respecto al norte ya está incluido
             let azimuth = orientation_bdl_to_52016(
                 space.angle_with_building_north + wall.angle_with_space_north,
             );
             space_polygon.rotate(azimuth.to_radians()).as_vec()
         }
-        // 4. Elementos BOTTOM
-        // Hacemos el mirror (y -> -y para cada punto) del polígono sobre el eje X para que al girarlo con el tilt 180 quede igual
-        // El azimuth global ya está incluido
-        (Some("BOTTOM"), _) => {
+        // 4. Elementos BOTTOM definidos por la geometría de su espacio
+        (Some("BOTTOM"), None) => {
             // Giramos el polígono según la desviación respecto al norte del muro y el espacio
+            // El giro global del edificio respecto al norte ya está incluido
             let azimuth = orientation_bdl_to_52016(
                 space.angle_with_building_north + wall.angle_with_space_north,
             );
+            // Hacemos un mirror (y -> -y para cada punto) sobre el eje X para que el giro del tilt 180 lo deje igual
             space_polygon
                 .rotate(azimuth.to_radians())
                 .mirror_y()
