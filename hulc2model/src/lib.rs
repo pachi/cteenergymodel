@@ -77,12 +77,12 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
         .map(|w| ExtraData {
             name: w.name.clone(),
             bounds: w.bounds,
-            spacetype: ecdata.get_space(&w.space).unwrap().space_type,
+            spacetype: ecdata.space_by_id(&w.space).unwrap().space_type,
             nextspace: w.nextto.clone(),
             nextspacetype: w
                 .nextto
                 .as_ref()
-                .and_then(|s| ecdata.get_space(s))
+                .and_then(|s| ecdata.space_by_id(s))
                 .map(|s| s.space_type),
             tilt: w.geometry.tilt.into(),
             cons: w.cons.clone(),

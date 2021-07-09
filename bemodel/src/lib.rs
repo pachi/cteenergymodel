@@ -9,6 +9,10 @@ pub mod common;
 pub(crate) mod from_ctehexml;
 mod model;
 pub mod model_impl;
+pub mod model_n50;
+pub mod model_qsoljul;
+pub mod model_transmittance;
+pub mod model_check;
 mod utils;
 
 pub use climatedata::*;
