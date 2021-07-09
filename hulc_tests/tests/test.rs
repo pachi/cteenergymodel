@@ -33,23 +33,24 @@ fn test_caso_a() {
     assert_eq!(data.windows.len(), 10);
     assert_eq!(data.walls.len(), 35); // 19 en ET
     assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
-    let results: Vec<&str> = vec![
-        "P02_E01_FI001",
-        "P02_E01_FI002",
-        "P02_E01_ME001",
-        "P02_E01_MED001",
-        "P02_E01_PE001",
-        "P02_E01_PE002",
-        "P02_E01_PE003",
-        "P03_E01_FI003",
-    ];
-    let space = data.space_by_name("P02_E01").unwrap();
     let mut wallsofspace = data
-        .walls_of_space_iter(&space.id)
+        .walls_of_space_iter(&data.space_by_name("P02_E01").unwrap().id)
         .map(|w| w.name.as_str())
         .collect::<Vec<_>>();
     wallsofspace.sort_unstable();
-    assert_eq!(wallsofspace, results);
+    assert_eq!(
+        wallsofspace,
+        vec![
+            "P02_E01_FI001",
+            "P02_E01_FI002",
+            "P02_E01_ME001",
+            "P02_E01_MED001",
+            "P02_E01_PE001",
+            "P02_E01_PE002",
+            "P02_E01_PE003",
+            "P03_E01_FI003",
+        ]
+    );
     // Suelo al exterior (aire), HULC=0.34
     let wall = data.wall_by_name("P02_E01_ME001").unwrap();
     assert_almost_eq!(fround2(data.u_for_wall(&wall).unwrap()), 0.33, 0.001);
