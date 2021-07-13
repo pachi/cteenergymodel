@@ -9,7 +9,7 @@
 use std::convert::TryFrom;
 
 use anyhow::Error;
-use na::Point3;
+use nalgebra::Point3;
 
 use crate::bdl::{BdlBlock};
 

@@ -12,7 +12,7 @@ use std::{convert::TryFrom, f32::consts::FRAC_PI_2};
 
 use anyhow::{bail, Error};
 
-use na::{Matrix2, Point2, Point3, Rotation2, Vector2};
+use nalgebra::{point, Matrix2, Point2, Point3, Rotation2, Vector2};
 
 use crate::bdl::BdlBlock;
 use crate::utils::normalize;
@@ -90,11 +90,7 @@ impl Polygon {
                 // ángulo entre la normal y el sur
                 let angle = n.angle(&s);
                 // Para las normales en el semiplano nx <= 0 cogemos el ángulo largo
-                normalize(
-                    f32::signum(n.x) * angle.to_degrees(),
-                    0.0,
-                    360.0,
-                )
+                normalize(f32::signum(n.x) * angle.to_degrees(), 0.0, 360.0)
             })
             .unwrap_or(0.0)
     }
@@ -106,16 +102,16 @@ impl Polygon {
 
     /// Devuelve un polígono que es un espejo respecto al eje X
     pub fn mirror_y(&self) -> Self {
-        let mirror: Vec<_> = self.0.iter().map(|p| Point2::new(p.x, -p.y)).collect();
+        let mirror: Vec<_> = self.0.iter().map(|p| point![p.x, -p.y]).collect();
         let mut counterclockwise = vec![mirror[0]];
         counterclockwise.extend(mirror[1..].iter().rev());
-        Self (counterclockwise)
+        Self(counterclockwise)
     }
 
     /// Devuelve un polígono rotado angle radianes respecto al origen
     pub fn rotate(&self, angle: f32) -> Self {
         let rot = Rotation2::new(angle);
-        Self (self.0.iter().map(|p| rot * p).collect())
+        Self(self.0.iter().map(|p| rot * p).collect())
     }
 }
 
@@ -166,7 +162,7 @@ pub fn point2_from_str(s: &str) -> Result<Point2<f32>, Error> {
         .collect::<Vec<_>>()
         .as_slice()
     {
-        Ok(Point2::new(x.parse::<f32>()?, y.parse::<f32>()?))
+        Ok(point![x.parse::<f32>()?, y.parse::<f32>()?])
     } else {
         bail!("Fallo al generar punto 2D con los datos '{}'", s)
     }
@@ -185,11 +181,11 @@ pub fn point3_from_str(s: &str) -> Result<Point3<f32>, Error> {
         .collect::<Vec<_>>()
         .as_slice()
     {
-        Ok(Point3::new(
+        Ok(point![
             x.parse::<f32>()?,
             y.parse::<f32>()?,
-            z.parse::<f32>()?,
-        ))
+            z.parse::<f32>()?
+        ])
     } else {
         bail!("Fallo al generar punto 3D con los datos '{}'", s)
     }
