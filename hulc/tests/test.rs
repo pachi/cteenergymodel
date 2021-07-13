@@ -5,7 +5,7 @@
 use std::convert::TryFrom;
 
 use hulc::bdl;
-use na::Point2;
+use nalgebra::point;
 
 // Utilidades para tests ------------------
 
@@ -44,11 +44,11 @@ fn bdl_polygon() {
     assert_almost_eq!(pol.area(), 76.307, 0.001);
     assert_eq!(
         pol.edge_vertices("V1").unwrap(),
-        [&Point2::new(14.97, 11.39), &Point2::new(10.84, 11.39)]
+        [&point![14.97, 11.39], &point![10.84, 11.39]]
     );
     assert_eq!(
         pol.edge_vertices("V6").unwrap(),
-        [&Point2::new(14.97, 9.04), &Point2::new(14.97, 11.39)]
+        [&point![14.97, 9.04], &point![14.97, 11.39]]
     );
     assert_almost_eq!(pol.edge_length("V3"), 18.22 - 10.86, 0.001);
 }
@@ -71,11 +71,11 @@ fn bdl_polygon2() {
     assert_almost_eq!(pol.perimeter(), 8.2426405, 0.001);
     assert_eq!(
         pol.edge_vertices("V1").unwrap(),
-        [&Point2::new(1.0, 1.0), &Point2::new(2.0, 1.0)]
+        [&point![1.0, 1.0], &point![2.0, 1.0]]
     );
     assert_eq!(
         pol.edge_vertices("V6").unwrap(),
-        [&Point2::new(0.0, 2.0), &Point2::new(1.0, 1.0)]
+        [&point![0.0, 2.0], &point![1.0, 1.0]]
     );
     assert_almost_eq!(pol.edge_length("V3"), 1.0, 0.001);
     // lado horizontal hacia la derecha
