@@ -13,6 +13,9 @@ pub fn fround2(val: f32) -> f32 {
 }
 
 macro_rules! assert_almost_eq {
+    ($a:expr, $b:expr) => {
+        assert_almost_eq!($a, $b, 0.001)
+    };
     ($a:expr, $b:expr, $c:expr) => {
         if ($a - $b).abs() > $c {
             panic!(
