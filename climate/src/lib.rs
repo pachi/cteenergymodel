@@ -66,13 +66,6 @@ mod tests {
     }
 
     #[test]
-    fn met_parsing() {
-        let metdata = met::parsemet(METDATA).unwrap();
-        assert_eq!(metdata.meta.zc, "D3");
-        assert_almost_eq!(metdata.data[8759].wind_dir, 178.0);
-    }
-
-    #[test]
     fn sunpos_test() {
         // Comparado con https://gml.noaa.gov/grad/solcalc/
         // Hay alguna pequeña diferencia en la declinación 23.053 -> 23.11
@@ -193,8 +186,12 @@ mod tests {
 
     #[test]
     fn met_utils() {
-        // Comparamos resultados mensuales
+        // Carga de archivos .met
         let metdata = met::parsemet(METDATA).unwrap();
+        assert_eq!(metdata.meta.zc, "D3");
+        assert_almost_eq!(metdata.data[8759].wind_dir, 178.0);
+        
+        // Calculamos datos mensuales para una superficie dada
         let surf_tilt = 0.0;
         let surf_azimuth = 0.0;
         let albedo = 0.2;
