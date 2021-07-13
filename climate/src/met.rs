@@ -103,7 +103,9 @@ pub struct HourlyData {
     pub wind_speed: f32,
     /// - Dirección del viento (grados respecto al norte, E+, O-);
     pub wind_dir: f32,
-    /// - Azimut solar (grados);
+    /// - Azimut solar (grados) (E+, W-, S=0);
+    /// Puesto que el criterio de signos .met (E-, S=0, W+) difiere del
+    /// criterio de 52010-1 (E+, S=0, W-) lo cambiamos en el parsing
     pub azimuth: f32,
     /// - Cénit solar (grados).
     pub zenith: f32,
@@ -208,7 +210,9 @@ pub fn parsemet<S: AsRef<str>>(metstring: S) -> Result<MetData, Error> {
                 rdirhor, rdifhor,
                 abs_humidity: humedadabs, rel_humidity: humedadrel,
                 wind_speed: velviento, wind_dir: dirviento,
-                azimuth: azimut, zenith: cenit })
+                // Cambiamos el signo del azimut, ya que en .met (E-, W+, S=0) el signo difiere del de 52010-1 (E+, W-, S=0)
+                azimuth: -azimut,
+                zenith: cenit })
             }
           };
           None
