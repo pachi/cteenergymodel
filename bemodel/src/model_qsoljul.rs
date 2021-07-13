@@ -8,11 +8,17 @@
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
 #![allow(non_snake_case)]
 
-use std::collections::HashMap;
+use std::{collections::HashMap, convert::From, f32::consts::PI};
 
-use log::{debug, info};
+use log::{debug, info, warn};
+use na::{
+    point, vector, Isometry, Point, Point2, Point3, Rotation, Rotation2, Rotation3, Translation2,
+    Translation3, Vector2, Vector3,
+};
 
-use super::{Model, Orientation, QSolJulData};
+use super::{Geometry, Model, Orientation, QSolJulData, Window, WindowGeometry};
+
+const EPSILON: f32 = 1e-5;
 
 impl Model {
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio

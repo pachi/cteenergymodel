@@ -15,6 +15,8 @@ pub use super::{
 
 // ---------- Estructura general de datos --------------
 
+pub type Polygon = Vec<Point2<f32>>;
+
 /// Modelo del edificio
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(default)]
@@ -160,7 +162,7 @@ pub struct Wall {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Geometry {
     /// Inclinación (beta) [0, 180]
-    /// Medido respecto a la horizontal y normal hacia arriba (0 -> suelo, 180 -> techo)
+    /// Ángulo con la vertical (0 -> suelo, 180 -> techo)
     pub tilt: f32,
     /// Orientación (gamma) [-180,+180] (S=0, E=+90, W=-90, sentido antihorario)
     /// Medido como azimuth geográfico de la proyección horizontal de la normal a la superficie con el eje -Y del espacio
@@ -171,7 +173,7 @@ pub struct Geometry {
     /// Un valor None señala que no hay definición geométrica completa
     pub position: Option<Point3<f32>>,
     /// Polígono del muro, en coordenadas de muro
-    pub polygon: Vec<Point2<f32>>,
+    pub polygon: Polygon,
 }
 
 /// Elemento de sombra

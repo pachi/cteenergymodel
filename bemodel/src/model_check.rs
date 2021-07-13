@@ -17,6 +17,7 @@ impl Model {
     ///     - Muros sin referencias de espacios válidas
     ///     - Muros sin referencias de construcciones válidas
     ///     - Muros con nextto con referencia no válida
+    /// TODO: - comprobar que elementos geométricos tengan punto de inserción != None
     pub fn check_model(&self) -> Vec<Warning> {
         use WarningLevel::WARNING;
 

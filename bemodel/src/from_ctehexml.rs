@@ -8,7 +8,7 @@ use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, bail, format_err, Error};
 use log::warn;
-use na::{Point2, Point3, Rotation3, Translation3, Vector3};
+use na::{point, Point3, Rotation3, Translation3, Vector3};
 
 use crate::utils::{fround2, fround3, normalize, orientation_bdl_to_52016, uuid_from_obj};
 use hulc::{
@@ -194,11 +194,11 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
             // 1. Casos definidos por vértice
             Some(loc) if loc != "TOP" && loc != "BOTTOM" => {
                 let [p1, _] = space.polygon.edge_vertices(loc).unwrap();
-                Point3::new(
+                point![
                     p1.x + wall.x + space.x,
                     p1.y + wall.y + space.y,
-                    wall.z + space.z,
-                )
+                    wall.z + space.z
+                ]
             }
             // 2. Casos definidos mediante polígono o por el espacio
             _ => {
@@ -208,11 +208,11 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
                     // El resto de los definidos por polígono (sin ser el de espacio) ya tienen en la Z la cota final
                     _ => 0.0,
                 };
-                Point3::new(
+                point![
                     wall.x + space.x,
                     wall.y + space.y,
-                    wall.z + space.z + height,
-                )
+                    wall.z + space.z + height
+                ]
             }
         };
 
@@ -252,10 +252,10 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
             let width = (p2 - p1).magnitude();
             let height = space.height;
             vec![
-                Point2::new(0.0, 0.0),
-                Point2::new(width, 0.0),
-                Point2::new(width, height),
-                Point2::new(0.0, height),
+                point![0.0, 0.0],
+                point![width, 0.0],
+                point![width, height],
+                point![0.0, height],
             ]
         }
         _ => {
@@ -326,7 +326,7 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
             win.setback,
         );
         let geometry = WindowGeometry {
-            position: Some(Point2::new(win.x, win.y)),
+            position: Some(point![win.x, win.y]),
             width: win.width,
             height: win.height,
             setback: win.setback,
@@ -352,22 +352,22 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
             let wallpos = wall
                 .geometry
                 .position
-                .unwrap_or_else(|| Point3::new(0.0, 0.0, 0.0));
+                .unwrap_or_else(|| point![0.0, 0.0, 0.0]);
 
             // Alero sobre el hueco
             if let Some(overhang) = &win.overhang {
-                let pos = wall2world
-                    * Point3::new(win.x - overhang.a, win.y + win.height + overhang.b, 0.0);
-                let position = Some(Point3::new(
+                let pos =
+                    wall2world * point![win.x - overhang.a, win.y + win.height + overhang.b, 0.0];
+                let position = Some(point![
                     pos.x + wallpos.x,
                     pos.y + wallpos.y,
-                    pos.z + wallpos.z,
-                ));
+                    pos.z + wallpos.z
+                ]);
                 let polygon = vec![
-                    Point2::new(0.0, 0.0),
-                    Point2::new(0.0, -overhang.depth),
-                    Point2::new(overhang.width, -overhang.depth),
-                    Point2::new(overhang.width, 0.0),
+                    point![0.0, 0.0],
+                    point![0.0, -overhang.depth],
+                    point![overhang.width, -overhang.depth],
+                    point![overhang.width, 0.0],
                 ];
 
                 shades.push(Shade {
@@ -385,18 +385,17 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
 
             // Aleta izquierda
             if let Some(lfin) = &win.left_fin {
-                let pos =
-                    wall2world * Point3::new(win.x - lfin.a, win.y + win.height - lfin.b, 0.0);
-                let position = Some(Point3::new(
+                let pos = wall2world * point![win.x - lfin.a, win.y + win.height - lfin.b, 0.0];
+                let position = Some(point![
                     pos.x + wallpos.x,
                     pos.y + wallpos.y,
-                    pos.z + wallpos.z,
-                ));
+                    pos.z + wallpos.z
+                ]);
                 let polygon = vec![
-                    Point2::new(0.0, 0.0),
-                    Point2::new(0.0, -lfin.height),
-                    Point2::new(lfin.depth, -lfin.height),
-                    Point2::new(lfin.depth, 0.0),
+                    point![0.0, 0.0],
+                    point![0.0, -lfin.height],
+                    point![lfin.depth, -lfin.height],
+                    point![lfin.depth, 0.0],
                 ];
 
                 shades.push(Shade {
@@ -414,17 +413,17 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
             // Aleta derecha
             if let Some(rfin) = &win.right_fin {
                 let pos = wall2world
-                    * Point3::new(win.x + win.width + rfin.a, win.y + win.height - rfin.b, 0.0);
-                let position = Some(Point3::new(
+                    * point![win.x + win.width + rfin.a, win.y + win.height - rfin.b, 0.0];
+                let position = Some(point![
                     pos.x + wallpos.x,
                     pos.y + wallpos.y,
-                    pos.z + wallpos.z,
-                ));
+                    pos.z + wallpos.z
+                ]);
                 let polygon = vec![
-                    Point2::new(0.0, 0.0),
-                    Point2::new(0.0, -rfin.height),
-                    Point2::new(rfin.depth, -rfin.height),
-                    Point2::new(rfin.depth, 0.0),
+                    point![0.0, 0.0],
+                    point![0.0, -rfin.height],
+                    point![rfin.depth, -rfin.height],
+                    point![rfin.depth, 0.0],
                 ];
 
                 shades.push(Shade {
@@ -503,15 +502,15 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                 // El origen simplemente se traslada la desviación global (en sentido inverso a los ángulos en coordenadas (X,-Y))
                 let position = Some(
                     Rotation3::from_axis_angle(&Vector3::z_axis(), -global_deviation.to_radians())
-                        * Point3::new(geom.x, geom.y, geom.z),
+                        * point![geom.x, geom.y, geom.z],
                 );
                 // El azimuth acumula la orientación de la sombra y la desviación del norte (tienen el mismo criterio de giro)
                 let azimuth = fround2(orientation_bdl_to_52016(geom.azimuth + global_deviation));
                 let polygon = vec![
-                    Point2::new(0.0, 0.0),
-                    Point2::new(geom.width, 0.0),
-                    Point2::new(geom.width, geom.height),
-                    Point2::new(0.0, geom.height),
+                    point![0.0, 0.0],
+                    point![geom.width, 0.0],
+                    point![geom.width, geom.height],
+                    point![0.0, geom.height],
                 ];
 
                 (position, geom.tilt, azimuth, polygon)

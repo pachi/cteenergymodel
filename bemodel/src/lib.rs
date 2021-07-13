@@ -4,6 +4,8 @@
 
 //! Datos climáticos y modelo del edificio
 
+extern crate nalgebra as na;
+
 pub mod climatedata;
 pub mod common;
 pub(crate) mod from_ctehexml;
