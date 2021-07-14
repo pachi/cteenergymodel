@@ -15,8 +15,6 @@ pub use super::{
 
 // ---------- Estructura general de datos --------------
 
-pub type Polygon = Vec<Point2<f32>>;
-
 /// Modelo del edificio
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 #[serde(default)]
@@ -173,7 +171,7 @@ pub struct Geometry {
     /// Un valor None señala que no hay definición geométrica completa
     pub position: Option<Point3<f32>>,
     /// Polígono del muro, en coordenadas de muro
-    pub polygon: Polygon,
+    pub polygon: Vec<Point2<f32>>,
 }
 
 /// Elemento de sombra
