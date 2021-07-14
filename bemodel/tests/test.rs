@@ -101,7 +101,6 @@ fn model_json_conversion() {
 
     let map = model.fshobst_for_sun_pos(0.0, 45.0);
     info!("sunlit map: {:#?}", map);
-    assert!(map == HashMap::new());
 }
 
 #[test]

@@ -16,7 +16,10 @@ use na::{
     Translation3, Vector2, Vector3,
 };
 
-use super::{Geometry, Model, Orientation, QSolJulData, Window, WindowGeometry};
+use super::{
+    BoundaryType::{ADIABATIC, EXTERIOR},
+    Geometry, Model, Orientation, QSolJulData, Window, WindowGeometry,
+};
 
 const EPSILON: f32 = 1e-5;
 
@@ -147,52 +150,48 @@ impl Model {
         // Conversión de coordenadas locales de muro a coordenadas de polígono de muro
         let wallLocal2WallPolyTransform = wallLocal2WallPolygon(polygon);
 
-        // Compute window for window shading tests
+        // Compute ray origin points on window for shading tests
         let points: Vec<Point3<f32>> = getWindowPoints(&window)
             .iter()
             .map(|p| wallLocal2WallPolyTransform * p)
             .map(|p| wallTransform * point![p.x, p.y, 0.0])
             .collect();
 
-        // Elementos oclusores, exceptuado muro del hueco
-        let mut num = 0;
+        // Elementos oclusores, muros y sombras
+        // - Debe excluir el muro del hueco para tener en cuenta retranqueos y evitar problemas numéricos
+        // Optimizaciones implementadas:
+        // - no buscar en muros interiores ni en contacto con el terreno (hecho)
+        // TODO: Posibles optimizaciones
+        // - agrupar elementos por zona / planta y localizar primero si se produce la intersección por zona / planta con AABB (estructura BVH)
+        //      - precalcular AABB de zonas
+        // - ignorar muros no enfrentados (producto escalar de normales > 0) al hueco, ya que no se ven
+        //      - precalcular normales de muros?
+        // - probar en primer lugar el opaco con el que se produjo la colisión en la última iteración
+        let mut occluders: Vec<_> = self
+            .walls
+            .iter()
+            // Exceptuamos el muro del hueco
+            .filter(|&e| e.id != winWall.id)
+            // Exceptuamos elementos interiores y en contacto con el terreno
+            .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
+            .map(|e| (&e.name, &e.geometry))
+            .collect();
+        let occ_shades = self.shades.iter().map(|e| (&e.name, &e.geometry));
+
+        occluders.extend(occ_shades);
+
+        let num = points.len();
         let mut num_intersects = 0;
         for ray_orig in points {
-            num += 1;
-            let mut intersects = false;
-            for w in &self.walls {
-                // Exceptuamos el muro del hueco
-                if w.id == winWall.id {
-                    continue;
-                };
-                // TODO: podríamos eliminar los muros con una normal cuyo producto escalar con el rayo sea positivo (mira en la misma dirección).
-                let intersection = intersectPoly2D(ray_orig, ray_dir, &w.geometry);
+            for (_name, geometry) in &occluders {
+                let intersection = intersectPoly2D(ray_orig, ray_dir, &geometry);
                 if intersection.is_some() {
-                    intersects = true;
                     // debug!("Intersección con muro oclusor: {}, de rayo: {}, punto 3D: {:#?}, en geometría: {:#?}", w.name, ray_dir, intersection, &w.geometry);
+                    num_intersects += 1;
                     break;
                 }
             }
-            if !intersects {
-                for s in &self.shades {
-                    let intersection = intersectPoly2D(ray_orig, ray_dir, &s.geometry);
-                    if intersection.is_some() {
-                        intersects = true;
-                        // debug!("Intersección con sombra oclusora: {}, de rayo: {}, punto 3D: {:#?}, en geometría: {:#?}", s.name, ray_dir, intersection, &s.geometry);
-                        break;
-                    }
-                }
-            }
-
-            if intersects {
-                num_intersects += 1;
-            }
         }
-
-        // debug!(
-        //     "Num. intersecciones para hueco {}: {} de {}",
-        //     &window.name, num_intersects, num
-        // );
         1.0 - num_intersects as f32 / num as f32
     }
 }
