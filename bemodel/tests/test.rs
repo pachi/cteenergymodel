@@ -2,9 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use std::collections::HashMap;
-
-use bemodel::{Geometry, Model, Window, climatedata, model_qsoljul::{intersectPoly2D, pointInPolygon2D}};
+use bemodel::{climatedata, geometry::point_in_poly, Geometry, Model, Window};
 use nalgebra::{point, vector};
 
 extern crate env_logger;
@@ -196,11 +194,11 @@ fn intersections() {
         info!("Polígono: {:?}", geo.polygon);
         info!("Posición: {:?}", geo.position);
         info!("Rayo: {}, {}", r_orig, r_dir);
-        let result = intersectPoly2D(r_orig, r_dir, &geo);
+        let result = &geo.intersect(r_orig, r_dir);
         info!("Intersección con rayo: {:?}", result);
         assert!(res == result.is_some());
     }
 
-    assert!(!pointInPolygon2D(point![-9.81, -7.3], &geom4.polygon));
-    assert!(pointInPolygon2D(point![2.0, 2.0], &geom4.polygon));
+    assert!(!point_in_poly(point![-9.81, -7.3], &geom4.polygon));
+    assert!(point_in_poly(point![2.0, 2.0], &geom4.polygon));
 }

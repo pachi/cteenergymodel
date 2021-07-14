@@ -11,17 +11,12 @@
 use std::{collections::HashMap, convert::From, f32::consts::PI};
 
 use log::{debug, info, warn};
-use na::{
-    point, vector, Isometry, Point, Point2, Point3, Rotation, Rotation2, Rotation3, Translation2,
-    Translation3, Vector2, Vector3,
-};
+use na::{point, vector, Point2, Point3};
 
 use super::{
     BoundaryType::{ADIABATIC, EXTERIOR},
-    Geometry, Model, Orientation, QSolJulData, Window, WindowGeometry,
+    Model, Orientation, QSolJulData, Window, WindowGeometry,
 };
-
-const EPSILON: f32 = 1e-5;
 
 impl Model {
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
@@ -103,7 +98,7 @@ impl Model {
 
     /// Fracción del hueco con radiación solar directa para la posición solar dada [0.0 - 1.0]
     ///
-    /// XXX: cuando la definición geométrica es incompleta (sin posición) o no se puede localizar el muro, se devuelve 1.0 (sin obstrucción)
+    /// Devuelve 1.0 (sin obstrucción) para definición geométrica incompleta (sin posición o hueco sin muro)
     ///
     /// window: window.id
     /// Azimuth (S=0, E=90, W=-90)
@@ -130,14 +125,7 @@ impl Model {
         let winWall = winWall.unwrap();
 
         let geometry = &winWall.geometry;
-        let Geometry {
-            tilt,
-            azimuth,
-            position,
-            polygon,
-        } = geometry;
-
-        if position.is_none() {
+        if geometry.position.is_none() {
             warn!(
                 "Hueco {} (id: {}) sin definición geométrica completa. Se considera superficie soleada al 100%",
                 window.name, window.id
@@ -146,9 +134,9 @@ impl Model {
         };
 
         // Conversión a coordenadas globales
-        let wallTransform = transformMatrix(*tilt, *azimuth, position.unwrap());
-        // Conversión de coordenadas locales de muro a coordenadas de polígono de muro
-        let wallLocal2WallPolyTransform = wallLocal2WallPolygon(polygon);
+        let wallTransform = geometry.local_to_global().unwrap(); //transformMatrix(*tilt, *azimuth, position.unwrap());
+                                                                 // Conversión de coordenadas locales de muro a coordenadas de polígono de muro
+        let wallLocal2WallPolyTransform = geometry.local_to_polygon().unwrap(); //wallLocal2WallPolygon(polygon);
 
         // Compute ray origin points on window for shading tests
         let points: Vec<Point3<f32>> = getWindowPoints(&window)
@@ -177,6 +165,7 @@ impl Model {
             .map(|e| (&e.name, &e.geometry))
             .collect();
         let occ_shades = self.shades.iter().map(|e| (&e.name, &e.geometry));
+        // TODO: añadir aletas laterales de retranqueos de ventana a las sombras.
 
         occluders.extend(occ_shades);
 
@@ -184,9 +173,10 @@ impl Model {
         let mut num_intersects = 0;
         for ray_orig in points {
             for (_name, geometry) in &occluders {
-                let intersection = intersectPoly2D(ray_orig, ray_dir, &geometry);
+                let intersection = geometry.intersect(ray_orig, ray_dir);
                 if intersection.is_some() {
-                    // debug!("Intersección con muro oclusor: {}, de rayo: {}, punto 3D: {:#?}, en geometría: {:#?}", w.name, ray_dir, intersection, &w.geometry);
+                    // debug!("La intersección del elemento oclusor {} y el rayo con origen {} y dirección {} es: t: {}, punto: {:#?}",
+                    //        w.name, ray_origin, ray_dir, intersection, intersection.then(|t| Some(ray_origin + t*ray_dir)).unwrap_or_none());
                     num_intersects += 1;
                     break;
                 }
@@ -194,137 +184,6 @@ impl Model {
         }
         1.0 - num_intersects as f32 / num as f32
     }
-}
-
-// -------------------------- Funciones auxiliares ---------------------------
-
-/// Calcula la existencia de intersección entre rayo y geometría, e indica el punto de intersección
-///
-/// ray_origin: punto de origen del rayo en coordenadas globales (Vector3)
-/// ray_dir: dirección del rayo en coordenadas globales (Vector3)
-/// poly: polígono 2D (XY), Polygon: Vec[Point2, ...]
-///
-/// - Transforma el rayo al espacio del polígono
-/// - Calcula el punto de intersección del rayo transformado con el plano XY
-/// - Comprueba si el punto está en el interior del polígono
-/// - Transforma el punto al espacio del rayo (coordenadas globales)
-///
-/// Si no devolvemos el punto de intersección ahorraríamos una transformación
-pub fn intersectPoly2D(
-    ray_origin: Point<f32, 3_usize>,
-    ray_dir: Vector3<f32>,
-    geom: &Geometry,
-) -> Option<Point<f32, 3_usize>> {
-    // Matrices de transformación de geometría
-    let trans = transformMatrix(geom.tilt, geom.azimuth, geom.position.unwrap());
-    let transInv = trans.inverse();
-
-    // Inverse transform of ray (we keep the 2D polygon as is and transform the ray)
-    let inv_ray_o = transInv * ray_origin;
-    // En JS es transInv.extractRotation porque no diferencia Vector de Point
-    let inv_ray_d = transInv * ray_dir;
-
-    // Normal to the planar polygon
-    let n_p = findPoly2DNormal(&geom.polygon);
-    // Check if ray is parallel to the polygon
-    let denominator = n_p.dot(&inv_ray_d);
-    if denominator.abs() < EPSILON {
-        return None;
-    }
-
-    // Find intersection of ray with XY plane
-    let poly_o_to_ray = point![geom.polygon[0].x, geom.polygon[0].y, 0.0] - inv_ray_o;
-    let t = n_p.dot(&poly_o_to_ray) / denominator;
-
-    // We only consider positive t (it's a ray!)
-    if t < 0.0 {
-        return None;
-    }
-    let intersection_point = inv_ray_o + t * inv_ray_d;
-
-    // Verify that the point falls inside the polygon
-    let point2d = intersection_point.xy();
-    // TODO: Pending optimization: check if point is in the 2D AABB
-    let point_is_inside = pointInPolygon2D(point2d, &geom.polygon);
-
-    // Return the transformed back intersection point (global coords) or None
-    if point_is_inside {
-        Some(trans * intersection_point)
-    } else {
-        None
-    }
-}
-
-// Test 2D de punto en polígono usando el método de Heines
-// http://erich.realtimerendering.com/ptinpoly/
-// Cuenta el número de cruces haciendo raycasting desde el punto para ver si está dentro (cruces impares) o fuera (cruces pares)
-// Evita el cálculo de las intersecciones y la división por cero viendo los cambios de signo
-// https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon/2922778#2922778
-// ver https://docs.rs/geo/0.2.6/src/geo/.cargo/registry/src/github.com-1ecc6299db9ec823/geo-0.2.6/src/algorithm/contains.rs.html#9-33
-// https://docs.rs/geo/0.18.0/geo/algorithm/contains/trait.Contains.html
-// Ver algunos casos límite en https://stackoverflow.com/a/63436180
-// Evita el cálculo del punto de intersección y una división localizando la condición de cruce
-pub fn pointInPolygon2D(pt: Point2<f32>, poly: &[Point2<f32>]) -> bool {
-    let x = pt.x;
-    let y = pt.y;
-    let mut inside = false;
-
-    // Empezamos con el segmento que une el punto final con el inicial
-    let mut v_j = poly[poly.len() - 1];
-    let mut y_0 = v_j.y >= y;
-    for &v_i in poly {
-        let y_1 = v_i.y >= y;
-        // primero se mira si el lado cruza la linea horizontal en pt.y
-        // y, si es así, comprobamos si se cruza también en x para detectar que se produe el cruce
-        if y_0 != y_1 && (((v_i.y - y) * (v_j.x - v_i.x) >= (v_i.x - x) * (v_j.y - v_i.y)) == y_1) {
-            inside = !inside;
-        }
-        // Avanzamos al siguiente segmento
-        y_0 = y_1;
-        v_j = v_i;
-    }
-
-    inside
-}
-
-/// Matriz de transformación de los elementos del edificio
-///
-/// Traslada de coordenadas de opaco / sombra a coordenadas globales (giros y desplazamientos)
-fn transformMatrix(
-    tilt: f32,
-    azimuth: f32,
-    position: Point3<f32>,
-) -> Isometry<f32, Rotation<f32, 3_usize>, 3_usize> {
-    let trans = Translation3::<f32>::from(position);
-    let zrot = Rotation3::<f32>::new(Vector3::z() * azimuth.to_radians());
-    let xrot = Rotation3::<f32>::new(Vector3::x() * tilt.to_radians());
-
-    trans * zrot * xrot
-}
-
-/// Matriz de transformación de coordenadas locales de muro a coordenadas de su polígono 2D
-/// Nos sirve para pasar de las coordenadas locales del muro a las coordenadas del polígono de muro en 2D
-/// Se gira el eje X en la dirección del polígono de muro p1 - p0 y se traslada a p0 el origen
-fn wallLocal2WallPolygon(
-    wall_polygon: &[Point2<f32>],
-) -> Isometry<f32, Rotation<f32, 2_usize>, 2_usize> {
-    let v0 = wall_polygon[0];
-    let v1 = wall_polygon[1];
-    let dir_x = v1 - v0;
-    let rot = Rotation2::rotation_between(&Vector2::x(), &dir_x);
-    let trans = Translation2::from(v0);
-
-    trans * rot
-}
-
-// Normal al polígono plano
-fn findPoly2DNormal(poly: &[Point2<f32>]) -> Vector3<f32> {
-    let v0 = poly[1] - poly[0];
-    let v1 = poly[2] - poly[0];
-
-    vector![v0.x, v0.y, 0.0]
-        .cross(&vector![v1.x, v1.y, 0.0])
-        .normalize()
 }
 
 // Calcula los puntos de origen en el hueco para el cálculo de fracción sombreada

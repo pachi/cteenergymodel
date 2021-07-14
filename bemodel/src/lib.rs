@@ -15,6 +15,7 @@ pub mod model_n50;
 pub mod model_qsoljul;
 pub mod model_transmittance;
 pub mod model_check;
+pub mod geometry;
 mod utils;
 
 pub use climatedata::*;
