@@ -17,7 +17,9 @@ impl Model {
     ///     - Muros sin referencias de espacios válidas
     ///     - Muros sin referencias de construcciones válidas
     ///     - Muros con nextto con referencia no válida
-    /// TODO: - comprobar que elementos geométricos tengan punto de inserción != None
+    /// TODO: Comprobaciones pendientes
+    ///     - comprobar que elementos geométricos tengan punto de inserción != None
+    ///     - la superficie de elemento (wall.a) coincide con la de su polígono
     pub fn check_model(&self) -> Vec<Warning> {
         use WarningLevel::WARNING;
 

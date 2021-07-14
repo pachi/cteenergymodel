@@ -139,7 +139,7 @@ pub struct Wall {
     /// Nombre del elemento opaco
     pub name: String,
     /// Superficie neta (sin huecos) del elemento opaco (m2)
-    /// TODO: a eliminar
+    /// TODO: a eliminar, podría estar definida por el polígono
     #[serde(rename = "A")]
     pub area: f32,
     /// Condiciones de contorno del cerramiento:
