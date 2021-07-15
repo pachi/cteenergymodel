@@ -86,7 +86,10 @@ impl Model {
     }
 
     /// Iterador de los huecos pertenecientes a un muro
-    pub fn wincons_of_window_iter<'a>(&'a self, wallid: &'a str) -> impl Iterator<Item = &'a Window> {
+    pub fn wincons_of_window_iter<'a>(
+        &'a self,
+        wallid: &'a str,
+    ) -> impl Iterator<Item = &'a Window> {
         self.windows.iter().filter(move |w| w.wall == wallid)
     }
 
@@ -171,7 +174,11 @@ impl Model {
             .iter()
             .filter_map(|s| {
                 if s.inside_tenv {
-                    Some(s.area * (s.height - self.top_wall_thickness_of_space(&s.id)) * s.multiplier)
+                    Some(
+                        s.area
+                            * (s.height - self.top_wall_thickness_of_space(&s.id))
+                            * s.multiplier,
+                    )
                 } else {
                     None
                 }
@@ -188,7 +195,11 @@ impl Model {
             .iter()
             .filter_map(|s| {
                 if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
-                    Some(s.area * (s.height - self.top_wall_thickness_of_space(&s.id)) * s.multiplier)
+                    Some(
+                        s.area
+                            * (s.height - self.top_wall_thickness_of_space(&s.id))
+                            * s.multiplier,
+                    )
                 } else {
                     None
                 }
@@ -208,10 +219,7 @@ impl Model {
         let area: f32 = self
             .walls_of_envelope_iter()
             .map(|w| {
-                let multiplier = self
-                    .space_of_wall(&w)
-                    .map(|s| s.multiplier)
-                    .unwrap_or(1.0);
+                let multiplier = self.space_of_wall(&w).map(|s| s.multiplier).unwrap_or(1.0);
                 let win_area: f32 = self.wincons_of_window_iter(&w.id).map(|win| win.area).sum();
                 (w.area + win_area) * multiplier
             })
