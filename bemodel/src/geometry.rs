@@ -92,9 +92,9 @@ fn local_to_global_transform(
     azimuth: f32,
     position: Option<Point3<f32>>,
 ) -> Option<Isometry<f32, Rotation<f32, 3_usize>, 3_usize>> {
-    let trans = Translation3::<f32>::from(position?);
-    let zrot = Rotation3::<f32>::new(Vector3::z() * azimuth.to_radians());
-    let xrot = Rotation3::<f32>::new(Vector3::x() * tilt.to_radians());
+    let trans = Translation3::from(position?);
+    let zrot = Rotation3::new(Vector3::z() * azimuth.to_radians());
+    let xrot = Rotation3::new(Vector3::x() * tilt.to_radians());
 
     Some(trans * zrot * xrot)
 }
