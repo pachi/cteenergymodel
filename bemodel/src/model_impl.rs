@@ -6,8 +6,10 @@
 
 use log::{info, warn};
 
-use super::{BoundaryType, Model, Space, SpaceType, Tilt, Wall, WallCons, Window, WindowCons};
-use crate::utils::fround2;
+use crate::{
+    geometry::shades_for_window_setback, utils::fround2, BoundaryType, Model, Shade, Space,
+    SpaceType, Tilt, Wall, WallCons, Window, WindowCons,
+};
 
 impl Model {
     /// Localiza espacio
@@ -131,6 +133,18 @@ impl Model {
                     .unwrap_or(false)
             })
             .flat_map(move |wall| self.windows.iter().filter(move |w| w.wall == wall.id))
+    }
+
+    /// Genera todas las sombras de retranqueo de los huecos del modelo
+    pub fn windows_setback_shades(&self) -> Vec<Shade> {
+        self.windows
+            .iter()
+            .filter_map(|window| match self.wall_of_window(window) {
+                Some(wall) => Some(shades_for_window_setback(wall, window)),
+                _ => None,
+            })
+            .flatten()
+            .collect()
     }
 
     /// Calcula la superficie útil de los espacios habitables de la envolvente térmica [m²]

@@ -51,3 +51,18 @@ pub fn uuid_from_obj(obj: &impl std::fmt::Debug) -> String {
         &h[20..32]
     )
 }
+
+/// Calcula UUID a partir de cadena
+///
+/// Este no es un método muy robusto pero da valores estables para los mismos objetos
+pub fn uuid_from_str(str: &str) -> String {
+    let h = format!("{:x}", md5::compute(str.as_bytes()));
+    format!(
+        "{}-{}-{}-{}-{}",
+        &h[0..8],
+        &h[8..12],
+        &h[12..16],
+        &h[16..20],
+        &h[20..32]
+    )
+}
