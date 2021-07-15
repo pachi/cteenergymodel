@@ -134,15 +134,15 @@ impl Model {
         };
 
         // Conversión a coordenadas globales
-        let wallTransform = geometry.local_to_global().unwrap(); //transformMatrix(*tilt, *azimuth, position.unwrap());
+        let to_global_tr = geometry.local_to_global().unwrap(); //transformMatrix(*tilt, *azimuth, position.unwrap());
                                                                  // Conversión de coordenadas locales de muro a coordenadas de polígono de muro
-        let wallLocal2WallPolyTransform = geometry.local_to_polygon().unwrap(); //wallLocal2WallPolygon(polygon);
+        let to_poly_tr = geometry.local_to_polygon().unwrap(); //wallLocal2WallPolygon(polygon);
 
         // Compute ray origin points on window for shading tests
-        let points: Vec<Point3<f32>> = getWindowPoints(&window)
+        let points: Vec<Point3<f32>> = ray_origins_for_window(&window)
             .iter()
-            .map(|p| wallLocal2WallPolyTransform * p)
-            .map(|p| wallTransform * point![p.x, p.y, 0.0])
+            .map(|p| to_poly_tr * p)
+            .map(|p| to_global_tr * point![p.x, p.y, 0.0])
             .collect();
 
         // Elementos oclusores, muros y sombras
@@ -186,13 +186,15 @@ impl Model {
     }
 }
 
-// Calcula los puntos de origen en el hueco para el cálculo de fracción sombreada
-//
-// Parte de una retícula de 10x10 elementos, que daría un 1% de cobertura por cada celda
-// Se podría optimizar la heurística, afinando el valor de N=10 en función del
-// tamaño y proporción del hueco (p.e. para que sean más o menos cuadradas las celdas)
-// aunque se pierda precisión en huecos pequeños la resolución sería similar en ambas direcciones
-fn getWindowPoints(window: &Window) -> Vec<Point2<f32>> {
+/// Calcula los puntos de origen en el hueco para el cálculo de fracción sombreada
+///
+/// Parte de una retícula de 10x10 elementos, que daría un 1% de cobertura por cada celda
+/// Potenciales mejoras:
+/// - optimizar la heurística, afinando el valor de N=10 en función del
+///   tamaño y proporción del hueco (p.e. para que sean más o menos cuadradas las celdas)
+///   aunque se pierda precisión en huecos pequeños la resolución sería similar en ambas direcciones
+/// - en cada rectángulo el punto de muestreo podría ser aleatorio y no el punto central
+fn ray_origins_for_window(window: &Window) -> Vec<Point2<f32>> {
     const N: usize = 10;
     let WindowGeometry {
         position,
