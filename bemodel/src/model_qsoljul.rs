@@ -11,11 +11,11 @@
 use std::{collections::HashMap, convert::From, f32::consts::PI};
 
 use log::{debug, info, warn};
-use na::{point, vector, Point2, Point3};
+use na::{point, vector, Point3};
 
 use super::{
     BoundaryType::{ADIABATIC, EXTERIOR},
-    Model, Orientation, QSolJulData, Window, WindowGeometry,
+    Geometry, Model, Orientation, QSolJulData, Shade, Wall, Window,
 };
 
 impl Model {
@@ -87,9 +87,12 @@ impl Model {
     ///
     /// Considera la sombra de muros y sombras sobre el hueco
     pub fn fshobst_for_sun_pos(&self, sun_azimuth: f32, sun_altitude: f32) -> HashMap<String, f32> {
+        let setback_shades = self.windows_setback_shades();
+        let occluders = self.get_occluders(&setback_shades);
+
         let mut map: HashMap<String, f32> = HashMap::new();
         for w in &self.windows {
-            let sunlit = self.sunlit_fraction(w, sun_azimuth, sun_altitude);
+            let sunlit = self.sunlit_fraction(w, &occluders, sun_azimuth, sun_altitude);
             // map.insert(w.id.clone(), sunlit);
             map.insert(w.name.clone(), sunlit);
         }
@@ -103,7 +106,13 @@ impl Model {
     /// window: window.id
     /// Azimuth (S=0, E=90, W=-90)
     /// Altura solar (Horiz=0, vert=90), en grados
-    pub fn sunlit_fraction(&self, window: &Window, sun_azimuth: f32, sun_altitude: f32) -> f32 {
+    pub fn sunlit_fraction(
+        &self,
+        window: &Window,
+        occluders: &[(&String, &String, &Geometry)],
+        sun_azimuth: f32,
+        sun_altitude: f32,
+    ) -> f32 {
         let sazim = (sun_azimuth * PI) / 180.0;
         let salt = (sun_altitude * PI) / 180.0;
         // Direction pointing towards the sun in the XYZ coordinate system (Z up, +X=E, +Y=N)
@@ -133,46 +142,15 @@ impl Model {
             return 1.0;
         };
 
-        // Conversión a coordenadas globales
-        let to_global_tr = geometry.local_to_global().unwrap(); //transformMatrix(*tilt, *azimuth, position.unwrap());
-                                                                 // Conversión de coordenadas locales de muro a coordenadas de polígono de muro
-        let to_poly_tr = geometry.local_to_polygon().unwrap(); //wallLocal2WallPolygon(polygon);
-
-        // Compute ray origin points on window for shading tests
-        let points: Vec<Point3<f32>> = ray_origins_for_window(&window)
-            .iter()
-            .map(|p| to_poly_tr * p)
-            .map(|p| to_global_tr * point![p.x, p.y, 0.0])
-            .collect();
-
-        // Elementos oclusores, muros y sombras
-        // - Debe excluir el muro del hueco para tener en cuenta retranqueos y evitar problemas numéricos
-        // Optimizaciones implementadas:
-        // - no buscar en muros interiores ni en contacto con el terreno (hecho)
-        // TODO: Posibles optimizaciones
-        // - agrupar elementos por zona / planta y localizar primero si se produce la intersección por zona / planta con AABB (estructura BVH)
-        //      - precalcular AABB de zonas
-        // - ignorar muros no enfrentados (producto escalar de normales > 0) al hueco, ya que no se ven
-        //      - precalcular normales de muros?
-        // - probar en primer lugar el opaco con el que se produjo la colisión en la última iteración
-        let mut occluders: Vec<_> = self
-            .walls
-            .iter()
-            // Exceptuamos el muro del hueco
-            .filter(|&e| e.id != winWall.id)
-            // Exceptuamos elementos interiores y en contacto con el terreno
-            .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
-            .map(|e| (&e.name, &e.geometry))
-            .collect();
-        let occ_shades = self.shades.iter().map(|e| (&e.name, &e.geometry));
-        // TODO: añadir aletas laterales de retranqueos de ventana a las sombras.
-
-        occluders.extend(occ_shades);
-
+        let points: Vec<Point3<f32>> = ray_origins_for_window(&winWall, &window);
         let num = points.len();
         let mut num_intersects = 0;
         for ray_orig in points {
-            for (_name, geometry) in &occluders {
+            for (_name, id, geometry) in occluders {
+                // Excluimos el propio muro del hueco
+                if id.as_str() == winWall.id.as_str() {
+                    continue;
+                };
                 let intersection = geometry.intersect(ray_orig, ray_dir);
                 if intersection.is_some() {
                     // debug!("La intersección del elemento oclusor {} y el rayo con origen {} y dirección {} es: t: {}, punto: {:#?}",
@@ -184,33 +162,58 @@ impl Model {
         }
         1.0 - num_intersects as f32 / num as f32
     }
+
+    pub fn get_occluders<'a>(
+        &'a self,
+        setback_shades: &'a [Shade],
+    ) -> Vec<(&'a String, &'a String, &'a Geometry)> {
+        let mut occluders: Vec<_> = self
+            .walls
+            .iter()
+            .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
+            .map(|e| (&e.name, &e.id, &e.geometry))
+            .collect();
+        occluders.extend(self.shades.iter().map(|e| (&e.name, &e.id, &e.geometry)));
+        occluders.extend(setback_shades.iter().map(|e| (&e.name, &e.id, &e.geometry)));
+        occluders
+    }
 }
 
 /// Calcula los puntos de origen en el hueco para el cálculo de fracción sombreada
 ///
-/// Parte de una retícula de 10x10 elementos, que daría un 1% de cobertura por cada celda
+/// Parte de una retícula de 10x10 bloques, para un 1% de cobertura por bloque
 /// Potenciales mejoras:
-/// - optimizar la heurística, afinando el valor de N=10 en función del
-///   tamaño y proporción del hueco (p.e. para que sean más o menos cuadradas las celdas)
-///   aunque se pierda precisión en huecos pequeños la resolución sería similar en ambas direcciones
+/// - afinar el valor de N=10 según tamaño y proporción del hueco
+///     - (p.e. para que sean más o menos cuadradas las celdas)
+///       aunque se pierda precisión en huecos pequeños la resolución sería similar en ambas direcciones
+///     - evitar bloque < 0.1 x 0.1 m
 /// - en cada rectángulo el punto de muestreo podría ser aleatorio y no el punto central
-fn ray_origins_for_window(window: &Window) -> Vec<Point2<f32>> {
+fn ray_origins_for_window(wall: &Wall, window: &Window) -> Vec<Point3<f32>> {
+    // Situamos NxN puntos en el plano del muro
     const N: usize = 10;
-    let WindowGeometry {
-        position,
-        width,
-        height,
-        ..
-    } = window.geometry;
-    let stepX = width / N as f32;
-    let stepY = height / N as f32;
-    let mut points = vec![];
-    let (x, y) = match position {
+    let wg = &window.geometry;
+
+    let (x, y) = match wg.position {
         Some(p) => (p.x, p.y),
-        // devolvemos una lista vacía de puntos, no hay definición geométrica
+        // Sin definición geométrica de hueco devolvemos una lista vacía de puntos
         _ => return Vec::new(),
     };
 
+    // Conversión a coordenadas globales desde coordenadas de muro
+    // Conversión de coordenadas locales de muro a coordenadas de polígono de muro
+    let (to_global_tr, to_poly_tr) = match (
+        wall.geometry.local_to_global(),
+        wall.geometry.local_to_polygon(),
+    ) {
+        (Some(to_global), Some(to_poly)) => (to_global, to_poly),
+        // Sin definición geométrica del hueco devolvemos una lista vacía de puntos
+        _ => return Vec::new(),
+    };
+
+    // Puntos 2D del centro de cada bloque en el plano del muro
+    let stepX = wg.width / N as f32;
+    let stepY = wg.height / N as f32;
+    let mut points = vec![];
     for j in 0..N {
         for i in 0..N {
             let px = x + (i as f32 + 0.5) * stepX;
@@ -219,5 +222,10 @@ fn ray_origins_for_window(window: &Window) -> Vec<Point2<f32>> {
         }
     }
 
+    // Puntos 3D en el plano de retranqueo
     points
+        .iter()
+        .map(|p| to_poly_tr * p)
+        .map(|p| to_global_tr * point![p.x, p.y, -wg.setback])
+        .collect()
 }

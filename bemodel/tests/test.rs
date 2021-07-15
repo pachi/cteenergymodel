@@ -67,34 +67,39 @@ fn model_json_conversion() {
     // Sombras
     let sun_azimuth = 0.0;
     let sun_altitude = 45.0;
-    // Ventana P04_E03_PE009_V sunlit = 0.7 - Bloquea Sombra011
+    let setback_shades = model.windows_setback_shades();
+    let occluders = model.get_occluders(&setback_shades);
+    // Ventana P04_E03_PE009_V sunlit = 0.7 - Bloquea Sombra011 + retranqueo 20cm
     assert_almost_eq!(
         model.sunlit_fraction(
             get_window(&model, "P04_E03_PE009_V"),
+            &occluders,
             sun_azimuth,
             sun_altitude
         ),
-        0.7
+        0.6
     );
 
-    // Ventana P01_E04_PE001_V = 0.9 - Bloquea Sombra003
+    // Ventana P01_E04_PE001_V = 0.9 - Bloquea Sombra003 + retranqueo 20cm
     assert_almost_eq!(
         model.sunlit_fraction(
             get_window(&model, "P01_E04_PE001_V"),
+            &occluders,
             sun_azimuth,
             sun_altitude
         ),
-        0.9
+        0.8
     );
 
-    // P04_E03_PE009_V_8 = 1 (sin retranqueos)
+    // P04_E03_PE009_V_8 = 0.8 (retranqueo 20 cm, sin alero)
     assert_almost_eq!(
         model.sunlit_fraction(
             get_window(&model, "P04_E03_PE009_V_8"),
+            &occluders,
             sun_azimuth,
             sun_altitude
         ),
-        1.0
+        0.8
     );
 
     let map = model.fshobst_for_sun_pos(0.0, 45.0);
