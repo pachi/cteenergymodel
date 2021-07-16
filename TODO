@@ -1,7 +1,10 @@
 # TAREAS PENDIENTES
 
-- Trasladar avisos en la conversión de modelos BDL
 - generar UUID reproducibles, con rnd y una semilla para generar los UUID. https://stackoverflow.com/a/56757552, https://github.com/uuid-rs/uuid/issues/100
+- Convertir name e id a ArrayString y UUID
+    - https://docs.rs/arrayvec/0.7.1/arrayvec/struct.ArrayString.html
+    - https://docs.rs/uuid/0.8.2/uuid/
+- Trasladar avisos en la conversión de modelos BDL
 - Con makefile generar .json y llevar a tests de hulc a bemodel en .json y copiar archivos .ctehexml, .tbl y .kyg a hulc2model
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
 - mover cosas de climas a otro crate
@@ -19,15 +22,14 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 ## cte::Data
 
 # Lamas en huecos
-- Dar soporte a lamas horizontales y verticales, igual que hacemos con el retranqueo
+- Dar soporte a lamas horizontales y verticales
 
 ### Sombras
 - http://performativedesign.com/articles/2007/shadingcalculations/
 - http://performativedesign.com/articles/2008/averagehourly/
 - https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf
 - https://idus.us.es/handle/11441/15301 p. 124
-- En el futuro podríamos añadir a las sombras la posibilidad de que tengan o no un elemento asociado para evitar calcular las sombras de otros huecos
-- Los muros arrojan sombras sobre cualquier hueco
+- Optimizar cálculo de intersecciones en sombras con BVH de AABB
 - Hacemos cálculos horarios de radiación incidente
     - ESP-r usa malla de 20x20 elementos por ventana y comprueba la colisión desde el centro, comprobando un día de cada mes (el de declinación media).
     -  DOE2 usa el primer día del mes.
