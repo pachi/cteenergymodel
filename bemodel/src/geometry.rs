@@ -169,7 +169,10 @@ fn poly_normal(poly: &[Point2<f32>]) -> Vector3<f32> {
 }
 
 /// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
-pub(crate) fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<Shade> {
+pub(crate) fn shades_for_window_setback(
+    wall: &super::Wall,
+    win: &super::Window,
+) -> Vec<(String, Shade)> {
     let wing = &win.geometry;
     // Si no hay retranqueo no se genera geometría
     if win.geometry.setback.abs() < 0.01 {
@@ -251,5 +254,10 @@ pub(crate) fn shades_for_window_setback(wall: &super::Wall, win: &super::Window)
         },
     };
 
-    vec![overhang, left_fin, right_fin, sill]
+    vec![
+        (win.id.clone(), overhang),
+        (win.id.clone(), left_fin),
+        (win.id.clone(), right_fin),
+        (win.id.clone(), sill),
+    ]
 }

@@ -136,7 +136,7 @@ impl Model {
     }
 
     /// Genera todas las sombras de retranqueo de los huecos del modelo
-    pub fn windows_setback_shades(&self) -> Vec<Shade> {
+    pub fn windows_setback_shades(&self) -> Vec<(String, Shade)> {
         self.windows
             .iter()
             .filter_map(|window| match self.wall_of_window(window) {

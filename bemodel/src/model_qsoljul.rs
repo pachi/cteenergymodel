@@ -111,7 +111,7 @@ impl Model {
     pub fn sunlit_fraction(
         &self,
         window: &Window,
-        occluders: &[(&String, &String, &Geometry)],
+        occluders: &[(&String, &String, Option<&String>, &Geometry)],
         sun_azimuth: f32,
         sun_altitude: f32,
     ) -> f32 {
@@ -156,11 +156,18 @@ impl Model {
         let num = points.len();
         let mut num_intersects = 0;
         for ray_orig in points {
-            for (_name, id, geometry) in occluders {
-                // Excluimos el propio muro del hueco
+            for (_name, id, origin_id, geometry) in occluders {
+                // Descartamos el muro al que pertenece el hueco
                 if id.as_str() == window_wall.id.as_str() {
                     continue;
                 };
+                // Descartamos las sombras de retranqueo que no provienen del hueco
+                if let Some(id) = origin_id {
+                    if *id != &window.id {
+                        continue;
+                    };
+                }
+
                 let intersection = geometry.intersect(ray_orig, ray_dir);
                 if intersection.is_some() {
                     // debug!("La intersección del elemento oclusor {} y el rayo con origen {} y dirección {} es: t: {}, punto: {:#?}",
@@ -182,16 +189,24 @@ impl Model {
     /// - https://tavianator.com/2011/ray_box.html
     pub fn get_occluders<'a>(
         &'a self,
-        setback_shades: &'a [Shade],
-    ) -> Vec<(&'a String, &'a String, &'a Geometry)> {
+        setback_shades: &'a [(String, Shade)],
+    ) -> Vec<(&'a String, &'a String, Option<&String>, &'a Geometry)> {
         let mut occluders: Vec<_> = self
             .walls
             .iter()
             .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
-            .map(|e| (&e.name, &e.id, &e.geometry))
+            .map(|e| (&e.name, &e.id, None, &e.geometry))
             .collect();
-        occluders.extend(self.shades.iter().map(|e| (&e.name, &e.id, &e.geometry)));
-        occluders.extend(setback_shades.iter().map(|e| (&e.name, &e.id, &e.geometry)));
+        occluders.extend(
+            self.shades
+                .iter()
+                .map(|e| (&e.name, &e.id, None, &e.geometry)),
+        );
+        occluders.extend(
+            setback_shades
+                .iter()
+                .map(|(wid, e)| (&e.name, &e.id, Some(wid), &e.geometry)),
+        );
         occluders
     }
 }
