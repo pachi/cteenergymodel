@@ -102,6 +102,7 @@ impl Model {
     /// Fracción del hueco con radiación solar directa para la posición solar dada [0.0 - 1.0]
     ///
     /// Devuelve 1.0 (sin obstrucción) para definición geométrica incompleta (sin posición o hueco sin muro)
+    /// Devuelve 0.0 para huecos cuya normal no mira hacia el sol (backface culling)
     ///
     /// window: window.id
     /// occluders: lista de potenciales elementos oclusores (name, id, geometry)
@@ -145,7 +146,13 @@ impl Model {
             return 1.0;
         };
 
-        let points: Vec<Point3<f32>> = ray_origins_for_window(&winWall, &window);
+        // Comprobamos que la normal del muro y el rayo hacia el sol no son opuestos (backface culling)
+        // Si no, el rayo iría al interior del hueco, está en sombra, y devolvemos 0.0
+        if window_wall.geometry.normal().dot(&ray_dir) < 0.01 {
+            return 0.0;
+        }
+
+        let points: Vec<Point3<f32>> = ray_origins_for_window(&window_wall, &window);
         let num = points.len();
         let mut num_intersects = 0;
         for ray_orig in points {
