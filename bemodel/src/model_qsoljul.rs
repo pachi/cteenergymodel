@@ -125,7 +125,7 @@ impl Model {
         ]
         .normalize();
 
-        let window_wall = match self.walls.iter().find(|w| w.id == window.wall) {
+        let window_wall = match self.wall_of_window(window) {
             None => {
                 warn!(
                     "Hueco {} (id: {}) sin muro asociado con id: {}. Se considera superficie soleada al 100%",
