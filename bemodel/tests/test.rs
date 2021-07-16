@@ -2,7 +2,9 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use bemodel::{climatedata, geometry::point_in_poly, Geometry, Model, Window};
+use bemodel::{
+    climatedata, geometry::point_in_poly, model_qsoljul::ray_to_sun, Geometry, Model, Window,
+};
 use nalgebra::{point, vector};
 
 extern crate env_logger;
@@ -67,38 +69,31 @@ fn model_json_conversion() {
     // Sombras
     let sun_azimuth = 0.0;
     let sun_altitude = 45.0;
+    let ray_dir = ray_to_sun(sun_azimuth, sun_altitude);
+
     let setback_shades = model.windows_setback_shades();
-    let occluders = model.get_occluders(&setback_shades);
+    let occluders = model.find_occluders(&setback_shades);
     // Ventana P04_E03_PE009_V sunlit = 0.7 - Bloquea Sombra011 + retranqueo 20cm
+    let window = get_window(&model, "P04_E03_PE009_V");
+    let ray_origins = model.ray_origins_for_window(&window);
     assert_almost_eq!(
-        model.sunlit_fraction(
-            get_window(&model, "P04_E03_PE009_V"),
-            &occluders,
-            sun_azimuth,
-            sun_altitude
-        ),
+        model.sunlit_fraction(&window, &occluders, &ray_dir, &ray_origins),
         0.6
     );
 
     // Ventana P01_E04_PE001_V = 0.9 - Bloquea Sombra003 + retranqueo 20cm
+    let window = get_window(&model, "P01_E04_PE001_V");
+    let ray_origins = model.ray_origins_for_window(&window);
     assert_almost_eq!(
-        model.sunlit_fraction(
-            get_window(&model, "P01_E04_PE001_V"),
-            &occluders,
-            sun_azimuth,
-            sun_altitude
-        ),
+        model.sunlit_fraction(&window, &occluders, &ray_dir, &ray_origins),
         0.8
     );
 
     // P04_E03_PE009_V_8 = 0.8 (retranqueo 20 cm, sin alero)
+    let window = get_window(&model, "P04_E03_PE009_V_8");
+    let ray_origins = model.ray_origins_for_window(&window);
     assert_almost_eq!(
-        model.sunlit_fraction(
-            get_window(&model, "P04_E03_PE009_V_8"),
-            &occluders,
-            sun_azimuth,
-            sun_altitude
-        ),
+        model.sunlit_fraction(&window, &occluders, &ray_dir, &ray_origins),
         0.8
     );
 
@@ -199,7 +194,7 @@ fn intersections() {
         info!("Polígono: {:?}", geo.polygon);
         info!("Posición: {:?}", geo.position);
         info!("Rayo: {}, {}", r_orig, r_dir);
-        let result = &geo.intersect(r_orig, r_dir);
+        let result = &geo.intersect(&r_orig, &r_dir);
         info!("Intersección con rayo: {:?}", result);
         assert!(res == result.is_some());
     }

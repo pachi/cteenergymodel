@@ -39,7 +39,7 @@ impl Geometry {
     /// - Calcula el punto de intersección del rayo transformado con el plano XY
     /// - Comprueba si el punto está en el interior del polígono
     /// - Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
-    pub fn intersect(&self, ray_origin: Point<f32, 3_usize>, ray_dir: Vector3<f32>) -> Option<f32> {
+    pub fn intersect(&self, ray_origin: &Point<f32, 3_usize>, ray_dir: &Vector3<f32>) -> Option<f32> {
         // Matrices de transformación de geometría
         let trans = local_to_global_transform(self.tilt, self.azimuth, self.position)?;
         let transInv = trans.inverse();
