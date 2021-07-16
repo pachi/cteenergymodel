@@ -8,7 +8,7 @@
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
 #![allow(non_snake_case)]
 
-use std::{collections::HashMap, convert::From, f32::consts::PI};
+use std::{collections::HashMap, convert::From};
 
 use log::{debug, info, warn};
 use na::{point, vector, Point3};
@@ -104,6 +104,7 @@ impl Model {
     /// Devuelve 1.0 (sin obstrucción) para definición geométrica incompleta (sin posición o hueco sin muro)
     ///
     /// window: window.id
+    /// occluders: lista de potenciales elementos oclusores (name, id, geometry)
     /// Azimuth (S=0, E=90, W=-90)
     /// Altura solar (Horiz=0, vert=90), en grados
     pub fn sunlit_fraction(
@@ -113,9 +114,9 @@ impl Model {
         sun_azimuth: f32,
         sun_altitude: f32,
     ) -> f32 {
-        let sazim = (sun_azimuth * PI) / 180.0;
-        let salt = (sun_altitude * PI) / 180.0;
-        // Direction pointing towards the sun in the XYZ coordinate system (Z up, +X=E, +Y=N)
+        let sazim = sun_azimuth.to_radians();
+        let salt = sun_altitude.to_radians();
+        // Direction **pointing towards the sun** in the XYZ coordinate system (Z up, +X=E, +Y=N)
         let ray_dir = vector![
             salt.cos() * sazim.sin(),
             -salt.cos() * sazim.cos(),
@@ -123,17 +124,19 @@ impl Model {
         ]
         .normalize();
 
-        let winWall = self.walls.iter().find(|w| w.id == window.wall);
-        if winWall.is_none() {
-            warn!(
-                "Hueco {} (id: {}) sin muro asociado con id: {}. Se considera superficie soleada al 100%",
-                window.name, window.id, window.wall
-            );
-            return 1.0;
+        let window_wall = match self.walls.iter().find(|w| w.id == window.wall) {
+            None => {
+                warn!(
+                    "Hueco {} (id: {}) sin muro asociado con id: {}. Se considera superficie soleada al 100%",
+                    window.name, window.id, window.wall
+                );
+                return 1.0;
+            }
+            Some(wall) => wall,
         };
-        let winWall = winWall.unwrap();
 
-        let geometry = &winWall.geometry;
+        // Elementos sin definición geométrica completa. No podemos calcular las obstrucciones
+        let geometry = &window_wall.geometry;
         if geometry.position.is_none() {
             warn!(
                 "Hueco {} (id: {}) sin definición geométrica completa. Se considera superficie soleada al 100%",
@@ -148,7 +151,7 @@ impl Model {
         for ray_orig in points {
             for (_name, id, geometry) in occluders {
                 // Excluimos el propio muro del hueco
-                if id.as_str() == winWall.id.as_str() {
+                if id.as_str() == window_wall.id.as_str() {
                     continue;
                 };
                 let intersection = geometry.intersect(ray_orig, ray_dir);
