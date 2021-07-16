@@ -20,6 +20,15 @@ const EPSILON: f32 = 1e-5;
 // -------------------------- Funciones auxiliares ---------------------------
 
 impl Geometry {
+    /// Vector unitario normal a la geometría, en coordenadas globales
+    pub fn normal(&self) -> Vector3<f32> {
+        let n_p = poly_normal(&self.polygon);
+        let zrot = Rotation3::new(Vector3::z() * self.azimuth.to_radians());
+        let xrot = Rotation3::new(Vector3::x() * self.tilt.to_radians());
+        let tr = zrot * xrot;
+        tr * n_p
+    }
+
     /// Calcula la intersección entre rayo y geometría, e indica el factor t en la dirección del rayo
     ///
     /// ray_origin: punto de origen del rayo en coordenadas globales (Vector3)
