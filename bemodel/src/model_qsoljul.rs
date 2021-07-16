@@ -163,6 +163,13 @@ impl Model {
         1.0 - num_intersects as f32 / num as f32
     }
 
+    /// Genera lista de elementos oclusores a partir de muros, sombras y sombras de retranqueo
+    /// Guarda el nombre del oclusor, su id y la geometría
+    /// TODO: optimizar cálculo de colisiones
+    /// TODO: - generar BVH AABB
+    /// TODO: - marcar sombras de huecos por hueco (para solo probar las que pertenecen al hueco)
+    /// - https://gamedev.stackexchange.com/a/21030
+    /// - https://tavianator.com/2011/ray_box.html
     pub fn get_occluders<'a>(
         &'a self,
         setback_shades: &'a [Shade],

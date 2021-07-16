@@ -117,15 +117,15 @@ fn local_to_polygon_transform(
     Some(trans * rot)
 }
 
-// Test 2D de punto en polígono usando el método de Heines
-// http://erich.realtimerendering.com/ptinpoly/
-// Cuenta el número de cruces haciendo raycasting desde el punto para ver si está dentro (cruces impares) o fuera (cruces pares)
-// Evita el cálculo de las intersecciones y la división por cero viendo los cambios de signo
-// https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon/2922778#2922778
-// ver https://docs.rs/geo/0.2.6/src/geo/.cargo/registry/src/github.com-1ecc6299db9ec823/geo-0.2.6/src/algorithm/contains.rs.html#9-33
-// https://docs.rs/geo/0.18.0/geo/algorithm/contains/trait.Contains.html
-// Ver algunos casos límite en https://stackoverflow.com/a/63436180
-// Evita el cálculo del punto de intersección y una división localizando la condición de cruce
+/// Test 2D de punto en polígono usando el método de Heines
+/// http://erich.realtimerendering.com/ptinpoly/
+/// Cuenta el número de cruces haciendo raycasting desde el punto para ver si está dentro (cruces impares) o fuera (cruces pares)
+/// Evita el cálculo de las intersecciones y la división por cero viendo los cambios de signo
+/// https://stackoverflow.com/questions/217578/how-can-i-determine-whether-a-2d-point-is-within-a-polygon/2922778#2922778
+/// ver https://docs.rs/geo/0.2.6/src/geo/.cargo/registry/src/github.com-1ecc6299db9ec823/geo-0.2.6/src/algorithm/contains.rs.html#9-33
+/// https://docs.rs/geo/0.18.0/geo/algorithm/contains/trait.Contains.html
+/// Ver algunos casos límite en https://stackoverflow.com/a/63436180
+/// Evita el cálculo del punto de intersección y una división localizando la condición de cruce
 pub fn point_in_poly(pt: Point2<f32>, poly: &[Point2<f32>]) -> bool {
     let x = pt.x;
     let y = pt.y;
@@ -149,7 +149,7 @@ pub fn point_in_poly(pt: Point2<f32>, poly: &[Point2<f32>]) -> bool {
     inside
 }
 
-// Normal al polígono plano
+/// Normal al polígono plano, en coordenadas locales
 fn poly_normal(poly: &[Point2<f32>]) -> Vector3<f32> {
     let v0 = poly[1] - poly[0];
     let v1 = poly[2] - poly[0];
