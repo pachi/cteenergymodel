@@ -111,7 +111,7 @@ impl Model {
     pub fn sunlit_fraction(
         &self,
         window: &Window,
-        occluders: &[(&String, &String, Option<&String>, &Geometry)],
+        occluders: &[Occluder],
         sun_azimuth: f32,
         sun_altitude: f32,
     ) -> f32 {
@@ -156,7 +156,13 @@ impl Model {
         let num = points.len();
         let mut num_intersects = 0;
         for ray_orig in points {
-            for (_name, id, origin_id, geometry) in occluders {
+            for Occluder {
+                id,
+                origin_id,
+                geometry,
+                ..
+            } in occluders
+            {
                 // Descartamos el muro al que pertenece el hueco
                 if id.as_str() == window_wall.id.as_str() {
                     continue;
@@ -184,31 +190,49 @@ impl Model {
     /// Guarda el nombre del oclusor, su id y la geometría
     /// TODO: optimizar cálculo de colisiones
     /// TODO: - generar BVH AABB
-    /// TODO: - marcar sombras de huecos por hueco (para solo probar las que pertenecen al hueco)
     /// - https://gamedev.stackexchange.com/a/21030
     /// - https://tavianator.com/2011/ray_box.html
-    pub fn get_occluders<'a>(
-        &'a self,
-        setback_shades: &'a [(String, Shade)],
-    ) -> Vec<(&'a String, &'a String, Option<&String>, &'a Geometry)> {
+    pub fn get_occluders<'a>(&'a self, setback_shades: &'a [(String, Shade)]) -> Vec<Occluder<'a>> {
         let mut occluders: Vec<_> = self
             .walls
             .iter()
             .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
-            .map(|e| (&e.name, &e.id, None, &e.geometry))
+            .map(|e| Occluder {
+                name: &e.name,
+                id: &e.id,
+                origin_id: None,
+                geometry: &e.geometry,
+            })
             .collect();
-        occluders.extend(
-            self.shades
-                .iter()
-                .map(|e| (&e.name, &e.id, None, &e.geometry)),
-        );
-        occluders.extend(
-            setback_shades
-                .iter()
-                .map(|(wid, e)| (&e.name, &e.id, Some(wid), &e.geometry)),
-        );
+        occluders.extend(self.shades.iter().map(|e| Occluder {
+            name: &e.name,
+            id: &e.id,
+            origin_id: None,
+            geometry: &e.geometry,
+        }));
+        occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
+            name: &e.name,
+            id: &e.id,
+            origin_id: Some(wid),
+            geometry: &e.geometry,
+        }));
         occluders
     }
+}
+
+/// Elemento oclusor, con información geométrica e identificación
+///
+/// - el id permite excluir el muro de un hueco
+/// - el origin_id permite excluir las geometrías de retranqueo que no son del hueco analizado
+pub struct Occluder<'a> {
+    /// Nombre del elemento
+    name: &'a String,
+    /// Id del elemento
+    id: &'a String,
+    /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
+    origin_id: Option<&'a String>,
+    /// Información geométrica
+    geometry: &'a Geometry,
 }
 
 /// Calcula los puntos de origen en el hueco para el cálculo de fracción sombreada
