@@ -259,6 +259,25 @@ pub struct SurfaceMonthlyRadiation {
     pub f_shwith500: [f32; 12],
 }
 
+/// Datos de radiación para un momento concreto, W/m²
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct RadData {
+    /// Mes del año [1, 12]
+    pub month: u32,
+    /// Día del mes [1, 31]
+    pub day: u32,
+    /// Hola de reloj para la localización, h [1.0, 24.0]
+    pub hour: f32,
+    /// Azimuth solar (grados) [-180.0,180.0] (-E, S=0, +W)
+    pub azimuth: f32,
+    /// Altitud solar (grados) [0.0, 90.0]
+    pub altitude: f32,
+    /// Radiación directa, W/m²
+    pub dir: f32,
+    /// Radiación difusa, W/m²
+    pub dif: f32,
+}
+
 /// Nombres para la orientación de un elemento, según los puntos cardinales
 #[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub enum ClimateZone {
