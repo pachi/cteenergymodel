@@ -5989,7 +5989,7 @@ pub static RADDATA: Lazy<Mutex<Vec<SurfaceMonthlyRadiation>>> = Lazy::new(|| {
 });
 
 /// Datos de radiación horarios para el día 21 de julio
-pub static RADDAYLYDATA: Lazy<Mutex<HashMap<ClimateZone, Vec<RadData>>>> = Lazy::new(|| {
+pub static JULYRADDATA: Lazy<Mutex<HashMap<ClimateZone, Vec<RadData>>>> = Lazy::new(|| {
     let mut map = HashMap::new();
     map.insert(
         A3c,

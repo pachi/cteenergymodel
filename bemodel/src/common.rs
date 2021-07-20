@@ -260,7 +260,7 @@ pub struct SurfaceMonthlyRadiation {
 }
 
 /// Datos de radiación para un momento concreto, W/m²
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct RadData {
     /// Mes del año [1, 12]
     pub month: u32,
