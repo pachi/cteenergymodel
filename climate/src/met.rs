@@ -289,15 +289,15 @@ pub fn met_monthly_data(metdata: &HashMap<String, MetData>) -> Vec<MonthlySurfac
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct RadData {
     /// Mes del año [1, 12]
-    pub mes: u32,
+    pub month: u32,
     /// Día del mes [1, 31]
-    pub dia: u32,
+    pub day: u32,
     /// Hola de reloj para la localización, h [1.0, 24.0]
-    pub hora: f32,
+    pub hour: f32,
     /// Azimuth solar (grados) [-180.0,180.0] (-E, S=0, +W)
     pub azimuth: f32,
     /// Altitud solar (grados) [0.0, 90.0]
-    pub altitud: f32,
+    pub altitude: f32,
     /// Radiación directa, W/m²
     pub dir: f32,
     /// Radiación difusa, W/m²
@@ -335,11 +335,11 @@ pub fn period_radiation_for_surface(
                 albedo,
             );
             RadData {
-                mes: d.month,
-                dia: d.day,
-                hora: d.hour,
+                month: d.month,
+                day: d.day,
+                hour: d.hour,
                 azimuth: d.azimuth,
-                altitud: 90.0 - d.zenith,
+                altitude: 90.0 - d.zenith,
                 dir: radiation.dir,
                 dif: radiation.dif,
             }
@@ -380,7 +380,7 @@ pub (crate) fn monthly_radiation_for_surface(
     let mut fshwi300 = vec![];
     let mut fshwi500 = vec![];
     for &imes in &MONTH_N {
-        let surfrad = surf_radiation.iter().filter(|&d| d.mes == imes);
+        let surfrad = surf_radiation.iter().filter(|&d| d.month == imes);
         let mut t_dir = 0.0;
         let mut t_dif = 0.0;
         let mut t_tot = 0.0;
@@ -430,11 +430,11 @@ pub fn met_july21st_radiation_data(metdata: &HashMap<String, MetData>) -> HashMa
         let zonerad = zonemetdata.data.iter()
             .filter(|d| d.month == 7 && d.day == 21 && (d.rdifhor > 0.0 || d.rdirhor > 0.0))
             .map(|d| RadData {
-                mes: d.month,
-                dia: d.day,
-                hora: d.hour,
+                month: d.month,
+                day: d.day,
+                hour: d.hour,
                 azimuth: d.azimuth,
-                altitud: 90.0 - d.zenith,
+                altitude: 90.0 - d.zenith,
                 dir: d.rdirhor,
                 dif: d.rdifhor,
             }).collect();
