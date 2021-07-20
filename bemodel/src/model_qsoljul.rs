@@ -89,18 +89,23 @@ impl Model {
     /// Considera la sombra de muros y sombras sobre el hueco
     /// TODO: devolver HashMap<String, Vec<f32>> con la lista de fracción soleada para las posiciones solares
     /// TODO: indicadas como parámetros Vec<Sunpos>
-    pub fn fshobst_for_sun_pos(&self, sun_azimuth: f32, sun_altitude: f32) -> HashMap<String, f32> {
+    pub fn fshobst_for_sun_pos(
+        &self,
+        sun_azimuth: f32,
+        sun_altitude: f32,
+    ) -> HashMap<String, Vec<f32>> {
         let setback_shades = self.windows_setback_shades();
         let occluders = self.find_occluders(&setback_shades);
-        
-        let mut map: HashMap<String, f32> = HashMap::new();
+
+        let mut map: HashMap<String, Vec<f32>> = HashMap::new();
         // TODO: ahora iterar según una lista de posiciones que se pasa como parámetro
         let ray_dir = ray_to_sun(sun_azimuth, sun_altitude);
         for window in &self.windows {
-            let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(&window);
-            let sunlit = self.sunlit_fraction(window, &occluders, &ray_dir, &ray_origins);
-            // map.insert(w.id.clone(), sunlit);
-            map.insert(window.name.clone(), sunlit);
+            let sunlit = self.sunlit_fraction(window, &ray_dir, &occluders);
+            // TODO: la clave debería ser la id: window.id
+            map.entry(window.name.clone())
+                .or_insert_with(Vec::new)
+                .push(sunlit);
         }
         map
     }
@@ -117,9 +122,8 @@ impl Model {
     pub fn sunlit_fraction(
         &self,
         window: &Window,
-        occluders: &[Occluder],
         ray_dir: &Vector3<f32>,
-        ray_origins: &[Point3<f32>],
+        occluders: &[Occluder],
     ) -> f32 {
         let window_wall = match self.wall_of_window(window) {
             None => {
@@ -148,6 +152,7 @@ impl Model {
             return 0.0;
         }
 
+        let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(&window);
         let num = ray_origins.len();
         let mut num_intersects = 0;
         for ray_orig in ray_origins {
@@ -187,7 +192,10 @@ impl Model {
     /// TODO: - generar BVH AABB
     /// - https://gamedev.stackexchange.com/a/21030
     /// - https://tavianator.com/2011/ray_box.html
-    pub fn find_occluders<'a>(&'a self, setback_shades: &'a [(String, Shade)]) -> Vec<Occluder<'a>> {
+    pub fn find_occluders<'a>(
+        &'a self,
+        setback_shades: &'a [(String, Shade)],
+    ) -> Vec<Occluder<'a>> {
         let mut occluders: Vec<_> = self
             .walls
             .iter()

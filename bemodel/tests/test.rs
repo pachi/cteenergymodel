@@ -73,27 +73,24 @@ fn model_json_conversion() {
 
     let setback_shades = model.windows_setback_shades();
     let occluders = model.find_occluders(&setback_shades);
-    // Ventana P04_E03_PE009_V sunlit = 0.7 - Bloquea Sombra011 + retranqueo 20cm
+    // Ventana P04_E03_PE009_V sunlit Fshobst_HULC = 0.58 - Bloquea Sombra011 + retranqueo 20cm
     let window = get_window(&model, "P04_E03_PE009_V");
-    let ray_origins = model.ray_origins_for_window(&window);
     assert_almost_eq!(
-        model.sunlit_fraction(&window, &occluders, &ray_dir, &ray_origins),
+        model.sunlit_fraction(&window, &ray_dir, &occluders),
         0.6
     );
 
-    // Ventana P01_E04_PE001_V = 0.9 - Bloquea Sombra003 + retranqueo 20cm
+    // Ventana P01_E04_PE001_V Fshobst_HULC = 0.65 - Bloquea Sombra003 + retranqueo 20cm
     let window = get_window(&model, "P01_E04_PE001_V");
-    let ray_origins = model.ray_origins_for_window(&window);
     assert_almost_eq!(
-        model.sunlit_fraction(&window, &occluders, &ray_dir, &ray_origins),
+        model.sunlit_fraction(&window, &ray_dir, &occluders),
         0.8
     );
 
-    // P04_E03_PE009_V_8 = 0.8 (retranqueo 20 cm, sin alero)
+    // P04_E03_PE009_V_8 Fshobst_HULC = 0.69 (retranqueo 20 cm, sin alero)
     let window = get_window(&model, "P04_E03_PE009_V_8");
-    let ray_origins = model.ray_origins_for_window(&window);
     assert_almost_eq!(
-        model.sunlit_fraction(&window, &occluders, &ray_dir, &ray_origins),
+        model.sunlit_fraction(&window, &ray_dir, &occluders),
         0.8
     );
 
