@@ -3,9 +3,12 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::process::exit;
 
-use climate::met::met_monthly_data;
+use climate::{
+    met::{met_monthly_data, read_metdata},
+    met_july21st_radiation_data,
+};
 
-const APP_TITLE: &str = r#"CteEPBD"#;
+const APP_TITLE: &str = r#"MetConvert"#;
 const APP_DESCRIPTION: &str = r#"
 Copyright (c) 2018-2021 Instituto de CC. de la Construcción Eduardo Torroja (IETcc-CSIC)
 
@@ -80,14 +83,6 @@ fn main() {
                 .index(1),
         )
         .arg(
-            Arg::with_name("archivo_salida_json")
-                .long("json")
-                .value_name("ARCHIVO_SALIDA_JSON")
-                .help("Archivo de salida de resultados detallados en formato JSON")
-                .takes_value(true)
-                .default_value("zcraddata.json"),
-        )
-        .arg(
             Arg::with_name("pretty")
                 .help("Salida en JSON embellecido")
                 .short("-p")
@@ -107,20 +102,35 @@ fn main() {
     }
 
     let climasdir = matches.value_of("climasdir").unwrap();
+    let metdata = read_metdata(&climasdir);
 
-    let metmonthlydata = met_monthly_data(&climasdir);
-
+    // Datos mensuales de radiación
+    let metmonthlydata = met_monthly_data(&metdata);
     let json = match matches.is_present("pretty") {
         true => serde_json::to_string_pretty(&metmonthlydata),
         _ => serde_json::to_string(&metmonthlydata),
     }
     .unwrap_or_else(|e| {
         eprintln!(
-            "ERROR: conversión incorrecta del balance energético a JSON: {}",
+            "ERROR: conversión incorrecta de los datos mensuales de radiación a JSON: {}",
             e
         );
         exit(exitcode::DATAERR);
     });
-    let path = matches.value_of("archivo_salida_json").unwrap();
-    writefile(&path, json.as_bytes());
+    writefile("zcraddata.json", json.as_bytes());
+
+    // Datos de radiación para el 21 de julio
+    let metjulydata = met_july21st_radiation_data(&metdata);
+    let json = match matches.is_present("pretty") {
+        true => serde_json::to_string_pretty(&metjulydata),
+        _ => serde_json::to_string(&metjulydata),
+    }
+    .unwrap_or_else(|e| {
+        eprintln!(
+            "ERROR: conversión incorrecta de los datos del 21 de julio a JSON: {}",
+            e
+        );
+        exit(exitcode::DATAERR);
+    });
+    writefile("zcjuly21raddata.json", json.as_bytes());
 }

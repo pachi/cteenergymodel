@@ -20,6 +20,7 @@
 //
 // Author(s): Rafael Villar Burke <pachi@rvburke.com>
 
+use std::collections::HashMap;
 /// # MET format reader
 ///
 /// Linea 1: nombre de archivo de clima. e.g. zonaD3.met
@@ -237,19 +238,29 @@ pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<MetData, Error> {
   parsemet(&utf8data)
 }
 
-/// Datos mensuales acucmulados de radiación
-pub fn met_monthly_data(metdir: &str) -> Vec<MonthlySurfaceRadData> {
-    let albedo = 0.2;
-    let mut data = vec![];
+/// Lee datos meteorológicos en metdir y guarda según zonas climáticas
+pub fn read_metdata(metdir: &str) -> HashMap<String, MetData> {
+    let mut met: HashMap<String, MetData> = HashMap::new();
     for zona in &CTE_CLIMATEZONES {
         let mstr = format!("{}/zona{}.met", metdir, zona);
         let metpath = Path::new(&mstr);
         if !metpath.exists() {
-            println!("Archivo no encontrado: {}", &metpath.display());
+            eprintln!("Archivo no encontrado: {}", &metpath.display());
             continue;
         };
         println!("Leyendo archivo {}", metpath.display());
         let metdata = parse_from_path(&metpath).unwrap();
+        met.insert(zona.to_string(), metdata);
+    }
+    met
+}
+
+/// Datos mensuales acucmulados de radiación
+pub fn met_monthly_data(metdata: &HashMap<String, MetData>) -> Vec<MonthlySurfaceRadData> {
+    const ALBEDO: f32 = 0.2;
+    let mut data = vec![];
+    for zona in &CTE_CLIMATEZONES {
+        let zonemetdata = metdata.get(*zona).unwrap();
         for &(tilt, azimuth, name) in &ORIENTATIONS {
             let MonthlyRadData {
                 dir,
@@ -257,7 +268,7 @@ pub fn met_monthly_data(metdir: &str) -> Vec<MonthlySurfaceRadData> {
                 fshwi200,
                 fshwi300,
                 fshwi500,
-            } = monthly_radiation_for_surface(&metdata, tilt, azimuth, albedo);
+            } = monthly_radiation_for_surface(&zonemetdata, tilt, azimuth, ALBEDO);
             data.push(MonthlySurfaceRadData {
                 zc: zona.to_string(),
                 name: name.to_string(),
@@ -275,13 +286,18 @@ pub fn met_monthly_data(metdir: &str) -> Vec<MonthlySurfaceRadData> {
 }
 
 /// Datos de radiación para un momento concreto, W/m²
-pub (crate) struct RadData {
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct RadData {
     /// Mes del año [1, 12]
     pub mes: u32,
     /// Día del mes [1, 31]
     pub dia: u32,
     /// Hola de reloj para la localización, h [1.0, 24.0]
     pub hora: f32,
+    /// Azimuth solar (grados) [-180.0,180.0] (-E, S=0, +W)
+    pub azimuth: f32,
+    /// Altitud solar (grados) [0.0, 90.0]
+    pub altitud: f32,
     /// Radiación directa, W/m²
     pub dir: f32,
     /// Radiación difusa, W/m²
@@ -294,7 +310,7 @@ pub (crate) struct RadData {
 /// latitude: latitud de la localización
 /// surface: superficie inclinada y orientada (inclinación [0, 180], azimuth [-180, 180])
 /// albedo: reflectancia del entorno [0.0, 1.0]
-fn period_radiation_for_surface(
+pub fn period_radiation_for_surface(
     hourlydata: &[HourlyData],
     latitude: f32,
     surface_tilt: f32,
@@ -322,6 +338,8 @@ fn period_radiation_for_surface(
                 mes: d.month,
                 dia: d.day,
                 hora: d.hour,
+                azimuth: d.azimuth,
+                altitud: 90.0 - d.zenith,
                 dir: radiation.dir,
                 dif: radiation.dif,
             }
@@ -400,4 +418,27 @@ pub (crate) fn monthly_radiation_for_surface(
         fshwi300,
         fshwi500,
     }
+}
+
+/// Datos horarios de radiación en una superficie horizontal por zona climática para el 21 de julio, W/m²
+///
+/// metdata: datos climáticos horarios anuales por zona climática
+pub fn met_july21st_radiation_data(metdata: &HashMap<String, MetData>) -> HashMap<String, Vec<RadData>> {
+    let mut map = HashMap::new();
+    for zona in &CTE_CLIMATEZONES {
+        let zonemetdata = metdata.get(*zona).unwrap();
+        let zonerad = zonemetdata.data.iter()
+            .filter(|d| d.month == 7 && d.day == 21 && (d.rdifhor > 0.0 || d.rdirhor > 0.0))
+            .map(|d| RadData {
+                mes: d.month,
+                dia: d.day,
+                hora: d.hour,
+                azimuth: d.azimuth,
+                altitud: 90.0 - d.zenith,
+                dir: d.rdirhor,
+                dif: d.rdifhor,
+            }).collect();
+        map.insert(zona.to_string(), zonerad);
+    }
+    map
 }
