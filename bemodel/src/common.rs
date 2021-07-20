@@ -251,8 +251,6 @@ pub struct SurfaceMonthlyRadiation {
     pub dir: [f32; 12],
     /// Radiación mensual difusa
     pub dif: [f32; 12],
-    /// Radiación mensual total
-    pub tot: [f32; 12],
     /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 200W/m2
     pub f_shwith200: [f32; 12],
     /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 300W/m2
@@ -669,6 +667,8 @@ pub struct N50Data {
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 /// Reporte de cálculo de las transmitancias de los elementos
+/// TODO: cambiar a ElementProps, no separar muros y huecos, e incluir
+/// TODO: si el elemento pertenece o no a la ET ElementProps{walls: {id: String, ElementData {et: bool, a: f32, u: Option<f32>}}}
 pub struct UValues {
     /// U de muros
     pub walls: HashMap<String, Option<f32>>,
