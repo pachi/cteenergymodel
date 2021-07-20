@@ -248,15 +248,15 @@ pub struct SurfaceMonthlyRadiation {
     /// TODO: convertir a orientación UNE-EN ISO 52016-1, medido desde el sur, positivo al este, negativo al oeste (S=0, E=+90, W=-90)
     pub gamma: f32,
     /// Radiación mensual directa
-    pub dir: [f32; 12],
+    pub dir: Vec<f32>,
     /// Radiación mensual difusa
-    pub dif: [f32; 12],
+    pub dif: Vec<f32>,
     /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 200W/m2
-    pub f_shwith200: [f32; 12],
+    pub f_shwith200: Vec<f32>,
     /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 300W/m2
-    pub f_shwith300: [f32; 12],
+    pub f_shwith300: Vec<f32>,
     /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 500W/m2
-    pub f_shwith500: [f32; 12],
+    pub f_shwith500: Vec<f32>,
 }
 
 /// Datos de radiación para un momento concreto, W/m²
