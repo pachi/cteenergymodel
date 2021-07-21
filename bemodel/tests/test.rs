@@ -94,8 +94,8 @@ fn model_json_conversion() {
         0.8
     );
 
-    let map = model.fshobst_for_sun_pos(0.0, 45.0);
-    info!("sunlit map: {:#?}", map);
+    let map = model.fshobst();
+    info!("sunlit map: {:?}", map);
 }
 
 #[test]

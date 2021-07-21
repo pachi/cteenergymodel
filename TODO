@@ -25,6 +25,9 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 - Dar soporte a lamas horizontales y verticales
 
 ## Sombras
+- Comparar resultados de Fshobst con HULC
+    - sacar valores según id, no nombre
+    - ver si es mejor otra fecha que el 21 julio
 - http://performativedesign.com/articles/2007/shadingcalculations/
 - http://performativedesign.com/articles/2008/averagehourly/
 - https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf

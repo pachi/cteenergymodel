@@ -15,9 +15,11 @@ use na::{point, vector, Point3};
 use nalgebra::Vector3;
 
 use super::{
+    climatedata,
     BoundaryType::{ADIABATIC, EXTERIOR},
     Geometry, Model, Orientation, QSolJulData, Shade, Window,
 };
+use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
 impl Model {
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
@@ -84,30 +86,71 @@ impl Model {
         q_soljul_data
     }
 
-    /// Calcula factor de obstáculos remotos para los huecos para la posición solar dada
+    /// Calcula factor de obstáculos remotos para los huecos
     ///
-    /// Considera la sombra de muros y sombras sobre el hueco
-    /// TODO: devolver HashMap<String, Vec<f32>> con la lista de fracción soleada para las posiciones solares
-    /// TODO: indicadas como parámetros Vec<Sunpos>
-    pub fn fshobst_for_sun_pos(
-        &self,
-        sun_azimuth: f32,
-        sun_altitude: f32,
-    ) -> HashMap<String, Vec<f32>> {
+    /// Considera el sombreamiento de elementos de muro y sombra sobre el hueco
+    /// Toma la zona climática del modelo y usa los datos del 21 de julio para los cálculos
+    /// TODO: la clave debería ser la id: window.id
+    pub fn fshobst(&self) -> HashMap<String, f32> {
         let setback_shades = self.windows_setback_shades();
         let occluders = self.find_occluders(&setback_shades);
 
-        let mut map: HashMap<String, Vec<f32>> = HashMap::new();
-        // TODO: ahora iterar según una lista de posiciones que se pasa como parámetro
-        let ray_dir = ray_to_sun(sun_azimuth, sun_altitude);
-        for window in &self.windows {
-            let sunlit = self.sunlit_fraction(window, &ray_dir, &occluders);
-            // TODO: la clave debería ser la id: window.id
-            map.entry(window.name.clone())
-                .or_insert_with(Vec::new)
-                .push(sunlit);
+        let mut map: HashMap<String, ObstData> = HashMap::new();
+        let julyraddata = climatedata::JULYRADDATA.lock().unwrap();
+        let raddata = match julyraddata.get(&self.meta.climate) {
+            Some(data) => data,
+            None => return HashMap::new(),
+        };
+        let latitude = climatedata::CLIMATEMETADATA
+            .lock()
+            .unwrap()
+            .get(&self.meta.climate)
+            .unwrap()
+            .latitude;
+        for d in raddata {
+            let ray_dir = ray_to_sun(d.azimuth, d.altitude);
+            let nday = nday_from_md(d.month, d.day);
+            for window in &self.windows {
+                // if window.name != "P04_E03_PE009_V_8" {continue};
+                let window_wall = match self.wall_of_window(window) {
+                    None => continue,
+                    Some(wall) => wall,
+                };
+                let rad_on_win = radiation_for_surface(
+                    nday,
+                    d.hour,
+                    SolarRadiation {
+                        dir: d.dir,
+                        dif: d.dif,
+                    },
+                    latitude,
+                    window_wall.geometry.tilt,
+                    window_wall.geometry.azimuth,
+                    0.2,
+                );
+                let fshdir = self.sunlit_fraction(window, &ray_dir, &occluders);
+                // TODO: la clave debería ser la id: window.id
+                let windata = map.entry(window.name.clone()).or_default();
+                windata.fshdir.push(fshdir);
+                windata.dir.push(rad_on_win.dir);
+                windata.dif.push(rad_on_win.dif);
+            }
         }
-        map
+        map.values_mut().for_each(|d| {
+            let nvalues = d.fshdir.len();
+            let mut fshobst_sum = 0.0;
+            for i in 0..nvalues {
+                let fshobst_i = (d.fshdir[i] * d.dir[i] + d.dif[i]) / (d.dir[i] + d.dif[i]);
+                fshobst_sum += fshobst_i
+            }
+            d.fshobst = fshobst_sum / nvalues as f32;
+        });
+
+        debug!("Fshobst map: {:#?}", map);
+
+        map.iter()
+            .map(|(k, data)| (k.clone(), data.fshobst))
+            .collect()
     }
 
     /// Fracción del hueco con radiación solar directa para la posición solar dada [0.0 - 1.0]
@@ -276,6 +319,19 @@ impl Model {
             .map(|p| to_global_tr * point![p.x, p.y, -wg.setback])
             .collect()
     }
+}
+
+/// Estructura interna de datos para el soporte del cálculo de fshobst de huecos
+#[derive(Default, Debug)]
+struct ObstData {
+    /// Fracción de obstrucción de radiación directa (fracción soleada del hueco) para cada hora
+    fshdir: Vec<f32>,
+    /// Radiación directa en el plano del hueco para cada hora, W/m²
+    dir: Vec<f32>,
+    /// Radiación difusa en el plano del hueco para cada hora, W/m²
+    dif: Vec<f32>,
+    /// Factor de obstáculos remotos (sobre radiación total), ponderado por horas
+    fshobst: f32,
 }
 
 /// Vector orientado en la dirección del sol

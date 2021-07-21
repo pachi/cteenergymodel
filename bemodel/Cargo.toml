@@ -12,6 +12,7 @@ license = "MIT"
 
 [dependencies]
 hulc = { path = "../hulc" }
+climate = { path = "../climate" }
 anyhow = "1.0"
 log = "0.4"
 md5 = "0.7.0"

@@ -235,6 +235,23 @@ impl From<&str> for Orientation {
     }
 }
 
+/// Metadatos de zonas climáticas .met
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Meta {
+    /// Climate file name. e.g. zonaD3.met
+    pub metname: String,
+    /// Climatic Zone (CTE). e.g. D3
+    pub zc: ClimateZone,
+    /// latitude, degrees
+    pub latitude: f32,
+    /// longitude, degrees
+    pub longitude: f32,
+    /// altitude, metres
+    pub altitude: f32,
+    /// reference longitude, degrees
+    pub reflong: f32,
+}
+
 /// Datos mensuales de radiación por superficie
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SurfaceMonthlyRadiation {
