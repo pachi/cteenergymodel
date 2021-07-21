@@ -104,6 +104,21 @@ fn main() {
     let climasdir = matches.value_of("climasdir").unwrap();
     let metdata = read_metdata(&climasdir);
 
+    // Datos generales de cada clima
+    let metgeneraldata: Vec<_> = metdata.values().map(|v| v.meta.clone()).collect();
+    let json = match matches.is_present("pretty") {
+        true => serde_json::to_string_pretty(&metgeneraldata),
+        _ => serde_json::to_string(&metgeneraldata),
+    }
+    .unwrap_or_else(|e| {
+        eprintln!(
+            "ERROR: conversión incorrecta de los datos generales de climas a JSON: {}",
+            e
+        );
+        exit(exitcode::DATAERR);
+    });
+    writefile("zcmetadata.json", json.as_bytes());
+
     // Datos mensuales de radiación
     let metmonthlydata = met_monthly_data(&metdata);
     let json = match matches.is_present("pretty") {

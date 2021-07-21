@@ -63,7 +63,7 @@ pub struct MetData {
 }
 
 /// Metadatos de archivo .met
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Meta {
     /// Climate file name. e.g. zonaD3.met
     pub metname: String,
@@ -255,7 +255,7 @@ pub fn read_metdata(metdir: &str) -> HashMap<String, MetData> {
     met
 }
 
-/// Datos mensuales acucmulados de radiación
+/// Datos mensuales acumulados de radiación
 pub fn met_monthly_data(metdata: &HashMap<String, MetData>) -> Vec<MonthlySurfaceRadData> {
     const ALBEDO: f32 = 0.2;
     let mut data = vec![];
