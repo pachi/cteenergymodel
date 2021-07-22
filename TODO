@@ -21,21 +21,17 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 
 ## cte::Data
 
-### Lamas en huecos
+## Lamas en huecos
 - Dar soporte a lamas horizontales y verticales
 
+## Estimar longitudes de PTs (ver heurísticas de CERMA, etc)
+
 ## Sombras
-- Comparar resultados de Fshobst con HULC
-    - sacar valores según id, no nombre
-    - ver si es mejor otra fecha que el 21 julio
 - http://performativedesign.com/articles/2007/shadingcalculations/
 - http://performativedesign.com/articles/2008/averagehourly/
 - https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf
 - https://idus.us.es/handle/11441/15301 p. 124
 - Optimizar cálculo de intersecciones en sombras con BVH de AABB
-- Hacemos cálculos horarios de radiación incidente
-    - ESP-r usa malla de 20x20 elementos por ventana y comprueba la colisión desde el centro, comprobando un día de cada mes (el de declinación media).
-    -  DOE2 usa el primer día del mes.
 - Caso de las lamas (blinds)
     - Vamos a tantear primero qué valores salen bloqueando solo la radiación directa, comparando con tablas DA DB-HE.
     - Se puede usar la referencia de EnergyPlus (más sencilla), la ISO 15099 (más precisa) o la UNE-EN ISO 52022-3, aunque esta última considera que no hay transmisión directa.
@@ -46,6 +42,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
             - A ver qué sale para el 21 de junio con esto y si se corresponde con lo que tenemos en el DA.
         - Se calcula la radiación directa a difusa (directa-difusa) https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-diffuse-blind-transmittance-reflectance-and-absorptance
         - Se calcula la radiación difusa a difusa (difusa-difusa) https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#diffuse-to-diffuse-transmittance-and-reflectance-of-blind
+
 
 ### Importación / Exportación
 
