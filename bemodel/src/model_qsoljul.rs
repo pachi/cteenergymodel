@@ -90,7 +90,6 @@ impl Model {
     ///
     /// Considera el sombreamiento de elementos de muro y sombra sobre el hueco
     /// Toma la zona climática del modelo y usa los datos del 21 de julio para los cálculos
-    /// TODO: la clave debería ser la id: window.id
     pub fn fshobst(&self) -> HashMap<String, f32> {
         let setback_shades = self.windows_setback_shades();
         let occluders = self.find_occluders(&setback_shades);
@@ -111,7 +110,7 @@ impl Model {
             let ray_dir = ray_to_sun(d.azimuth, d.altitude);
             let nday = nday_from_md(d.month, d.day);
             for window in &self.windows {
-                // if window.name != "P04_E03_PE009_V_8" {continue};
+                // if window.name != "P01_E01_PE004_V" {continue};
                 let window_wall = match self.wall_of_window(window) {
                     None => continue,
                     Some(wall) => wall,
@@ -129,8 +128,7 @@ impl Model {
                     0.2,
                 );
                 let fshdir = self.sunlit_fraction(window, &ray_dir, &occluders);
-                // TODO: la clave debería ser la id: window.id
-                let windata = map.entry(window.name.clone()).or_default();
+                let windata = map.entry(window.id.clone()).or_default();
                 windata.fshdir.push(fshdir);
                 windata.dir.push(rad_on_win.dir);
                 windata.dif.push(rad_on_win.dif);
@@ -244,20 +242,17 @@ impl Model {
             .iter()
             .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
             .map(|e| Occluder {
-                name: &e.name,
                 id: &e.id,
                 origin_id: None,
                 geometry: &e.geometry,
             })
             .collect();
         occluders.extend(self.shades.iter().map(|e| Occluder {
-            name: &e.name,
             id: &e.id,
             origin_id: None,
             geometry: &e.geometry,
         }));
         occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
-            name: &e.name,
             id: &e.id,
             origin_id: Some(wid),
             geometry: &e.geometry,
@@ -354,9 +349,6 @@ pub fn ray_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3<f32> {
 /// - el id permite excluir el muro de un hueco
 /// - el origin_id permite excluir las geometrías de retranqueo que no son del hueco analizado
 pub struct Occluder<'a> {
-    /// Nombre del elemento
-    #[allow(dead_code)]
-    name: &'a String,
     /// Id del elemento
     id: &'a String,
     /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
