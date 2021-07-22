@@ -138,3 +138,5 @@ Documentar hipótesis:
 - Ignoramos el dato de Z-GROUND de elementos enterrados. Avisar
 - Suponemos que la altura de los espacios es igual a la altura suelo-suelo de las plantas y descontamos el grosor de forjado superior.
 - Avisar de incoherencias entre altura de espacios y plantas (pensar cómo, p.e. altura de planta < altura de espacio?)
+- Solamente se contempla la obstrucción de la radiación solar directa. Para la radiación difusa se toman valores fijos de los
+  factores de visibilidad del cielo y del suelo (0.5) sin contemplar obstrucciones remotas.
