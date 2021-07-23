@@ -56,7 +56,7 @@ use serde::{ser::SerializeSeq, Deserialize, Serialize, Serializer};
 use super::{solar::{nday_from_ymd, radiation_for_surface, SolarRadiation}, ORIENTATIONS, MONTH_N, CTE_CLIMATEZONES};
 
 /// Datos climáticos de archivo .met
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct MetData {
     pub meta: Meta,
     pub data: Vec<HourlyData>,
@@ -80,7 +80,7 @@ pub struct Meta {
 }
 
 /// Valores horarios de archivo .met
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct HourlyData {
     /// Mes (1 a 12)
     pub month: u32,

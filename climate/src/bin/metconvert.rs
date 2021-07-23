@@ -148,4 +148,8 @@ fn main() {
         exit(exitcode::DATAERR);
     });
     writefile("zcjuly21raddata.json", json.as_bytes());
+
+    // Todos los datos climáticos en formato bincode
+    let encoded: Vec<u8> = bincode::serialize(&metdata).unwrap();
+    writefile("zcmetdata.bincode", &encoded);
 }
