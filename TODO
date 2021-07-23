@@ -7,7 +7,6 @@
 - Trasladar avisos en la conversión de modelos BDL
 - Con makefile generar .json y llevar a tests de hulc a bemodel en .json y copiar archivos .ctehexml, .tbl y .kyg a hulc2model
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
-- mover cosas de climas a otro crate
 - Validación JSON? https://www.npmjs.com/package/is-my-json-valid
 
 Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K.
@@ -86,7 +85,6 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
     - ¿espacios?: ¿definiendo su suelo (con polígono)? -> ¿merece la pena otra forma de definir los espacios?
 - El perímetro expuesto se podría eliminar de bemodel/space, calculándolo como en bdl/space l.110 a partir de los muros y suelos
     - parte del perímetro que tiene muros con el exterior
-- Otra opción es poder calcular algunas cosas a partir del modelo (Volumen de espacios, perímetro expuesto, superficie, etc) pero a petición del usuario.
 
 ### Cálculos adicionales
 
@@ -131,6 +129,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 ## docs
 
 Documentar hipótesis:
+- El volumen de los espacios se calcula a partir de su superficie y altura, no se hace cálculo geométrico
 - Suponemos que la cota z de los elementos enterrados es igual a la z del suelo del espacio en el que se encuentran
 - Ignoramos el dato de Z-GROUND de elementos enterrados. Avisar
 - Suponemos que la altura de los espacios es igual a la altura suelo-suelo de las plantas y descontamos el grosor de forjado superior.
