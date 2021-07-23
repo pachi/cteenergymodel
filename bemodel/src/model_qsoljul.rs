@@ -86,11 +86,11 @@ impl Model {
         q_soljul_data
     }
 
-    /// Calcula factor de obstáculos remotos para los huecos
+    /// Recalcula los factores de obstáculos remotos para los huecos
     ///
     /// Considera el sombreamiento de elementos de muro y sombra sobre el hueco
-    /// Toma la zona climática del modelo y usa los datos del 21 de julio para los cálculos
-    pub fn fshobst(&self) -> HashMap<String, f32> {
+    /// Toma la zona climática del modelo y usa los datos del 1 de julio para los cálculos
+    pub fn update_fshobst(&mut self) {
         let setback_shades = self.windows_setback_shades();
         let occluders = self.find_occluders(&setback_shades);
 
@@ -98,7 +98,7 @@ impl Model {
         let julyraddata = climatedata::JULYRADDATA.lock().unwrap();
         let raddata = match julyraddata.get(&self.meta.climate) {
             Some(data) => data,
-            None => return HashMap::new(),
+            None => return,
         };
         let latitude = climatedata::CLIMATEMETADATA
             .lock()
@@ -143,12 +143,11 @@ impl Model {
             }
             d.fshobst = fshobst_sum / nvalues as f32;
         });
-
         debug!("Fshobst map: {:#?}", map);
 
-        map.iter()
-            .map(|(k, data)| (k.clone(), data.fshobst))
-            .collect()
+        for mut window in &mut self.windows {
+            window.fshobst = map.get(&window.id).map(|v| v.fshobst).unwrap_or(1.0);
+        }
     }
 
     /// Fracción del hueco con radiación solar directa para la posición solar dada [0.0 - 1.0]

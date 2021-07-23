@@ -2,8 +2,6 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use std::collections::HashMap;
-
 use bemodel::{
     climatedata, geometry::point_in_poly, model_qsoljul::ray_to_sun, Geometry, Model, Window,
 };
@@ -30,26 +28,6 @@ macro_rules! assert_almost_eq {
 
 fn get_window_by_name<'a>(model: &'a Model, win_name: &str) -> &'a Window {
     model.windows.iter().find(|w| w.name == win_name).unwrap()
-}
-
-fn id_to_name(model: &Model) -> HashMap<String, String> {
-    let mut map = HashMap::new();
-    for e in &model.walls {
-        map.insert(e.id.to_string(), e.name.to_string());
-    }
-    for e in &model.windows {
-        map.insert(e.id.to_string(), e.name.to_string());
-    }
-    for e in &model.shades {
-        map.insert(e.id.to_string(), e.name.to_string());
-    }
-    for e in &model.wallcons {
-        map.insert(e.id.to_string(), e.name.to_string());
-    }
-    for e in &model.wincons {
-        map.insert(e.id.to_string(), e.name.to_string());
-    }
-    map
 }
 
 // --------------
@@ -84,7 +62,7 @@ fn model_json_conversion() {
     assert_almost_eq!(model.vol_env_gross(), 5231.0, 0.1);
 
     let json = model.as_json().unwrap();
-    let model = Model::from_json(&json).unwrap();
+    let mut model = Model::from_json(&json).unwrap();
     let json2 = model.as_json().unwrap();
     assert_eq!(&json, &json2);
 
@@ -107,12 +85,11 @@ fn model_json_conversion() {
     let window = get_window_by_name(&model, "P04_E03_PE009_V_8");
     assert_almost_eq!(model.sunlit_fraction(&window, &ray_dir, &occluders), 0.8);
 
-    let to_name = id_to_name(&model);
-    let map = model.fshobst();
+    model.update_fshobst();
     info!(
         "sunlit map:\n{}",
-        map.iter()
-            .map(|(k, v)| format!("{}: {}", to_name[k], v))
+        model.windows.iter()
+            .map(|w| format!("{}: {}", w.name, w.fshobst))
             .collect::<Vec<_>>().join("\n")
     );
 }
