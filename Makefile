@@ -36,6 +36,12 @@ bloat:
 	# cargo bloat --release --crates --split-std -n 10
 bench:
 	cargo bench
+# Instala linux-perf: sudo apt install -y linux-tools-generic
+# Instala cargo-flamegraph: cargo install flamegraph
+# https://github.com/flamegraph-rs/flamegraph
+# después de make profile, visualizar flamegraph.svg en el navegador...
+profile:
+	cargo flamegraph --bench benchmark_bemodel -- --bench
 perf:
 	# Ver https://profiler.firefox.com/docs/#/./guide-perf-profiling
 	$(info [INFO]: Obteniendo datos de perfilado en el archivo perf.data)

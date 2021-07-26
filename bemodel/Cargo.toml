@@ -23,3 +23,14 @@ serde_json = "1.0"
 
 [dev-dependencies]
 env_logger= "0.9"
+criterion = { version="0.3", features=["html_reports"] }
+
+[[bench]]
+name = "benchmark_bemodel"
+harness = false
+
+[profile.bench]
+debug = true
+
+[profile.release]
+debug = true
