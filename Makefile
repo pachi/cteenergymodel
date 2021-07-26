@@ -37,6 +37,8 @@ bloat:
 bench:
 	cargo bench
 # Instala linux-perf: sudo apt install -y linux-tools-generic
+# echo -1 | sudo tee /proc/sys/kernel/perf_event_paranoid
+# Configuración permanente en /etc/sysctl.conf con kernel.perf_event_paranoid = -1
 # Instala cargo-flamegraph: cargo install flamegraph
 # https://github.com/flamegraph-rs/flamegraph
 # después de make profile, visualizar flamegraph.svg en el navegador...
