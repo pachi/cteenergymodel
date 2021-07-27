@@ -9,7 +9,7 @@ use std::convert::From;
 
 // use log::{debug, info, warn};
 use na::{
-    point, vector, Isometry, Point, Point2, Point3, Rotation, Rotation2, Rotation3, Translation2,
+    point, vector, IsometryMatrix2, IsometryMatrix3, Point2, Point3, Rotation2, Rotation3, Translation2,
     Translation3, Vector2, Vector3,
 };
 
@@ -39,9 +39,9 @@ impl Geometry {
     /// - Calcula el punto de intersección del rayo transformado con el plano XY
     /// - Comprueba si el punto está en el interior del polígono
     /// - Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
-    pub fn intersect(&self, ray_origin: &Point<f32, 3_usize>, ray_dir: &Vector3<f32>) -> Option<f32> {
+    pub fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
         // Matrices de transformación de geometría
-        let trans = local_to_global_transform(self.tilt, self.azimuth, self.position)?;
+        let trans = self.local_to_global()?;
         let transInv = trans.inverse();
 
         // Inverse transform of ray (we keep the 2D polygon as is and transform the ray)
@@ -83,12 +83,12 @@ impl Geometry {
     }
 
     /// Matriz de transformación de coordenadas locales a coordenadas globales
-    pub fn local_to_global(&self) -> Option<Isometry<f32, Rotation<f32, 3_usize>, 3_usize>> {
+    pub fn local_to_global(&self) -> Option<IsometryMatrix3<f32>> {
         local_to_global_transform(self.tilt, self.azimuth, self.position)
     }
 
     /// Matriz de transformación de coordenadas locales a coordenadas de polígono
-    pub fn local_to_polygon(&self) -> Option<Isometry<f32, Rotation<f32, 2_usize>, 2_usize>> {
+    pub fn local_to_polygon(&self) -> Option<IsometryMatrix2<f32>> {
         local_to_polygon_transform(&self.polygon)
     }
 }
@@ -100,7 +100,7 @@ fn local_to_global_transform(
     tilt: f32,
     azimuth: f32,
     position: Option<Point3<f32>>,
-) -> Option<Isometry<f32, Rotation<f32, 3_usize>, 3_usize>> {
+) -> Option<IsometryMatrix3<f32>> {
     let trans = Translation3::from(position?);
     let zrot = Rotation3::new(Vector3::z() * azimuth.to_radians());
     let xrot = Rotation3::new(Vector3::x() * tilt.to_radians());
@@ -111,9 +111,7 @@ fn local_to_global_transform(
 /// Matriz de transformación de coordenadas locales de muro a coordenadas de su polígono 2D
 /// Nos sirve para pasar de las coordenadas locales del muro a las coordenadas del polígono de muro en 2D
 /// Se gira el eje X en la dirección del polígono de muro p1 - p0 y se traslada a p0 el origen
-fn local_to_polygon_transform(
-    wall_polygon: &[Point2<f32>],
-) -> Option<Isometry<f32, Rotation<f32, 2_usize>, 2_usize>> {
+fn local_to_polygon_transform(wall_polygon: &[Point2<f32>]) -> Option<IsometryMatrix2<f32>> {
     if wall_polygon.len() <= 2 {
         return None;
     };
