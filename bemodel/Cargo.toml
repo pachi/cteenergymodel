@@ -32,5 +32,6 @@ harness = false
 [profile.bench]
 debug = true
 
+# Modificación para mejorar info de flamegraph
 [profile.release]
 debug = true
