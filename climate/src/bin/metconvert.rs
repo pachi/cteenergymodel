@@ -102,7 +102,7 @@ fn main() {
     }
 
     let climasdir = matches.value_of("climasdir").unwrap();
-    let metdata = read_metdata(&climasdir);
+    let metdata = read_metdata(climasdir);
 
     // Datos generales de cada clima
     let metgeneraldata: Vec<_> = metdata.values().map(|v| v.meta.clone()).collect();

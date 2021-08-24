@@ -7,7 +7,7 @@ use criterion::{criterion_group, criterion_main, Criterion};
 
 fn fshobst_update_benchmark(c: &mut Criterion) {
     let strdata = include_str!("../tests/data/e4h_medianeras.json");
-    let mut model = Model::from_json(&strdata).unwrap();
+    let mut model = Model::from_json(strdata).unwrap();
 
     c.bench_function("Actualiza F_sh;obst", |b| b.iter(|| model.update_fshobst()));
 }

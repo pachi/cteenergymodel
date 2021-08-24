@@ -47,7 +47,7 @@ impl Model {
     /// Grosor de un elemento opaco
     pub fn wall_thickness(&self, wallid: &str) -> f32 {
         self.wall_by_id(wallid)
-            .and_then(|w| self.wallcons_for_wall(&w).map(|c| c.thickness))
+            .and_then(|w| self.wallcons_for_wall(w).map(|c| c.thickness))
             .unwrap_or(0.0)
     }
 
@@ -139,9 +139,9 @@ impl Model {
     pub fn windows_setback_shades(&self) -> Vec<(String, Shade)> {
         self.windows
             .iter()
-            .filter_map(|window| match self.wall_of_window(window) {
-                Some(wall) => Some(shades_for_window_setback(wall, window)),
-                _ => None,
+            .filter_map(|window| {
+                self.wall_of_window(window)
+                    .map(|wall| shades_for_window_setback(wall, window))
             })
             .flatten()
             .collect()
@@ -233,7 +233,7 @@ impl Model {
         let area: f32 = self
             .walls_of_envelope_iter()
             .map(|w| {
-                let multiplier = self.space_of_wall(&w).map(|s| s.multiplier).unwrap_or(1.0);
+                let multiplier = self.space_of_wall(w).map(|s| s.multiplier).unwrap_or(1.0);
                 let win_area: f32 = self.wincons_of_window_iter(&w.id).map(|win| win.area).sum();
                 (w.area + win_area) * multiplier
             })
@@ -247,7 +247,7 @@ impl Model {
     /// TODO: la altura neta debería calcularse promediando los grosores de todos los muros que cierren el espacio,
     /// TODO: estos podrían ser más de uno pero este cálculo ahora se hace con el primero que se localiza
     pub fn top_wall_thickness_of_space(&self, spaceid: &str) -> f32 {
-        self.top_wall_of_space(&spaceid)
+        self.top_wall_of_space(spaceid)
             .map(|w| self.wall_thickness(&w.id))
             .unwrap_or(0.0)
     }

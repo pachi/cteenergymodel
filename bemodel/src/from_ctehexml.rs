@@ -41,16 +41,16 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let mut windows = vec![];
         let mut shades = vec![];
 
-        let mut walls = walls_from_bdl(&bdl)?;
-        let (wins, winshades) = windows_from_bdl(&walls, &bdl);
+        let mut walls = walls_from_bdl(bdl)?;
+        let (wins, winshades) = windows_from_bdl(&walls, bdl);
         windows.extend_from_slice(&wins);
         shades.extend_from_slice(&winshades);
-        let othershades = shades_from_bdl(&bdl);
+        let othershades = shades_from_bdl(bdl);
         shades.extend_from_slice(&othershades);
-        let thermal_bridges = thermal_bridges_from_bdl(&bdl);
-        let wallcons = wallcons_from_bdl(&walls, &bdl)?;
-        let wincons = windowcons_from_bdl(&bdl)?;
-        let spaces = spaces_from_bdl(&bdl)?;
+        let thermal_bridges = thermal_bridges_from_bdl(bdl);
+        let wallcons = wallcons_from_bdl(&walls, bdl)?;
+        let wincons = windowcons_from_bdl(bdl)?;
+        let spaces = spaces_from_bdl(bdl)?;
 
         // Cambia referencias a nombres por id's
         let spaceids = spaces
@@ -152,7 +152,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
             let id = uuid_from_obj(&s);
             let area = fround2(s.area());
             let height = fround2(s.height);
-            let exposed_perimeter = Some(fround2(s.exposed_perimeter(&bdl)));
+            let exposed_perimeter = Some(fround2(s.exposed_perimeter(bdl)));
             Ok(Space {
                 id,
                 name: s.name.clone(),
@@ -283,7 +283,7 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
         .map(|wall| -> Result<Wall, Error> {
             let id = uuid_from_obj(wall);
             let bounds = wall.bounds.into();
-            let geometry = wall_geometry(&wall, bdl);
+            let geometry = wall_geometry(wall, bdl);
             Ok(Wall {
                 id,
                 name: wall.name.clone(),

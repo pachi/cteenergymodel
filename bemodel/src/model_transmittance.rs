@@ -159,7 +159,7 @@ impl Model {
         let R_n_perim_ins = self.meta.rn_perim_insulation;
         let D_perim_ins = self.meta.d_perim_insulation;
 
-        let cons = self.wallcons_for_wall(&wall)?;
+        let cons = self.wallcons_for_wall(wall)?;
         let R_intrinsic = cons.r_intrinsic;
 
         match (bounds, position) {
@@ -199,7 +199,7 @@ impl Model {
                 // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
                 // Calculamos la dimensión característica del **espacio** en el que sitúa el suelo
                 // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
-                let wspace = self.space_of_wall(&wall)?;
+                let wspace = self.space_of_wall(wall)?;
                 let gnd_A = wspace.area;
                 let mut gnd_P = wspace
                     .exposed_perimeter
@@ -262,7 +262,7 @@ impl Model {
             (GROUND, SIDE) => {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
                 let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
-                let space = self.space_of_wall(&wall)?;
+                let space = self.space_of_wall(wall)?;
                 // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
                 let z = if space.z < 0.0 { -space.z } else { 0.0 };
                 // Muros que realmente no son enterrados
@@ -283,7 +283,7 @@ impl Model {
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
                         // Si no está definida la construcción no participa de la envolvente
-                        self.wallcons_for_wall(&w)
+                        self.wallcons_for_wall(w)
                             .map(|wallcons| {
                                 (W + LAMBDA_GND * (RSI_DESCENDENTE + wallcons.r_intrinsic + RSE)
                                     + mean * (i - 1) as f32)
@@ -344,7 +344,7 @@ impl Model {
                 // Dos casos:
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
-                let space = self.space_of_wall(&wall)?;
+                let space = self.space_of_wall(wall)?;
                 let nextto = match wall.nextto.as_ref() {
                     Some(s) => s,
                     _ => {
@@ -440,7 +440,7 @@ impl Model {
                             let win_axu = self
                                 .wincons_of_window_iter(&wall.id)
                                 .filter_map(|win| {
-                                    self.wincons_of_window(&win)
+                                    self.wincons_of_window(win)
                                         // Si no está definida la construcción no participa de la envolvente
                                         .map(|wincons| Some(win.area * wincons.u))?
                                 })

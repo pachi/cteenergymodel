@@ -67,7 +67,7 @@ impl Polygon {
     /// El lado que empieza en el último vértice continua en el vértice inicial
     pub fn edge_vertices(&self, vertexname: &str) -> Option<[&Point2<f32>; 2]> {
         let num_vertex: usize = vertexname
-            .strip_prefix("V")
+            .strip_prefix('V')
             .map(str::parse::<usize>)
             .unwrap_or_else(|| panic!("Vértice {} desconocido de polígono", vertexname))
             .ok()?

@@ -30,12 +30,12 @@ impl Model {
         let Q_soljul = self
             .windows_of_envelope_iter()
             .filter_map(|w| {
-                let wall = self.wall_of_window(&w)?;
+                let wall = self.wall_of_window(w)?;
                 let multiplier = self
                 .space_of_wall(wall)
                 .map(|s| s.multiplier)
                 .unwrap_or(1.0);
-                let wincons = self.wincons_of_window(&w)?;
+                let wincons = self.wincons_of_window(w)?;
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
                 let area = w.area * multiplier;
@@ -192,7 +192,7 @@ impl Model {
             return 0.0;
         }
 
-        let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(&window);
+        let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(window);
         let num = ray_origins.len();
         let mut num_intersects = 0;
         for ray_orig in ray_origins {

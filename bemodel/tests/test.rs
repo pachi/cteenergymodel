@@ -45,7 +45,7 @@ fn model_json_conversion() {
     init();
 
     let strdata = include_str!("./data/e4h_medianeras.json");
-    let model = Model::from_json(&strdata).unwrap();
+    let model = Model::from_json(strdata).unwrap();
     let climatezone = model.meta.climate;
     let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
     let n50data = model.n50();
@@ -75,15 +75,15 @@ fn model_json_conversion() {
     let occluders = model.find_occluders(&setback_shades);
     // Ventana P04_E03_PE009_V sunlit Fshobst_HULC = 0.58 - Bloquea Sombra011 + retranqueo 20cm
     let window = get_window_by_name(&model, "P04_E03_PE009_V");
-    assert_almost_eq!(model.sunlit_fraction(&window, &ray_dir, &occluders), 0.6);
+    assert_almost_eq!(model.sunlit_fraction(window, &ray_dir, &occluders), 0.6);
 
     // Ventana P01_E04_PE001_V Fshobst_HULC = 0.65 - Bloquea Sombra003 + retranqueo 20cm
     let window = get_window_by_name(&model, "P01_E04_PE001_V");
-    assert_almost_eq!(model.sunlit_fraction(&window, &ray_dir, &occluders), 0.8);
+    assert_almost_eq!(model.sunlit_fraction(window, &ray_dir, &occluders), 0.8);
 
     // P04_E03_PE009_V_8 Fshobst_HULC = 0.69 (retranqueo 20 cm, sin alero)
     let window = get_window_by_name(&model, "P04_E03_PE009_V_8");
-    assert_almost_eq!(model.sunlit_fraction(&window, &ray_dir, &occluders), 0.8);
+    assert_almost_eq!(model.sunlit_fraction(window, &ray_dir, &occluders), 0.8);
 
     model.update_fshobst();
     info!(

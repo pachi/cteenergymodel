@@ -268,7 +268,7 @@ pub fn met_monthly_data(metdata: &HashMap<String, MetData>) -> Vec<MonthlySurfac
                 fshwi200,
                 fshwi300,
                 fshwi500,
-            } = monthly_radiation_for_surface(&zonemetdata, tilt, azimuth, ALBEDO);
+            } = monthly_radiation_for_surface(zonemetdata, tilt, azimuth, ALBEDO);
             data.push(MonthlySurfaceRadData {
                 zc: zona.to_string(),
                 name: name.to_string(),

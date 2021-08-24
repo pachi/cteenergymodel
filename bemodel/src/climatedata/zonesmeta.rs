@@ -6,7 +6,7 @@
 //! Datos de radiación mensuales para superficies
 //! Datos de radiación horaria por zona climática para el 21 de julio
 //! Criterios de orientación UNE-EN ISO 52016-1, (S=0, E=+90, W=-90)
-#![allow(clippy::clippy::approx_constant)]
+#![allow(clippy::approx_constant)]
 
 use std::{collections::HashMap, sync::Mutex};
 

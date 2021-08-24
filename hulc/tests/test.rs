@@ -391,7 +391,7 @@ fn bdl_space() {
     assert_almost_eq!(elem.height, 3.5, 0.1);
     // La cota se recibe del objeto floor en el postproceso. Inicialmente se pone a cero
     assert_almost_eq!(elem.z, 0.0, 0.1);
-    assert_eq!(elem.insidete, true);
+    assert!(elem.insidete);
     assert_eq!(elem.floor, "P01");
     assert_almost_eq!(elem.power, 4.4, 0.1);
     assert_almost_eq!(elem.veeiobj, 7.0, 0.1);
@@ -401,7 +401,7 @@ fn bdl_space() {
     assert_eq!(elem.systemconds, "Residencial");
     assert_almost_eq!(elem.floor_multiplier, 1.0, 0.1);
     assert_almost_eq!(elem.multiplier, 1.0, 0.1);
-    assert_eq!(elem.ismultiplied, false);
+    assert!(!elem.ismultiplied);
     assert_eq!(elem.airchanges_h, None);
 }
 

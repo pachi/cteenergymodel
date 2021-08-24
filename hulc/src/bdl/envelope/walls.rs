@@ -125,7 +125,7 @@ impl Wall {
             } else {
                 let poly = &space.polygon;
                 let height = space.height;
-                let length = poly.edge_length(&location);
+                let length = poly.edge_length(location);
                 Ok(height * length)
             }
         } else {
@@ -170,7 +170,7 @@ impl Wall {
             } else {
                 let poly = &space.polygon;
                 let height = space.height;
-                let length = poly.edge_length(&location);
+                let length = poly.edge_length(location);
                 Ok(2.0 * (height + length))
             }
         } else {
