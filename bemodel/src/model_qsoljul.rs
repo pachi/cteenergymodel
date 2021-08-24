@@ -11,13 +11,13 @@
 use std::{collections::HashMap, convert::From};
 
 use log::{debug, info, warn};
-use na::{point, vector, Point3};
+use na::{point, vector, IsometryMatrix3, Point2, Point3};
 use nalgebra::Vector3;
 
 use super::{
-    climatedata,
+    climatedata, geometry,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    Geometry, Model, Orientation, QSolJulData, Window,
+    Model, Orientation, QSolJulData, Window,
 };
 use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
@@ -195,28 +195,20 @@ impl Model {
         let num = ray_origins.len();
         let mut num_intersects = 0;
         for ray_orig in ray_origins {
-            for Occluder {
-                id,
-                origin_id,
-                geometry,
-                ..
-            } in occluders
-            {
+            for occluder in occluders {
                 // Descartamos el muro al que pertenece el hueco
-                if id.as_str() == window_wall.id.as_str() {
+                if occluder.id.as_str() == window_wall.id.as_str() {
                     continue;
                 };
                 // Descartamos las sombras de retranqueo que no provienen del hueco
-                if let Some(id) = origin_id {
+                if let Some(id) = &occluder.origin_id {
                     if *id != window.id {
                         continue;
                     };
                 }
-
-                let intersection = geometry.intersect(&ray_orig, ray_dir);
-                if intersection.is_some() {
+                if occluder.intersect(&ray_orig, ray_dir).is_some() {
                     // debug!("La intersección del elemento oclusor {} y el rayo con origen {} y dirección {} es: t: {}, punto: {:#?}",
-                    //        w.name, ray_origin, ray_dir, intersection, intersection.then(|t| Some(ray_origin + t*ray_dir)).unwrap_or_none());
+                    //        occluder.id, ray_origin, ray_dir, intersection, intersection.then(|t| Some(ray_origin + t*ray_dir)).unwrap_or_none());
                     num_intersects += 1;
                     break;
                 }
@@ -240,18 +232,24 @@ impl Model {
             .map(|e| Occluder {
                 id: e.id.clone(),
                 origin_id: None,
-                geometry: e.geometry.clone(),
+                normal: geometry::poly_normal(&e.geometry.polygon),
+                trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
+                polygon: e.geometry.polygon.clone(),
             })
             .collect();
         occluders.extend(self.shades.iter().map(|e| Occluder {
             id: e.id.clone(),
             origin_id: None,
-            geometry: e.geometry.clone(),
+            normal: geometry::poly_normal(&e.geometry.polygon),
+            trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
+            polygon: e.geometry.polygon.clone(),
         }));
         occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
             id: e.id.clone(),
             origin_id: Some(wid.into()),
-            geometry: e.geometry.clone(),
+            normal: geometry::poly_normal(&e.geometry.polygon),
+            trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
+            polygon: e.geometry.polygon.clone(),
         }));
         occluders
     }
@@ -344,11 +342,28 @@ pub fn ray_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3<f32> {
 ///
 /// - el id permite excluir el muro de un hueco
 /// - el origin_id permite excluir las geometrías de retranqueo que no son del hueco analizado
+/// - normal y trans_matrix permiten cachear resultados para cálculo de intersecciones con el polígono 2D transformando un rayo
 pub struct Occluder {
     /// Id del elemento
     id: String,
     /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
     origin_id: Option<String>,
-    /// Información geométrica
-    geometry: Geometry,
+    /// normal del polígono
+    normal: Vector3<f32>,
+    /// Matriz de transformación de coordenadas globales a locales de polígono
+    trans_matrix: Option<IsometryMatrix3<f32>>,
+    /// Polígono 2D
+    polygon: Vec<Point2<f32>>,
+}
+
+impl Occluder {
+    fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+        geometry::intersect_with_data(
+            ray_origin,
+            ray_dir,
+            &self.polygon,
+            self.trans_matrix.as_ref(),
+            &self.normal,
+        )
+    }
 }

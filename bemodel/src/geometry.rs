@@ -9,8 +9,8 @@ use std::convert::From;
 
 // use log::{debug, info, warn};
 use na::{
-    point, vector, IsometryMatrix2, IsometryMatrix3, Point2, Point3, Rotation2, Rotation3, Translation2,
-    Translation3, Vector2, Vector3,
+    point, vector, IsometryMatrix2, IsometryMatrix3, Point2, Point3, Rotation2, Rotation3,
+    Translation2, Translation3, Vector2, Vector3,
 };
 
 use super::{utils::uuid_from_str, Geometry, Shade};
@@ -33,64 +33,86 @@ impl Geometry {
     ///
     /// ray_origin: punto de origen del rayo en coordenadas globales (Vector3)
     /// ray_dir: dirección del rayo en coordenadas globales (Vector3)
-    /// poly: polígono 2D (XY), Polygon: Vec[Point2, ...]
     ///
-    /// - Transforma el rayo al espacio del polígono
-    /// - Calcula el punto de intersección del rayo transformado con el plano XY
-    /// - Comprueba si el punto está en el interior del polígono
-    /// - Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
+    /// Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
     pub fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
         // Matrices de transformación de geometría
-        let trans = self.local_to_global()?;
-        let transInv = trans.inverse();
-
-        // Inverse transform of ray (we keep the 2D polygon as is and transform the ray)
-        let inv_ray_o = transInv * ray_origin;
-        // En JS es transInv.extractRotation porque no diferencia Vector de Point
-        let inv_ray_d = transInv * ray_dir;
-
+        let transInv = self.local_to_global().map(|m| m.inverse());
         // Normal to the planar polygon
-        let n_p = poly_normal(&self.polygon);
-        // Check if ray is parallel to the polygon
-        let denominator = n_p.dot(&inv_ray_d);
-        if denominator.abs() < EPSILON {
-            return None;
-        }
-
-        // Find intersection of ray with XY plane
-        let poly_o_to_ray = point![self.polygon[0].x, self.polygon[0].y, 0.0] - inv_ray_o;
-        let t = n_p.dot(&poly_o_to_ray) / denominator;
-
-        // We only consider positive t (it's a ray!)
-        if t < 0.0 {
-            return None;
-        }
-        let intersection_point = inv_ray_o + t * inv_ray_d;
-
-        // Verify that the point falls inside the polygon
-        let point2d = intersection_point.xy();
-        // TODO: Pending optimization: check if point is in the 2D AABB
-        let point_is_inside = point_in_poly(point2d, &self.polygon);
-
-        if point_is_inside {
-            // Intersection point is at t units in the ray direction from its origin
-            // let intp = trans * intersection_point;
-            // let intp = ray_origin + t * ray_dir;
-            Some(t)
-        } else {
-            None
-        }
+        let n_p = &poly_normal(&self.polygon);
+        intersect_with_data(ray_origin, ray_dir, &self.polygon, transInv.as_ref(), n_p)
     }
-
+    
     /// Matriz de transformación de coordenadas locales a coordenadas globales
     pub fn local_to_global(&self) -> Option<IsometryMatrix3<f32>> {
         local_to_global_transform(self.tilt, self.azimuth, self.position)
     }
-
+    
     /// Matriz de transformación de coordenadas locales a coordenadas de polígono
     pub fn local_to_polygon(&self) -> Option<IsometryMatrix2<f32>> {
         local_to_polygon_transform(&self.polygon)
     }
+}
+
+
+/// Calcula la intersección entre rayo y polígono aportando matrices, e indica el factor t en la dirección del rayo
+///
+/// ray_origin: punto de origen del rayo en coordenadas globales (Vector3)
+/// ray_dir: dirección del rayo en coordenadas globales (Vector3)
+/// polygon: polígono 2D (en plano XY con transformación de coordenadas y normal dadas)
+/// transInv: matriz de transformación desde coordenadas globales a locales del polígono
+/// n_p: normal a la geometría
+///
+/// - Transforma el rayo al espacio del polígono
+/// - Calcula el punto de intersección del rayo transformado con el plano XY
+/// - Comprueba si el punto está en el interior del polígono
+/// - Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
+pub fn intersect_with_data(ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>, polygon: &[Point2<f32>], transInv: Option<&IsometryMatrix3<f32>>, n_p: &Vector3<f32>) -> Option<f32> {
+    let transInv = transInv?;
+    // Inverse transform of ray (we keep the 2D polygon as is and transform the ray)
+    let inv_ray_o = transInv * ray_origin;
+    // En JS es transInv.extractRotation porque no diferencia Vector de Point
+    let inv_ray_d = transInv * ray_dir;
+
+    // Check if ray is parallel to the polygon
+    let denominator = n_p.dot(&inv_ray_d);
+    if denominator.abs() < EPSILON {
+        return None;
+    }
+
+    // Find intersection of ray with XY plane
+    let poly_o_to_ray = point![polygon[0].x, polygon[0].y, 0.0] - inv_ray_o;
+    let t = n_p.dot(&poly_o_to_ray) / denominator;
+
+    // We only consider positive t (it's a ray!)
+    if t < 0.0 {
+        return None;
+    }
+    
+    // Verify that the point falls inside the polygon
+    let intersection_point = inv_ray_o + t * inv_ray_d;
+    let point2d = intersection_point.xy();
+    // TODO: Pending optimization: check if point is in the 2D AABB
+    let point_is_inside = point_in_poly(point2d, polygon);
+    
+    if point_is_inside {
+        // Intersection point is at t units in the ray direction from its origin
+        // let intp = trans * intersection_point;
+        // let intp = ray_origin + t * ray_dir;
+        Some(t)
+    } else {
+        None
+    }
+}
+
+/// Normal al polígono plano, en coordenadas locales
+pub fn poly_normal(poly: &[Point2<f32>]) -> Vector3<f32> {
+    let v0 = poly[1] - poly[0];
+    let v1 = poly[2] - poly[0];
+
+    vector![v0.x, v0.y, 0.0]
+        .cross(&vector![v1.x, v1.y, 0.0])
+        .normalize()
 }
 
 /// Matriz de transformación de los elementos del edificio
@@ -154,16 +176,6 @@ pub fn point_in_poly(pt: Point2<f32>, poly: &[Point2<f32>]) -> bool {
     }
 
     inside
-}
-
-/// Normal al polígono plano, en coordenadas locales
-fn poly_normal(poly: &[Point2<f32>]) -> Vector3<f32> {
-    let v0 = poly[1] - poly[0];
-    let v1 = poly[2] - poly[0];
-
-    vector![v0.x, v0.y, 0.0]
-        .cross(&vector![v1.x, v1.y, 0.0])
-        .normalize()
 }
 
 /// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
