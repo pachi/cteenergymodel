@@ -71,8 +71,7 @@ fn model_json_conversion() {
     let sun_altitude = 45.0;
     let ray_dir = ray_to_sun(sun_azimuth, sun_altitude);
 
-    let setback_shades = model.windows_setback_shades();
-    let occluders = model.find_occluders(&setback_shades);
+    let occluders = model.find_occluders();
     // Ventana P04_E03_PE009_V sunlit Fshobst_HULC = 0.58 - Bloquea Sombra011 + retranqueo 20cm
     let window = get_window_by_name(&model, "P04_E03_PE009_V");
     assert_almost_eq!(model.sunlit_fraction(window, &ray_dir, &occluders), 0.6);

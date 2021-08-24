@@ -17,7 +17,7 @@ use nalgebra::Vector3;
 use super::{
     climatedata,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    Geometry, Model, Orientation, QSolJulData, Shade, Window,
+    Geometry, Model, Orientation, QSolJulData, Window,
 };
 use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
@@ -91,8 +91,7 @@ impl Model {
     /// Considera el sombreamiento de elementos de muro y sombra sobre el hueco
     /// Toma la zona climática del modelo y usa los datos del 1 de julio para los cálculos
     pub fn update_fshobst(&mut self) {
-        let setback_shades = self.windows_setback_shades();
-        let occluders = self.find_occluders(&setback_shades);
+        let occluders = self.find_occluders();
 
         let mut map: HashMap<String, ObstData> = HashMap::new();
         let julyraddata = climatedata::JULYRADDATA.lock().unwrap();
@@ -209,7 +208,7 @@ impl Model {
                 };
                 // Descartamos las sombras de retranqueo que no provienen del hueco
                 if let Some(id) = origin_id {
-                    if *id != &window.id {
+                    if *id != window.id {
                         continue;
                     };
                 }
@@ -232,29 +231,27 @@ impl Model {
     /// TODO: - generar BVH AABB
     /// - https://gamedev.stackexchange.com/a/21030
     /// - https://tavianator.com/2011/ray_box.html
-    pub fn find_occluders<'a>(
-        &'a self,
-        setback_shades: &'a [(String, Shade)],
-    ) -> Vec<Occluder<'a>> {
+    pub fn find_occluders(&self) -> Vec<Occluder> {
+        let setback_shades = self.windows_setback_shades();
         let mut occluders: Vec<_> = self
             .walls
             .iter()
             .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
             .map(|e| Occluder {
-                id: &e.id,
+                id: e.id.clone(),
                 origin_id: None,
-                geometry: &e.geometry,
+                geometry: e.geometry.clone(),
             })
             .collect();
         occluders.extend(self.shades.iter().map(|e| Occluder {
-            id: &e.id,
+            id: e.id.clone(),
             origin_id: None,
-            geometry: &e.geometry,
+            geometry: e.geometry.clone(),
         }));
         occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
-            id: &e.id,
-            origin_id: Some(wid),
-            geometry: &e.geometry,
+            id: e.id.clone(),
+            origin_id: Some(wid.into()),
+            geometry: e.geometry.clone(),
         }));
         occluders
     }
@@ -347,11 +344,11 @@ pub fn ray_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3<f32> {
 ///
 /// - el id permite excluir el muro de un hueco
 /// - el origin_id permite excluir las geometrías de retranqueo que no son del hueco analizado
-pub struct Occluder<'a> {
+pub struct Occluder {
     /// Id del elemento
-    id: &'a String,
+    id: String,
     /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
-    origin_id: Option<&'a String>,
+    origin_id: Option<String>,
     /// Información geométrica
-    geometry: &'a Geometry,
+    geometry: Geometry,
 }
