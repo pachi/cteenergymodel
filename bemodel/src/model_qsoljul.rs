@@ -269,7 +269,7 @@ impl Model {
             Some(wall) => wall,
         };
         // Situamos NxN puntos en el plano del muro
-        const N: usize = 10;
+        const N: usize = 7;
         let wg = &window.geometry;
 
         let (x, y) = match wg.position {
