@@ -91,6 +91,8 @@ fn model_json_conversion() {
             .map(|w| format!("{}: {}", w.name, w.fshobst))
             .collect::<Vec<_>>().join("\n")
     );
+    // HULC: 0.43
+    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.47, 0.01);
 }
 
 #[test]
