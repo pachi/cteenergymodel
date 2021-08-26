@@ -90,6 +90,9 @@ impl Model {
     ///
     /// Considera el sombreamiento de elementos de muro y sombra sobre el hueco
     /// Toma la zona climática del modelo y usa los datos del 1 de julio para los cálculos
+    /// Calcula únicamente la radiación directa bloqueada, y asume factores de visibilidad fijos
+    /// sin calcularlos a partir de la visión del cielo o el terreno y las reflexiones.
+    /// Por esto, tiende a sobreestimar el valor respecto a un método con backwards raytracing completo.
     pub fn update_fshobst(&mut self) {
         let occluders = self.find_occluders();
 
