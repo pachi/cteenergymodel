@@ -96,7 +96,20 @@ impl Model {
     pub fn update_fshobst(&mut self) {
         let occluders = self.find_occluders();
 
+        /// Estructura interna de datos para el soporte del cálculo de fshobst de huecos
+        #[derive(Default, Debug)]
+        struct ObstData {
+            /// Fracción de obstrucción de radiación directa (fracción soleada del hueco) para cada hora
+            fshdir: Vec<f32>,
+            /// Radiación directa en el plano del hueco para cada hora, W/m²
+            dir: Vec<f32>,
+            /// Radiación difusa en el plano del hueco para cada hora, W/m²
+            dif: Vec<f32>,
+            /// Factor de obstáculos remotos (sobre radiación total), ponderado por horas
+            fshobst: f32,
+        }
         let mut map: HashMap<String, ObstData> = HashMap::new();
+        
         let julyraddata = climatedata::JULYRADDATA.lock().unwrap();
         let raddata = match julyraddata.get(&self.meta.climate) {
             Some(data) => data,
@@ -309,19 +322,6 @@ impl Model {
             .map(|p| to_global_tr * point![p.x, p.y, -wg.setback])
             .collect()
     }
-}
-
-/// Estructura interna de datos para el soporte del cálculo de fshobst de huecos
-#[derive(Default, Debug)]
-struct ObstData {
-    /// Fracción de obstrucción de radiación directa (fracción soleada del hueco) para cada hora
-    fshdir: Vec<f32>,
-    /// Radiación directa en el plano del hueco para cada hora, W/m²
-    dir: Vec<f32>,
-    /// Radiación difusa en el plano del hueco para cada hora, W/m²
-    dif: Vec<f32>,
-    /// Factor de obstáculos remotos (sobre radiación total), ponderado por horas
-    fshobst: f32,
 }
 
 /// Vector orientado en la dirección del sol
