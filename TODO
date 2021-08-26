@@ -31,10 +31,6 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 - https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf
 - https://idus.us.es/handle/11441/15301 p. 124
 - Optimizar cálculo de intersecciones en sombras:
-    - Make profile y analizar flamegraph:
-        - casi todo se lo lleva .intersect
-            - la mayoría es bemodel::geometry::local_to_global_transform (cachear?)
-            - Geometry::poly_normal (cachear?)
     - BVH de AABB
 - Caso de las lamas (blinds)
     - Vamos a tantear primero qué valores salen bloqueando solo la radiación directa, comparando con tablas DA DB-HE.
@@ -140,4 +136,4 @@ Documentar hipótesis:
 - Suponemos que la altura de los espacios es igual a la altura suelo-suelo de las plantas y descontamos el grosor de forjado superior.
 - Avisar de incoherencias entre altura de espacios y plantas (pensar cómo, p.e. altura de planta < altura de espacio?)
 - Solamente se contempla la obstrucción de la radiación solar directa. Para la radiación difusa se toman valores fijos de los
-  factores de visibilidad del cielo y del suelo (0.5) sin contemplar obstrucciones remotas.
+  factores de visibilidad del cielo y del suelo (0.5) sin contemplar obstrucciones remotas. Esto tiende a sobreestimar el valor de Fshobst.
