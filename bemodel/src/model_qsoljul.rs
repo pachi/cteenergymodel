@@ -256,21 +256,19 @@ impl Model {
 
     /// Calcula los puntos de origen en el hueco para el cálculo de fracción sombreada
     ///
-    /// Parte de una retícula de 10x10 bloques, para un 1% de cobertura por bloque
-    /// Potenciales mejoras:
-    /// - afinar el valor de N=10 según tamaño y proporción del hueco
-    ///     - (p.e. para que sean más o menos cuadradas las celdas)
-    ///       aunque se pierda precisión en huecos pequeños la resolución sería similar en ambas direcciones
-    ///     - evitar bloque < 0.1 x 0.1 m
+    /// Parte de una retícula dividida entre 5 y 10 partes por dimensión
     /// - en cada rectángulo el punto de muestreo podría ser aleatorio y no el punto central
     pub fn ray_origins_for_window(&self, window: &Window) -> Vec<Point3<f32>> {
         let wall = match self.wall_of_window(window) {
             None => return vec![],
             Some(wall) => wall,
         };
-        // Situamos NxN puntos en el plano del muro
-        const N: usize = 7;
         let wg = &window.geometry;
+
+        // Definimos el número de puntos muestreados para que cada dimensión
+        // se divida en fragmentos de 20cm aprox, sin pasar de 10 ni menos de 5
+        let n_x: usize = 10.min((wg.width / 20.0).round() as usize).max(5);
+        let n_y: usize = 10.min((wg.height / 20.0).round() as usize).max(5);
 
         let (x, y) = match wg.position {
             Some(p) => (p.x, p.y),
@@ -290,11 +288,11 @@ impl Model {
         };
 
         // Puntos 2D del centro de cada bloque en el plano del muro
-        let stepX = wg.width / N as f32;
-        let stepY = wg.height / N as f32;
+        let stepX = wg.width / n_x as f32;
+        let stepY = wg.height / n_y as f32;
         let mut points = vec![];
-        for j in 0..N {
-            for i in 0..N {
+        for j in 0..n_y {
+            for i in 0..n_x {
                 let px = x + (i as f32 + 0.5) * stepX;
                 let py = y + (j as f32 + 0.5) * stepY;
                 points.push(point![px, py]);
