@@ -208,6 +208,13 @@ impl Model {
         }
 
         let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(window);
+
+        // TODO: filtrar aquí oclusores usando BVH de AABB
+        // Una idea de optimización por bloques podría ser
+        // comprobar la intersección del haz de rayos (usando las esquinas)
+        // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter2/static_aabb_plane.html ???
+        // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
+
         let num = ray_origins.len();
         let mut num_intersects = 0;
         for ray_orig in ray_origins {
