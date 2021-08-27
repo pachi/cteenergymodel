@@ -32,6 +32,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 - https://idus.us.es/handle/11441/15301 p. 124
 - Optimizar cálculo de intersecciones en sombras:
     - BVH de AABB
+    - Se podría usar el haz de rayos comprobando la intersección del las esquinas de los huecos con la BVH.
 - Caso de las lamas (blinds)
     - Vamos a tantear primero qué valores salen bloqueando solo la radiación directa, comparando con tablas DA DB-HE.
     - Se puede usar la referencia de EnergyPlus (más sencilla), la ISO 15099 (más precisa) o la UNE-EN ISO 52022-3, aunque esta última considera que no hay transmisión directa.
