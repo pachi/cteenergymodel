@@ -206,29 +206,30 @@ impl Model {
         if window_wall.geometry.normal().dot(ray_dir) < 0.01 {
             return 0.0;
         }
-
-        let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(window);
-
+        
         // TODO: filtrar aquí oclusores usando BVH de AABB
-        // Una idea de optimización por bloques podría ser
-        // comprobar la intersección del haz de rayos (usando las esquinas)
         // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter2/static_aabb_plane.html ???
         // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
-
+        let candidate_occluders: Vec<_> = occluders.iter().filter(|oc| {
+            // Descartamos el muro al que pertenece el hueco
+            if oc.id.as_str() == window_wall.id.as_str() {
+                return false;
+            };
+            // Descartamos las sombras de retranqueo que no provienen del hueco
+            if let Some(id) = &oc.origin_id {
+                if *id != window.id {
+                    return false;
+                };
+            };
+            true
+        }).collect();
+        
+        // Pensar si es posible la optimización por paquetes de rayos
+        let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(window);
         let num = ray_origins.len();
         let mut num_intersects = 0;
         for ray_orig in ray_origins {
-            for occluder in occluders {
-                // Descartamos el muro al que pertenece el hueco
-                if occluder.id.as_str() == window_wall.id.as_str() {
-                    continue;
-                };
-                // Descartamos las sombras de retranqueo que no provienen del hueco
-                if let Some(id) = &occluder.origin_id {
-                    if *id != window.id {
-                        continue;
-                    };
-                }
+            for occluder in &candidate_occluders {
                 if occluder.intersect(&ray_orig, ray_dir).is_some() {
                     // debug!("La intersección del elemento oclusor {} y el rayo con origen {} y dirección {} es: t: {}, punto: {:#?}",
                     //        occluder.id, ray_origin, ray_dir, intersection, intersection.then(|t| Some(ray_origin + t*ray_dir)).unwrap_or_none());
