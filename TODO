@@ -18,6 +18,14 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 - Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabático
 - Ver si se calcula bien el volumen de espacios con cerramientos inclinados
 
+# Modelo
+
+## bemodel
+
+- Ver funciones que se podrían hacer infalibles sabiendo que hay definición geométrica (punto + poly)
+    - implementar is_full_geometry (e.geometry.position.is_some()) y filtrar
+
+
 ## cte::Data
 
 ## Lamas en huecos
