@@ -48,7 +48,7 @@ impl Geometry {
         local_to_global_transform(self.tilt, self.azimuth, self.position)
     }
     
-    /// Matriz de transformación de coordenadas locales a coordenadas de polígono
+    /// Matriz de transformación de coordenadas locales de la geometría a coordenadas de polígono interno
     pub fn local_to_polygon(&self) -> Option<IsometryMatrix2<f32>> {
         local_to_polygon_transform(&self.polygon)
     }

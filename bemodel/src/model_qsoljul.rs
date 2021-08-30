@@ -109,7 +109,7 @@ impl Model {
             fshobst: f32,
         }
         let mut map: HashMap<String, ObstData> = HashMap::new();
-        
+
         let julyraddata = climatedata::JULYRADDATA.lock().unwrap();
         let raddata = match julyraddata.get(&self.meta.climate) {
             Some(data) => data,
