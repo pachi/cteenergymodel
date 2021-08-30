@@ -11,11 +11,11 @@
 use std::{collections::HashMap, convert::From};
 
 use log::{debug, info, warn};
-use na::{point, vector, IsometryMatrix3, Point2, Point3};
-use nalgebra::Vector3;
+use nalgebra::{point, vector, Point3, Vector3};
 
 use super::{
-    climatedata, geometry,
+    climatedata,
+    geometry::{poly_normal, Occluder},
     BoundaryType::{ADIABATIC, EXTERIOR},
     Model, Orientation, QSolJulData, Window,
 };
@@ -206,24 +206,27 @@ impl Model {
         if window_wall.geometry.normal().dot(ray_dir) < 0.01 {
             return 0.0;
         }
-        
+
         // TODO: filtrar aquí oclusores usando BVH de AABB
         // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter2/static_aabb_plane.html ???
         // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
-        let candidate_occluders: Vec<_> = occluders.iter().filter(|oc| {
-            // Descartamos el muro al que pertenece el hueco
-            if oc.id.as_str() == window_wall.id.as_str() {
-                return false;
-            };
-            // Descartamos las sombras de retranqueo que no provienen del hueco
-            if let Some(id) = &oc.origin_id {
-                if *id != window.id {
+        let candidate_occluders: Vec<_> = occluders
+            .iter()
+            .filter(|oc| {
+                // Descartamos el muro al que pertenece el hueco
+                if oc.id.as_str() == window_wall.id.as_str() {
                     return false;
                 };
-            };
-            true
-        }).collect();
-        
+                // Descartamos las sombras de retranqueo que no provienen del hueco
+                if let Some(id) = &oc.origin_id {
+                    if *id != window.id {
+                        return false;
+                    };
+                };
+                true
+            })
+            .collect();
+
         // Pensar si es posible la optimización por paquetes de rayos
         let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(window);
         let num = ray_origins.len();
@@ -256,24 +259,27 @@ impl Model {
             .map(|e| Occluder {
                 id: e.id.clone(),
                 origin_id: None,
-                normal: geometry::poly_normal(&e.geometry.polygon),
+                normal: poly_normal(&e.geometry.polygon),
                 trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
                 polygon: e.geometry.polygon.clone(),
+                aabb: e.geometry.aabb(),
             })
             .collect();
         occluders.extend(self.shades.iter().map(|e| Occluder {
             id: e.id.clone(),
             origin_id: None,
-            normal: geometry::poly_normal(&e.geometry.polygon),
+            normal: poly_normal(&e.geometry.polygon),
             trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),
+            aabb: e.geometry.aabb(),
         }));
         occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
             id: e.id.clone(),
             origin_id: Some(wid.into()),
-            normal: geometry::poly_normal(&e.geometry.polygon),
+            normal: poly_normal(&e.geometry.polygon),
             trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),
+            aabb: e.geometry.aabb(),
         }));
         occluders
     }
@@ -345,34 +351,4 @@ pub fn ray_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3<f32> {
         salt.sin()
     ]
     .normalize()
-}
-
-/// Elemento oclusor, con información geométrica e identificación
-///
-/// - el id permite excluir el muro de un hueco
-/// - el origin_id permite excluir las geometrías de retranqueo que no son del hueco analizado
-/// - normal y trans_matrix permiten cachear resultados para cálculo de intersecciones con el polígono 2D transformando un rayo
-pub struct Occluder {
-    /// Id del elemento
-    id: String,
-    /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
-    origin_id: Option<String>,
-    /// normal del polígono
-    normal: Vector3<f32>,
-    /// Matriz de transformación de coordenadas globales a locales de polígono
-    trans_matrix: Option<IsometryMatrix3<f32>>,
-    /// Polígono 2D
-    polygon: Vec<Point2<f32>>,
-}
-
-impl Occluder {
-    fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
-        geometry::intersect_with_data(
-            ray_origin,
-            ray_dir,
-            &self.polygon,
-            self.trans_matrix.as_ref(),
-            &self.normal,
-        )
-    }
 }

@@ -42,18 +42,44 @@ impl Geometry {
         let n_p = &poly_normal(&self.polygon);
         intersect_with_data(ray_origin, ray_dir, &self.polygon, transInv.as_ref(), n_p)
     }
-    
+
+    pub fn aabb(&self) -> AABB {
+        if let Some(trans) = self.local_to_global() {
+            let mut min_x = f32::INFINITY;
+            let mut min_y = f32::INFINITY;
+            let mut min_z = f32::INFINITY;
+            let mut max_x = f32::NEG_INFINITY;
+            let mut max_y = f32::NEG_INFINITY;
+            let mut max_z = f32::NEG_INFINITY;
+
+            for p in self.polygon.iter().map(|p| trans * point![p.x, p.y, 0.0]) {
+                min_x = min_x.min(p.x);
+                max_x = max_x.max(p.x);
+                min_y = min_y.min(p.y);
+                max_y = max_y.max(p.y);
+                min_z = min_z.min(p.z);
+                max_z = max_z.max(p.z);
+            }
+
+            AABB {
+                min: point![min_x, min_y, min_z],
+                max: point![max_x, max_y, max_z],
+            }
+        } else {
+            Default::default()
+        }
+    }
+
     /// Matriz de transformación de coordenadas locales a coordenadas globales
     pub fn local_to_global(&self) -> Option<IsometryMatrix3<f32>> {
         local_to_global_transform(self.tilt, self.azimuth, self.position)
     }
-    
+
     /// Matriz de transformación de coordenadas locales de la geometría a coordenadas de polígono interno
     pub fn local_to_polygon(&self) -> Option<IsometryMatrix2<f32>> {
         local_to_polygon_transform(&self.polygon)
     }
 }
-
 
 /// Calcula la intersección entre rayo y polígono aportando matrices, e indica el factor t en la dirección del rayo
 ///
@@ -67,7 +93,13 @@ impl Geometry {
 /// - Calcula el punto de intersección del rayo transformado con el plano XY
 /// - Comprueba si el punto está en el interior del polígono
 /// - Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
-pub fn intersect_with_data(ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>, polygon: &[Point2<f32>], transInv: Option<&IsometryMatrix3<f32>>, n_p: &Vector3<f32>) -> Option<f32> {
+pub fn intersect_with_data(
+    ray_origin: &Point3<f32>,
+    ray_dir: &Vector3<f32>,
+    polygon: &[Point2<f32>],
+    transInv: Option<&IsometryMatrix3<f32>>,
+    n_p: &Vector3<f32>,
+) -> Option<f32> {
     let transInv = transInv?;
     // Inverse transform of ray (we keep the 2D polygon as is and transform the ray)
     let inv_ray_o = transInv * ray_origin;
@@ -88,13 +120,13 @@ pub fn intersect_with_data(ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>, pol
     if t < 0.0 {
         return None;
     }
-    
+
     // Verify that the point falls inside the polygon
     let intersection_point = inv_ray_o + t * inv_ray_d;
     let point2d = intersection_point.xy();
     // TODO: Pending optimization: check if point is in the 2D AABB
     let point_is_inside = point_in_poly(point2d, polygon);
-    
+
     if point_is_inside {
         // Intersection point is at t units in the ray direction from its origin
         // let intp = trans * intersection_point;
@@ -270,4 +302,90 @@ pub(crate) fn shades_for_window_setback(
         (win.id.clone(), right_fin),
         (win.id.clone(), sill),
     ]
+}
+
+/// Axis aligned bounding box definida por puntos extremos
+#[derive(Debug, Copy, Clone)]
+pub struct AABB {
+    pub min: Point3<f32>,
+    pub max: Point3<f32>,
+}
+
+impl AABB {
+    /// Detecta si existe intersección de AABB y rayo usando el algoritmo de Cyrus-Beck
+    /// https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
+    /// NaN es siempre distinto, de modo que las comparaciones con NaN son correctas
+    /// Las AABB deben tener ancho > 0 en todas las dimensiones
+    pub fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+        let idx = 1.0 / ray_dir.x;
+        let idy = 1.0 / ray_dir.y;
+        let idz = 1.0 / ray_dir.z;
+
+        let t1 = (self.min.x - ray_origin.x) * idx;
+        let t2 = (self.max.x - ray_origin.x) * idx;
+        let t3 = (self.min.y - ray_origin.y) * idy;
+        let t4 = (self.max.y - ray_origin.y) * idy;
+        let t5 = (self.min.z - ray_origin.z) * idz;
+        let t6 = (self.max.z - ray_origin.z) * idz;
+
+        let tmin = t1.min(t2).max(t3.min(t4)).max(t5.min(t6));
+        let tmax = t1.max(t2).min(t3.max(t4)).min(t5.max(t6));
+
+        // Si tmax < 0 la línea interseca pero el AABB está detrás
+        if tmax < 0.0 {
+            // t = tmax;
+            return None;
+        }
+
+        // Si tmin > tmax el rayo no corta AABB
+        if tmin > tmax {
+            // t = tmax;
+            return None;
+        }
+        // t = tmin;
+        Some(tmin)
+    }
+}
+
+impl Default for AABB {
+    fn default() -> Self {
+        Self {
+            min: point![0.0, 0.0, 0.0],
+            max: point![0.0, 0.0, 0.0],
+        }
+    }
+}
+
+/// Elemento oclusor, con información geométrica e identificación
+///
+/// - el id permite excluir el muro de un hueco
+/// - el origin_id permite excluir las geometrías de retranqueo que no son del hueco analizado
+/// - normal y trans_matrix permiten cachear resultados para cálculo de intersecciones con el polígono 2D transformando un rayo
+#[derive(Debug)]
+pub struct Occluder {
+    /// Id del elemento
+    pub id: String,
+    /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
+    pub origin_id: Option<String>,
+    /// normal del polígono
+    pub normal: Vector3<f32>,
+    /// Matriz de transformación de coordenadas globales a locales de polígono
+    pub trans_matrix: Option<IsometryMatrix3<f32>>,
+    /// Polígono 2D
+    pub polygon: Vec<Point2<f32>>,
+    /// AABB (min, max)
+    pub aabb: AABB,
+}
+
+impl Occluder {
+    pub fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+        self.aabb.intersects(ray_origin, ray_dir)?;
+        crate::geometry::intersect_with_data(
+            ray_origin,
+            ray_dir,
+            &self.polygon,
+            self.trans_matrix.as_ref(),
+            &self.normal,
+        )
+    }
 }

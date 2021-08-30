@@ -2,9 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use bemodel::{
-    climatedata, geometry::point_in_poly, model_qsoljul::ray_to_sun, Geometry, Model, Window,
-};
+use bemodel::{Geometry, Model, Window, climatedata, geometry::{AABB, point_in_poly}, model_qsoljul::ray_to_sun};
 use nalgebra::{point, vector};
 
 extern crate env_logger;
@@ -195,4 +193,25 @@ fn intersections() {
 
     assert!(!point_in_poly(point![-9.81, -7.3], &geom4.polygon));
     assert!(point_in_poly(point![2.0, 2.0], &geom4.polygon));
+}
+
+#[test]
+fn aabb_intersections() {
+    let aabb1 = AABB {min: point![1.0, 1.0, 1.0], max: point![5.0, 5.0, 5.0]};
+    let r_o1 = point![0.0, 0.0, 0.0];
+    let r_d1 = vector![1.0, 1.0, 1.0];
+    assert!(aabb1.intersects(&r_o1, &r_d1).is_some());
+
+    let r_o2 = point![6.0, 6.0, 6.0];
+    assert!(aabb1.intersects(&r_o2, &r_d1).is_none());
+
+    let r_d2 = vector![-1.0, -1.0, -1.0];
+    assert!(aabb1.intersects(&r_o2, &r_d2).is_some());
+
+    let r_o3 = point![0.0, 2.0, 2.0];
+    let r_d3 = vector![1.0, 0.0, 0.0];
+    assert!(aabb1.intersects(&r_o3, &r_d3).is_some());
+
+    let r_d4 = vector![0.0, 0.0, 1.0];
+    assert!(aabb1.intersects(&r_o3, &r_d4).is_none());
 }

@@ -9,13 +9,13 @@ extern crate nalgebra as na;
 pub mod climatedata;
 pub mod common;
 pub(crate) mod from_ctehexml;
+pub mod geometry;
 mod model;
+pub mod model_check;
 pub mod model_impl;
 pub mod model_n50;
 pub mod model_qsoljul;
 pub mod model_transmittance;
-pub mod model_check;
-pub mod geometry;
 mod utils;
 
 pub use climatedata::*;
