@@ -94,7 +94,7 @@ impl Model {
     /// sin calcularlos a partir de la visión del cielo o el terreno y las reflexiones.
     /// Por esto, tiende a sobreestimar el valor respecto a un método con backwards raytracing completo.
     pub fn update_fshobst(&mut self) {
-        let occluders = self.find_occluders();
+        let occluders = self.collect_occluders();
 
         /// Estructura interna de datos para el soporte del cálculo de fshobst de huecos
         #[derive(Default, Debug)]
@@ -247,7 +247,7 @@ impl Model {
     /// TODO: - generar BVH AABB
     /// - https://gamedev.stackexchange.com/a/21030
     /// - https://tavianator.com/2011/ray_box.html
-    pub fn find_occluders(&self) -> Vec<Occluder> {
+    pub fn collect_occluders(&self) -> Vec<Occluder> {
         let setback_shades = self.windows_setback_shades();
         let mut occluders: Vec<_> = self
             .walls
