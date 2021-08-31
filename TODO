@@ -38,6 +38,8 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 - http://performativedesign.com/articles/2008/averagehourly/
 - https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf
 - https://idus.us.es/handle/11441/15301 p. 124
+- Reducir diferencia con HULC en qsoljul
+    - Ver qué día del año usar...
 - Optimizar cálculo de intersecciones en sombras:
     - BVH de AABB
     - Se podría usar el haz de rayos comprobando la intersección del las esquinas de los huecos con la BVH.
