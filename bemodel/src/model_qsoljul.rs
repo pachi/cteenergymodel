@@ -15,6 +15,7 @@ use nalgebra::{point, vector, Point3, Vector3};
 
 use super::{
     climatedata,
+    common::RadData,
     geometry::{poly_normal, Occluder},
     BoundaryType::{ADIABATIC, EXTERIOR},
     Model, Orientation, QSolJulData, Window,
@@ -90,8 +91,6 @@ impl Model {
     ///
     /// Considera el sombreamiento de elementos de muro y sombra sobre el hueco
     /// Toma la zona climática del modelo y usa los datos del 1 de julio para los cálculos
-    /// Para reducir el tiempo de cálculo usa pasos de 2h, promediando el valor geométrico y la hora
-    /// y usando la suma de radiación para ese intervalo.
     /// Calcula únicamente la radiación directa bloqueada, y asume factores de visibilidad fijos
     /// sin calcularlos a partir de la visión del cielo o el terreno y las reflexiones.
     /// Por esto, tiende a sobreestimar el valor respecto a un método con backwards raytracing completo.
@@ -123,31 +122,17 @@ impl Model {
             .get(&self.meta.climate)
             .unwrap()
             .latitude;
-        // Calcula usando periodos de 2 horas. Promediamos la hora y los datos geométricos y asignamos la suma de la radiación a esa hora intermedia
-        for chunk in raddata.chunks(2) {
-            let (month, day, hour, azimuth, altitude, dir, dif) = match chunk {
-                [d1, d2] => (
-                    d1.month,
-                    d1.day,
-                    (d1.hour + d2.hour) / 2.0,
-                    (d1.azimuth + d2.azimuth) / 2.0,
-                    (d1.altitude + d2.altitude) / 2.0,
-                    (d1.dir + d2.dir),
-                    (d1.dif + d2.dif),
-                ),
-                chunk => {
-                    let d1 = &chunk[0];
-                    (
-                        d1.month,
-                        d1.day,
-                        d1.hour,
-                        d1.azimuth,
-                        d1.altitude,
-                        d1.dir,
-                        d1.dif,
-                    )
-                }
-            };
+        for d in raddata {
+            let RadData {
+                month,
+                day,
+                hour,
+                azimuth,
+                altitude,
+                dir,
+                dif,
+                ..
+            } = *d;
             let ray_dir = ray_to_sun(azimuth, altitude);
             let nday = nday_from_md(month, day);
             for window in &self.windows {

@@ -1,0 +1,2914 @@
+{
+  "meta": {
+    "name": "Vivienda unifamiliar",
+    "is_new_building": true,
+    "is_dwelling": true,
+    "num_dwellings": 1,
+    "climate": "A4",
+    "global_ventilation_l_s": 33,
+    "n50_test_ach": null,
+    "d_perim_insulation": 1,
+    "rn_perim_insulation": 1
+  },
+  "spaces": [
+    {
+      "id": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "name": "P01_E01",
+      "area": 25.04,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 2.7,
+      "n_v": null,
+      "z": 0,
+      "exposed_perimeter": 7.21
+    },
+    {
+      "id": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "name": "P01_E02",
+      "area": 5.45,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 2.7,
+      "n_v": null,
+      "z": 0,
+      "exposed_perimeter": 5.41
+    },
+    {
+      "id": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "name": "P01_E03",
+      "area": 10.78,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 2.7,
+      "n_v": null,
+      "z": 0,
+      "exposed_perimeter": 5.31
+    },
+    {
+      "id": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "name": "P01_E04",
+      "area": 6.47,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 2.7,
+      "n_v": null,
+      "z": 0,
+      "exposed_perimeter": 10.5
+    },
+    {
+      "id": "99e44bea-0460-ee84-1147-bb281692529c",
+      "name": "P02_E01",
+      "area": 11.12,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 3,
+      "n_v": null,
+      "z": 2.7,
+      "exposed_perimeter": 3.6
+    },
+    {
+      "id": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "name": "P02_E02",
+      "area": 9.87,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 3,
+      "n_v": null,
+      "z": 2.7,
+      "exposed_perimeter": 2.54
+    },
+    {
+      "id": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "name": "P02_E03",
+      "area": 12.4,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 3,
+      "n_v": null,
+      "z": 2.7,
+      "exposed_perimeter": 3.88
+    },
+    {
+      "id": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "name": "P02_E04",
+      "area": 5.76,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 3,
+      "n_v": null,
+      "z": 2.7,
+      "exposed_perimeter": 2.3
+    },
+    {
+      "id": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "name": "P02_E05",
+      "area": 5.88,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 3,
+      "n_v": null,
+      "z": 2.7,
+      "exposed_perimeter": 7.46
+    },
+    {
+      "id": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "name": "P02_E06",
+      "area": 9.6,
+      "multiplier": 1,
+      "type": "CONDITIONED",
+      "inside_tenv": true,
+      "height": 3,
+      "n_v": null,
+      "z": 2.7,
+      "exposed_perimeter": 14.95
+    }
+  ],
+  "walls": [
+    {
+      "id": "533865ce-8e6a-c0a8-a2d9-cbb2fbea4ab5",
+      "name": "P01_E01_PE001",
+      "A": 8.27,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -180,
+        "position": [
+          3.6100469,
+          -2.8465981,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.5958343,
+            0
+          ],
+          [
+            3.5958343,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "d42ed212-0e16-17c6-c916-95290d4db5ef",
+      "name": "P01_E01_PE003",
+      "A": 8.32,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 0.22,
+        "position": [
+          0.0027723028,
+          -9.796509,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.6165302,
+            0
+          ],
+          [
+            3.6165302,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "0e75b8a8-90d7-587f-55ed-4a340f95b16f",
+      "name": "P01_E01_Med001",
+      "A": 12.24,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "nextto": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.07,
+        "position": [
+          3.6192756,
+          -9.782523,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            4.53339,
+            0
+          ],
+          [
+            4.53339,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "135c0154-af0e-e483-8924-37cd4631fc0b",
+      "name": "P01_E01_Med002",
+      "A": 6.49,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.08,
+        "position": [
+          3.6132438,
+          -5.249137,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.4025412,
+            0
+          ],
+          [
+            2.4025412,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cbe0f10b-776a-69c4-2f0b-c09c3633c6f0",
+      "name": "P01_E01_MED001",
+      "A": 18.76,
+      "bounds": "ADIABATIC",
+      "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -90.09,
+        "position": [
+          0.014212725,
+          -2.846598,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            6.9499207,
+            0
+          ],
+          [
+            6.9499207,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "a5a646b7-85d8-ddc1-8835-ac3616349030",
+      "name": "P01_E01_FTER001",
+      "A": 25.04,
+      "bounds": "GROUND",
+      "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
+      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "nextto": null,
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -90,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "polygon": [
+          [
+            9.782523,
+            -3.619276
+          ],
+          [
+            9.796509,
+            -0.002772731
+          ],
+          [
+            2.846598,
+            -0.01421285
+          ],
+          [
+            2.846598,
+            -3.610047
+          ],
+          [
+            5.249137,
+            -3.613244
+          ]
+        ]
+      }
+    },
+    {
+      "id": "287e688a-5fda-decf-438b-58013a2ada83",
+      "name": "P01_E02_PE004",
+      "A": 1.53,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 0.22,
+        "position": [
+          3.6192756,
+          -9.782523,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.1899661,
+            0
+          ],
+          [
+            1.1899661,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "843ad978-8173-f870-d13c-e30f5c6b5987",
+      "name": "P01_E02_PE005",
+      "A": 5.6,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 89.25,
+        "position": [
+          4.8092327,
+          -9.777921,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.0736995,
+            0
+          ],
+          [
+            2.0736995,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "b3cd2546-e362-c0ea-d4f7-a83e896d3f20",
+      "name": "P01_E02_Med003",
+      "A": 3.26,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 178.1,
+        "position": [
+          4.818425,
+          -5.289166,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.2058457,
+            0
+          ],
+          [
+            1.2058457,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "fa3267bd-ca61-c282-5537-ad9ace5bcd3f",
+      "name": "P01_E02_Med005",
+      "A": 6.52,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "nextto": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.43,
+        "position": [
+          4.8365326,
+          -7.704401,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.415303,
+            0
+          ],
+          [
+            2.415303,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "a9000b58-e6f8-f3b9-7bee-25311bbf0e74",
+      "name": "P01_E02_FTER002",
+      "A": 5.45,
+      "bounds": "GROUND",
+      "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
+      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "nextto": null,
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -90,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "polygon": [
+          [
+            5.289166,
+            -4.818425
+          ],
+          [
+            7.704401,
+            -4.836533
+          ],
+          [
+            9.777921,
+            -4.809233
+          ],
+          [
+            9.782523,
+            -3.619276
+          ],
+          [
+            5.249137,
+            -3.613244
+          ]
+        ]
+      }
+    },
+    {
+      "id": "3a5df886-d7c7-c80f-9dcd-edb41be26016",
+      "name": "P01_E03_PE001",
+      "A": 6.11,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 0.41,
+        "position": [
+          4.8365326,
+          -7.704401,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.5831208,
+            0
+          ],
+          [
+            2.5831208,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "a663d3cf-1dcd-00e1-f931-77f139985df5",
+      "name": "P01_E03_PE003",
+      "A": 4.18,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -179.99,
+        "position": [
+          7.412345,
+          -2.8634772,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.8595448,
+            0
+          ],
+          [
+            1.8595448,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "e2dcf444-0b20-5f66-14ba-d98ce4953dee",
+      "name": "P01_E03_Med001",
+      "A": 6.45,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -90.45,
+        "position": [
+          5.5528,
+          -2.8637822,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.3882864,
+            0
+          ],
+          [
+            2.3882864,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6bf8bb64-51f3-5162-db58-06927384cee0",
+      "name": "P01_E03_Med002",
+      "A": 1.94,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -177.03,
+        "position": [
+          5.534208,
+          -5.2519965,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.71674705,
+            0
+          ],
+          [
+            0.71674705,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "590da616-cc82-cb32-cc1b-92986b62f421",
+      "name": "P01_E03_MED001",
+      "A": 13.02,
+      "bounds": "ADIABATIC",
+      "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.08,
+        "position": [
+          7.4195867,
+          -7.6858244,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            4.822352,
+            0
+          ],
+          [
+            4.822352,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "b892d19e-96cc-73e5-9586-9c72bb9dd203",
+      "name": "P01_E03_FTER003",
+      "A": 10.78,
+      "bounds": "GROUND",
+      "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
+      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "nextto": null,
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -90,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "polygon": [
+          [
+            2.863782,
+            -5.5528
+          ],
+          [
+            2.863477,
+            -7.412345
+          ],
+          [
+            7.685824,
+            -7.419587
+          ],
+          [
+            7.704401,
+            -4.836533
+          ],
+          [
+            5.289166,
+            -4.818425
+          ],
+          [
+            5.251996,
+            -5.534208
+          ]
+        ]
+      }
+    },
+    {
+      "id": "7354cbb8-6b12-c6a2-4034-f7adbc80f15b",
+      "name": "P01_E04_PE001",
+      "A": 2.55,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.61,
+        "position": [
+          5.5528,
+          -2.8637822,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.946072,
+            0
+          ],
+          [
+            0.946072,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "4f9ceedd-a380-5452-be9b-faa5a2b35bd6",
+      "name": "P01_E04_PE002",
+      "A": 3.33,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -180,
+        "position": [
+          5.542692,
+          -1.9177642,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.9140623,
+            0
+          ],
+          [
+            1.9140623,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cacced72-88c1-50c6-72d9-6b11f6e10326",
+      "name": "P01_E04_PE003",
+      "A": 2.51,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -91.15,
+        "position": [
+          3.62863,
+          -1.9177641,
+          0
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.92901987,
+            0
+          ],
+          [
+            0.92901987,
+            2.7
+          ],
+          [
+            0,
+            2.7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "42c4fc15-d786-e23d-beae-53b0b29432ff",
+      "name": "P01_E04_FTER004",
+      "A": 6.47,
+      "bounds": "GROUND",
+      "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
+      "space": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "nextto": null,
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -90,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "polygon": [
+          [
+            5.249137,
+            -3.613244
+          ],
+          [
+            2.846598,
+            -3.610047
+          ],
+          [
+            1.917764,
+            -3.62863
+          ],
+          [
+            1.917764,
+            -5.542692
+          ],
+          [
+            2.863782,
+            -5.5528
+          ],
+          [
+            5.251996,
+            -5.534208
+          ],
+          [
+            5.289166,
+            -4.818425
+          ]
+        ]
+      }
+    },
+    {
+      "id": "aa702707-b64b-1280-d199-ed7fac965bec",
+      "name": "P02_E01_PE001",
+      "A": 9.35,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -180,
+        "position": [
+          3.6100469,
+          -2.8465981,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.5958343,
+            0
+          ],
+          [
+            3.5958343,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "8ef829c2-fef3-e713-ed59-d1f455135f3a",
+      "name": "P02_E01_FE001",
+      "A": 11.12,
+      "bounds": "EXTERIOR",
+      "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "nextto": null,
+      "geometry": {
+        "tilt": 0,
+        "azimuth": 90,
+        "position": [
+          0,
+          0,
+          5.7
+        ],
+        "polygon": [
+          [
+            -5.926586,
+            -0.009142421
+          ],
+          [
+            -5.9418573,
+            -3.6141655
+          ],
+          [
+            -2.8465981,
+            -3.6100469
+          ],
+          [
+            -2.846598,
+            -0.014212601
+          ]
+        ]
+      }
+    },
+    {
+      "id": "13bf0ffa-b146-c96f-e12c-ad651746a905",
+      "name": "P02_E01_FI001",
+      "A": 11.12,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "nextto": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -90,
+        "position": [
+          0,
+          0,
+          2.7
+        ],
+        "polygon": [
+          [
+            5.926586,
+            -0.009142939
+          ],
+          [
+            2.846598,
+            -0.01421285
+          ],
+          [
+            2.846598,
+            -3.610047
+          ],
+          [
+            5.941857,
+            -3.614166
+          ]
+        ]
+      }
+    },
+    {
+      "id": "c0a02e85-bdcb-c3cf-d0e3-b8d7fb842663",
+      "name": "P02_E01_Med001",
+      "A": 10.82,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "nextto": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -0.24,
+        "position": [
+          0.00914268,
+          -5.926586,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.6050556,
+            0
+          ],
+          [
+            3.6050556,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "51a266d4-3a9d-c174-2731-7327b91b5799",
+      "name": "P02_E01_Med002",
+      "A": 9.29,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.08,
+        "position": [
+          3.6141658,
+          -5.941857,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.0952618,
+            0
+          ],
+          [
+            3.0952618,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "b78f9986-1d96-56a2-1834-e7dc755bc7dd",
+      "name": "P02_E01_MED001",
+      "A": 9.24,
+      "bounds": "ADIABATIC",
+      "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -90.09,
+        "position": [
+          0.014212725,
+          -2.846598,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.0799923,
+            0
+          ],
+          [
+            3.0799923,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "bace5dde-0b16-53fe-4491-a30edbadb765",
+      "name": "P02_E02_PE003",
+      "A": 6.66,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 1.1,
+        "position": [
+          4.8092327,
+          -9.777921,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.5389209,
+            0
+          ],
+          [
+            2.5389209,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "80e08545-fd25-79a2-71ad-ccbbe275a2ad",
+      "name": "P02_E02_ME001",
+      "A": 5.27,
+      "bounds": "EXTERIOR",
+      "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": null,
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -92.02,
+        "position": [
+          7.4189997,
+          -7.6850004,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.045268,
+            2.116352e-11
+          ],
+          [
+            2.182584,
+            2.534737
+          ],
+          [
+            0.1099182,
+            2.58073
+          ]
+        ]
+      }
+    },
+    {
+      "id": "818625ff-1720-44dd-47ee-b98347f02f72",
+      "name": "P02_E02_ME002",
+      "A": 9.87,
+      "bounds": "EXTERIOR",
+      "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": null,
+      "geometry": {
+        "tilt": 0,
+        "azimuth": 90,
+        "position": [
+          0,
+          0,
+          5.7
+        ],
+        "polygon": [
+          [
+            -5.9266057,
+            -5.5220447
+          ],
+          [
+            -5.9265575,
+            -4.8232036
+          ],
+          [
+            -7.4999332,
+            -4.8174963
+          ],
+          [
+            -9.777921,
+            -4.809232
+          ],
+          [
+            -9.729289,
+            -7.3476872
+          ],
+          [
+            -7.6858244,
+            -7.4195867
+          ],
+          [
+            -5.9419255,
+            -7.4169674
+          ]
+        ]
+      }
+    },
+    {
+      "id": "e789e2b5-46cd-5b63-fa51-128a11e72c50",
+      "name": "P02_E02_FI001",
+      "A": 4.56,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -90,
+        "position": [
+          5.5219994,
+          -5.9260006,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.01499987,
+            -1.894
+          ],
+          [
+            1.759,
+            -1.897
+          ],
+          [
+            1.778,
+            0.6859999
+          ],
+          [
+            0.02199984,
+            0.6989999
+          ],
+          [
+            0,
+            0.6989999
+          ]
+        ]
+      }
+    },
+    {
+      "id": "e67c9b43-bb51-5477-9558-53b5ec382bfb",
+      "name": "P02_E02_Med003",
+      "A": 2.1,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 180,
+        "position": [
+          5.5220447,
+          -5.9266057,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.6988411,
+            0
+          ],
+          [
+            0.6988411,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "a2fef26d-7081-bc8d-87a5-0e27646ed632",
+      "name": "P02_E02_Med004",
+      "A": 4.72,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -90.21,
+        "position": [
+          4.8232036,
+          -5.926557,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.5733861,
+            0
+          ],
+          [
+            1.5733861,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "84618c5e-87be-980f-bde5-a6469d381e30",
+      "name": "P02_E02_Med005",
+      "A": 6.83,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -90.21,
+        "position": [
+          4.8174963,
+          -7.499933,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.278003,
+            0
+          ],
+          [
+            2.278003,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "e1323c66-90d2-1c4f-c2a0-b061ee179ac3",
+      "name": "P02_E02_Med006",
+      "A": 5.68,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 179.54,
+        "position": [
+          7.4169674,
+          -5.9419255,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.8949846,
+            0
+          ],
+          [
+            1.8949846,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "05429fba-a2be-1139-50b0-29f4bfe13d6e",
+      "name": "P02_E02_MED001",
+      "A": 5.23,
+      "bounds": "ADIABATIC",
+      "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.09,
+        "position": [
+          7.4195867,
+          -7.6858244,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.7439009,
+            0
+          ],
+          [
+            1.7439009,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "10f0a057-dd1a-287d-7f09-54cac1dd6fd0",
+      "name": "P02_E02_MED002",
+      "A": 6.13,
+      "bounds": "ADIABATIC",
+      "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 87.98,
+        "position": [
+          7.3476877,
+          -9.729288,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.0447288,
+            0
+          ],
+          [
+            2.0447288,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "c6b34d7f-8fff-299e-992a-4123e90ca2ed",
+      "name": "P02_E03_PE007",
+      "A": 7.39,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 0.22,
+        "position": [
+          0.0027723028,
+          -9.796509,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.942815,
+            0
+          ],
+          [
+            2.942815,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "5ce7cc4d-6a35-64d2-8ce5-2fb04a312c8d",
+      "name": "P02_E03_FE002",
+      "A": 12.4,
+      "bounds": "EXTERIOR",
+      "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "nextto": null,
+      "geometry": {
+        "tilt": 0,
+        "azimuth": 90,
+        "position": [
+          0,
+          0,
+          5.7
+        ],
+        "polygon": [
+          [
+            -9.785129,
+            -2.945565
+          ],
+          [
+            -7.5055723,
+            -2.9610853
+          ],
+          [
+            -7.4748573,
+            -3.6162052
+          ],
+          [
+            -5.9418573,
+            -3.6141655
+          ],
+          [
+            -5.926586,
+            -0.009142421
+          ],
+          [
+            -9.796509,
+            -0.0027718747
+          ]
+        ]
+      }
+    },
+    {
+      "id": "9484d8c6-2714-c41c-6b94-5d85c55a3994",
+      "name": "P02_E03_FI002",
+      "A": 12.4,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "nextto": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -90,
+        "position": [
+          0,
+          0,
+          2.7
+        ],
+        "polygon": [
+          [
+            9.785129,
+            -2.945566
+          ],
+          [
+            9.796509,
+            -0.002772731
+          ],
+          [
+            5.926586,
+            -0.009142939
+          ],
+          [
+            5.941857,
+            -3.614166
+          ],
+          [
+            7.474857,
+            -3.616206
+          ],
+          [
+            7.505572,
+            -2.961086
+          ]
+        ]
+      }
+    },
+    {
+      "id": "3ee96814-dd7f-51ad-dd06-39d0f5a7fdc3",
+      "name": "P02_E03_Med007",
+      "A": 6.84,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "nextto": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 89.61,
+        "position": [
+          2.9455655,
+          -9.785129,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.2796097,
+            0
+          ],
+          [
+            2.2796097,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "588ab2af-8bc0-15b3-1cd7-e7888522f9d7",
+      "name": "P02_E03_Med008",
+      "A": 1.97,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "nextto": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 2.68,
+        "position": [
+          2.9610858,
+          -7.505572,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.65583956,
+            0
+          ],
+          [
+            0.65583956,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "8c8dbeda-15f1-31ec-0b77-ef177085114c",
+      "name": "P02_E03_Med009",
+      "A": 4.6,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.07,
+        "position": [
+          3.6162057,
+          -7.474857,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.5330013,
+            0
+          ],
+          [
+            1.5330013,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "3cbd91fb-2c8f-72c2-49bb-23899bc72731",
+      "name": "P02_E03_MED001",
+      "A": 11.61,
+      "bounds": "ADIABATIC",
+      "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -90.09,
+        "position": [
+          0.00914268,
+          -5.926586,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.869928,
+            0
+          ],
+          [
+            3.869928,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "497af7dc-502b-536d-c8ac-405410e48a74",
+      "name": "P02_E04_PE002",
+      "A": 4.62,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -179.99,
+        "position": [
+          7.412345,
+          -2.8634772,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.8595448,
+            0
+          ],
+          [
+            1.8595448,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "611efe4e-54a2-d406-275a-1e429433f2b7",
+      "name": "P02_E04_ME001",
+      "A": 5.76,
+      "bounds": "EXTERIOR",
+      "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "nextto": null,
+      "geometry": {
+        "tilt": 0,
+        "azimuth": 90,
+        "position": [
+          0,
+          0,
+          5.7
+        ],
+        "polygon": [
+          [
+            -2.8637824,
+            -5.5527997
+          ],
+          [
+            -5.9266057,
+            -5.5220447
+          ],
+          [
+            -5.9419255,
+            -7.4169674
+          ],
+          [
+            -2.8634777,
+            -7.4123445
+          ]
+        ]
+      }
+    },
+    {
+      "id": "3f17d454-ed50-c0b5-d4eb-58af6bb87ff5",
+      "name": "P02_E04_FI003",
+      "A": 5.76,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "nextto": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -0.59,
+        "position": [
+          5.529,
+          -5.2510004,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.004999846,
+            -0.00005185001
+          ],
+          [
+            -0.001763994,
+            -2.38811
+          ],
+          [
+            1.858136,
+            -2.407398
+          ],
+          [
+            1.894054,
+            0.6703952
+          ],
+          [
+            -2.983391e-11,
+            0.6750365
+          ]
+        ]
+      }
+    },
+    {
+      "id": "5c74d463-53ce-0507-18f9-c68cea9b1c1c",
+      "name": "P02_E04_Med001",
+      "A": 9.19,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -90.58,
+        "position": [
+          5.5528,
+          -2.8637822,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.0629776,
+            0
+          ],
+          [
+            3.0629776,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6822237f-fb1a-1782-5e6c-a11461240d83",
+      "name": "P02_E04_MED001",
+      "A": 9.24,
+      "bounds": "ADIABATIC",
+      "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.09,
+        "position": [
+          7.4169674,
+          -5.9419255,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            3.0784516,
+            0
+          ],
+          [
+            3.0784516,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "7a17f297-8a2a-d32b-1fce-e805218b3794",
+      "name": "P02_E05_FE001",
+      "A": 1.61,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "nextto": null,
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -92.56,
+        "position": [
+          4.8089995,
+          -9.777,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.8728714,
+            -1.587104e-9
+          ],
+          [
+            0.9819989,
+            1.790913
+          ],
+          [
+            0.09127525,
+            1.861781
+          ],
+          [
+            0.05816356,
+            1.188588
+          ]
+        ]
+      }
+    },
+    {
+      "id": "190b88e2-95c9-b398-96d7-1eb7581318c4",
+      "name": "P02_E05_PE001",
+      "A": 2.18,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -88.02,
+        "position": [
+          2.9455655,
+          -9.785129,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.89423406,
+            0
+          ],
+          [
+            0.89423406,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "f38103af-f40f-4fd4-356e-ee9c11e4f8fa",
+      "name": "P02_E05_PE002",
+      "A": 5.38,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 0.94,
+        "position": [
+          2.9764206,
+          -10.67883,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.7946011,
+            0
+          ],
+          [
+            1.7946011,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "1ca92dd4-e4ee-9c34-b4f9-2351b7044181",
+      "name": "P02_E05_PE003",
+      "A": 2.62,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 87.47,
+        "position": [
+          4.7707787,
+          -10.64929,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.8722175,
+            0
+          ],
+          [
+            0.8722175,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "b746054b-f02f-ba41-4459-4cfa21deb0e3",
+      "name": "P02_E05_FE003",
+      "A": 5.88,
+      "bounds": "EXTERIOR",
+      "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "nextto": null,
+      "geometry": {
+        "tilt": 0,
+        "azimuth": 90,
+        "position": [
+          0,
+          0,
+          5.7
+        ],
+        "polygon": [
+          [
+            -7.4999332,
+            -4.8174963
+          ],
+          [
+            -7.4748573,
+            -3.6162052
+          ],
+          [
+            -7.5055723,
+            -2.9610853
+          ],
+          [
+            -9.785129,
+            -2.945565
+          ],
+          [
+            -10.67883,
+            -2.9764202
+          ],
+          [
+            -10.64929,
+            -4.770778
+          ],
+          [
+            -9.777921,
+            -4.809232
+          ]
+        ]
+      }
+    },
+    {
+      "id": "3113b1bc-6e44-4a2c-a523-4a8123ab6763",
+      "name": "P02_E05_FI001",
+      "A": 1.52,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "nextto": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -87.29,
+        "position": [
+          3.6159997,
+          -7.474,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.305561,
+            0.1061153
+          ],
+          [
+            2.276694,
+            0.7795035
+          ],
+          [
+            7.743299e-10,
+            0.6557332
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6a4fc55e-8121-a8fb-cb46-128c375b8dbc",
+      "name": "P02_E05_FI002",
+      "A": 2.74,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "nextto": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": -91.19,
+        "position": [
+          4.8169994,
+          -7.499,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            2.277673,
+            -0.03941057
+          ],
+          [
+            2.307437,
+            1.150228
+          ],
+          [
+            1.006697e-10,
+            1.20126
+          ]
+        ]
+      }
+    },
+    {
+      "id": "b7a4a737-ba94-2047-a18c-681665c754b6",
+      "name": "P02_E05_Med001",
+      "A": 3.6,
+      "bounds": "INTERIOR",
+      "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 178.8,
+        "position": [
+          4.8174963,
+          -7.499933,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.2015525,
+            0
+          ],
+          [
+            1.2015525,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "3645c88b-a838-c1a3-d2c0-edeadadbf4ef",
+      "name": "P02_E06_PE001",
+      "A": 2.84,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": 90.61,
+        "position": [
+          5.5528,
+          -2.8637822,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.946072,
+            0
+          ],
+          [
+            0.946072,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "6ca93c51-be77-3188-0e7c-4e97516588a0",
+      "name": "P02_E06_PE002",
+      "A": 4.78,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -180,
+        "position": [
+          5.542692,
+          -1.9177642,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.9140623,
+            0
+          ],
+          [
+            1.9140623,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "a2449635-f788-af6f-393d-035293b2cf62",
+      "name": "P02_E06_PE003",
+      "A": 2.79,
+      "bounds": "EXTERIOR",
+      "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "nextto": null,
+      "geometry": {
+        "tilt": 90,
+        "azimuth": -91.15,
+        "position": [
+          3.62863,
+          -1.9177641,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.92901987,
+            0
+          ],
+          [
+            0.92901987,
+            3
+          ],
+          [
+            0,
+            3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "5c08fa9a-62e4-70ed-bf9e-c3647c334b22",
+      "name": "P02_E06_FE005",
+      "A": 9.6,
+      "bounds": "EXTERIOR",
+      "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "nextto": null,
+      "geometry": {
+        "tilt": 0,
+        "azimuth": 90,
+        "position": [
+          0,
+          0,
+          5.7
+        ],
+        "polygon": [
+          [
+            -7.4748573,
+            -3.6162052
+          ],
+          [
+            -7.4999332,
+            -4.8174963
+          ],
+          [
+            -5.9265575,
+            -4.8232036
+          ],
+          [
+            -5.9266057,
+            -5.5220447
+          ],
+          [
+            -2.8637824,
+            -5.5527997
+          ],
+          [
+            -1.9177644,
+            -5.542692
+          ],
+          [
+            -1.9177643,
+            -3.6286297
+          ],
+          [
+            -2.8465981,
+            -3.6100469
+          ],
+          [
+            -5.9418573,
+            -3.6141655
+          ]
+        ]
+      }
+    },
+    {
+      "id": "90a0b0d2-374c-88d7-ef85-12ae8c1a9bac",
+      "name": "P02_E06_FI003",
+      "A": 2.67,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "nextto": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": 88.81,
+        "position": [
+          3.6159997,
+          -7.474,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            1.532626,
+            -0.03390354
+          ],
+          [
+            2.224456,
+            -0.04930509
+          ],
+          [
+            2.209542,
+            1.156266
+          ],
+          [
+            1.572784,
+            1.174522
+          ],
+          [
+            1.550789,
+            1.17498
+          ],
+          [
+            1.006697e-10,
+            1.20126
+          ]
+        ]
+      }
+    },
+    {
+      "id": "13792fb9-beb6-102f-0d1b-d7aada364c28",
+      "name": "P02_E06_FI004",
+      "A": 0.46,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "nextto": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": 90,
+        "position": [
+          4.8229995,
+          -5.926,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.6370001,
+            -0.005000114
+          ],
+          [
+            0.6750002,
+            0.7059999
+          ],
+          [
+            0,
+            0.6989999
+          ]
+        ]
+      }
+    },
+    {
+      "id": "b898fc1e-d5c5-b484-a0c7-cc3895899495",
+      "name": "P02_E06_FI005",
+      "A": 6.47,
+      "bounds": "INTERIOR",
+      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "geometry": {
+        "tilt": 180,
+        "azimuth": 179.45,
+        "position": [
+          5.529,
+          -5.2510004,
+          2.7
+        ],
+        "polygon": [
+          [
+            0,
+            0
+          ],
+          [
+            0.710601,
+            -0.04484609
+          ],
+          [
+            1.91593,
+            -0.01645351
+          ],
+          [
+            1.942074,
+            2.386406
+          ],
+          [
+            1.933022,
+            3.315536
+          ],
+          [
+            0.01911083,
+            3.333971
+          ],
+          [
+            1.772436e-10,
+            2.388111
+          ]
+        ]
+      }
+    }
+  ],
+  "windows": [
+    {
+      "id": "316e9a63-d88a-c58a-1024-caf10461d8b6",
+      "name": "P01_E01_PE001_V",
+      "A": 1.44,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "533865ce-8e6a-c0a8-a2d9-cbb2fbea4ab5",
+      "fshobst": 0.8021761,
+      "geometry": {
+        "position": [
+          1.1,
+          0.8
+        ],
+        "height": 1.2,
+        "width": 1.2,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "45dd41e3-faf3-5e6b-4687-d4d7f1a26681",
+      "name": "P01_E01_PE003_V",
+      "A": 1.44,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "d42ed212-0e16-17c6-c916-95290d4db5ef",
+      "fshobst": 0.8043886,
+      "geometry": {
+        "position": [
+          0.6,
+          1
+        ],
+        "height": 1.2,
+        "width": 1.2,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "ba0ebd21-3983-aadc-15ef-5f4370706232",
+      "name": "P01_E02_PE004_V",
+      "A": 1.68,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "287e688a-5fda-decf-438b-58013a2ada83",
+      "fshobst": 0.7507816,
+      "geometry": {
+        "position": [
+          0.1,
+          0
+        ],
+        "height": 2.1,
+        "width": 0.8,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "babc3f61-3c6d-b24c-777c-0e76f80bd34f",
+      "name": "P01_E03_PE001_V",
+      "A": 0.86,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "3a5df886-d7c7-c80f-9dcd-edb41be26016",
+      "fshobst": 0.71222633,
+      "geometry": {
+        "position": [
+          1.12,
+          1
+        ],
+        "height": 1,
+        "width": 0.86,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "0166f04c-fbbc-8fbc-5990-a037e0813a36",
+      "name": "P01_E03_PE003_V",
+      "A": 0.84,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "a663d3cf-1dcd-00e1-f931-77f139985df5",
+      "fshobst": 0.7831122,
+      "geometry": {
+        "position": [
+          0.5,
+          0.8
+        ],
+        "height": 1.2,
+        "width": 0.7,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "6c4bc7d0-01bf-eee9-9969-399c0def7707",
+      "name": "P01_E04_PE002_V",
+      "A": 1.84,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "4f9ceedd-a380-5452-be9b-faa5a2b35bd6",
+      "fshobst": 0.8114637,
+      "geometry": {
+        "position": [
+          0.5,
+          0
+        ],
+        "height": 2.3,
+        "width": 0.8,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "db0809b9-cfca-9d87-ee3d-7f0d62efd628",
+      "name": "P02_E01_PE001_V",
+      "A": 1.44,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "aa702707-b64b-1280-d199-ed7fac965bec",
+      "fshobst": 0.8021761,
+      "geometry": {
+        "position": [
+          1.2,
+          1
+        ],
+        "height": 1.2,
+        "width": 1.2,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "47fb9a41-fc6a-8508-6daf-891713c6b46f",
+      "name": "P02_E02_PE003_V",
+      "A": 0.96,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "bace5dde-0b16-53fe-4491-a30edbadb765",
+      "fshobst": 0.798298,
+      "geometry": {
+        "position": [
+          0.9,
+          1
+        ],
+        "height": 1.2,
+        "width": 0.8,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "2160addf-a6bb-eb4d-329f-cd140b61d783",
+      "name": "P02_E03_PE007_V",
+      "A": 1.44,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "c6b34d7f-8fff-299e-992a-4123e90ca2ed",
+      "fshobst": 0.8185515,
+      "geometry": {
+        "position": [
+          0.6,
+          1
+        ],
+        "height": 1.2,
+        "width": 1.2,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "ecda039e-8295-b0d6-3bfb-b3635fd62b20",
+      "name": "P02_E04_PE002_V",
+      "A": 0.96,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "497af7dc-502b-536d-c8ac-405410e48a74",
+      "fshobst": 0.7831122,
+      "geometry": {
+        "position": [
+          0.4,
+          1
+        ],
+        "height": 1.2,
+        "width": 0.8,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "b86217e4-3590-8496-9206-5f18ad78655d",
+      "name": "P02_E05_PE001_V",
+      "A": 0.5,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "190b88e2-95c9-b398-96d7-1eb7581318c4",
+      "fshobst": 0.77200884,
+      "geometry": {
+        "position": [
+          0.2,
+          1
+        ],
+        "height": 1,
+        "width": 0.5,
+        "setback": 0.2
+      }
+    },
+    {
+      "id": "56b64cd9-4175-3126-46bd-b912a118f7a3",
+      "name": "P02_E06_PE002_V",
+      "A": 0.96,
+      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "wall": "6ca93c51-be77-3188-0e7c-4e97516588a0",
+      "fshobst": 0.80203694,
+      "geometry": {
+        "position": [
+          0.4,
+          1
+        ],
+        "height": 1.2,
+        "width": 0.8,
+        "setback": 0.2
+      }
+    }
+  ],
+  "shades": [],
+  "thermal_bridges": [
+    {
+      "id": "ecdd1f44-ab99-183f-5519-bbc276ff5802",
+      "name": "FRENTE_FORJADO",
+      "kind": "INTERMEDIATEFLOOR",
+      "L": 12.19,
+      "psi": 0.1
+    },
+    {
+      "id": "4b0c0269-dfa5-0ffe-3b0f-196296d5e0ea",
+      "name": "UNION_CUBIERTA",
+      "kind": "ROOF",
+      "L": 40.17,
+      "psi": 0.24
+    },
+    {
+      "id": "d569ff72-c5fc-f260-77e0-ec3c7625566b",
+      "name": "ESQUINA_CONVEXA_FORJADO",
+      "kind": "ROOF",
+      "L": 12.62,
+      "psi": 0.43
+    },
+    {
+      "id": "ca62d370-7de4-a16c-7125-993acce1b9bd",
+      "name": "ESQUINA_CONCAVA",
+      "kind": "CORNER",
+      "L": 20.1,
+      "psi": -0.16
+    },
+    {
+      "id": "627f55a1-bb11-3c5c-4b71-93167f5602b7",
+      "name": "ESQUINA_CONVEXA",
+      "kind": "CORNER",
+      "L": 20.1,
+      "psi": 0.11
+    },
+    {
+      "id": "20b5818c-9c16-5bab-3f18-ecf60554564c",
+      "name": "PILAR",
+      "kind": "PILLAR",
+      "L": 30.22,
+      "psi": 0.02
+    },
+    {
+      "id": "3ef730d5-7f6e-c053-2e6b-4080dcb1bdd7",
+      "name": "HUECO_CAPIALZADO",
+      "kind": "WINDOW",
+      "L": 10.86,
+      "psi": 0.05
+    },
+    {
+      "id": "e2c1d27c-95d0-440c-a9f4-cd80f00d6ac2",
+      "name": "HUECO_JAMBA",
+      "kind": "WINDOW",
+      "L": 32,
+      "psi": 0.05
+    },
+    {
+      "id": "5f26ca9e-1957-7c8e-175f-70f2195bf581",
+      "name": "HUECO_ALFEIZAR",
+      "kind": "WINDOW",
+      "L": 10.86,
+      "psi": 0.05
+    },
+    {
+      "id": "13b87a8c-9d1f-74d8-acc2-a13126534457",
+      "name": "UNION_SOLERA_PAREDEXT",
+      "kind": "GROUNDFLOOR",
+      "L": 17.11,
+      "psi": 0.28
+    }
+  ],
+  "wallcons": [
+    {
+      "id": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+      "name": "Cubierta plana",
+      "group": "Cubiertas planas",
+      "thickness": 0.44,
+      "R_intrinsic": 3.361,
+      "absorptance": 0.6
+    },
+    {
+      "id": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "name": "Forjado interior",
+      "group": "Forjados interiores",
+      "thickness": 0.22,
+      "R_intrinsic": 1.172,
+      "absorptance": 0.6
+    },
+    {
+      "id": "6cfcec0e-b90b-998b-c755-7d219638d40c",
+      "name": "Forjado terreno",
+      "group": "Forjados terrenos",
+      "thickness": 0.21,
+      "R_intrinsic": 0.197,
+      "absorptance": 0.6
+    },
+    {
+      "id": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+      "name": "Medianera",
+      "group": "Medianeras",
+      "thickness": 0.36,
+      "R_intrinsic": 1.57,
+      "absorptance": 0.6
+    },
+    {
+      "id": "1949e38b-b7e0-a178-a272-92604bf2608b",
+      "name": "Muro exterior",
+      "group": "Muros exteriores",
+      "thickness": 0.26,
+      "R_intrinsic": 2.227,
+      "absorptance": 0.6
+    },
+    {
+      "id": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+      "name": "Tabique",
+      "group": "Tabiques",
+      "thickness": 0.14,
+      "R_intrinsic": 0.204,
+      "absorptance": 0.6
+    }
+  ],
+  "wincons": [
+    {
+      "id": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "name": "Vidrio doble",
+      "group": "Vidrios dobles",
+      "U": 1.83,
+      "Ff": 0.15,
+      "gglwi": 0.64,
+      "gglshwi": 0.08,
+      "C_100": 27
+    }
+  ]
+}

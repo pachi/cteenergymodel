@@ -94,6 +94,36 @@ fn model_json_conversion() {
 }
 
 #[test]
+fn model_json_unif() {
+    init();
+
+    let strdata = include_str!("./data/ejemploviv_unif.json");
+    let mut model = Model::from_json(strdata).unwrap();
+    let climatezone = model.meta.climate;
+    let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
+    let n50data = model.n50();
+    assert_almost_eq!(model.a_ref(), 102.37, 0.01);
+    assert_almost_eq!(model.compacity(), 1.36, 0.01);
+    assert_almost_eq!(model.K().K, 0.62, 0.01);
+    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.59, 0.01);
+
+    assert_almost_eq!(n50data.n50, 6.89, 0.01);
+    assert_almost_eq!(n50data.n50_ref, 6.89, 0.01);
+    assert_almost_eq!(model.vol_env_net(), 258.25, 0.01);
+    assert_almost_eq!(model.vol_env_gross(), 292.79, 0.1);
+
+    model.update_fshobst();
+    info!(
+        "sunlit map:\n{}",
+        model.windows.iter()
+            .map(|w| format!("{}: {}", w.name, w.fshobst))
+            .collect::<Vec<_>>().join("\n")
+    );
+    // HULC: 0.54
+    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.55, 0.01);
+}
+
+#[test]
 fn intersections() {
     init();
 
