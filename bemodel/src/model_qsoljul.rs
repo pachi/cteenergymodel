@@ -241,7 +241,7 @@ impl Model {
         let mut num_intersects = 0;
         for ray_orig in ray_origins {
             for occluder in &candidate_occluders {
-                if occluder.intersect(&ray_orig, ray_dir).is_some() {
+                if occluder.intersects(&ray_orig, ray_dir).is_some() {
                     // debug!("La intersección del elemento oclusor {} y el rayo con origen {} y dirección {} es: t: {}, punto: {:#?}",
                     //        occluder.id, ray_origin, ray_dir, intersection, intersection.then(|t| Some(ray_origin + t*ray_dir)).unwrap_or_none());
                     num_intersects += 1;

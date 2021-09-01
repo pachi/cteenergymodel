@@ -358,7 +358,7 @@ pub struct Occluder {
 }
 
 impl Occluder {
-    pub fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+    pub fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
         self.aabb.intersects(ray_origin, ray_dir)?;
         crate::geometry::intersects_with_data(
             ray_origin,
