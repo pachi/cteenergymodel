@@ -226,7 +226,7 @@ impl Model {
                     return false;
                 };
                 // Descartamos las sombras de retranqueo que no provienen del hueco
-                if let Some(id) = &oc.origin_id {
+                if let Some(id) = &oc.linked_to_id {
                     if *id != window.id {
                         return false;
                     };
@@ -266,7 +266,7 @@ impl Model {
             .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
             .map(|e| Occluder {
                 id: e.id.clone(),
-                origin_id: None,
+                linked_to_id: None,
                 normal: poly_normal(&e.geometry.polygon),
                 trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
                 polygon: e.geometry.polygon.clone(),
@@ -275,7 +275,7 @@ impl Model {
             .collect();
         occluders.extend(self.shades.iter().map(|e| Occluder {
             id: e.id.clone(),
-            origin_id: None,
+            linked_to_id: None,
             normal: poly_normal(&e.geometry.polygon),
             trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),
@@ -283,7 +283,7 @@ impl Model {
         }));
         occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
             id: e.id.clone(),
-            origin_id: Some(wid.into()),
+            linked_to_id: Some(wid.into()),
             normal: poly_normal(&e.geometry.polygon),
             trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),

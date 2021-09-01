@@ -366,7 +366,7 @@ pub struct Occluder {
     /// Id del elemento
     pub id: String,
     /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
-    pub origin_id: Option<String>,
+    pub linked_to_id: Option<String>,
     /// normal del polígono
     pub normal: Vector3<f32>,
     /// Matriz de transformación de coordenadas globales a locales de polígono
