@@ -268,7 +268,7 @@ impl Model {
                 id: e.id.clone(),
                 linked_to_id: None,
                 normal: poly_normal(&e.geometry.polygon),
-                trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
+                trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
                 polygon: e.geometry.polygon.clone(),
                 aabb: e.geometry.aabb(),
             })
@@ -277,7 +277,7 @@ impl Model {
             id: e.id.clone(),
             linked_to_id: None,
             normal: poly_normal(&e.geometry.polygon),
-            trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
+            trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),
             aabb: e.geometry.aabb(),
         }));
@@ -285,7 +285,7 @@ impl Model {
             id: e.id.clone(),
             linked_to_id: Some(wid.into()),
             normal: poly_normal(&e.geometry.polygon),
-            trans_matrix: e.geometry.local_to_global().map(|m| m.inverse()),
+            trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),
             aabb: e.geometry.aabb(),
         }));
@@ -317,8 +317,8 @@ impl Model {
         // Conversión a coordenadas globales desde coordenadas de muro
         // Conversión de coordenadas locales de muro a coordenadas de polígono de muro
         let (to_global_tr, to_poly_tr) = match (
-            wall.geometry.local_to_global(),
-            wall.geometry.local_to_polygon(),
+            wall.geometry.to_global_coords_matrix(),
+            wall.geometry.to_polygon_coords_matrix(),
         ) {
             (Some(to_global), Some(to_poly)) => (to_global, to_poly),
             // Sin definición geométrica del hueco devolvemos una lista vacía de puntos

@@ -351,7 +351,7 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
         if win.overhang.is_some() || win.left_fin.is_some() || win.right_fin.is_some() {
             let wall2world = wall
                 .geometry
-                .local_to_global()
+                .to_global_coords_matrix()
                 .expect("El muro debe tener definición geométrica completa");
 
             // Alero sobre el hueco

@@ -30,7 +30,7 @@ impl Geometry {
 
     /// Matriz de transformación de coordenadas locales a coordenadas globales
     /// Traslada de coordenadas de opaco / sombra a coordenadas globales (giros y desplazamientos)
-    pub fn local_to_global(&self) -> Option<IsometryMatrix3<f32>> {
+    pub fn to_global_coords_matrix(&self) -> Option<IsometryMatrix3<f32>> {
         let trans = Translation3::from(self.position?);
         let zrot = Rotation3::new(Vector3::z() * self.azimuth.to_radians());
         let xrot = Rotation3::new(Vector3::x() * self.tilt.to_radians());
@@ -40,7 +40,7 @@ impl Geometry {
 
     /// Matriz de transformación de coordenadas locales de la geometría a coordenadas de polígono interno 2D
     /// Se gira el eje X en la dirección del polígono de muro p1 - p0 y se traslada a p0 el origen
-    pub fn local_to_polygon(&self) -> Option<IsometryMatrix2<f32>> {
+    pub fn to_polygon_coords_matrix(&self) -> Option<IsometryMatrix2<f32>> {
         if self.polygon.len() <= 2 {
             return None;
         };
@@ -61,14 +61,14 @@ impl Geometry {
     /// Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
     pub fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
         // Matrices de transformación de geometría
-        let transInv = self.local_to_global().map(|m| m.inverse());
+        let transInv = self.to_global_coords_matrix().map(|m| m.inverse());
         // Normal to the planar polygon
         let n_p = &poly_normal(&self.polygon);
         intersect_with_data(ray_origin, ray_dir, &self.polygon, transInv.as_ref(), n_p)
     }
 
     pub fn aabb(&self) -> AABB {
-        if let Some(trans) = self.local_to_global() {
+        if let Some(trans) = self.to_global_coords_matrix() {
             let mut min_x = f32::INFINITY;
             let mut min_y = f32::INFINITY;
             let mut min_z = f32::INFINITY;
@@ -211,7 +211,7 @@ pub(crate) fn shades_for_window_setback(
 
     let wall2world = wall
         .geometry
-        .local_to_global()
+        .to_global_coords_matrix()
         .expect("El muro debe tener definición geométrica completa");
 
     let overhang = Shade {
