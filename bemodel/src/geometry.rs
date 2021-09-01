@@ -114,10 +114,9 @@ pub fn intersect_with_data(
     transInv: Option<&IsometryMatrix3<f32>>,
     n_p: &Vector3<f32>,
 ) -> Option<f32> {
+    // Transform ray to the polygon coordinate space
     let transInv = transInv?;
-    // Inverse transform of ray (we keep the 2D polygon as is and transform the ray)
     let inv_ray_o = transInv * ray_origin;
-    // En JS es transInv.extractRotation porque no diferencia Vector de Point
     let inv_ray_d = transInv * ray_dir;
 
     // Check if ray is parallel to the polygon
@@ -138,7 +137,6 @@ pub fn intersect_with_data(
     // Verify that the point falls inside the polygon
     let intersection_point = inv_ray_o + t * inv_ray_d;
     let point2d = intersection_point.xy();
-    // TODO: Pending optimization: check if point is in the 2D AABB
     let point_is_inside = point_in_poly(point2d, polygon);
 
     if point_is_inside {
@@ -200,7 +198,7 @@ pub(crate) fn shades_for_window_setback(
 ) -> Vec<(String, Shade)> {
     let wing = &win.geometry;
     // Si no hay retranqueo no se genera geometría
-    if win.geometry.setback.abs() < 0.01 {
+    if wing.setback.abs() < 0.01 {
         return vec![];
     };
     let wpos = match wing.position {
