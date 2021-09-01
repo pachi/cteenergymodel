@@ -216,7 +216,7 @@ fn intersections() {
         info!("Polígono: {:?}", geo.polygon);
         info!("Posición: {:?}", geo.position);
         info!("Rayo: {}, {}", r_orig, r_dir);
-        let result = &geo.intersect(&r_orig, &r_dir);
+        let result = &geo.intersects(&r_orig, &r_dir);
         info!("Intersección con rayo: {:?}", result);
         assert!(res == result.is_some());
     }

@@ -3,7 +3,6 @@
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 //! Rutinas de cálculo geométrico
-#![allow(non_snake_case)]
 
 use std::convert::From;
 
@@ -59,12 +58,12 @@ impl Geometry {
     /// ray_dir: dirección del rayo en coordenadas globales (Vector3)
     ///
     /// Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
-    pub fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+    pub fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
         // Matrices de transformación de geometría
-        let transInv = self.to_global_coords_matrix().map(|m| m.inverse());
+        let trans_inv = self.to_global_coords_matrix().map(|m| m.inverse());
         // Normal to the planar polygon
         let n_p = &poly_normal(&self.polygon);
-        intersect_with_data(ray_origin, ray_dir, &self.polygon, transInv.as_ref(), n_p)
+        intersects_with_data(ray_origin, ray_dir, &self.polygon, trans_inv.as_ref(), n_p)
     }
 
     pub fn aabb(&self) -> AABB {
@@ -107,17 +106,17 @@ impl Geometry {
 /// - Calcula el punto de intersección del rayo transformado con el plano XY
 /// - Comprueba si el punto está en el interior del polígono
 /// - Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
-pub fn intersect_with_data(
+pub fn intersects_with_data(
     ray_origin: &Point3<f32>,
     ray_dir: &Vector3<f32>,
     polygon: &[Point2<f32>],
-    transInv: Option<&IsometryMatrix3<f32>>,
+    global_to_poly_matrix: Option<&IsometryMatrix3<f32>>,
     n_p: &Vector3<f32>,
 ) -> Option<f32> {
     // Transform ray to the polygon coordinate space
-    let transInv = transInv?;
-    let inv_ray_o = transInv * ray_origin;
-    let inv_ray_d = transInv * ray_dir;
+    let trans_inv = global_to_poly_matrix?;
+    let inv_ray_o = trans_inv * ray_origin;
+    let inv_ray_d = trans_inv * ray_dir;
 
     // Check if ray is parallel to the polygon
     let denominator = n_p.dot(&inv_ray_d);
@@ -361,7 +360,7 @@ pub struct Occluder {
 impl Occluder {
     pub fn intersect(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
         self.aabb.intersects(ray_origin, ray_dir)?;
-        crate::geometry::intersect_with_data(
+        crate::geometry::intersects_with_data(
             ray_origin,
             ray_dir,
             &self.polygon,
