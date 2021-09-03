@@ -18,6 +18,7 @@ pub mod model_impl;
 pub mod model_n50;
 pub mod model_qsoljul;
 pub mod model_transmittance;
+mod ray;
 mod utils;
 
 pub use climatedata::*;
@@ -26,6 +27,7 @@ pub use common::{
     ThermalBridgeKind, Tilt, UValues, Warning, WarningLevel,
 };
 pub use model::*;
+pub use ray::Ray;
 
 /// Versión del programa
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

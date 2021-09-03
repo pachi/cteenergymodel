@@ -7,9 +7,8 @@
 use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
-pub use super::{
-    BoundaryType, ClimateZone, N50Data, Orientation, Point2, Point3, SpaceType, ThermalBridgeKind,
-    Tilt, UValues, Warning, WarningLevel,
+use super::{
+    BoundaryType, ClimateZone, Orientation, Point2, Point3, SpaceType, ThermalBridgeKind, Tilt,
 };
 
 // ---------- Estructura general de datos --------------

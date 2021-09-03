@@ -1,6 +1,6 @@
 // TODO: Implementar Bounded para Occluder
 
-use nalgebra::{point, Point3, Vector3};
+use super::{point, Point3, Ray};
 use std::ops::Deref;
 
 /// Elementos capaces de definir la AABB que los encierra
@@ -10,24 +10,24 @@ pub trait Bounded {
 
 /// Elementos para los que se puede comprobar la intersección con un rayo
 pub trait Intersectable {
-    fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32>;
+    fn intersects(&self, ray: &Ray) -> Option<f32>;
 }
 
 /// Axis aligned bounding box definida por puntos extremos
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct AABB {
-    pub min: Point3<f32>,
-    pub max: Point3<f32>,
+    pub min: Point3,
+    pub max: Point3,
 }
 
 impl AABB {
     /// Constructor
-    pub fn new(min: Point3<f32>, max: Point3<f32>) -> Self {
+    pub fn new(min: Point3, max: Point3) -> Self {
         Self { min, max }
     }
 
     /// Punto medio de la AABB
-    pub fn center(self) -> Point3<f32> {
+    pub fn center(self) -> Point3 {
         nalgebra::center(&self.max, &self.min)
     }
 
@@ -73,17 +73,17 @@ impl Intersectable for AABB {
     /// https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
     /// NaN es siempre distinto, de modo que las comparaciones con NaN son correctas
     /// Las AABB deben tener ancho > 0 en todas las dimensiones
-    fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
-        let idx = 1.0 / ray_dir.x;
-        let idy = 1.0 / ray_dir.y;
-        let idz = 1.0 / ray_dir.z;
+    fn intersects(&self, ray: &Ray) -> Option<f32> {
+        let idx = 1.0 / ray.dir.x;
+        let idy = 1.0 / ray.dir.y;
+        let idz = 1.0 / ray.dir.z;
 
-        let t1 = (self.min.x - ray_origin.x) * idx;
-        let t2 = (self.max.x - ray_origin.x) * idx;
-        let t3 = (self.min.y - ray_origin.y) * idy;
-        let t4 = (self.max.y - ray_origin.y) * idy;
-        let t5 = (self.min.z - ray_origin.z) * idz;
-        let t6 = (self.max.z - ray_origin.z) * idz;
+        let t1 = (self.min.x - ray.origin.x) * idx;
+        let t2 = (self.max.x - ray.origin.x) * idx;
+        let t3 = (self.min.y - ray.origin.y) * idy;
+        let t4 = (self.max.y - ray.origin.y) * idy;
+        let t5 = (self.min.z - ray.origin.z) * idz;
+        let t6 = (self.max.z - ray.origin.z) * idz;
 
         let tmin = t1.min(t2).max(t3.min(t4)).max(t5.min(t6));
         let tmax = t1.max(t2).min(t3.max(t4)).min(t5.max(t6));
@@ -135,8 +135,8 @@ impl<T: Bounded> BVH<T> {
     /// Itera sobre los nodos con los que colisiona el rayo
     /// Devuelve tanto nodos intermedios (Node) como finales (Leaf) para los que hay colisión,
     /// bien con su AABB o sus elementos
-    pub fn iter_with_ray(&self, ray_origin: Point3<f32>, ray_dir: Vector3<f32>) -> PreorderIter<T> {
-        PreorderIter::new(self.root.as_ref(), ray_origin, ray_dir)
+    pub fn iter_with_ray(&self, ray: &Ray) -> PreorderIter<T> {
+        PreorderIter::new(self.root.as_ref(), *ray)
     }
 
     /// Divide nodo final en nodo intermedio con dos nodos finales separados por eje mayor
@@ -193,15 +193,15 @@ impl<T> Intersectable for BVH<T>
 where
     T: Bounded + Intersectable,
 {
-    fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+    fn intersects(&self, ray: &Ray) -> Option<f32> {
         let hits_iter = self
-            .iter_with_ray(*ray_origin, *ray_dir)
+            .iter_with_ray(ray)
             .filter(|e| matches!(e, BVHNode::Leaf { .. }));
         for e in hits_iter {
             match e {
                 BVHNode::Leaf { elements, .. } => {
                     for occ in elements {
-                        if let intersect_opt @ Some(_) = occ.intersects(ray_origin, ray_dir) {
+                        if let intersect_opt @ Some(_) = occ.intersects(ray) {
                             return intersect_opt;
                         }
                     }
@@ -271,27 +271,20 @@ impl<T> Bounded for BVHNode<T> {
 #[derive(Debug, Clone)]
 pub struct PreorderIter<'a, T> {
     stack: Vec<&'a BVHNode<T>>,
-    ray_origin: Point3<f32>,
-    ray_dir: Vector3<f32>,
+    ray: Ray,
 }
 
 impl<'a, T> PreorderIter<'a, T> {
-    pub fn new(
-        root: Option<&'a BVHNode<T>>,
-        ray_origin: Point3<f32>,
-        ray_dir: Vector3<f32>,
-    ) -> Self {
+    pub fn new(root: Option<&'a BVHNode<T>>, ray: Ray) -> Self {
         if let Some(node) = root {
             PreorderIter {
                 stack: vec![node],
-                ray_origin,
-                ray_dir,
+                ray,
             }
         } else {
             PreorderIter {
                 stack: vec![],
-                ray_origin,
-                ray_dir,
+                ray,
             }
         }
     }
@@ -307,10 +300,7 @@ impl<'a, T> Iterator for PreorderIter<'a, T> {
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(node) = self.stack.pop() {
             // println!("taking node {:#?}", node.aabb());
-            let hits_node = node
-                .aabb()
-                .intersects(&self.ray_origin, &self.ray_dir)
-                .is_some();
+            let hits_node = node.aabb().intersects(&self.ray).is_some();
             // println!("node hits? {}", hits_node);
             if hits_node {
                 // println!("node aabb hits");
@@ -335,7 +325,7 @@ impl<'a, T> Iterator for PreorderIter<'a, T> {
 
 #[cfg(test)]
 mod tests {
-    use super::{BVHNode, Bounded, Intersectable, AABB, BVH};
+    use super::{BVHNode, Bounded, Intersectable, AABB, BVH, Ray};
     use nalgebra::{point, vector};
 
     /// Prueba la unión de dos AABBs
@@ -396,11 +386,10 @@ mod tests {
         assert_eq!(aabb.max, point![9.0, 9.0, 9.0]);
 
         // Rayo que colisiona solo con elemento a
-        let ray_origin = point![2.5, 0.0, 2.5];
-        let ray_dir = vector![0.0, 1.0, 0.0];
+        let ray = Ray::new(point![2.5, 0.0, 2.5], vector![0.0, 1.0, 0.0]);
 
         let hits_iter = bvh
-            .iter_with_ray(ray_origin, ray_dir)
+            .iter_with_ray(&ray)
             .filter(|e| matches!(e, BVHNode::Leaf { .. }));
         assert_eq!(hits_iter.clone().count(), 1);
         let hit_node = hits_iter.clone().collect::<Vec<_>>()[0];
@@ -409,6 +398,6 @@ mod tests {
             _ => panic!(),
         };
         assert_eq!(elem, a);
-        assert_eq!(bvh.intersects(&ray_origin, &ray_dir), Some(1.0));
+        assert_eq!(bvh.intersects(&ray), Some(1.0));
     }
 }

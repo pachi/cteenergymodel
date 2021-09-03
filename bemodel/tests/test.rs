@@ -3,8 +3,11 @@
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 use bemodel::{
-    bvh::{AABB, Intersectable}, climatedata, geometry::point_in_poly, model_qsoljul::ray_to_sun, Geometry, Model,
-    Window,
+    bvh::{Intersectable, AABB},
+    climatedata,
+    geometry::point_in_poly,
+    model_qsoljul::ray_dir_to_sun,
+    Geometry, Model, Ray, Window,
 };
 use nalgebra::{point, vector};
 
@@ -70,20 +73,23 @@ fn model_json_conversion() {
     // Sombras
     let sun_azimuth = 0.0;
     let sun_altitude = 45.0;
-    let ray_dir = ray_to_sun(sun_azimuth, sun_altitude);
+    let ray_dir = ray_dir_to_sun(sun_azimuth, sun_altitude);
 
     let occluders = model.collect_occluders();
     // Ventana P04_E03_PE009_V sunlit Fshobst_HULC = 0.58 - Bloquea Sombra011 + retranqueo 20cm
     let window = get_window_by_name(&model, "P04_E03_PE009_V");
-    assert_almost_eq!(model.sunlit_fraction(window, &ray_dir, &occluders), 0.6);
+    let ray_origins = model.ray_origins_for_window(window);
+    assert_almost_eq!(model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders), 0.6);
 
     // Ventana P01_E04_PE001_V Fshobst_HULC = 0.65 - Bloquea Sombra003 + retranqueo 20cm
     let window = get_window_by_name(&model, "P01_E04_PE001_V");
-    assert_almost_eq!(model.sunlit_fraction(window, &ray_dir, &occluders), 0.8);
+    let ray_origins = model.ray_origins_for_window(window);
+    assert_almost_eq!(model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders), 0.8);
 
     // P04_E03_PE009_V_8 Fshobst_HULC = 0.69 (retranqueo 20 cm, sin alero)
     let window = get_window_by_name(&model, "P04_E03_PE009_V_8");
-    assert_almost_eq!(model.sunlit_fraction(window, &ray_dir, &occluders), 0.8);
+    let ray_origins = model.ray_origins_for_window(window);
+    assert_almost_eq!(model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders), 0.8);
 
     model.update_fshobst();
     info!(
@@ -190,42 +196,57 @@ fn intersections() {
 
     #[allow(clippy::approx_constant)]
     let testcases = vec![
-        (&geom1, point![1.0, 1.0, 2.0], vector![0.0, 0.0, -1.0], true),
+        (
+            &geom1,
+            Ray::new(point![1.0, 1.0, 2.0], vector![0.0, 0.0, -1.0]),
+            true,
+        ),
         (
             &geom2,
-            point![1.0, 1.0, 2.0],
-            vector![0.0, 0.0, -1.0],
+            Ray::new(point![1.0, 1.0, 2.0], vector![0.0, 0.0, -1.0]),
             false,
         ),
-        (&geom2, point![1.0, 2.0, 1.0], vector![0.0, -1.0, 0.0], true),
+        (
+            &geom2,
+            Ray::new(point![1.0, 2.0, 1.0], vector![0.0, -1.0, 0.0]),
+            true,
+        ),
         (
             &geom3,
-            point![1.0, 1.0, 2.0],
-            vector![0.0, 0.0, -1.0],
+            Ray::new(point![1.0, 1.0, 2.0], vector![0.0, 0.0, -1.0]),
             false,
         ),
-        (&geom3, point![2.0, 1.0, 1.0], vector![-1.0, 0.0, 0.0], true),
-        (&geom3, point![-2.0, 1.0, 1.0], vector![1.0, 0.0, 0.0], true),
         (
             &geom3,
-            point![-2.0, 1.0, 1.0],
-            vector![-1.0, 0.0, 0.0],
+            Ray::new(point![2.0, 1.0, 1.0], vector![-1.0, 0.0, 0.0]),
+            true,
+        ),
+        (
+            &geom3,
+            Ray::new(point![-2.0, 1.0, 1.0], vector![1.0, 0.0, 0.0]),
+            true,
+        ),
+        (
+            &geom3,
+            Ray::new(point![-2.0, 1.0, 1.0], vector![-1.0, 0.0, 0.0]),
             false,
         ),
         (
             &geom4,
-            point![-0.709, 2.1975, 0.0],
-            vector![0.0, -0.707106, 0.707106],
+            Ray::new(
+                point![-0.709, 2.1975, 0.0],
+                vector![0.0, -0.707106, 0.707106],
+            ),
             false,
         ),
     ];
 
-    for (geo, r_orig, r_dir, res) in testcases {
+    for (geo, r, res) in testcases {
         info!("Inclinación: {}, azimuth: {}", geo.tilt, geo.azimuth);
         info!("Polígono: {:?}", geo.polygon);
         info!("Posición: {:?}", geo.position);
-        info!("Rayo: {}, {}", r_orig, r_dir);
-        let result = &geo.intersects(&r_orig, &r_dir);
+        info!("Rayo: {}, {}", r.origin, r.dir);
+        let result = &geo.intersects(&r);
         info!("Intersección con rayo: {:?}", result);
         assert!(res == result.is_some());
     }
@@ -240,20 +261,24 @@ fn aabb_intersections() {
         min: point![1.0, 1.0, 1.0],
         max: point![5.0, 5.0, 5.0],
     };
-    let r_o1 = point![0.0, 0.0, 0.0];
-    let r_d1 = vector![1.0, 1.0, 1.0];
-    assert!(aabb1.intersects(&r_o1, &r_d1).is_some());
 
-    let r_o2 = point![6.0, 6.0, 6.0];
-    assert!(aabb1.intersects(&r_o2, &r_d1).is_none());
+    assert!(aabb1
+        .intersects(&Ray::new(point![0.0, 0.0, 0.0], vector![1.0, 1.0, 1.0]))
+        .is_some());
 
-    let r_d2 = vector![-1.0, -1.0, -1.0];
-    assert!(aabb1.intersects(&r_o2, &r_d2).is_some());
+    assert!(aabb1
+        .intersects(&Ray::new(point![6.0, 6.0, 6.0], vector![1.0, 1.0, 1.0]))
+        .is_none());
 
-    let r_o3 = point![0.0, 2.0, 2.0];
-    let r_d3 = vector![1.0, 0.0, 0.0];
-    assert!(aabb1.intersects(&r_o3, &r_d3).is_some());
+    assert!(aabb1
+        .intersects(&Ray::new(point![6.0, 6.0, 6.0], vector![-1.0, -1.0, -1.0]))
+        .is_some());
 
-    let r_d4 = vector![0.0, 0.0, 1.0];
-    assert!(aabb1.intersects(&r_o3, &r_d4).is_none());
+    assert!(aabb1
+        .intersects(&Ray::new(point![0.0, 2.0, 2.0], vector![1.0, 0.0, 0.0]))
+        .is_some());
+
+    assert!(aabb1
+        .intersects(&Ray::new(point![0.0, 2.0, 2.0], vector![0.0, 0.0, 1.0]))
+        .is_none());
 }

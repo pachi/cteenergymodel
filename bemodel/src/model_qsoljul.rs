@@ -13,13 +13,13 @@ use std::{collections::HashMap, convert::From};
 use log::{debug, info, warn};
 
 use super::{
-    point, vector,
     bvh::{Bounded, Intersectable},
     climatedata,
     common::RadData,
     geometry::{poly_normal, Occluder},
+    point, vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    Model, Orientation, Point3, QSolJulData, Vector3, Window,
+    Model, Orientation, Point3, QSolJulData, Ray, Vector3, Window,
 };
 use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
@@ -112,36 +112,37 @@ impl Model {
         }
         let mut map: HashMap<String, ObstData> = HashMap::new();
 
-        let julyraddata = climatedata::JULYRADDATA.lock().unwrap();
-        let raddata = match julyraddata.get(&self.meta.climate) {
-            Some(data) => data,
-            None => return,
-        };
         let latitude = climatedata::CLIMATEMETADATA
             .lock()
             .unwrap()
             .get(&self.meta.climate)
             .unwrap()
             .latitude;
-        for d in raddata {
-            let RadData {
-                month,
-                day,
-                hour,
-                azimuth,
-                altitude,
-                dir,
-                dif,
-                ..
-            } = *d;
-            let ray_dir = ray_to_sun(azimuth, altitude);
-            let nday = nday_from_md(month, day);
-            for window in &self.windows {
-                // if window.name != "P01_E01_PE004_V" {continue};
-                let window_wall = match self.wall_of_window(window) {
-                    None => continue,
-                    Some(wall) => wall,
-                };
+        let julyraddata = climatedata::JULYRADDATA.lock().unwrap();
+        let raddata = match julyraddata.get(&self.meta.climate) {
+            Some(data) => data,
+            None => return,
+        };
+        for window in &self.windows {
+            // if window.name != "P01_E01_PE004_V" {continue};
+            let window_wall = match self.wall_of_window(window) {
+                None => continue,
+                Some(wall) => wall,
+            };
+            let ray_origins = self.ray_origins_for_window(window);
+            for d in raddata {
+                let RadData {
+                    month,
+                    day,
+                    hour,
+                    azimuth,
+                    altitude,
+                    dir,
+                    dif,
+                    ..
+                } = *d;
+                let ray_dir = ray_dir_to_sun(azimuth, altitude);
+                let nday = nday_from_md(month, day);
                 let rad_on_win = radiation_for_surface(
                     nday,
                     hour,
@@ -151,7 +152,7 @@ impl Model {
                     window_wall.geometry.azimuth,
                     0.2,
                 );
-                let fshdir = self.sunlit_fraction(window, &ray_dir, &occluders);
+                let fshdir = self.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders);
                 let windata = map.entry(window.id.clone()).or_default();
                 windata.fshdir.push(fshdir);
                 windata.dir.push(rad_on_win.dir);
@@ -186,6 +187,7 @@ impl Model {
     pub fn sunlit_fraction(
         &self,
         window: &Window,
+        ray_origins: &[Point3],
         ray_dir: &Vector3,
         occluders: &[Occluder],
     ) -> f32 {
@@ -237,13 +239,12 @@ impl Model {
             })
             .collect();
 
-        // Pensar si es posible la optimización por paquetes de rayos
-        let ray_origins: Vec<Point3> = self.ray_origins_for_window(window);
-        let num = ray_origins.len();
+        let rays = ray_origins.iter().map(|origin| Ray::new(*origin, *ray_dir));
+        let num = rays.len();
         let mut num_intersects = 0;
-        for ray_orig in ray_origins {
+        for ray in rays {
             for occluder in &candidate_occluders {
-                if occluder.intersects(&ray_orig, ray_dir).is_some() {
+                if occluder.intersects(&ray).is_some() {
                     // debug!("La intersección del elemento oclusor {} y el rayo con origen {} y dirección {} es: t: {}, punto: {:#?}",
                     //        occluder.id, ray_origin, ray_dir, intersection, intersection.then(|t| Some(ray_origin + t*ray_dir)).unwrap_or_none());
                     num_intersects += 1;
@@ -338,7 +339,6 @@ impl Model {
                 points.push(point![px, py]);
             }
         }
-
         // Puntos 3D en el plano de retranqueo
         points
             .iter()
@@ -352,7 +352,7 @@ impl Model {
 ///
 /// sun_azimuth: azimuth solar [-180.0,+180.0] (E+, W-, S=0)
 /// sun_altitude: altitud solar [0.0, +90] (90 es vertical)
-pub fn ray_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3 {
+pub fn ray_dir_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3 {
     let sazim = sun_azimuth.to_radians();
     let salt = sun_altitude.to_radians();
     vector![

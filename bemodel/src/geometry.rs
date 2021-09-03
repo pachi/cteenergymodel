@@ -11,7 +11,7 @@ use na::{IsometryMatrix2, IsometryMatrix3, Rotation2, Rotation3, Translation2, T
 
 use super::{
     bvh::{Bounded, Intersectable, AABB},
-    point, vector, Geometry, Point2, Point3, Vector2, Vector3,
+    point, vector, Geometry, Point2, Ray, Vector2, Vector3,
 };
 
 const EPSILON: f32 = 1e-5;
@@ -60,12 +60,12 @@ impl Intersectable for Geometry {
     /// ray_dir: dirección del rayo en coordenadas globales (Vector3)
     ///
     /// Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
-    fn intersects(&self, ray_origin: &Point3, ray_dir: &Vector3) -> Option<f32> {
+    fn intersects(&self, ray: &Ray) -> Option<f32> {
         // Matrices de transformación de geometría
         let trans_inv = self.to_global_coords_matrix().map(|m| m.inverse());
         // Normal to the planar polygon
         let n_p = &poly_normal(&self.polygon);
-        intersects_with_data(ray_origin, ray_dir, &self.polygon, trans_inv.as_ref(), n_p)
+        intersects_with_data(ray, &self.polygon, trans_inv.as_ref(), n_p)
     }
 }
 
@@ -111,16 +111,15 @@ impl Bounded for Geometry {
 /// - Comprueba si el punto está en el interior del polígono
 /// - Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
 pub fn intersects_with_data(
-    ray_origin: &Point3,
-    ray_dir: &Vector3,
+    ray: &Ray,
     polygon: &[Point2],
     global_to_poly_matrix: Option<&IsometryMatrix3<f32>>,
     n_p: &Vector3,
 ) -> Option<f32> {
     // Transform ray to the polygon coordinate space
     let trans_inv = global_to_poly_matrix?;
-    let inv_ray_o = trans_inv * ray_origin;
-    let inv_ray_d = trans_inv * ray_dir;
+    let inv_ray_o = trans_inv * ray.origin;
+    let inv_ray_d = trans_inv * ray.dir;
 
     // Check if ray is parallel to the polygon
     let denominator = n_p.dot(&inv_ray_d);
@@ -216,15 +215,9 @@ pub struct Occluder {
 }
 
 impl Intersectable for Occluder {
-    fn intersects(&self, ray_origin: &Point3, ray_dir: &Vector3) -> Option<f32> {
-        self.aabb.intersects(ray_origin, ray_dir)?;
-        intersects_with_data(
-            ray_origin,
-            ray_dir,
-            &self.polygon,
-            self.trans_matrix.as_ref(),
-            &self.normal,
-        )
+    fn intersects(&self, ray: &Ray) -> Option<f32> {
+        self.aabb.intersects(ray)?;
+        intersects_with_data(ray, &self.polygon, self.trans_matrix.as_ref(), &self.normal)
     }
 }
 
