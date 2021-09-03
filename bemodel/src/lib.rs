@@ -6,6 +6,7 @@
 
 extern crate nalgebra as na;
 
+pub mod bvh;
 pub mod climatedata;
 pub mod common;
 pub(crate) mod from_ctehexml;

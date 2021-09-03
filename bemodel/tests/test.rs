@@ -2,7 +2,10 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use bemodel::{Geometry, Model, Window, climatedata, geometry::{AABB, point_in_poly}, model_qsoljul::ray_to_sun};
+use bemodel::{
+    bvh::{AABB, Intersectable}, climatedata, geometry::point_in_poly, model_qsoljul::ray_to_sun, Geometry, Model,
+    Window,
+};
 use nalgebra::{point, vector};
 
 extern crate env_logger;
@@ -85,9 +88,12 @@ fn model_json_conversion() {
     model.update_fshobst();
     info!(
         "sunlit map:\n{}",
-        model.windows.iter()
+        model
+            .windows
+            .iter()
             .map(|w| format!("{}: {}", w.name, w.fshobst))
-            .collect::<Vec<_>>().join("\n")
+            .collect::<Vec<_>>()
+            .join("\n")
     );
     // HULC: 0.43
     assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.47, 0.01);
@@ -115,9 +121,12 @@ fn model_json_unif() {
     model.update_fshobst();
     info!(
         "sunlit map:\n{}",
-        model.windows.iter()
+        model
+            .windows
+            .iter()
             .map(|w| format!("{}: {}", w.name, w.fshobst))
-            .collect::<Vec<_>>().join("\n")
+            .collect::<Vec<_>>()
+            .join("\n")
     );
     // HULC: 0.54
     assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.55, 0.01);
@@ -227,7 +236,10 @@ fn intersections() {
 
 #[test]
 fn aabb_intersections() {
-    let aabb1 = AABB {min: point![1.0, 1.0, 1.0], max: point![5.0, 5.0, 5.0]};
+    let aabb1 = AABB {
+        min: point![1.0, 1.0, 1.0],
+        max: point![5.0, 5.0, 5.0],
+    };
     let r_o1 = point![0.0, 0.0, 0.0];
     let r_d1 = vector![1.0, 1.0, 1.0];
     assert!(aabb1.intersects(&r_o1, &r_d1).is_some());

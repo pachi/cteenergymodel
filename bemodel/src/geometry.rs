@@ -12,7 +12,10 @@ use na::{
     Translation2, Translation3, Vector2, Vector3,
 };
 
-use super::{utils::uuid_from_str, Geometry, Shade};
+use super::{
+    bvh::{Bounded, Intersectable, AABB},
+    Geometry,
+};
 
 const EPSILON: f32 = 1e-5;
 
@@ -51,22 +54,26 @@ impl Geometry {
 
         Some(trans * rot)
     }
+}
 
+impl Intersectable for Geometry {
     /// Calcula la intersección entre rayo y geometría, e indica el factor t en la dirección del rayo
     ///
     /// ray_origin: punto de origen del rayo en coordenadas globales (Vector3)
     /// ray_dir: dirección del rayo en coordenadas globales (Vector3)
     ///
     /// Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
-    pub fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+    fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
         // Matrices de transformación de geometría
         let trans_inv = self.to_global_coords_matrix().map(|m| m.inverse());
         // Normal to the planar polygon
         let n_p = &poly_normal(&self.polygon);
         intersects_with_data(ray_origin, ray_dir, &self.polygon, trans_inv.as_ref(), n_p)
     }
+}
 
-    pub fn aabb(&self) -> AABB {
+impl Bounded for Geometry {
+    fn aabb(&self) -> AABB {
         if let Some(trans) = self.to_global_coords_matrix() {
             let mut min_x = f32::INFINITY;
             let mut min_y = f32::INFINITY;
@@ -190,152 +197,6 @@ pub fn point_in_poly(pt: Point2<f32>, poly: &[Point2<f32>]) -> bool {
     inside
 }
 
-/// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
-pub(crate) fn shades_for_window_setback(
-    wall: &super::Wall,
-    win: &super::Window,
-) -> Vec<(String, Shade)> {
-    let wing = &win.geometry;
-    // Si no hay retranqueo no se genera geometría
-    if wing.setback.abs() < 0.01 {
-        return vec![];
-    };
-    let wpos = match wing.position {
-        Some(pos) => pos,
-        // Si no hay definición geométrica completa no se calcula geometría
-        _ => return vec![],
-    };
-
-    let wall2world = wall
-        .geometry
-        .to_global_coords_matrix()
-        .expect("El muro debe tener definición geométrica completa");
-
-    let overhang = Shade {
-        id: uuid_from_str(&format!("{}-top_setback", win.id)),
-        name: format!("{}_top_setback", win.name),
-        geometry: Geometry {
-            // inclinación: con 90º es perpendicular al hueco
-            tilt: wall.geometry.tilt + 90.0,
-            azimuth: wall.geometry.azimuth,
-            position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
-            polygon: vec![
-                point![0.0, 0.0],
-                point![0.0, -wing.setback],
-                point![wing.width, -wing.setback],
-                point![wing.width, 0.0],
-            ],
-        },
-    };
-
-    let left_fin = Shade {
-        id: uuid_from_str(&format!("{}-left_setback", win.id)),
-        name: format!("{}_left_setback", win.name),
-        geometry: Geometry {
-            tilt: wall.geometry.tilt,
-            azimuth: wall.geometry.azimuth + 90.0,
-            position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
-            polygon: vec![
-                point![0.0, 0.0],
-                point![0.0, -wing.height],
-                point![wing.setback, -wing.height],
-                point![wing.setback, 0.0],
-            ],
-        },
-    };
-
-    let right_fin = Shade {
-        id: uuid_from_str(&format!("{}-right_setback", win.id)),
-        name: format!("{}_right_setback", win.name),
-        geometry: Geometry {
-            tilt: wall.geometry.tilt,
-            azimuth: wall.geometry.azimuth - 90.0,
-            position: Some(wall2world * point![wpos.x + wing.width, wpos.y + wing.height, 0.0]),
-            polygon: vec![
-                point![0.0, 0.0],
-                point![-wing.setback, 0.0],
-                point![-wing.setback, -wing.height],
-                point![0.0, -wing.height],
-            ],
-        },
-    };
-
-    let sill = Shade {
-        id: uuid_from_str(&format!("{}-sill_setback", win.id)),
-        name: format!("{}_sill_setback", win.name),
-        geometry: Geometry {
-            tilt: wall.geometry.tilt - 90.0,
-            azimuth: wall.geometry.azimuth,
-            position: Some(wall2world * point![wpos.x, wpos.y, 0.0]),
-            polygon: vec![
-                point![0.0, 0.0],
-                point![wing.width, 0.0],
-                point![wing.width, wing.setback],
-                point![0.0, wing.setback],
-            ],
-        },
-    };
-
-    vec![
-        (win.id.clone(), overhang),
-        (win.id.clone(), left_fin),
-        (win.id.clone(), right_fin),
-        (win.id.clone(), sill),
-    ]
-}
-
-/// Axis aligned bounding box definida por puntos extremos
-#[derive(Debug, Copy, Clone)]
-pub struct AABB {
-    pub min: Point3<f32>,
-    pub max: Point3<f32>,
-}
-
-impl AABB {
-    /// Detecta si existe intersección de AABB y rayo usando el algoritmo de Cyrus-Beck
-    /// https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
-    /// NaN es siempre distinto, de modo que las comparaciones con NaN son correctas
-    /// Las AABB deben tener ancho > 0 en todas las dimensiones
-    pub fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
-        let idx = 1.0 / ray_dir.x;
-        let idy = 1.0 / ray_dir.y;
-        let idz = 1.0 / ray_dir.z;
-
-        let t1 = (self.min.x - ray_origin.x) * idx;
-        let t2 = (self.max.x - ray_origin.x) * idx;
-        let t3 = (self.min.y - ray_origin.y) * idy;
-        let t4 = (self.max.y - ray_origin.y) * idy;
-        let t5 = (self.min.z - ray_origin.z) * idz;
-        let t6 = (self.max.z - ray_origin.z) * idz;
-
-        let tmin = t1.min(t2).max(t3.min(t4)).max(t5.min(t6));
-        let tmax = t1.max(t2).min(t3.max(t4)).min(t5.max(t6));
-
-        // Si tmax < 0 la línea interseca pero el AABB está detrás
-        if tmax < 0.0 {
-            // t = tmax;
-            return None;
-        }
-
-        // Si tmin > tmax el rayo no corta AABB
-        if tmin > tmax {
-            // t = tmax;
-            return None;
-        }
-        // t = tmin;
-        Some(tmin)
-    }
-}
-
-impl Default for AABB {
-    fn default() -> Self {
-        Self {
-            min: point![0.0, 0.0, 0.0],
-            max: point![0.0, 0.0, 0.0],
-        }
-    }
-}
-
 /// Elemento oclusor, con información geométrica e identificación
 ///
 /// - el id permite excluir el muro de un hueco
@@ -357,15 +218,21 @@ pub struct Occluder {
     pub aabb: AABB,
 }
 
-impl Occluder {
-    pub fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+impl Intersectable for Occluder {
+    fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
         self.aabb.intersects(ray_origin, ray_dir)?;
-        crate::geometry::intersects_with_data(
+        intersects_with_data(
             ray_origin,
             ray_dir,
             &self.polygon,
             self.trans_matrix.as_ref(),
             &self.normal,
         )
+    }
+}
+
+impl Bounded for Occluder {
+    fn aabb(&self) -> AABB {
+        self.aabb
     }
 }

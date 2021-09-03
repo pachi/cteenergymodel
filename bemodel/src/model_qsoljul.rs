@@ -14,6 +14,7 @@ use log::{debug, info, warn};
 use nalgebra::{point, vector, Point3, Vector3};
 
 use super::{
+    bvh::{Bounded, Intersectable},
     climatedata,
     common::RadData,
     geometry::{poly_normal, Occluder},
@@ -218,6 +219,7 @@ impl Model {
         // TODO: filtrar aquí oclusores usando BVH de AABB
         // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter2/static_aabb_plane.html ???
         // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
+        // Probablemente lo mejor sería generar el BHV y pasarlo a esta función, y filtrar en las intersecciones
         let candidate_occluders: Vec<_> = occluders
             .iter()
             .filter(|oc| {
