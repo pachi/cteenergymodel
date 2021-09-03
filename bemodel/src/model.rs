@@ -5,12 +5,11 @@
 //! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
 
 use anyhow::Error;
-use na::{Point2, Point3};
 use serde::{Deserialize, Serialize};
 
 pub use super::{
-    BoundaryType, ClimateZone, N50Data, Orientation, SpaceType, ThermalBridgeKind, Tilt, UValues,
-    Warning, WarningLevel,
+    BoundaryType, ClimateZone, N50Data, Orientation, Point2, Point3, SpaceType, ThermalBridgeKind,
+    Tilt, UValues, Warning, WarningLevel,
 };
 
 // ---------- Estructura general de datos --------------
@@ -169,9 +168,9 @@ pub struct Geometry {
     pub azimuth: f32,
     /// Posición del muro, en coordenadas de espacio
     /// Un valor None señala que no hay definición geométrica completa
-    pub position: Option<Point3<f32>>,
+    pub position: Option<Point3>,
     /// Polígono del muro, en coordenadas de muro
-    pub polygon: Vec<Point2<f32>>,
+    pub polygon: Vec<Point2>,
 }
 
 /// Elemento de sombra
@@ -210,7 +209,7 @@ pub struct Window {
 pub struct WindowGeometry {
     /// Posición del hueco, en coordenadas de muro
     /// Un valor None señala que no hay definición geométrica completa
-    pub position: Option<Point2<f32>>,
+    pub position: Option<Point2>,
     /// Altura del hueco, m
     pub height: f32,
     /// Anchuro del hueco, m

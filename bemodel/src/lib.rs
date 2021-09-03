@@ -5,6 +5,7 @@
 //! Datos climáticos y modelo del edificio
 
 extern crate nalgebra as na;
+pub use nalgebra::{point, vector};
 
 pub mod bvh;
 pub mod climatedata;
@@ -28,3 +29,8 @@ pub use model::*;
 
 /// Versión del programa
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+pub type Point2 = nalgebra::Point2<f32>;
+pub type Point3 = nalgebra::Point3<f32>;
+pub type Vector2 = nalgebra::Vector2<f32>;
+pub type Vector3 = nalgebra::Vector3<f32>;

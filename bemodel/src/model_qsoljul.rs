@@ -11,15 +11,15 @@
 use std::{collections::HashMap, convert::From};
 
 use log::{debug, info, warn};
-use nalgebra::{point, vector, Point3, Vector3};
 
 use super::{
+    point, vector,
     bvh::{Bounded, Intersectable},
     climatedata,
     common::RadData,
     geometry::{poly_normal, Occluder},
     BoundaryType::{ADIABATIC, EXTERIOR},
-    Model, Orientation, QSolJulData, Window,
+    Model, Orientation, Point3, QSolJulData, Vector3, Window,
 };
 use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
@@ -186,7 +186,7 @@ impl Model {
     pub fn sunlit_fraction(
         &self,
         window: &Window,
-        ray_dir: &Vector3<f32>,
+        ray_dir: &Vector3,
         occluders: &[Occluder],
     ) -> f32 {
         let window_wall = match self.wall_of_window(window) {
@@ -238,7 +238,7 @@ impl Model {
             .collect();
 
         // Pensar si es posible la optimización por paquetes de rayos
-        let ray_origins: Vec<Point3<f32>> = self.ray_origins_for_window(window);
+        let ray_origins: Vec<Point3> = self.ray_origins_for_window(window);
         let num = ray_origins.len();
         let mut num_intersects = 0;
         for ray_orig in ray_origins {
@@ -298,7 +298,7 @@ impl Model {
     ///
     /// Parte de una retícula dividida entre 5 y 10 partes por dimensión
     /// - en cada rectángulo el punto de muestreo podría ser aleatorio y no el punto central
-    pub fn ray_origins_for_window(&self, window: &Window) -> Vec<Point3<f32>> {
+    pub fn ray_origins_for_window(&self, window: &Window) -> Vec<Point3> {
         let wall = match self.wall_of_window(window) {
             None => return vec![],
             Some(wall) => wall,
@@ -352,7 +352,7 @@ impl Model {
 ///
 /// sun_azimuth: azimuth solar [-180.0,+180.0] (E+, W-, S=0)
 /// sun_altitude: altitud solar [0.0, +90] (90 es vertical)
-pub fn ray_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3<f32> {
+pub fn ray_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3 {
     let sazim = sun_azimuth.to_radians();
     let salt = sun_altitude.to_radians();
     vector![

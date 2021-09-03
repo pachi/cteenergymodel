@@ -7,14 +7,11 @@
 use std::convert::From;
 
 // use log::{debug, info, warn};
-use na::{
-    point, vector, IsometryMatrix2, IsometryMatrix3, Point2, Point3, Rotation2, Rotation3,
-    Translation2, Translation3, Vector2, Vector3,
-};
+use na::{IsometryMatrix2, IsometryMatrix3, Rotation2, Rotation3, Translation2, Translation3};
 
 use super::{
     bvh::{Bounded, Intersectable, AABB},
-    Geometry,
+    point, vector, Geometry, Point2, Point3, Vector2, Vector3,
 };
 
 const EPSILON: f32 = 1e-5;
@@ -23,7 +20,7 @@ const EPSILON: f32 = 1e-5;
 
 impl Geometry {
     /// Vector unitario normal a la geometría, en coordenadas globales
-    pub fn normal(&self) -> Vector3<f32> {
+    pub fn normal(&self) -> Vector3 {
         let n_p = poly_normal(&self.polygon);
         let zrot = Rotation3::new(Vector3::z() * self.azimuth.to_radians());
         let xrot = Rotation3::new(Vector3::x() * self.tilt.to_radians());
@@ -63,7 +60,7 @@ impl Intersectable for Geometry {
     /// ray_dir: dirección del rayo en coordenadas globales (Vector3)
     ///
     /// Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
-    fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+    fn intersects(&self, ray_origin: &Point3, ray_dir: &Vector3) -> Option<f32> {
         // Matrices de transformación de geometría
         let trans_inv = self.to_global_coords_matrix().map(|m| m.inverse());
         // Normal to the planar polygon
@@ -114,11 +111,11 @@ impl Bounded for Geometry {
 /// - Comprueba si el punto está en el interior del polígono
 /// - Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
 pub fn intersects_with_data(
-    ray_origin: &Point3<f32>,
-    ray_dir: &Vector3<f32>,
-    polygon: &[Point2<f32>],
+    ray_origin: &Point3,
+    ray_dir: &Vector3,
+    polygon: &[Point2],
     global_to_poly_matrix: Option<&IsometryMatrix3<f32>>,
-    n_p: &Vector3<f32>,
+    n_p: &Vector3,
 ) -> Option<f32> {
     // Transform ray to the polygon coordinate space
     let trans_inv = global_to_poly_matrix?;
@@ -156,7 +153,7 @@ pub fn intersects_with_data(
 }
 
 /// Normal al polígono plano, en coordenadas locales
-pub fn poly_normal(poly: &[Point2<f32>]) -> Vector3<f32> {
+pub fn poly_normal(poly: &[Point2]) -> Vector3 {
     let v0 = poly[1] - poly[0];
     let v1 = poly[2] - poly[0];
 
@@ -174,7 +171,7 @@ pub fn poly_normal(poly: &[Point2<f32>]) -> Vector3<f32> {
 /// https://docs.rs/geo/0.18.0/geo/algorithm/contains/trait.Contains.html
 /// Ver algunos casos límite en https://stackoverflow.com/a/63436180
 /// Evita el cálculo del punto de intersección y una división localizando la condición de cruce
-pub fn point_in_poly(pt: Point2<f32>, poly: &[Point2<f32>]) -> bool {
+pub fn point_in_poly(pt: Point2, poly: &[Point2]) -> bool {
     let x = pt.x;
     let y = pt.y;
     let mut inside = false;
@@ -209,17 +206,17 @@ pub struct Occluder {
     /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
     pub linked_to_id: Option<String>,
     /// normal del polígono
-    pub normal: Vector3<f32>,
+    pub normal: Vector3,
     /// Matriz de transformación de coordenadas globales a locales de polígono
     pub trans_matrix: Option<IsometryMatrix3<f32>>,
     /// Polígono 2D
-    pub polygon: Vec<Point2<f32>>,
+    pub polygon: Vec<Point2>,
     /// AABB (min, max)
     pub aabb: AABB,
 }
 
 impl Intersectable for Occluder {
-    fn intersects(&self, ray_origin: &Point3<f32>, ray_dir: &Vector3<f32>) -> Option<f32> {
+    fn intersects(&self, ray_origin: &Point3, ray_dir: &Vector3) -> Option<f32> {
         self.aabb.intersects(ray_origin, ray_dir)?;
         intersects_with_data(
             ray_origin,
