@@ -19,15 +19,14 @@ pub mod model_n50;
 pub mod model_qsoljul;
 pub mod model_transmittance;
 mod ray;
+mod report;
 mod utils;
 
 pub use climatedata::*;
-pub use common::{
-    BoundaryType, ClimateZone, KData, N50Data, Orientation, QSolJulData, SpaceType,
-    ThermalBridgeKind, Tilt, UValues, Warning, WarningLevel,
-};
+pub use common::{BoundaryType, ClimateZone, Orientation, SpaceType, ThermalBridgeKind, Tilt};
 pub use model::*;
 pub use ray::Ray;
+pub use report::{KData, N50Data, QSolJulData, UValues, Warning, WarningLevel};
 
 /// Versión del programa
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
