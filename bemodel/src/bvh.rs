@@ -1,5 +1,3 @@
-// TODO: Implementar Bounded para Occluder
-
 use super::{point, Point3, Ray};
 use std::ops::Deref;
 
@@ -110,26 +108,36 @@ impl Intersectable for AABB {
 ///
 /// Elemento raíz de una partición de la geometría por objetos, usando AABBs (axis aligned bounding boxes).
 /// Diseñamos la estructura para acelerar el cálculo de si un rayo colisiona con alguno de sus elementos terminales.
+/// https://gdbooks.gitbooks.io/3dcollisions/content/Chapter2/static_aabb_plane.html ???
+/// https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
 #[derive(Debug)]
 pub struct BVH<T> {
     pub root: Option<BVHNode<T>>,
+    pub max_num_elements: usize,
 }
 
 impl<T: Bounded> BVH<T> {
-    pub fn new(root: Option<BVHNode<T>>) -> Self {
-        BVH { root }
+    pub fn new(root: Option<BVHNode<T>>, max_num_elements: usize) -> Self {
+        BVH {
+            root,
+            max_num_elements,
+        }
     }
 
     /// Construye una BVH a partir de un vector de elementos
-    pub fn build(elements: Vec<T>) -> Self {
+    /// TODO: Este método recursivo tiende a colapsar la pila (stack overflow)
+    pub fn build(elements: Vec<T>, max_num_elements: usize) -> Self {
         // let aabb = AABB::from_slice(&elements);
         let aabb = elements.aabb();
         let root = if !elements.is_empty() {
-            Some(BVH::split_leaf_node(BVHNode::Leaf { aabb, elements }))
+            Some(BVH::split_leaf_node(
+                BVHNode::Leaf { aabb, elements },
+                max_num_elements,
+            ))
         } else {
             None
         };
-        BVH::new(root)
+        BVH::new(root, max_num_elements)
     }
 
     /// Itera sobre los nodos con los que colisiona el rayo
@@ -140,31 +148,10 @@ impl<T: Bounded> BVH<T> {
     }
 
     /// Divide nodo final en nodo intermedio con dos nodos finales separados por eje mayor
-    fn split_leaf_node(node: BVHNode<T>) -> BVHNode<T> {
+    fn split_leaf_node(node: BVHNode<T>, max_num_elements: usize) -> BVHNode<T> {
         if let BVHNode::Leaf { aabb, elements } = node {
-            if elements.len() > 2 {
-                let center = aabb.center();
-                let (dimx, dimy, dimz) = (
-                    aabb.max.x - aabb.min.x,
-                    aabb.max.y - aabb.min.y,
-                    aabb.max.z - aabb.min.z,
-                );
-                let (left_elems, right_elems): (Vec<_>, Vec<_>) = if dimx >= dimy && dimx >= dimz {
-                    // X es la dimensión mayor
-                    elements
-                        .into_iter()
-                        .partition(|e| e.aabb().center().x < center.x)
-                } else if dimy >= dimz {
-                    // Y es la dimensión mayor
-                    elements
-                        .into_iter()
-                        .partition(|e| e.aabb().center().y < center.y)
-                } else {
-                    // Z es la dimensión mayor
-                    elements
-                        .into_iter()
-                        .partition(|e| e.aabb().center().z < center.z)
-                };
+            if elements.len() > max_num_elements {
+                let (left_elems, right_elems) = BVH::partition_elements(elements, aabb);
 
                 let left = BVHNode::Leaf {
                     aabb: left_elems.aabb(),
@@ -177,14 +164,40 @@ impl<T: Bounded> BVH<T> {
 
                 BVHNode::Node {
                     aabb,
-                    left: Some(Box::new(BVH::split_leaf_node(left))),
-                    right: Some(Box::new(BVH::split_leaf_node(right))),
+                    left: Some(Box::new(BVH::split_leaf_node(left, max_num_elements))),
+                    right: Some(Box::new(BVH::split_leaf_node(right, max_num_elements))),
                 }
             } else {
                 BVHNode::Leaf { aabb, elements }
             }
         } else {
             unreachable!();
+        }
+    }
+
+    /// Divide lista de elementos en dos partes
+    fn partition_elements(elements: Vec<T>, aabb: AABB) -> (Vec<T>, Vec<T>) {
+        let center = aabb.center();
+        let (dimx, dimy, dimz) = (
+            aabb.max.x - aabb.min.x,
+            aabb.max.y - aabb.min.y,
+            aabb.max.z - aabb.min.z,
+        );
+        if dimx >= dimy && dimx >= dimz {
+            // X es la dimensión mayor
+            elements
+                .into_iter()
+                .partition(|e| e.aabb().center().x < center.x)
+        } else if dimy >= dimz {
+            // Y es la dimensión mayor
+            elements
+                .into_iter()
+                .partition(|e| e.aabb().center().y < center.y)
+        } else {
+            // Z es la dimensión mayor
+            elements
+                .into_iter()
+                .partition(|e| e.aabb().center().z < center.z)
         }
     }
 }
@@ -198,16 +211,12 @@ where
             .iter_with_ray(ray)
             .filter(|e| matches!(e, BVHNode::Leaf { .. }));
         for e in hits_iter {
-            match e {
-                BVHNode::Leaf { elements, .. } => {
-                    for occ in elements {
-                        if let intersect_opt @ Some(_) = occ.intersects(ray) {
-                            return intersect_opt;
-                        }
+            if e.is_leaf() {
+                for occ in e.elements()? {
+                    if let intersect_opt @ Some(_) = occ.intersects(ray) {
+                        return intersect_opt;
                     }
-                    continue;
                 }
-                _ => continue,
             }
         }
         None
@@ -233,6 +242,7 @@ pub enum BVHNode<T> {
 }
 
 impl<T> BVHNode<T> {
+    /// Rama izquierda de un nodo intermedio
     pub fn left(self) -> Option<Box<BVHNode<T>>> {
         match self {
             BVHNode::Node { left, .. } => left,
@@ -240,6 +250,7 @@ impl<T> BVHNode<T> {
         }
     }
 
+    /// Rama derecha de un nodo intermedio
     pub fn right(self) -> Option<Box<BVHNode<T>>> {
         match self {
             BVHNode::Node { right, .. } => right,
@@ -247,12 +258,18 @@ impl<T> BVHNode<T> {
         }
     }
 
-    // pub fn elements(self) -> Option<Vec<T>> {
-    //     match self {
-    //         BVHNode::Leaf { elements, .. } => Some(elements),
-    //         _ => None,
-    //     }
-    // }
+    /// ¿Es un nodo terminal?
+    pub fn is_leaf(&self) -> bool {
+        matches!(self, BVHNode::Leaf { .. })
+    }
+
+    /// Referencia a elementos
+    pub fn elements(&self) -> Option<&Vec<T>> {
+        match self {
+            BVHNode::Leaf { elements, .. } => Some(elements),
+            _ => None,
+        }
+    }
 }
 
 impl<T> Bounded for BVHNode<T> {
@@ -282,10 +299,7 @@ impl<'a, T> PreorderIter<'a, T> {
                 ray,
             }
         } else {
-            PreorderIter {
-                stack: vec![],
-                ray,
-            }
+            PreorderIter { stack: vec![], ray }
         }
     }
 }
@@ -299,25 +313,18 @@ impl<'a, T> Iterator for PreorderIter<'a, T> {
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(node) = self.stack.pop() {
-            // println!("taking node {:#?}", node.aabb());
             let hits_node = node.aabb().intersects(&self.ray).is_some();
-            // println!("node hits? {}", hits_node);
             if hits_node {
-                // println!("node aabb hits");
                 if let BVHNode::Node { right, left, .. } = node {
                     if let Some(r_node) = &right {
-                        // println!("has right node");
                         self.stack.push(r_node)
                     }
-
                     if let Some(l_node) = &left {
-                        // println!("has left node");
                         self.stack.push(l_node)
                     };
                 };
                 return Some(node);
             };
-            // println!("Not taking node");
         }
         None
     }
@@ -325,7 +332,7 @@ impl<'a, T> Iterator for PreorderIter<'a, T> {
 
 #[cfg(test)]
 mod tests {
-    use super::{BVHNode, Bounded, Intersectable, AABB, BVH, Ray};
+    use super::{BVHNode, Bounded, Intersectable, Ray, AABB, BVH};
     use nalgebra::{point, vector};
 
     /// Prueba la unión de dos AABBs
@@ -348,7 +355,7 @@ mod tests {
             AABB::new(point![5.0, 1.0, 5.0], point![9.0, 5.0, 9.0]),
         ];
 
-        let bvh = BVH::build(elements);
+        let bvh = BVH::build(elements, 2);
         let root = bvh.root.unwrap();
         let aabb = root.aabb();
         assert_eq!(aabb.min, point![1.0, 1.0, 1.0]);
@@ -380,7 +387,7 @@ mod tests {
             left: Some(Box::new(left)),
             right: Some(Box::new(right)),
         };
-        let bvh = BVH::new(Some(root));
+        let bvh = BVH::new(Some(root), 2);
         let aabb = bvh.root.as_ref().unwrap().aabb();
         assert_eq!(aabb.min, point![1.0, 1.0, 1.0]);
         assert_eq!(aabb.max, point![9.0, 9.0, 9.0]);

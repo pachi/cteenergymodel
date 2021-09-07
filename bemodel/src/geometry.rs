@@ -214,14 +214,14 @@ pub struct Occluder {
     pub aabb: AABB,
 }
 
-impl Intersectable for Occluder {
+impl Intersectable for &Occluder {
     fn intersects(&self, ray: &Ray) -> Option<f32> {
         self.aabb.intersects(ray)?;
         intersects_with_data(ray, &self.polygon, self.trans_matrix.as_ref(), &self.normal)
     }
 }
 
-impl Bounded for Occluder {
+impl Bounded for &Occluder {
     fn aabb(&self) -> AABB {
         self.aabb
     }
