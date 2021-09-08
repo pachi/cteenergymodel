@@ -1,5 +1,5 @@
 use super::{point, Point3, Ray};
-use std::ops::Deref;
+use std::{collections::HashMap, ops::Deref};
 
 /// Elementos capaces de definir la AABB que los encierra
 pub trait Bounded {
@@ -113,21 +113,37 @@ impl Intersectable for AABB {
 #[derive(Debug)]
 pub struct BVH<T> {
     pub root: Option<BVHNode<T>>,
-    pub max_num_elements: usize,
 }
 
-impl<T: Bounded> BVH<T> {
-    pub fn new(root: Option<BVHNode<T>>, max_num_elements: usize) -> Self {
-        BVH {
-            root,
-            max_num_elements,
-        }
+#[derive(Debug)]
+enum Side {
+    L,
+    R,
+}
+
+#[derive(Debug)]
+enum NodeType {
+    Leaf,
+    Node,
+}
+
+type NodeId = usize;
+struct TreeElement<T>(NodeId, NodeType, Side, Option<NodeId>, Option<Vec<T>>);
+
+impl<T: std::fmt::Debug> std::fmt::Debug for TreeElement<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "TreeElement ({:?}, {:?}, {:?}, {:?}, vec_with_elems: {:?}", &self.0, &self.1, &self.2, &self.3, &self.4.is_some())
+    }
+}
+
+impl<T: Bounded + std::fmt::Debug> BVH<T> {
+    pub fn new(root: Option<BVHNode<T>>) -> Self {
+        BVH { root }
     }
 
-    /// Construye una BVH a partir de un vector de elementos
-    /// TODO: Este método recursivo tiende a colapsar la pila (stack overflow)
-    pub fn build(elements: Vec<T>, max_num_elements: usize) -> Self {
-        // let aabb = AABB::from_slice(&elements);
+    /// Construye una BVH de forma recursiva a partir de un vector de elementos
+    /// El método puede colapsar la pila (stack overflow) con muchos elementos
+    pub fn build_recursive(elements: Vec<T>, max_num_elements: usize) -> Self {
         let aabb = elements.aabb();
         let root = if !elements.is_empty() {
             Some(BVH::split_leaf_node(
@@ -137,7 +153,144 @@ impl<T: Bounded> BVH<T> {
         } else {
             None
         };
-        BVH::new(root, max_num_elements)
+        BVH::new(root)
+    }
+
+    /// Construye una BVH de forma iterativa a partir de un vector de elementos
+    pub fn build(elements: Vec<T>, max_num_elements: usize) -> Self {
+        let node_list = BVH::generate_node_list(elements, max_num_elements);
+        BVH::build_from_node_list(node_list)
+    }
+
+    /// Genera iterativamente lista de nodos del árbol a partir de la lista de elementos
+    fn generate_node_list(elements: Vec<T>, max_num_elements: usize) -> Vec<TreeElement<T>> {
+        use NodeType::*;
+        use Side::*;
+
+        // Nodos pendientes
+        let mut pending: Vec<TreeElement<T>> = Vec::new();
+        // Nodos procesados (2*n-1 nodos con n terminales)
+        let expected_num_nodes = 2 * (elements.len() / max_num_elements) - 1;
+        let mut node_list: Vec<TreeElement<T>> = Vec::with_capacity(expected_num_nodes);
+
+        let mut id: NodeId = 0;
+        let ll = elements.len();
+        if ll > max_num_elements {
+            let (left, right) = BVH::partition_elements(elements);
+            // Guardamos nodo inicial (da igual el lado)
+            node_list.push(TreeElement(0, Node, L, None, None));
+            // Nodos pendientes
+            pending.push(TreeElement(id + 2, Node, R, Some(id), Some(right)));
+            pending.push(TreeElement(id + 1, Node, L, Some(id), Some(left)));
+            id += 2;
+            // Procesar stack de pendientes de dividir
+            while !pending.is_empty() {
+                let TreeElement(c_id, _c_type, c_side, c_maybe_parent_id, c_maybe_elems) =
+                    pending.pop().unwrap();
+                let c_elems = c_maybe_elems.unwrap();
+                let cll = c_elems.len();
+                if cll > max_num_elements {
+                    // Completamos un nodo intermedio y dejamos pendientes sus ramas
+                    let (left, right) = BVH::partition_elements(c_elems);
+                    node_list.push(TreeElement(c_id, Node, c_side, c_maybe_parent_id, None));
+                    pending.push(TreeElement(
+                        id + 2,
+                        Node,
+                        R,
+                        Some(c_id),
+                        Some(right),
+                    ));
+                    pending.push(TreeElement(
+                        id + 1,
+                        Node,
+                        L,
+                        Some(c_id),
+                        Some(left),
+                    ));
+                    id += 2;
+                } else {
+                    // Completamos un nodo terminal
+                    node_list.push(TreeElement(
+                        c_id,
+                        Leaf,
+                        c_side,
+                        c_maybe_parent_id,
+                        Some(c_elems),
+                    ))
+                }
+            }
+        } else {
+            node_list.push(TreeElement(0, Leaf, L, None, Some(elements)))
+        }
+        node_list
+    }
+
+    /// Reconstruye árbol a partir de lista de nodos intermedios y terminales
+    fn build_from_node_list(mut node_list: Vec<TreeElement<T>>) -> Self {
+        use NodeType::*;
+        use Side::*;
+
+        // Diccionario de elementos pendientes de acabar (sin dos nodos hijos), indexados por padre
+        let mut pending: HashMap<NodeId, BVHNode<T>> = HashMap::new();
+        // Diccionario de nodos completos, listos para insertar en sus padres e indexados por padre
+        // Al final del proceso contiene el nodo raíz
+        let mut completed: HashMap<NodeId, BVHNode<T>> = HashMap::new();
+
+        // Vamos añadiendo los nodos que tenemos a sus elementos padre y
+        // a medida que los completamos los añadimos a sus respectivos padres
+        while node_list.len() > 1 {
+            // Con nodo intermedio elems es None, y tiene datos en nodos terminales
+            let TreeElement(id, _type, side, maybe_parent_id, elems) = node_list.pop().unwrap();
+            let parent_id = maybe_parent_id.unwrap();
+            let parent_node = pending.entry(parent_id).or_insert(BVHNode::Node {
+                aabb: Default::default(),
+                left: None,
+                right: None,
+            });
+            match (side, _type) {
+                (L, Leaf) => {
+                    let elements = elems.unwrap();
+                    parent_node.set_left(BVHNode::Leaf {
+                        aabb: elements.aabb(),
+                        elements,
+                    })
+                }
+                (L, Node) => {
+                    let left = completed.remove(&id).unwrap();
+                    parent_node.set_left(left)
+                }
+                (R, Leaf) => {
+                    let elements = elems.unwrap();
+                    parent_node.set_right(BVHNode::Leaf {
+                        aabb: elements.aabb(),
+                        elements,
+                    })
+                }
+                (R, Node) => {
+                    let right = completed.remove(&id).unwrap();
+                    parent_node.set_right(right)
+                }
+            };
+            // Está completo y disponible para insertar en otro nodo
+            // Lo eliminamos de pending y añadimos a completed
+            if parent_node.is_complete_node() {
+                let mut parent_node = pending.remove(&parent_id).unwrap();
+                let updated_aabb = match &parent_node {
+                    BVHNode::Node { left, right, .. } => left
+                        .as_ref()
+                        .unwrap()
+                        .aabb()
+                        .join(right.as_ref().unwrap().aabb()),
+                    _ => unreachable!(),
+                };
+                if let BVHNode::Node { aabb, .. } = &mut parent_node {
+                    *aabb = updated_aabb;
+                };
+                completed.insert(parent_id, parent_node);
+            }
+        }
+        let root = completed.remove(&0_usize).unwrap();
+        Self::new(Some(root))
     }
 
     /// Itera sobre los nodos con los que colisiona el rayo
@@ -151,7 +304,7 @@ impl<T: Bounded> BVH<T> {
     fn split_leaf_node(node: BVHNode<T>, max_num_elements: usize) -> BVHNode<T> {
         if let BVHNode::Leaf { aabb, elements } = node {
             if elements.len() > max_num_elements {
-                let (left_elems, right_elems) = BVH::partition_elements(elements, aabb);
+                let (left_elems, right_elems) = BVH::partition_elements_with_aabb(elements, aabb);
 
                 let left = BVHNode::Leaf {
                     aabb: left_elems.aabb(),
@@ -176,7 +329,34 @@ impl<T: Bounded> BVH<T> {
     }
 
     /// Divide lista de elementos en dos partes
-    fn partition_elements(elements: Vec<T>, aabb: AABB) -> (Vec<T>, Vec<T>) {
+    fn partition_elements_with_aabb(elements: Vec<T>, aabb: AABB) -> (Vec<T>, Vec<T>) {
+        let center = aabb.center();
+        let (dimx, dimy, dimz) = (
+            aabb.max.x - aabb.min.x,
+            aabb.max.y - aabb.min.y,
+            aabb.max.z - aabb.min.z,
+        );
+        if dimx >= dimy && dimx >= dimz {
+            // X es la dimensión mayor
+            elements
+                .into_iter()
+                .partition(|e| e.aabb().center().x < center.x)
+        } else if dimy >= dimz {
+            // Y es la dimensión mayor
+            elements
+                .into_iter()
+                .partition(|e| e.aabb().center().y < center.y)
+        } else {
+            // Z es la dimensión mayor
+            elements
+                .into_iter()
+                .partition(|e| e.aabb().center().z < center.z)
+        }
+    }
+
+    /// Divide lista de elementos en dos partes
+    fn partition_elements(elements: Vec<T>) -> (Vec<T>, Vec<T>) {
+        let aabb = &elements.aabb();
         let center = aabb.center();
         let (dimx, dimy, dimz) = (
             aabb.max.x - aabb.min.x,
@@ -204,7 +384,7 @@ impl<T: Bounded> BVH<T> {
 
 impl<T> Intersectable for BVH<T>
 where
-    T: Bounded + Intersectable,
+    T: Bounded + Intersectable + std::fmt::Debug,
 {
     fn intersects(&self, ray: &Ray) -> Option<f32> {
         let hits_iter = self
@@ -243,18 +423,44 @@ pub enum BVHNode<T> {
 
 impl<T> BVHNode<T> {
     /// Rama izquierda de un nodo intermedio
-    pub fn left(self) -> Option<Box<BVHNode<T>>> {
+    pub fn get_left(self) -> Option<Box<BVHNode<T>>> {
         match self {
             BVHNode::Node { left, .. } => left,
             _ => None,
         }
     }
 
+    /// Define la rama izquierda de un nodo intermedio
+    /// No actualiza su aabb
+    pub fn set_left(&mut self, node: BVHNode<T>) {
+        match self {
+            BVHNode::Node { left, .. } => *left = Some(Box::new(node)),
+            _ => panic!(),
+        }
+    }
+
     /// Rama derecha de un nodo intermedio
-    pub fn right(self) -> Option<Box<BVHNode<T>>> {
+    pub fn get_right(self) -> Option<Box<BVHNode<T>>> {
         match self {
             BVHNode::Node { right, .. } => right,
             _ => None,
+        }
+    }
+
+    /// Define la rama derecha de un nodo intermedio
+    /// No actualiza el aabb
+    pub fn set_right(&mut self, node: BVHNode<T>) {
+        match self {
+            BVHNode::Node { right, .. } => *right = Some(Box::new(node)),
+            _ => panic!(),
+        }
+    }
+
+    /// Comprueba si es un nodo intermedio y ambos nodos hijos tienen nodo
+    pub fn is_complete_node(&self) -> bool {
+        match self {
+            BVHNode::Node { left, right, .. } => left.is_some() && right.is_some(),
+            BVHNode::Leaf { .. } => false,
         }
     }
 
@@ -332,6 +538,8 @@ impl<'a, T> Iterator for PreorderIter<'a, T> {
 
 #[cfg(test)]
 mod tests {
+    use core::panic;
+
     use super::{BVHNode, Bounded, Intersectable, Ray, AABB, BVH};
     use nalgebra::{point, vector};
 
@@ -355,12 +563,22 @@ mod tests {
             AABB::new(point![5.0, 1.0, 5.0], point![9.0, 5.0, 9.0]),
         ];
 
+        let bvh = BVH::build_recursive(elements.clone(), 2);
+        let root = bvh.root.unwrap();
+        let aabb = root.aabb();
+        assert_eq!(aabb.min, point![1.0, 1.0, 1.0]);
+        assert_eq!(aabb.max, point![9.0, 9.0, 9.0]);
+        let left = root.get_left().unwrap();
+        let left_aabb = left.aabb();
+        assert_eq!(left_aabb.min, point![1.0, 1.0, 1.0]);
+        assert_eq!(left_aabb.max, point![5.0, 9.0, 9.0]);
+
         let bvh = BVH::build(elements, 2);
         let root = bvh.root.unwrap();
         let aabb = root.aabb();
         assert_eq!(aabb.min, point![1.0, 1.0, 1.0]);
         assert_eq!(aabb.max, point![9.0, 9.0, 9.0]);
-        let left = root.left().unwrap();
+        let left = root.get_left().unwrap();
         let left_aabb = left.aabb();
         assert_eq!(left_aabb.min, point![1.0, 1.0, 1.0]);
         assert_eq!(left_aabb.max, point![5.0, 9.0, 9.0]);
@@ -387,7 +605,7 @@ mod tests {
             left: Some(Box::new(left)),
             right: Some(Box::new(right)),
         };
-        let bvh = BVH::new(Some(root), 2);
+        let bvh = BVH::new(Some(root));
         let aabb = bvh.root.as_ref().unwrap().aabb();
         assert_eq!(aabb.min, point![1.0, 1.0, 1.0]);
         assert_eq!(aabb.max, point![9.0, 9.0, 9.0]);
