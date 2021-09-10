@@ -198,7 +198,6 @@ pub fn point_in_poly(pt: Point2, poly: &[Point2]) -> bool {
 /// - el id permite excluir el muro de un hueco
 /// - el origin_id permite excluir las geometrías de retranqueo que no son del hueco analizado
 /// - normal y trans_matrix permiten cachear resultados para cálculo de intersecciones con el polígono 2D transformando un rayo
-#[derive(Debug)]
 pub struct Occluder {
     /// Id del elemento
     pub id: String,
@@ -224,5 +223,11 @@ impl Intersectable for &Occluder {
 impl Bounded for &Occluder {
     fn aabb(&self) -> AABB {
         self.aabb
+    }
+}
+
+impl std::fmt::Debug for Occluder {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Occluder (id: {}, linked_to_id: {:?}", &self.id, &self.linked_to_id)
     }
 }
