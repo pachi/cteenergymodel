@@ -1,5 +1,6 @@
+use std::{collections::HashMap, fmt::Debug, ops::Deref};
+
 use super::{point, Point3, Ray};
-use std::{collections::HashMap, ops::Deref};
 
 /// Elementos capaces de definir la AABB que los encierra
 pub trait Bounded {
@@ -12,10 +13,22 @@ pub trait Intersectable {
 }
 
 /// Axis aligned bounding box definida por puntos extremos
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 pub struct AABB {
     pub min: Point3,
     pub max: Point3,
+}
+
+impl Debug for AABB {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let min = self.min;
+        let max = self.max;
+        write!(
+            f,
+            "AABB (min: point![{}, {}, {}], max: point![{}, {}, {}])",
+            min.x, min.y, min.z, max.x, max.y, max.z
+        )
+    }
 }
 
 impl AABB {
@@ -130,13 +143,21 @@ enum NodeType {
 type NodeId = usize;
 struct TreeElement<T>(NodeId, NodeType, Side, Option<NodeId>, Option<Vec<T>>);
 
-impl<T: std::fmt::Debug> std::fmt::Debug for TreeElement<T> {
+impl<T: Debug> Debug for TreeElement<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "TreeElement ({:?}, {:?}, {:?}, {:?}, vec_with_elems: {:?}", &self.0, &self.1, &self.2, &self.3, &self.4.is_some())
+        write!(
+            f,
+            "TreeElement ({:?}, {:?}, {:?}, {:?}, vec_with_elems: {:?}",
+            &self.0,
+            &self.1,
+            &self.2,
+            &self.3,
+            &self.4.is_some()
+        )
     }
 }
 
-impl<T: Bounded + std::fmt::Debug> BVH<T> {
+impl<T: Bounded> BVH<T> {
     pub fn new(root: Option<BVHNode<T>>) -> Self {
         BVH { root }
     }
@@ -193,20 +214,8 @@ impl<T: Bounded + std::fmt::Debug> BVH<T> {
                     // Completamos un nodo intermedio y dejamos pendientes sus ramas
                     let (left, right) = BVH::partition_elements(c_elems);
                     node_list.push(TreeElement(c_id, Node, c_side, c_maybe_parent_id, None));
-                    pending.push(TreeElement(
-                        id + 2,
-                        Node,
-                        R,
-                        Some(c_id),
-                        Some(right),
-                    ));
-                    pending.push(TreeElement(
-                        id + 1,
-                        Node,
-                        L,
-                        Some(c_id),
-                        Some(left),
-                    ));
+                    pending.push(TreeElement(id + 2, Node, R, Some(c_id), Some(right)));
+                    pending.push(TreeElement(id + 1, Node, L, Some(c_id), Some(left)));
                     id += 2;
                 } else {
                     // Completamos un nodo terminal
@@ -243,17 +252,15 @@ impl<T: Bounded + std::fmt::Debug> BVH<T> {
             let TreeElement(id, _type, side, maybe_parent_id, elems) = node_list.pop().unwrap();
             let parent_id = maybe_parent_id.unwrap();
             let parent_node = pending.entry(parent_id).or_insert(BVHNode::Node {
-                aabb: Default::default(),
+                aabb: AABB::default(),
                 left: None,
                 right: None,
             });
             match (side, _type) {
                 (L, Leaf) => {
                     let elements = elems.unwrap();
-                    parent_node.set_left(BVHNode::Leaf {
-                        aabb: elements.aabb(),
-                        elements,
-                    })
+                    let aabb = elements.aabb();
+                    parent_node.set_left(BVHNode::Leaf { aabb, elements })
                 }
                 (L, Node) => {
                     let left = completed.remove(&id).unwrap();
@@ -261,10 +268,8 @@ impl<T: Bounded + std::fmt::Debug> BVH<T> {
                 }
                 (R, Leaf) => {
                     let elements = elems.unwrap();
-                    parent_node.set_right(BVHNode::Leaf {
-                        aabb: elements.aabb(),
-                        elements,
-                    })
+                    let aabb = elements.aabb();
+                    parent_node.set_right(BVHNode::Leaf { aabb, elements })
                 }
                 (R, Node) => {
                     let right = completed.remove(&id).unwrap();
@@ -275,17 +280,7 @@ impl<T: Bounded + std::fmt::Debug> BVH<T> {
             // Lo eliminamos de pending y añadimos a completed
             if parent_node.is_complete_node() {
                 let mut parent_node = pending.remove(&parent_id).unwrap();
-                let updated_aabb = match &parent_node {
-                    BVHNode::Node { left, right, .. } => left
-                        .as_ref()
-                        .unwrap()
-                        .aabb()
-                        .join(right.as_ref().unwrap().aabb()),
-                    _ => unreachable!(),
-                };
-                if let BVHNode::Node { aabb, .. } = &mut parent_node {
-                    *aabb = updated_aabb;
-                };
+                parent_node.set_aabb_from_children();
                 completed.insert(parent_id, parent_node);
             }
         }
@@ -384,18 +379,16 @@ impl<T: Bounded + std::fmt::Debug> BVH<T> {
 
 impl<T> Intersectable for BVH<T>
 where
-    T: Bounded + Intersectable + std::fmt::Debug,
+    T: Bounded + Intersectable,
 {
     fn intersects(&self, ray: &Ray) -> Option<f32> {
         let hits_iter = self
             .iter_with_ray(ray)
             .filter(|e| matches!(e, BVHNode::Leaf { .. }));
         for e in hits_iter {
-            if e.is_leaf() {
-                for occ in e.elements()? {
-                    if let intersect_opt @ Some(_) = occ.intersects(ray) {
-                        return intersect_opt;
-                    }
+            for occ in e.elements()? {
+                if let intersect_opt @ Some(_) = occ.intersects(ray) {
+                    return intersect_opt;
                 }
             }
         }
@@ -421,9 +414,23 @@ pub enum BVHNode<T> {
     },
 }
 
-impl<T> BVHNode<T> {
+impl<T: Bounded> BVHNode<T> {
+    /// Define la AABB de un nodo
+    pub fn set_aabb_from_children(&mut self) {
+        match self {
+            BVHNode::Node {
+                aabb, left, right, ..
+            } => {
+                let left_aabb = left.as_ref().unwrap().aabb();
+                let right_aabb = right.as_ref().unwrap().aabb();
+                *aabb = left_aabb.join(right_aabb);
+            }
+            BVHNode::Leaf { aabb, elements } => *aabb = elements.aabb(),
+        }
+    }
+
     /// Rama izquierda de un nodo intermedio
-    pub fn get_left(self) -> Option<Box<BVHNode<T>>> {
+    pub fn take_left(self) -> Option<Box<BVHNode<T>>> {
         match self {
             BVHNode::Node { left, .. } => left,
             _ => None,
@@ -440,7 +447,7 @@ impl<T> BVHNode<T> {
     }
 
     /// Rama derecha de un nodo intermedio
-    pub fn get_right(self) -> Option<Box<BVHNode<T>>> {
+    pub fn take_right(self) -> Option<Box<BVHNode<T>>> {
         match self {
             BVHNode::Node { right, .. } => right,
             _ => None,
@@ -514,19 +521,18 @@ impl<'a, T> PreorderIter<'a, T> {
 // https://aloso.github.io/2021/03/09/creating-an-iterator
 // https://sachanganesh.com/programming/graph-tree-traversals-in-rust/
 // https://www.geeksforgeeks.org/tree-traversals-inorder-preorder-and-postorder/
-impl<'a, T> Iterator for PreorderIter<'a, T> {
+impl<'a, T: Bounded> Iterator for PreorderIter<'a, T> {
     type Item = &'a BVHNode<T>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if let Some(node) = self.stack.pop() {
-            let hits_node = node.aabb().intersects(&self.ray).is_some();
-            if hits_node {
+        while let Some(node) = self.stack.pop() {
+            if node.aabb().intersects(&self.ray).is_some() {
                 if let BVHNode::Node { right, left, .. } = node {
                     if let Some(r_node) = &right {
-                        self.stack.push(r_node)
+                        self.stack.push(r_node.deref())
                     }
                     if let Some(l_node) = &left {
-                        self.stack.push(l_node)
+                        self.stack.push(l_node.deref())
                     };
                 };
                 return Some(node);
@@ -563,30 +569,37 @@ mod tests {
             AABB::new(point![5.0, 1.0, 5.0], point![9.0, 5.0, 9.0]),
         ];
 
+        // Método recursivo
         let bvh = BVH::build_recursive(elements.clone(), 2);
         let root = bvh.root.unwrap();
         let aabb = root.aabb();
         assert_eq!(aabb.min, point![1.0, 1.0, 1.0]);
         assert_eq!(aabb.max, point![9.0, 9.0, 9.0]);
-        let left = root.get_left().unwrap();
+        let left = root.take_left().unwrap();
         let left_aabb = left.aabb();
         assert_eq!(left_aabb.min, point![1.0, 1.0, 1.0]);
         assert_eq!(left_aabb.max, point![5.0, 9.0, 9.0]);
 
-        let bvh = BVH::build(elements, 2);
+        // Método iterativo
+        let bvh = BVH::build(elements.clone(), 2);
         let root = bvh.root.unwrap();
         let aabb = root.aabb();
         assert_eq!(aabb.min, point![1.0, 1.0, 1.0]);
         assert_eq!(aabb.max, point![9.0, 9.0, 9.0]);
-        let left = root.get_left().unwrap();
+        let left = root.take_left().unwrap();
         let left_aabb = left.aabb();
         assert_eq!(left_aabb.min, point![1.0, 1.0, 1.0]);
         assert_eq!(left_aabb.max, point![5.0, 9.0, 9.0]);
+
+        // Rayo que colisiona solo con elemento a
+        let bvh = BVH::build(elements, 2);
+        let ray = Ray::new(point![2.5, 0.0, 2.5], vector![0.0, 1.0, 0.0]);
+        assert_eq!(bvh.intersects(&ray), Some(1.0));
     }
 
     /// Prueba la construcción de una BVH
     #[test]
-    fn bvh_build_tree() {
+    fn bvh_tree_intersects() {
         let a = AABB::new(point![1.0, 1.0, 1.0], point![5.0, 5.0, 5.0]);
         let b = AABB::new(point![1.0, 5.0, 5.0], point![5.0, 9.0, 9.0]);
         let c = AABB::new(point![5.0, 5.0, 1.0], point![9.0, 9.0, 5.0]);
