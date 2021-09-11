@@ -312,35 +312,6 @@ impl<T: Bounded> BVH<T> {
                 .partition(|e| e.aabb().center().z < center.z)
         }
     }
-    
-    /// Divide lista de elementos en dos partes usando el punto medio del eje más largo como plano divisor
-    ///
-    /// Esto puede entrar en un bucle infinito si los centros a un lado del centro no son < max_elements
-    fn partition_elements_by_aabb_center(elements: Vec<T>) -> (Vec<T>, Vec<T>) {
-        let aabb = &elements.aabb();
-        let center = aabb.center();
-        let (dimx, dimy, dimz) = (
-            aabb.max.x - aabb.min.x,
-            aabb.max.y - aabb.min.y,
-            aabb.max.z - aabb.min.z,
-        );
-        if dimx >= dimy && dimx >= dimz {
-            // X es la dimensión mayor
-            elements
-                .into_iter()
-                .partition(|e| e.aabb().center().x < center.x)
-        } else if dimy >= dimz {
-            // Y es la dimensión mayor
-            elements
-                .into_iter()
-                .partition(|e| e.aabb().center().y < center.y)
-        } else {
-            // Z es la dimensión mayor
-            elements
-                .into_iter()
-                .partition(|e| e.aabb().center().z < center.z)
-        }
-    }
 }
 
 impl<T> Intersectable for BVH<T>
