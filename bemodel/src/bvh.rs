@@ -162,21 +162,6 @@ impl<T: Bounded> BVH<T> {
         BVH { root }
     }
 
-    /// Construye una BVH de forma recursiva a partir de un vector de elementos
-    /// El método puede colapsar la pila (stack overflow) con muchos elementos
-    pub fn build_recursive(elements: Vec<T>, max_num_elements: usize) -> Self {
-        let aabb = elements.aabb();
-        let root = if !elements.is_empty() {
-            Some(BVH::split_leaf_node(
-                BVHNode::Leaf { aabb, elements },
-                max_num_elements,
-            ))
-        } else {
-            None
-        };
-        BVH::new(root)
-    }
-
     /// Construye una BVH de forma iterativa a partir de un vector de elementos
     pub fn build(elements: Vec<T>, max_num_elements: usize) -> Self {
         let node_list = BVH::generate_node_list(elements, max_num_elements);
@@ -197,7 +182,7 @@ impl<T: Bounded> BVH<T> {
         let mut id: NodeId = 0;
         let ll = elements.len();
         if ll > max_num_elements {
-            let (left, right) = BVH::partition_elements(elements);
+            let (left, right) = BVH::partition_elements_by_centroid(elements);
             // Guardamos nodo inicial (da igual el lado)
             node_list.push(TreeElement(0, Node, L, None, None));
             // Nodos pendientes
@@ -212,7 +197,7 @@ impl<T: Bounded> BVH<T> {
                 let cll = c_elems.len();
                 if cll > max_num_elements {
                     // Completamos un nodo intermedio y dejamos pendientes sus ramas
-                    let (left, right) = BVH::partition_elements(c_elems);
+                    let (left, right) = BVH::partition_elements_by_centroid(c_elems);
                     node_list.push(TreeElement(c_id, Node, c_side, c_maybe_parent_id, None));
                     pending.push(TreeElement(id + 2, Node, R, Some(c_id), Some(right)));
                     pending.push(TreeElement(id + 1, Node, L, Some(c_id), Some(left)));
@@ -295,37 +280,16 @@ impl<T: Bounded> BVH<T> {
         PreorderIter::new(self.root.as_ref(), *ray)
     }
 
-    /// Divide nodo final en nodo intermedio con dos nodos finales separados por eje mayor
-    fn split_leaf_node(node: BVHNode<T>, max_num_elements: usize) -> BVHNode<T> {
-        if let BVHNode::Leaf { aabb, elements } = node {
-            if elements.len() > max_num_elements {
-                let (left_elems, right_elems) = BVH::partition_elements_with_aabb(elements, aabb);
+    /// Divide lista de elementos en dos partes usando el centroide en el eje más largo como plano divisor
+    fn partition_elements_by_centroid(elements: Vec<T>) -> (Vec<T>, Vec<T>) {
+        let aabb = elements.aabb();
+        let len = elements.len() as f32;
+        let (cx, cy, cz) = elements.iter().fold((0.0_f32, 0.0, 0.0), |acc, e| {
+            let ec = e.aabb().center().coords;
+            (acc.0 + ec.x, acc.1 + ec.y, acc.2 + ec.z)
+        });
+        let center = point![cx / len, cy / len, cz / len];
 
-                let left = BVHNode::Leaf {
-                    aabb: left_elems.aabb(),
-                    elements: left_elems,
-                };
-                let right = BVHNode::Leaf {
-                    aabb: right_elems.aabb(),
-                    elements: right_elems,
-                };
-
-                BVHNode::Node {
-                    aabb,
-                    left: Some(Box::new(BVH::split_leaf_node(left, max_num_elements))),
-                    right: Some(Box::new(BVH::split_leaf_node(right, max_num_elements))),
-                }
-            } else {
-                BVHNode::Leaf { aabb, elements }
-            }
-        } else {
-            unreachable!();
-        }
-    }
-
-    /// Divide lista de elementos en dos partes
-    fn partition_elements_with_aabb(elements: Vec<T>, aabb: AABB) -> (Vec<T>, Vec<T>) {
-        let center = aabb.center();
         let (dimx, dimy, dimz) = (
             aabb.max.x - aabb.min.x,
             aabb.max.y - aabb.min.y,
@@ -348,9 +312,11 @@ impl<T: Bounded> BVH<T> {
                 .partition(|e| e.aabb().center().z < center.z)
         }
     }
-
-    /// Divide lista de elementos en dos partes
-    fn partition_elements(elements: Vec<T>) -> (Vec<T>, Vec<T>) {
+    
+    /// Divide lista de elementos en dos partes usando el punto medio del eje más largo como plano divisor
+    ///
+    /// Esto puede entrar en un bucle infinito si los centros a un lado del centro no son < max_elements
+    fn partition_elements_by_aabb_center(elements: Vec<T>) -> (Vec<T>, Vec<T>) {
         let aabb = &elements.aabb();
         let center = aabb.center();
         let (dimx, dimy, dimz) = (
@@ -568,17 +534,6 @@ mod tests {
             AABB::new(point![5.0, 5.0, 1.0], point![9.0, 9.0, 5.0]),
             AABB::new(point![5.0, 1.0, 5.0], point![9.0, 5.0, 9.0]),
         ];
-
-        // Método recursivo
-        let bvh = BVH::build_recursive(elements.clone(), 2);
-        let root = bvh.root.unwrap();
-        let aabb = root.aabb();
-        assert_eq!(aabb.min, point![1.0, 1.0, 1.0]);
-        assert_eq!(aabb.max, point![9.0, 9.0, 9.0]);
-        let left = root.take_left().unwrap();
-        let left_aabb = left.aabb();
-        assert_eq!(left_aabb.min, point![1.0, 1.0, 1.0]);
-        assert_eq!(left_aabb.max, point![5.0, 9.0, 9.0]);
 
         // Método iterativo
         let bvh = BVH::build(elements.clone(), 2);
