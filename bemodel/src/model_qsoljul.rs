@@ -246,15 +246,6 @@ impl Model {
             }
         }
 
-        // for ray in rays {
-        //     for occluder in &candidate_occluders {
-        //         if occluder.intersects(&ray).is_some() {
-        //             num_intersects += 1;
-        //             break;
-        //         }
-        //     }
-        // }
-
         1.0 - num_intersects as f32 / num_rays as f32
     }
 
