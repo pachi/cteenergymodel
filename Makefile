@@ -44,17 +44,6 @@ bench:
 # después de make profile, visualizar flamegraph.svg en el navegador...
 profile:
 	cargo flamegraph --bench benchmark_bemodel -- --bench
-perf:
-	# Ver https://profiler.firefox.com/docs/#/./guide-perf-profiling
-	$(info [INFO]: Obteniendo datos de perfilado en el archivo perf.data)
-	# -g -> call graph recording, -F number -> frecuencia de registro
-	$(info [INFO]: Puede parar la toma de datos cuando quiera con Ctrl+C)
-	perf record -g -F 999 target/release/hulc2model hulc_tests/tests/data > /dev/null
-	$(info [INFO]: Convirtiendo datos de perfilado a Firefox Profiler y guardando en /tmp/test.perf)
-	perf script -F +pid > /tmp/test.perf
-	$(info [INFO]: Puede abrir los datos en http://profiler.firefox.com)
-	# Visualización alterantiva
-	# perf report -f --sort comm,dso
 count:
 	$(info [INFO]: Calculando tamaño del código)
 	cargo count -a src/
@@ -67,4 +56,3 @@ fixcross:
 	cp /usr/i686-w64-mingw32/lib/crt2.o ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/i686-pc-windows-gnu/lib/
 	cp /usr/i686-w64-mingw32/lib/dllcrt2.o ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/i686-pc-windows-gnu/lib/
 	cp /usr/i686-w64-mingw32/lib/libmsvcrt.a ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/i686-pc-windows-gnu/lib/
-
