@@ -283,13 +283,9 @@ impl<T: Bounded> BVH<T> {
     /// Divide lista de elementos en dos partes usando el centroide en el eje más largo como plano divisor
     fn partition_elements_by_centroid(elements: Vec<T>) -> (Vec<T>, Vec<T>) {
         let aabb = elements.aabb();
-        let (dimx, dimy, dimz) = (
-            aabb.max.x - aabb.min.x,
-            aabb.max.y - aabb.min.y,
-            aabb.max.z - aabb.min.z,
-        );
+        let dim = aabb.max.coords - aabb.min.coords;
         let len = elements.len() as f32;
-        if dimx >= dimy && dimx >= dimz {
+        if dim.x >= dim.y && dim.x >= dim.z {
             // X es la dimensión mayor
             let cx = elements
                 .iter()
@@ -297,7 +293,7 @@ impl<T: Bounded> BVH<T> {
                 .sum::<f32>()
                 / len;
             elements.into_iter().partition(|e| e.aabb().center().x < cx)
-        } else if dimy >= dimz {
+        } else if dim.y >= dim.z {
             // Y es la dimensión mayor
             let cy = elements
                 .iter()
