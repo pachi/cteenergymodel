@@ -13,7 +13,7 @@ use std::{collections::HashMap, convert::From};
 use log::{debug, info, warn};
 
 use super::{
-    bvh::{Bounded, Intersectable},
+    bvh::{Bounded, Intersectable, BVH},
     climatedata,
     common::RadData,
     geometry::{poly_normal, Occluder},
@@ -218,10 +218,6 @@ impl Model {
             return 0.0;
         }
 
-        // TODO: filtrar aquí oclusores usando BVH de AABB
-        // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter2/static_aabb_plane.html ???
-        // https://gdbooks.gitbooks.io/3dcollisions/content/Chapter3/raycast_aabb.html
-        // Probablemente lo mejor sería generar el BHV y pasarlo a esta función, y filtrar en las intersecciones
         let candidate_occluders: Vec<_> = occluders
             .iter()
             .filter(|oc| {
@@ -240,27 +236,30 @@ impl Model {
             .collect();
 
         let rays = ray_origins.iter().map(|origin| Ray::new(*origin, *ray_dir));
-        let num = rays.len();
+        let num_rays = rays.len();
         let mut num_intersects = 0;
+
+        let bvh = BVH::build(candidate_occluders, 30);
         for ray in rays {
-            for occluder in &candidate_occluders {
-                if occluder.intersects(&ray).is_some() {
-                    // debug!("La intersección del elemento oclusor {} y el rayo con origen {} y dirección {} es: t: {}, punto: {:#?}",
-                    //        occluder.id, ray_origin, ray_dir, intersection, intersection.then(|t| Some(ray_origin + t*ray_dir)).unwrap_or_none());
-                    num_intersects += 1;
-                    break;
-                }
+            if bvh.intersects(&ray).is_some() {
+                num_intersects += 1;
             }
         }
-        1.0 - num_intersects as f32 / num as f32
+
+        // for ray in rays {
+        //     for occluder in &candidate_occluders {
+        //         if occluder.intersects(&ray).is_some() {
+        //             num_intersects += 1;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        1.0 - num_intersects as f32 / num_rays as f32
     }
 
     /// Genera lista de elementos oclusores a partir de muros, sombras y sombras de retranqueo
     /// Guarda el nombre del oclusor, su id y la geometría
-    /// TODO: optimizar cálculo de colisiones
-    /// TODO: - generar BVH AABB
-    /// - https://gamedev.stackexchange.com/a/21030
-    /// - https://tavianator.com/2011/ray_box.html
     pub fn collect_occluders(&self) -> Vec<Occluder> {
         let setback_shades = self.windows_setback_shades();
         let mut occluders: Vec<_> = self
