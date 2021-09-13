@@ -283,33 +283,36 @@ impl<T: Bounded> BVH<T> {
     /// Divide lista de elementos en dos partes usando el centroide en el eje más largo como plano divisor
     fn partition_elements_by_centroid(elements: Vec<T>) -> (Vec<T>, Vec<T>) {
         let aabb = elements.aabb();
-        let len = elements.len() as f32;
-        let (cx, cy, cz) = elements.iter().fold((0.0_f32, 0.0, 0.0), |acc, e| {
-            let ec = e.aabb().center().coords;
-            (acc.0 + ec.x, acc.1 + ec.y, acc.2 + ec.z)
-        });
-        let center = point![cx / len, cy / len, cz / len];
-
         let (dimx, dimy, dimz) = (
             aabb.max.x - aabb.min.x,
             aabb.max.y - aabb.min.y,
             aabb.max.z - aabb.min.z,
         );
+        let len = elements.len() as f32;
         if dimx >= dimy && dimx >= dimz {
             // X es la dimensión mayor
-            elements
-                .into_iter()
-                .partition(|e| e.aabb().center().x < center.x)
+            let cx = elements
+                .iter()
+                .map(|e| e.aabb().center().coords.x)
+                .sum::<f32>()
+                / len;
+            elements.into_iter().partition(|e| e.aabb().center().x < cx)
         } else if dimy >= dimz {
             // Y es la dimensión mayor
-            elements
-                .into_iter()
-                .partition(|e| e.aabb().center().y < center.y)
+            let cy = elements
+                .iter()
+                .map(|e| e.aabb().center().coords.y)
+                .sum::<f32>()
+                / len;
+            elements.into_iter().partition(|e| e.aabb().center().y < cy)
         } else {
             // Z es la dimensión mayor
-            elements
-                .into_iter()
-                .partition(|e| e.aabb().center().z < center.z)
+            let cz = elements
+                .iter()
+                .map(|e| e.aabb().center().coords.z)
+                .sum::<f32>()
+                / len;
+            elements.into_iter().partition(|e| e.aabb().center().z < cz)
         }
     }
 }
