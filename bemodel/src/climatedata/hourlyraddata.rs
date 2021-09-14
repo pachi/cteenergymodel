@@ -6,6 +6,9 @@
 //! Datos de radiación mensuales para superficies
 //! Datos de radiación horaria por zona climática para el 1 de julio
 //! Criterios de orientación UNE-EN ISO 52016-1, (S=0, E=+90, W=-90)
+//!
+//! TODO: Analizar posibilidad de usar PHF: https://nickb.dev/blog/a-quick-tour-of-trade-offs-embedding-data-in-rust
+//! https://docs.rs/phf/0.8.0/phf/
 #![allow(clippy::approx_constant)]
 
 use std::{collections::HashMap, sync::Mutex};
