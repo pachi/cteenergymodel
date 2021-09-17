@@ -6,8 +6,7 @@ use bemodel::{
     bvh::{Intersectable, AABB},
     climatedata,
     geometry::point_in_poly,
-    model_qsoljul::ray_dir_to_sun,
-    Geometry, Model, Ray, Window,
+    ray_dir_to_sun, Geometry, Model, Ray, Window,
 };
 use nalgebra::{point, vector};
 
@@ -79,17 +78,26 @@ fn model_json_conversion() {
     // Ventana P04_E03_PE009_V sunlit Fshobst_HULC = 0.58 - Bloquea Sombra011 + retranqueo 20cm
     let window = get_window_by_name(&model, "P04_E03_PE009_V");
     let ray_origins = model.ray_origins_for_window(window);
-    assert_almost_eq!(model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders), 0.6);
+    assert_almost_eq!(
+        model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders),
+        0.6
+    );
 
     // Ventana P01_E04_PE001_V Fshobst_HULC = 0.65 - Bloquea Sombra003 + retranqueo 20cm
     let window = get_window_by_name(&model, "P01_E04_PE001_V");
     let ray_origins = model.ray_origins_for_window(window);
-    assert_almost_eq!(model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders), 0.8);
+    assert_almost_eq!(
+        model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders),
+        0.8
+    );
 
     // P04_E03_PE009_V_8 Fshobst_HULC = 0.69 (retranqueo 20 cm, sin alero)
     let window = get_window_by_name(&model, "P04_E03_PE009_V_8");
     let ray_origins = model.ray_origins_for_window(window);
-    assert_almost_eq!(model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders), 0.8);
+    assert_almost_eq!(
+        model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders),
+        0.8
+    );
 
     model.update_fshobst();
     info!(

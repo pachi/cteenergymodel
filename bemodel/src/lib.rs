@@ -13,11 +13,11 @@ pub mod common;
 pub(crate) mod from_ctehexml;
 pub mod geometry;
 mod model;
-pub mod model_check;
-pub mod model_impl;
-pub mod model_n50;
-pub mod model_qsoljul;
-pub mod model_transmittance;
+mod model_check;
+mod model_impl;
+mod model_n50;
+mod model_qsoljul;
+mod model_transmittance;
 mod ray;
 mod report;
 mod utils;
@@ -27,7 +27,7 @@ pub use common::{BoundaryType, ClimateZone, Orientation, SpaceType, ThermalBridg
 pub use model::*;
 pub use ray::Ray;
 pub use report::energy_indicators;
-pub(crate) use report::{KData, N50Data, QSolJulData, UValues, Warning, WarningLevel};
+pub use model_qsoljul::ray_dir_to_sun;
 
 /// Versión del programa
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
