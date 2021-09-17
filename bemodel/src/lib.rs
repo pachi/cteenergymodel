@@ -26,7 +26,8 @@ pub use climatedata::*;
 pub use common::{BoundaryType, ClimateZone, Orientation, SpaceType, ThermalBridgeKind, Tilt};
 pub use model::*;
 pub use ray::Ray;
-pub use report::{KData, N50Data, QSolJulData, UValues, Warning, WarningLevel};
+pub use report::energy_indicators;
+pub(crate) use report::{KData, N50Data, QSolJulData, UValues, Warning, WarningLevel};
 
 /// Versión del programa
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

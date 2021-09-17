@@ -7,7 +7,7 @@ use std::{collections::HashMap, fmt::Display};
 
 use serde::{Deserialize, Serialize};
 
-use crate::Orientation;
+use crate::{Model, Orientation, climatedata};
 
 /// Nivel de aviso para condiciones de chequeo del modelo
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -271,4 +271,36 @@ pub struct UValues {
     pub walls: HashMap<String, Option<f32>>,
     /// U de huecos
     pub windows: HashMap<String, Option<f32>>,
+}
+
+/// Estructura que contiene los resultados del cálculo de indicadores y parámetros energéticos
+#[allow(non_snake_case)]
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct IndicatorsReport {
+    pub area_ref: f32,
+    pub compacity: f32,
+    pub vol_env_net: f32,
+    pub vol_env_gross: f32,
+    pub u_values: UValues,
+    pub K_data: KData,
+    pub q_soljul_data: QSolJulData,
+    pub n50_data: N50Data,
+    pub warnings: Vec<Warning>,
+}
+
+/// Calcula indicadores energéticos del modelo
+pub fn energy_indicators(model: &Model) -> IndicatorsReport {
+    let climatezone = model.meta.climate;
+    let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
+    IndicatorsReport {
+        area_ref: model.a_ref(),
+        compacity: model.compacity(),
+        u_values: model.u_values(),
+        K_data: model.K(),
+        q_soljul_data: model.q_soljul(&totradjul),
+        n50_data: model.n50(),
+        vol_env_net: model.vol_env_net(),
+        vol_env_gross: model.vol_env_gross(),
+        warnings: model.check_model(),
+    }
 }
