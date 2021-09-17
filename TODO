@@ -1,146 +1,146 @@
 # TAREAS PENDIENTES
 
-- generar UUID reproducibles, con rnd y una semilla para generar los UUID. https://stackoverflow.com/a/56757552, https://github.com/uuid-rs/uuid/issues/100
+- generar UUID reproducibles, con rnd y una semilla para generar los UUID. <https://stackoverflow.com/a/56757552>, <https://github.com/uuid-rs/uuid/issues/100>
 - Convertir name e id a ArrayString y UUID
-    - https://docs.rs/arrayvec/0.7.1/arrayvec/struct.ArrayString.html
-    - https://docs.rs/uuid/0.8.2/uuid/
+  - <https://docs.rs/arrayvec/0.7.1/arrayvec/struct.ArrayString.html>
+  - <https://docs.rs/uuid/0.8.2/uuid/>
 - Trasladar avisos en la conversión de modelos BDL
 - Con makefile generar .json y llevar a tests de hulc a bemodel en .json y copiar archivos .ctehexml, .tbl y .kyg a hulc2model
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
-- Validación JSON? https://www.npmjs.com/package/is-my-json-valid
+- Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
 
-Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K.
-    - añadiendo un identificador en el nombre (p.e. EXCLUYE_HE1_K)
-    - pasando una lista de elementos excluidos
+Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K. - añadiendo un identificador en el nombre (p.e. EXCLUYE_HE1_K) - pasando una lista de elementos excluidos
 
-# Comprobaciones
+## Comprobaciones
+
 - Ver si se puede calcular bien la altura de espacios / plantas usando altura de espacio y no de planta
 - Ver si se calcula bien la altura neta / volumen interior de espacios con cerramientos superior e inferior adiabático
 - Ver si se calcula bien el volumen de espacios con cerramientos inclinados
 
-# Modelo
+## Modelo
 
-## bemodel
+### bemodel
 
+- Mover todos los cálculos de indicadores a módulo y funciones que toman el modelo como parámetro, sin que sean métodos de Model
 - Ver funciones que se podrían hacer infalibles sabiendo que hay definición geométrica (punto + poly)
-    - implementar is_full_geometry (e.geometry.position.is_some()) y filtrar
+  - implementar is_full_geometry (e.geometry.position.is_some()) y filtrar
 
+### cte::Data
 
-## cte::Data
+### Lamas en huecos
 
-## Lamas en huecos
 - Dar soporte a lamas horizontales y verticales
 
-## Estimar longitudes de PTs (ver heurísticas de CERMA, etc)
+### Estimar longitudes de PTs (ver heurísticas de CERMA, etc)
 
-## Sombras
-- http://performativedesign.com/articles/2007/shadingcalculations/
-- http://performativedesign.com/articles/2008/averagehourly/
-- https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf
-- https://idus.us.es/handle/11441/15301 p. 124
+### Sombras
+
+- <http://performativedesign.com/articles/2007/shadingcalculations/>
+- <http://performativedesign.com/articles/2008/averagehourly/>
+- <https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf>
+- <https://idus.us.es/handle/11441/15301> p. 124
 - Reducir diferencia con HULC en qsoljul
-    - Ver qué día del año usar...
-- Optimizar cálculo de intersecciones en sombras:
-    - BVH de AABB
-    - Se podría usar el haz de rayos comprobando la intersección del las esquinas de los huecos con la BVH.
+  - Ver qué día del año usar...
 - Caso de las lamas (blinds)
-    - Vamos a tantear primero qué valores salen bloqueando solo la radiación directa, comparando con tablas DA DB-HE.
-    - Se puede usar la referencia de EnergyPlus (más sencilla), la ISO 15099 (más precisa) o la UNE-EN ISO 52022-3, aunque esta última considera que no hay transmisión directa.
-    - http://www.ibpsa.org/proceedings/BS2001/BS01_0457_464.pdf
-    - https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#blinds
-        - Se calcula la radiación directa (directa-directa) https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-direct-blind-transmittance
-            - tau_dir,dir = 1 - |s. cos(elev_b - elev_s) / cos elev_s) / h, con |w| <= h
-            - A ver qué sale para el 21 de junio con esto y si se corresponde con lo que tenemos en el DA.
-        - Se calcula la radiación directa a difusa (directa-difusa) https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-diffuse-blind-transmittance-reflectance-and-absorptance
-        - Se calcula la radiación difusa a difusa (difusa-difusa) https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#diffuse-to-diffuse-transmittance-and-reflectance-of-blind
+  - Vamos a tantear primero qué valores salen bloqueando solo la radiación directa, comparando con tablas DA DB-HE.
+  - Se puede usar la referencia de EnergyPlus (más sencilla), la ISO 15099 (más precisa) o la UNE-EN ISO 52022-3, aunque esta última considera que no hay transmisión directa.
+  - <http://www.ibpsa.org/proceedings/BS2001/BS01_0457_464.pdf>
+  - <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#blinds>
+    - Se calcula la radiación directa (directa-directa) <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-direct-blind-transmittance>
+      - tau_dir,dir = 1 - |s. cos(elev_b - elev_s) / cos elev_s) / h, con |w| <= h
+      - A ver qué sale para el 21 de junio con esto y si se corresponde con lo que tenemos en el DA.
+    - Se calcula la radiación directa a difusa (directa-difusa) <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-diffuse-blind-transmittance-reflectance-and-absorptance>
+    - Se calcula la radiación difusa a difusa (difusa-difusa) <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#diffuse-to-diffuse-transmittance-and-reflectance-of-blind>
 
-
-### Importación / Exportación
+#### Importación / Exportación
 
 - importación de OpenStudio
-    - Usa EpJSON, ver OpenStudio/src/epjson/epJSONTranslator.{hpp, cpp}
-    - https://github.com/NREL/OpenStudio/blob/develop/src/epjson/epJSONTranslator.hpp
-    - https://raw.githubusercontent.com/NREL/OpenStudio/develop/resources/model/OpenStudio.idd
-    - https://openstudio-sdk-documentation.s3.amazonaws.com/cpp/OpenStudio-3.1.0-doc/model/html/index.html#object_implementation
-- importación de epJSON: https://bigladdersoftware.com/epx/docs/9-1/essentials/title.html#epjson
-    - https://energyplus.readthedocs.io/en/latest/schema.html
-    - https://energyplus.net/documentation
-    - GlobalGeometryRules
-    - Zone
-    - Material, Material:NoMass, Material:AirGap, WindowMaterial:Glazing, WindowMaterial:Gas
-    - WindowMaterial:SimpleGlazingSystem (WindowMaterial:Glazing + WindowMaterial:Gas, con U + SHGC)
-    - WindowProperty:FrameAndDivider - Puentes térmicos de ventanas
-    - Construction (list of materials)
-    - **BuildingSurface:Detailed, FenestrationSurface:Detailed, and Shading:Zone:Detailed**
-        - Wall:Detailed, Wall:Exterior, Wall:Adiabatic, Wall:Underground, Wall:Interzone
-        - RoofCeiling:Detailed, Roof
-        - Floor:Detailed, Floor:GroundContact, Floor:Adiabatic, Floor:Interzone
-        - Ceiling:Adiabatic, Ceiling:Interzone
-        - Window, Window:Interzone
-        - Door, GlazedDoor, Door:Interzone, GlazedDoor:Interzone
-        - Shading:Site, Shading:Building, Shading:Overhang, Shading:Overhang:Projection, Shading:Fin, Shading:Fin:Projection
-    - SurfaceProperty:ExposedFoundationPerimeter
+  - Usa EpJSON, ver OpenStudio/src/epjson/epJSONTranslator.{hpp, cpp}
+  - <https://github.com/NREL/OpenStudio/blob/develop/src/epjson/epJSONTranslator.hpp>
+  - <https://raw.githubusercontent.com/NREL/OpenStudio/develop/resources/model/OpenStudio.idd>
+  - <https://openstudio-sdk-documentation.s3.amazonaws.com/cpp/OpenStudio-3.1.0-doc/model/html/index.html#object_implementation>
+- importación de epJSON: <https://bigladdersoftware.com/epx/docs/9-1/essentials/title.html#epjson>
+  - <https://energyplus.readthedocs.io/en/latest/schema.html>
+  - <https://energyplus.net/documentation>
+  - GlobalGeometryRules
+  - Zone
+  - Material, Material:NoMass, Material:AirGap, WindowMaterial:Glazing, WindowMaterial:Gas
+  - WindowMaterial:SimpleGlazingSystem (WindowMaterial:Glazing + WindowMaterial:Gas, con U + SHGC)
+  - WindowProperty:FrameAndDivider - Puentes térmicos de ventanas
+  - Construction (list of materials)
+  - **BuildingSurface:Detailed, FenestrationSurface:Detailed, and Shading:Zone:Detailed**
+    - Wall:Detailed, Wall:Exterior, Wall:Adiabatic, Wall:Underground, Wall:Interzone
+    - RoofCeiling:Detailed, Roof
+    - Floor:Detailed, Floor:GroundContact, Floor:Adiabatic, Floor:Interzone
+    - Ceiling:Adiabatic, Ceiling:Interzone
+    - Window, Window:Interzone
+    - Door, GlazedDoor, Door:Interzone, GlazedDoor:Interzone
+    - Shading:Site, Shading:Building, Shading:Overhang, Shading:Overhang:Projection, Shading:Fin, Shading:Fin:Projection
+  - SurfaceProperty:ExposedFoundationPerimeter
 - importación de IFC:
-    - https://github.com/tomvandig/web-ifc
-    - https://github.com/opensourceBIM/IfcValidator
+  - <https://github.com/tomvandig/web-ifc>
+  - <https://github.com/opensourceBIM/IfcValidator>
 
-### Esquema de datos
+#### Esquema de datos
 
-- Esquema JSON - https://www.npmjs.com/package/is-my-json-valid
-    - http://json-schema.org/
+- Esquema JSON - <https://www.npmjs.com/package/is-my-json-valid>
+  - <http://json-schema.org/>
 
-### Modelo de datos
+#### Modelo de datos
 
 - Pensar si tiene sentido eliminar las superficies de:
-    - muros calculando desde su polígono
-    - huecos: calculando con su altura, ancho 
-    - ¿espacios?: ¿definiendo su suelo (con polígono)? -> ¿merece la pena otra forma de definir los espacios?
+  - muros calculando desde su polígono
+  - huecos: calculando con su altura, ancho
+  - ¿espacios?: ¿definiendo su suelo (con polígono)? -> ¿merece la pena otra forma de definir los espacios?
 - El perímetro expuesto se podría eliminar de bemodel/space, calculándolo como en bdl/space l.110 a partir de los muros y suelos
-    - parte del perímetro que tiene muros con el exterior
+  - parte del perímetro que tiene muros con el exterior
 
-### Cálculos adicionales
+#### Cálculos adicionales
 
 - Calcular más cosas:
-    - Completar estructura UValues?
-        - Walls:  {A_gross, A_net, U, inside_et, space?}
-        - Windows: {A, U, inside_et, wall?, space?}
-        - Spaces: {A, V, p_ext (perimetro expuesto), inside_et}
-        - calcula superficie A con el polígono (y elimina A de propiedades)
-        - indicando elementos que pertenecen a la envolvente
-            - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
-            - ¿ agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR* ?
-        - Podríamos usar esa estructura como caché
-            - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos
-            - Si no, con una caché en u_for_wall() debería dar casi igual
+
+  - Completar estructura UValues?
+    - Walls: {A_gross, A_net, U, inside_et, space?}
+    - Windows: {A, U, inside_et, wall?, space?}
+    - Spaces: {A, V, p_ext (perimetro expuesto), inside_et}
+    - calcula superficie A con el polígono (y elimina A de propiedades)
+    - indicando elementos que pertenecen a la envolvente
+      - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
+      - ¿ agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR ?
+    - Podríamos usar esa estructura como caché
+      - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos
+      - Si no, con una caché en u_for_wall() debería dar casi igual
 
 - Módulo para calcular propiedades de elementos
-    - Calculador de elementos para obtener % de afección de U según intercalarios
-        y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
-    - propiedades de vidrios con protecciones móviles, etc
-    - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
-    - Generador de construcciones a partir de definición por capas
+  - Calculador de elementos para obtener % de afección de U según intercalarios
+    y cajón de persiana a partir de expresiones en DA DB-HE1 (p.13)
+  - propiedades de vidrios con protecciones móviles, etc
+  - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
+  - Generador de construcciones a partir de definición por capas
 
-#### Nuevos datos / campos:
+##### Nuevos datos / campos
+
 - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
 - Incorporar en construcciones la composición de capas (capas: Vec<(String, f32)>)
 - Incorporar datos de materiales para poder calcular U de composiciones
-    - Necesita biblioteca base en Rust para interpretar construcciones:
-    - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+  - Necesita biblioteca base en Rust para interpretar construcciones:
+  - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 
-## BDL
+### BDL
 
 - Quitar de los elementos aquellas cosas que necesitan consultas globales (con acceso a bdldata)
 - Comprobar qué se cambia en las plantas o en el edificio cuando se indica una cota base distinta a la 0.0 (ver si se pone la Z de la planta P01 distinta a "")
 - Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL:
-    - metadatos
-    - horarios
-    - condiciones operacionales
-    - consignas
+  - metadatos
+  - horarios
+  - condiciones operacionales
+  - consignas
 - Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1 y reutilizar módulo nuevo
 
-## docs
+### docs
 
 Documentar hipótesis:
+
 - El volumen de los espacios se calcula a partir de su superficie y altura, no se hace cálculo geométrico
 - Suponemos que la cota z de los elementos enterrados es igual a la z del suelo del espacio en el que se encuentran
 - Ignoramos el dato de Z-GROUND de elementos enterrados. Avisar
