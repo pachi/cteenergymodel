@@ -307,7 +307,7 @@ impl Model {
         let R_n_perim_ins = self.meta.rn_perim_insulation;
         let D_perim_ins = self.meta.d_perim_insulation;
 
-        let cons = self.wallcons_for_wall(wall)?;
+        let cons = self.wallcons_of_wall(wall)?;
         let R_intrinsic = cons.r_intrinsic;
 
         match (bounds, position) {
@@ -431,7 +431,7 @@ impl Model {
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
                         // Si no está definida la construcción no participa de la envolvente
-                        self.wallcons_for_wall(w)
+                        self.wallcons_of_wall(w)
                             .map(|wallcons| {
                                 (W + LAMBDA_GND * (RSI_DESCENDENTE + wallcons.r_intrinsic + RSE)
                                     + mean * (i - 1) as f32)

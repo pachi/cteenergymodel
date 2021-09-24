@@ -50,12 +50,12 @@ impl Model {
     /// Grosor de un elemento opaco
     pub fn wall_thickness(&self, wallid: &str) -> f32 {
         self.wall_by_id(wallid)
-            .and_then(|w| self.wallcons_for_wall(w).map(|c| c.thickness))
+            .and_then(|w| self.wallcons_of_wall(w).map(|c| c.thickness))
             .unwrap_or(0.0)
     }
 
     /// Localiza construcción de opaco
-    pub fn wallcons_for_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a WallCons> {
+    pub fn wallcons_of_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a WallCons> {
         let maybecons = self.wallcons.iter().find(|wc| wc.id == wall.cons);
         if maybecons.is_none() {
             warn!(
@@ -247,17 +247,11 @@ impl Model {
     }
 
     /// Grosor del forjado superior de un espacio
-    /// TODO: la altura neta debería calcularse promediando los grosores de todos los muros que cierren el espacio,
-    /// TODO: estos podrían ser más de uno pero este cálculo ahora se hace con el primero que se localiza
     pub fn top_wall_thickness_of_space(&self, spaceid: &str) -> f32 {
-        self.top_wall_of_space(spaceid)
-            .map(|w| self.wall_thickness(&w.id))
-            .unwrap_or(0.0)
-    }
-
-    /// Elemento opaco de techo de un espacio
-    fn top_wall_of_space<'a>(&'a self, spaceid: &'a str) -> Option<&'a Wall> {
-        self.walls.iter().find(move |w| {
+        // Elemento opaco de techo de un espacio
+        // TODO: la altura neta debería calcularse promediando los grosores de **todos** los muros que
+        // TODO: cubren el espacio y no solo el primero que se encuentre
+        let top_wall_of_space = self.walls.iter().find(move |w| {
             match w.geometry.tilt.into() {
                 // Muros exteriores o cubiertas sobre el espacio
                 Tilt::TOP => w.space == spaceid,
@@ -265,7 +259,10 @@ impl Model {
                 Tilt::BOTTOM => w.nextto.as_ref().map(|s| s == spaceid).unwrap_or(false),
                 _ => false,
             }
-        })
+        });
+        top_wall_of_space
+            .map(|w| self.wall_thickness(&w.id))
+            .unwrap_or(0.0)
     }
 
     /// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
