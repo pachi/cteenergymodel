@@ -23,7 +23,7 @@ impl Model {
     /// TODO: Comprobaciones pendientes
     ///     - comprobar que elementos geométricos tengan punto de inserción != None
     ///     - la superficie de elemento (wall.a) coincide con la de su polígono
-    pub fn check_model(&self) -> Vec<Warning> {
+    pub fn check(&self) -> Vec<Warning> {
         use WarningLevel::WARNING;
 
         let spaceids: HashSet<&str> = self.spaces.iter().map(|s| s.id.as_str()).collect();

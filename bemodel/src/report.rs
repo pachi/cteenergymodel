@@ -89,6 +89,6 @@ pub fn energy_indicators(model: &Model) -> IndicatorsReport {
         n50_data: model.n50(),
         vol_env_net: model.vol_env_net(),
         vol_env_gross: model.vol_env_gross(),
-        warnings: model.check_model(),
+        warnings: model.check(),
     }
 }
