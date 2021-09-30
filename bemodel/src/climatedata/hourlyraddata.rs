@@ -2,8 +2,6 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Datos generales de zonas climáticas (latitud, longitud de referencia, nombre, etc)
-//! Datos de radiación mensuales para superficies
 //! Datos de radiación horaria por zona climática para el 1 de julio
 //! Criterios de orientación UNE-EN ISO 52016-1, (S=0, E=+90, W=-90)
 //!
@@ -14,11 +12,28 @@
 use std::{collections::HashMap, sync::Mutex};
 
 use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
 
-use crate::common::{
-    ClimateZone::{self, *},
-    RadData,
-};
+use super::ClimateZone::{self, *};
+
+/// Datos de radiación para un momento concreto, W/m²
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct RadData {
+    /// Mes del año [1, 12]
+    pub month: u32,
+    /// Día del mes [1, 31]
+    pub day: u32,
+    /// Hola de reloj para la localización, h [1.0, 24.0]
+    pub hour: f32,
+    /// Azimuth solar (grados) [-180.0,180.0] (-E, S=0, +W)
+    pub azimuth: f32,
+    /// Altitud solar (grados) [0.0, 90.0]
+    pub altitude: f32,
+    /// Radiación directa, W/m²
+    pub dir: f32,
+    /// Radiación difusa, W/m²
+    pub dif: f32,
+}
 
 /// Convierte filas en formato .met a RadData pero separadas por comas,
 /// Selecciona las columnas correspondientes

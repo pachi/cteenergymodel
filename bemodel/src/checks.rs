@@ -6,10 +6,7 @@
 
 use std::collections::HashSet;
 
-use super::{
-    report::{Warning, WarningLevel},
-    Model,
-};
+use super::{Model, Warning, WarningLevel};
 
 impl Model {
     /// Comprueba consistencia del modelo y devuelve lista de avisos / errores detectados

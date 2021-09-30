@@ -21,7 +21,6 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 
 ### bemodel
 
-- Mover todos los cálculos de indicadores a módulo y funciones que toman el modelo como parámetro, sin que sean métodos de Model
 - Ver funciones que se podrían hacer infalibles sabiendo que hay definición geométrica (punto + poly)
   - implementar is_full_geometry (e.geometry.position.is_some()) y filtrar
 

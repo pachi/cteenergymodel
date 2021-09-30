@@ -8,18 +8,33 @@ use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, bail, format_err, Error};
 use log::warn;
-use na::{point, Point3, Rotation3, Translation3, Vector3};
+use nalgebra::{point, Point3, Rotation2, Rotation3, Translation3, Vector3};
 
-use crate::utils::{fround2, fround3, normalize, orientation_bdl_to_52016, uuid_from_obj};
+use crate::utils::{fround2, fround3, normalize, uuid_from_obj};
 use hulc::{
     bdl::{self, Data},
     ctehexml,
 };
 
-pub use super::{
+pub use crate::{
     BoundaryType, Geometry, Meta, Model, Orientation, Shade, Space, SpaceType, ThermalBridge,
     ThermalBridgeKind, Tilt, Wall, WallCons, Window, WindowCons, WindowGeometry,
 };
+
+// Utilidades varias de conversión
+
+/// Normaliza aziimuth [-180, 180]
+#[inline]
+pub fn normalize_azimuth(azimuth: f32) -> f32 {
+    normalize(azimuth, -180.0, 180.0)
+}
+
+/// Convierte el azimuth desde el criterio del BDL al criterio de la 52016-1 y normaliza
+/// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro (N=0, E=+90, W=-90)
+/// UNE-EN ISO 52016-1: S=0, E=+90, W=-90
+pub fn orientation_bdl_to_52016(azimuth: f32) -> f32 {
+    normalize_azimuth(180.0 - azimuth)
+}
 
 // Conversiones de BDL a tipos CTE -------------------
 
@@ -188,7 +203,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
     // La posición del muro es en coordenadas globales, incluyendo un giro en Z según desviación global del norte y la desviación del espacio
     // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
     let angle = -(space.angle_with_building_north + global_deviation).to_radians();
-    let rot = na::Rotation3::from_euler_angles(0.0, 0.0, angle);
+    let rot = Rotation3::from_euler_angles(0.0, 0.0, angle);
     let position = rot
         * match wall.location.as_deref() {
             // 1. Casos definidos por vértice
@@ -513,7 +528,7 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                 // Azimuth del elemento de sombra (¡Atención! Criterio EN S=0, E=+90, W=-90)
                 let shade_azimuth = if (tilt % std::f32::consts::PI).abs() > (10.0 * f32::EPSILON) {
                     // No es una superficie horizontal y calculamos el azimuth (con el Sur) como el ángulo de -Y y la proyección horizontal de la normal
-                    na::Rotation2::rotation_between(&-Vector3::<f32>::y_axis().xy(), &normal.xy())
+                    Rotation2::rotation_between(&-Vector3::<f32>::y_axis().xy(), &normal.xy())
                         .angle()
                 } else {
                     // Es una superficie horizontal y el azimuth (con el Sur) se calcula como si estuviese vertical la superficie -> -Y -> +Z

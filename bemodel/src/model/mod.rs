@@ -2,19 +2,80 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Implementación de funciones de acceso e identificación de elementos y cálculos geométricos generales
+//! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
 
+pub use nalgebra::{point, vector};
+
+use anyhow::Error;
 use log::{info, warn};
+use serde::{Deserialize, Serialize};
 
-use nalgebra::point;
+mod common;
+mod constructions;
+mod meta;
+mod opaques;
+mod space;
+mod thermalbridge;
+mod window;
 
-use crate::{
-    utils::{fround2, uuid_from_str},
-    BoundaryType, Geometry, Model, Shade, Space, SpaceType, Tilt, Wall, WallCons, Window,
-    WindowCons,
-};
+use crate::utils::{fround2, uuid_from_str};
+
+pub use common::{BoundaryType, Orientation, Tilt};
+pub use constructions::{WallCons, WindowCons};
+pub use meta::Meta;
+pub use opaques::{Geometry, Shade, Wall};
+pub use space::{Space, SpaceType};
+pub use thermalbridge::{ThermalBridge, ThermalBridgeKind};
+pub use window::{Window, WindowGeometry};
+
+pub type Point2 = nalgebra::Point2<f32>;
+pub type Point3 = nalgebra::Point3<f32>;
+pub type Vector2 = nalgebra::Vector2<f32>;
+pub type Vector3 = nalgebra::Vector3<f32>;
+
+// ---------- Estructura general de datos --------------
+
+/// Modelo del edificio
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[serde(default)]
+pub struct Model {
+    /// Metadatos
+    pub meta: Meta,
+    /// Espacios
+    pub spaces: Vec<Space>,
+    /// Opacos
+    pub walls: Vec<Wall>,
+    /// Huecos
+    pub windows: Vec<Window>,
+    /// Puentes térmicos
+    pub thermal_bridges: Vec<ThermalBridge>,
+    /// Sombras
+    pub shades: Vec<Shade>,
+    /// Construcciones de opacos
+    pub wallcons: Vec<WallCons>,
+    /// Construcciones de huecos
+    pub wincons: Vec<WindowCons>,
+    // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
+    pub extra: Option<Vec<ExtraData>>,
+}
 
 impl Model {
+    // ---------------- Conversión hacia y desde JSON
+
+    /// Devuelve el modelo en formato JSON
+    pub fn as_json(&self) -> Result<String, Error> {
+        let json = serde_json::to_string_pretty(&self)?;
+        Ok(json)
+    }
+
+    /// Lee un modelo desde JSON
+    pub fn from_json(data: &str) -> Result<Self, Error> {
+        let model: Model = serde_json::from_str(data)?;
+        Ok(model)
+    }
+
+    // ---------------- Aceso e identificación de elementos
+
     /// Localiza espacio
     pub fn space_by_id<'a>(&'a self, spaceid: &'a str) -> Option<&'a Space> {
         self.spaces.iter().find(|s| s.id == spaceid)
@@ -45,13 +106,6 @@ impl Model {
     /// Localiza opaco por nombre
     pub fn wall_by_name<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
         self.walls.iter().find(|w| w.name == wallname)
-    }
-
-    /// Grosor de un elemento opaco
-    pub fn wall_thickness(&self, wallid: &str) -> f32 {
-        self.wall_by_id(wallid)
-            .and_then(|w| self.wallcons_of_wall(w).map(|c| c.thickness))
-            .unwrap_or(0.0)
     }
 
     /// Localiza construcción de opaco
@@ -138,17 +192,7 @@ impl Model {
             .flat_map(move |wall| self.windows.iter().filter(move |w| w.wall == wall.id))
     }
 
-    /// Genera todas las sombras de retranqueo de los huecos del modelo
-    pub fn windows_setback_shades(&self) -> Vec<(String, Shade)> {
-        self.windows
-            .iter()
-            .filter_map(|window| {
-                self.wall_of_window(window)
-                    .map(|wall| Model::shades_for_window_setback(wall, window))
-            })
-            .flatten()
-            .collect()
-    }
+    // ---------------- Cálculos geométricos generales
 
     /// Calcula la superficie útil de los espacios habitables de la envolvente térmica [m²]
     pub fn a_ref(&self) -> f32 {
@@ -246,6 +290,13 @@ impl Model {
         compac
     }
 
+    /// Grosor de un elemento opaco
+    pub fn wall_thickness(&self, wallid: &str) -> f32 {
+        self.wall_by_id(wallid)
+            .and_then(|w| self.wallcons_of_wall(w).map(|c| c.thickness))
+            .unwrap_or(0.0)
+    }
+
     /// Grosor del forjado superior de un espacio
     pub fn top_wall_thickness_of_space(&self, spaceid: &str) -> f32 {
         // Elemento opaco de techo de un espacio
@@ -265,94 +316,129 @@ impl Model {
             .unwrap_or(0.0)
     }
 
-    /// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
-    fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(String, Shade)> {
-        let wing = &win.geometry;
-        // Si no hay retranqueo no se genera geometría
-        if wing.setback.abs() < 0.01 {
-            return vec![];
-        };
-        let wpos = match wing.position {
-            Some(pos) => pos,
-            // Si no hay definición geométrica completa no se calcula geometría
-            _ => return vec![],
-        };
-
-        let wall2world = wall
-            .geometry
-            .to_global_coords_matrix()
-            .expect("El muro debe tener definición geométrica completa");
-
-        let overhang = Shade {
-            id: uuid_from_str(&format!("{}-top_setback", win.id)),
-            name: format!("{}_top_setback", win.name),
-            geometry: Geometry {
-                // inclinación: con 90º es perpendicular al hueco
-                tilt: wall.geometry.tilt + 90.0,
-                azimuth: wall.geometry.azimuth,
-                position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
-                polygon: vec![
-                    point![0.0, 0.0],
-                    point![0.0, -wing.setback],
-                    point![wing.width, -wing.setback],
-                    point![wing.width, 0.0],
-                ],
-            },
-        };
-
-        let left_fin = Shade {
-            id: uuid_from_str(&format!("{}-left_setback", win.id)),
-            name: format!("{}_left_setback", win.name),
-            geometry: Geometry {
-                tilt: wall.geometry.tilt,
-                azimuth: wall.geometry.azimuth + 90.0,
-                position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
-                polygon: vec![
-                    point![0.0, 0.0],
-                    point![0.0, -wing.height],
-                    point![wing.setback, -wing.height],
-                    point![wing.setback, 0.0],
-                ],
-            },
-        };
-
-        let right_fin = Shade {
-            id: uuid_from_str(&format!("{}-right_setback", win.id)),
-            name: format!("{}_right_setback", win.name),
-            geometry: Geometry {
-                tilt: wall.geometry.tilt,
-                azimuth: wall.geometry.azimuth - 90.0,
-                position: Some(wall2world * point![wpos.x + wing.width, wpos.y + wing.height, 0.0]),
-                polygon: vec![
-                    point![0.0, 0.0],
-                    point![-wing.setback, 0.0],
-                    point![-wing.setback, -wing.height],
-                    point![0.0, -wing.height],
-                ],
-            },
-        };
-
-        let sill = Shade {
-            id: uuid_from_str(&format!("{}-sill_setback", win.id)),
-            name: format!("{}_sill_setback", win.name),
-            geometry: Geometry {
-                tilt: wall.geometry.tilt - 90.0,
-                azimuth: wall.geometry.azimuth,
-                position: Some(wall2world * point![wpos.x, wpos.y, 0.0]),
-                polygon: vec![
-                    point![0.0, 0.0],
-                    point![wing.width, 0.0],
-                    point![wing.width, wing.setback],
-                    point![0.0, wing.setback],
-                ],
-            },
-        };
-
-        vec![
-            (win.id.clone(), overhang),
-            (win.id.clone(), left_fin),
-            (win.id.clone(), right_fin),
-            (win.id.clone(), sill),
-        ]
+    /// Genera todas las sombras de retranqueo de los huecos del modelo
+    pub fn windows_setback_shades(&self) -> Vec<(String, Shade)> {
+        self.windows
+            .iter()
+            .filter_map(|window| {
+                self.wall_of_window(window)
+                    .map(|wall| shades_for_window_setback(wall, window))
+            })
+            .flatten()
+            .collect()
     }
+}
+
+/// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
+fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(String, Shade)> {
+    let wing = &win.geometry;
+    // Si no hay retranqueo no se genera geometría
+    if wing.setback.abs() < 0.01 {
+        return vec![];
+    };
+    let wpos = match wing.position {
+        Some(pos) => pos,
+        // Si no hay definición geométrica completa no se calcula geometría
+        _ => return vec![],
+    };
+
+    let wall2world = wall
+        .geometry
+        .to_global_coords_matrix()
+        .expect("El muro debe tener definición geométrica completa");
+
+    let overhang = Shade {
+        id: uuid_from_str(&format!("{}-top_setback", win.id)),
+        name: format!("{}_top_setback", win.name),
+        geometry: Geometry {
+            // inclinación: con 90º es perpendicular al hueco
+            tilt: wall.geometry.tilt + 90.0,
+            azimuth: wall.geometry.azimuth,
+            position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
+            polygon: vec![
+                point![0.0, 0.0],
+                point![0.0, -wing.setback],
+                point![wing.width, -wing.setback],
+                point![wing.width, 0.0],
+            ],
+        },
+    };
+
+    let left_fin = Shade {
+        id: uuid_from_str(&format!("{}-left_setback", win.id)),
+        name: format!("{}_left_setback", win.name),
+        geometry: Geometry {
+            tilt: wall.geometry.tilt,
+            azimuth: wall.geometry.azimuth + 90.0,
+            position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
+            polygon: vec![
+                point![0.0, 0.0],
+                point![0.0, -wing.height],
+                point![wing.setback, -wing.height],
+                point![wing.setback, 0.0],
+            ],
+        },
+    };
+
+    let right_fin = Shade {
+        id: uuid_from_str(&format!("{}-right_setback", win.id)),
+        name: format!("{}_right_setback", win.name),
+        geometry: Geometry {
+            tilt: wall.geometry.tilt,
+            azimuth: wall.geometry.azimuth - 90.0,
+            position: Some(wall2world * point![wpos.x + wing.width, wpos.y + wing.height, 0.0]),
+            polygon: vec![
+                point![0.0, 0.0],
+                point![-wing.setback, 0.0],
+                point![-wing.setback, -wing.height],
+                point![0.0, -wing.height],
+            ],
+        },
+    };
+
+    let sill = Shade {
+        id: uuid_from_str(&format!("{}-sill_setback", win.id)),
+        name: format!("{}_sill_setback", win.name),
+        geometry: Geometry {
+            tilt: wall.geometry.tilt - 90.0,
+            azimuth: wall.geometry.azimuth,
+            position: Some(wall2world * point![wpos.x, wpos.y, 0.0]),
+            polygon: vec![
+                point![0.0, 0.0],
+                point![wing.width, 0.0],
+                point![wing.width, wing.setback],
+                point![0.0, wing.setback],
+            ],
+        },
+    };
+
+    vec![
+        (win.id.clone(), overhang),
+        (win.id.clone(), left_fin),
+        (win.id.clone(), right_fin),
+        (win.id.clone(), sill),
+    ]
+}
+
+/// Datos adicionales para comprobación de muros
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct ExtraData {
+    // Nombre del muro
+    pub name: String,
+    // Condiciones de contorno del muro
+    pub bounds: BoundaryType,
+    // Tipo de espacio
+    pub spacetype: SpaceType,
+    // Espacio adyacente
+    pub nextspace: Option<String>,
+    // Tipo de espacio adyacente
+    pub nextspacetype: Option<SpaceType>,
+    // Inclinación del muro
+    pub tilt: Tilt,
+    // Construcción
+    pub cons: String,
+    // U por defecto u obtenida de archivo KyGananciasSolares.txt
+    pub u: f32,
+    // U calculada con UNE-EN ISO 13789
+    pub computed_u: f32,
 }

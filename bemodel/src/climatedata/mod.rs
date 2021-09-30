@@ -10,13 +10,15 @@
 
 use std::collections::HashMap;
 
-use crate::common::{ClimateZone, Orientation};
+use crate::Orientation;
 
+mod climatezone;
 mod hourlyraddata;
 mod monthlyraddata;
 mod zonesmeta;
 
-pub use hourlyraddata::JULYRADDATA;
+pub use climatezone::ClimateZone;
+pub use hourlyraddata::{RadData, JULYRADDATA};
 pub use monthlyraddata::MONTHLYRADDATA;
 pub use zonesmeta::CLIMATEMETADATA;
 

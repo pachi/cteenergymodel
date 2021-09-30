@@ -3,10 +3,9 @@
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 use bemodel::{
-    bvh::{Intersectable, AABB},
     climatedata,
-    geometry::point_in_poly,
-    ray_dir_to_sun, Geometry, Model, Ray, Window,
+    energy::{ray_dir_to_sun, Intersectable, Ray, AABB},
+    Geometry, Model, Window,
 };
 use nalgebra::{point, vector};
 
@@ -258,9 +257,6 @@ fn intersections() {
         info!("Intersección con rayo: {:?}", result);
         assert!(res == result.is_some());
     }
-
-    assert!(!point_in_poly(point![-9.81, -7.3], &geom4.polygon));
-    assert!(point_in_poly(point![2.0, 2.0], &geom4.polygon));
 }
 
 #[test]

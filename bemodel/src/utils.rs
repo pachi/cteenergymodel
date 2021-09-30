@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-// Utilidades varias
+// Utilidades varias de redondeo, normalización de datos y generación de UUID
 
 /// Redondea valor a 2 decimales
 pub fn fround2(val: f32) -> f32 {
@@ -22,19 +22,6 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     let offset = value - start;
     // volvemos a sumar el valor inicial para volver al intervalo [start, end]
     (offset - (f32::floor(offset / width) * width)) + start
-}
-
-/// Normaliza aziimuth [-180, 180]
-#[inline]
-pub fn normalize_azimuth(azimuth: f32) -> f32 {
-    normalize(azimuth, -180.0, 180.0)
-}
-
-/// Convierte el azimuth desde el criterio del BDL al criterio de la 52016-1 y normaliza
-/// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro (N=0, E=+90, W=-90)
-/// UNE-EN ISO 52016-1: S=0, E=+90, W=-90
-pub fn orientation_bdl_to_52016(azimuth: f32) -> f32 {
-    normalize_azimuth(180.0 - azimuth)
 }
 
 /// Calcula UUID a partir de hash MD5 del objeto

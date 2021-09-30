@@ -17,7 +17,7 @@ use std::{collections::HashMap, f32::consts::PI};
 use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 
-use super::{BoundaryType, Model, SpaceType, ThermalBridgeKind, Tilt, Wall};
+use crate::{BoundaryType, Model, SpaceType, ThermalBridgeKind, Tilt, Wall};
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
 const RSI_ASCENDENTE: f32 = 0.10;

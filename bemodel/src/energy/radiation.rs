@@ -13,16 +13,17 @@ use std::{collections::HashMap, convert::From};
 use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 
-use super::{
-    bvh::{Bounded, Intersectable, BVH},
-    climatedata,
-    common::RadData,
-    geometry::{poly_normal, Occluder},
+use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
+
+use crate::{
+    climatedata::{RadData, CLIMATEMETADATA, JULYRADDATA},
+    energy::{Bounded, Intersectable, Ray, BVH},
     point, vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    Model, Orientation, Point3, Ray, Vector3, Window,
+    Model, Orientation, Point3, Vector3, Window,
 };
-use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
+
+use super::{occluder::Occluder, utils::poly_normal};
 
 /// Reporte de cálculo del parámetro de control solar q_sol:jul (HE2019)
 #[allow(non_snake_case)]
@@ -155,13 +156,13 @@ impl Model {
         }
         let mut map: HashMap<String, ObstData> = HashMap::new();
 
-        let latitude = climatedata::CLIMATEMETADATA
+        let latitude = CLIMATEMETADATA
             .lock()
             .unwrap()
             .get(&self.meta.climate)
             .unwrap()
             .latitude;
-        let julyraddata = climatedata::JULYRADDATA.lock().unwrap();
+        let julyraddata = JULYRADDATA.lock().unwrap();
         let raddata = match julyraddata.get(&self.meta.climate) {
             Some(data) => data,
             None => return,

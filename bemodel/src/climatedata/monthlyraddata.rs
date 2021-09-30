@@ -2,17 +2,41 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Datos generales de zonas climáticas (latitud, longitud de referencia, nombre, etc)
 //! Datos de radiación mensuales para superficies
-//! Datos de radiación horaria por zona climática para el 21 de julio
-//! Criterios de orientación UNE-EN ISO 52016-1, (S=0, E=+90, W=-90)
 #![allow(clippy::approx_constant)]
 
 use std::sync::Mutex;
 
 use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
 
-use crate::common::{ClimateZone::*, Orientation::*, SurfaceMonthlyRadiation};
+use super::ClimateZone::{self, *};
+use crate::Orientation::{self, *};
+
+/// Datos mensuales de radiación por superficie
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SurfaceMonthlyRadiation {
+    /// Zona climática
+    pub zone: ClimateZone,
+    /// Orientación u horizontal
+    pub orientation: Orientation,
+    /// Inclinación (Horiz=0, vertical=90)
+    pub beta: f32,
+    /// Orientación (N=0, E=-90, W=+90, S=180)
+    /// Nota: el criterio difiere del de UNE-EN ISO 52016-1
+    /// donde se mide desde el sur, positivo al este, negativo al oeste (S=0, E=+90, W=-90)
+    pub gamma: f32,
+    /// Radiación mensual directa
+    pub dir: Vec<f32>,
+    /// Radiación mensual difusa
+    pub dif: Vec<f32>,
+    /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 200W/m2
+    pub f_shwith200: Vec<f32>,
+    /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 300W/m2
+    pub f_shwith300: Vec<f32>,
+    /// Factor mensual de reducción para sombreamientos solares móviles para nivel de irradiación de activación de 500W/m2
+    pub f_shwith500: Vec<f32>,
+}
 
 /// Datos de radiación mensual sobre una superficie orientada e inclinada
 /// Array de (20 climas canarios y 12 climas peninsulares) * 9 orientaciones (N, S, E, W, NE, NW, SE, SW, HZ) con datos de radiación mensual

@@ -7,7 +7,7 @@
 use log::info;
 use serde::{Deserialize, Serialize};
 
-use super::{BoundaryType, Model};
+use crate::{BoundaryType, Model};
 
 /// Reporte de cálculo de n50 con valores de referencia (teóricos) y de ensayo (si está disponible)
 /// El valor teórico usa las permeabilidades del CTE DB-HE 2019

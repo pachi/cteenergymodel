@@ -3,26 +3,38 @@
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 //! Datos generales de zonas climáticas (latitud, longitud de referencia, nombre, etc)
-//! Datos de radiación mensuales para superficies
-//! Datos de radiación horaria por zona climática para el 21 de julio
-//! Criterios de orientación UNE-EN ISO 52016-1, (S=0, E=+90, W=-90)
 #![allow(clippy::approx_constant)]
 
 use std::{collections::HashMap, sync::Mutex};
 
 use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
 
-use crate::common::{
-    ClimateZone::{self, *},
-    Meta,
-};
+use super::ClimateZone::{self, *};
+
+/// Metadatos de zonas climáticas .met
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MetInfo {
+    /// Climate file name. e.g. zonaD3.met
+    pub metname: String,
+    /// Climatic Zone (CTE). e.g. D3
+    pub zc: ClimateZone,
+    /// latitude, degrees
+    pub latitude: f32,
+    /// longitude, degrees
+    pub longitude: f32,
+    /// altitude, metres
+    pub altitude: f32,
+    /// reference longitude, degrees
+    pub reflong: f32,
+}
 
 /// Diccionario con metadatos de zonas climáticas (20 climas canarios y 12 climas peninsulares)
-pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(|| {
+pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, MetInfo>>> = Lazy::new(|| {
     let mut map = HashMap::new();
     map.insert(
         C4,
-        Meta {
+        MetInfo {
             metname: "zonaC4.met".to_string(),
             zc: C4,
             latitude: 40.68333,
@@ -33,7 +45,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         B1c,
-        Meta {
+        MetInfo {
             metname: "zonaB1c.met".to_string(),
             zc: B1c,
             latitude: 28.325,
@@ -44,7 +56,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         D2,
-        Meta {
+        MetInfo {
             metname: "zonaD2.met".to_string(),
             zc: D2,
             latitude: 40.68333,
@@ -55,7 +67,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         D1,
-        Meta {
+        MetInfo {
             metname: "zonaD1.met".to_string(),
             zc: D1,
             latitude: 40.68333,
@@ -66,7 +78,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         E1c,
-        Meta {
+        MetInfo {
             metname: "zonaE1c.met".to_string(),
             zc: E1c,
             latitude: 28.325,
@@ -77,7 +89,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         D3c,
-        Meta {
+        MetInfo {
             metname: "zonaD3c.met".to_string(),
             zc: D3c,
             latitude: 28.325,
@@ -88,7 +100,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         Alfa2c,
-        Meta {
+        MetInfo {
             metname: "zonaAlfa2c.met".to_string(),
             zc: Alfa2c,
             latitude: 28.325,
@@ -99,7 +111,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         A3,
-        Meta {
+        MetInfo {
             metname: "zonaA3.met".to_string(),
             zc: A3,
             latitude: 40.68333,
@@ -110,7 +122,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         C1c,
-        Meta {
+        MetInfo {
             metname: "zonaC1c.met".to_string(),
             zc: C1c,
             latitude: 28.325,
@@ -121,7 +133,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         Alfa4c,
-        Meta {
+        MetInfo {
             metname: "zonaAlfa4c.met".to_string(),
             zc: Alfa4c,
             latitude: 28.325,
@@ -132,7 +144,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         C4c,
-        Meta {
+        MetInfo {
             metname: "zonaC4c.met".to_string(),
             zc: C4c,
             latitude: 28.325,
@@ -143,7 +155,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         Alfa1c,
-        Meta {
+        MetInfo {
             metname: "zonaAlfa1c.met".to_string(),
             zc: Alfa1c,
             latitude: 28.325,
@@ -154,7 +166,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         E1,
-        Meta {
+        MetInfo {
             metname: "zonaE1.met".to_string(),
             zc: E1,
             latitude: 40.68333,
@@ -165,7 +177,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         C2,
-        Meta {
+        MetInfo {
             metname: "zonaC2.met".to_string(),
             zc: C2,
             latitude: 40.68333,
@@ -176,7 +188,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         B4,
-        Meta {
+        MetInfo {
             metname: "zonaB4.met".to_string(),
             zc: B4,
             latitude: 40.68333,
@@ -187,7 +199,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         C1,
-        Meta {
+        MetInfo {
             metname: "zonaC1.met".to_string(),
             zc: C1,
             latitude: 40.68333,
@@ -198,7 +210,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         C3c,
-        Meta {
+        MetInfo {
             metname: "zonaC3c.met".to_string(),
             zc: C3c,
             latitude: 28.325,
@@ -209,7 +221,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         B2c,
-        Meta {
+        MetInfo {
             metname: "zonaB2c.met".to_string(),
             zc: B2c,
             latitude: 28.325,
@@ -220,7 +232,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         Alfa3c,
-        Meta {
+        MetInfo {
             metname: "zonaAlfa3c.met".to_string(),
             zc: Alfa3c,
             latitude: 28.325,
@@ -231,7 +243,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         B3,
-        Meta {
+        MetInfo {
             metname: "zonaB3.met".to_string(),
             zc: B3,
             latitude: 40.68333,
@@ -242,7 +254,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         B3c,
-        Meta {
+        MetInfo {
             metname: "zonaB3c.met".to_string(),
             zc: B3c,
             latitude: 28.325,
@@ -253,7 +265,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         C3,
-        Meta {
+        MetInfo {
             metname: "zonaC3.met".to_string(),
             zc: C3,
             latitude: 40.68333,
@@ -264,7 +276,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         A1c,
-        Meta {
+        MetInfo {
             metname: "zonaA1c.met".to_string(),
             zc: A1c,
             latitude: 28.325,
@@ -275,7 +287,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         A4c,
-        Meta {
+        MetInfo {
             metname: "zonaA4c.met".to_string(),
             zc: A4c,
             latitude: 28.325,
@@ -286,7 +298,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         B4c,
-        Meta {
+        MetInfo {
             metname: "zonaB4c.met".to_string(),
             zc: B4c,
             latitude: 28.325,
@@ -297,7 +309,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         D1c,
-        Meta {
+        MetInfo {
             metname: "zonaD1c.met".to_string(),
             zc: D1c,
             latitude: 28.325,
@@ -308,7 +320,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         D2c,
-        Meta {
+        MetInfo {
             metname: "zonaD2c.met".to_string(),
             zc: D2c,
             latitude: 28.325,
@@ -319,7 +331,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         A3c,
-        Meta {
+        MetInfo {
             metname: "zonaA3c.met".to_string(),
             zc: A3c,
             latitude: 28.325,
@@ -330,7 +342,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         A4,
-        Meta {
+        MetInfo {
             metname: "zonaA4.met".to_string(),
             zc: A4,
             latitude: 40.68333,
@@ -341,7 +353,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         C2c,
-        Meta {
+        MetInfo {
             metname: "zonaC2c.met".to_string(),
             zc: C2c,
             latitude: 28.325,
@@ -352,7 +364,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         A2c,
-        Meta {
+        MetInfo {
             metname: "zonaA2c.met".to_string(),
             zc: A2c,
             latitude: 28.325,
@@ -363,7 +375,7 @@ pub static CLIMATEMETADATA: Lazy<Mutex<HashMap<ClimateZone, Meta>>> = Lazy::new(
     );
     map.insert(
         D3,
-        Meta {
+        MetInfo {
             metname: "zonaD3.met".to_string(),
             zc: D3,
             latitude: 40.68333,
