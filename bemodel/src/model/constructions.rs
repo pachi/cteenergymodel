@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Construcciones de la envolvente térmica
+//! Construcciones de la envolvente térmica: WallCons, WindowCons
 
 use serde::{Deserialize, Serialize};
 

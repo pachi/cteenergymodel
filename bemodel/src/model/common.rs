@@ -3,7 +3,7 @@
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 #![allow(clippy::upper_case_acronyms)]
 
-//! Tipos comunes al modelo del edificio
+//! Tipos comunes al modelo del edificio: BoundaryType, Tilt, Orientation
 
 use std::{fmt::Display};
 

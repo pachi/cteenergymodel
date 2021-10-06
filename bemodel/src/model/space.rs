@@ -2,7 +2,9 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
+//! Espacios : Space
+//! 
+//! XXX: realmente los tratamos como zonas térmicas y no como recintos
 
 use std::{fmt::Display};
 
@@ -11,8 +13,6 @@ use serde::{Deserialize, Serialize};
 // Elementos -----------------------------------------------
 
 /// Espacio
-/// XXX: en teoría se podrían asignar los espacios a zonas térmicas, aunque simplificadamente
-/// XXX: consideraremos que cada espacio se corresponde con una ZT.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Space {
     /// ID del espacio (en formato UUID)

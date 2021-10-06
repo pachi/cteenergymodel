@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
+//! Elementos semitransparentes del edificio: Window, WindowGeometry
 
 use serde::{Deserialize, Serialize};
 
