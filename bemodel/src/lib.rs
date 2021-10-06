@@ -4,17 +4,19 @@
 
 //! Datos climáticos y modelo del edificio
 
-mod model;
 mod checks;
-mod reporting;
+mod types;
 mod utils;
 
 pub mod climatedata;
 pub mod convert;
 pub mod energy;
 
-pub use model::*;
-pub use reporting::{Warning, WarningLevel};
+pub use types::{
+    point, vector, BoundaryType, ExtraData, Geometry, Meta, Model, Orientation, Point2, Point3,
+    Shade, Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Vector2, Vector3, Wall,
+    WallCons, Warning, WarningLevel, Window, WindowCons, WindowGeometry,
+};
 
 /// Versión del programa
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

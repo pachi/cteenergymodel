@@ -10,28 +10,10 @@ use anyhow::Error;
 use log::{info, warn};
 use serde::{Deserialize, Serialize};
 
-mod common;
-mod constructions;
-mod meta;
-mod opaques;
-mod space;
-mod thermalbridge;
-mod window;
-
-use crate::utils::{fround2, uuid_from_str};
-
-pub use common::{BoundaryType, Orientation, Tilt};
-pub use constructions::{WallCons, WindowCons};
-pub use meta::Meta;
-pub use opaques::{Geometry, Shade, Wall};
-pub use space::{Space, SpaceType};
-pub use thermalbridge::{ThermalBridge, ThermalBridgeKind};
-pub use window::{Window, WindowGeometry};
-
-pub type Point2 = nalgebra::Point2<f32>;
-pub type Point3 = nalgebra::Point3<f32>;
-pub type Vector2 = nalgebra::Vector2<f32>;
-pub type Vector3 = nalgebra::Vector3<f32>;
+use super::{
+    fround2, uuid_from_str, BoundaryType, Geometry, Meta, Shade, Space, SpaceType, ThermalBridge,
+    Tilt, Wall, WallCons, Window, WindowCons,
+};
 
 // ---------- Estructura general de datos --------------
 
