@@ -1,5 +1,6 @@
 # TAREAS PENDIENTES
 
+- Separar check de cálculo energético
 - generar UUID reproducibles, con rnd y una semilla para generar los UUID. <https://stackoverflow.com/a/56757552>, <https://github.com/uuid-rs/uuid/issues/100>
 - Convertir name e id a ArrayString y UUID
   - <https://docs.rs/arrayvec/0.7.1/arrayvec/struct.ArrayString.html>
@@ -19,12 +20,24 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 
 ## Modelo
 
+### Datos del modelo
+
+- Pensar si tiene sentido eliminar las superficies de:
+  - muros calculando desde su polígono
+  - huecos: calculando con su altura, ancho
+  - ¿espacios?: ¿definiendo su suelo (con polígono)? -> ¿merece la pena otra forma de definir los espacios?
+- El perímetro expuesto se podría eliminar de bemodel/space, calculándolo como en bdl/space l.110 a partir de los muros y suelos
+  - parte del perímetro que tiene muros con el exterior
+- Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
+- Incorporar en construcciones la composición de capas (capas: Vec<(String, f32)>)
+- Incorporar datos de materiales para poder calcular U de composiciones
+  - Necesita biblioteca base en Rust para interpretar construcciones:
+  - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+
 ### bemodel
 
 - Ver funciones que se podrían hacer infalibles sabiendo que hay definición geométrica (punto + poly)
   - implementar is_full_geometry (e.geometry.position.is_some()) y filtrar
-
-### cte::Data
 
 ### Lamas en huecos
 
@@ -51,7 +64,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
     - Se calcula la radiación directa a difusa (directa-difusa) <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-diffuse-blind-transmittance-reflectance-and-absorptance>
     - Se calcula la radiación difusa a difusa (difusa-difusa) <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#diffuse-to-diffuse-transmittance-and-reflectance-of-blind>
 
-#### Importación / Exportación
+### Importación / Exportación
 
 - importación de OpenStudio
   - Usa EpJSON, ver OpenStudio/src/epjson/epJSONTranslator.{hpp, cpp}
@@ -80,21 +93,12 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
   - <https://github.com/tomvandig/web-ifc>
   - <https://github.com/opensourceBIM/IfcValidator>
 
-#### Esquema de datos
+### Esquema de datos
 
 - Esquema JSON - <https://www.npmjs.com/package/is-my-json-valid>
   - <http://json-schema.org/>
 
-#### Modelo de datos
-
-- Pensar si tiene sentido eliminar las superficies de:
-  - muros calculando desde su polígono
-  - huecos: calculando con su altura, ancho
-  - ¿espacios?: ¿definiendo su suelo (con polígono)? -> ¿merece la pena otra forma de definir los espacios?
-- El perímetro expuesto se podría eliminar de bemodel/space, calculándolo como en bdl/space l.110 a partir de los muros y suelos
-  - parte del perímetro que tiene muros con el exterior
-
-#### Cálculos adicionales
+### Cálculos adicionales
 
 - Calcular más cosas:
 
@@ -117,15 +121,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
   - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
   - Generador de construcciones a partir de definición por capas
 
-##### Nuevos datos / campos
-
-- Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
-- Incorporar en construcciones la composición de capas (capas: Vec<(String, f32)>)
-- Incorporar datos de materiales para poder calcular U de composiciones
-  - Necesita biblioteca base en Rust para interpretar construcciones:
-  - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
-
-### BDL
+## BDL
 
 - Quitar de los elementos aquellas cosas que necesitan consultas globales (con acceso a bdldata)
 - Comprobar qué se cambia en las plantas o en el edificio cuando se indica una cota base distinta a la 0.0 (ver si se pone la Z de la planta P01 distinta a "")
@@ -136,7 +132,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
   - consignas
 - Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1 y reutilizar módulo nuevo
 
-### docs
+## docs
 
 Documentar hipótesis:
 
@@ -145,5 +141,4 @@ Documentar hipótesis:
 - Ignoramos el dato de Z-GROUND de elementos enterrados. Avisar
 - Suponemos que la altura de los espacios es igual a la altura suelo-suelo de las plantas y descontamos el grosor de forjado superior.
 - Avisar de incoherencias entre altura de espacios y plantas (pensar cómo, p.e. altura de planta < altura de espacio?)
-- Solamente se contempla la obstrucción de la radiación solar directa. Para la radiación difusa se toman valores fijos de los
-  factores de visibilidad del cielo y del suelo (0.5) sin contemplar obstrucciones remotas. Esto tiende a sobreestimar el valor de Fshobst.
+- Solamente se contempla la obstrucción de la radiación solar directa. Para la radiación difusa se toman valores fijos de los factores de visibilidad del cielo y del suelo (0.5) sin contemplar obstrucciones remotas. Esto tiende a sobreestimar el valor de Fshobst.
