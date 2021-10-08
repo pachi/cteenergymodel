@@ -3,6 +3,10 @@
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 //! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
+//! 
+//! Los elementos usan un identificador único con formato UUID:
+//! - https://www.rfc-editor.org/rfc/rfc4122
+//! - representación en cadena de 36 caracteres
 
 pub use nalgebra::{point, vector};
 
