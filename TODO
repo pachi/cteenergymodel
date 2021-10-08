@@ -5,6 +5,8 @@
 - Convertir name e id a ArrayString y UUID
   - <https://docs.rs/arrayvec/0.7.1/arrayvec/struct.ArrayString.html>
   - <https://docs.rs/uuid/0.8.2/uuid/>
+  - UUID: <https://www.rfc-editor.org/rfc/rfc4122>
+  - Ver tamaño máximo de name, id son 36 caracteres en representación de texto
 - Trasladar avisos en la conversión de modelos BDL
 - Con makefile generar .json y llevar a tests de hulc a bemodel en .json y copiar archivos .ctehexml, .tbl y .kyg a hulc2model
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
