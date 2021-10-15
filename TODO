@@ -57,7 +57,8 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
   - Ver qué día del año usar...
 - Caso de las lamas (blinds)
   - Vamos a tantear primero qué valores salen bloqueando solo la radiación directa, comparando con tablas DA DB-HE.
-  - Se puede usar la referencia de EnergyPlus (más sencilla), la ISO 15099 (más precisa) o la UNE-EN ISO 52022-3, aunque esta última considera que no hay transmisión directa.
+  - Se puede usar la referencia de EnergyPlus (más sencilla), la ISO 15099 (más precisa) o, mejor, la UNE-EN ISO 52022-3,
+    aunque esta última considera que no hay transmisión directa (que es fácil de añadir, incorporando la transmissión directa como se indica en E+ y cambiando los factores de visibilidad, que también se pueden calcular con el Hottel's crossed strings method).
   - <http://www.ibpsa.org/proceedings/BS2001/BS01_0457_464.pdf>
   - <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#blinds>
     - Se calcula la radiación directa (directa-directa) <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-direct-blind-transmittance>
