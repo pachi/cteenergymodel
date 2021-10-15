@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Datos climáticos y modelo del edificio
+//! Datos climáticos, modelo del edificio y rutinas para cálculo energético
 
 mod checks;
 mod types;
