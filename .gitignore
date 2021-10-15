@@ -11,8 +11,11 @@ hulc_tests/**/Documentacion/*
 perf.data*
 callgrind*
 flamegraph*
-cubo.json*
-e4h_medianeras.json*
 *.ctehexml
 *.log
+*.json
+*.data
+*.svg
+*.ods
+*.txt
 **/zcraddata.json
