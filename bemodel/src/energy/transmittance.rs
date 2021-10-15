@@ -17,7 +17,7 @@ use std::{collections::HashMap, f32::consts::PI};
 use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 
-use crate::{BoundaryType, Model, SpaceType, ThermalBridgeKind, Tilt, Wall};
+use crate::{BoundaryType, Model, SpaceType, ThermalBridgeKind, Tilt, Wall, Window};
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
 const RSI_ASCENDENTE: f32 = 0.10;
@@ -286,7 +286,7 @@ impl Model {
         let windowsmap: HashMap<String, Option<f32>> = self
             .windows
             .iter()
-            .map(|w| (w.id.clone(), self.wincons_of_window(w).map(|w| w.u)))
+            .map(|w| (w.id.clone(), self.u_for_window(w)))
             .collect();
         UValues {
             walls: wallsmap,
@@ -294,11 +294,20 @@ impl Model {
         }
     }
 
+    /// Transmitancia térmica del hueco, U_W, en una posición dada, en W/m2K
+    /// Notas:
+    /// - estos valores ya deben incluir las resistencias superficiales
+    ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
+    pub fn u_for_window(&self, window: &Window) -> Option<f32> {
+        self.wincons_of_window(window).map(|wincons| wincons.u)
+    }
+
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
     /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
     /// Notas:
     /// - los elementos adiabáticos se reportan con valor 0.0
     /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
+    /// - se usan resistencias superficiales de referencia (DB-HE)
     pub fn u_for_wall(&self, wall: &Wall) -> Option<f32> {
         use {BoundaryType::*, SpaceType::*, Tilt::*};
 
@@ -588,9 +597,8 @@ impl Model {
                             let win_axu = self
                                 .wincons_of_window_iter(&wall.id)
                                 .filter_map(|win| {
-                                    self.wincons_of_window(win)
-                                        // Si no está definida la construcción no participa de la envolvente
-                                        .map(|wincons| Some(win.area * wincons.u))?
+                                    // Si no está definida la construcción, el hueco no participa de la envolvente
+                                    self.u_for_window(win).map(|u| Some(win.area * u))?
                                 })
                                 .sum::<f32>();
                             Some(wall.area * wall_u + win_axu)
