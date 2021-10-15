@@ -7,6 +7,7 @@
 //! Cálculo de K, qsoljul, Fshobst, etc
 
 use serde::{Deserialize, Serialize};
+use anyhow::Error;
 
 use crate::{climatedata, Model, Warning};
 
@@ -42,8 +43,16 @@ pub struct IndicatorsReport {
     pub warnings: Vec<Warning>,
 }
 
+impl IndicatorsReport {
+    /// Devuelve resultados en formato JSON
+    pub fn as_json(&self) -> Result<String, Error> {
+        let json = serde_json::to_string_pretty(&self)?;
+        Ok(json)
+    }
+}
+
 /// Calcula indicadores energéticos del modelo
-pub fn energy_indicators(model: &Model) -> IndicatorsReport {
+pub fn indicators(model: &Model) -> IndicatorsReport {
     let climatezone = model.meta.climate;
     let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
     IndicatorsReport {
