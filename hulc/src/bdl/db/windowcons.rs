@@ -113,7 +113,9 @@ impl TryFrom<BdlBlock> for WindowCons {
         let BdlBlock {
             name, mut attrs, ..
         } = value;
-        let group = attrs.remove_str("GROUP")?;
+        let group = attrs
+            .remove_str("GROUP")
+            .unwrap_or_else(|_| "Ventanas".to_string());
         let glass = attrs.remove_str("GLASS-TYPE")?;
         let glassgroup = attrs.remove_str("GROUP-GLASS")?;
         let frame = attrs.remove_str("NAME-FRAME")?;
