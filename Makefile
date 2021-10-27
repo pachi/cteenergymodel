@@ -56,5 +56,7 @@ fixcross:
 	cp /usr/i686-w64-mingw32/lib/crt2.o ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/i686-pc-windows-gnu/lib/
 	cp /usr/i686-w64-mingw32/lib/dllcrt2.o ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/i686-pc-windows-gnu/lib/
 	cp /usr/i686-w64-mingw32/lib/libmsvcrt.a ~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/i686-pc-windows-gnu/lib/
+
+input ?= ./hulc_tests/tests/data/e4h_medianeras.ctehexml
 thor:
-	cargo run --bin thor ./hulc_tests/tests/data/e4h_medianeras.ctehexml -v -o model_thor.json -r results_thor.json
+	cargo run --bin thor ${input} -v -o model_thor.json -r results_thor.json

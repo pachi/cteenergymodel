@@ -23,7 +23,7 @@ Licencia: Publicado bajo licencia MIT.
 
 "#;
 const APP_ABOUT: &str =
-    r#"Frost - Indicadores de eficiencia energética de la envolvente del edificio (CTE DB-HE)."#;
+    r#"Thor - Indicadores de eficiencia energética de la envolvente del edificio (CTE DB-HE)."#;
 const APP_LICENSE: &str = r#"
 Copyright (c) 2018-2021 Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
 
