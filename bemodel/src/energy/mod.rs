@@ -6,8 +6,8 @@
 //!
 //! Cálculo de K, qsoljul, Fshobst, etc
 
-use serde::{Deserialize, Serialize};
 use anyhow::Error;
+use serde::{Deserialize, Serialize};
 
 use crate::{climatedata, Model, Warning};
 

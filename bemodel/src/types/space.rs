@@ -3,10 +3,10 @@
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 //! Espacios : Space
-//! 
+//!
 //! XXX: realmente los tratamos como zonas térmicas y no como recintos
 
-use std::{fmt::Display};
+use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
 

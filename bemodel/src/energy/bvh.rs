@@ -4,8 +4,8 @@
 
 use std::{collections::HashMap, fmt::Debug, ops::Deref};
 
-use super::ray::Ray;
 use super::aabb::AABB;
+use super::ray::Ray;
 
 /// Elementos capaces de definir la AABB que los encierra
 pub trait Bounded {

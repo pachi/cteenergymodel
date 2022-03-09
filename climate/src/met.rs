@@ -45,15 +45,17 @@ use std::collections::HashMap;
 /// - Azimut solar (grados);
 /// - Cénit solar (grados).
 ///
-
 use std::fs::File;
 use std::io::{prelude::*, BufReader};
 use std::path::Path;
 
-use anyhow::{Context, Error, bail};
+use anyhow::{bail, Context, Error};
 use serde::{ser::SerializeSeq, Deserialize, Serialize, Serializer};
 
-use super::{solar::{nday_from_ymd, radiation_for_surface, SolarRadiation}, ORIENTATIONS, MONTH_N, CTE_CLIMATEZONES};
+use super::{
+    solar::{nday_from_ymd, radiation_for_surface, SolarRadiation},
+    CTE_CLIMATEZONES, MONTH_N, ORIENTATIONS,
+};
 
 /// Datos climáticos de archivo .met
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
@@ -112,7 +114,6 @@ pub struct HourlyData {
     pub zenith: f32,
 }
 
-
 /// Datos de radiación y factores de reducción mensuales para una superficie
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct MonthlySurfaceRadData {
@@ -149,7 +150,6 @@ pub struct MonthlySurfaceRadData {
     pub fshwi500: Vec<f32>,
 }
 
-
 /// Redondea valor a 2 decimales
 #[inline]
 pub fn fround2(val: f32) -> f32 {
@@ -170,7 +170,8 @@ where
 
 // Parse hourly data from .met data as string
 pub fn parsemet<S: AsRef<str>>(metstring: S) -> Result<MetData, Error> {
-    let datalines: Vec<_> = metstring.as_ref()
+    let datalines: Vec<_> = metstring
+        .as_ref()
         .split('\n')
         .map(str::trim)
         .filter(|&line| !line.is_empty())
@@ -182,7 +183,9 @@ pub fn parsemet<S: AsRef<str>>(metstring: S) -> Result<MetData, Error> {
         .map(str::parse::<f32>)
         .collect::<Result<Vec<f32>, _>>()
         .unwrap();
-    if loc.len() != 4 {bail!("Datos de localización incorrectos: {}", &datalines[1])};
+    if loc.len() != 4 {
+        bail!("Datos de localización incorrectos: {}", &datalines[1])
+    };
 
     let zc = metname.replace("zona", "").replace(".met", "");
     let meta = Meta {
@@ -194,39 +197,45 @@ pub fn parsemet<S: AsRef<str>>(metstring: S) -> Result<MetData, Error> {
         reflong: loc[3],
     };
     // datalines
-    let data: Vec<_> = datalines[2..].iter().map(|x| x.trim()).filter(|x| !x.is_empty()).map(|x| {
-      let vals: Vec<_> = x.split_ascii_whitespace().map(str::trim).collect();
-        let date: Vec<_> = vals[0..2].iter().map(|x| x.parse::<u32>().unwrap()).collect();
-        let values: Vec<_> = vals[2..]
-            .iter()
-            .map(|x| x.parse::<f32>().unwrap())
-            .collect();
-        (date, values)
-    }).filter_map(|(date, values)| 
-        {
-          if let [ mes, dia] = date[..] {
-            if let [hora, tempseca, tempcielo, rdirhor, rdifhor, humedadabs, humedadrel, velviento, dirviento, azimut, cenit ] = values[..] {
-              return Some(HourlyData { month: mes, day: dia, hour: hora,
-                db_temp: tempseca, sky_temp: tempcielo,
-                rdirhor, rdifhor,
-                abs_humidity: humedadabs, rel_humidity: humedadrel,
-                wind_speed: velviento, wind_dir: dirviento,
-                // Cambiamos el signo del azimut, ya que en .met (E-, W+, S=0) el signo difiere del de 52010-1 (E+, W-, S=0)
-                azimuth: -azimut,
-                zenith: cenit })
+    let data: Vec<_> = datalines[2..].iter().map(|x| x.trim()).filter(|x| !x.is_empty())
+        .map(|x| {
+            let vals: Vec<_> = x.split_ascii_whitespace().map(str::trim).collect();
+            let date: Vec<_> = vals[0..2].iter().map(|x| x.parse::<u32>().unwrap()).collect();
+            let values: Vec<_> = vals[2..]
+                .iter()
+                .map(|x| x.parse::<f32>().unwrap())
+                .collect();
+            (date, values)
+        })
+        .filter_map(|(date, values)| {
+            if let [ mes, dia] = date[..] {
+                if let [hora, tempseca, tempcielo, rdirhor, rdifhor, humedadabs, humedadrel, velviento, dirviento, azimut, cenit ] = values[..] {
+                return Some(HourlyData { month: mes, day: dia, hour: hora,
+                    db_temp: tempseca, sky_temp: tempcielo,
+                    rdirhor, rdifhor,
+                    abs_humidity: humedadabs, rel_humidity: humedadrel,
+                    wind_speed: velviento, wind_dir: dirviento,
+                    // Cambiamos el signo del azimut, ya que en .met (E-, W+, S=0) el signo difiere del de 52010-1 (E+, W-, S=0)
+                    azimuth: -azimut,
+                    zenith: cenit })
+                }
+            };
+            None
             }
-          };
-          None
-          }
-      ).collect();
-    if data.len() != 8760 {bail!("Datos horarios con un número de entradas distinto a 8760: {}", &data.len())};
+        ).collect();
+    if data.len() != 8760 {
+        bail!(
+            "Datos horarios con un número de entradas distinto a 8760: {}",
+            &data.len()
+        )
+    };
 
     Ok(MetData { meta, data })
 }
 
 /// Lee estructura de datos desde path de archivo .met
 pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<MetData, Error> {
-  let mut utf8data = String::new();
+    let mut utf8data = String::new();
     BufReader::new(File::open(path.as_ref())?)
         .read_to_string(&mut utf8data)
         .with_context(|| {
@@ -235,7 +244,7 @@ pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<MetData, Error> {
                 path.as_ref().display()
             )
         })?;
-  parsemet(&utf8data)
+    parsemet(&utf8data)
 }
 
 /// Lee datos meteorológicos en metdir y guarda según zonas climáticas
@@ -363,7 +372,7 @@ pub(crate) struct MonthlyRadData {
 }
 
 /// Radiación acumulada mensual (directa, difusa) para un clima y superficie, kWh/m²
-pub (crate) fn monthly_radiation_for_surface(
+pub(crate) fn monthly_radiation_for_surface(
     metdata: &MetData,
     surf_tilt: f32,
     surf_azimuth: f32,
@@ -423,11 +432,15 @@ pub (crate) fn monthly_radiation_for_surface(
 /// Datos horarios de radiación en una superficie horizontal por zona climática para el 21 de julio, W/m²
 ///
 /// metdata: datos climáticos horarios anuales por zona climática
-pub fn met_july21st_radiation_data(metdata: &HashMap<String, MetData>) -> HashMap<String, Vec<RadData>> {
+pub fn met_july21st_radiation_data(
+    metdata: &HashMap<String, MetData>,
+) -> HashMap<String, Vec<RadData>> {
     let mut map = HashMap::new();
     for zona in &CTE_CLIMATEZONES {
         let zonemetdata = metdata.get(*zona).unwrap();
-        let zonerad = zonemetdata.data.iter()
+        let zonerad = zonemetdata
+            .data
+            .iter()
             .filter(|d| d.month == 7 && d.day == 21 && (d.rdifhor > 0.0 || d.rdirhor > 0.0))
             .map(|d| RadData {
                 month: d.month,
@@ -437,7 +450,8 @@ pub fn met_july21st_radiation_data(metdata: &HashMap<String, MetData>) -> HashMa
                 altitude: 90.0 - d.zenith,
                 dir: d.rdirhor,
                 dif: d.rdifhor,
-            }).collect();
+            })
+            .collect();
         map.insert(zona.to_string(), zonerad);
     }
     map

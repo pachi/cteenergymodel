@@ -9,7 +9,7 @@ use nalgebra::{
     IsometryMatrix2, IsometryMatrix3, Rotation2, Rotation3, Translation2, Translation3,
 };
 
-use super::{Bounded, Intersectable, Ray, AABB, utils::poly_normal};
+use super::{utils::poly_normal, Bounded, Intersectable, Ray, AABB};
 use crate::{point, Geometry, Vector2, Vector3};
 
 // -------------------------- Funciones auxiliares ---------------------------

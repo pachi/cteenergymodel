@@ -11,7 +11,7 @@ use std::convert::TryFrom;
 use anyhow::Error;
 use nalgebra::Point3;
 
-use crate::bdl::{BdlBlock};
+use crate::bdl::BdlBlock;
 
 use super::point3_from_str;
 

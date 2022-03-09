@@ -5,7 +5,7 @@
 
 //! Tipos comunes al modelo del edificio: BoundaryType, Tilt, Orientation
 
-use std::{fmt::Display};
+use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
 

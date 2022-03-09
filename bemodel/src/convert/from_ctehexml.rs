@@ -599,23 +599,27 @@ fn wallcons_from_bdl(walls: &[Wall], bdl: &Data) -> Result<Vec<WallCons>, Error>
                 .get(wcons)
                 .and_then(|cons|{
                     let id = uuid_from_obj(wcons);
+                    let r = if let Ok(r) = cons.r_intrinsic(&bdl.db.materials) { r } else {
+                        warn!(
+                            "ERROR: No es posible calcular la R intrínseca de la construcción: {:?}\n", 
+                            cons,
+                        );
+                        return None
+                    };
                     match cons.r_intrinsic(&bdl.db.materials) {
                         Ok(r) => Some(WallCons {
                             id,
                             name: cons.name.clone(),
                             group: cons.group.clone(),
-                            thickness: fround2(cons.total_thickness()),
-                            r_intrinsic: fround3(r),
-                            absorptance: cons.absorptance,
-                        }),
-                        _ => {
-                            warn!(
-                                "ERROR: No es posible calcular la R intrínseca de la construcción: {:?}\n",
-                                cons,
-                            );
-                            None
-                        }
-                }})
+                    Some(WallCons {
+                        id,
+                        name: cons.name.clone(),
+                        group: cons.group.clone(),
+                        thickness: fround2(cons.total_thickness()),
+                        r_intrinsic: fround3(r),
+                        absorptance: cons.absorptance,
+                    })
+            })
                 .ok_or_else(|| {
                     format_err!(
                         "Construcción de muro no encontrada o incorrecta: '{}'\n",
