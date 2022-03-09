@@ -4,6 +4,7 @@
 
 //! Construcciones de la envolvente térmica: WallCons, WindowCons
 
+use super::Uuid;
 use serde::{Deserialize, Serialize};
 
 // Elementos -----------------------------------------------
@@ -12,11 +13,15 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WallCons {
     /// ID del espacio (en formato UUID)
-    pub id: String,
+    pub id: Uuid,
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
+    #[serde(default)]
     pub group: String,
+    /// Capas que forman la construcción de opaco, como lista de tuplas (material, espesor)
+    #[serde(default)]
+    pub layers: Vec<(String, f32)>,
     /// Grosor del elemento (m) [0.0-]
     pub thickness: f32,
     /// Resistencia térmica total sin resistencias superficiales (resistencia intrínseca) [m2K/W]
@@ -30,7 +35,7 @@ pub struct WallCons {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WindowCons {
     /// ID del espacio (en formato UUID)
-    pub id: String,
+    pub id: Uuid,
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)

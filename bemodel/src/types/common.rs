@@ -11,6 +11,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::utils::normalize;
 
+/// Identificador (UUID v4)
+pub type Uuid = String;
+
 /// Condiciones de contorno de los cerramientos
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum BoundaryType {

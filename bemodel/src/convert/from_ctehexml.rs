@@ -17,8 +17,9 @@ use hulc::{
 };
 
 pub use crate::{
-    BoundaryType, Geometry, Meta, Model, Orientation, Shade, Space, SpaceType, ThermalBridge,
-    ThermalBridgeKind, Tilt, Wall, WallCons, Window, WindowCons, WindowGeometry,
+    BoundaryType, Geometry, MatProps, Material, Meta, Model, Orientation, Shade, Space, SpaceType,
+    ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, Window, WindowCons,
+    WindowGeometry,
 };
 
 // Utilidades varias de conversión
@@ -63,7 +64,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let othershades = shades_from_bdl(bdl);
         shades.extend_from_slice(&othershades);
         let thermal_bridges = thermal_bridges_from_bdl(bdl);
-        let wallcons = wallcons_from_bdl(&walls, bdl)?;
+        let materials = materials_from_bdl(bdl);
+        let wallcons = wallcons_from_bdl(&walls, &materials, bdl)?;
         let wincons = windowcons_from_bdl(bdl)?;
         let spaces = spaces_from_bdl(bdl)?;
 
@@ -154,6 +156,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             spaces,
             wincons,
             wallcons,
+            materials,
             extra: None,
         })
     }
@@ -581,14 +584,47 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
         .collect()
 }
 
+/// Materiales partir de datos BDL
+fn materials_from_bdl(bdl: &Data) -> Vec<Material> {
+    let mut materials = Vec::new();
+    for (name, material) in &bdl.db.materials {
+        let id = uuid_from_obj(material);
+        materials.push(Material {
+            id,
+            name: name.clone(),
+            group: material.group.clone(),
+            properties: if let Some(p) = material.properties {
+                MatProps::Detailed {
+                    conductivity: p.conductivity,
+                    density: p.density,
+                    specificheat: p.specificheat,
+                    vapourdiffusivity: p.vapourdiffusivity,
+                }
+            } else {
+                MatProps::Resistance(material.resistance.unwrap_or_default())
+            },
+        })
+    }
+    materials
+}
+
 /// Construcciones de muros a partir de datos BDL
-fn wallcons_from_bdl(walls: &[Wall], bdl: &Data) -> Result<Vec<WallCons>, Error> {
+fn wallcons_from_bdl(
+    walls: &[Wall],
+    materials: &[Material],
+    bdl: &Data,
+) -> Result<Vec<WallCons>, Error> {
     let mut wcnames = walls
         .iter()
         .map(|w| w.cons.clone())
         .collect::<Vec<String>>();
     wcnames.sort();
     wcnames.dedup();
+
+    let name_to_id = materials
+        .iter()
+        .map(|m| (&m.name, &m.id))
+        .collect::<BTreeMap<&String, &Uuid>>();
 
     wcnames
         .iter()
@@ -606,15 +642,23 @@ fn wallcons_from_bdl(walls: &[Wall], bdl: &Data) -> Result<Vec<WallCons>, Error>
                         );
                         return None
                     };
-                    match cons.r_intrinsic(&bdl.db.materials) {
-                        Ok(r) => Some(WallCons {
-                            id,
-                            name: cons.name.clone(),
-                            group: cons.group.clone(),
+                    let mut ids = Vec::new();
+                    for mat_name in &cons.material {
+                        if let Some(id) = name_to_id.get(mat_name).cloned(){
+                            ids.push(id.clone());
+                        }
+                        else {
+                            return None;
+                        };
+                    }
+                    let layers = ids.iter().cloned()
+                        .zip(cons.thickness.iter().cloned())
+                        .collect();
                     Some(WallCons {
                         id,
                         name: cons.name.clone(),
                         group: cons.group.clone(),
+                        layers,
                         thickness: fround2(cons.total_thickness()),
                         r_intrinsic: fround3(r),
                         absorptance: cons.absorptance,

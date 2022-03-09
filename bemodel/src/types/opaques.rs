@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::{BoundaryType, Orientation, Point2, Point3, Tilt};
+use super::{BoundaryType, Orientation, Point2, Point3, Tilt, Uuid};
 
 // Elementos -----------------------------------------------
 
@@ -14,7 +14,7 @@ use super::{BoundaryType, Orientation, Point2, Point3, Tilt};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Wall {
     /// ID del espacio (en formato UUID)
-    pub id: String,
+    pub id: Uuid,
     /// Nombre del elemento opaco
     pub name: String,
     /// Superficie neta (sin huecos) del elemento opaco (m2)
@@ -28,11 +28,11 @@ pub struct Wall {
     /// - ADIABATIC: cerramientos sin transmisión de calor
     pub bounds: BoundaryType,
     /// Construcción del opaco
-    pub cons: String,
+    pub cons: Uuid,
     /// Espacio al que pertenece el elemento opaco
-    pub space: String,
+    pub space: Uuid,
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
-    pub nextto: Option<String>,
+    pub nextto: Option<Uuid>,
     /// Geometría del elemento opaco
     pub geometry: Geometry,
 }

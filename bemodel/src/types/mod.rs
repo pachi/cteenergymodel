@@ -12,6 +12,7 @@ pub use nalgebra::{point, vector};
 
 mod common;
 mod constructions;
+mod materials;
 mod meta;
 mod model;
 mod opaques;
@@ -22,8 +23,9 @@ mod window;
 
 use crate::utils::{fround2, uuid_from_str};
 
-pub use common::{BoundaryType, Orientation, Tilt};
+pub use common::{BoundaryType, Orientation, Tilt, Uuid};
 pub use constructions::{WallCons, WindowCons};
+pub use materials::{MatProps, Material};
 pub use meta::Meta;
 pub use model::{ExtraData, Model};
 pub use opaques::{Geometry, Shade, Wall};

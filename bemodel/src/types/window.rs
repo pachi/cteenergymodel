@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::Point2;
+use super::{Point2, Uuid};
 
 // Elementos -----------------------------------------------
 
@@ -21,9 +21,9 @@ pub struct Window {
     #[serde(rename = "A")]
     pub area: f32,
     /// Construcción del hueco
-    pub cons: String,
+    pub cons: Uuid,
     /// Muro al que pertenece el hueco
-    pub wall: String,
+    pub wall: Uuid,
     /// Factor de obstáculos remotos
     pub fshobst: f32,
     /// Geometría de hueco

@@ -4,6 +4,7 @@
 
 //! Puentes térmicos lineales: ThermalBridge, ThermalBridgeKind
 
+use super::Uuid;
 use serde::{Deserialize, Serialize};
 
 // Elementos -----------------------------------------------
@@ -12,7 +13,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ThermalBridge {
     /// ID del espacio (en formato UUID)
-    pub id: String,
+    pub id: Uuid,
     /// Nombre del puente térmico
     pub name: String,
     /// Tipo de puente térmico

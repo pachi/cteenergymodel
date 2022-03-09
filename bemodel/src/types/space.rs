@@ -8,6 +8,7 @@
 
 use std::fmt::Display;
 
+use super::Uuid;
 use serde::{Deserialize, Serialize};
 
 // Elementos -----------------------------------------------
@@ -16,7 +17,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Space {
     /// ID del espacio (en formato UUID)
-    pub id: String,
+    pub id: Uuid,
     /// Nombre del espacio
     pub name: String,
     /// Superficie útil del espacio (m2)

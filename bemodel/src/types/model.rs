@@ -11,8 +11,8 @@ use log::{info, warn};
 use serde::{Deserialize, Serialize};
 
 use super::{
-    fround2, uuid_from_str, BoundaryType, Geometry, Meta, Shade, Space, SpaceType, ThermalBridge,
-    Tilt, Wall, WallCons, Window, WindowCons,
+    fround2, uuid_from_str, BoundaryType, Geometry, Material, Meta, Shade, Space, SpaceType,
+    ThermalBridge, Tilt, Wall, WallCons, Window, WindowCons,
 };
 
 // ---------- Estructura general de datos --------------
@@ -37,6 +37,8 @@ pub struct Model {
     pub wallcons: Vec<WallCons>,
     /// Construcciones de huecos
     pub wincons: Vec<WindowCons>,
+    /// Materiales
+    pub materials: Vec<Material>,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
     pub extra: Option<Vec<ExtraData>>,
 }
