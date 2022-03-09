@@ -19,7 +19,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
 [target.'cfg(not(windows))'.dependencies]
-env_logger = "0.8"
+env_logger = "0.9"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3", features = ["wingdi", "winuser", "libloaderapi", "combaseapi", "objbase", "shobjidl", "shlobj", "winerror"] }
