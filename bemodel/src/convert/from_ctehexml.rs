@@ -7,7 +7,6 @@
 use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
 
 use anyhow::{anyhow, bail, format_err, Error};
-use log::warn;
 use nalgebra::{point, Point3, Rotation2, Rotation3, Translation3, Vector3};
 
 use crate::utils::{fround2, fround3, normalize, uuid_from_obj};
@@ -626,53 +625,58 @@ fn wallcons_from_bdl(
         .map(|m| (&m.name, &m.id))
         .collect::<BTreeMap<&String, &Uuid>>();
 
-    wcnames
-        .iter()
-        .map(|wcons| {
-            let wallcons = bdl
-                .db
-                .wallcons
-                .get(wcons)
-                .and_then(|cons|{
-                    let id = uuid_from_obj(wcons);
-                    let r = if let Ok(r) = cons.r_intrinsic(&bdl.db.materials) { r } else {
-                        warn!(
-                            "ERROR: No es posible calcular la R intrínseca de la construcción: {:?}\n", 
-                            cons,
-                        );
-                        return None
+    let mut wclist = Vec::with_capacity(wcnames.len());
+    for wcons in &wcnames {
+        match bdl.db.wallcons.get(wcons) {
+            Some(cons) => {
+                let id = uuid_from_obj(wcons);
+
+                let mut ids = Vec::with_capacity(cons.material.len());
+                for mat_name in &cons.material {
+                    if let Some(id) = name_to_id.get(mat_name).cloned() {
+                        ids.push(id.clone());
+                    } else {
+                        return Err(format_err!(
+                            "ERROR: No se ha encontrado el id del material: {}",
+                            mat_name,
+                        ));
                     };
-                    let mut ids = Vec::new();
-                    for mat_name in &cons.material {
-                        if let Some(id) = name_to_id.get(mat_name).cloned(){
-                            ids.push(id.clone());
-                        }
-                        else {
-                            return None;
-                        };
+                }
+                let layers = ids
+                    .iter()
+                    .cloned()
+                    .zip(cons.thickness.iter().cloned())
+                    .collect();
+
+                let r = match cons.r_intrinsic(&bdl.db.materials) {
+                    Ok(r) => r,
+                    _ => {
+                        return Err(format_err!(
+                        "ERROR: No es posible calcular la R intrínseca de la construcción: {:?}\n",
+                        cons,
+                    ))
                     }
-                    let layers = ids.iter().cloned()
-                        .zip(cons.thickness.iter().cloned())
-                        .collect();
-                    Some(WallCons {
-                        id,
-                        name: cons.name.clone(),
-                        group: cons.group.clone(),
-                        layers,
-                        thickness: fround2(cons.total_thickness()),
-                        r_intrinsic: fround3(r),
-                        absorptance: cons.absorptance,
-                    })
-            })
-                .ok_or_else(|| {
-                    format_err!(
-                        "Construcción de muro no encontrada o incorrecta: '{}'\n",
-                        wcons,
-                    )
-                })?;
-            Ok(wallcons)
-        })
-        .collect::<Result<Vec<_>, _>>()
+                };
+
+                wclist.push(WallCons {
+                    id,
+                    name: cons.name.clone(),
+                    group: cons.group.clone(),
+                    layers,
+                    thickness: fround2(cons.total_thickness()),
+                    r_intrinsic: fround3(r),
+                    absorptance: cons.absorptance,
+                })
+            }
+            _ => {
+                return Err(format_err!(
+                    "Construcción de muro no encontrada o incorrecta: '{}'\n",
+                    wcons,
+                ))
+            }
+        };
+    }
+    Ok(wclist)
 }
 
 /// Construcciones de huecos a partir de datos BDL
