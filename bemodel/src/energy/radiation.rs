@@ -18,7 +18,9 @@ use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 use crate::{
     climatedata::{RadData, CLIMATEMETADATA, JULYRADDATA},
     energy::{Bounded, Intersectable, Ray, BVH},
-    point, vector,
+    point,
+    utils::fround2,
+    vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
     Model, Orientation, Point3, Vector3, Window,
 };
@@ -215,7 +217,10 @@ impl Model {
         debug!("Fshobst map: {:#?}", map);
 
         for mut window in &mut self.windows {
-            window.fshobst = map.get(&window.id).map(|v| v.fshobst).unwrap_or(1.0);
+            window.fshobst = map
+                .get(&window.id)
+                .map(|v| fround2(v.fshobst))
+                .unwrap_or(1.0);
         }
     }
 
