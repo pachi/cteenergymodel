@@ -54,7 +54,10 @@ fn model_json_conversion() {
     assert_almost_eq!(model.a_ref(), 1673.92, 0.01);
     assert_almost_eq!(model.compacity(), 3.17, 0.01);
     assert_almost_eq!(model.K().K, 0.37, 0.01);
-    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.43, 0.01);
+    // En HULC es q_solul = 0.43
+    // con model.update_fshobst = 0.47
+    // con el modelo simple (solo retranqueos) = 0.53
+    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.47, 0.01);
 
     assert_almost_eq!(n50data.n50, 2.96, 0.01);
     assert_almost_eq!(n50data.n50_ref, 2.96, 0.01);
@@ -64,7 +67,7 @@ fn model_json_conversion() {
     assert_almost_eq!(model.vol_env_gross(), 5231.0, 0.1);
 
     let json = model.as_json().unwrap();
-    let mut model = Model::from_json(&json).unwrap();
+    let model = Model::from_json(&json).unwrap();
     let json2 = model.as_json().unwrap();
     assert_eq!(&json, &json2);
 
@@ -97,19 +100,6 @@ fn model_json_conversion() {
         model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders),
         0.8
     );
-
-    model.update_fshobst();
-    info!(
-        "sunlit map:\n{}",
-        model
-            .windows
-            .iter()
-            .map(|w| format!("{}: {}", w.name, w.fshobst))
-            .collect::<Vec<_>>()
-            .join("\n")
-    );
-    // HULC: 0.43
-    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.47, 0.01);
 }
 
 #[test]
