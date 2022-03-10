@@ -14,7 +14,7 @@ use super::{Point2, Uuid};
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Window {
     /// ID del espacio (en formato UUID)
-    pub id: String,
+    pub id: Uuid,
     /// Nombre del hueco
     pub name: String,
     /// Superficie del hueco (m2)

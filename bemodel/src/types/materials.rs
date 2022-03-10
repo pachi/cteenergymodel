@@ -10,6 +10,19 @@ use super::Uuid;
 
 // Materiales -----------------------------------------------
 
+/// Elemento opaco (muro, cubierta, suelo, partición)
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Material {
+    /// ID del material (UUID)
+    pub id: Uuid,
+    /// Nombre del material
+    pub name: String,
+    /// Grupo al que pertenece (biblioteca)
+    pub group: String,
+    /// Definición de propiedades, detallada (lambda, rho, C_p, mu, ...) o solo resistencia
+    pub properties: MatProps,
+}
+
 /// Tipos de propiedades de materiales
 #[derive(Debug, Copy, Clone, Serialize, Deserialize)]
 pub enum MatProps {
@@ -26,17 +39,4 @@ pub enum MatProps {
     },
     /// Resistencia térmica (R)
     Resistance(f32),
-}
-
-/// Elemento opaco (muro, cubierta, suelo, partición)
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Material {
-    /// ID del material (UUID)
-    pub id: Uuid,
-    /// Nombre del material
-    pub name: String,
-    /// Grupo al que pertenece (biblioteca)
-    pub group: String,
-    /// Definición de propiedades, detallada (lambda, rho, C_p, mu, ...) o solo resistencia
-    pub properties: MatProps,
 }
