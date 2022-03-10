@@ -78,7 +78,11 @@ impl<T: Bounded> BVH<T> {
         // Nodos pendientes
         let mut pending: Vec<TreeElement<T>> = Vec::new();
         // Nodos procesados (2*n-1 nodos con n terminales)
-        let expected_num_nodes = 2 * (elements.len() / max_num_elements) - 1;
+        let expected_num_nodes = if elements.is_empty() {
+            2 * (elements.len() / max_num_elements) - 1
+        } else {
+            0
+        };
         let mut node_list: Vec<TreeElement<T>> = Vec::with_capacity(expected_num_nodes);
 
         let mut id: NodeId = 0;
@@ -171,8 +175,7 @@ impl<T: Bounded> BVH<T> {
                 completed.insert(parent_id, parent_node);
             }
         }
-        let root = completed.remove(&0_usize).unwrap();
-        Self::new(Some(root))
+        Self::new(completed.remove(&0_usize))
     }
 
     /// Itera sobre los nodos con los que colisiona el rayo
