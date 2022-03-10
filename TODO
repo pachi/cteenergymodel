@@ -1,5 +1,7 @@
 # TAREAS PENDIENTES
 
+- Eliminar A de huecos y de muros
+- Convertir UValues a AUValues en IndicatorsReport
 - Separar check de cálculo energético
 - generar UUID reproducibles, con rnd y una semilla para generar los UUID. <https://stackoverflow.com/a/56757552>, <https://github.com/uuid-rs/uuid/issues/100>
 - Convertir name e id a ArrayString y UUID
