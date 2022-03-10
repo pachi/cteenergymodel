@@ -1,8 +1,8 @@
 run:
 	$(info [INFO]: Ejecutando ejemplo)
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo/ -- -o cubo.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/data/ -- -o e4h_medianeras.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/casoA/ -- -o caso_a.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo/cubo.ctehexml -o cubo.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/data/e4h_medianeras.ctehexml -o e4h_medianeras.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/casoA/casoa.ctehexml -o caso_a.json
 	$(info [INFO]: Actualizando ejemplos en bemodel/tests/data)
 	mv e4h_medianeras.json bemodel/tests/data/e4h_medianeras.json
 	mv caso_a.json bemodel/tests/data/caso_a.json
