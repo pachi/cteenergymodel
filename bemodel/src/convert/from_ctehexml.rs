@@ -4,7 +4,11 @@
 
 //! Conversión desde CtehexmlData a cte::Model
 
-use std::{collections::BTreeMap, convert::TryFrom, convert::TryInto};
+use std::{
+    collections::{BTreeMap, HashSet},
+    convert::TryFrom,
+    convert::TryInto,
+};
 
 use anyhow::{anyhow, bail, format_err, Error};
 use nalgebra::{point, Point3, Rotation2, Rotation3, Translation3, Vector3};
@@ -63,10 +67,13 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let othershades = shades_from_bdl(bdl);
         shades.extend_from_slice(&othershades);
         let thermal_bridges = thermal_bridges_from_bdl(bdl);
-        let materials = materials_from_bdl(bdl);
-        let wallcons = wallcons_from_bdl(&walls, &materials, bdl)?;
+        let mut materials = materials_from_bdl(bdl);
+        let (wallcons, used_material_ids) = wallcons_from_bdl(&walls, &materials, bdl)?;
         let wincons = windowcons_from_bdl(bdl)?;
         let spaces = spaces_from_bdl(bdl)?;
+        
+        // Purgamos materiales no usados
+        materials.retain(|v| used_material_ids.contains(&v.id));
 
         // Cambia referencias a nombres por id's
         let spaceids = spaces
@@ -606,7 +613,7 @@ fn wallcons_from_bdl(
     walls: &[Wall],
     materials: &[Material],
     bdl: &Data,
-) -> Result<Vec<WallCons>, Error> {
+) -> Result<(Vec<WallCons>, HashSet<Uuid>), Error> {
     let mut wcnames = walls
         .iter()
         .map(|w| w.cons.clone())
@@ -619,6 +626,7 @@ fn wallcons_from_bdl(
         .map(|m| (&m.name, &m.id))
         .collect::<BTreeMap<&String, &Uuid>>();
 
+    let mut used_material_ids = HashSet::new();
     let mut wclist = Vec::with_capacity(wcnames.len());
     for wcons in &wcnames {
         match bdl.db.wallcons.get(wcons) {
@@ -629,6 +637,7 @@ fn wallcons_from_bdl(
                 for mat_name in &cons.material {
                     if let Some(id) = name_to_id.get(mat_name).cloned() {
                         ids.push(id.clone());
+                        used_material_ids.insert(id.clone());
                     } else {
                         return Err(format_err!(
                             "ERROR: No se ha encontrado el id del material: {}",
@@ -670,7 +679,7 @@ fn wallcons_from_bdl(
             }
         };
     }
-    Ok(wclist)
+    Ok((wclist, used_material_ids))
 }
 
 /// Construcciones de huecos a partir de datos BDL

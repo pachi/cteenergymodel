@@ -34,9 +34,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 - El perímetro expuesto se podría eliminar de bemodel/space, calculándolo como en bdl/space l.110 a partir de los muros y suelos
   - parte del perímetro que tiene muros con el exterior
 - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
-- Incorporar en construcciones la composición de capas (capas: Vec<(String, f32)>)
-- Incorporar datos de materiales para poder calcular U de composiciones
-  - Necesita biblioteca base en Rust para interpretar construcciones:
+- Crear biblioteca base de materiales en Rust para interpretar construcciones:
   - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 
 ### Chequeos de modelo
