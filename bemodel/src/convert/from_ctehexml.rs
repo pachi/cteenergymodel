@@ -146,7 +146,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             rn_perim_insulation,
         };
 
-        Ok(Model {
+        let mut model = Model {
             meta,
             walls,
             windows,
@@ -157,7 +157,9 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             wallcons,
             materials,
             extra: None,
-        })
+        };
+        model.update_fshobst();
+        Ok(model)
     }
 }
 
@@ -334,15 +336,6 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
         let id = uuid_from_obj(win);
         let wall = walls.iter().find(|w| w.name == win.wall).unwrap();
 
-        // TODO: Calcular fshobst teniendo en cuenta algo más que el setback
-        let fshobst = fshobst_for_setback(
-            wall.geometry.tilt,
-            wall.geometry.azimuth,
-            win.width,
-            win.height,
-            win.setback,
-        );
-
         // Definición del hueco
         let window = Window {
             id,
@@ -350,7 +343,8 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
             cons: win.cons.to_string(),
             wall: win.wall.clone(),
             area: fround2(win.width * win.height),
-            fshobst: fround2(fshobst),
+            // XXX: Usamos un valor por defecto ya que al final se actualiza con model.update_fshobst()
+            fshobst: 1.0,
             geometry: WindowGeometry {
                 position: Some(point![win.x, win.y]),
                 width: win.width,
@@ -731,158 +725,4 @@ fn windowcons_from_bdl(bdl: &Data) -> Result<Vec<WindowCons>, Error> {
                 })
         })
         .collect::<Result<Vec<_>, _>>()
-}
-
-/// Factor de obstáculos remotos (Fshobst) en función del retranqueo, orientación y geometría del hueco
-/// Se calcula, para huecos verticales, de acuerdo a la tabla 17 del DA DB-HE/1 (p. 19).
-/// Es un cálculo best-effort. Podríamos mejorarlo implementando la 52016-1 pero lo puede personalizar el usuario luego
-pub fn fshobst_for_setback(tilt: f32, azimuth: f32, width: f32, height: f32, setback: f32) -> f32 {
-    use Orientation::*;
-    use Tilt::*;
-
-    // Calcular según orientación e inclinación
-    let rh = setback / height;
-    let rw = setback / width;
-    match tilt.into() {
-        // Elementos verticales - Tabla 17 del DA DB-HE/1 (p.19)
-        SIDE => {
-            let range_rh = if rh < 0.05 {
-                0
-            } else if rh <= 0.1 {
-                1
-            } else if rh <= 0.2 {
-                2
-            } else if rh <= 0.5 {
-                3
-            } else {
-                4
-            };
-            let range_rw = if rw < 0.05 {
-                0
-            } else if rw <= 0.1 {
-                1
-            } else if rw <= 0.2 {
-                2
-            } else if rw <= 0.5 {
-                3
-            } else {
-                4
-            };
-            match azimuth.into() {
-                S => match (range_rh, range_rw) {
-                    (1, 1) => 0.82,
-                    (1, 2) => 0.74,
-                    (1, 3) => 0.62,
-                    (1, 4) => 0.39,
-                    (2, 1) => 0.76,
-                    (2, 2) => 0.67,
-                    (2, 3) => 0.56,
-                    (2, 4) => 0.35,
-                    (3, 1) => 0.56,
-                    (3, 2) => 0.51,
-                    (3, 3) => 0.39,
-                    (3, 4) => 0.27,
-                    (4, 1) => 0.35,
-                    (4, 2) => 0.32,
-                    (4, 3) => 0.27,
-                    (4, 4) => 0.17,
-                    _ => 1.0,
-                },
-                SE | SW => match (range_rh, range_rw) {
-                    (1, 1) => 0.86,
-                    (1, 2) => 0.81,
-                    (1, 3) => 0.72,
-                    (1, 4) => 0.51,
-                    (2, 1) => 0.79,
-                    (2, 2) => 0.74,
-                    (2, 3) => 0.66,
-                    (2, 4) => 0.47,
-                    (3, 1) => 0.59,
-                    (3, 2) => 0.56,
-                    (3, 3) => 0.47,
-                    (3, 4) => 0.36,
-                    (4, 1) => 0.38,
-                    (4, 2) => 0.36,
-                    (4, 3) => 0.32,
-                    (4, 4) => 0.23,
-                    _ => 1.0,
-                },
-                E | W => match (range_rh, range_rw) {
-                    (1, 1) => 0.91,
-                    (1, 2) => 0.87,
-                    (1, 3) => 0.81,
-                    (1, 4) => 0.65,
-                    (2, 1) => 0.86,
-                    (2, 2) => 0.82,
-                    (2, 3) => 0.76,
-                    (2, 4) => 0.61,
-                    (3, 1) => 0.71,
-                    (3, 2) => 0.68,
-                    (3, 3) => 0.61,
-                    (3, 4) => 0.51,
-                    (4, 1) => 0.53,
-                    (4, 2) => 0.51,
-                    (4, 3) => 0.48,
-                    (4, 4) => 0.39,
-                    _ => 1.0,
-                },
-                _ => 1.0,
-            }
-        }
-        TOP => {
-            // Elementos horizontales: tabla 19 DA DB-HE/1 p.19
-            let range_rh = if rh <= 0.1 {
-                0
-            } else if rh <= 0.5 {
-                1
-            } else if rh <= 1.0 {
-                2
-            } else if rh <= 2.0 {
-                3
-            } else if rh <= 5.0 {
-                4
-            } else {
-                5
-            };
-            let range_rw = if rw <= 0.1 {
-                0
-            } else if rw <= 0.5 {
-                1
-            } else if rw <= 1.0 {
-                2
-            } else if rw <= 2.0 {
-                3
-            } else if rw <= 5.0 {
-                4
-            } else {
-                5
-            };
-            let rmin = i32::min(range_rh, range_rw);
-            let rmax = i32::max(range_rh, range_rw);
-            match (rmax, rmin) {
-                (0, 0) => 0.42,
-                (1, 0) => 0.43,
-                (1, 1) => 0.46,
-                (2, 0) => 0.43,
-                (2, 1) => 0.48,
-                (2, 2) => 0.52,
-                (3, 0) => 0.43,
-                (3, 1) => 0.50,
-                (3, 2) => 0.55,
-                (3, 3) => 0.60,
-                (4, 0) => 0.44,
-                (4, 1) => 0.51,
-                (4, 2) => 0.58,
-                (4, 3) => 0.66,
-                (4, 4) => 0.75,
-                (5, 0) => 0.44,
-                (5, 1) => 0.52,
-                (5, 2) => 0.59,
-                (5, 3) => 0.68,
-                (5, 4) => 0.79,
-                _ => 0.85,
-            }
-        }
-        BOTTOM => 1.0,
-    }
 }
