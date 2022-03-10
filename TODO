@@ -1,6 +1,6 @@
 # TAREAS PENDIENTES
 
-- Eliminar A de huecos y de muros
+- Eliminar A de huecos y de muros y calcular en bemodel::energy::indicators(), usándolo para luego calcular U
 - Convertir UValues a AUValues en IndicatorsReport
 - Separar check de cálculo energético
 - generar UUID reproducibles, con rnd y una semilla para generar los UUID. <https://stackoverflow.com/a/56757552>, <https://github.com/uuid-rs/uuid/issues/100>
