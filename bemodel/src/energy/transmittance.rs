@@ -17,7 +17,7 @@ use std::{collections::HashMap, f32::consts::PI};
 use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 
-use crate::{BoundaryType, Model, SpaceType, ThermalBridgeKind, Tilt, Wall, Window};
+use crate::{BoundaryType, Model, SpaceType, ThermalBridgeKind, Tilt, Wall, Window, Uuid};
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
 const RSI_ASCENDENTE: f32 = 0.10;
@@ -31,12 +31,12 @@ const LAMBDA_INS: f32 = 0.035;
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 /// Reporte de cálculo de las transmitancias de los elementos
 /// TODO: cambiar a ElementProps, no separar muros y huecos, e incluir
-/// TODO: si el elemento pertenece o no a la ET ElementProps{walls: {id: String, ElementData {et: bool, a: f32, u: Option<f32>}}}
+/// TODO: si el elemento pertenece o no a la ET ElementProps{walls: {id: Uuid, ElementData {et: bool, a: f32, u: Option<f32>}}}
 pub struct UValues {
     /// U de muros
-    pub walls: HashMap<String, Option<f32>>,
+    pub walls: HashMap<Uuid, Option<f32>>,
     /// U de huecos
-    pub windows: HashMap<String, Option<f32>>,
+    pub windows: HashMap<Uuid, Option<f32>>,
 }
 
 /// Reporte de cálculo de K (HE2019)
@@ -278,12 +278,12 @@ impl Model {
 
     /// Diccionario de transmitancias de elementos del modelo (walls, windows) según id
     pub fn u_values(&self) -> UValues {
-        let wallsmap: HashMap<String, Option<f32>> = self
+        let wallsmap: HashMap<Uuid, Option<f32>> = self
             .walls
             .iter()
             .map(|w| (w.id.clone(), self.u_for_wall(w)))
             .collect();
-        let windowsmap: HashMap<String, Option<f32>> = self
+        let windowsmap: HashMap<Uuid, Option<f32>> = self
             .windows
             .iter()
             .map(|w| (w.id.clone(), self.u_for_window(w)))
