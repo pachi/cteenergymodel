@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::{Point2, Uuid};
+use super::{vector, HasSurface, Point2, Uuid, Vector3};
 
 // Elementos -----------------------------------------------
 
@@ -52,5 +52,22 @@ impl Default for WindowGeometry {
             width: 1.0,
             setback: 0.0,
         }
+    }
+}
+
+impl HasSurface for WindowGeometry {
+    /// Vector unitario normal a la geometría
+    fn normal(&self) -> Vector3 {
+        vector![0.0, 0.0, 1.0]
+    }
+
+    /// Superficie del hueco, m²
+    fn area(&self) -> f32 {
+        self.width * self.height
+    }
+
+    /// Perímetro del hueco, m
+    fn perimeter(&self) -> f32 {
+        2.0 * (self.width + self.height)
     }
 }
