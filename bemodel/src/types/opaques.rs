@@ -37,7 +37,7 @@ pub struct Wall {
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
     pub nextto: Option<Uuid>,
     /// Geometría del elemento opaco
-    pub geometry: Geometry,
+    pub geometry: WallGeometry,
 }
 
 /// Convierte de muro a enum Tilt
@@ -65,12 +65,12 @@ pub struct Shade {
     /// Nombre del elemento opaco
     pub name: String,
     /// Geometría del elemento opaco
-    pub geometry: Geometry,
+    pub geometry: WallGeometry,
 }
 
 /// Geometría de muro
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct Geometry {
+pub struct WallGeometry {
     /// Inclinación (beta) [0, 180]
     /// Ángulo con la vertical (0 -> suelo, 180 -> techo)
     pub tilt: f32,
@@ -86,7 +86,7 @@ pub struct Geometry {
     pub polygon: Polygon,
 }
 
-impl Geometry {
+impl WallGeometry {
     /// Matriz de transformación de coordenadas locales a coordenadas globales
     /// Traslada de coordenadas de opaco / sombra a coordenadas globales (giros y desplazamientos)
     pub fn to_global_coords_matrix(&self) -> Option<IsometryMatrix3<f32>> {
@@ -113,7 +113,7 @@ impl Geometry {
     }
 }
 
-impl HasSurface for Geometry {
+impl HasSurface for WallGeometry {
     /// Vector unitario normal a la geometría, en coordenadas globales
     fn normal(&self) -> Option<Vector3> {
         // Normal al polígono plano, en coordenadas locales

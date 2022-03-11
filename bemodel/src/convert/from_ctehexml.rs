@@ -20,8 +20,8 @@ use hulc::{
 };
 
 pub use crate::{
-    BoundaryType, Geometry, MatProps, Material, Meta, Model, Orientation, Shade, Space, SpaceType,
-    ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, Window, WindowCons,
+    BoundaryType, MatProps, Material, Meta, Model, Orientation, Shade, Space, SpaceType,
+    ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeometry, Window, WindowCons,
     WindowGeometry,
 };
 
@@ -71,7 +71,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let (wallcons, used_material_ids) = wallcons_from_bdl(&walls, &materials, bdl)?;
         let wincons = windowcons_from_bdl(bdl)?;
         let spaces = spaces_from_bdl(bdl)?;
-        
+
         // Purgamos materiales no usados
         materials.retain(|v| used_material_ids.contains(&v.id));
 
@@ -205,7 +205,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
 ///
 /// El polígono 3D del muro se obtiene a partir de los datos de muro y del espacio
 /// Para cada nivel, primero se gira el azimuth y luego se desplaza x, y, z
-fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
+fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
     let space_polygon = &space.polygon;
     let global_deviation = global_deviation_from_north(bdl);
@@ -293,7 +293,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> Geometry {
     let azimuth = fround2(orientation_bdl_to_52016(
         global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
     ));
-    Geometry {
+    WallGeometry {
         azimuth,
         tilt,
         position: Some(position),
@@ -374,7 +374,7 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
 
             // Alero sobre el hueco
             if let Some(overhang) = &win.overhang {
-                let geometry = Geometry {
+                let geometry = WallGeometry {
                     // inclinación: overhang.angle (0 es paralelo al hueco y 90 es perpendicular al hueco)
                     tilt: wall.geometry.tilt - overhang.angle,
                     azimuth: wall.geometry.azimuth,
@@ -398,7 +398,7 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
 
             // Aleta izquierda
             if let Some(lfin) = &win.left_fin {
-                let geometry = Geometry {
+                let geometry = WallGeometry {
                     tilt: wall.geometry.tilt,
                     azimuth: wall.geometry.azimuth - 90.0,
                     position: Some(
@@ -420,7 +420,7 @@ fn windows_from_bdl(walls: &[Wall], bdl: &Data) -> (Vec<Window>, Vec<Shade>) {
 
             // Aleta derecha
             if let Some(rfin) = &win.right_fin {
-                let geometry = Geometry {
+                let geometry = WallGeometry {
                     tilt: wall.geometry.tilt,
                     azimuth: wall.geometry.azimuth - 90.0,
                     position: Some(
@@ -573,7 +573,7 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
             Some(Shade {
                 id,
                 name,
-                geometry: Geometry {
+                geometry: WallGeometry {
                     tilt,
                     azimuth,
                     position,

@@ -26,11 +26,11 @@ use crate::utils::{fround2, uuid_from_str};
 
 pub use common::{BoundaryType, Orientation, Tilt, Uuid};
 pub use constructions::{WallCons, WindowCons};
-pub use geometry::{Point2, Point3, Polygon, Vector2, Vector3, HasSurface};
+pub use geometry::{HasSurface, Point2, Point3, Polygon, Vector2, Vector3};
 pub use materials::{MatProps, Material};
 pub use meta::Meta;
 pub use model::{ExtraData, Model};
-pub use opaques::{Geometry, Shade, Wall};
+pub use opaques::{Shade, Wall, WallGeometry};
 pub use reporting::{Warning, WarningLevel};
 pub use space::{Space, SpaceType};
 pub use thermalbridge::{ThermalBridge, ThermalBridgeKind};

@@ -7,11 +7,11 @@
 // use log::{debug, info, warn};
 
 use super::{Bounded, Intersectable, Ray, AABB};
-use crate::{point, Geometry, HasSurface};
+use crate::{point, HasSurface, WallGeometry};
 
 // -------------------------- Funciones auxiliares ---------------------------
 
-impl Intersectable for Geometry {
+impl Intersectable for WallGeometry {
     /// Calcula la intersección entre rayo y geometría, e indica el factor t en la dirección del rayo
     ///
     /// ray_origin: punto de origen del rayo en coordenadas globales (Vector3)
@@ -27,7 +27,7 @@ impl Intersectable for Geometry {
     }
 }
 
-impl Bounded for Geometry {
+impl Bounded for WallGeometry {
     fn aabb(&self) -> AABB {
         if let Some(trans) = self.to_global_coords_matrix() {
             let mut min_x = f32::INFINITY;

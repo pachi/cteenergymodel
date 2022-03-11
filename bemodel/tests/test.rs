@@ -5,7 +5,7 @@
 use bemodel::{
     climatedata,
     energy::{ray_dir_to_sun, Intersectable, Ray, AABB},
-    Geometry, Model, Window,
+    Model, WallGeometry, Window,
 };
 use nalgebra::{point, vector};
 
@@ -140,7 +140,7 @@ fn intersections() {
     init();
 
     // Horizontal
-    let geom1 = Geometry {
+    let geom1 = WallGeometry {
         tilt: 0.0,
         azimuth: 0.0,
         position: Some(point![0.0, 0.0, 0.0]),
@@ -153,7 +153,7 @@ fn intersections() {
     };
 
     // Vertical a Sur
-    let geom2 = Geometry {
+    let geom2 = WallGeometry {
         tilt: 90.0,
         azimuth: 0.0,
         position: Some(point![0.0, 0.0, 0.0]),
@@ -166,7 +166,7 @@ fn intersections() {
     };
 
     // Vertical a Este
-    let geom3 = Geometry {
+    let geom3 = WallGeometry {
         tilt: 90.0,
         azimuth: 90.0,
         position: Some(point![0.0, 0.0, 0.0]),
@@ -179,7 +179,7 @@ fn intersections() {
     };
 
     // Vertical sur
-    let geom4 = Geometry {
+    let geom4 = WallGeometry {
         tilt: 90.0,
         azimuth: 0.0,
         position: Some(point![9.11, 0.0, 9.5]),

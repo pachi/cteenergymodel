@@ -11,8 +11,8 @@ use log::{info, warn};
 use serde::{Deserialize, Serialize};
 
 use super::{
-    fround2, uuid_from_str, BoundaryType, Geometry, Material, Meta, Shade, Space, SpaceType,
-    ThermalBridge, Tilt, Wall, WallCons, Window, WindowCons,
+    fround2, uuid_from_str, BoundaryType, Material, Meta, Shade, Space, SpaceType, ThermalBridge,
+    Tilt, Wall, WallCons, WallGeometry, Window, WindowCons,
 };
 
 // ---------- Estructura general de datos --------------
@@ -334,7 +334,7 @@ fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(St
     let overhang = Shade {
         id: uuid_from_str(&format!("{}-top_setback", win.id)),
         name: format!("{}_top_setback", win.name),
-        geometry: Geometry {
+        geometry: WallGeometry {
             // inclinación: con 90º es perpendicular al hueco
             tilt: wall.geometry.tilt + 90.0,
             azimuth: wall.geometry.azimuth,
@@ -351,7 +351,7 @@ fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(St
     let left_fin = Shade {
         id: uuid_from_str(&format!("{}-left_setback", win.id)),
         name: format!("{}_left_setback", win.name),
-        geometry: Geometry {
+        geometry: WallGeometry {
             tilt: wall.geometry.tilt,
             azimuth: wall.geometry.azimuth + 90.0,
             position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
@@ -367,7 +367,7 @@ fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(St
     let right_fin = Shade {
         id: uuid_from_str(&format!("{}-right_setback", win.id)),
         name: format!("{}_right_setback", win.name),
-        geometry: Geometry {
+        geometry: WallGeometry {
             tilt: wall.geometry.tilt,
             azimuth: wall.geometry.azimuth - 90.0,
             position: Some(wall2world * point![wpos.x + wing.width, wpos.y + wing.height, 0.0]),
@@ -383,7 +383,7 @@ fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(St
     let sill = Shade {
         id: uuid_from_str(&format!("{}-sill_setback", win.id)),
         name: format!("{}_sill_setback", win.name),
-        geometry: Geometry {
+        geometry: WallGeometry {
             tilt: wall.geometry.tilt - 90.0,
             azimuth: wall.geometry.azimuth,
             position: Some(wall2world * point![wpos.x, wpos.y, 0.0]),
