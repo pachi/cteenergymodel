@@ -253,8 +253,7 @@ impl Model {
 
         // Elementos sin definición geométrica completa. No podemos calcular las obstrucciones
         let geometry = &window_wall.geometry;
-        let normal = window_wall.geometry.normal();
-        if geometry.position.is_none() || normal.is_none() {
+        if geometry.position.is_none() {
             warn!(
                 "Hueco {} (id: {}) sin definición geométrica completa. Se considera superficie soleada al 100%",
                 window.name, window.id
@@ -264,7 +263,7 @@ impl Model {
 
         // Comprobamos que la normal del muro y el rayo hacia el sol no son opuestos (backface culling)
         // Si no, el rayo iría al interior del hueco, está en sombra, y devolvemos 0.0
-        if normal.unwrap().dot(ray_dir) < 0.01 {
+        if window_wall.geometry.normal().dot(ray_dir) < 0.01 {
             return 0.0;
         }
 
@@ -310,7 +309,7 @@ impl Model {
             .map(|e| Occluder {
                 id: e.id.clone(),
                 linked_to_id: None,
-                normal: e.geometry.polygon.normal().unwrap(),
+                normal: e.geometry.polygon.normal(),
                 trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
                 polygon: e.geometry.polygon.clone(),
                 aabb: e.geometry.aabb(),
@@ -319,7 +318,7 @@ impl Model {
         occluders.extend(self.shades.iter().map(|e| Occluder {
             id: e.id.clone(),
             linked_to_id: None,
-            normal: e.geometry.polygon.normal().unwrap(),
+            normal: e.geometry.polygon.normal(),
             trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),
             aabb: e.geometry.aabb(),
@@ -327,7 +326,7 @@ impl Model {
         occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
             id: e.id.clone(),
             linked_to_id: Some(wid.into()),
-            normal: e.geometry.polygon.normal().unwrap(),
+            normal: e.geometry.polygon.normal(),
             trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),
             aabb: e.geometry.aabb(),

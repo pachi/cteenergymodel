@@ -18,12 +18,12 @@ impl Intersectable for WallGeometry {
     /// ray_dir: dirección del rayo en coordenadas globales (Vector3)
     ///
     /// Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
+    /// Comprueba la intersección transformando el rayo con la transformación inversa de la geometría
     fn intersects(&self, ray: &Ray) -> Option<f32> {
         // Matrices de transformación de geometría
         let trans_inv = self.to_global_coords_matrix().map(|m| m.inverse());
         // Normal to the planar polygon
-        let n_p = &self.polygon.normal().unwrap();
-        ray.intersects_with_data(&self.polygon, trans_inv.as_ref(), n_p)
+        ray.intersects_with_data(&self.polygon, trans_inv.as_ref(), &self.polygon.normal())
     }
 }
 

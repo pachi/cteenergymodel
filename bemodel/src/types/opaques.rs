@@ -115,18 +115,18 @@ impl WallGeometry {
 
 impl HasSurface for WallGeometry {
     /// Vector unitario normal a la geometría, en coordenadas globales
-    fn normal(&self) -> Option<Vector3> {
-        // Normal al polígono plano, en coordenadas locales
-        let n_p = self.polygon.normal().unwrap();
+    fn normal(&self) -> Vector3 {
         let zrot = Rotation3::new(Vector3::z() * self.azimuth.to_radians());
         let xrot = Rotation3::new(Vector3::x() * self.tilt.to_radians());
-        Some(zrot * xrot * n_p)
+        zrot * xrot * self.polygon.normal()
     }
 
+    /// Superficie bruta del opaco, m²
     fn area(&self) -> f32 {
         self.polygon.area()
     }
 
+    /// Perímetro del opaco, m
     fn perimeter(&self) -> f32 {
         self.polygon.perimeter()
     }

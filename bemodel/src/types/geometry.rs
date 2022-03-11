@@ -18,7 +18,7 @@ pub trait HasSurface {
     /// Perímetro (m)
     fn perimeter(&self) -> f32;
     /// Vector unitario normal al plano
-    fn normal(&self) -> Option<Vector3>;
+    fn normal(&self) -> Vector3;
 }
 
 impl HasSurface for Polygon {
@@ -56,17 +56,21 @@ impl HasSurface for Polygon {
     }
 
     /// Vector unitario normal al polígono plano, en coordenadas locales del polígono
-    fn normal(&self) -> Option<Vector3> {
+    fn normal(&self) -> Vector3 {
         if self.len() < 3 {
-            return None;
+            return vector![0.0, 0.0, 1.0];
         };
         let v0 = self[1] - self[0];
         let v1 = self[2] - self[0];
 
-        Some(
-            vector![v0.x, v0.y, 0.0]
-                .cross(&vector![v1.x, v1.y, 0.0])
-                .normalize(),
-        )
+        // normal
+        // let n = vector![v0.x, v0.y, 0.0].cross(&vector![v1.x, v1.y, 0.0]).normalize();
+        // Desarrollando el determinante por la fila 3 -> x=0, y= 0, z es 1 o -1 según signo del adjunto superior
+        // assert!(n.x == n2.x && n.y == n2.y && n.z == n2.z);
+        if v0.x * v1.y >= v0.y * v1.x {
+            vector![0.0, 0.0, 1.0]
+        } else {
+            vector![0.0, 0.0, -1.0]
+        }
     }
 }
