@@ -19,7 +19,6 @@ mod occluder;
 mod radiation;
 mod ray;
 mod transmittance;
-mod utils;
 
 pub use aabb::AABB;
 pub use bvh::{Bounded, Intersectable, BVH};
@@ -55,6 +54,8 @@ impl IndicatorsReport {
 pub fn indicators(model: &Model) -> IndicatorsReport {
     let climatezone = model.meta.climate;
     let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
+    // TODO: calcula aquí las áreas de huecos y muros y guardar, luego pasar a u_values
+    // Ver si también se calculan las R_intrinseca de las construcciones
     IndicatorsReport {
         area_ref: model.a_ref(),
         compacity: model.compacity(),

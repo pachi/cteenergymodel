@@ -6,7 +6,7 @@ use nalgebra::IsometryMatrix3;
 
 use super::{Bounded, Intersectable, Ray, AABB};
 
-use crate::{Point2, Vector3};
+use crate::{Polygon, Vector3};
 
 /// Elemento oclusor, con información geométrica e identificación
 ///
@@ -23,7 +23,7 @@ pub struct Occluder {
     /// Matriz de transformación de coordenadas globales a locales de polígono
     pub trans_matrix: Option<IsometryMatrix3<f32>>,
     /// Polígono 2D
-    pub polygon: Vec<Point2>,
+    pub polygon: Polygon,
     /// AABB (min, max)
     pub aabb: AABB,
 }

@@ -5,49 +5,11 @@
 //! Implementación de los traits Bounded e Intersectable para Geometry
 
 // use log::{debug, info, warn};
-use nalgebra::{
-    IsometryMatrix2, IsometryMatrix3, Rotation2, Rotation3, Translation2, Translation3,
-};
 
-use super::{utils::poly_normal, Bounded, Intersectable, Ray, AABB};
-use crate::{point, Geometry, Vector2, Vector3};
+use super::{Bounded, Intersectable, Ray, AABB};
+use crate::{point, Geometry, HasSurface};
 
 // -------------------------- Funciones auxiliares ---------------------------
-
-impl Geometry {
-    /// Vector unitario normal a la geometría, en coordenadas globales
-    pub fn normal(&self) -> Vector3 {
-        let n_p = poly_normal(&self.polygon);
-        let zrot = Rotation3::new(Vector3::z() * self.azimuth.to_radians());
-        let xrot = Rotation3::new(Vector3::x() * self.tilt.to_radians());
-        zrot * xrot * n_p
-    }
-
-    /// Matriz de transformación de coordenadas locales a coordenadas globales
-    /// Traslada de coordenadas de opaco / sombra a coordenadas globales (giros y desplazamientos)
-    pub fn to_global_coords_matrix(&self) -> Option<IsometryMatrix3<f32>> {
-        let trans = Translation3::from(self.position?);
-        let zrot = Rotation3::new(Vector3::z() * self.azimuth.to_radians());
-        let xrot = Rotation3::new(Vector3::x() * self.tilt.to_radians());
-
-        Some(trans * zrot * xrot)
-    }
-
-    /// Matriz de transformación de coordenadas locales de la geometría a coordenadas de polígono interno 2D
-    /// Se gira el eje X en la dirección del polígono de muro p1 - p0 y se traslada a p0 el origen
-    pub fn to_polygon_coords_matrix(&self) -> Option<IsometryMatrix2<f32>> {
-        if self.polygon.len() <= 2 {
-            return None;
-        };
-        let v0 = self.polygon[0];
-        let v1 = self.polygon[1];
-        let dir_x = v1 - v0;
-        let rot = Rotation2::rotation_between(&Vector2::x(), &dir_x);
-        let trans = Translation2::from(v0);
-
-        Some(trans * rot)
-    }
-}
 
 impl Intersectable for Geometry {
     /// Calcula la intersección entre rayo y geometría, e indica el factor t en la dirección del rayo
@@ -60,7 +22,7 @@ impl Intersectable for Geometry {
         // Matrices de transformación de geometría
         let trans_inv = self.to_global_coords_matrix().map(|m| m.inverse());
         // Normal to the planar polygon
-        let n_p = &poly_normal(&self.polygon);
+        let n_p = &self.polygon.normal().unwrap();
         ray.intersects_with_data(&self.polygon, trans_inv.as_ref(), n_p)
     }
 }
