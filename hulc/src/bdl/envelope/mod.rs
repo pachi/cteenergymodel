@@ -26,3 +26,10 @@ pub use space::Space;
 pub use thermalbridge::ThermalBridge;
 pub use walls::{BoundaryType, Tilt, Wall};
 pub use window::Window;
+
+/// Punto 2D
+pub type Point2 = nalgebra::Point2<f32>;
+/// Punto 2D
+pub type Point3 = nalgebra::Point3<f32>;
+/// Punto 2D
+pub type Vector2 = nalgebra::Vector2<f32>;

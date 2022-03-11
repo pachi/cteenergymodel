@@ -12,14 +12,15 @@ use std::{convert::TryFrom, f32::consts::FRAC_PI_2};
 
 use anyhow::{bail, Error};
 
-use nalgebra::{point, Matrix2, Point2, Point3, Rotation2, Vector2};
+use nalgebra::{point, Matrix2, Rotation2};
 
 use crate::bdl::BdlBlock;
 use crate::utils::normalize;
+use super::{Point2, Point3, Vector2};
 
 /// Polígono - conjunto de vértices 2D
 #[derive(Debug, Clone, Default)]
-pub struct Polygon(pub Vec<Point2<f32>>);
+pub struct Polygon(pub Vec<Point2>);
 
 impl Polygon {
     /// Área del polígono definido por vértices (m2)
@@ -65,7 +66,7 @@ impl Polygon {
 
     /// Vértices del lado que empieza en el vértice con el nombre indicdo (Vnn)
     /// El lado que empieza en el último vértice continua en el vértice inicial
-    pub fn edge_vertices(&self, vertexname: &str) -> Option<[&Point2<f32>; 2]> {
+    pub fn edge_vertices(&self, vertexname: &str) -> Option<[&Point2; 2]> {
         let num_vertex: usize = vertexname
             .strip_prefix('V')
             .map(str::parse::<usize>)
@@ -95,8 +96,8 @@ impl Polygon {
             .unwrap_or(0.0)
     }
 
-    /// Devuelve copia como Vec<Point2<f32>>
-    pub fn as_vec(&self) -> Vec<Point2<f32>> {
+    /// Devuelve copia como Vec<Point2>
+    pub fn as_vec(&self) -> Vec<Point2> {
         self.0.clone()
     }
 
@@ -155,14 +156,14 @@ impl TryFrom<BdlBlock> for Polygon {
 /// ```text
 ///     ( 14.97, 11.39 )
 /// ```
-pub fn point2_from_str(s: &str) -> Result<Point2<f32>, Error> {
+pub fn point2_from_str(s: &str) -> Result<Point2, Error> {
     if let [x, y] = s
         .split(',')
         .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
         .collect::<Vec<_>>()
         .as_slice()
     {
-        Ok(point![x.parse::<f32>()?, y.parse::<f32>()?])
+        Ok(point![x.parse()?, y.parse()?])
     } else {
         bail!("Fallo al generar punto 2D con los datos '{}'", s)
     }
@@ -174,18 +175,14 @@ pub fn point2_from_str(s: &str) -> Result<Point2<f32>, Error> {
 /// ```text
 ///     ( 14.97, 11.39, 2.0 )
 /// ```
-pub fn point3_from_str(s: &str) -> Result<Point3<f32>, Error> {
+pub fn point3_from_str(s: &str) -> Result<Point3, Error> {
     if let [x, y, z] = s
         .split(',')
         .map(|v| v.trim_matches(&[' ', '(', ')'] as &[_]))
         .collect::<Vec<_>>()
         .as_slice()
     {
-        Ok(point![
-            x.parse::<f32>()?,
-            y.parse::<f32>()?,
-            z.parse::<f32>()?
-        ])
+        Ok(point![x.parse()?, y.parse()?, z.parse()?])
     } else {
         bail!("Fallo al generar punto 3D con los datos '{}'", s)
     }
