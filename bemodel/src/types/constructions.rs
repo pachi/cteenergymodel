@@ -21,7 +21,7 @@ pub struct WallCons {
     pub group: String,
     /// Capas que forman la construcción de opaco, como lista de tuplas (material, espesor)
     #[serde(default)]
-    pub layers: Vec<(String, f32)>,
+    pub layers: Vec<Layer>,
     /// Grosor del elemento (m) [0.0-]
     pub thickness: f32,
     /// Resistencia térmica total sin resistencias superficiales (resistencia intrínseca) [m2K/W]
@@ -29,6 +29,15 @@ pub struct WallCons {
     pub r_intrinsic: f32,
     /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
     pub absorptance: f32,
+}
+
+/// Definición de capa de opaco
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct Layer {
+    /// ID del material
+    pub id: Uuid,
+    /// Espesor, m
+    pub e: f32,
 }
 
 /// Definición de construcción de hueco o lucernario

@@ -25,7 +25,7 @@ mod window;
 use crate::utils::{fround2, uuid_from_str};
 
 pub use common::{BoundaryType, Orientation, Tilt, Uuid};
-pub use constructions::{WallCons, WindowCons};
+pub use constructions::{WallCons, WindowCons, Layer};
 pub use geometry::{HasSurface, Point2, Point3, Polygon, Vector2, Vector3};
 pub use materials::{MatProps, Material};
 pub use meta::Meta;

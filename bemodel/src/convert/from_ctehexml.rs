@@ -20,7 +20,7 @@ use hulc::{
 };
 
 pub use crate::{
-    BoundaryType, MatProps, Material, Meta, Model, Orientation, Shade, Space, SpaceType,
+    BoundaryType, Layer, MatProps, Material, Meta, Model, Orientation, Shade, Space, SpaceType,
     ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeometry, Window, WindowCons,
     WindowGeometry,
 };
@@ -649,6 +649,7 @@ fn wallcons_from_bdl(
                     .iter()
                     .cloned()
                     .zip(cons.thickness.iter().cloned())
+                    .map(|(id, e)| Layer { id, e })
                     .collect();
 
                 let r = match cons.r_intrinsic(&bdl.db.materials) {
