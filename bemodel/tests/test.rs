@@ -63,7 +63,7 @@ fn model_json_conversion() {
     assert_almost_eq!(n50data.n50_ref, 2.96, 0.01);
     assert_almost_eq!(n50data.walls_c_ref, 16.0, 0.01);
     assert_almost_eq!(n50data.walls_c, 16.0, 0.01);
-    assert_almost_eq!(model.vol_env_net(), 4666.05, 0.01);
+    assert_almost_eq!(model.vol_env_net(), 4672.34, 0.1);
     assert_almost_eq!(model.vol_env_gross(), 5231.0, 0.1);
 
     let json = model.as_json().unwrap();
@@ -114,11 +114,12 @@ fn model_json_unif() {
     assert_almost_eq!(model.a_ref(), 102.37, 0.01);
     assert_almost_eq!(model.compacity(), 1.36, 0.01);
     assert_almost_eq!(model.K().K, 0.62, 0.01);
-    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.59, 0.01);
+    // HULC q_sol;jul = 0.54
+    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.55, 0.01);
 
     assert_almost_eq!(n50data.n50, 6.89, 0.01);
     assert_almost_eq!(n50data.n50_ref, 6.89, 0.01);
-    assert_almost_eq!(model.vol_env_net(), 258.25, 0.01);
+    assert_almost_eq!(model.vol_env_net(), 258.10, 0.1);
     assert_almost_eq!(model.vol_env_gross(), 292.79, 0.1);
 
     model.update_fshobst();
