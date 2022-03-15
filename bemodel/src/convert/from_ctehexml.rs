@@ -11,6 +11,7 @@ use std::{
 };
 
 use anyhow::{anyhow, bail, format_err, Error};
+use indexmap::IndexMap;
 use nalgebra::{point, Point3, Rotation2, Rotation3, Translation3, Vector3};
 
 use crate::utils::{fround2, normalize, uuid_from_obj};
@@ -67,13 +68,17 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let othershades = shades_from_bdl(bdl);
         shades.extend_from_slice(&othershades);
         let thermal_bridges = thermal_bridges_from_bdl(bdl);
-        let mut materials = materials_from_bdl(bdl);
-        let (wallcons, used_material_ids) = wallcons_from_bdl(&walls, &materials, bdl)?;
+        let mut materials_vec = materials_from_bdl(bdl);
+        let (wallcons, used_material_ids) = wallcons_from_bdl(&walls, &materials_vec, bdl)?;
         let wincons = windowcons_from_bdl(bdl)?;
         let spaces = spaces_from_bdl(bdl)?;
 
         // Purgamos materiales no usados
-        materials.retain(|v| used_material_ids.contains(&v.id));
+        materials_vec.retain(|v| used_material_ids.contains(&v.id));
+        let materials: IndexMap<Uuid, Material> = materials_vec
+            .into_iter()
+            .map(|m| (m.id.clone(), m))
+            .collect();
 
         // Cambia referencias a nombres por id's
         let spaceids = spaces
@@ -601,7 +606,9 @@ fn materials_from_bdl(bdl: &Data) -> Vec<Material> {
                     vapourdiffusivity: p.vapourdiffusivity,
                 }
             } else {
-                MatProps::Resistance(material.resistance.unwrap_or_default())
+                MatProps::Resistance {
+                    resistance: material.resistance.unwrap_or_default(),
+                }
             },
         })
     }

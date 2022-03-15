@@ -16,6 +16,7 @@ climate = { path = "../climate" }
 anyhow = "1.0"
 clap = "2.34"
 exitcode = "1.1"
+indexmap = { version = "1", features = ["serde-1"] }
 log = "0.4"
 md5 = "0.7"
 nalgebra = { version="0.30", features=["serde-serialize"] }

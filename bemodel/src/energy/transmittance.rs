@@ -300,9 +300,9 @@ impl Model {
 
     /// Resistencia térmica intrínseca (sin resistencias superficiales) de una composición de capas [W/m²K]
     pub fn walcons_intrinsic_r(&self, wallcons: &WallCons) -> Result<f32, Error> {
-        let mut resistance = 0.0;
+        let mut total_resistance = 0.0;
         for Layer { id, e } in &wallcons.layers {
-            match self.materials.iter().find(|m| &m.id == id) {
+            match self.materials.get(id) {
                 None => return Err(format_err!(
                     "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
                     id,
@@ -310,8 +310,8 @@ impl Model {
                 )),
                 Some(mat) => {
                     match mat.properties {
-                        MatProps::Detailed{ conductivity, .. } if conductivity > 0.0 => resistance += e / conductivity,
-                        MatProps::Resistance(res) => resistance += res,
+                        MatProps::Detailed{ conductivity, .. } if conductivity > 0.0 => total_resistance += e / conductivity,
+                        MatProps::Resistance{ resistance} => total_resistance += resistance,
                         _ => return Err(format_err!(
                             "Material \"{}\" de la composición de capas \"{}\" con conductividad nula o casi nula",
                             mat.name,
@@ -321,7 +321,7 @@ impl Model {
                 },
             }
         }
-        Ok(resistance)
+        Ok(total_resistance)
     }
 
     /// Transmitancia térmica del hueco, U_W, en una posición dada, en W/m2K

@@ -2888,8 +2888,6 @@
           "e": 0.01
         }
       ],
-      "thickness": 0.44,
-      "R_intrinsic": 3.361,
       "absorptance": 0.6
     },
     {
@@ -2918,8 +2916,6 @@
           "e": 0.01
         }
       ],
-      "thickness": 0.22,
-      "R_intrinsic": 1.172,
       "absorptance": 0.6
     },
     {
@@ -2944,8 +2940,6 @@
           "e": 0.15
         }
       ],
-      "thickness": 0.21,
-      "R_intrinsic": 0.197,
       "absorptance": 0.6
     },
     {
@@ -2986,8 +2980,6 @@
           "e": 0.01
         }
       ],
-      "thickness": 0.36,
-      "R_intrinsic": 1.57,
       "absorptance": 0.6
     },
     {
@@ -3016,8 +3008,6 @@
           "e": 0.01
         }
       ],
-      "thickness": 0.26,
-      "R_intrinsic": 2.227,
       "absorptance": 0.6
     },
     {
@@ -3038,8 +3028,6 @@
           "e": 0.01
         }
       ],
-      "thickness": 0.14,
-      "R_intrinsic": 0.204,
       "absorptance": 0.6
     }
   ],
@@ -3060,217 +3048,151 @@
       "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
       "name": "LMmp",
       "group": "Fábricas de ladrillo",
-      "properties": {
-        "Detailed": {
-          "conductivity": 1.02,
-          "density": 2170.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
-    },
-    {
-      "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
-      "name": "MORgt1000",
-      "group": "Morteros",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.55,
-          "density": 1125.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
-    },
-    {
-      "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
-      "name": "cnv_ver_5",
-      "group": "Cámaras de aire",
-      "properties": {
-        "Resistance": 0.18
-      }
+      "conductivity": 1.02,
+      "density": 2170.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 10.0
     },
     {
       "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
       "name": "plaqCer",
       "group": "Cerámicos",
-      "properties": {
-        "Detailed": {
-          "conductivity": 1.0,
-          "density": 2000.0,
-          "specificheat": 800.0,
-          "vapourdiffusivity": 30.0
-        }
-      }
-    },
-    {
-      "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
-      "name": "LHs",
-      "group": "Fábricas de ladrillo",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.556,
-          "density": 1000.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
+      "conductivity": 1.0,
+      "density": 2000.0,
+      "specificheat": 800.0,
+      "vapourdiffusivity": 30.0
     },
     {
       "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
       "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
       "group": "Pétreos y suelos",
-      "properties": {
-        "Detailed": {
-          "conductivity": 1.1,
-          "density": 1885.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 1.0
-        }
-      }
-    },
-    {
-      "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
-      "name": "MAL",
-      "group": "Morteros",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.41,
-          "density": 1000.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
-    },
-    {
-      "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
-      "name": "LPmp_50",
-      "group": "Fábricas de ladrillo",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.68,
-          "density": 1140.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
-    },
-    {
-      "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
-      "name": "HMlt2300",
-      "group": "Hormigones",
-      "properties": {
-        "Detailed": {
-          "conductivity": 1.65,
-          "density": 2150.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 70.0
-        }
-      }
-    },
-    {
-      "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
-      "name": "EPS037",
-      "group": "Aislantes",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.037,
-          "density": 30.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 20.0
-        }
-      }
-    },
-    {
-      "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
-      "name": "betun_lamina",
-      "group": "Bituminosos",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.23,
-          "density": 1100.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 50000.0
-        }
-      }
-    },
-    {
-      "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
-      "name": "FUhal250",
-      "group": "Forjados unidireccionales",
-      "properties": {
-        "Detailed": {
-          "conductivity": 1.0,
-          "density": 1230.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 6.0
-        }
-      }
+      "conductivity": 1.1,
+      "density": 1885.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 1.0
     },
     {
       "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
       "name": "enlYlq1300",
       "group": "Enlucidos",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.57,
-          "density": 1150.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 6.0
-        }
-      }
+      "conductivity": 0.57,
+      "density": 1150.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 6.0
+    },
+    {
+      "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
+      "name": "LPmp_50",
+      "group": "Fábricas de ladrillo",
+      "conductivity": 0.68,
+      "density": 1140.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 10.0
+    },
+    {
+      "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
+      "name": "HMlt2300",
+      "group": "Hormigones",
+      "conductivity": 1.65,
+      "density": 2150.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 70.0
     },
     {
       "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
       "name": "BC140",
       "group": "Fábricas de bloque cerámico de arcilla aligerada",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.4375,
-          "density": 1170.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
+      "conductivity": 0.4375,
+      "density": 1170.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 10.0
     },
     {
-      "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
-      "name": "azulejo",
-      "group": "Cerámicos",
-      "properties": {
-        "Detailed": {
-          "conductivity": 1.3,
-          "density": 2300.0,
-          "specificheat": 840.0,
-          "vapourdiffusivity": 1e30
-        }
-      }
+      "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
+      "name": "betun_lamina",
+      "group": "Bituminosos",
+      "conductivity": 0.23,
+      "density": 1100.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 50000.0
     },
     {
-      "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
-      "name": "HAlq2300",
-      "group": "Hormigones",
-      "properties": {
-        "Detailed": {
-          "conductivity": 2.3,
-          "density": 2400.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 80.0
-        }
-      }
+      "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
+      "name": "MORgt1000",
+      "group": "Morteros",
+      "conductivity": 0.55,
+      "density": 1125.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 10.0
     },
     {
       "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
       "name": "MW_04",
       "group": "Aislantes",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.04,
-          "density": 40.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 1.0
-        }
-      }
+      "conductivity": 0.04,
+      "density": 40.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 1.0
+    },
+    {
+      "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
+      "name": "cnv_ver_5",
+      "group": "Cámaras de aire",
+      "resistance": 0.18
+    },
+    {
+      "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
+      "name": "LHs",
+      "group": "Fábricas de ladrillo",
+      "conductivity": 0.556,
+      "density": 1000.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 10.0
+    },
+    {
+      "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+      "name": "MAL",
+      "group": "Morteros",
+      "conductivity": 0.41,
+      "density": 1000.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 10.0
+    },
+    {
+      "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+      "name": "EPS037",
+      "group": "Aislantes",
+      "conductivity": 0.037,
+      "density": 30.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 20.0
+    },
+    {
+      "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
+      "name": "azulejo",
+      "group": "Cerámicos",
+      "conductivity": 1.3,
+      "density": 2300.0,
+      "specificheat": 840.0,
+      "vapourdiffusivity": 1e30
+    },
+    {
+      "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+      "name": "HAlq2300",
+      "group": "Hormigones",
+      "conductivity": 2.3,
+      "density": 2400.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 80.0
+    },
+    {
+      "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
+      "name": "FUhal250",
+      "group": "Forjados unidireccionales",
+      "conductivity": 1.0,
+      "density": 1230.0,
+      "specificheat": 1000.0,
+      "vapourdiffusivity": 6.0
     }
   ],
   "extra": null
