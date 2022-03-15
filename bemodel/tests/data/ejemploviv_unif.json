@@ -5,128 +5,128 @@
     "is_dwelling": true,
     "num_dwellings": 1,
     "climate": "A4",
-    "global_ventilation_l_s": 33,
+    "global_ventilation_l_s": 33.0,
     "n50_test_ach": null,
-    "d_perim_insulation": 1,
-    "rn_perim_insulation": 1
+    "d_perim_insulation": 1.0,
+    "rn_perim_insulation": 1.0
   },
   "spaces": [
     {
-      "id": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "name": "P01_E01",
       "area": 25.04,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
       "n_v": null,
-      "z": 0,
+      "z": 0.0,
       "exposed_perimeter": 7.21
     },
     {
-      "id": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "id": "8fb42929-3639-dcb3-13d7-071296960471",
       "name": "P01_E02",
       "area": 5.45,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
       "n_v": null,
-      "z": 0,
+      "z": 0.0,
       "exposed_perimeter": 5.41
     },
     {
-      "id": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "id": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "name": "P01_E03",
       "area": 10.78,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
       "n_v": null,
-      "z": 0,
+      "z": 0.0,
       "exposed_perimeter": 5.31
     },
     {
-      "id": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "id": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "name": "P01_E04",
       "area": 6.47,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
       "n_v": null,
-      "z": 0,
+      "z": 0.0,
       "exposed_perimeter": 10.5
     },
     {
-      "id": "99e44bea-0460-ee84-1147-bb281692529c",
+      "id": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
       "name": "P02_E01",
       "area": 11.12,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
-      "height": 3,
+      "height": 3.0,
       "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 3.6
     },
     {
-      "id": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "id": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "name": "P02_E02",
       "area": 9.87,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
-      "height": 3,
+      "height": 3.0,
       "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 2.54
     },
     {
-      "id": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "id": "8e7b02af-007d-5337-7ec5-482065784e11",
       "name": "P02_E03",
       "area": 12.4,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
-      "height": 3,
+      "height": 3.0,
       "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 3.88
     },
     {
-      "id": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "id": "839f06f9-2a5f-3316-a889-92064087fee3",
       "name": "P02_E04",
       "area": 5.76,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
-      "height": 3,
+      "height": 3.0,
       "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 2.3
     },
     {
-      "id": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "id": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "name": "P02_E05",
       "area": 5.88,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
-      "height": 3,
+      "height": 3.0,
       "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 7.46
     },
     {
-      "id": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "id": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "name": "P02_E06",
       "area": 9.6,
-      "multiplier": 1,
+      "multiplier": 1.0,
       "type": "CONDITIONED",
       "inside_tenv": true,
-      "height": 3,
+      "height": 3.0,
       "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 14.95
@@ -139,31 +139,31 @@
       "A": 8.27,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
-        "azimuth": -180,
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           3.6100469,
           -2.8465981,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.5958343,
-            0
+            0.0
           ],
           [
             3.5958343,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -175,31 +175,31 @@
       "A": 8.32,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 0.22,
         "position": [
           0.0027723028,
           -9.796509,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.6165302,
-            0
+            0.0
           ],
           [
             3.6165302,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -211,31 +211,31 @@
       "A": 12.24,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
-      "nextto": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
+      "nextto": "8fb42929-3639-dcb3-13d7-071296960471",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.07,
         "position": [
           3.6192756,
           -9.782523,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             4.53339,
-            0
+            0.0
           ],
           [
             4.53339,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -247,31 +247,31 @@
       "A": 6.49,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
-      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
+      "nextto": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.08,
         "position": [
           3.6132438,
           -5.249137,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.4025412,
-            0
+            0.0
           ],
           [
             2.4025412,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -283,31 +283,31 @@
       "A": 18.76,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
-      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -90.09,
         "position": [
           0.014212725,
           -2.846598,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             6.9499207,
-            0
+            0.0
           ],
           [
             6.9499207,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -319,15 +319,15 @@
       "A": 25.04,
       "bounds": "GROUND",
       "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
-      "space": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "nextto": null,
       "geometry": {
-        "tilt": 180,
-        "azimuth": -90,
+        "tilt": 180.0,
+        "azimuth": -90.0,
         "position": [
-          0,
-          0,
-          0
+          0.0,
+          0.0,
+          0.0
         ],
         "polygon": [
           [
@@ -359,31 +359,31 @@
       "A": 1.53,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "space": "8fb42929-3639-dcb3-13d7-071296960471",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 0.22,
         "position": [
           3.6192756,
           -9.782523,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.1899661,
-            0
+            0.0
           ],
           [
             1.1899661,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -395,31 +395,31 @@
       "A": 5.6,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "space": "8fb42929-3639-dcb3-13d7-071296960471",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 89.25,
         "position": [
           4.8092327,
           -9.777921,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.0736995,
-            0
+            0.0
           ],
           [
             2.0736995,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -431,31 +431,31 @@
       "A": 3.26,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
-      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "8fb42929-3639-dcb3-13d7-071296960471",
+      "nextto": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 178.1,
         "position": [
           4.818425,
           -5.289166,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.2058457,
-            0
+            0.0
           ],
           [
             1.2058457,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -467,31 +467,31 @@
       "A": 6.52,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
-      "nextto": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "space": "8fb42929-3639-dcb3-13d7-071296960471",
+      "nextto": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.43,
         "position": [
           4.8365326,
           -7.704401,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.415303,
-            0
+            0.0
           ],
           [
             2.415303,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -503,15 +503,15 @@
       "A": 5.45,
       "bounds": "GROUND",
       "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
-      "space": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "space": "8fb42929-3639-dcb3-13d7-071296960471",
       "nextto": null,
       "geometry": {
-        "tilt": 180,
-        "azimuth": -90,
+        "tilt": 180.0,
+        "azimuth": -90.0,
         "position": [
-          0,
-          0,
-          0
+          0.0,
+          0.0,
+          0.0
         ],
         "polygon": [
           [
@@ -543,31 +543,31 @@
       "A": 6.11,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 0.41,
         "position": [
           4.8365326,
           -7.704401,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.5831208,
-            0
+            0.0
           ],
           [
             2.5831208,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -579,31 +579,31 @@
       "A": 4.18,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -179.99,
         "position": [
           7.412345,
           -2.8634772,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.8595448,
-            0
+            0.0
           ],
           [
             1.8595448,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -615,31 +615,31 @@
       "A": 6.45,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
-      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
+      "nextto": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -90.45,
         "position": [
           5.5528,
           -2.8637822,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.3882864,
-            0
+            0.0
           ],
           [
             2.3882864,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -651,31 +651,31 @@
       "A": 1.94,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
-      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
+      "nextto": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -177.03,
         "position": [
           5.534208,
           -5.2519965,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.71674705,
-            0
+            0.0
           ],
           [
             0.71674705,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -687,31 +687,31 @@
       "A": 13.02,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
-      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.08,
         "position": [
           7.4195867,
           -7.6858244,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             4.822352,
-            0
+            0.0
           ],
           [
             4.822352,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -723,15 +723,15 @@
       "A": 10.78,
       "bounds": "GROUND",
       "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
-      "space": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "nextto": null,
       "geometry": {
-        "tilt": 180,
-        "azimuth": -90,
+        "tilt": 180.0,
+        "azimuth": -90.0,
         "position": [
-          0,
-          0,
-          0
+          0.0,
+          0.0,
+          0.0
         ],
         "polygon": [
           [
@@ -767,31 +767,31 @@
       "A": 2.55,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.61,
         "position": [
           5.5528,
           -2.8637822,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.946072,
-            0
+            0.0
           ],
           [
             0.946072,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -803,31 +803,31 @@
       "A": 3.33,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
-        "azimuth": -180,
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           5.542692,
           -1.9177642,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.9140623,
-            0
+            0.0
           ],
           [
             1.9140623,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -839,31 +839,31 @@
       "A": 2.51,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -91.15,
         "position": [
           3.62863,
           -1.9177641,
-          0
+          0.0
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.92901987,
-            0
+            0.0
           ],
           [
             0.92901987,
             2.7
           ],
           [
-            0,
+            0.0,
             2.7
           ]
         ]
@@ -875,15 +875,15 @@
       "A": 6.47,
       "bounds": "GROUND",
       "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
-      "space": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "nextto": null,
       "geometry": {
-        "tilt": 180,
-        "azimuth": -90,
+        "tilt": 180.0,
+        "azimuth": -90.0,
         "position": [
-          0,
-          0,
-          0
+          0.0,
+          0.0,
+          0.0
         ],
         "polygon": [
           [
@@ -923,11 +923,11 @@
       "A": 9.35,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
-        "azimuth": -180,
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           3.6100469,
           -2.8465981,
@@ -935,20 +935,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.5958343,
-            0
+            0.0
           ],
           [
             3.5958343,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -959,14 +959,14 @@
       "A": 11.12,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
-      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
       "nextto": null,
       "geometry": {
-        "tilt": 0,
-        "azimuth": 90,
+        "tilt": 0.0,
+        "azimuth": 90.0,
         "position": [
-          0,
-          0,
+          0.0,
+          0.0,
           5.7
         ],
         "polygon": [
@@ -995,14 +995,14 @@
       "A": 11.12,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "99e44bea-0460-ee84-1147-bb281692529c",
-      "nextto": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
+      "nextto": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "geometry": {
-        "tilt": 180,
-        "azimuth": -90,
+        "tilt": 180.0,
+        "azimuth": -90.0,
         "position": [
-          0,
-          0,
+          0.0,
+          0.0,
           2.7
         ],
         "polygon": [
@@ -1031,10 +1031,10 @@
       "A": 10.82,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "99e44bea-0460-ee84-1147-bb281692529c",
-      "nextto": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
+      "nextto": "8e7b02af-007d-5337-7ec5-482065784e11",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -0.24,
         "position": [
           0.00914268,
@@ -1043,20 +1043,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.6050556,
-            0
+            0.0
           ],
           [
             3.6050556,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1067,10 +1067,10 @@
       "A": 9.29,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "99e44bea-0460-ee84-1147-bb281692529c",
-      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
+      "nextto": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.08,
         "position": [
           3.6141658,
@@ -1079,20 +1079,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.0952618,
-            0
+            0.0
           ],
           [
             3.0952618,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1103,10 +1103,10 @@
       "A": 9.24,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
-      "space": "99e44bea-0460-ee84-1147-bb281692529c",
+      "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -90.09,
         "position": [
           0.014212725,
@@ -1115,20 +1115,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.0799923,
-            0
+            0.0
           ],
           [
             3.0799923,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1139,10 +1139,10 @@
       "A": 6.66,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 1.1,
         "position": [
           4.8092327,
@@ -1151,34 +1151,34 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.5389209,
-            0
+            0.0
           ],
           [
             2.5389209,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
     },
     {
-      "id": "80e08545-fd25-79a2-71ad-ccbbe275a2ad",
+      "id": "60813647-5264-8d7f-d009-2d4747f7e9d4",
       "name": "P02_E02_ME001",
       "A": 5.27,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "nextto": null,
       "geometry": {
-        "tilt": 180,
+        "tilt": 180.0,
         "azimuth": -92.02,
         "position": [
           7.4189997,
@@ -1187,8 +1187,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            -0.0
           ],
           [
             2.045268,
@@ -1211,14 +1211,14 @@
       "A": 9.87,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "nextto": null,
       "geometry": {
-        "tilt": 0,
-        "azimuth": 90,
+        "tilt": 0.0,
+        "azimuth": 90.0,
         "position": [
-          0,
-          0,
+          0.0,
+          0.0,
           5.7
         ],
         "polygon": [
@@ -1254,16 +1254,16 @@
       }
     },
     {
-      "id": "e789e2b5-46cd-5b63-fa51-128a11e72c50",
+      "id": "c8d7e818-a315-137e-1e26-92e917241061",
       "name": "P02_E02_FI001",
       "A": 4.56,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
-      "nextto": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
+      "nextto": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "geometry": {
-        "tilt": 180,
-        "azimuth": -90,
+        "tilt": 180.0,
+        "azimuth": -90.0,
         "position": [
           5.5219994,
           -5.9260006,
@@ -1271,8 +1271,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.01499987,
@@ -1291,7 +1291,7 @@
             0.6989999
           ],
           [
-            0,
+            0.0,
             0.6989999
           ]
         ]
@@ -1303,11 +1303,11 @@
       "A": 2.1,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
-      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
+      "nextto": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "geometry": {
-        "tilt": 90,
-        "azimuth": 180,
+        "tilt": 90.0,
+        "azimuth": 180.0,
         "position": [
           5.5220447,
           -5.9266057,
@@ -1315,20 +1315,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.6988411,
-            0
+            0.0
           ],
           [
             0.6988411,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1339,10 +1339,10 @@
       "A": 4.72,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
-      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
+      "nextto": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -90.21,
         "position": [
           4.8232036,
@@ -1351,20 +1351,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.5733861,
-            0
+            0.0
           ],
           [
             1.5733861,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1375,10 +1375,10 @@
       "A": 6.83,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
-      "nextto": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
+      "nextto": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -90.21,
         "position": [
           4.8174963,
@@ -1387,20 +1387,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.278003,
-            0
+            0.0
           ],
           [
             2.278003,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1411,10 +1411,10 @@
       "A": 5.68,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
-      "nextto": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
+      "nextto": "839f06f9-2a5f-3316-a889-92064087fee3",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 179.54,
         "position": [
           7.4169674,
@@ -1423,20 +1423,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.8949846,
-            0
+            0.0
           ],
           [
             1.8949846,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1447,10 +1447,10 @@
       "A": 5.23,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.09,
         "position": [
           7.4195867,
@@ -1459,20 +1459,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.7439009,
-            0
+            0.0
           ],
           [
             1.7439009,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1483,10 +1483,10 @@
       "A": 6.13,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
-      "space": "17eba17b-5f9d-4b9d-2e12-7ae785affcc3",
+      "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 87.98,
         "position": [
           7.3476877,
@@ -1495,20 +1495,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.0447288,
-            0
+            0.0
           ],
           [
             2.0447288,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1519,10 +1519,10 @@
       "A": 7.39,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "space": "8e7b02af-007d-5337-7ec5-482065784e11",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 0.22,
         "position": [
           0.0027723028,
@@ -1531,20 +1531,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.942815,
-            0
+            0.0
           ],
           [
             2.942815,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1555,14 +1555,14 @@
       "A": 12.4,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
-      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "space": "8e7b02af-007d-5337-7ec5-482065784e11",
       "nextto": null,
       "geometry": {
-        "tilt": 0,
-        "azimuth": 90,
+        "tilt": 0.0,
+        "azimuth": 90.0,
         "position": [
-          0,
-          0,
+          0.0,
+          0.0,
           5.7
         ],
         "polygon": [
@@ -1599,14 +1599,14 @@
       "A": 12.4,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
-      "nextto": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "space": "8e7b02af-007d-5337-7ec5-482065784e11",
+      "nextto": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "geometry": {
-        "tilt": 180,
-        "azimuth": -90,
+        "tilt": 180.0,
+        "azimuth": -90.0,
         "position": [
-          0,
-          0,
+          0.0,
+          0.0,
           2.7
         ],
         "polygon": [
@@ -1643,10 +1643,10 @@
       "A": 6.84,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
-      "nextto": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "space": "8e7b02af-007d-5337-7ec5-482065784e11",
+      "nextto": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 89.61,
         "position": [
           2.9455655,
@@ -1655,20 +1655,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.2796097,
-            0
+            0.0
           ],
           [
             2.2796097,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1679,10 +1679,10 @@
       "A": 1.97,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
-      "nextto": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "space": "8e7b02af-007d-5337-7ec5-482065784e11",
+      "nextto": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 2.68,
         "position": [
           2.9610858,
@@ -1691,20 +1691,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.65583956,
-            0
+            0.0
           ],
           [
             0.65583956,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1715,10 +1715,10 @@
       "A": 4.6,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
-      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "8e7b02af-007d-5337-7ec5-482065784e11",
+      "nextto": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.07,
         "position": [
           3.6162057,
@@ -1727,20 +1727,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.5330013,
-            0
+            0.0
           ],
           [
             1.5330013,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1751,10 +1751,10 @@
       "A": 11.61,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
-      "space": "dacb2f5d-0eca-5227-8632-45d297309611",
+      "space": "8e7b02af-007d-5337-7ec5-482065784e11",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -90.09,
         "position": [
           0.00914268,
@@ -1763,20 +1763,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.869928,
-            0
+            0.0
           ],
           [
             3.869928,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1787,10 +1787,10 @@
       "A": 4.62,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "space": "839f06f9-2a5f-3316-a889-92064087fee3",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -179.99,
         "position": [
           7.412345,
@@ -1799,20 +1799,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.8595448,
-            0
+            0.0
           ],
           [
             1.8595448,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1823,14 +1823,14 @@
       "A": 5.76,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
-      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "space": "839f06f9-2a5f-3316-a889-92064087fee3",
       "nextto": null,
       "geometry": {
-        "tilt": 0,
-        "azimuth": 90,
+        "tilt": 0.0,
+        "azimuth": 90.0,
         "position": [
-          0,
-          0,
+          0.0,
+          0.0,
           5.7
         ],
         "polygon": [
@@ -1854,15 +1854,15 @@
       }
     },
     {
-      "id": "3f17d454-ed50-c0b5-d4eb-58af6bb87ff5",
+      "id": "1abb4180-de17-3387-a51b-9b489f1c4428",
       "name": "P02_E04_FI003",
       "A": 5.76,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
-      "nextto": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "space": "839f06f9-2a5f-3316-a889-92064087fee3",
+      "nextto": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "geometry": {
-        "tilt": 180,
+        "tilt": 180.0,
         "azimuth": -0.59,
         "position": [
           5.529,
@@ -1871,8 +1871,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.004999846,
@@ -1903,10 +1903,10 @@
       "A": 9.19,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
-      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "839f06f9-2a5f-3316-a889-92064087fee3",
+      "nextto": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -90.58,
         "position": [
           5.5528,
@@ -1915,20 +1915,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.0629776,
-            0
+            0.0
           ],
           [
             3.0629776,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -1939,10 +1939,10 @@
       "A": 9.24,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
-      "space": "703a8a7b-0213-012c-6c25-9ea7ae29e504",
+      "space": "839f06f9-2a5f-3316-a889-92064087fee3",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.09,
         "position": [
           7.4169674,
@@ -1951,34 +1951,34 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             3.0784516,
-            0
+            0.0
           ],
           [
             3.0784516,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
     },
     {
-      "id": "7a17f297-8a2a-d32b-1fce-e805218b3794",
+      "id": "aff6db28-6533-308f-8aa4-b7c445d6ee3f",
       "name": "P02_E05_FE001",
       "A": 1.61,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "nextto": null,
       "geometry": {
-        "tilt": 180,
+        "tilt": 180.0,
         "azimuth": -92.56,
         "position": [
           4.8089995,
@@ -1987,8 +1987,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            -0.0
           ],
           [
             0.8728714,
@@ -2015,10 +2015,10 @@
       "A": 2.18,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -88.02,
         "position": [
           2.9455655,
@@ -2027,20 +2027,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.89423406,
-            0
+            0.0
           ],
           [
             0.89423406,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -2051,10 +2051,10 @@
       "A": 5.38,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 0.94,
         "position": [
           2.9764206,
@@ -2063,20 +2063,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.7946011,
-            0
+            0.0
           ],
           [
             1.7946011,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -2087,10 +2087,10 @@
       "A": 2.62,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 87.47,
         "position": [
           4.7707787,
@@ -2099,20 +2099,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.8722175,
-            0
+            0.0
           ],
           [
             0.8722175,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -2123,14 +2123,14 @@
       "A": 5.88,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
-      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
+      "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "nextto": null,
       "geometry": {
-        "tilt": 0,
-        "azimuth": 90,
+        "tilt": 0.0,
+        "azimuth": 90.0,
         "position": [
-          0,
-          0,
+          0.0,
+          0.0,
           5.7
         ],
         "polygon": [
@@ -2166,15 +2166,15 @@
       }
     },
     {
-      "id": "3113b1bc-6e44-4a2c-a523-4a8123ab6763",
+      "id": "83999685-83a0-6990-8074-0651fff88ffd",
       "name": "P02_E05_FI001",
       "A": 1.52,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
-      "nextto": "3442f5f2-3e86-ddee-941a-433a4c36d1dc",
+      "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
+      "nextto": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "geometry": {
-        "tilt": 180,
+        "tilt": 180.0,
         "azimuth": -87.29,
         "position": [
           3.6159997,
@@ -2183,8 +2183,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.305561,
@@ -2202,15 +2202,15 @@
       }
     },
     {
-      "id": "6a4fc55e-8121-a8fb-cb46-128c375b8dbc",
+      "id": "abfc1783-8a0b-f7b6-2be2-d4f7f776ecc1",
       "name": "P02_E05_FI002",
       "A": 2.74,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
-      "nextto": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
+      "nextto": "8fb42929-3639-dcb3-13d7-071296960471",
       "geometry": {
-        "tilt": 180,
+        "tilt": 180.0,
         "azimuth": -91.19,
         "position": [
           4.8169994,
@@ -2219,8 +2219,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             2.277673,
@@ -2243,10 +2243,10 @@
       "A": 3.6,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "space": "ed5e19e6-0265-4d45-6b76-895053edd6af",
-      "nextto": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
+      "nextto": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 178.8,
         "position": [
           4.8174963,
@@ -2255,20 +2255,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.2015525,
-            0
+            0.0
           ],
           [
             1.2015525,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -2279,10 +2279,10 @@
       "A": 2.84,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": 90.61,
         "position": [
           5.5528,
@@ -2291,20 +2291,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.946072,
-            0
+            0.0
           ],
           [
             0.946072,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -2315,11 +2315,11 @@
       "A": 4.78,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
-        "azimuth": -180,
+        "tilt": 90.0,
+        "azimuth": -180.0,
         "position": [
           5.542692,
           -1.9177642,
@@ -2327,20 +2327,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.9140623,
-            0
+            0.0
           ],
           [
             1.9140623,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -2351,10 +2351,10 @@
       "A": 2.79,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "nextto": null,
       "geometry": {
-        "tilt": 90,
+        "tilt": 90.0,
         "azimuth": -91.15,
         "position": [
           3.62863,
@@ -2363,20 +2363,20 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.92901987,
-            0
+            0.0
           ],
           [
             0.92901987,
-            3
+            3.0
           ],
           [
-            0,
-            3
+            0.0,
+            3.0
           ]
         ]
       }
@@ -2387,14 +2387,14 @@
       "A": 9.6,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
-      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
+      "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "nextto": null,
       "geometry": {
-        "tilt": 0,
-        "azimuth": 90,
+        "tilt": 0.0,
+        "azimuth": 90.0,
         "position": [
-          0,
-          0,
+          0.0,
+          0.0,
           5.7
         ],
         "polygon": [
@@ -2438,15 +2438,15 @@
       }
     },
     {
-      "id": "90a0b0d2-374c-88d7-ef85-12ae8c1a9bac",
+      "id": "6cbba7ce-e4d8-7df1-aaa5-434a79a25ed3",
       "name": "P02_E06_FI003",
       "A": 2.67,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
-      "nextto": "fb8546eb-2b49-7c51-32a7-361af065ceb1",
+      "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
+      "nextto": "8fb42929-3639-dcb3-13d7-071296960471",
       "geometry": {
-        "tilt": 180,
+        "tilt": 180.0,
         "azimuth": 88.81,
         "position": [
           3.6159997,
@@ -2455,8 +2455,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             1.532626,
@@ -2486,16 +2486,16 @@
       }
     },
     {
-      "id": "13792fb9-beb6-102f-0d1b-d7aada364c28",
+      "id": "453d597f-f0c1-3cf7-b6de-9fddd01ea5d6",
       "name": "P02_E06_FI004",
       "A": 0.46,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
-      "nextto": "8c2148a6-9abb-fa53-e1fa-e616986f3793",
+      "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
+      "nextto": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "geometry": {
-        "tilt": 180,
-        "azimuth": 90,
+        "tilt": 180.0,
+        "azimuth": 90.0,
         "position": [
           4.8229995,
           -5.926,
@@ -2503,8 +2503,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.6370001,
@@ -2515,22 +2515,22 @@
             0.7059999
           ],
           [
-            0,
+            0.0,
             0.6989999
           ]
         ]
       }
     },
     {
-      "id": "b898fc1e-d5c5-b484-a0c7-cc3895899495",
+      "id": "ccd49660-f5ef-a440-67da-2d73cc323e83",
       "name": "P02_E06_FI005",
       "A": 6.47,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "space": "b9d47c88-c328-d0db-e700-01c32d3a065e",
-      "nextto": "609896b7-7e82-0b45-3f59-5157ad12bd85",
+      "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
+      "nextto": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "geometry": {
-        "tilt": 180,
+        "tilt": 180.0,
         "azimuth": 179.45,
         "position": [
           5.529,
@@ -2539,8 +2539,8 @@
         ],
         "polygon": [
           [
-            0,
-            0
+            0.0,
+            0.0
           ],
           [
             0.710601,
@@ -2577,7 +2577,7 @@
       "A": 1.44,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "533865ce-8e6a-c0a8-a2d9-cbb2fbea4ab5",
-      "fshobst": 0.8021761,
+      "fshobst": 0.76,
       "geometry": {
         "position": [
           1.1,
@@ -2594,11 +2594,11 @@
       "A": 1.44,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "d42ed212-0e16-17c6-c916-95290d4db5ef",
-      "fshobst": 0.8043886,
+      "fshobst": 0.75,
       "geometry": {
         "position": [
           0.6,
-          1
+          1.0
         ],
         "height": 1.2,
         "width": 1.2,
@@ -2611,11 +2611,11 @@
       "A": 1.68,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "287e688a-5fda-decf-438b-58013a2ada83",
-      "fshobst": 0.7507816,
+      "fshobst": 0.69,
       "geometry": {
         "position": [
           0.1,
-          0
+          0.0
         ],
         "height": 2.1,
         "width": 0.8,
@@ -2628,13 +2628,13 @@
       "A": 0.86,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "3a5df886-d7c7-c80f-9dcd-edb41be26016",
-      "fshobst": 0.71222633,
+      "fshobst": 0.68,
       "geometry": {
         "position": [
           1.12,
-          1
+          1.0
         ],
-        "height": 1,
+        "height": 1.0,
         "width": 0.86,
         "setback": 0.2
       }
@@ -2645,7 +2645,7 @@
       "A": 0.84,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "a663d3cf-1dcd-00e1-f931-77f139985df5",
-      "fshobst": 0.7831122,
+      "fshobst": 0.73,
       "geometry": {
         "position": [
           0.5,
@@ -2662,11 +2662,11 @@
       "A": 1.84,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "4f9ceedd-a380-5452-be9b-faa5a2b35bd6",
-      "fshobst": 0.8114637,
+      "fshobst": 0.77,
       "geometry": {
         "position": [
           0.5,
-          0
+          0.0
         ],
         "height": 2.3,
         "width": 0.8,
@@ -2679,11 +2679,11 @@
       "A": 1.44,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "aa702707-b64b-1280-d199-ed7fac965bec",
-      "fshobst": 0.8021761,
+      "fshobst": 0.76,
       "geometry": {
         "position": [
           1.2,
-          1
+          1.0
         ],
         "height": 1.2,
         "width": 1.2,
@@ -2696,11 +2696,11 @@
       "A": 0.96,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "bace5dde-0b16-53fe-4491-a30edbadb765",
-      "fshobst": 0.798298,
+      "fshobst": 0.74,
       "geometry": {
         "position": [
           0.9,
-          1
+          1.0
         ],
         "height": 1.2,
         "width": 0.8,
@@ -2713,11 +2713,11 @@
       "A": 1.44,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "c6b34d7f-8fff-299e-992a-4123e90ca2ed",
-      "fshobst": 0.8185515,
+      "fshobst": 0.75,
       "geometry": {
         "position": [
           0.6,
-          1
+          1.0
         ],
         "height": 1.2,
         "width": 1.2,
@@ -2730,11 +2730,11 @@
       "A": 0.96,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "497af7dc-502b-536d-c8ac-405410e48a74",
-      "fshobst": 0.7831122,
+      "fshobst": 0.74,
       "geometry": {
         "position": [
           0.4,
-          1
+          1.0
         ],
         "height": 1.2,
         "width": 0.8,
@@ -2747,13 +2747,13 @@
       "A": 0.5,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "190b88e2-95c9-b398-96d7-1eb7581318c4",
-      "fshobst": 0.77200884,
+      "fshobst": 0.75,
       "geometry": {
         "position": [
           0.2,
-          1
+          1.0
         ],
-        "height": 1,
+        "height": 1.0,
         "width": 0.5,
         "setback": 0.2
       }
@@ -2764,11 +2764,11 @@
       "A": 0.96,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "6ca93c51-be77-3188-0e7c-4e97516588a0",
-      "fshobst": 0.80203694,
+      "fshobst": 0.77,
       "geometry": {
         "position": [
           0.4,
-          1
+          1.0
         ],
         "height": 1.2,
         "width": 0.8,
@@ -2776,7 +2776,6 @@
       }
     }
   ],
-  "shades": [],
   "thermal_bridges": [
     {
       "id": "ecdd1f44-ab99-183f-5519-bbc276ff5802",
@@ -2831,7 +2830,7 @@
       "id": "e2c1d27c-95d0-440c-a9f4-cd80f00d6ac2",
       "name": "HUECO_JAMBA",
       "kind": "WINDOW",
-      "L": 32,
+      "L": 32.0,
       "psi": 0.05
     },
     {
@@ -2849,11 +2848,46 @@
       "psi": 0.28
     }
   ],
+  "shades": [],
   "wallcons": [
     {
       "id": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
       "name": "Cubierta plana",
       "group": "Cubiertas planas",
+      "layers": [
+        {
+          "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
+          "e": 0.02
+        },
+        {
+          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+          "e": 0.01
+        },
+        {
+          "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+          "e": 0.12
+        },
+        {
+          "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
+          "e": 0.003
+        },
+        {
+          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+          "e": 0.01
+        },
+        {
+          "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
+          "e": 0.02
+        },
+        {
+          "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
+          "e": 0.25
+        },
+        {
+          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+          "e": 0.01
+        }
+      ],
       "thickness": 0.44,
       "R_intrinsic": 3.361,
       "absorptance": 0.6
@@ -2862,6 +2896,28 @@
       "id": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "name": "Forjado interior",
       "group": "Forjados interiores",
+      "layers": [
+        {
+          "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
+          "e": 0.02
+        },
+        {
+          "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+          "e": 0.02
+        },
+        {
+          "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+          "e": 0.03
+        },
+        {
+          "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
+          "e": 0.14
+        },
+        {
+          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+          "e": 0.01
+        }
+      ],
       "thickness": 0.22,
       "R_intrinsic": 1.172,
       "absorptance": 0.6
@@ -2870,6 +2926,24 @@
       "id": "6cfcec0e-b90b-998b-c755-7d219638d40c",
       "name": "Forjado terreno",
       "group": "Forjados terrenos",
+      "layers": [
+        {
+          "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
+          "e": 0.02
+        },
+        {
+          "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
+          "e": 0.02
+        },
+        {
+          "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+          "e": 0.02
+        },
+        {
+          "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+          "e": 0.15
+        }
+      ],
       "thickness": 0.21,
       "R_intrinsic": 0.197,
       "absorptance": 0.6
@@ -2878,6 +2952,40 @@
       "id": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
       "name": "Medianera",
       "group": "Medianeras",
+      "layers": [
+        {
+          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+          "e": 0.01
+        },
+        {
+          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+          "e": 0.01
+        },
+        {
+          "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+          "e": 0.115
+        },
+        {
+          "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+          "e": 0.04
+        },
+        {
+          "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
+          "e": 0.05
+        },
+        {
+          "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+          "e": 0.115
+        },
+        {
+          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+          "e": 0.01
+        },
+        {
+          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+          "e": 0.01
+        }
+      ],
       "thickness": 0.36,
       "R_intrinsic": 1.57,
       "absorptance": 0.6
@@ -2886,6 +2994,28 @@
       "id": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "name": "Muro exterior",
       "group": "Muros exteriores",
+      "layers": [
+        {
+          "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+          "e": 0.115
+        },
+        {
+          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+          "e": 0.01
+        },
+        {
+          "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+          "e": 0.08
+        },
+        {
+          "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
+          "e": 0.04
+        },
+        {
+          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+          "e": 0.01
+        }
+      ],
       "thickness": 0.26,
       "R_intrinsic": 2.227,
       "absorptance": 0.6
@@ -2894,6 +3024,20 @@
       "id": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "name": "Tabique",
       "group": "Tabiques",
+      "layers": [
+        {
+          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+          "e": 0.01
+        },
+        {
+          "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
+          "e": 0.115
+        },
+        {
+          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+          "e": 0.01
+        }
+      ],
       "thickness": 0.14,
       "R_intrinsic": 0.204,
       "absorptance": 0.6
@@ -2908,7 +3052,226 @@
       "Ff": 0.15,
       "gglwi": 0.64,
       "gglshwi": 0.08,
-      "C_100": 27
+      "C_100": 27.0
     }
-  ]
+  ],
+  "materials": [
+    {
+      "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+      "name": "LMmp",
+      "group": "Fábricas de ladrillo",
+      "properties": {
+        "Detailed": {
+          "conductivity": 1.02,
+          "density": 2170.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
+      "name": "MORgt1000",
+      "group": "Morteros",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.55,
+          "density": 1125.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
+      "name": "cnv_ver_5",
+      "group": "Cámaras de aire",
+      "properties": {
+        "Resistance": 0.18
+      }
+    },
+    {
+      "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
+      "name": "plaqCer",
+      "group": "Cerámicos",
+      "properties": {
+        "Detailed": {
+          "conductivity": 1.0,
+          "density": 2000.0,
+          "specificheat": 800.0,
+          "vapourdiffusivity": 30.0
+        }
+      }
+    },
+    {
+      "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
+      "name": "LHs",
+      "group": "Fábricas de ladrillo",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.556,
+          "density": 1000.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+      "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
+      "group": "Pétreos y suelos",
+      "properties": {
+        "Detailed": {
+          "conductivity": 1.1,
+          "density": 1885.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 1.0
+        }
+      }
+    },
+    {
+      "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+      "name": "MAL",
+      "group": "Morteros",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.41,
+          "density": 1000.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
+      "name": "LPmp_50",
+      "group": "Fábricas de ladrillo",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.68,
+          "density": 1140.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
+      "name": "HMlt2300",
+      "group": "Hormigones",
+      "properties": {
+        "Detailed": {
+          "conductivity": 1.65,
+          "density": 2150.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 70.0
+        }
+      }
+    },
+    {
+      "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+      "name": "EPS037",
+      "group": "Aislantes",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.037,
+          "density": 30.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 20.0
+        }
+      }
+    },
+    {
+      "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
+      "name": "betun_lamina",
+      "group": "Bituminosos",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.23,
+          "density": 1100.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 50000.0
+        }
+      }
+    },
+    {
+      "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
+      "name": "FUhal250",
+      "group": "Forjados unidireccionales",
+      "properties": {
+        "Detailed": {
+          "conductivity": 1.0,
+          "density": 1230.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 6.0
+        }
+      }
+    },
+    {
+      "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+      "name": "enlYlq1300",
+      "group": "Enlucidos",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.57,
+          "density": 1150.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 6.0
+        }
+      }
+    },
+    {
+      "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
+      "name": "BC140",
+      "group": "Fábricas de bloque cerámico de arcilla aligerada",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.4375,
+          "density": 1170.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
+      "name": "azulejo",
+      "group": "Cerámicos",
+      "properties": {
+        "Detailed": {
+          "conductivity": 1.3,
+          "density": 2300.0,
+          "specificheat": 840.0,
+          "vapourdiffusivity": 1e30
+        }
+      }
+    },
+    {
+      "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+      "name": "HAlq2300",
+      "group": "Hormigones",
+      "properties": {
+        "Detailed": {
+          "conductivity": 2.3,
+          "density": 2400.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 80.0
+        }
+      }
+    },
+    {
+      "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+      "name": "MW_04",
+      "group": "Aislantes",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.04,
+          "density": 40.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 1.0
+        }
+      }
+    }
+  ],
+  "extra": null
 }

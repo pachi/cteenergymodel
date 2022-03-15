@@ -1581,26 +1581,26 @@
       "name": "Cubierta no transitable",
       "group": "Cubiertas planas",
       "layers": [
-        [
-          "d2b63da2-39ad-a836-2613-026cb38463c0",
-          0.1
-        ],
-        [
-          "770d2370-953c-4c98-d712-6de5b71a00e0",
-          0.001
-        ],
-        [
-          "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
-          0.08
-        ],
-        [
-          "770d2370-953c-4c98-d712-6de5b71a00e0",
-          0.001
-        ],
-        [
-          "9904021e-6d18-e151-1094-c776bc669d51",
-          0.3
-        ]
+        {
+          "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
+          "e": 0.1
+        },
+        {
+          "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
+          "e": 0.001
+        },
+        {
+          "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
+          "e": 0.08
+        },
+        {
+          "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
+          "e": 0.001
+        },
+        {
+          "id": "9904021e-6d18-e151-1094-c776bc669d51",
+          "e": 0.3
+        }
       ],
       "thickness": 0.48,
       "R_intrinsic": 2.798,
@@ -1611,22 +1611,22 @@
       "name": "Forjado interior",
       "group": "Forjados Interiores",
       "layers": [
-        [
-          "bbe62996-0f75-da18-c562-ec609d76127e",
-          0.01
-        ],
-        [
-          "edad6fe9-b71e-c3db-b22c-648911e53b48",
-          0.02
-        ],
-        [
-          "bed4d34b-8949-b348-d818-5c079a708d9e",
-          0.31
-        ],
-        [
-          "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
-          0.01
-        ]
+        {
+          "id": "bbe62996-0f75-da18-c562-ec609d76127e",
+          "e": 0.01
+        },
+        {
+          "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
+          "e": 0.02
+        },
+        {
+          "id": "bed4d34b-8949-b348-d818-5c079a708d9e",
+          "e": 0.31
+        },
+        {
+          "id": "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
+          "e": 0.01
+        }
       ],
       "thickness": 0.35,
       "R_intrinsic": 0.471,
@@ -1637,26 +1637,26 @@
       "name": "Placas de yeso",
       "group": "Tabiques",
       "layers": [
-        [
-          "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          0.01
-        ],
-        [
-          "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          0.01
-        ],
-        [
-          "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
-          0.05
-        ],
-        [
-          "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          0.01
-        ],
-        [
-          "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          0.01
-        ]
+        {
+          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+          "e": 0.01
+        },
+        {
+          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+          "e": 0.01
+        },
+        {
+          "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
+          "e": 0.05
+        },
+        {
+          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+          "e": 0.01
+        },
+        {
+          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+          "e": 0.01
+        }
       ],
       "thickness": 0.09,
       "R_intrinsic": 0.34,
@@ -1667,34 +1667,34 @@
       "name": "SATE",
       "group": "Fachada",
       "layers": [
-        [
-          "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
-          0.01
-        ],
-        [
-          "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
-          0.05
-        ],
-        [
-          "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
-          0.01
-        ],
-        [
-          "17c92d86-cb3c-aef5-f628-48e247099509",
-          0.115
-        ],
-        [
-          "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
-          0.04
-        ],
-        [
-          "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          0.01
-        ],
-        [
-          "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          0.01
-        ]
+        {
+          "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
+          "e": 0.01
+        },
+        {
+          "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
+          "e": 0.05
+        },
+        {
+          "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
+          "e": 0.01
+        },
+        {
+          "id": "17c92d86-cb3c-aef5-f628-48e247099509",
+          "e": 0.115
+        },
+        {
+          "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
+          "e": 0.04
+        },
+        {
+          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+          "e": 0.01
+        },
+        {
+          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+          "e": 0.01
+        }
       ],
       "thickness": 0.25,
       "R_intrinsic": 3.192,
@@ -1705,26 +1705,26 @@
       "name": "Solera",
       "group": "Soleras",
       "layers": [
-        [
-          "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
-          0.005
-        ],
-        [
-          "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
-          0.03
-        ],
-        [
-          "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
-          0.04
-        ],
-        [
-          "aa688a4a-4c45-475d-6e89-f65a22f250f9",
-          0.2
-        ],
-        [
-          "97696bc6-3e8d-be70-3915-45ebc100a9ba",
-          0.2
-        ]
+        {
+          "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
+          "e": 0.005
+        },
+        {
+          "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
+          "e": 0.03
+        },
+        {
+          "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
+          "e": 0.04
+        },
+        {
+          "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
+          "e": 0.2
+        },
+        {
+          "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+          "e": 0.2
+        }
       ],
       "thickness": 0.48,
       "R_intrinsic": 1.523,
@@ -1745,15 +1745,15 @@
   ],
   "materials": [
     {
-      "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
-      "name": "Subcapa fieltro",
-      "group": "Textiles",
+      "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
+      "name": "Hormigón armado 2300 < d < 2500",
+      "group": "Hormigones",
       "properties": {
         "Detailed": {
-          "conductivity": 0.05,
-          "density": 120.0,
-          "specificheat": 1300.0,
-          "vapourdiffusivity": 15.0
+          "conductivity": 2.3,
+          "density": 2400.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 80.0
         }
       }
     },
@@ -1771,11 +1771,50 @@
       }
     },
     {
+      "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
+      "name": "Mortero de áridos ligeros [vermiculita perlita]",
+      "group": "Morteros",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.41,
+          "density": 900.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "bbe62996-0f75-da18-c562-ec609d76127e",
+      "name": "Frondosa ligera 435 < d < 565",
+      "group": "Maderas",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.15,
+          "density": 500.0,
+          "specificheat": 1600.0,
+          "vapourdiffusivity": 50.0
+        }
+      }
+    },
+    {
       "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
       "name": "Cámara de aire sin ventilar horizontal 2 cm",
       "group": "Cámaras de aire",
       "properties": {
         "Resistance": 0.16
+      }
+    },
+    {
+      "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+      "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
+      "group": "Pétreos y suelos",
+      "properties": {
+        "Detailed": {
+          "conductivity": 1.1,
+          "density": 1885.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 1.0
+        }
       }
     },
     {
@@ -1788,6 +1827,58 @@
           "density": 1110.0,
           "specificheat": 1000.0,
           "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
+      "name": "XPS Expandido con dióxido de carbono CO2 [ 0.034 W/[mK]]",
+      "group": "Aislantes",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.034,
+          "density": 37.5,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 100.0
+        }
+      }
+    },
+    {
+      "id": "17c92d86-cb3c-aef5-f628-48e247099509",
+      "name": "1/2 pie LP métrico o catalán 40 mm< G < 60 mm",
+      "group": "Fábricas de ladrillo",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.667,
+          "density": 1140.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
+      "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250",
+      "group": "Morteros",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.55,
+          "density": 1125.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
+      "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
+      "name": "Subcapa fieltro",
+      "group": "Textiles",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.05,
+          "density": 120.0,
+          "specificheat": 1300.0,
+          "vapourdiffusivity": 15.0
         }
       }
     },
@@ -1805,13 +1896,21 @@
       }
     },
     {
-      "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
-      "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
-      "group": "Pétreos y suelos",
+      "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
+      "name": "Cámara de aire sin ventilar vertical 5 cm",
+      "group": "Cámaras de aire",
+      "properties": {
+        "Resistance": 0.18
+      }
+    },
+    {
+      "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
+      "name": "MW Lana mineral [0.031 W/[mK]]",
+      "group": "Aislantes",
       "properties": {
         "Detailed": {
-          "conductivity": 1.1,
-          "density": 1885.0,
+          "conductivity": 0.031,
+          "density": 40.0,
           "specificheat": 1000.0,
           "vapourdiffusivity": 1.0
         }
@@ -1831,92 +1930,6 @@
       }
     },
     {
-      "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
-      "name": "Cámara de aire sin ventilar vertical 5 cm",
-      "group": "Cámaras de aire",
-      "properties": {
-        "Resistance": 0.18
-      }
-    },
-    {
-      "id": "17c92d86-cb3c-aef5-f628-48e247099509",
-      "name": "1/2 pie LP métrico o catalán 40 mm< G < 60 mm",
-      "group": "Fábricas de ladrillo",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.667,
-          "density": 1140.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
-    },
-    {
-      "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
-      "name": "Arena y grava [1700 < d < 2200]",
-      "group": "Pétreos y suelos",
-      "properties": {
-        "Detailed": {
-          "conductivity": 2.0,
-          "density": 1450.0,
-          "specificheat": 1050.0,
-          "vapourdiffusivity": 50.0
-        }
-      }
-    },
-    {
-      "id": "bbe62996-0f75-da18-c562-ec609d76127e",
-      "name": "Frondosa ligera 435 < d < 565",
-      "group": "Maderas",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.15,
-          "density": 500.0,
-          "specificheat": 1600.0,
-          "vapourdiffusivity": 50.0
-        }
-      }
-    },
-    {
-      "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
-      "name": "XPS Expandido con dióxido de carbono CO2 [ 0.034 W/[mK]]",
-      "group": "Aislantes",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.034,
-          "density": 37.5,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 100.0
-        }
-      }
-    },
-    {
-      "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
-      "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250",
-      "group": "Morteros",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.55,
-          "density": 1125.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
-    },
-    {
-      "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
-      "name": "Hormigón armado 2300 < d < 2500",
-      "group": "Hormigones",
-      "properties": {
-        "Detailed": {
-          "conductivity": 2.3,
-          "density": 2400.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 80.0
-        }
-      }
-    },
-    {
       "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
       "name": "Placa de yeso laminado [PYL] 750 < d < 900",
       "group": "Yesos",
@@ -1930,28 +1943,15 @@
       }
     },
     {
-      "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
-      "name": "Mortero de áridos ligeros [vermiculita perlita]",
-      "group": "Morteros",
+      "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
+      "name": "Arena y grava [1700 < d < 2200]",
+      "group": "Pétreos y suelos",
       "properties": {
         "Detailed": {
-          "conductivity": 0.41,
-          "density": 900.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
-    },
-    {
-      "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
-      "name": "MW Lana mineral [0.031 W/[mK]]",
-      "group": "Aislantes",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.031,
-          "density": 40.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 1.0
+          "conductivity": 2.0,
+          "density": 1450.0,
+          "specificheat": 1050.0,
+          "vapourdiffusivity": 50.0
         }
       }
     }

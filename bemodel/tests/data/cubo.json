@@ -400,14 +400,14 @@
       "name": "Contacto por defecto",
       "group": "Cerramientos en contacto con el terreno",
       "layers": [
-        [
-          "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
-          0.3
-        ],
-        [
-          "325ca1f7-1075-6440-dac4-6e9f2d775a01",
-          0.02
-        ]
+        {
+          "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+          "e": 0.3
+        },
+        {
+          "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
+          "e": 0.02
+        }
       ],
       "thickness": 0.32,
       "R_intrinsic": 0.131,
@@ -418,22 +418,22 @@
       "name": "Fachada por defecto D",
       "group": "Fachadas",
       "layers": [
-        [
-          "17c92d86-cb3c-aef5-f628-48e247099509",
-          0.12
-        ],
-        [
-          "78ebd691-ddae-7e7a-d188-ff67e878be71",
-          0.02
-        ],
-        [
-          "a14db341-a3e0-233e-3897-0e99b620bca1",
-          0.05
-        ],
-        [
-          "b5b44575-ea28-0353-8bc8-8ad8726ec897",
-          0.02
-        ]
+        {
+          "id": "17c92d86-cb3c-aef5-f628-48e247099509",
+          "e": 0.12
+        },
+        {
+          "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
+          "e": 0.02
+        },
+        {
+          "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+          "e": 0.05
+        },
+        {
+          "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+          "e": 0.02
+        }
       ],
       "thickness": 0.21,
       "R_intrinsic": 0.412,
@@ -444,18 +444,18 @@
       "name": "PIV por defecto",
       "group": "Partición interior vertical",
       "layers": [
-        [
-          "b5b44575-ea28-0353-8bc8-8ad8726ec897",
-          0.02
-        ],
-        [
-          "46b0c377-fd88-4584-7c2d-398659acad1d",
-          0.08
-        ],
-        [
-          "b5b44575-ea28-0353-8bc8-8ad8726ec897",
-          0.02
-        ]
+        {
+          "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+          "e": 0.02
+        },
+        {
+          "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
+          "e": 0.08
+        },
+        {
+          "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+          "e": 0.02
+        }
       ],
       "thickness": 0.12,
       "R_intrinsic": 0.255,
@@ -476,6 +476,19 @@
   ],
   "materials": [
     {
+      "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+      "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
+      "group": "Fábricas de ladrillo",
+      "properties": {
+        "Detailed": {
+          "conductivity": 0.445,
+          "density": 1000.0,
+          "specificheat": 1000.0,
+          "vapourdiffusivity": 10.0
+        }
+      }
+    },
+    {
       "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
       "name": "Hormigón armado d > 2500",
       "group": "Hormigones",
@@ -489,34 +502,13 @@
       }
     },
     {
-      "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
-      "name": "Tabicón de LH doble [60 mm < E < 90 mm]",
-      "group": "Fábricas de ladrillo",
+      "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
+      "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000",
+      "group": "Morteros",
       "properties": {
         "Detailed": {
-          "conductivity": 0.432,
-          "density": 930.0,
-          "specificheat": 1000.0,
-          "vapourdiffusivity": 10.0
-        }
-      }
-    },
-    {
-      "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
-      "name": "Cámara de aire ligeramente ventilada vertical 2 cm",
-      "group": "Cámaras de aire",
-      "properties": {
-        "Resistance": 0.085
-      }
-    },
-    {
-      "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
-      "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
-      "group": "Fábricas de ladrillo",
-      "properties": {
-        "Detailed": {
-          "conductivity": 0.445,
-          "density": 1000.0,
+          "conductivity": 1.8,
+          "density": 2100.0,
           "specificheat": 1000.0,
           "vapourdiffusivity": 10.0
         }
@@ -536,6 +528,14 @@
       }
     },
     {
+      "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
+      "name": "Cámara de aire ligeramente ventilada vertical 2 cm",
+      "group": "Cámaras de aire",
+      "properties": {
+        "Resistance": 0.085
+      }
+    },
+    {
       "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
       "name": "Enlucido de yeso 1000 < d < 1300",
       "group": "Enlucidos",
@@ -549,13 +549,13 @@
       }
     },
     {
-      "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
-      "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000",
-      "group": "Morteros",
+      "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
+      "name": "Tabicón de LH doble [60 mm < E < 90 mm]",
+      "group": "Fábricas de ladrillo",
       "properties": {
         "Detailed": {
-          "conductivity": 1.8,
-          "density": 2100.0,
+          "conductivity": 0.432,
+          "density": 930.0,
           "specificheat": 1000.0,
           "vapourdiffusivity": 10.0
         }
