@@ -38,7 +38,6 @@ pub struct Model {
     /// Construcciones de huecos
     pub wincons: Vec<WindowCons>,
     /// Materiales
-    #[serde(with = "super::materials")]
     pub materials: MaterialsList,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
     pub extra: Option<Vec<ExtraData>>,

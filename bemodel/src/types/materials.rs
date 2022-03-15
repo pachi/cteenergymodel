@@ -4,15 +4,14 @@
 
 //! Materiales
 
-use indexmap::IndexMap;
-use serde::{de::Deserializer, ser::Serializer, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 use super::Uuid;
 
 // Materiales -----------------------------------------------
 
 /// Lista de materiales indexada por Uuid
-pub type MaterialsList = IndexMap<Uuid, Material>;
+pub type MaterialsList = Vec<Material>;
 
 /// Elemento opaco (muro, cubierta, suelo, partición)
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -50,22 +49,4 @@ pub enum MatProps {
         /// Resistencia térmica, m²K/W
         resistance: f32,
     },
-}
-
-pub fn serialize<S>(map: &IndexMap<Uuid, Material>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    serializer.collect_seq(map.values())
-}
-
-pub fn deserialize<'de, D>(deserializer: D) -> Result<IndexMap<Uuid, Material>, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let mut map = IndexMap::new();
-    for item in Vec::<Material>::deserialize(deserializer)? {
-        map.insert(item.id.clone(), item);
-    }
-    Ok(map)
 }
