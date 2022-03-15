@@ -11,8 +11,8 @@ use log::{info, warn};
 use serde::{Deserialize, Serialize};
 
 use super::{
-    fround2, uuid_from_str, BoundaryType, Meta, Shade, Space, SpaceType, ThermalBridge,
-    Tilt, Wall, WallCons, WallGeometry, Window, WindowCons, Db
+    fround2, uuid_from_str, BoundaryType, ConsDb, MatsDb, Meta, Shade, Space, SpaceType,
+    ThermalBridge, Tilt, Wall, WallCons, WallGeometry, Window, WindowCons,
 };
 
 // ---------- Estructura general de datos --------------
@@ -33,17 +33,13 @@ pub struct Model {
     pub thermal_bridges: Vec<ThermalBridge>,
     /// Sombras
     pub shades: Vec<Shade>,
-    /// Construcciones de opacos
-    pub wallcons: Vec<WallCons>,
-    /// Construcciones de huecos
-    pub wincons: Vec<WindowCons>,
+    /// Construcciones
+    pub cons: ConsDb,
     /// Materiales
-    pub db: Db,
+    pub mats: MatsDb,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
     pub extra: Option<Vec<ExtraData>>,
 }
-
-
 
 impl Model {
     // ---------------- Conversión hacia y desde JSON
@@ -96,7 +92,7 @@ impl Model {
 
     /// Localiza construcción de opaco
     pub fn wallcons_of_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a WallCons> {
-        let maybecons = self.wallcons.iter().find(|wc| wc.id == wall.cons);
+        let maybecons = self.cons.wallcons.iter().find(|wc| wc.id == wall.cons);
         if maybecons.is_none() {
             warn!(
                 "Muro {} ({}) con definición de construcción incorrecta {}",
@@ -120,7 +116,7 @@ impl Model {
 
     /// Localiza construcción de hueco
     pub fn wincons_of_window<'a>(&'a self, win: &'a Window) -> Option<&'a WindowCons> {
-        let maybecons = self.wincons.iter().find(|wc| wc.id == win.cons);
+        let maybecons = self.cons.wincons.iter().find(|wc| wc.id == win.cons);
         if maybecons.is_none() {
             warn!(
                 "Hueco {}({}) con definición de construcción incorrecta {}",

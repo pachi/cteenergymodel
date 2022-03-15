@@ -394,97 +394,84 @@
       }
     }
   ],
-  "wallcons": [
-    {
-      "id": "6058e362-fe85-048e-7cbf-0ddf2d7c1085",
-      "name": "Contacto por defecto",
-      "group": "Cerramientos en contacto con el terreno",
-      "layers": [
-        {
-          "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
-          "e": 0.3
-        },
-        {
-          "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
-          "e": 0.02
-        }
-      ],
-      "absorptance": 0.0
-    },
-    {
-      "id": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
-      "name": "Fachada por defecto D",
-      "group": "Fachadas",
-      "layers": [
-        {
-          "id": "17c92d86-cb3c-aef5-f628-48e247099509",
-          "e": 0.12
-        },
-        {
-          "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
-          "e": 0.02
-        },
-        {
-          "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
-          "e": 0.05
-        },
-        {
-          "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
-          "e": 0.02
-        }
-      ],
-      "absorptance": 0.0
-    },
-    {
-      "id": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
-      "name": "PIV por defecto",
-      "group": "Partición interior vertical",
-      "layers": [
-        {
-          "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
-          "e": 0.02
-        },
-        {
-          "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
-          "e": 0.08
-        },
-        {
-          "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
-          "e": 0.02
-        }
-      ],
-      "absorptance": 0.0
-    }
-  ],
-  "wincons": [
-    {
-      "id": "586cacdb-0937-fe9e-6692-d73af19b880e",
-      "name": "Doble -- Mrpt - Gris claro",
-      "group": "Huecos",
-      "U": 3.29,
-      "Ff": 0.1,
-      "gglwi": 0.72,
-      "gglshwi": 0.72,
-      "C_100": 25.0
-    }
-  ],
-  "db": {
+  "cons": {
+    "wallcons": [
+      {
+        "id": "6058e362-fe85-048e-7cbf-0ddf2d7c1085",
+        "name": "Contacto por defecto",
+        "group": "Cerramientos en contacto con el terreno",
+        "layers": [
+          {
+            "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+            "e": 0.3
+          },
+          {
+            "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
+            "e": 0.02
+          }
+        ],
+        "absorptance": 0.0
+      },
+      {
+        "id": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
+        "name": "Fachada por defecto D",
+        "group": "Fachadas",
+        "layers": [
+          {
+            "id": "17c92d86-cb3c-aef5-f628-48e247099509",
+            "e": 0.12
+          },
+          {
+            "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
+            "e": 0.02
+          },
+          {
+            "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+            "e": 0.05
+          },
+          {
+            "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+            "e": 0.02
+          }
+        ],
+        "absorptance": 0.0
+      },
+      {
+        "id": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
+        "name": "PIV por defecto",
+        "group": "Partición interior vertical",
+        "layers": [
+          {
+            "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+            "e": 0.02
+          },
+          {
+            "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
+            "e": 0.08
+          },
+          {
+            "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+            "e": 0.02
+          }
+        ],
+        "absorptance": 0.0
+      }
+    ],
+    "wincons": [
+      {
+        "id": "586cacdb-0937-fe9e-6692-d73af19b880e",
+        "name": "Doble -- Mrpt - Gris claro",
+        "group": "Huecos",
+        "U": 3.29,
+        "Ff": 0.1,
+        "gglwi": 0.72,
+        "gglshwi": 0.72,
+        "C_100": 25.0
+      }
+    ]
+  },
+  "mats": {
     "materials": [
-      {
-        "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
-        "name": "Cámara de aire ligeramente ventilada vertical 2 cm",
-        "group": "Cámaras de aire",
-        "resistance": 0.085
-      },
-      {
-        "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
-        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000",
-        "group": "Morteros",
-        "conductivity": 1.8,
-        "density": 2100.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
-      },
       {
         "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
         "name": "Enlucido de yeso 1000 < d < 1300",
@@ -504,15 +491,6 @@
         "vapourdiffusivity": 10.0
       },
       {
-        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
-        "name": "Hormigón armado d > 2500",
-        "group": "Hormigones",
-        "conductivity": 2.5,
-        "density": 2600.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 80.0
-      },
-      {
         "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
         "name": "Tabicón de LH doble [60 mm < E < 90 mm]",
         "group": "Fábricas de ladrillo",
@@ -522,11 +500,35 @@
         "vapourdiffusivity": 10.0
       },
       {
+        "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
+        "name": "Cámara de aire ligeramente ventilada vertical 2 cm",
+        "group": "Cámaras de aire",
+        "resistance": 0.085
+      },
+      {
         "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
         "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
         "group": "Fábricas de ladrillo",
         "conductivity": 0.445,
         "density": 1000.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+        "name": "Hormigón armado d > 2500",
+        "group": "Hormigones",
+        "conductivity": 2.5,
+        "density": 2600.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 80.0
+      },
+      {
+        "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
+        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000",
+        "group": "Morteros",
+        "conductivity": 1.8,
+        "density": 2100.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 10.0
       }

@@ -7349,187 +7349,180 @@
       }
     }
   ],
-  "wallcons": [
-    {
-      "id": "90abad0b-5853-8104-6278-149940b884ab",
-      "name": "cubierta tipo",
-      "group": "Horizontales",
-      "layers": [
-        {
-          "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
-          "e": 0.015
-        },
-        {
-          "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
-          "e": 0.015
-        },
-        {
-          "id": "80274963-698f-dbb3-3741-056857281f8c",
-          "e": 0.13
-        },
-        {
-          "id": "e5f312d0-e644-824e-259a-917bf8d344bf",
-          "e": 0.07
-        },
-        {
-          "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
-          "e": 0.25
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
-      "name": "division_viviendas",
-      "group": "Tabiques",
-      "layers": [
-        {
-          "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
-          "e": 0.015
-        },
-        {
-          "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
-          "e": 0.04
-        },
-        {
-          "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
-          "e": 0.015
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
-      "name": "fachada tipo",
-      "group": "Fachada",
-      "layers": [
-        {
-          "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
-          "e": 0.015
-        },
-        {
-          "id": "a90add57-4ac6-032e-fe56-eece92423ac3",
-          "e": 0.115
-        },
-        {
-          "id": "80274963-698f-dbb3-3741-056857281f8c",
-          "e": 0.14
-        },
-        {
-          "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
-          "e": 0.04
-        },
-        {
-          "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
-          "e": 0.015
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
-      "name": "forjado tipo",
-      "group": "Horizontales",
-      "layers": [
-        {
-          "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
-          "e": 0.015
-        },
-        {
-          "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
-          "e": 0.02
-        },
-        {
-          "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
-          "e": 0.25
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "b8262ed2-37c9-a9d6-9d8c-23f515aedc0f",
-      "name": "solera tipo",
-      "group": "Horizontales",
-      "layers": [
-        {
-          "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
-          "e": 0.015
-        },
-        {
-          "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
-          "e": 0.015
-        },
-        {
-          "id": "80274963-698f-dbb3-3741-056857281f8c",
-          "e": 0.085
-        },
-        {
-          "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
-          "e": 0.2
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "2af92460-4420-a8ff-4506-bd2d63173011",
-      "name": "tabique tipo",
-      "group": "Tabiques",
-      "layers": [
-        {
-          "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
-          "e": 0.015
-        },
-        {
-          "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
-          "e": 0.04
-        },
-        {
-          "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
-          "e": 0.015
-        }
-      ],
-      "absorptance": 0.6
-    }
-  ],
-  "wincons": [
-    {
-      "id": "2477f2c0-14c8-3ba5-378a-bb6b12ca930c",
-      "name": "ventana tipo",
-      "group": "ventanas",
-      "U": 2.99,
-      "Ff": 0.2,
-      "gglwi": 0.64,
-      "gglshwi": 0.08,
-      "C_100": 27.0
-    },
-    {
-      "id": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
-      "name": "ventana_igualOS",
-      "group": "ventanas",
-      "U": 1.17,
-      "Ff": 0.2,
-      "gglwi": 0.38,
-      "gglshwi": 0.08,
-      "C_100": 27.0
-    }
-  ],
-  "db": {
-    "materials": [
+  "cons": {
+    "wallcons": [
       {
-        "id": "e5f312d0-e644-824e-259a-917bf8d344bf",
-        "name": "Hormigón con otros áridos ligeros d 1600",
-        "group": "Hormigones",
-        "conductivity": 0.59,
-        "density": 1600.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
+        "id": "90abad0b-5853-8104-6278-149940b884ab",
+        "name": "cubierta tipo",
+        "group": "Horizontales",
+        "layers": [
+          {
+            "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
+            "e": 0.015
+          },
+          {
+            "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
+            "e": 0.015
+          },
+          {
+            "id": "80274963-698f-dbb3-3741-056857281f8c",
+            "e": 0.13
+          },
+          {
+            "id": "e5f312d0-e644-824e-259a-917bf8d344bf",
+            "e": 0.07
+          },
+          {
+            "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
+            "e": 0.25
+          }
+        ],
+        "absorptance": 0.6
       },
       {
-        "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
-        "name": "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.228,
-        "density": 670.0,
+        "id": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
+        "name": "division_viviendas",
+        "group": "Tabiques",
+        "layers": [
+          {
+            "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
+            "e": 0.015
+          },
+          {
+            "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
+            "e": 0.04
+          },
+          {
+            "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
+            "e": 0.015
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
+        "name": "fachada tipo",
+        "group": "Fachada",
+        "layers": [
+          {
+            "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
+            "e": 0.015
+          },
+          {
+            "id": "a90add57-4ac6-032e-fe56-eece92423ac3",
+            "e": 0.115
+          },
+          {
+            "id": "80274963-698f-dbb3-3741-056857281f8c",
+            "e": 0.14
+          },
+          {
+            "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+            "e": 0.04
+          },
+          {
+            "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
+            "e": 0.015
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
+        "name": "forjado tipo",
+        "group": "Horizontales",
+        "layers": [
+          {
+            "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
+            "e": 0.015
+          },
+          {
+            "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
+            "e": 0.02
+          },
+          {
+            "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
+            "e": 0.25
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "b8262ed2-37c9-a9d6-9d8c-23f515aedc0f",
+        "name": "solera tipo",
+        "group": "Horizontales",
+        "layers": [
+          {
+            "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
+            "e": 0.015
+          },
+          {
+            "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
+            "e": 0.015
+          },
+          {
+            "id": "80274963-698f-dbb3-3741-056857281f8c",
+            "e": 0.085
+          },
+          {
+            "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+            "e": 0.2
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "2af92460-4420-a8ff-4506-bd2d63173011",
+        "name": "tabique tipo",
+        "group": "Tabiques",
+        "layers": [
+          {
+            "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
+            "e": 0.015
+          },
+          {
+            "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
+            "e": 0.04
+          },
+          {
+            "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
+            "e": 0.015
+          }
+        ],
+        "absorptance": 0.6
+      }
+    ],
+    "wincons": [
+      {
+        "id": "2477f2c0-14c8-3ba5-378a-bb6b12ca930c",
+        "name": "ventana tipo",
+        "group": "ventanas",
+        "U": 2.99,
+        "Ff": 0.2,
+        "gglwi": 0.64,
+        "gglshwi": 0.08,
+        "C_100": 27.0
+      },
+      {
+        "id": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
+        "name": "ventana_igualOS",
+        "group": "ventanas",
+        "U": 1.17,
+        "Ff": 0.2,
+        "gglwi": 0.38,
+        "gglshwi": 0.08,
+        "C_100": 27.0
+      }
+    ]
+  },
+  "mats": {
+    "materials": [
+      {
+        "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
+        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000",
+        "group": "Morteros",
+        "conductivity": 1.3,
+        "density": 1900.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 10.0
       },
@@ -7543,31 +7536,22 @@
         "vapourdiffusivity": 10.0
       },
       {
-        "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
-        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000",
-        "group": "Morteros",
-        "conductivity": 1.3,
-        "density": 1900.0,
+        "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
+        "name": "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.228,
+        "density": 670.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 10.0
       },
       {
-        "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
-        "name": "Yeso de alta dureza 900 < d < 1200",
-        "group": "Yesos",
-        "conductivity": 0.43,
-        "density": 1050.0,
+        "id": "80274963-698f-dbb3-3741-056857281f8c",
+        "name": "XPS Expandido con hidrofluorcarbonos HFC [ 0.032 W/[mK]]",
+        "group": "Aislantes",
+        "conductivity": 0.032,
+        "density": 37.5,
         "specificheat": 1000.0,
-        "vapourdiffusivity": 4.0
-      },
-      {
-        "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
-        "name": "FU Entrevigado cerámico -Canto 250 mm",
-        "group": "Forjados unidireccionales",
-        "conductivity": 0.908,
-        "density": 1220.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
+        "vapourdiffusivity": 100.0
       },
       {
         "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
@@ -7588,15 +7572,6 @@
         "vapourdiffusivity": 30.0
       },
       {
-        "id": "80274963-698f-dbb3-3741-056857281f8c",
-        "name": "XPS Expandido con hidrofluorcarbonos HFC [ 0.032 W/[mK]]",
-        "group": "Aislantes",
-        "conductivity": 0.032,
-        "density": 37.5,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 100.0
-      },
-      {
         "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
         "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
         "group": "Fábricas de ladrillo",
@@ -7604,6 +7579,33 @@
         "density": 1000.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "e5f312d0-e644-824e-259a-917bf8d344bf",
+        "name": "Hormigón con otros áridos ligeros d 1600",
+        "group": "Hormigones",
+        "conductivity": 0.59,
+        "density": 1600.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
+        "name": "FU Entrevigado cerámico -Canto 250 mm",
+        "group": "Forjados unidireccionales",
+        "conductivity": 0.908,
+        "density": 1220.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
+        "name": "Yeso de alta dureza 900 < d < 1200",
+        "group": "Yesos",
+        "conductivity": 0.43,
+        "density": 1050.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 4.0
       }
     ]
   },

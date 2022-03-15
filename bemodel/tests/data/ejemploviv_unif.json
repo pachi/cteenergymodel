@@ -2849,217 +2849,246 @@
     }
   ],
   "shades": [],
-  "wallcons": [
-    {
-      "id": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
-      "name": "Cubierta plana",
-      "group": "Cubiertas planas",
-      "layers": [
-        {
-          "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
-          "e": 0.02
-        },
-        {
-          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
-          "e": 0.01
-        },
-        {
-          "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
-          "e": 0.12
-        },
-        {
-          "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
-          "e": 0.003
-        },
-        {
-          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
-          "e": 0.01
-        },
-        {
-          "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
-          "e": 0.02
-        },
-        {
-          "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
-          "e": 0.25
-        },
-        {
-          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-          "e": 0.01
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "name": "Forjado interior",
-      "group": "Forjados interiores",
-      "layers": [
-        {
-          "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
-          "e": 0.02
-        },
-        {
-          "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
-          "e": 0.02
-        },
-        {
-          "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
-          "e": 0.03
-        },
-        {
-          "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
-          "e": 0.14
-        },
-        {
-          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-          "e": 0.01
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "6cfcec0e-b90b-998b-c755-7d219638d40c",
-      "name": "Forjado terreno",
-      "group": "Forjados terrenos",
-      "layers": [
-        {
-          "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
-          "e": 0.02
-        },
-        {
-          "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
-          "e": 0.02
-        },
-        {
-          "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
-          "e": 0.02
-        },
-        {
-          "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
-          "e": 0.15
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
-      "name": "Medianera",
-      "group": "Medianeras",
-      "layers": [
-        {
-          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-          "e": 0.01
-        },
-        {
-          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
-          "e": 0.01
-        },
-        {
-          "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
-          "e": 0.115
-        },
-        {
-          "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
-          "e": 0.04
-        },
-        {
-          "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
-          "e": 0.05
-        },
-        {
-          "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
-          "e": 0.115
-        },
-        {
-          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
-          "e": 0.01
-        },
-        {
-          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-          "e": 0.01
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "1949e38b-b7e0-a178-a272-92604bf2608b",
-      "name": "Muro exterior",
-      "group": "Muros exteriores",
-      "layers": [
-        {
-          "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
-          "e": 0.115
-        },
-        {
-          "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
-          "e": 0.01
-        },
-        {
-          "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
-          "e": 0.08
-        },
-        {
-          "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
-          "e": 0.04
-        },
-        {
-          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-          "e": 0.01
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
-      "name": "Tabique",
-      "group": "Tabiques",
-      "layers": [
-        {
-          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-          "e": 0.01
-        },
-        {
-          "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
-          "e": 0.115
-        },
-        {
-          "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-          "e": 0.01
-        }
-      ],
-      "absorptance": 0.6
-    }
-  ],
-  "wincons": [
-    {
-      "id": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
-      "name": "Vidrio doble",
-      "group": "Vidrios dobles",
-      "U": 1.83,
-      "Ff": 0.15,
-      "gglwi": 0.64,
-      "gglshwi": 0.08,
-      "C_100": 27.0
-    }
-  ],
-  "db": {
-    "materials": [
+  "cons": {
+    "wallcons": [
       {
-        "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
-        "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
-        "group": "Pétreos y suelos",
-        "conductivity": 1.1,
-        "density": 1885.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 1.0
+        "id": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
+        "name": "Cubierta plana",
+        "group": "Cubiertas planas",
+        "layers": [
+          {
+            "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
+            "e": 0.02
+          },
+          {
+            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "e": 0.01
+          },
+          {
+            "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+            "e": 0.12
+          },
+          {
+            "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
+            "e": 0.003
+          },
+          {
+            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "e": 0.01
+          },
+          {
+            "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
+            "e": 0.02
+          },
+          {
+            "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
+            "e": 0.25
+          },
+          {
+            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "e": 0.01
+          }
+        ],
+        "absorptance": 0.6
       },
       {
-        "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
-        "name": "MAL",
+        "id": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+        "name": "Forjado interior",
+        "group": "Forjados interiores",
+        "layers": [
+          {
+            "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
+            "e": 0.02
+          },
+          {
+            "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+            "e": 0.02
+          },
+          {
+            "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+            "e": 0.03
+          },
+          {
+            "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
+            "e": 0.14
+          },
+          {
+            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "e": 0.01
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "6cfcec0e-b90b-998b-c755-7d219638d40c",
+        "name": "Forjado terreno",
+        "group": "Forjados terrenos",
+        "layers": [
+          {
+            "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
+            "e": 0.02
+          },
+          {
+            "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
+            "e": 0.02
+          },
+          {
+            "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+            "e": 0.02
+          },
+          {
+            "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+            "e": 0.15
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
+        "name": "Medianera",
+        "group": "Medianeras",
+        "layers": [
+          {
+            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "e": 0.01
+          },
+          {
+            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "e": 0.01
+          },
+          {
+            "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+            "e": 0.115
+          },
+          {
+            "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+            "e": 0.04
+          },
+          {
+            "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
+            "e": 0.05
+          },
+          {
+            "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+            "e": 0.115
+          },
+          {
+            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "e": 0.01
+          },
+          {
+            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "e": 0.01
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "1949e38b-b7e0-a178-a272-92604bf2608b",
+        "name": "Muro exterior",
+        "group": "Muros exteriores",
+        "layers": [
+          {
+            "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+            "e": 0.115
+          },
+          {
+            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "e": 0.01
+          },
+          {
+            "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+            "e": 0.08
+          },
+          {
+            "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
+            "e": 0.04
+          },
+          {
+            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "e": 0.01
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
+        "name": "Tabique",
+        "group": "Tabiques",
+        "layers": [
+          {
+            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "e": 0.01
+          },
+          {
+            "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
+            "e": 0.115
+          },
+          {
+            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "e": 0.01
+          }
+        ],
+        "absorptance": 0.6
+      }
+    ],
+    "wincons": [
+      {
+        "id": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+        "name": "Vidrio doble",
+        "group": "Vidrios dobles",
+        "U": 1.83,
+        "Ff": 0.15,
+        "gglwi": 0.64,
+        "gglshwi": 0.08,
+        "C_100": 27.0
+      }
+    ]
+  },
+  "mats": {
+    "materials": [
+      {
+        "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
+        "name": "plaqCer",
+        "group": "Cerámicos",
+        "conductivity": 1.0,
+        "density": 2000.0,
+        "specificheat": 800.0,
+        "vapourdiffusivity": 30.0
+      },
+      {
+        "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+        "name": "HAlq2300",
+        "group": "Hormigones",
+        "conductivity": 2.3,
+        "density": 2400.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 80.0
+      },
+      {
+        "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
+        "name": "HMlt2300",
+        "group": "Hormigones",
+        "conductivity": 1.65,
+        "density": 2150.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 70.0
+      },
+      {
+        "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
+        "name": "FUhal250",
+        "group": "Forjados unidireccionales",
+        "conductivity": 1.0,
+        "density": 1230.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 6.0
+      },
+      {
+        "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
+        "name": "MORgt1000",
         "group": "Morteros",
-        "conductivity": 0.41,
-        "density": 1000.0,
+        "conductivity": 0.55,
+        "density": 1125.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 10.0
       },
@@ -3073,24 +3102,6 @@
         "vapourdiffusivity": 10.0
       },
       {
-        "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-        "name": "enlYlq1300",
-        "group": "Enlucidos",
-        "conductivity": 0.57,
-        "density": 1150.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 6.0
-      },
-      {
-        "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
-        "name": "BC140",
-        "group": "Fábricas de bloque cerámico de arcilla aligerada",
-        "conductivity": 0.4375,
-        "density": 1170.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
-      },
-      {
         "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
         "name": "LPmp_50",
         "group": "Fábricas de ladrillo",
@@ -3100,76 +3111,31 @@
         "vapourdiffusivity": 10.0
       },
       {
-        "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
-        "name": "MW_04",
-        "group": "Aislantes",
-        "conductivity": 0.04,
-        "density": 40.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 1.0
-      },
-      {
-        "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
-        "name": "HAlq2300",
-        "group": "Hormigones",
-        "conductivity": 2.3,
-        "density": 2400.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 80.0
-      },
-      {
-        "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
-        "name": "plaqCer",
-        "group": "Cerámicos",
-        "conductivity": 1.0,
-        "density": 2000.0,
-        "specificheat": 800.0,
-        "vapourdiffusivity": 30.0
-      },
-      {
-        "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
-        "name": "MORgt1000",
-        "group": "Morteros",
-        "conductivity": 0.55,
-        "density": 1125.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
-      },
-      {
-        "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
-        "name": "FUhal250",
-        "group": "Forjados unidireccionales",
-        "conductivity": 1.0,
-        "density": 1230.0,
+        "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+        "name": "enlYlq1300",
+        "group": "Enlucidos",
+        "conductivity": 0.57,
+        "density": 1150.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 6.0
       },
       {
-        "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
-        "name": "HMlt2300",
-        "group": "Hormigones",
-        "conductivity": 1.65,
-        "density": 2150.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 70.0
-      },
-      {
-        "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
-        "name": "betun_lamina",
-        "group": "Bituminosos",
-        "conductivity": 0.23,
-        "density": 1100.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 50000.0
-      },
-      {
-        "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
-        "name": "LMmp",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 1.02,
-        "density": 2170.0,
+        "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+        "name": "MAL",
+        "group": "Morteros",
+        "conductivity": 0.41,
+        "density": 1000.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+        "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
+        "group": "Pétreos y suelos",
+        "conductivity": 1.1,
+        "density": 1885.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 1.0
       },
       {
         "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
@@ -3181,6 +3147,15 @@
         "vapourdiffusivity": 1e30
       },
       {
+        "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+        "name": "MW_04",
+        "group": "Aislantes",
+        "conductivity": 0.04,
+        "density": 40.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 1.0
+      },
+      {
         "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
         "name": "EPS037",
         "group": "Aislantes",
@@ -3188,6 +3163,33 @@
         "density": 30.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 20.0
+      },
+      {
+        "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
+        "name": "betun_lamina",
+        "group": "Bituminosos",
+        "conductivity": 0.23,
+        "density": 1100.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 50000.0
+      },
+      {
+        "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
+        "name": "BC140",
+        "group": "Fábricas de bloque cerámico de arcilla aligerada",
+        "conductivity": 0.4375,
+        "density": 1170.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+        "name": "LMmp",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 1.02,
+        "density": 2170.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
       },
       {
         "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",

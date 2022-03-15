@@ -20,9 +20,9 @@ use hulc::{
 };
 
 pub use crate::{
-    BoundaryType, Db, Layer, MatProps, Material, Meta, Model, Orientation, Shade, Space, SpaceType,
-    ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeometry, Window, WindowCons,
-    WindowGeometry,
+    BoundaryType, ConsDb, Layer, MatProps, Material, MatsDb, Meta, Model, Orientation, Shade,
+    Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeometry,
+    Window, WindowCons, WindowGeometry,
 };
 
 // Utilidades varias de conversión
@@ -160,9 +160,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             thermal_bridges,
             shades,
             spaces,
-            wincons,
-            wallcons,
-            db: Db { materials },
+            cons: ConsDb { wincons, wallcons },
+            mats: MatsDb { materials },
             extra: None,
         };
         model.update_fshobst();

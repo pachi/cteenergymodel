@@ -11,6 +11,15 @@ use crate::utils::fround3;
 
 // Elementos -----------------------------------------------
 
+/// Base de datos de construcciones de opacos y huecos
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct ConsDb {
+    /// Construcciones de opacos
+    pub wallcons: Vec<WallCons>,
+    /// Construcciones de huecos
+    pub wincons: Vec<WindowCons>,
+}
+
 /// Definición de construcción de elemento opaco
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WallCons {

@@ -12,7 +12,7 @@ use super::Uuid;
 
 /// Base de datos de materiales
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct Db {
+pub struct MatsDb {
     /// Lista de materiales para elementos opacos (muro, cubierta, suelo, partición)
     pub materials: MaterialsList,
     // /// Lista de vidrios

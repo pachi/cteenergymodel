@@ -25,8 +25,8 @@ impl Model {
 
         let spaceids: HashSet<&str> = self.spaces.iter().map(|s| s.id.as_str()).collect();
         let wallids: HashSet<&str> = self.walls.iter().map(|w| w.id.as_str()).collect();
-        let wallconsids: HashSet<&str> = self.wallcons.iter().map(|c| c.id.as_str()).collect();
-        let winconsids: HashSet<&str> = self.wincons.iter().map(|c| c.id.as_str()).collect();
+        let wallconsids: HashSet<&str> = self.cons.wallcons.iter().map(|c| c.id.as_str()).collect();
+        let winconsids: HashSet<&str> = self.cons.wincons.iter().map(|c| c.id.as_str()).collect();
 
         let mut warnings = Vec::new();
 

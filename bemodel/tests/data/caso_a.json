@@ -1575,216 +1575,185 @@
     }
   ],
   "shades": [],
-  "wallcons": [
-    {
-      "id": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
-      "name": "Cubierta no transitable",
-      "group": "Cubiertas planas",
-      "layers": [
-        {
-          "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
-          "e": 0.1
-        },
-        {
-          "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
-          "e": 0.001
-        },
-        {
-          "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
-          "e": 0.08
-        },
-        {
-          "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
-          "e": 0.001
-        },
-        {
-          "id": "9904021e-6d18-e151-1094-c776bc669d51",
-          "e": 0.3
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
-      "name": "Forjado interior",
-      "group": "Forjados Interiores",
-      "layers": [
-        {
-          "id": "bbe62996-0f75-da18-c562-ec609d76127e",
-          "e": 0.01
-        },
-        {
-          "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
-          "e": 0.02
-        },
-        {
-          "id": "bed4d34b-8949-b348-d818-5c079a708d9e",
-          "e": 0.31
-        },
-        {
-          "id": "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
-          "e": 0.01
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
-      "name": "Placas de yeso",
-      "group": "Tabiques",
-      "layers": [
-        {
-          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          "e": 0.01
-        },
-        {
-          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          "e": 0.01
-        },
-        {
-          "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
-          "e": 0.05
-        },
-        {
-          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          "e": 0.01
-        },
-        {
-          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          "e": 0.01
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "5904daa6-22de-1811-f735-cc4c3059de46",
-      "name": "SATE",
-      "group": "Fachada",
-      "layers": [
-        {
-          "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
-          "e": 0.01
-        },
-        {
-          "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
-          "e": 0.05
-        },
-        {
-          "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
-          "e": 0.01
-        },
-        {
-          "id": "17c92d86-cb3c-aef5-f628-48e247099509",
-          "e": 0.115
-        },
-        {
-          "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
-          "e": 0.04
-        },
-        {
-          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          "e": 0.01
-        },
-        {
-          "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-          "e": 0.01
-        }
-      ],
-      "absorptance": 0.6
-    },
-    {
-      "id": "e10cece0-793f-ff77-2bcb-35576380274f",
-      "name": "Solera",
-      "group": "Soleras",
-      "layers": [
-        {
-          "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
-          "e": 0.005
-        },
-        {
-          "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
-          "e": 0.03
-        },
-        {
-          "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
-          "e": 0.04
-        },
-        {
-          "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
-          "e": 0.2
-        },
-        {
-          "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
-          "e": 0.2
-        }
-      ],
-      "absorptance": 0.6
-    }
-  ],
-  "wincons": [
-    {
-      "id": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
-      "name": "PVC 2",
-      "group": "Ventanas de PVC",
-      "U": 1.26,
-      "Ff": 0.1,
-      "gglwi": 0.72,
-      "gglshwi": 1.0,
-      "C_100": 50.0
-    }
-  ],
-  "db": {
+  "cons": {
+    "wallcons": [
+      {
+        "id": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
+        "name": "Cubierta no transitable",
+        "group": "Cubiertas planas",
+        "layers": [
+          {
+            "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
+            "e": 0.1
+          },
+          {
+            "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
+            "e": 0.001
+          },
+          {
+            "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
+            "e": 0.08
+          },
+          {
+            "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
+            "e": 0.001
+          },
+          {
+            "id": "9904021e-6d18-e151-1094-c776bc669d51",
+            "e": 0.3
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+        "name": "Forjado interior",
+        "group": "Forjados Interiores",
+        "layers": [
+          {
+            "id": "bbe62996-0f75-da18-c562-ec609d76127e",
+            "e": 0.01
+          },
+          {
+            "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
+            "e": 0.02
+          },
+          {
+            "id": "bed4d34b-8949-b348-d818-5c079a708d9e",
+            "e": 0.31
+          },
+          {
+            "id": "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
+            "e": 0.01
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
+        "name": "Placas de yeso",
+        "group": "Tabiques",
+        "layers": [
+          {
+            "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+            "e": 0.01
+          },
+          {
+            "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+            "e": 0.01
+          },
+          {
+            "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
+            "e": 0.05
+          },
+          {
+            "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+            "e": 0.01
+          },
+          {
+            "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+            "e": 0.01
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "5904daa6-22de-1811-f735-cc4c3059de46",
+        "name": "SATE",
+        "group": "Fachada",
+        "layers": [
+          {
+            "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
+            "e": 0.01
+          },
+          {
+            "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
+            "e": 0.05
+          },
+          {
+            "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
+            "e": 0.01
+          },
+          {
+            "id": "17c92d86-cb3c-aef5-f628-48e247099509",
+            "e": 0.115
+          },
+          {
+            "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
+            "e": 0.04
+          },
+          {
+            "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+            "e": 0.01
+          },
+          {
+            "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+            "e": 0.01
+          }
+        ],
+        "absorptance": 0.6
+      },
+      {
+        "id": "e10cece0-793f-ff77-2bcb-35576380274f",
+        "name": "Solera",
+        "group": "Soleras",
+        "layers": [
+          {
+            "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
+            "e": 0.005
+          },
+          {
+            "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
+            "e": 0.03
+          },
+          {
+            "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
+            "e": 0.04
+          },
+          {
+            "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
+            "e": 0.2
+          },
+          {
+            "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+            "e": 0.2
+          }
+        ],
+        "absorptance": 0.6
+      }
+    ],
+    "wincons": [
+      {
+        "id": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+        "name": "PVC 2",
+        "group": "Ventanas de PVC",
+        "U": 1.26,
+        "Ff": 0.1,
+        "gglwi": 0.72,
+        "gglshwi": 1.0,
+        "C_100": 50.0
+      }
+    ]
+  },
+  "mats": {
     "materials": [
       {
-        "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
-        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250",
-        "group": "Morteros",
-        "conductivity": 0.55,
-        "density": 1125.0,
+        "id": "9904021e-6d18-e151-1094-c776bc669d51",
+        "name": "FU Entrevigado cerámico -Canto 300 mm",
+        "group": "Forjados unidireccionales",
+        "conductivity": 0.846,
+        "density": 1110.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 10.0
       },
       {
-        "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
-        "name": "Cámara de aire sin ventilar horizontal 2 cm",
-        "group": "Cámaras de aire",
-        "resistance": 0.16
-      },
-      {
-        "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
-        "name": "Arena y grava [1700 < d < 2200]",
-        "group": "Pétreos y suelos",
-        "conductivity": 2.0,
-        "density": 1450.0,
-        "specificheat": 1050.0,
-        "vapourdiffusivity": 50.0
-      },
-      {
-        "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
-        "name": "Subcapa fieltro",
-        "group": "Textiles",
-        "conductivity": 0.05,
-        "density": 120.0,
-        "specificheat": 1300.0,
-        "vapourdiffusivity": 15.0
-      },
-      {
-        "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-        "name": "Placa de yeso laminado [PYL] 750 < d < 900",
-        "group": "Yesos",
-        "conductivity": 0.25,
-        "density": 825.0,
+        "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
+        "name": "XPS Expandido con dióxido de carbono CO2 [ 0.034 W/[mK]]",
+        "group": "Aislantes",
+        "conductivity": 0.034,
+        "density": 37.5,
         "specificheat": 1000.0,
-        "vapourdiffusivity": 4.0
-      },
-      {
-        "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
-        "name": "Hormigón armado 2300 < d < 2500",
-        "group": "Hormigones",
-        "conductivity": 2.3,
-        "density": 2400.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 80.0
+        "vapourdiffusivity": 100.0
       },
       {
         "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
@@ -1796,20 +1765,104 @@
         "vapourdiffusivity": 10.0
       },
       {
+        "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
+        "name": "MW Lana mineral [0.031 W/[mK]]",
+        "group": "Aislantes",
+        "conductivity": 0.031,
+        "density": 40.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 1.0
+      },
+      {
+        "id": "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
+        "name": "Mortero de yeso",
+        "group": "Morteros",
+        "conductivity": 0.8,
+        "density": 1500.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 6.0
+      },
+      {
+        "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
+        "name": "Subcapa fieltro",
+        "group": "Textiles",
+        "conductivity": 0.05,
+        "density": 120.0,
+        "specificheat": 1300.0,
+        "vapourdiffusivity": 15.0
+      },
+      {
+        "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
+        "name": "Hormigón armado 2300 < d < 2500",
+        "group": "Hormigones",
+        "conductivity": 2.3,
+        "density": 2400.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 80.0
+      },
+      {
+        "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+        "name": "Placa de yeso laminado [PYL] 750 < d < 900",
+        "group": "Yesos",
+        "conductivity": 0.25,
+        "density": 825.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 4.0
+      },
+      {
+        "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
+        "name": "Cámara de aire sin ventilar horizontal 2 cm",
+        "group": "Cámaras de aire",
+        "resistance": 0.16
+      },
+      {
+        "id": "bed4d34b-8949-b348-d818-5c079a708d9e",
+        "name": "FUr310_12",
+        "group": "Forjados unidireccionales",
+        "conductivity": 1.33506,
+        "density": 840.0,
+        "specificheat": 800.0,
+        "vapourdiffusivity": 5.0
+      },
+      {
+        "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
+        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250",
+        "group": "Morteros",
+        "conductivity": 0.55,
+        "density": 1125.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+        "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
+        "group": "Pétreos y suelos",
+        "conductivity": 1.1,
+        "density": 1885.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 1.0
+      },
+      {
+        "id": "bbe62996-0f75-da18-c562-ec609d76127e",
+        "name": "Frondosa ligera 435 < d < 565",
+        "group": "Maderas",
+        "conductivity": 0.15,
+        "density": 500.0,
+        "specificheat": 1600.0,
+        "vapourdiffusivity": 50.0
+      },
+      {
+        "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
+        "name": "Cámara de aire sin ventilar vertical 5 cm",
+        "group": "Cámaras de aire",
+        "resistance": 0.18
+      },
+      {
         "id": "17c92d86-cb3c-aef5-f628-48e247099509",
         "name": "1/2 pie LP métrico o catalán 40 mm< G < 60 mm",
         "group": "Fábricas de ladrillo",
         "conductivity": 0.667,
         "density": 1140.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
-      },
-      {
-        "id": "9904021e-6d18-e151-1094-c776bc669d51",
-        "name": "FU Entrevigado cerámico -Canto 300 mm",
-        "group": "Forjados unidireccionales",
-        "conductivity": 0.846,
-        "density": 1110.0,
         "specificheat": 1000.0,
         "vapourdiffusivity": 10.0
       },
@@ -1823,64 +1876,13 @@
         "vapourdiffusivity": 30.0
       },
       {
-        "id": "bbe62996-0f75-da18-c562-ec609d76127e",
-        "name": "Frondosa ligera 435 < d < 565",
-        "group": "Maderas",
-        "conductivity": 0.15,
-        "density": 500.0,
-        "specificheat": 1600.0,
-        "vapourdiffusivity": 50.0
-      },
-      {
-        "id": "bed4d34b-8949-b348-d818-5c079a708d9e",
-        "name": "FUr310_12",
-        "group": "Forjados unidireccionales",
-        "conductivity": 1.33506,
-        "density": 840.0,
-        "specificheat": 800.0,
-        "vapourdiffusivity": 5.0
-      },
-      {
-        "id": "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
-        "name": "Mortero de yeso",
-        "group": "Morteros",
-        "conductivity": 0.8,
-        "density": 1500.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 6.0
-      },
-      {
-        "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
-        "name": "Cámara de aire sin ventilar vertical 5 cm",
-        "group": "Cámaras de aire",
-        "resistance": 0.18
-      },
-      {
-        "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
-        "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
+        "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
+        "name": "Arena y grava [1700 < d < 2200]",
         "group": "Pétreos y suelos",
-        "conductivity": 1.1,
-        "density": 1885.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 1.0
-      },
-      {
-        "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
-        "name": "XPS Expandido con dióxido de carbono CO2 [ 0.034 W/[mK]]",
-        "group": "Aislantes",
-        "conductivity": 0.034,
-        "density": 37.5,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 100.0
-      },
-      {
-        "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
-        "name": "MW Lana mineral [0.031 W/[mK]]",
-        "group": "Aislantes",
-        "conductivity": 0.031,
-        "density": 40.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 1.0
+        "conductivity": 2.0,
+        "density": 1450.0,
+        "specificheat": 1050.0,
+        "vapourdiffusivity": 50.0
       }
     ]
   },

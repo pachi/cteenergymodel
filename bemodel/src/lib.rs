@@ -13,8 +13,8 @@ pub mod convert;
 pub mod energy;
 
 pub use types::{
-    point, vector, BoundaryType, Db, ExtraData, HasSurface, Layer, MatProps, Material, Meta, Model,
-    Orientation, Point2, Point3, Polygon, Shade, Space, SpaceType, ThermalBridge,
+    point, vector, BoundaryType, ConsDb, ExtraData, HasSurface, Layer, MatProps, Material, MatsDb,
+    Meta, Model, Orientation, Point2, Point3, Polygon, Shade, Space, SpaceType, ThermalBridge,
     ThermalBridgeKind, Tilt, Uuid, Vector2, Vector3, Wall, WallCons, WallGeometry, Warning,
     WarningLevel, Window, WindowCons, WindowGeometry,
 };
