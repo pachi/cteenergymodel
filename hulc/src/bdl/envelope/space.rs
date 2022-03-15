@@ -85,7 +85,7 @@ impl Space {
                     &topwall.cons
                 )
             })?
-            .total_thickness();
+            .thickness();
         Ok(self.height - topheight)
     }
 

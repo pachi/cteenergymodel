@@ -6,12 +6,11 @@
 //!
 //! Composiciones constructivas de cerramientos opacos (LAYERS)
 
-use std::{collections::HashMap, convert::TryFrom};
+use std::convert::TryFrom;
 
 use anyhow::{format_err, Error};
-use log::warn;
 
-use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock, Material};
+use crate::bdl::{extract_f32vec, extract_namesvec, BdlBlock};
 
 /// Definición de elemento a través de sus capas
 #[derive(Debug, Clone, Default)]
@@ -25,55 +24,14 @@ pub struct WallCons {
     /// Lista de espesores de las capas [m] ([e1, e2, ...])
     pub thickness: Vec<f32>,
     /// Absortividad (a la radiación solar) (-)
-    /// XXX: esta no es una definición del BDL pero lo usaremos para tomarla de Construction y evitar ese objeto
+    /// NOTE: esta propiedad se toma del objeto Construction de BDL y no de Layers pero lo recogemos aquí y evitamos definir ese objeto
     pub absorptance: f32,
 }
 
 impl WallCons {
     /// Espesor total de una composición de capas [m]
-    pub fn total_thickness(&self) -> f32 {
+    pub fn thickness(&self) -> f32 {
         self.thickness.iter().sum()
-    }
-
-    /// Resistencia térmica de una composición de capas [W/m2K]
-    pub fn r_intrinsic(&self, materialsdb: &HashMap<String, Material>) -> Result<f32, Error> {
-        let materials = &self
-            .material
-            .iter()
-            .map(|m| {
-                materialsdb.get(m).ok_or_else(|| {
-                    format_err!(
-                        "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
-                        m,
-                        self.name
-                    )
-                })
-            })
-            .collect::<Result<Vec<_>, Error>>()?;
-
-        materials
-            .iter()
-            .zip(&self.thickness)
-            // Resistencias térmicas de las capas
-            .map(|(mat, thk)| match mat.properties {
-                Some(props) if props.conductivity != 0.0 => Some(thk / props.conductivity),
-                None => mat.resistance,
-                _ => {
-                    warn!(
-                        "Material no definido por conductividad o resistencia: {:?}",
-                        mat
-                    );
-                    None
-                }
-            })
-            // Resistencia térmica total
-            .try_fold(0.0_f32, |acc, x| x.map(|res| res + acc))
-            .ok_or_else(|| {
-                format_err!(
-                    "Error al calcular la resistencia térmica de la composición \"{}\"",
-                    self.name
-                )
-            })
     }
 }
 

@@ -4,8 +4,10 @@
 
 //! Construcciones de la envolvente térmica: WallCons, WindowCons
 
-use super::Uuid;
 use serde::{Deserialize, Serialize};
+
+use super::Uuid;
+use crate::utils::fround3;
 
 // Elementos -----------------------------------------------
 
@@ -22,13 +24,15 @@ pub struct WallCons {
     /// Capas que forman la construcción de opaco, como lista de tuplas (material, espesor)
     #[serde(default)]
     pub layers: Vec<Layer>,
-    /// Grosor del elemento (m) [0.0-]
-    pub thickness: f32,
-    /// Resistencia térmica total sin resistencias superficiales (resistencia intrínseca) [m2K/W]
-    #[serde(rename = "R_intrinsic")]
-    pub r_intrinsic: f32,
     /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
     pub absorptance: f32,
+}
+
+impl WallCons {
+    /// Espesor total de una composición de capas [m]
+    pub fn thickness(&self) -> f32 {
+        fround3(self.layers.iter().map(|Layer { e, .. }| e).sum())
+    }
 }
 
 /// Definición de capa de opaco

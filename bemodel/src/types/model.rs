@@ -277,7 +277,7 @@ impl Model {
     /// Grosor de un elemento opaco
     pub fn wall_thickness(&self, wallid: &str) -> f32 {
         self.wall_by_id(wallid)
-            .and_then(|w| self.wallcons_of_wall(w).map(|c| c.thickness))
+            .and_then(|w| self.wallcons_of_wall(w).map(|c| c.thickness()))
             .unwrap_or(0.0)
     }
 

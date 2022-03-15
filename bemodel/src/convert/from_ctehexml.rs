@@ -13,7 +13,7 @@ use std::{
 use anyhow::{anyhow, bail, format_err, Error};
 use nalgebra::{point, Point3, Rotation2, Rotation3, Translation3, Vector3};
 
-use crate::utils::{fround2, fround3, normalize, uuid_from_obj};
+use crate::utils::{fround2, normalize, uuid_from_obj};
 use hulc::{
     bdl::{self, Data},
     ctehexml,
@@ -632,7 +632,6 @@ fn wallcons_from_bdl(
         match bdl.db.wallcons.get(wcons) {
             Some(cons) => {
                 let id = uuid_from_obj(wcons);
-
                 let mut ids = Vec::with_capacity(cons.material.len());
                 for mat_name in &cons.material {
                     if let Some(id) = name_to_id.get(mat_name).cloned() {
@@ -651,26 +650,14 @@ fn wallcons_from_bdl(
                     .zip(cons.thickness.iter().cloned())
                     .map(|(id, e)| Layer { id, e })
                     .collect();
-
-                let r = match cons.r_intrinsic(&bdl.db.materials) {
-                    Ok(r) => r,
-                    _ => {
-                        return Err(format_err!(
-                        "ERROR: No es posible calcular la R intrínseca de la construcción: {:?}\n",
-                        cons,
-                    ))
-                    }
-                };
-
-                wclist.push(WallCons {
+                let wallcons = WallCons {
                     id,
                     name: cons.name.clone(),
                     group: cons.group.clone(),
                     layers,
-                    thickness: fround2(cons.total_thickness()),
-                    r_intrinsic: fround3(r),
                     absorptance: cons.absorptance,
-                })
+                };
+                wclist.push(wallcons)
             }
             _ => {
                 return Err(format_err!(

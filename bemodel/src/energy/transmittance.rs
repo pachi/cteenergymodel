@@ -14,10 +14,14 @@
 
 use std::{collections::HashMap, f32::consts::PI};
 
+use anyhow::{format_err, Error};
 use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 
-use crate::{BoundaryType, Model, SpaceType, ThermalBridgeKind, Tilt, Wall, Window, Uuid};
+use crate::{
+    BoundaryType, Layer, MatProps, Model, SpaceType, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons,
+    Window,
+};
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
 const RSI_ASCENDENTE: f32 = 0.10;
@@ -30,8 +34,8 @@ const LAMBDA_INS: f32 = 0.035;
 
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 /// Reporte de cálculo de las transmitancias de los elementos
-/// TODO: cambiar a ElementProps, no separar muros y huecos, e incluir
-/// TODO: si el elemento pertenece o no a la ET ElementProps{walls: {id: Uuid, ElementData {et: bool, a: f32, u: Option<f32>}}}
+/// TODO: cambiar a ElementProps=IndexMap<id, ElementProps> e indexar todo por id?
+/// TODO: añadir si el elemento pertenece o no a la ET ElementProps{walls: {id: Uuid, ElementData {et: bool, a: f32, u: Option<f32>}}}
 pub struct UValues {
     /// U de muros
     pub walls: HashMap<Uuid, Option<f32>>,
@@ -294,6 +298,32 @@ impl Model {
         }
     }
 
+    /// Resistencia térmica intrínseca (sin resistencias superficiales) de una composición de capas [W/m²K]
+    pub fn walcons_intrinsic_r(&self, wallcons: &WallCons) -> Result<f32, Error> {
+        let mut resistance = 0.0;
+        for Layer { id, e } in &wallcons.layers {
+            match self.materials.iter().find(|m| &m.id == id) {
+                None => return Err(format_err!(
+                    "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
+                    id,
+                    wallcons.name
+                )),
+                Some(mat) => {
+                    match mat.properties {
+                        MatProps::Detailed{ conductivity, .. } if conductivity > 0.0 => resistance += e / conductivity,
+                        MatProps::Resistance(res) => resistance += res,
+                        _ => return Err(format_err!(
+                            "Material \"{}\" de la composición de capas \"{}\" con conductividad nula o casi nula",
+                            mat.name,
+                            wallcons.name
+                        ))
+                    }
+                },
+            }
+        }
+        Ok(resistance)
+    }
+
     /// Transmitancia térmica del hueco, U_W, en una posición dada, en W/m2K
     /// Notas:
     /// - estos valores ya deben incluir las resistencias superficiales
@@ -317,7 +347,7 @@ impl Model {
         let D_perim_ins = self.meta.d_perim_insulation;
 
         let cons = self.wallcons_of_wall(wall)?;
-        let R_intrinsic = cons.r_intrinsic;
+        let R_intrinsic = self.walcons_intrinsic_r(cons).ok()?;
 
         match (bounds, position) {
             // Elementos adiabáticos -----------------------------
@@ -441,10 +471,14 @@ impl Model {
                     .fold(0.0, |mean, (w, i)| {
                         // Si no está definida la construcción no participa de la envolvente
                         self.wallcons_of_wall(w)
-                            .map(|wallcons| {
-                                (W + LAMBDA_GND * (RSI_DESCENDENTE + wallcons.r_intrinsic + RSE)
-                                    + mean * (i - 1) as f32)
-                                    / i as f32
+                            .map(|wallcons| match self.walcons_intrinsic_r(wallcons).ok() {
+                                Some(wallcons_r_intrinsic) => {
+                                    (W + LAMBDA_GND
+                                        * (RSI_DESCENDENTE + wallcons_r_intrinsic + RSE)
+                                        + mean * (i - 1) as f32)
+                                        / i as f32
+                                }
+                                _ => 0.0,
                             })
                             .unwrap_or(0.0)
                     });
