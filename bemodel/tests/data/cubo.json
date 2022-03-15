@@ -468,67 +468,69 @@
       "C_100": 25.0
     }
   ],
-  "materials": [
-    {
-      "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
-      "name": "Hormigón armado d > 2500",
-      "group": "Hormigones",
-      "conductivity": 2.5,
-      "density": 2600.0,
-      "specificheat": 1000.0,
-      "vapourdiffusivity": 80.0
-    },
-    {
-      "id": "17c92d86-cb3c-aef5-f628-48e247099509",
-      "name": "1/2 pie LP métrico o catalán 40 mm< G < 60 mm",
-      "group": "Fábricas de ladrillo",
-      "conductivity": 0.667,
-      "density": 1140.0,
-      "specificheat": 1000.0,
-      "vapourdiffusivity": 10.0
-    },
-    {
-      "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
-      "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000",
-      "group": "Morteros",
-      "conductivity": 1.8,
-      "density": 2100.0,
-      "specificheat": 1000.0,
-      "vapourdiffusivity": 10.0
-    },
-    {
-      "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
-      "name": "Enlucido de yeso 1000 < d < 1300",
-      "group": "Enlucidos",
-      "conductivity": 0.57,
-      "density": 1150.0,
-      "specificheat": 1000.0,
-      "vapourdiffusivity": 6.0
-    },
-    {
-      "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
-      "name": "Cámara de aire ligeramente ventilada vertical 2 cm",
-      "group": "Cámaras de aire",
-      "resistance": 0.085
-    },
-    {
-      "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
-      "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
-      "group": "Fábricas de ladrillo",
-      "conductivity": 0.445,
-      "density": 1000.0,
-      "specificheat": 1000.0,
-      "vapourdiffusivity": 10.0
-    },
-    {
-      "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
-      "name": "Tabicón de LH doble [60 mm < E < 90 mm]",
-      "group": "Fábricas de ladrillo",
-      "conductivity": 0.432,
-      "density": 930.0,
-      "specificheat": 1000.0,
-      "vapourdiffusivity": 10.0
-    }
-  ],
+  "db": {
+    "materials": [
+      {
+        "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
+        "name": "Cámara de aire ligeramente ventilada vertical 2 cm",
+        "group": "Cámaras de aire",
+        "resistance": 0.085
+      },
+      {
+        "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
+        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000",
+        "group": "Morteros",
+        "conductivity": 1.8,
+        "density": 2100.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+        "name": "Enlucido de yeso 1000 < d < 1300",
+        "group": "Enlucidos",
+        "conductivity": 0.57,
+        "density": 1150.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 6.0
+      },
+      {
+        "id": "17c92d86-cb3c-aef5-f628-48e247099509",
+        "name": "1/2 pie LP métrico o catalán 40 mm< G < 60 mm",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.667,
+        "density": 1140.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+        "name": "Hormigón armado d > 2500",
+        "group": "Hormigones",
+        "conductivity": 2.5,
+        "density": 2600.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 80.0
+      },
+      {
+        "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
+        "name": "Tabicón de LH doble [60 mm < E < 90 mm]",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.432,
+        "density": 930.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      },
+      {
+        "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+        "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.445,
+        "density": 1000.0,
+        "specificheat": 1000.0,
+        "vapourdiffusivity": 10.0
+      }
+    ]
+  },
   "extra": null
 }

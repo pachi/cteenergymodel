@@ -10,10 +10,21 @@ use super::Uuid;
 
 // Materiales -----------------------------------------------
 
+/// Base de datos de materiales
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct Db {
+    /// Lista de materiales para elementos opacos (muro, cubierta, suelo, partición)
+    pub materials: MaterialsList,
+    // /// Lista de vidrios
+    // pub glasses: todo!(),
+    // /// Lista de marcos
+    // pub frames: todo!(),
+}
+
 /// Lista de materiales indexada por Uuid
 pub type MaterialsList = Vec<Material>;
 
-/// Elemento opaco (muro, cubierta, suelo, partición)
+/// Material de elemento opaco (muro, cubierta, suelo, partición)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Material {
     /// ID del material (UUID)

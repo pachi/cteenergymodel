@@ -302,7 +302,7 @@ impl Model {
     pub fn walcons_intrinsic_r(&self, wallcons: &WallCons) -> Result<f32, Error> {
         let mut total_resistance = 0.0;
         for Layer { id, e } in &wallcons.layers {
-            match self.materials.iter().find(|m| &m.id==id) {
+            match self.db.materials.iter().find(|m| &m.id==id) {
                 None => return Err(format_err!(
                     "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
                     id,
