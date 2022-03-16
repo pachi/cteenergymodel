@@ -19,8 +19,8 @@ use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    BoundaryType, Layer, MatProps, Model, SpaceType, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons,
-    Window,
+    BoundaryType, HasSurface, Layer, MatProps, Model, SpaceType, ThermalBridgeKind, Tilt, Uuid,
+    Wall, WallCons, Window,
 };
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
@@ -198,7 +198,7 @@ impl Model {
                     Some(u) => u,
                     _ => continue,
                 };
-                let area = multiplier * win.area;
+                let area = multiplier * win.geometry.area();
                 k.windows.a += area;
                 k.windows.au += area * win_u;
                 k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
@@ -208,7 +208,7 @@ impl Model {
                 Some(u) => u,
                 _ => continue,
             };
-            let area = multiplier * wall.area;
+            let area = multiplier * self.wall_net_area(wall);
             let area_u = area * wall_u;
             let mut element_case = match (wall.bounds, Tilt::from(wall)) {
                 (BoundaryType::GROUND, _) => &mut k.ground,
@@ -632,17 +632,18 @@ impl Model {
                                 .windows_of_wall_iter(&wall.id)
                                 .filter_map(|win| {
                                     // Si no está definida la construcción, el hueco no participa de la envolvente
-                                    self.u_for_window(win).map(|u| Some(win.area * u))?
+                                    self.u_for_window(win)
+                                        .map(|u| Some(win.geometry.area() * u))?
                                 })
                                 .sum::<f32>();
-                            Some(wall.area * wall_u + win_axu)
+                            Some(self.wall_net_area(wall) * wall_u + win_axu)
                         })
                         .sum::<f32>();
                     // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
                     // En la fórmula anterior, para espacios no acondicionados, se indica que se excluyen suelos, pero no entiendo bien por qué.
                     // Esta fórmula, cuando los A_e_k y U_e_k incluyen los muros y suelos con el terreno U_bw y U_bf, con la parte proporcional de
                     // muros al exterior, es equivalente a la que indica la 13370
-                    let A_i = wall.area;
+                    let A_i = self.wall_net_area(wall);
                     let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
                     let R_u = A_i / H_ue;
                     let U = 1.0 / (R_f + R_u);

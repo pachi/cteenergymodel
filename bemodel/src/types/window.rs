@@ -17,14 +17,15 @@ pub struct Window {
     pub id: Uuid,
     /// Nombre del hueco
     pub name: String,
-    /// Superficie del hueco (m2)
-    #[serde(rename = "A")]
-    pub area: f32,
+    // /// Superficie del hueco (m2)
+    // #[serde(rename = "A")]
+    // pub area: f32,
     /// Construcción del hueco
     pub cons: Uuid,
     /// Muro al que pertenece el hueco
     pub wall: Uuid,
     /// Factor de obstáculos remotos
+    /// TODO: debería ser Option<f32> y solo usarse si no se quiere autocalculado
     pub f_shobst: f32,
     /// Geometría de hueco
     pub geometry: WindowGeometry,

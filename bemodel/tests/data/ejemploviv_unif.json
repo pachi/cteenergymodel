@@ -136,7 +136,6 @@
     {
       "id": "533865ce-8e6a-c0a8-a2d9-cbb2fbea4ab5",
       "name": "P01_E01_PE001",
-      "A": 8.27,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
@@ -172,7 +171,6 @@
     {
       "id": "d42ed212-0e16-17c6-c916-95290d4db5ef",
       "name": "P01_E01_PE003",
-      "A": 8.32,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
@@ -208,7 +206,6 @@
     {
       "id": "0e75b8a8-90d7-587f-55ed-4a340f95b16f",
       "name": "P01_E01_Med001",
-      "A": 12.24,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
@@ -244,7 +241,6 @@
     {
       "id": "135c0154-af0e-e483-8924-37cd4631fc0b",
       "name": "P01_E01_Med002",
-      "A": 6.49,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
@@ -280,7 +276,6 @@
     {
       "id": "cbe0f10b-776a-69c4-2f0b-c09c3633c6f0",
       "name": "P01_E01_MED001",
-      "A": 18.76,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
@@ -316,7 +311,6 @@
     {
       "id": "a5a646b7-85d8-ddc1-8835-ac3616349030",
       "name": "P01_E01_FTER001",
-      "A": 25.04,
       "bounds": "GROUND",
       "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
@@ -356,7 +350,6 @@
     {
       "id": "287e688a-5fda-decf-438b-58013a2ada83",
       "name": "P01_E02_PE004",
-      "A": 1.53,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "8fb42929-3639-dcb3-13d7-071296960471",
@@ -392,7 +385,6 @@
     {
       "id": "843ad978-8173-f870-d13c-e30f5c6b5987",
       "name": "P01_E02_PE005",
-      "A": 5.6,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "8fb42929-3639-dcb3-13d7-071296960471",
@@ -428,7 +420,6 @@
     {
       "id": "b3cd2546-e362-c0ea-d4f7-a83e896d3f20",
       "name": "P01_E02_Med003",
-      "A": 3.26,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "8fb42929-3639-dcb3-13d7-071296960471",
@@ -464,7 +455,6 @@
     {
       "id": "fa3267bd-ca61-c282-5537-ad9ace5bcd3f",
       "name": "P01_E02_Med005",
-      "A": 6.52,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "8fb42929-3639-dcb3-13d7-071296960471",
@@ -500,7 +490,6 @@
     {
       "id": "a9000b58-e6f8-f3b9-7bee-25311bbf0e74",
       "name": "P01_E02_FTER002",
-      "A": 5.45,
       "bounds": "GROUND",
       "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
       "space": "8fb42929-3639-dcb3-13d7-071296960471",
@@ -540,7 +529,6 @@
     {
       "id": "3a5df886-d7c7-c80f-9dcd-edb41be26016",
       "name": "P01_E03_PE001",
-      "A": 6.11,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
@@ -576,7 +564,6 @@
     {
       "id": "a663d3cf-1dcd-00e1-f931-77f139985df5",
       "name": "P01_E03_PE003",
-      "A": 4.18,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
@@ -612,7 +599,6 @@
     {
       "id": "e2dcf444-0b20-5f66-14ba-d98ce4953dee",
       "name": "P01_E03_Med001",
-      "A": 6.45,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
@@ -648,7 +634,6 @@
     {
       "id": "6bf8bb64-51f3-5162-db58-06927384cee0",
       "name": "P01_E03_Med002",
-      "A": 1.94,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
@@ -684,7 +669,6 @@
     {
       "id": "590da616-cc82-cb32-cc1b-92986b62f421",
       "name": "P01_E03_MED001",
-      "A": 13.02,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
@@ -720,7 +704,6 @@
     {
       "id": "b892d19e-96cc-73e5-9586-9c72bb9dd203",
       "name": "P01_E03_FTER003",
-      "A": 10.78,
       "bounds": "GROUND",
       "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
@@ -764,7 +747,6 @@
     {
       "id": "7354cbb8-6b12-c6a2-4034-f7adbc80f15b",
       "name": "P01_E04_PE001",
-      "A": 2.55,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
@@ -800,7 +782,6 @@
     {
       "id": "4f9ceedd-a380-5452-be9b-faa5a2b35bd6",
       "name": "P01_E04_PE002",
-      "A": 3.33,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
@@ -836,7 +817,6 @@
     {
       "id": "cacced72-88c1-50c6-72d9-6b11f6e10326",
       "name": "P01_E04_PE003",
-      "A": 2.51,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
@@ -872,7 +852,6 @@
     {
       "id": "42c4fc15-d786-e23d-beae-53b0b29432ff",
       "name": "P01_E04_FTER004",
-      "A": 6.47,
       "bounds": "GROUND",
       "cons": "6cfcec0e-b90b-998b-c755-7d219638d40c",
       "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
@@ -920,7 +899,6 @@
     {
       "id": "aa702707-b64b-1280-d199-ed7fac965bec",
       "name": "P02_E01_PE001",
-      "A": 9.35,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
@@ -956,7 +934,6 @@
     {
       "id": "8ef829c2-fef3-e713-ed59-d1f455135f3a",
       "name": "P02_E01_FE001",
-      "A": 11.12,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
@@ -992,7 +969,6 @@
     {
       "id": "13bf0ffa-b146-c96f-e12c-ad651746a905",
       "name": "P02_E01_FI001",
-      "A": 11.12,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
@@ -1028,7 +1004,6 @@
     {
       "id": "c0a02e85-bdcb-c3cf-d0e3-b8d7fb842663",
       "name": "P02_E01_Med001",
-      "A": 10.82,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
@@ -1064,7 +1039,6 @@
     {
       "id": "51a266d4-3a9d-c174-2731-7327b91b5799",
       "name": "P02_E01_Med002",
-      "A": 9.29,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
@@ -1100,7 +1074,6 @@
     {
       "id": "b78f9986-1d96-56a2-1834-e7dc755bc7dd",
       "name": "P02_E01_MED001",
-      "A": 9.24,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
@@ -1136,7 +1109,6 @@
     {
       "id": "bace5dde-0b16-53fe-4491-a30edbadb765",
       "name": "P02_E02_PE003",
-      "A": 6.66,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1172,7 +1144,6 @@
     {
       "id": "60813647-5264-8d7f-d009-2d4747f7e9d4",
       "name": "P02_E02_ME001",
-      "A": 5.27,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1208,7 +1179,6 @@
     {
       "id": "818625ff-1720-44dd-47ee-b98347f02f72",
       "name": "P02_E02_ME002",
-      "A": 9.87,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1256,7 +1226,6 @@
     {
       "id": "c8d7e818-a315-137e-1e26-92e917241061",
       "name": "P02_E02_FI001",
-      "A": 4.56,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1300,7 +1269,6 @@
     {
       "id": "e67c9b43-bb51-5477-9558-53b5ec382bfb",
       "name": "P02_E02_Med003",
-      "A": 2.1,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1336,7 +1304,6 @@
     {
       "id": "a2fef26d-7081-bc8d-87a5-0e27646ed632",
       "name": "P02_E02_Med004",
-      "A": 4.72,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1372,7 +1339,6 @@
     {
       "id": "84618c5e-87be-980f-bde5-a6469d381e30",
       "name": "P02_E02_Med005",
-      "A": 6.83,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1408,7 +1374,6 @@
     {
       "id": "e1323c66-90d2-1c4f-c2a0-b061ee179ac3",
       "name": "P02_E02_Med006",
-      "A": 5.68,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1444,7 +1409,6 @@
     {
       "id": "05429fba-a2be-1139-50b0-29f4bfe13d6e",
       "name": "P02_E02_MED001",
-      "A": 5.23,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1480,7 +1444,6 @@
     {
       "id": "10f0a057-dd1a-287d-7f09-54cac1dd6fd0",
       "name": "P02_E02_MED002",
-      "A": 6.13,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
@@ -1516,7 +1479,6 @@
     {
       "id": "c6b34d7f-8fff-299e-992a-4123e90ca2ed",
       "name": "P02_E03_PE007",
-      "A": 7.39,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
@@ -1552,7 +1514,6 @@
     {
       "id": "5ce7cc4d-6a35-64d2-8ce5-2fb04a312c8d",
       "name": "P02_E03_FE002",
-      "A": 12.4,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
@@ -1596,7 +1557,6 @@
     {
       "id": "9484d8c6-2714-c41c-6b94-5d85c55a3994",
       "name": "P02_E03_FI002",
-      "A": 12.4,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
@@ -1640,7 +1600,6 @@
     {
       "id": "3ee96814-dd7f-51ad-dd06-39d0f5a7fdc3",
       "name": "P02_E03_Med007",
-      "A": 6.84,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
@@ -1676,7 +1635,6 @@
     {
       "id": "588ab2af-8bc0-15b3-1cd7-e7888522f9d7",
       "name": "P02_E03_Med008",
-      "A": 1.97,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
@@ -1712,7 +1670,6 @@
     {
       "id": "8c8dbeda-15f1-31ec-0b77-ef177085114c",
       "name": "P02_E03_Med009",
-      "A": 4.6,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
@@ -1748,7 +1705,6 @@
     {
       "id": "3cbd91fb-2c8f-72c2-49bb-23899bc72731",
       "name": "P02_E03_MED001",
-      "A": 11.61,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
@@ -1784,7 +1740,6 @@
     {
       "id": "497af7dc-502b-536d-c8ac-405410e48a74",
       "name": "P02_E04_PE002",
-      "A": 4.62,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "839f06f9-2a5f-3316-a889-92064087fee3",
@@ -1820,7 +1775,6 @@
     {
       "id": "611efe4e-54a2-d406-275a-1e429433f2b7",
       "name": "P02_E04_ME001",
-      "A": 5.76,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
       "space": "839f06f9-2a5f-3316-a889-92064087fee3",
@@ -1856,7 +1810,6 @@
     {
       "id": "1abb4180-de17-3387-a51b-9b489f1c4428",
       "name": "P02_E04_FI003",
-      "A": 5.76,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "839f06f9-2a5f-3316-a889-92064087fee3",
@@ -1900,7 +1853,6 @@
     {
       "id": "5c74d463-53ce-0507-18f9-c68cea9b1c1c",
       "name": "P02_E04_Med001",
-      "A": 9.19,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "839f06f9-2a5f-3316-a889-92064087fee3",
@@ -1936,7 +1888,6 @@
     {
       "id": "6822237f-fb1a-1782-5e6c-a11461240d83",
       "name": "P02_E04_MED001",
-      "A": 9.24,
       "bounds": "ADIABATIC",
       "cons": "54dd12d0-c80f-a15b-1e45-fc98676a086f",
       "space": "839f06f9-2a5f-3316-a889-92064087fee3",
@@ -1972,7 +1923,6 @@
     {
       "id": "aff6db28-6533-308f-8aa4-b7c445d6ee3f",
       "name": "P02_E05_FE001",
-      "A": 1.61,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
@@ -2012,7 +1962,6 @@
     {
       "id": "190b88e2-95c9-b398-96d7-1eb7581318c4",
       "name": "P02_E05_PE001",
-      "A": 2.18,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
@@ -2048,7 +1997,6 @@
     {
       "id": "f38103af-f40f-4fd4-356e-ee9c11e4f8fa",
       "name": "P02_E05_PE002",
-      "A": 5.38,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
@@ -2084,7 +2032,6 @@
     {
       "id": "1ca92dd4-e4ee-9c34-b4f9-2351b7044181",
       "name": "P02_E05_PE003",
-      "A": 2.62,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
@@ -2120,7 +2067,6 @@
     {
       "id": "b746054b-f02f-ba41-4459-4cfa21deb0e3",
       "name": "P02_E05_FE003",
-      "A": 5.88,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
@@ -2168,7 +2114,6 @@
     {
       "id": "83999685-83a0-6990-8074-0651fff88ffd",
       "name": "P02_E05_FI001",
-      "A": 1.52,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
@@ -2204,7 +2149,6 @@
     {
       "id": "abfc1783-8a0b-f7b6-2be2-d4f7f776ecc1",
       "name": "P02_E05_FI002",
-      "A": 2.74,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
@@ -2240,7 +2184,6 @@
     {
       "id": "b7a4a737-ba94-2047-a18c-681665c754b6",
       "name": "P02_E05_Med001",
-      "A": 3.6,
       "bounds": "INTERIOR",
       "cons": "d1f9bd4a-fb11-aa30-3475-f4cd08d563f3",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
@@ -2276,7 +2219,6 @@
     {
       "id": "3645c88b-a838-c1a3-d2c0-edeadadbf4ef",
       "name": "P02_E06_PE001",
-      "A": 2.84,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
@@ -2312,7 +2254,6 @@
     {
       "id": "6ca93c51-be77-3188-0e7c-4e97516588a0",
       "name": "P02_E06_PE002",
-      "A": 4.78,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
@@ -2348,7 +2289,6 @@
     {
       "id": "a2449635-f788-af6f-393d-035293b2cf62",
       "name": "P02_E06_PE003",
-      "A": 2.79,
       "bounds": "EXTERIOR",
       "cons": "1949e38b-b7e0-a178-a272-92604bf2608b",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
@@ -2384,7 +2324,6 @@
     {
       "id": "5c08fa9a-62e4-70ed-bf9e-c3647c334b22",
       "name": "P02_E06_FE005",
-      "A": 9.6,
       "bounds": "EXTERIOR",
       "cons": "72ae7185-95a4-2122-f22f-1c017f0efbfa",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
@@ -2440,7 +2379,6 @@
     {
       "id": "6cbba7ce-e4d8-7df1-aaa5-434a79a25ed3",
       "name": "P02_E06_FI003",
-      "A": 2.67,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
@@ -2488,7 +2426,6 @@
     {
       "id": "453d597f-f0c1-3cf7-b6de-9fddd01ea5d6",
       "name": "P02_E06_FI004",
-      "A": 0.46,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
@@ -2524,7 +2461,6 @@
     {
       "id": "ccd49660-f5ef-a440-67da-2d73cc323e83",
       "name": "P02_E06_FI005",
-      "A": 6.47,
       "bounds": "INTERIOR",
       "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
@@ -2574,7 +2510,6 @@
     {
       "id": "316e9a63-d88a-c58a-1024-caf10461d8b6",
       "name": "P01_E01_PE001_V",
-      "A": 1.44,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "533865ce-8e6a-c0a8-a2d9-cbb2fbea4ab5",
       "f_shobst": 0.76,
@@ -2591,7 +2526,6 @@
     {
       "id": "45dd41e3-faf3-5e6b-4687-d4d7f1a26681",
       "name": "P01_E01_PE003_V",
-      "A": 1.44,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "d42ed212-0e16-17c6-c916-95290d4db5ef",
       "f_shobst": 0.75,
@@ -2608,7 +2542,6 @@
     {
       "id": "ba0ebd21-3983-aadc-15ef-5f4370706232",
       "name": "P01_E02_PE004_V",
-      "A": 1.68,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "287e688a-5fda-decf-438b-58013a2ada83",
       "f_shobst": 0.69,
@@ -2625,7 +2558,6 @@
     {
       "id": "babc3f61-3c6d-b24c-777c-0e76f80bd34f",
       "name": "P01_E03_PE001_V",
-      "A": 0.86,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "3a5df886-d7c7-c80f-9dcd-edb41be26016",
       "f_shobst": 0.68,
@@ -2642,7 +2574,6 @@
     {
       "id": "0166f04c-fbbc-8fbc-5990-a037e0813a36",
       "name": "P01_E03_PE003_V",
-      "A": 0.84,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "a663d3cf-1dcd-00e1-f931-77f139985df5",
       "f_shobst": 0.73,
@@ -2659,7 +2590,6 @@
     {
       "id": "6c4bc7d0-01bf-eee9-9969-399c0def7707",
       "name": "P01_E04_PE002_V",
-      "A": 1.84,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "4f9ceedd-a380-5452-be9b-faa5a2b35bd6",
       "f_shobst": 0.77,
@@ -2676,7 +2606,6 @@
     {
       "id": "db0809b9-cfca-9d87-ee3d-7f0d62efd628",
       "name": "P02_E01_PE001_V",
-      "A": 1.44,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "aa702707-b64b-1280-d199-ed7fac965bec",
       "f_shobst": 0.76,
@@ -2693,7 +2622,6 @@
     {
       "id": "47fb9a41-fc6a-8508-6daf-891713c6b46f",
       "name": "P02_E02_PE003_V",
-      "A": 0.96,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "bace5dde-0b16-53fe-4491-a30edbadb765",
       "f_shobst": 0.74,
@@ -2710,7 +2638,6 @@
     {
       "id": "2160addf-a6bb-eb4d-329f-cd140b61d783",
       "name": "P02_E03_PE007_V",
-      "A": 1.44,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "c6b34d7f-8fff-299e-992a-4123e90ca2ed",
       "f_shobst": 0.75,
@@ -2727,7 +2654,6 @@
     {
       "id": "ecda039e-8295-b0d6-3bfb-b3635fd62b20",
       "name": "P02_E04_PE002_V",
-      "A": 0.96,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "497af7dc-502b-536d-c8ac-405410e48a74",
       "f_shobst": 0.74,
@@ -2744,7 +2670,6 @@
     {
       "id": "b86217e4-3590-8496-9206-5f18ad78655d",
       "name": "P02_E05_PE001_V",
-      "A": 0.5,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "190b88e2-95c9-b398-96d7-1eb7581318c4",
       "f_shobst": 0.75,
@@ -2761,7 +2686,6 @@
     {
       "id": "56b64cd9-4175-3126-46bd-b912a118f7a3",
       "name": "P02_E06_PE002_V",
-      "A": 0.96,
       "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
       "wall": "6ca93c51-be77-3188-0e7c-4e97516588a0",
       "f_shobst": 0.77,
@@ -3049,15 +2973,6 @@
   "mats": {
     "materials": [
       {
-        "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
-        "name": "betun_lamina",
-        "group": "Bituminosos",
-        "conductivity": 0.23,
-        "density": 1100.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 50000.0
-      },
-      {
         "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
         "name": "HMlt2300",
         "group": "Hormigones",
@@ -3065,60 +2980,6 @@
         "density": 2150.0,
         "specific_heat": 1000.0,
         "vapour_diffusivity": 70.0
-      },
-      {
-        "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
-        "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
-        "group": "Pétreos y suelos",
-        "conductivity": 1.1,
-        "density": 1885.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 1.0
-      },
-      {
-        "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
-        "name": "LMmp",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 1.02,
-        "density": 2170.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
-      },
-      {
-        "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
-        "name": "FUhal250",
-        "group": "Forjados unidireccionales",
-        "conductivity": 1.0,
-        "density": 1230.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 6.0
-      },
-      {
-        "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
-        "name": "enlYlq1300",
-        "group": "Enlucidos",
-        "conductivity": 0.57,
-        "density": 1150.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 6.0
-      },
-      {
-        "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
-        "name": "MW_04",
-        "group": "Aislantes",
-        "conductivity": 0.04,
-        "density": 40.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 1.0
-      },
-      {
-        "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
-        "name": "LPmp_50",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.68,
-        "density": 1140.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
       },
       {
         "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
@@ -3139,6 +3000,42 @@
         "vapour_diffusivity": 1e30
       },
       {
+        "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+        "name": "EPS037",
+        "group": "Aislantes",
+        "conductivity": 0.037,
+        "density": 30.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 20.0
+      },
+      {
+        "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
+        "name": "LPmp_50",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.68,
+        "density": 1140.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
+      },
+      {
+        "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+        "name": "enlYlq1300",
+        "group": "Enlucidos",
+        "conductivity": 0.57,
+        "density": 1150.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 6.0
+      },
+      {
+        "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+        "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
+        "group": "Pétreos y suelos",
+        "conductivity": 1.1,
+        "density": 1885.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 1.0
+      },
+      {
         "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
         "name": "plaqCer",
         "group": "Cerámicos",
@@ -3148,28 +3045,28 @@
         "vapour_diffusivity": 30.0
       },
       {
-        "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
-        "name": "HAlq2300",
-        "group": "Hormigones",
-        "conductivity": 2.3,
-        "density": 2400.0,
+        "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
+        "name": "FUhal250",
+        "group": "Forjados unidireccionales",
+        "conductivity": 1.0,
+        "density": 1230.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 80.0
+        "vapour_diffusivity": 6.0
+      },
+      {
+        "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+        "name": "LMmp",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 1.02,
+        "density": 2170.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
       },
       {
         "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
         "name": "cnv_ver_5",
         "group": "Cámaras de aire",
         "resistance": 0.18
-      },
-      {
-        "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
-        "name": "EPS037",
-        "group": "Aislantes",
-        "conductivity": 0.037,
-        "density": 30.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 20.0
       },
       {
         "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
@@ -3181,6 +3078,15 @@
         "vapour_diffusivity": 10.0
       },
       {
+        "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
+        "name": "betun_lamina",
+        "group": "Bituminosos",
+        "conductivity": 0.23,
+        "density": 1100.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 50000.0
+      },
+      {
         "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
         "name": "LHs",
         "group": "Fábricas de ladrillo",
@@ -3190,6 +3096,15 @@
         "vapour_diffusivity": 10.0
       },
       {
+        "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+        "name": "MW_04",
+        "group": "Aislantes",
+        "conductivity": 0.04,
+        "density": 40.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 1.0
+      },
+      {
         "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
         "name": "MORgt1000",
         "group": "Morteros",
@@ -3197,6 +3112,15 @@
         "density": 1125.0,
         "specific_heat": 1000.0,
         "vapour_diffusivity": 10.0
+      },
+      {
+        "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+        "name": "HAlq2300",
+        "group": "Hormigones",
+        "conductivity": 2.3,
+        "density": 2400.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 80.0
       }
     ],
     "glasses": [

@@ -268,7 +268,6 @@
     {
       "id": "6caee817-b447-fb34-3d52-18bdec2ce88b",
       "name": "P01_E01_PE001",
-      "A": 19.96,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
@@ -304,7 +303,6 @@
     {
       "id": "03892ba7-8066-e6cc-dbcf-f6ab7c90c699",
       "name": "P01_E01_PE003",
-      "A": 9.57,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
@@ -340,7 +338,6 @@
     {
       "id": "1fc93cdb-6b75-9df7-015c-66bf877c94de",
       "name": "P01_E01_PE004",
-      "A": 7.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
@@ -376,7 +373,6 @@
     {
       "id": "2329f3b6-869c-ac2e-1029-282351d4354c",
       "name": "P01_E01_Med001",
-      "A": 14.46,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
@@ -412,7 +408,6 @@
     {
       "id": "eb2a9621-53f8-ae4d-222a-7459ebc83c0b",
       "name": "P01_E01_Med002",
-      "A": 39.87,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
@@ -448,7 +443,6 @@
     {
       "id": "cd8adb50-4b6a-c80e-f9e9-75be518183f4",
       "name": "P01_E01_MED001",
-      "A": 31.64,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
@@ -484,7 +478,6 @@
     {
       "id": "f0286322-9d88-6756-5178-b48a188bb3ab",
       "name": "P01_E01_FTER001",
-      "A": 76.31,
       "bounds": "GROUND",
       "cons": "b8262ed2-37c9-a9d6-9d8c-23f515aedc0f",
       "space": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
@@ -528,7 +521,6 @@
     {
       "id": "84a2a9bc-c5eb-0cd0-7ef2-17dcb9ae56e3",
       "name": "P01_E02_PE005",
-      "A": 10.57,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
@@ -564,7 +556,6 @@
     {
       "id": "245c33f0-b4eb-00f7-ecfa-a978d2c38c5b",
       "name": "P01_E02_PE006",
-      "A": 8.17,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
@@ -600,7 +591,6 @@
     {
       "id": "3cd708b1-75e9-42bd-2b76-22a3dc9560bb",
       "name": "P01_E02_Med003",
-      "A": 20.48,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
@@ -636,7 +626,6 @@
     {
       "id": "8f762b85-d91e-3708-b7ab-7f4fe9495d34",
       "name": "P01_E02_Med004",
-      "A": 20.55,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
@@ -672,7 +661,6 @@
     {
       "id": "39e17f9d-0642-dce9-3b14-eb34390626a1",
       "name": "P01_E02_Med005",
-      "A": 13.79,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
@@ -708,7 +696,6 @@
     {
       "id": "252609c8-3f26-2bc4-69bd-b366a85c8fbf",
       "name": "P01_E02_Med006",
-      "A": 12.78,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
@@ -744,7 +731,6 @@
     {
       "id": "18648cf8-797e-6920-2e88-38109672cbbc",
       "name": "P01_E02_FTER002",
-      "A": 35.18,
       "bounds": "GROUND",
       "cons": "b8262ed2-37c9-a9d6-9d8c-23f515aedc0f",
       "space": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
@@ -792,7 +778,6 @@
     {
       "id": "51b77ff9-b303-f1ba-5ac3-7fa723da0139",
       "name": "P01_E03_PE001",
-      "A": 6.54,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "9b819691-7ca1-fe58-1db2-2be0051b1a1b",
@@ -828,7 +813,6 @@
     {
       "id": "1edecef5-30b5-5b43-dbc3-cf162dc12666",
       "name": "P01_E03_PE002",
-      "A": 9.58,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "9b819691-7ca1-fe58-1db2-2be0051b1a1b",
@@ -864,7 +848,6 @@
     {
       "id": "267d5157-d1c6-d96d-15eb-48d3b3841778",
       "name": "P01_E03_PE004",
-      "A": 19.47,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "9b819691-7ca1-fe58-1db2-2be0051b1a1b",
@@ -900,7 +883,6 @@
     {
       "id": "432d51b3-1194-d333-e559-804696762d25",
       "name": "P01_E03_Med001",
-      "A": 39.9,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "9b819691-7ca1-fe58-1db2-2be0051b1a1b",
@@ -936,7 +918,6 @@
     {
       "id": "e78a9387-c73f-6bcb-c7bd-32ab4ca69aa1",
       "name": "P01_E03_MED001",
-      "A": 31.64,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "9b819691-7ca1-fe58-1db2-2be0051b1a1b",
@@ -972,7 +953,6 @@
     {
       "id": "0f52fe69-84c1-f4f2-b3ba-ad978f8bb786",
       "name": "P01_E03_FTER003",
-      "A": 74.45,
       "bounds": "GROUND",
       "cons": "b8262ed2-37c9-a9d6-9d8c-23f515aedc0f",
       "space": "9b819691-7ca1-fe58-1db2-2be0051b1a1b",
@@ -1016,7 +996,6 @@
     {
       "id": "33b5b12b-e346-ee78-510f-bb5d006b4f4b",
       "name": "P01_E04_PE001",
-      "A": 8.74,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "f27e5c13-523f-d73e-7f86-9c9fb1d8ac2c",
@@ -1052,7 +1031,6 @@
     {
       "id": "268499c5-6040-71f9-8847-d8542bf3794c",
       "name": "P01_E04_FTER004",
-      "A": 41.53,
       "bounds": "GROUND",
       "cons": "b8262ed2-37c9-a9d6-9d8c-23f515aedc0f",
       "space": "f27e5c13-523f-d73e-7f86-9c9fb1d8ac2c",
@@ -1088,7 +1066,6 @@
     {
       "id": "b3cc4c64-1189-3491-e4a1-f61d5b7f9ea5",
       "name": "P01_E05_PE001",
-      "A": 23.59,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0ea2bc6a-0fc5-1091-922e-3a48d6b7eeb1",
@@ -1124,7 +1101,6 @@
     {
       "id": "55fedf12-a77d-302e-d0dd-8cfe48899145",
       "name": "P01_E05_PE003",
-      "A": 9.58,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0ea2bc6a-0fc5-1091-922e-3a48d6b7eeb1",
@@ -1160,7 +1136,6 @@
     {
       "id": "cb5b1eac-255c-81e6-c007-f50aa85a11fc",
       "name": "P01_E05_PE004",
-      "A": 7.21,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0ea2bc6a-0fc5-1091-922e-3a48d6b7eeb1",
@@ -1196,7 +1171,6 @@
     {
       "id": "2635b52d-d9b5-6647-e84c-736ed5e2d4ba",
       "name": "P01_E05_Med001",
-      "A": 39.94,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "0ea2bc6a-0fc5-1091-922e-3a48d6b7eeb1",
@@ -1232,7 +1206,6 @@
     {
       "id": "396edf33-3a16-c8aa-e20e-3aa3e3930ef7",
       "name": "P01_E05_MED001",
-      "A": 30.94,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0ea2bc6a-0fc5-1091-922e-3a48d6b7eeb1",
@@ -1268,7 +1241,6 @@
     {
       "id": "eec424e9-7c91-b127-f5ae-db99d446cedc",
       "name": "P01_E05_FTER005",
-      "A": 95.56,
       "bounds": "GROUND",
       "cons": "b8262ed2-37c9-a9d6-9d8c-23f515aedc0f",
       "space": "0ea2bc6a-0fc5-1091-922e-3a48d6b7eeb1",
@@ -1312,7 +1284,6 @@
     {
       "id": "d49cc280-d0bd-eb22-dd30-346de9e4529e",
       "name": "P01_E06_PE001",
-      "A": 7.69,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0e14f305-ae0f-c770-ac55-ef09fb85b284",
@@ -1348,7 +1319,6 @@
     {
       "id": "19242636-b354-1059-c664-908c5dd09cfc",
       "name": "P01_E06_PE002",
-      "A": 9.57,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0e14f305-ae0f-c770-ac55-ef09fb85b284",
@@ -1384,7 +1354,6 @@
     {
       "id": "987bdc0c-74e4-cd50-c532-67d5424af590",
       "name": "P01_E06_PE004",
-      "A": 23.59,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0e14f305-ae0f-c770-ac55-ef09fb85b284",
@@ -1420,7 +1389,6 @@
     {
       "id": "058b2af8-12eb-37ff-aaa5-233d1eca3a85",
       "name": "P01_E06_MED001",
-      "A": 30.94,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0e14f305-ae0f-c770-ac55-ef09fb85b284",
@@ -1456,7 +1424,6 @@
     {
       "id": "19aedf75-6682-1ffc-f7c9-ecc90924a0e5",
       "name": "P01_E06_FTER006",
-      "A": 95.45,
       "bounds": "GROUND",
       "cons": "b8262ed2-37c9-a9d6-9d8c-23f515aedc0f",
       "space": "0e14f305-ae0f-c770-ac55-ef09fb85b284",
@@ -1500,7 +1467,6 @@
     {
       "id": "02a1d1c0-8bb7-264a-2336-fd633056209c",
       "name": "P02_E01_PE001",
-      "A": 5.37,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
@@ -1536,7 +1502,6 @@
     {
       "id": "07028d58-e8d4-c3c0-7739-8239b7c9d142",
       "name": "P02_E01_PE002",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
@@ -1572,7 +1537,6 @@
     {
       "id": "10def459-503b-77fe-4cfd-eb0d2689d819",
       "name": "P02_E01_PE004",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
@@ -1608,7 +1572,6 @@
     {
       "id": "f72ab8d6-b009-2491-76ff-7ab2920a5c6e",
       "name": "P02_E01_FI001",
-      "A": 74.43,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
@@ -1656,7 +1619,6 @@
     {
       "id": "3b0bf497-6dfc-3092-3b11-4450ef0cd6c3",
       "name": "P02_E01_FI002",
-      "A": 21.7,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
@@ -1692,7 +1654,6 @@
     {
       "id": "46b60b9b-2cfc-40d2-df35-2702a1720b2f",
       "name": "P02_E01_Med001",
-      "A": 34.18,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
@@ -1728,7 +1689,6 @@
     {
       "id": "f277d03b-4309-d07c-cb6d-27ecd8f527f1",
       "name": "P02_E01_Med002",
-      "A": 17.58,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
@@ -1764,7 +1724,6 @@
     {
       "id": "2d98bac9-a56d-73c3-a736-8921fb630c39",
       "name": "P02_E01_MED001",
-      "A": 27.12,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
@@ -1800,7 +1759,6 @@
     {
       "id": "43f21c5d-ab82-2cd8-db8b-c55c9c4e01ec",
       "name": "P02_E02_PE005",
-      "A": 6.42,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
@@ -1836,7 +1794,6 @@
     {
       "id": "60f31063-c1ae-c833-435e-63cd1985d679",
       "name": "P02_E02_PE006",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
@@ -1872,7 +1829,6 @@
     {
       "id": "c56916a7-c264-d200-ae90-95ca321aa8cc",
       "name": "P02_E02_PE008",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
@@ -1908,7 +1864,6 @@
     {
       "id": "8aa1c4e6-54a9-f32b-4ff2-61fb7ba0b3be",
       "name": "P02_E02_FI003",
-      "A": 95.34,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
@@ -1952,7 +1907,6 @@
     {
       "id": "4173bcfa-9ef3-92ff-ecf9-4098c3ad59d6",
       "name": "P02_E02_Med003",
-      "A": 17.55,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
@@ -1988,7 +1942,6 @@
     {
       "id": "c722db9a-3230-6de7-f411-d8f7c893d5f5",
       "name": "P02_E02_Med004",
-      "A": 34.23,
       "bounds": "INTERIOR",
       "cons": "2af92460-4420-a8ff-4506-bd2d63173011",
       "space": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
@@ -2024,7 +1977,6 @@
     {
       "id": "79de3ff9-a8a9-e922-496d-0665fd91651b",
       "name": "P02_E02_MED001",
-      "A": 26.52,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
@@ -2060,7 +2012,6 @@
     {
       "id": "f8606b8b-ddfe-39ed-2988-4ce8b2d56ecf",
       "name": "P02_E03_PE009",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "be65044c-9404-f1db-b961-0d25ed3f87d9",
@@ -2096,7 +2047,6 @@
     {
       "id": "f394d526-16cf-778c-a654-3cb31308b538",
       "name": "P02_E03_PE011",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "be65044c-9404-f1db-b961-0d25ed3f87d9",
@@ -2132,7 +2082,6 @@
     {
       "id": "9c844512-c9c4-6e8d-6697-89fc8c226ece",
       "name": "P02_E03_PE012",
-      "A": 5.85,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "be65044c-9404-f1db-b961-0d25ed3f87d9",
@@ -2168,7 +2117,6 @@
     {
       "id": "2ecde8af-9690-8554-2b20-ab5ccc5f772f",
       "name": "P02_E03_FI001",
-      "A": 76.19,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "be65044c-9404-f1db-b961-0d25ed3f87d9",
@@ -2212,7 +2160,6 @@
     {
       "id": "a487625a-6a25-face-48fc-8ee1f66690d0",
       "name": "P02_E03_FI002",
-      "A": 19.82,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "be65044c-9404-f1db-b961-0d25ed3f87d9",
@@ -2252,7 +2199,6 @@
     {
       "id": "cfff2c2d-a8c6-c8ec-49d4-1c3940771441",
       "name": "P02_E03_Med005",
-      "A": 17.58,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "be65044c-9404-f1db-b961-0d25ed3f87d9",
@@ -2288,7 +2234,6 @@
     {
       "id": "2f45a1b9-1f8c-4587-b06b-561b3cf6aae8",
       "name": "P02_E03_MED001",
-      "A": 27.12,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "be65044c-9404-f1db-b961-0d25ed3f87d9",
@@ -2324,7 +2269,6 @@
     {
       "id": "76b0c81f-4a36-f0bd-6fbc-e607a29ea0ac",
       "name": "P02_E04_PE001",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "9c123d73-221f-1132-227b-1cc29312fa74",
@@ -2360,7 +2304,6 @@
     {
       "id": "42ec34c4-0f76-bbef-28e1-d72e644a5b17",
       "name": "P02_E04_PE003",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "9c123d73-221f-1132-227b-1cc29312fa74",
@@ -2396,7 +2339,6 @@
     {
       "id": "a60e1940-f207-0804-0c74-2f570bed1939",
       "name": "P02_E04_PE004",
-      "A": 5.94,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "9c123d73-221f-1132-227b-1cc29312fa74",
@@ -2432,7 +2374,6 @@
     {
       "id": "099b8e4d-f65e-e46a-6f4a-1118c5089987",
       "name": "P02_E04_FI001",
-      "A": 95.5,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "9c123d73-221f-1132-227b-1cc29312fa74",
@@ -2476,7 +2417,6 @@
     {
       "id": "64b60943-03db-99fa-25f2-7bbb4747c0bc",
       "name": "P02_E04_Med001",
-      "A": 17.61,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "9c123d73-221f-1132-227b-1cc29312fa74",
@@ -2512,7 +2452,6 @@
     {
       "id": "a637a3c7-733d-9b79-1c9f-bae0c8a5d736",
       "name": "P02_E04_MED001",
-      "A": 26.52,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "9c123d73-221f-1132-227b-1cc29312fa74",
@@ -2548,7 +2487,6 @@
     {
       "id": "a9e9ac92-c736-4b25-5a45-2a162240c2ae",
       "name": "P02_E05_PE001",
-      "A": 7.64,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "97146638-ea1f-57c8-bf98-6921c92575ac",
@@ -2584,7 +2522,6 @@
     {
       "id": "47054fa0-7fcc-edab-f09b-f585ed17efc9",
       "name": "P02_E05_PE002",
-      "A": 6.66,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "97146638-ea1f-57c8-bf98-6921c92575ac",
@@ -2620,7 +2557,6 @@
     {
       "id": "401ee7b9-df5e-b004-5e84-eef817eb0b7e",
       "name": "P02_E05_FI001",
-      "A": 35.14,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "97146638-ea1f-57c8-bf98-6921c92575ac",
@@ -2672,7 +2608,6 @@
     {
       "id": "f3e78039-2c04-4ad8-b0ca-4c094c92ec58",
       "name": "P03_E01_PE001",
-      "A": 5.37,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "b293153e-71a3-c32f-ee77-c4c064d95812",
@@ -2708,7 +2643,6 @@
     {
       "id": "43aae6c0-4fb3-b7b6-65e2-5fb3e7bb1f54",
       "name": "P03_E01_PE002",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "b293153e-71a3-c32f-ee77-c4c064d95812",
@@ -2744,7 +2678,6 @@
     {
       "id": "cb0f38ff-51c3-cd01-c6da-755332efdc89",
       "name": "P03_E01_PE004",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "b293153e-71a3-c32f-ee77-c4c064d95812",
@@ -2780,7 +2713,6 @@
     {
       "id": "bb8faa1a-580b-6c47-e92c-535be3708a4c",
       "name": "P03_E01_Med001",
-      "A": 34.18,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "b293153e-71a3-c32f-ee77-c4c064d95812",
@@ -2816,7 +2748,6 @@
     {
       "id": "346a20f6-7860-1ea5-f148-9add7bf8d720",
       "name": "P03_E01_Med002",
-      "A": 17.58,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "b293153e-71a3-c32f-ee77-c4c064d95812",
@@ -2852,7 +2783,6 @@
     {
       "id": "d7519d0b-d855-6c9d-ebe5-20b4b774c202",
       "name": "P03_E01_FI007",
-      "A": 96.14,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "b293153e-71a3-c32f-ee77-c4c064d95812",
@@ -2896,7 +2826,6 @@
     {
       "id": "3cdab467-ff26-9368-fab1-1a685a692d38",
       "name": "P03_E01_MED001",
-      "A": 27.12,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "b293153e-71a3-c32f-ee77-c4c064d95812",
@@ -2932,7 +2861,6 @@
     {
       "id": "4b9501d6-20d3-eefe-cb07-379450ec547f",
       "name": "P03_E02_PE005",
-      "A": 6.42,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "c20e74c0-39b3-4d23-7733-26456a6d927c",
@@ -2968,7 +2896,6 @@
     {
       "id": "7d04b887-c7f6-ecb3-74ba-68675532a244",
       "name": "P03_E02_PE006",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "c20e74c0-39b3-4d23-7733-26456a6d927c",
@@ -3004,7 +2931,6 @@
     {
       "id": "df4311d3-576d-5486-ee3d-7e5236273cae",
       "name": "P03_E02_PE008",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "c20e74c0-39b3-4d23-7733-26456a6d927c",
@@ -3040,7 +2966,6 @@
     {
       "id": "23c54b76-aa11-8d66-a9bc-10fe7c62d520",
       "name": "P03_E02_Med003",
-      "A": 17.55,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "c20e74c0-39b3-4d23-7733-26456a6d927c",
@@ -3076,7 +3001,6 @@
     {
       "id": "9dd11bb6-9d75-0f21-7800-62092f5e110e",
       "name": "P03_E02_Med004",
-      "A": 34.23,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "c20e74c0-39b3-4d23-7733-26456a6d927c",
@@ -3112,7 +3036,6 @@
     {
       "id": "a0e79e94-7962-7fc3-bcc5-1b3448c98d6f",
       "name": "P03_E02_FI008",
-      "A": 95.45,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "c20e74c0-39b3-4d23-7733-26456a6d927c",
@@ -3156,7 +3079,6 @@
     {
       "id": "4ef6f39d-7444-60e5-7e6c-e2514f6562da",
       "name": "P03_E02_MED001",
-      "A": 26.52,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "c20e74c0-39b3-4d23-7733-26456a6d927c",
@@ -3192,7 +3114,6 @@
     {
       "id": "dc253e7c-8080-0ecd-09cc-ead69e1b3f38",
       "name": "P03_E03_PE009",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "f45f6108-a38f-e401-5d08-8427489d337d",
@@ -3228,7 +3149,6 @@
     {
       "id": "60fbe545-8fde-6ebf-7239-3ca014d084c9",
       "name": "P03_E03_PE011",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "f45f6108-a38f-e401-5d08-8427489d337d",
@@ -3264,7 +3184,6 @@
     {
       "id": "6e742f44-d5b5-91a1-5a5f-4100d11713e1",
       "name": "P03_E03_PE012",
-      "A": 5.85,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "f45f6108-a38f-e401-5d08-8427489d337d",
@@ -3300,7 +3219,6 @@
     {
       "id": "2bd84da4-986e-0b42-34cf-d9a4f8d32531",
       "name": "P03_E03_Med005",
-      "A": 17.58,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "f45f6108-a38f-e401-5d08-8427489d337d",
@@ -3336,7 +3254,6 @@
     {
       "id": "bf8e5f12-9211-bc4c-7617-19dcb37cce15",
       "name": "P03_E03_FI009",
-      "A": 96.14,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "f45f6108-a38f-e401-5d08-8427489d337d",
@@ -3380,7 +3297,6 @@
     {
       "id": "b0f842f6-d10a-3378-2e96-e32d5e84aa3f",
       "name": "P03_E03_MED001",
-      "A": 27.12,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "f45f6108-a38f-e401-5d08-8427489d337d",
@@ -3416,7 +3332,6 @@
     {
       "id": "ec845c90-c06e-1beb-6211-ad67ff768e7a",
       "name": "P03_E04_PE013",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "3f80985c-8936-44c9-09c7-68364bd2251a",
@@ -3452,7 +3367,6 @@
     {
       "id": "85047f9b-cce5-3aa5-a41c-a6226e91589f",
       "name": "P03_E04_PE015",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "3f80985c-8936-44c9-09c7-68364bd2251a",
@@ -3488,7 +3402,6 @@
     {
       "id": "a9e0ec6f-9c08-7bda-f4c7-1e37b8942bdf",
       "name": "P03_E04_PE016",
-      "A": 5.94,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "3f80985c-8936-44c9-09c7-68364bd2251a",
@@ -3524,7 +3437,6 @@
     {
       "id": "263d2e0e-c7b8-731e-4a0e-b1c13ddbea7b",
       "name": "P03_E04_Med006",
-      "A": 17.61,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "3f80985c-8936-44c9-09c7-68364bd2251a",
@@ -3560,7 +3472,6 @@
     {
       "id": "d61370de-6164-1fe0-6c4e-75f6ae2b6a3d",
       "name": "P03_E04_FI010",
-      "A": 95.56,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "3f80985c-8936-44c9-09c7-68364bd2251a",
@@ -3604,7 +3515,6 @@
     {
       "id": "be0040c5-bfbc-44ff-b9e1-f9cc86c17e33",
       "name": "P03_E04_MED001",
-      "A": 26.52,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "3f80985c-8936-44c9-09c7-68364bd2251a",
@@ -3640,7 +3550,6 @@
     {
       "id": "b4dc6aa7-407d-0f11-1963-98d1cb02bf74",
       "name": "P03_E05_PE017",
-      "A": 7.64,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "cb7b7744-ff05-cd5d-81f1-b741bbf632b7",
@@ -3676,7 +3585,6 @@
     {
       "id": "8b15d8bf-06e4-b33b-da00-ca82849c006d",
       "name": "P03_E05_PE018",
-      "A": 6.66,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "cb7b7744-ff05-cd5d-81f1-b741bbf632b7",
@@ -3712,7 +3620,6 @@
     {
       "id": "e6acc737-51e7-8c9a-0be2-56be55535f5a",
       "name": "P03_E05_FI011",
-      "A": 35.19,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "cb7b7744-ff05-cd5d-81f1-b741bbf632b7",
@@ -3756,7 +3663,6 @@
     {
       "id": "9ee699e0-fda2-ea8e-c0cc-cdc3f9614f35",
       "name": "P04_E01_PE001",
-      "A": 5.37,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
@@ -3792,7 +3698,6 @@
     {
       "id": "035bcd2f-5d5a-4c0e-be73-f2536203a788",
       "name": "P04_E01_PE002",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
@@ -3828,7 +3733,6 @@
     {
       "id": "8cc09147-6d07-660d-f72a-3c2def31e13c",
       "name": "P04_E01_PE004",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
@@ -3864,7 +3768,6 @@
     {
       "id": "c9bedd31-73d3-a524-7c54-0b0b46fbc8ce",
       "name": "P04_E01_Med001",
-      "A": 34.18,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
@@ -3900,7 +3803,6 @@
     {
       "id": "3955a5e0-aaf0-3644-b3d2-4c3368e803c2",
       "name": "P04_E01_Med002",
-      "A": 17.58,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
@@ -3936,7 +3838,6 @@
     {
       "id": "480e3905-c21b-3ce0-08f7-caa935105ad0",
       "name": "P04_E01_FI007",
-      "A": 96.14,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
@@ -3980,7 +3881,6 @@
     {
       "id": "6276e296-54ca-ebd1-2258-34bad97ead61",
       "name": "P04_E01_MED001",
-      "A": 27.12,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
@@ -4016,7 +3916,6 @@
     {
       "id": "cf47183a-2437-c001-bd3e-3632411e34e8",
       "name": "P04_E01_CUB001",
-      "A": 96.14,
       "bounds": "EXTERIOR",
       "cons": "90abad0b-5853-8104-6278-149940b884ab",
       "space": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
@@ -4060,7 +3959,6 @@
     {
       "id": "e1da097d-dea5-93a6-e71e-0eec60c90122",
       "name": "P04_E02_PE005",
-      "A": 6.42,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
@@ -4096,7 +3994,6 @@
     {
       "id": "609f2839-5cd0-aaf6-c293-c51850f53276",
       "name": "P04_E02_PE006",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
@@ -4132,7 +4029,6 @@
     {
       "id": "24ae8d74-1168-bbdb-2b82-6682669cad4e",
       "name": "P04_E02_PE008",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
@@ -4168,7 +4064,6 @@
     {
       "id": "cf30158e-fe1b-8abb-629f-a9538ad83585",
       "name": "P04_E02_Med003",
-      "A": 17.55,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
@@ -4204,7 +4099,6 @@
     {
       "id": "f387e208-f96b-f2cf-94d5-bc4fc777c6c1",
       "name": "P04_E02_Med004",
-      "A": 34.23,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
@@ -4240,7 +4134,6 @@
     {
       "id": "7e26e956-b2e5-1283-03d5-6c75eb56dba5",
       "name": "P04_E02_FI008",
-      "A": 95.45,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
@@ -4284,7 +4177,6 @@
     {
       "id": "518f55cc-4584-f6e0-dd7f-6b70a0ab308b",
       "name": "P04_E02_MED001",
-      "A": 26.52,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
@@ -4320,7 +4212,6 @@
     {
       "id": "7295fa71-1985-f69a-70d8-d33f1e3ce22f",
       "name": "P04_E02_CUB001",
-      "A": 95.45,
       "bounds": "EXTERIOR",
       "cons": "90abad0b-5853-8104-6278-149940b884ab",
       "space": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
@@ -4364,7 +4255,6 @@
     {
       "id": "4166972e-9911-a517-a617-e192718d3c2f",
       "name": "P04_E03_PE009",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
@@ -4400,7 +4290,6 @@
     {
       "id": "370ff208-ae69-29fc-1039-6e0e9be2c719",
       "name": "P04_E03_PE011",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
@@ -4436,7 +4325,6 @@
     {
       "id": "212c4e4e-2c4d-b2a3-1462-80e9c30166fc",
       "name": "P04_E03_PE012",
-      "A": 5.85,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
@@ -4472,7 +4360,6 @@
     {
       "id": "b0a5a8fd-396b-ce0e-fb1a-fce1d77cb026",
       "name": "P04_E03_Med005",
-      "A": 17.58,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
@@ -4508,7 +4395,6 @@
     {
       "id": "a759daf8-08e5-297f-7663-50d5d5ce82af",
       "name": "P04_E03_FI009",
-      "A": 96.14,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
@@ -4552,7 +4438,6 @@
     {
       "id": "ede40e93-82e7-7e5a-a8d6-61480563d4b0",
       "name": "P04_E03_MED001",
-      "A": 27.12,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
@@ -4588,7 +4473,6 @@
     {
       "id": "6a91a69c-ab68-9c44-52fa-07cd8878a2a4",
       "name": "P04_E03_CUB001",
-      "A": 96.14,
       "bounds": "EXTERIOR",
       "cons": "90abad0b-5853-8104-6278-149940b884ab",
       "space": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
@@ -4632,7 +4516,6 @@
     {
       "id": "80b0f1a5-08b0-4588-dd5a-ab1df8938683",
       "name": "P04_E04_PE013",
-      "A": 19.03,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
@@ -4668,7 +4551,6 @@
     {
       "id": "9839972e-a4a4-f82c-2c80-65e7254b3676",
       "name": "P04_E04_PE015",
-      "A": 7.95,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
@@ -4704,7 +4586,6 @@
     {
       "id": "79d9bf16-1be9-4eed-6009-dc52168f715e",
       "name": "P04_E04_PE016",
-      "A": 5.94,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
@@ -4740,7 +4621,6 @@
     {
       "id": "a116fec0-b5bf-88e9-53df-2dea71f605a7",
       "name": "P04_E04_Med006",
-      "A": 17.61,
       "bounds": "INTERIOR",
       "cons": "a0c426e2-3565-162d-7a9d-d51fe6ee2501",
       "space": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
@@ -4776,7 +4656,6 @@
     {
       "id": "f4724f42-e62c-f61d-c59d-d2f859f1f499",
       "name": "P04_E04_FI010",
-      "A": 95.56,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
@@ -4820,7 +4699,6 @@
     {
       "id": "a1e3aa63-802f-d970-0534-1b80fc736cbd",
       "name": "P04_E04_MED001",
-      "A": 26.52,
       "bounds": "ADIABATIC",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
@@ -4856,7 +4734,6 @@
     {
       "id": "e79fbddc-9977-ba3c-f5ac-694b12ebb4a2",
       "name": "P04_E04_CUB001",
-      "A": 95.56,
       "bounds": "EXTERIOR",
       "cons": "90abad0b-5853-8104-6278-149940b884ab",
       "space": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
@@ -4900,7 +4777,6 @@
     {
       "id": "831a235e-c21a-6bbd-90be-09ea122a0938",
       "name": "P04_E05_PE017",
-      "A": 7.64,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "3b883139-ac45-3eff-f6d0-4426be697579",
@@ -4936,7 +4812,6 @@
     {
       "id": "740c527f-3f22-525f-6946-0e40e55a9421",
       "name": "P04_E05_PE018",
-      "A": 6.66,
       "bounds": "EXTERIOR",
       "cons": "d58fbeda-ed1f-4e83-e1d8-4f8070e85795",
       "space": "3b883139-ac45-3eff-f6d0-4426be697579",
@@ -4972,7 +4847,6 @@
     {
       "id": "cdf8bfc6-815f-be81-4225-7f6b913d0ddc",
       "name": "P04_E05_FI011",
-      "A": 35.19,
       "bounds": "INTERIOR",
       "cons": "29a051a4-5fa4-acf4-5d25-6a0230bf259f",
       "space": "3b883139-ac45-3eff-f6d0-4426be697579",
@@ -5016,7 +4890,6 @@
     {
       "id": "0adb9e95-9eee-96bb-8020-8ebb7fab7fb4",
       "name": "P04_E05_CUB001",
-      "A": 35.19,
       "bounds": "EXTERIOR",
       "cons": "90abad0b-5853-8104-6278-149940b884ab",
       "space": "3b883139-ac45-3eff-f6d0-4426be697579",
@@ -5062,7 +4935,6 @@
     {
       "id": "da8eb79f-a93a-4f05-4076-68a4ab42e50f",
       "name": "P01_E01_PE001_V",
-      "A": 1.7,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "6caee817-b447-fb34-3d52-18bdec2ce88b",
       "f_shobst": 0.76,
@@ -5079,7 +4951,6 @@
     {
       "id": "80579288-36a1-2e8d-85d6-804a6b810eb6",
       "name": "P01_E01_PE001_V_1",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "6caee817-b447-fb34-3d52-18bdec2ce88b",
       "f_shobst": 0.74,
@@ -5096,7 +4967,6 @@
     {
       "id": "26a6ed0d-a8ce-bee0-2055-92fbb5dea582",
       "name": "P01_E01_PE001_V_2",
-      "A": 1.7,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "6caee817-b447-fb34-3d52-18bdec2ce88b",
       "f_shobst": 0.69,
@@ -5113,7 +4983,6 @@
     {
       "id": "e3c99910-c2aa-3a80-3464-508de5d3e2ba",
       "name": "P01_E01_PE003_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "03892ba7-8066-e6cc-dbcf-f6ab7c90c699",
       "f_shobst": 0.75,
@@ -5130,7 +4999,6 @@
     {
       "id": "186c2447-0a74-1473-5ee9-ba4c902f0e54",
       "name": "P01_E01_PE004_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "1fc93cdb-6b75-9df7-015c-66bf877c94de",
       "f_shobst": 0.6,
@@ -5147,7 +5015,6 @@
     {
       "id": "4835f715-f264-6645-935a-a980785fc7ca",
       "name": "P01_E02_PE006_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "245c33f0-b4eb-00f7-ecfa-a978d2c38c5b",
       "f_shobst": 0.62,
@@ -5164,7 +5031,6 @@
     {
       "id": "eb9601bc-1cd4-38f8-25f8-fdd61e831796",
       "name": "P01_E02_PE006_V_1",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "245c33f0-b4eb-00f7-ecfa-a978d2c38c5b",
       "f_shobst": 0.63,
@@ -5181,7 +5047,6 @@
     {
       "id": "86650f39-de1e-4b14-8d52-e2c8fbad5291",
       "name": "P01_E03_PE001_V",
-      "A": 1.68,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "51b77ff9-b303-f1ba-5ac3-7fa723da0139",
       "f_shobst": 0.6,
@@ -5198,7 +5063,6 @@
     {
       "id": "9949bf7c-e616-dda3-db33-bb28ac31cb06",
       "name": "P01_E03_PE002_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "1edecef5-30b5-5b43-dbc3-cf162dc12666",
       "f_shobst": 0.75,
@@ -5215,7 +5079,6 @@
     {
       "id": "b49c8bbd-8a94-d3a0-5732-91df4d4ade82",
       "name": "P01_E03_PE004_V",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "267d5157-d1c6-d96d-15eb-48d3b3841778",
       "f_shobst": 0.74,
@@ -5232,7 +5095,6 @@
     {
       "id": "c70acd48-3e8f-b3a7-f960-99391c1e5a02",
       "name": "P01_E03_PE004_V_1",
-      "A": 1.7,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "267d5157-d1c6-d96d-15eb-48d3b3841778",
       "f_shobst": 0.77,
@@ -5249,7 +5111,6 @@
     {
       "id": "f4526c13-9567-85eb-d884-0b9773ca024e",
       "name": "P01_E03_PE004_V_2",
-      "A": 1.7,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "267d5157-d1c6-d96d-15eb-48d3b3841778",
       "f_shobst": 0.7,
@@ -5266,7 +5127,6 @@
     {
       "id": "26df45ea-1c80-fcbe-2a76-4bdfac2e7420",
       "name": "P01_E04_PE001_V",
-      "A": 4.0,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "33b5b12b-e346-ee78-510f-bb5d006b4f4b",
       "f_shobst": 0.66,
@@ -5283,7 +5143,6 @@
     {
       "id": "0f52e897-2277-2025-96a8-5852e6979750",
       "name": "P01_E05_PE001_V",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "b3cc4c64-1189-3491-e4a1-f61d5b7f9ea5",
       "f_shobst": 0.88,
@@ -5300,7 +5159,6 @@
     {
       "id": "3b5f67a0-6233-a17e-6a36-3e46a27f17a4",
       "name": "P01_E05_PE001_V_1",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "b3cc4c64-1189-3491-e4a1-f61d5b7f9ea5",
       "f_shobst": 0.83,
@@ -5317,7 +5175,6 @@
     {
       "id": "2dfd4d37-790f-ba68-36a0-ca9cf7d06830",
       "name": "P01_E05_PE001_V_2",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "b3cc4c64-1189-3491-e4a1-f61d5b7f9ea5",
       "f_shobst": 0.87,
@@ -5334,7 +5191,6 @@
     {
       "id": "52278083-14d2-0ef0-7ecb-0708179aae28",
       "name": "P01_E05_PE003_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "55fedf12-a77d-302e-d0dd-8cfe48899145",
       "f_shobst": 0.71,
@@ -5351,7 +5207,6 @@
     {
       "id": "6e8bd2e0-abbe-32e7-2162-1cb6b0932adc",
       "name": "P01_E05_PE004_V",
-      "A": 1.68,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "cb5b1eac-255c-81e6-c007-f50aa85a11fc",
       "f_shobst": 0.63,
@@ -5368,7 +5223,6 @@
     {
       "id": "e02de4b6-8a5e-b118-5aa2-068a4880374a",
       "name": "P01_E06_PE001_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "d49cc280-d0bd-eb22-dd30-346de9e4529e",
       "f_shobst": 0.62,
@@ -5385,7 +5239,6 @@
     {
       "id": "0e84f91e-d390-672a-91df-00ba4b743e86",
       "name": "P01_E06_PE002_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "19242636-b354-1059-c664-908c5dd09cfc",
       "f_shobst": 0.71,
@@ -5402,7 +5255,6 @@
     {
       "id": "b9f68f17-f076-160d-a69d-1a2937b49712",
       "name": "P01_E06_PE004_V",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "987bdc0c-74e4-cd50-c532-67d5424af590",
       "f_shobst": 0.87,
@@ -5419,7 +5271,6 @@
     {
       "id": "bbe3d7e7-1194-d68f-d85b-bfe70eab0d65",
       "name": "P01_E06_PE004_V_1",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "987bdc0c-74e4-cd50-c532-67d5424af590",
       "f_shobst": 0.84,
@@ -5436,7 +5287,6 @@
     {
       "id": "86a44aa8-79c4-347c-942a-fa7d85249c62",
       "name": "P01_E06_PE004_V_2",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "987bdc0c-74e4-cd50-c532-67d5424af590",
       "f_shobst": 0.88,
@@ -5453,7 +5303,6 @@
     {
       "id": "5295dc5c-16e5-a5f3-ebad-8046d96c08d4",
       "name": "P02_E01_PE001_V",
-      "A": 1.68,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "02a1d1c0-8bb7-264a-2336-fd633056209c",
       "f_shobst": 0.61,
@@ -5470,7 +5319,6 @@
     {
       "id": "26e0095a-fe62-57c9-110a-b5ac67fbf90b",
       "name": "P02_E01_PE002_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "07028d58-e8d4-c3c0-7739-8239b7c9d142",
       "f_shobst": 0.75,
@@ -5487,7 +5335,6 @@
     {
       "id": "42102175-2934-2ded-7cfa-e5515659f942",
       "name": "P02_E01_PE004_V",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "10def459-503b-77fe-4cfd-eb0d2689d819",
       "f_shobst": 0.74,
@@ -5504,7 +5351,6 @@
     {
       "id": "29ffa306-de95-f971-b931-2bf8a96386d8",
       "name": "P02_E01_PE004_V_1",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "10def459-503b-77fe-4cfd-eb0d2689d819",
       "f_shobst": 0.73,
@@ -5521,7 +5367,6 @@
     {
       "id": "4c9ea1ce-ee89-7b0a-2e2c-654fb3edbd7f",
       "name": "P02_E01_PE004_V_2",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "10def459-503b-77fe-4cfd-eb0d2689d819",
       "f_shobst": 0.66,
@@ -5538,7 +5383,6 @@
     {
       "id": "1f1debda-ce89-4eae-6096-004440c213e8",
       "name": "P02_E02_PE005_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "43f21c5d-ab82-2cd8-db8b-c55c9c4e01ec",
       "f_shobst": 0.67,
@@ -5555,7 +5399,6 @@
     {
       "id": "5ed00d0c-f7c9-4b7a-ad9e-e4d9fab0b714",
       "name": "P02_E02_PE006_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "60f31063-c1ae-c833-435e-63cd1985d679",
       "f_shobst": 0.72,
@@ -5572,7 +5415,6 @@
     {
       "id": "2d022867-a771-3c2c-abe8-cc32762ace4d",
       "name": "P02_E02_PE008_V",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "c56916a7-c264-d200-ae90-95ca321aa8cc",
       "f_shobst": 0.88,
@@ -5589,7 +5431,6 @@
     {
       "id": "bed40823-33de-4e7d-f9bf-b9ef219d4f6e",
       "name": "P02_E02_PE008_V_1",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "c56916a7-c264-d200-ae90-95ca321aa8cc",
       "f_shobst": 0.84,
@@ -5606,7 +5447,6 @@
     {
       "id": "1bba0979-e6d9-94b2-af06-2b5854a64ed4",
       "name": "P02_E02_PE008_V_2",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "c56916a7-c264-d200-ae90-95ca321aa8cc",
       "f_shobst": 0.87,
@@ -5623,7 +5463,6 @@
     {
       "id": "2e89a1bc-3667-2ac4-830a-d0660c2524b0",
       "name": "P02_E03_PE009_V",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "f8606b8b-ddfe-39ed-2988-4ce8b2d56ecf",
       "f_shobst": 0.66,
@@ -5640,7 +5479,6 @@
     {
       "id": "761d5fd8-bdf2-464a-29ee-1b77bfc868d8",
       "name": "P02_E03_PE009_V_1",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "f8606b8b-ddfe-39ed-2988-4ce8b2d56ecf",
       "f_shobst": 0.72,
@@ -5657,7 +5495,6 @@
     {
       "id": "692d0373-4430-dc00-c38a-8484150c42bc",
       "name": "P02_E03_PE009_V_2",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "f8606b8b-ddfe-39ed-2988-4ce8b2d56ecf",
       "f_shobst": 0.74,
@@ -5674,7 +5511,6 @@
     {
       "id": "2d9f1eb4-d1fc-93c0-78ca-bc13435dadbf",
       "name": "P02_E03_PE011_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "f394d526-16cf-778c-a654-3cb31308b538",
       "f_shobst": 0.75,
@@ -5691,7 +5527,6 @@
     {
       "id": "86589c4e-75f6-e72a-3eb3-109014740dfe",
       "name": "P02_E03_PE012_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "9c844512-c9c4-6e8d-6697-89fc8c226ece",
       "f_shobst": 0.6,
@@ -5708,7 +5543,6 @@
     {
       "id": "45985e56-57e7-3fb1-2aa7-0b392cb8d532",
       "name": "P02_E04_PE001_V",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "76b0c81f-4a36-f0bd-6fbc-e607a29ea0ac",
       "f_shobst": 0.87,
@@ -5725,7 +5559,6 @@
     {
       "id": "12afcd5a-06ef-ca43-d5d3-822e91543541",
       "name": "P02_E04_PE001_V_1",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "76b0c81f-4a36-f0bd-6fbc-e607a29ea0ac",
       "f_shobst": 0.83,
@@ -5742,7 +5575,6 @@
     {
       "id": "96c04275-575f-2e56-4904-326e6dbc333e",
       "name": "P02_E04_PE001_V_2",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "76b0c81f-4a36-f0bd-6fbc-e607a29ea0ac",
       "f_shobst": 0.88,
@@ -5759,7 +5591,6 @@
     {
       "id": "371f5e6d-cd35-d368-875b-516ac425f9ac",
       "name": "P02_E04_PE003_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "42ec34c4-0f76-bbef-28e1-d72e644a5b17",
       "f_shobst": 0.72,
@@ -5776,7 +5607,6 @@
     {
       "id": "09c60dfc-dc22-fbdd-caf1-cc98c96c199b",
       "name": "P02_E04_PE004_V",
-      "A": 1.68,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "a60e1940-f207-0804-0c74-2f570bed1939",
       "f_shobst": 0.68,
@@ -5793,7 +5623,6 @@
     {
       "id": "04f0bfd5-be40-c8a2-b153-b80ce7564339",
       "name": "P02_E05_PE001_V",
-      "A": 1.43,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "a9e9ac92-c736-4b25-5a45-2a162240c2ae",
       "f_shobst": 0.69,
@@ -5810,7 +5639,6 @@
     {
       "id": "5b1c7ef5-040c-d4b8-beac-75634f1a7411",
       "name": "P02_E05_PE002_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "47054fa0-7fcc-edab-f09b-f585ed17efc9",
       "f_shobst": 0.67,
@@ -5827,7 +5655,6 @@
     {
       "id": "8c83447c-ec20-a29c-4e89-270281e3feab",
       "name": "P02_E05_PE002_V_1",
-      "A": 1.2,
       "cons": "2477f2c0-14c8-3ba5-378a-bb6b12ca930c",
       "wall": "47054fa0-7fcc-edab-f09b-f585ed17efc9",
       "f_shobst": 0.67,
@@ -5844,7 +5671,6 @@
     {
       "id": "6bba56ef-64cb-8211-3b71-a9d9d4304967",
       "name": "P03_E01_PE001_V",
-      "A": 1.68,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "f3e78039-2c04-4ad8-b0ca-4c094c92ec58",
       "f_shobst": 0.71,
@@ -5861,7 +5687,6 @@
     {
       "id": "293b91c3-82ac-e257-3cbf-a64495bee661",
       "name": "P03_E01_PE002_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "43aae6c0-4fb3-b7b6-65e2-5fb3e7bb1f54",
       "f_shobst": 0.75,
@@ -5878,7 +5703,6 @@
     {
       "id": "9f6ff14e-ccea-dc9c-892d-fde62e7626aa",
       "name": "P03_E01_PE004_V",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "cb0f38ff-51c3-cd01-c6da-755332efdc89",
       "f_shobst": 0.74,
@@ -5895,7 +5719,6 @@
     {
       "id": "f47cd47c-bad9-14c9-01df-afe39a436f28",
       "name": "P03_E01_PE004_V_2",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "cb0f38ff-51c3-cd01-c6da-755332efdc89",
       "f_shobst": 0.73,
@@ -5912,7 +5735,6 @@
     {
       "id": "5138534e-a586-8033-9f6d-dbf7d68ec241",
       "name": "P03_E01_PE004_V_3",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "cb0f38ff-51c3-cd01-c6da-755332efdc89",
       "f_shobst": 0.66,
@@ -5929,7 +5751,6 @@
     {
       "id": "421162cd-83ca-0d5d-9784-39c662db3db6",
       "name": "P03_E02_PE005_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "4b9501d6-20d3-eefe-cb07-379450ec547f",
       "f_shobst": 0.74,
@@ -5946,7 +5767,6 @@
     {
       "id": "dea230bf-dcdc-5a91-a1be-1587ee0b3d7b",
       "name": "P03_E02_PE006_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "7d04b887-c7f6-ecb3-74ba-68675532a244",
       "f_shobst": 0.73,
@@ -5963,7 +5783,6 @@
     {
       "id": "d80a9394-bd5f-b6ef-226a-ae7a37078b16",
       "name": "P03_E02_PE008_V",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "df4311d3-576d-5486-ee3d-7e5236273cae",
       "f_shobst": 0.88,
@@ -5980,7 +5799,6 @@
     {
       "id": "c949aa75-fd66-0e12-cf7c-f9991652e456",
       "name": "P03_E02_PE008_V_5",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "df4311d3-576d-5486-ee3d-7e5236273cae",
       "f_shobst": 0.84,
@@ -5997,7 +5815,6 @@
     {
       "id": "1219559b-38ef-49bf-c725-72a01efde770",
       "name": "P03_E02_PE008_V_6",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "df4311d3-576d-5486-ee3d-7e5236273cae",
       "f_shobst": 0.87,
@@ -6014,7 +5831,6 @@
     {
       "id": "2eb3b081-a5a1-9658-1895-3b8652958389",
       "name": "P03_E03_PE009_V",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "dc253e7c-8080-0ecd-09cc-ead69e1b3f38",
       "f_shobst": 0.66,
@@ -6031,7 +5847,6 @@
     {
       "id": "e4fdfbc1-c3ca-13ed-1b4e-409a1e5fe773",
       "name": "P03_E03_PE009_V_7",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "dc253e7c-8080-0ecd-09cc-ead69e1b3f38",
       "f_shobst": 0.72,
@@ -6048,7 +5863,6 @@
     {
       "id": "db7fed54-9aa6-7295-de0a-00a1f024d937",
       "name": "P03_E03_PE009_V_8",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "dc253e7c-8080-0ecd-09cc-ead69e1b3f38",
       "f_shobst": 0.74,
@@ -6065,7 +5879,6 @@
     {
       "id": "0558996d-7f65-aba4-279b-66493ec96af1",
       "name": "P03_E03_PE011_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "60fbe545-8fde-6ebf-7239-3ca014d084c9",
       "f_shobst": 0.75,
@@ -6082,7 +5895,6 @@
     {
       "id": "821ef203-a737-063b-3053-e8f0f42438c1",
       "name": "P03_E03_PE012_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "6e742f44-d5b5-91a1-5a5f-4100d11713e1",
       "f_shobst": 0.69,
@@ -6099,7 +5911,6 @@
     {
       "id": "447aaba1-2d3d-2c49-738d-d9085b5f9853",
       "name": "P03_E04_PE013_V",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "ec845c90-c06e-1beb-6211-ad67ff768e7a",
       "f_shobst": 0.87,
@@ -6116,7 +5927,6 @@
     {
       "id": "25474101-8d01-67d9-002c-c0d161c43306",
       "name": "P03_E04_PE013_V_10",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "ec845c90-c06e-1beb-6211-ad67ff768e7a",
       "f_shobst": 0.83,
@@ -6133,7 +5943,6 @@
     {
       "id": "2e73e963-9399-c3b8-e876-742e14235c2b",
       "name": "P03_E04_PE013_V_11",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "ec845c90-c06e-1beb-6211-ad67ff768e7a",
       "f_shobst": 0.88,
@@ -6150,7 +5959,6 @@
     {
       "id": "61042a62-99ad-3459-8844-67c2f2d5e9b5",
       "name": "P03_E04_PE015_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "85047f9b-cce5-3aa5-a41c-a6226e91589f",
       "f_shobst": 0.73,
@@ -6167,7 +5975,6 @@
     {
       "id": "a1585ab7-59ce-33f4-b3a7-b0a1f5ecb1ae",
       "name": "P03_E04_PE016_V",
-      "A": 1.68,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "a9e0ec6f-9c08-7bda-f4c7-1e37b8942bdf",
       "f_shobst": 0.74,
@@ -6184,7 +5991,6 @@
     {
       "id": "d498309d-ce6f-3621-275d-263c2239943f",
       "name": "P03_E05_PE017_V",
-      "A": 1.43,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "b4dc6aa7-407d-0f11-1963-98d1cb02bf74",
       "f_shobst": 0.78,
@@ -6201,7 +6007,6 @@
     {
       "id": "08f88214-acef-199d-d1b2-68fee0a75716",
       "name": "P03_E05_PE018_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "8b15d8bf-06e4-b33b-da00-ca82849c006d",
       "f_shobst": 0.74,
@@ -6218,7 +6023,6 @@
     {
       "id": "d2350179-e9a3-d853-5521-881a4d8dc01b",
       "name": "P03_E05_PE018_V_13",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "8b15d8bf-06e4-b33b-da00-ca82849c006d",
       "f_shobst": 0.74,
@@ -6235,7 +6039,6 @@
     {
       "id": "a00cf9ba-a470-afdb-515f-9ad66daf4f92",
       "name": "P04_E01_PE001_V",
-      "A": 1.68,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "9ee699e0-fda2-ea8e-c0cc-cdc3f9614f35",
       "f_shobst": 0.86,
@@ -6252,7 +6055,6 @@
     {
       "id": "d1906ad7-8a43-fd3e-71a0-ae7b7afe2d98",
       "name": "P04_E01_PE002_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "035bcd2f-5d5a-4c0e-be73-f2536203a788",
       "f_shobst": 0.77,
@@ -6269,7 +6071,6 @@
     {
       "id": "a62563bc-100c-bdd4-caba-4bed40df42ea",
       "name": "P04_E01_PE004_V",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "8cc09147-6d07-660d-f72a-3c2def31e13c",
       "f_shobst": 0.74,
@@ -6286,7 +6087,6 @@
     {
       "id": "881840d3-9092-cad8-f4b6-328c50579982",
       "name": "P04_E01_PE004_V_2",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "8cc09147-6d07-660d-f72a-3c2def31e13c",
       "f_shobst": 0.74,
@@ -6303,7 +6103,6 @@
     {
       "id": "16772cce-9aa0-a417-7382-d7669e30b094",
       "name": "P04_E01_PE004_V_3",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "8cc09147-6d07-660d-f72a-3c2def31e13c",
       "f_shobst": 0.66,
@@ -6320,7 +6119,6 @@
     {
       "id": "cadf9f8d-ed27-523b-f8f0-fd38ded62c53",
       "name": "P04_E02_PE005_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "e1da097d-dea5-93a6-e71e-0eec60c90122",
       "f_shobst": 0.83,
@@ -6337,7 +6135,6 @@
     {
       "id": "719a5e3b-801a-e9b8-6508-df9ca9293650",
       "name": "P04_E02_PE006_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "609f2839-5cd0-aaf6-c293-c51850f53276",
       "f_shobst": 0.74,
@@ -6354,7 +6151,6 @@
     {
       "id": "8c0ac90f-b459-8f74-c3ad-9b30f9892e00",
       "name": "P04_E02_PE008_V",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "24ae8d74-1168-bbdb-2b82-6682669cad4e",
       "f_shobst": 0.88,
@@ -6371,7 +6167,6 @@
     {
       "id": "da355781-e666-f8bc-9039-cdc72f852bdf",
       "name": "P04_E02_PE008_V_5",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "24ae8d74-1168-bbdb-2b82-6682669cad4e",
       "f_shobst": 0.84,
@@ -6388,7 +6183,6 @@
     {
       "id": "77c53602-5fab-4596-28ba-7de594de4d11",
       "name": "P04_E02_PE008_V_6",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "24ae8d74-1168-bbdb-2b82-6682669cad4e",
       "f_shobst": 0.87,
@@ -6405,7 +6199,6 @@
     {
       "id": "56deec25-22e6-8b7b-4deb-4e812129bc85",
       "name": "P04_E03_PE009_V",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "4166972e-9911-a517-a617-e192718d3c2f",
       "f_shobst": 0.66,
@@ -6422,7 +6215,6 @@
     {
       "id": "5b357c8c-0b28-d1ca-0982-487538cef973",
       "name": "P04_E03_PE009_V_7",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "4166972e-9911-a517-a617-e192718d3c2f",
       "f_shobst": 0.74,
@@ -6439,7 +6231,6 @@
     {
       "id": "79cee499-c584-af78-6e17-d3e993006f2e",
       "name": "P04_E03_PE009_V_8",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "4166972e-9911-a517-a617-e192718d3c2f",
       "f_shobst": 0.74,
@@ -6456,7 +6247,6 @@
     {
       "id": "e3ee66e5-4366-9f63-ce43-94ffa7f23657",
       "name": "P04_E03_PE011_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "370ff208-ae69-29fc-1039-6e0e9be2c719",
       "f_shobst": 0.77,
@@ -6473,7 +6263,6 @@
     {
       "id": "6795efa5-09ae-6e81-47c2-26a7024ad285",
       "name": "P04_E03_PE012_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "212c4e4e-2c4d-b2a3-1462-80e9c30166fc",
       "f_shobst": 0.86,
@@ -6490,7 +6279,6 @@
     {
       "id": "65b2a838-d440-0c5a-46c0-d37486801b41",
       "name": "P04_E04_PE013_V",
-      "A": 4.1,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "80b0f1a5-08b0-4588-dd5a-ab1df8938683",
       "f_shobst": 0.87,
@@ -6507,7 +6295,6 @@
     {
       "id": "9c28aad7-0d1e-8d6c-d4b0-0cacfc322840",
       "name": "P04_E04_PE013_V_10",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "80b0f1a5-08b0-4588-dd5a-ab1df8938683",
       "f_shobst": 0.83,
@@ -6524,7 +6311,6 @@
     {
       "id": "862dee7f-0ef7-f0a5-85c5-7042e3b53890",
       "name": "P04_E04_PE013_V_11",
-      "A": 2.4,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "80b0f1a5-08b0-4588-dd5a-ab1df8938683",
       "f_shobst": 0.88,
@@ -6541,7 +6327,6 @@
     {
       "id": "cfa9cbe3-0a0d-2a05-cfe5-5e5e78723b74",
       "name": "P04_E04_PE015_V",
-      "A": 1.8,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "9839972e-a4a4-f82c-2c80-65e7254b3676",
       "f_shobst": 0.74,
@@ -6558,7 +6343,6 @@
     {
       "id": "4e17e907-fba4-6e59-eccf-e4685a7d38e7",
       "name": "P04_E04_PE016_V",
-      "A": 1.68,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "79d9bf16-1be9-4eed-6009-dc52168f715e",
       "f_shobst": 0.82,
@@ -6575,7 +6359,6 @@
     {
       "id": "c3d880a3-9531-82c2-e9a9-741b648228a6",
       "name": "P04_E05_PE017_V",
-      "A": 1.43,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "831a235e-c21a-6bbd-90be-09ea122a0938",
       "f_shobst": 0.88,
@@ -6592,7 +6375,6 @@
     {
       "id": "50cf7ce8-9e55-cdbe-ce6b-bf48f170652d",
       "name": "P04_E05_PE018_V",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "740c527f-3f22-525f-6946-0e40e55a9421",
       "f_shobst": 0.86,
@@ -6609,7 +6391,6 @@
     {
       "id": "f93b35f6-228c-4ec3-5d65-865f37a4e392",
       "name": "P04_E05_PE018_V_13",
-      "A": 1.2,
       "cons": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
       "wall": "740c527f-3f22-525f-6946-0e40e55a9421",
       "f_shobst": 0.86,
@@ -7520,20 +7301,11 @@
   "mats": {
     "materials": [
       {
-        "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
-        "name": "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.228,
-        "density": 670.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
-      },
-      {
-        "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
-        "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.445,
-        "density": 1000.0,
+        "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
+        "name": "FU Entrevigado cerámico -Canto 250 mm",
+        "group": "Forjados unidireccionales",
+        "conductivity": 0.908,
+        "density": 1220.0,
         "specific_heat": 1000.0,
         "vapour_diffusivity": 10.0
       },
@@ -7547,22 +7319,13 @@
         "vapour_diffusivity": 30.0
       },
       {
-        "id": "a90add57-4ac6-032e-fe56-eece92423ac3",
-        "name": "1/2 pie LP métrico o catalán 80 mm< G < 100 mm",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.512,
-        "density": 900.0,
+        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+        "name": "Hormigón armado d > 2500",
+        "group": "Hormigones",
+        "conductivity": 2.5,
+        "density": 2600.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
-      },
-      {
-        "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
-        "name": "FU Entrevigado cerámico -Canto 250 mm",
-        "group": "Forjados unidireccionales",
-        "conductivity": 0.908,
-        "density": 1220.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
+        "vapour_diffusivity": 80.0
       },
       {
         "id": "e5f312d0-e644-824e-259a-917bf8d344bf",
@@ -7570,6 +7333,15 @@
         "group": "Hormigones",
         "conductivity": 0.59,
         "density": 1600.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
+      },
+      {
+        "id": "a90add57-4ac6-032e-fe56-eece92423ac3",
+        "name": "1/2 pie LP métrico o catalán 80 mm< G < 100 mm",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.512,
+        "density": 900.0,
         "specific_heat": 1000.0,
         "vapour_diffusivity": 10.0
       },
@@ -7583,6 +7355,15 @@
         "vapour_diffusivity": 100.0
       },
       {
+        "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
+        "name": "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.228,
+        "density": 670.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
+      },
+      {
         "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
         "name": "Yeso de alta dureza 900 < d < 1200",
         "group": "Yesos",
@@ -7592,6 +7373,15 @@
         "vapour_diffusivity": 4.0
       },
       {
+        "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+        "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.445,
+        "density": 1000.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
+      },
+      {
         "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
         "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000",
         "group": "Morteros",
@@ -7599,31 +7389,22 @@
         "density": 1900.0,
         "specific_heat": 1000.0,
         "vapour_diffusivity": 10.0
-      },
-      {
-        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
-        "name": "Hormigón armado d > 2500",
-        "group": "Hormigones",
-        "conductivity": 2.5,
-        "density": 2600.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 80.0
       }
     ],
     "glasses": [
-      {
-        "id": "d9c700e5-eeee-c16f-ca04-acb2f955e14b",
-        "name": "Vidrio_igual OS",
-        "group": "Dobles bajo emisivos 0.1-0.2 en posición vertical",
-        "u_value": 1.0,
-        "g_gln": 0.42494112
-      },
       {
         "id": "11851140-105c-be34-f195-82e1880ffd77",
         "name": "VER_DB1_4-6-661a",
         "group": "Dobles bajo emisivos 0.1-0.2 en posición vertical",
         "u_value": 2.6,
         "g_gln": 0.7082353
+      },
+      {
+        "id": "d9c700e5-eeee-c16f-ca04-acb2f955e14b",
+        "name": "Vidrio_igual OS",
+        "group": "Dobles bajo emisivos 0.1-0.2 en posición vertical",
+        "u_value": 1.0,
+        "g_gln": 0.42494112
       }
     ],
     "frames": [

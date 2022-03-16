@@ -303,7 +303,6 @@ fn walls_from_bdl(bdl: &Data) -> Result<Vec<Wall>, Error> {
                 id,
                 name: wall.name.clone(),
                 cons: wall.cons.to_string(),
-                area: fround2(wall.net_area(bdl)?),
                 space: wall.space.clone(),
                 next_to: wall.nextto.clone(),
                 bounds,
@@ -338,7 +337,6 @@ fn windows_and_shades_from_bdl(bdl: &Data, walls: &[Wall]) -> (Vec<Window>, Vec<
             name: win.name.clone(),
             cons: win.cons.to_string(),
             wall: win.wall.clone(),
-            area: fround2(win.width * win.height),
             // XXX: Usamos un valor por defecto ya que al final se actualiza con model.update_fshobst()
             f_shobst: 1.0,
             geometry: WindowGeometry {

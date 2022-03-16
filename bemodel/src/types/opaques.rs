@@ -20,10 +20,6 @@ pub struct Wall {
     pub id: Uuid,
     /// Nombre del elemento opaco
     pub name: String,
-    /// Superficie neta (sin huecos) del elemento opaco (m2)
-    /// TODO: a eliminar, podría estar definida por el polígono
-    #[serde(rename = "A")]
-    pub area: f32,
     /// Condiciones de contorno del cerramiento:
     /// - GROUND: cerramientos en contacto con el terreno
     /// - EXTERIOR: cerramientos en contacto con el aire exterior
