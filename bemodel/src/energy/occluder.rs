@@ -6,7 +6,7 @@ use nalgebra::IsometryMatrix3;
 
 use super::{Bounded, Intersectable, Ray, AABB};
 
-use crate::{Polygon, Vector3};
+use crate::{Polygon, Vector3, Uuid};
 
 /// Elemento oclusor, con información geométrica e identificación
 ///
@@ -15,9 +15,9 @@ use crate::{Polygon, Vector3};
 /// - normal y trans_matrix permiten cachear resultados para cálculo de intersecciones con el polígono 2D transformando un rayo
 pub struct Occluder {
     /// Id del elemento
-    pub id: String,
+    pub id: Uuid,
     /// Id del elemento que genera este oclusor (si proviene de otro elemento, como sombras de retranqueos de huecos)
-    pub linked_to_id: Option<String>,
+    pub linked_to_id: Option<Uuid>,
     /// normal del polígono
     pub normal: Vector3,
     /// Matriz de transformación de coordenadas globales a locales de polígono

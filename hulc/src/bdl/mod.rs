@@ -135,7 +135,7 @@ impl Data {
                 }
                 "GAP" => {
                     let e = WindowCons::try_from(block)?;
-                    bdldata.db.windowcons.insert(e.name.clone(), e);
+                    bdldata.db.wincons.insert(e.name.clone(), e);
                 }
                 "NAME-FRAME" => {
                     let e = Frame::try_from(block)?;

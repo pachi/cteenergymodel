@@ -37,7 +37,7 @@ fn test_caso_a() {
     assert_eq!(data.walls.len(), 35); // 19 en ET
     assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
     let mut wallsofspace = data
-        .walls_of_space_iter(&data.get_space_by_name("P02_E01").unwrap().id)
+        .walls_of_space_iter(data.get_space_by_name("P02_E01").unwrap().id)
         .map(|w| w.name.as_str())
         .collect::<Vec<_>>();
     wallsofspace.sort_unstable();

@@ -4,6 +4,8 @@
 
 // Utilidades varias de redondeo, normalización de datos y generación de UUID
 
+use crate::Uuid;
+
 /// Redondea valor a 2 decimales
 pub fn fround2(val: f32) -> f32 {
     (val * 100.0).round() / 100.0
@@ -27,29 +29,31 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
 /// Calcula UUID a partir de hash MD5 del objeto
 ///
 /// Este no es un método muy robusto pero da valores estables para los mismos objetos
-pub fn uuid_from_obj(obj: &impl std::fmt::Debug) -> String {
+pub fn uuid_from_obj(obj: &impl std::fmt::Debug) -> Uuid {
     let h = format!("{:x}", md5::compute(format!("{:?}", obj).as_bytes()));
-    format!(
+    Uuid::parse_str(&format!(
         "{}-{}-{}-{}-{}",
         &h[0..8],
         &h[8..12],
         &h[12..16],
         &h[16..20],
         &h[20..32]
-    )
+    ))
+    .unwrap()
 }
 
 /// Calcula UUID a partir de cadena
 ///
 /// Este no es un método muy robusto pero da valores estables para los mismos objetos
-pub fn uuid_from_str(str: &str) -> String {
+pub fn uuid_from_str(str: &str) -> Uuid {
     let h = format!("{:x}", md5::compute(str.as_bytes()));
-    format!(
+    Uuid::parse_str(&format!(
         "{}-{}-{}-{}-{}",
         &h[0..8],
         &h[8..12],
         &h[12..16],
         &h[16..20],
         &h[20..32]
-    )
+    ))
+    .unwrap()
 }

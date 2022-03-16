@@ -8,6 +8,8 @@ use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
 
+use super::Uuid;
+
 /// Nivel de aviso para condiciones de chequeo del modelo
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum WarningLevel {
@@ -49,7 +51,7 @@ pub struct Warning {
     /// Nivel de afectación
     pub level: WarningLevel,
     /// Id del elemento afectado, en su caso
-    pub id: Option<String>,
+    pub id: Option<Uuid>,
     /// Mensaje del aviso
     pub msg: String,
 }

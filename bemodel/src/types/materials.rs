@@ -23,17 +23,17 @@ pub struct MatsDb {
 
 impl MatsDb {
     /// Localiza material de opaco por id
-    pub fn get_material<'a>(&'a self, id: &'a str) -> Option<&'a Material> {
+    pub fn get_material(&self, id: Uuid) -> Option<&Material> {
         self.materials.iter().find(|w| w.id == id)
     }
 
     /// Localiza vidrio por id
-    pub fn get_glass<'a>(&'a self, id: &'a str) -> Option<&'a Glass> {
+    pub fn get_glass(&self, id: Uuid) -> Option<&Glass> {
         self.glasses.iter().find(|w| w.id == id)
     }
 
     /// Localiza marco por id
-    pub fn get_frame<'a>(&'a self, id: &'a str) -> Option<&'a Frame> {
+    pub fn get_frame(&self, id: Uuid) -> Option<&Frame> {
         self.frames.iter().find(|w| w.id == id)
     }
 }

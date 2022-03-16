@@ -193,7 +193,7 @@ impl Model {
                 .map(|s| s.multiplier)
                 .unwrap_or(1.0);
             // Huecos de los opacos
-            for win in self.windows_of_wall_iter(&wall.id) {
+            for win in self.windows_of_wall_iter(wall.id) {
                 let win_u = match self.u_for_window(win) {
                     Some(u) => u,
                     _ => continue,
@@ -277,12 +277,12 @@ impl Model {
         let wallsmap: HashMap<Uuid, Option<f32>> = self
             .walls
             .iter()
-            .map(|w| (w.id.clone(), self.u_for_wall(w)))
+            .map(|w| (w.id, self.u_for_wall(w)))
             .collect();
         let windowsmap: HashMap<Uuid, Option<f32>> = self
             .windows
             .iter()
-            .map(|w| (w.id.clone(), self.u_for_window(w)))
+            .map(|w| (w.id, self.u_for_window(w)))
             .collect();
         UValues {
             walls: wallsmap,
@@ -465,7 +465,7 @@ impl Model {
                 // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
                 // Usamos el promedio de los suelos del espacio
                 let mut d_t = self
-                    .walls_of_space_iter(&space.id)
+                    .walls_of_space_iter(space.id)
                     .filter(|w| Tilt::from(*w) == BOTTOM)
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
@@ -501,7 +501,7 @@ impl Model {
                 };
 
                 // Altura neta
-                let height_net = space.height - self.top_wall_thickness_of_space(&space.id);
+                let height_net = space.height - self.top_wall_thickness_of_space(space.id);
 
                 // Altura sobre el terreno (muro no enterrado)
                 let h = if height_net > z { height_net - z } else { 0.0 };
@@ -536,7 +536,7 @@ impl Model {
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
                 let space = self.get_space_of_wall(wall)?;
-                let nextto = match wall.next_to.as_ref() {
+                let nextto = match wall.next_to {
                     Some(s) => s,
                     _ => {
                         warn!(
@@ -547,14 +547,12 @@ impl Model {
                     }
                 };
 
-                let nextspace = match self.get_space(nextto.as_str()) {
+                let nextspace = match self.get_space(nextto) {
                     Some(s) => s,
                     _ => {
                         warn!(
                             "Muro {} ({}) con definición de espacio adyacente incorrecta {}",
-                            wall.id,
-                            wall.name,
-                            nextto.as_str()
+                            wall.id, wall.name, nextto
                         );
                         return None;
                     }
@@ -601,7 +599,7 @@ impl Model {
 
                     // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
                     let uncondspace_v = (uncondspace.height
-                        - self.top_wall_thickness_of_space(&uncondspace.id))
+                        - self.top_wall_thickness_of_space(uncondspace.id))
                         * uncondspace.area;
                     let n_ven = match uncondspace.n_v {
                         Some(n_v) => n_v,
@@ -623,13 +621,13 @@ impl Model {
                     // Como hemos asignado U_bw y U_bf a los muros y suelos en contacto con el terreno, ya se tiene en cuenta
                     // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
                     let UA_e_k = self
-                        .walls_of_space_iter(&uncondspace.id)
+                        .walls_of_space_iter(uncondspace.id)
                         .filter(|wall| wall.bounds == GROUND || wall.bounds == EXTERIOR)
                         .filter_map(|wall| {
                             // A·U de muros (y suelos) + A.U de sus huecos
                             let wall_u = self.u_for_wall(wall)?;
                             let win_axu = self
-                                .windows_of_wall_iter(&wall.id)
+                                .windows_of_wall_iter(wall.id)
                                 .filter_map(|win| {
                                     // Si no está definida la construcción, el hueco no participa de la envolvente
                                     self.u_for_window(win)

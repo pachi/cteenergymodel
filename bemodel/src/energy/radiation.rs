@@ -22,7 +22,7 @@ use crate::{
     utils::fround2,
     vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    HasSurface, Model, Orientation, Point3, Vector3, Window,
+    HasSurface, Model, Orientation, Point3, Uuid, Vector3, Window,
 };
 
 use super::occluder::Occluder;
@@ -85,7 +85,7 @@ impl Model {
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
                 let area = w.geometry.area() * multiplier;
-                let gglshwi = wincons.g_glshwi.or_else(|| self.mats.get_glass(&wincons.glass).map(|g| g.g_glwi()))?;
+                let gglshwi = wincons.g_glshwi.or_else(|| self.mats.get_glass(wincons.glass).map(|g| g.g_glwi()))?;
                 let Q_soljul_orient = w.f_shobst * gglshwi * (1.0 - wincons.f_f) * area * radjul;
                 // Datos de detalle
                 let mut detail = q_soljul_data.detail.entry(orientation).or_default();
@@ -155,7 +155,7 @@ impl Model {
             /// Factor de obstáculos remotos (sobre radiación total), ponderado por horas
             fshobst: f32,
         }
-        let mut map: HashMap<String, ObstData> = HashMap::new();
+        let mut map: HashMap<Uuid, ObstData> = HashMap::new();
 
         let latitude = CLIMATEMETADATA
             .lock()
@@ -198,7 +198,7 @@ impl Model {
                     0.2,
                 );
                 let fshdir = self.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders);
-                let windata = map.entry(window.id.clone()).or_default();
+                let windata = map.entry(window.id).or_default();
                 windata.fshdir.push(fshdir);
                 windata.dir.push(rad_on_win.dir);
                 windata.dif.push(rad_on_win.dif);
@@ -270,7 +270,7 @@ impl Model {
             .iter()
             .filter(|oc| {
                 // Descartamos el muro al que pertenece el hueco
-                if oc.id.as_str() == window_wall.id.as_str() {
+                if oc.id == window_wall.id {
                     return false;
                 };
                 // Descartamos las sombras de retranqueo que no provienen del hueco
@@ -306,7 +306,7 @@ impl Model {
             .iter()
             .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
             .map(|e| Occluder {
-                id: e.id.clone(),
+                id: e.id,
                 linked_to_id: None,
                 normal: e.geometry.polygon.normal(),
                 trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
@@ -315,7 +315,7 @@ impl Model {
             })
             .collect();
         occluders.extend(self.shades.iter().map(|e| Occluder {
-            id: e.id.clone(),
+            id: e.id,
             linked_to_id: None,
             normal: e.geometry.polygon.normal(),
             trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
@@ -323,8 +323,8 @@ impl Model {
             aabb: e.geometry.aabb(),
         }));
         occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
-            id: e.id.clone(),
-            linked_to_id: Some(wid.into()),
+            id: e.id,
+            linked_to_id: Some(*wid),
             normal: e.geometry.polygon.normal(),
             trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
             polygon: e.geometry.polygon.clone(),

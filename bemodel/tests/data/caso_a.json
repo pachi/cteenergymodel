@@ -89,7 +89,7 @@
       "id": "2d6d2be2-eab2-c84e-3a48-b2f910232de7",
       "name": "P01_E01_ME001",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "next_to": null,
       "geometry": {
@@ -124,7 +124,7 @@
       "id": "f14cb443-0084-058f-39f0-95a02b3bd8b4",
       "name": "P01_E01_Med001",
       "bounds": "INTERIOR",
-      "cons": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
+      "cons": "0c5481fc-26b0-d26d-c284-6e29bc729acd",
       "space": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "next_to": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
       "geometry": {
@@ -159,7 +159,7 @@
       "id": "4e2ef645-df09-51b8-69b7-43c8890d975e",
       "name": "P01_E01_MED002",
       "bounds": "ADIABATIC",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "next_to": null,
       "geometry": {
@@ -194,7 +194,7 @@
       "id": "c0a62ac5-18f5-2384-fd66-505b5fe86c9f",
       "name": "P01_E01_FTER001",
       "bounds": "GROUND",
-      "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
+      "cons": "9edf4fca-267f-554b-c656-2a7af171377c",
       "space": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "next_to": null,
       "geometry": {
@@ -229,7 +229,7 @@
       "id": "cf790949-0d25-3a11-5be7-fd040dee2ed9",
       "name": "P01_E01_TER002",
       "bounds": "GROUND",
-      "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
+      "cons": "9edf4fca-267f-554b-c656-2a7af171377c",
       "space": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "next_to": null,
       "geometry": {
@@ -264,7 +264,7 @@
       "id": "05f61df8-a26c-ad51-4e98-925775fca53b",
       "name": "P01_E02_MED002",
       "bounds": "ADIABATIC",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
       "next_to": null,
       "geometry": {
@@ -299,7 +299,7 @@
       "id": "764da0c3-e232-abd7-40f0-517151478c34",
       "name": "P01_E02_TER001",
       "bounds": "GROUND",
-      "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
+      "cons": "9edf4fca-267f-554b-c656-2a7af171377c",
       "space": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
       "next_to": null,
       "geometry": {
@@ -334,7 +334,7 @@
       "id": "45bf4c7b-5df4-f36a-9d5c-0a2bac79773f",
       "name": "P01_E02_TER002",
       "bounds": "GROUND",
-      "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
+      "cons": "9edf4fca-267f-554b-c656-2a7af171377c",
       "space": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
       "next_to": null,
       "geometry": {
@@ -369,7 +369,7 @@
       "id": "f5f9893a-8748-f072-6311-eb87a59efc02",
       "name": "P01_E02_TER003",
       "bounds": "GROUND",
-      "cons": "e10cece0-793f-ff77-2bcb-35576380274f",
+      "cons": "9edf4fca-267f-554b-c656-2a7af171377c",
       "space": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
       "next_to": null,
       "geometry": {
@@ -404,7 +404,7 @@
       "id": "547be19f-bc09-0f8d-3cb3-ef4b2b9a8599",
       "name": "P02_E01_PE001",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "54239679-cf77-3097-b426-71c92a7e5e99",
       "next_to": null,
       "geometry": {
@@ -439,7 +439,7 @@
       "id": "2accf7eb-84c4-7283-ee50-5e3e391ead20",
       "name": "P02_E01_PE002",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "54239679-cf77-3097-b426-71c92a7e5e99",
       "next_to": null,
       "geometry": {
@@ -474,7 +474,7 @@
       "id": "b993bbb7-a49b-e8e2-5265-36b9baf74cbf",
       "name": "P02_E01_PE003",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "54239679-cf77-3097-b426-71c92a7e5e99",
       "next_to": null,
       "geometry": {
@@ -509,7 +509,7 @@
       "id": "e0d904ad-31d7-602a-1bbc-4bab3c015645",
       "name": "P02_E01_ME001",
       "bounds": "EXTERIOR",
-      "cons": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
+      "cons": "bded062f-338e-a024-2ca4-45868ac6ebbc",
       "space": "54239679-cf77-3097-b426-71c92a7e5e99",
       "next_to": null,
       "geometry": {
@@ -544,7 +544,7 @@
       "id": "385590a9-8f05-78ad-a60e-615556aa6036",
       "name": "P02_E01_FI001",
       "bounds": "INTERIOR",
-      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "cons": "ed6d4955-5fda-664f-f85f-6cb248a3373b",
       "space": "54239679-cf77-3097-b426-71c92a7e5e99",
       "next_to": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "geometry": {
@@ -579,7 +579,7 @@
       "id": "447f907c-a56c-440e-4053-b670b3b379dc",
       "name": "P02_E01_FI002",
       "bounds": "INTERIOR",
-      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "cons": "ed6d4955-5fda-664f-f85f-6cb248a3373b",
       "space": "54239679-cf77-3097-b426-71c92a7e5e99",
       "next_to": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
       "geometry": {
@@ -614,7 +614,7 @@
       "id": "aa569053-4d2a-6523-a569-b45e33976e96",
       "name": "P02_E01_MED001",
       "bounds": "ADIABATIC",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "54239679-cf77-3097-b426-71c92a7e5e99",
       "next_to": null,
       "geometry": {
@@ -649,7 +649,7 @@
       "id": "78ecae57-6753-4551-4a41-97dcf1e0c16f",
       "name": "P03_E01_PE006",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "next_to": null,
       "geometry": {
@@ -684,7 +684,7 @@
       "id": "785307c4-2fc5-1f6c-d024-4decfcf726e4",
       "name": "P03_E01_PE007",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "next_to": null,
       "geometry": {
@@ -719,7 +719,7 @@
       "id": "c91be448-7926-1a7c-3cb2-48e544a9de39",
       "name": "P03_E01_PE008",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "next_to": null,
       "geometry": {
@@ -754,7 +754,7 @@
       "id": "416cbb3b-1f22-b371-c44c-3096a1f88edc",
       "name": "P03_E01_FE004",
       "bounds": "EXTERIOR",
-      "cons": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
+      "cons": "bded062f-338e-a024-2ca4-45868ac6ebbc",
       "space": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "next_to": null,
       "geometry": {
@@ -789,7 +789,7 @@
       "id": "e606c221-da3a-727e-4246-fddfc70d027f",
       "name": "P03_E01_FI003",
       "bounds": "INTERIOR",
-      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "cons": "ed6d4955-5fda-664f-f85f-6cb248a3373b",
       "space": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "next_to": "54239679-cf77-3097-b426-71c92a7e5e99",
       "geometry": {
@@ -824,7 +824,7 @@
       "id": "7fc8cb66-952f-f941-e835-14a9c7ac32ef",
       "name": "P03_E01_MED001",
       "bounds": "ADIABATIC",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "next_to": null,
       "geometry": {
@@ -859,7 +859,7 @@
       "id": "9c6e9fb5-3c3e-4c76-7788-e7f132a59190",
       "name": "P03_E01_FI001",
       "bounds": "INTERIOR",
-      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "cons": "ed6d4955-5fda-664f-f85f-6cb248a3373b",
       "space": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "next_to": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "geometry": {
@@ -894,7 +894,7 @@
       "id": "0f2b4364-da31-6b8f-b377-2f4be1d8f202",
       "name": "P04_E01_PE001",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "next_to": null,
       "geometry": {
@@ -929,7 +929,7 @@
       "id": "94154415-1d9e-89db-3594-ef926981d10c",
       "name": "P04_E01_PE002",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "next_to": null,
       "geometry": {
@@ -964,7 +964,7 @@
       "id": "8e3f0a12-81e4-510b-00c3-9bc333747f7c",
       "name": "P04_E01_Med001",
       "bounds": "INTERIOR",
-      "cons": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
+      "cons": "0c5481fc-26b0-d26d-c284-6e29bc729acd",
       "space": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "next_to": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "geometry": {
@@ -999,7 +999,7 @@
       "id": "1f950da8-1df0-6f29-c5c9-a4d5e8be451d",
       "name": "P04_E01_FI001",
       "bounds": "INTERIOR",
-      "cons": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+      "cons": "ed6d4955-5fda-664f-f85f-6cb248a3373b",
       "space": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "next_to": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "geometry": {
@@ -1034,7 +1034,7 @@
       "id": "566cea5c-4a8e-44c2-108e-e0f9b4e5263e",
       "name": "P04_E01_MED001",
       "bounds": "ADIABATIC",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "next_to": null,
       "geometry": {
@@ -1069,7 +1069,7 @@
       "id": "dbb481ea-7e84-0b49-6b5b-68795ede0518",
       "name": "P04_E01C003",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "next_to": null,
       "geometry": {
@@ -1100,7 +1100,7 @@
       "id": "4c44c60e-ad57-3bb6-331d-13c2b14afba9",
       "name": "P04_E01C004",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "next_to": null,
       "geometry": {
@@ -1131,7 +1131,7 @@
       "id": "e8d27253-acfe-8640-96c7-6f6156e9fe68",
       "name": "P04_E02_PE002",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "next_to": null,
       "geometry": {
@@ -1166,7 +1166,7 @@
       "id": "1c33ec2a-a592-66e8-6af2-a8b8d44542a7",
       "name": "P04_E02_PE003",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "next_to": null,
       "geometry": {
@@ -1201,7 +1201,7 @@
       "id": "269e517c-0533-40d7-775a-744a41482bc9",
       "name": "P04_E02_MED001",
       "bounds": "ADIABATIC",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "next_to": null,
       "geometry": {
@@ -1236,7 +1236,7 @@
       "id": "6f0289a7-1cb8-1756-2a63-15e2c7597c7f",
       "name": "P04_E02C001",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "next_to": null,
       "geometry": {
@@ -1267,7 +1267,7 @@
       "id": "4746bc2b-fd87-29b3-eb9c-05f6c1217159",
       "name": "P04_E02C002",
       "bounds": "EXTERIOR",
-      "cons": "5904daa6-22de-1811-f735-cc4c3059de46",
+      "cons": "17380b90-6397-ca20-bf2d-bbb469412c7c",
       "space": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "next_to": null,
       "geometry": {
@@ -1533,7 +1533,7 @@
   "cons": {
     "wallcons": [
       {
-        "id": "b2e5135a-ff03-4271-f569-1e4ebfba8002",
+        "id": "bded062f-338e-a024-2ca4-45868ac6ebbc",
         "name": "Cubierta no transitable",
         "group": "Cubiertas planas",
         "layers": [
@@ -1561,7 +1561,7 @@
         "absorptance": 0.6
       },
       {
-        "id": "b3f96087-749c-d143-2a8c-baac5f59f9e9",
+        "id": "ed6d4955-5fda-664f-f85f-6cb248a3373b",
         "name": "Forjado interior",
         "group": "Forjados Interiores",
         "layers": [
@@ -1585,7 +1585,7 @@
         "absorptance": 0.6
       },
       {
-        "id": "5fe34255-1b66-5e27-81d5-c84d84d41c0c",
+        "id": "0c5481fc-26b0-d26d-c284-6e29bc729acd",
         "name": "Placas de yeso",
         "group": "Tabiques",
         "layers": [
@@ -1613,7 +1613,7 @@
         "absorptance": 0.6
       },
       {
-        "id": "5904daa6-22de-1811-f735-cc4c3059de46",
+        "id": "17380b90-6397-ca20-bf2d-bbb469412c7c",
         "name": "SATE",
         "group": "Fachada",
         "layers": [
@@ -1649,7 +1649,7 @@
         "absorptance": 0.6
       },
       {
-        "id": "e10cece0-793f-ff77-2bcb-35576380274f",
+        "id": "9edf4fca-267f-554b-c656-2a7af171377c",
         "name": "Solera",
         "group": "Soleras",
         "layers": [
@@ -1694,90 +1694,6 @@
   "mats": {
     "materials": [
       {
-        "id": "bed4d34b-8949-b348-d818-5c079a708d9e",
-        "name": "FUr310_12",
-        "group": "Forjados unidireccionales",
-        "conductivity": 1.33506,
-        "density": 840.0,
-        "specific_heat": 800.0,
-        "vapour_diff": 5.0
-      },
-      {
-        "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
-        "name": "Cámara de aire sin ventilar vertical 5 cm",
-        "group": "Cámaras de aire",
-        "resistance": 0.18
-      },
-      {
-        "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
-        "name": "Cámara de aire sin ventilar horizontal 2 cm",
-        "group": "Cámaras de aire",
-        "resistance": 0.16
-      },
-      {
-        "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
-        "name": "Subcapa fieltro",
-        "group": "Textiles",
-        "conductivity": 0.05,
-        "density": 120.0,
-        "specific_heat": 1300.0,
-        "vapour_diff": 15.0
-      },
-      {
-        "id": "bbe62996-0f75-da18-c562-ec609d76127e",
-        "name": "Frondosa ligera 435 < d < 565",
-        "group": "Maderas",
-        "conductivity": 0.15,
-        "density": 500.0,
-        "specific_heat": 1600.0,
-        "vapour_diff": 50.0
-      },
-      {
-        "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
-        "name": "MW Lana mineral [0.031 W/[mK]]",
-        "group": "Aislantes",
-        "conductivity": 0.031,
-        "density": 40.0,
-        "specific_heat": 1000.0,
-        "vapour_diff": 1.0
-      },
-      {
-        "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
-        "name": "Hormigón armado 2300 < d < 2500",
-        "group": "Hormigones",
-        "conductivity": 2.3,
-        "density": 2400.0,
-        "specific_heat": 1000.0,
-        "vapour_diff": 80.0
-      },
-      {
-        "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
-        "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
-        "group": "Pétreos y suelos",
-        "conductivity": 1.1,
-        "density": 1885.0,
-        "specific_heat": 1000.0,
-        "vapour_diff": 1.0
-      },
-      {
-        "id": "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
-        "name": "Mortero de yeso",
-        "group": "Morteros",
-        "conductivity": 0.8,
-        "density": 1500.0,
-        "specific_heat": 1000.0,
-        "vapour_diff": 6.0
-      },
-      {
-        "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
-        "name": "Plaqueta o baldosa cerámica",
-        "group": "Cerámicos",
-        "conductivity": 1.0,
-        "density": 2000.0,
-        "specific_heat": 800.0,
-        "vapour_diff": 30.0
-      },
-      {
         "id": "17c92d86-cb3c-aef5-f628-48e247099509",
         "name": "1/2 pie LP métrico o catalán 40 mm< G < 60 mm",
         "group": "Fábricas de ladrillo",
@@ -1785,33 +1701,6 @@
         "density": 1140.0,
         "specific_heat": 1000.0,
         "vapour_diff": 10.0
-      },
-      {
-        "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
-        "name": "Placa de yeso laminado [PYL] 750 < d < 900",
-        "group": "Yesos",
-        "conductivity": 0.25,
-        "density": 825.0,
-        "specific_heat": 1000.0,
-        "vapour_diff": 4.0
-      },
-      {
-        "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
-        "name": "Mortero de áridos ligeros [vermiculita perlita]",
-        "group": "Morteros",
-        "conductivity": 0.41,
-        "density": 900.0,
-        "specific_heat": 1000.0,
-        "vapour_diff": 10.0
-      },
-      {
-        "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
-        "name": "XPS Expandido con dióxido de carbono CO2 [ 0.034 W/[mK]]",
-        "group": "Aislantes",
-        "conductivity": 0.034,
-        "density": 37.5,
-        "specific_heat": 1000.0,
-        "vapour_diff": 100.0
       },
       {
         "id": "9904021e-6d18-e151-1094-c776bc669d51",
@@ -1823,6 +1712,24 @@
         "vapour_diff": 10.0
       },
       {
+        "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
+        "name": "Subcapa fieltro",
+        "group": "Textiles",
+        "conductivity": 0.05,
+        "density": 120.0,
+        "specific_heat": 1300.0,
+        "vapour_diff": 15.0
+      },
+      {
+        "id": "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
+        "name": "Mortero de yeso",
+        "group": "Morteros",
+        "conductivity": 0.8,
+        "density": 1500.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 6.0
+      },
+      {
         "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
         "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250",
         "group": "Morteros",
@@ -1832,6 +1739,39 @@
         "vapour_diff": 10.0
       },
       {
+        "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
+        "name": "MW Lana mineral [0.031 W/[mK]]",
+        "group": "Aislantes",
+        "conductivity": 0.031,
+        "density": 40.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 1.0
+      },
+      {
+        "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+        "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
+        "group": "Pétreos y suelos",
+        "conductivity": 1.1,
+        "density": 1885.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 1.0
+      },
+      {
+        "id": "bbe62996-0f75-da18-c562-ec609d76127e",
+        "name": "Frondosa ligera 435 < d < 565",
+        "group": "Maderas",
+        "conductivity": 0.15,
+        "density": 500.0,
+        "specific_heat": 1600.0,
+        "vapour_diff": 50.0
+      },
+      {
+        "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
+        "name": "Cámara de aire sin ventilar horizontal 2 cm",
+        "group": "Cámaras de aire",
+        "resistance": 0.16
+      },
+      {
         "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
         "name": "Arena y grava [1700 < d < 2200]",
         "group": "Pétreos y suelos",
@@ -1839,6 +1779,66 @@
         "density": 1450.0,
         "specific_heat": 1050.0,
         "vapour_diff": 50.0
+      },
+      {
+        "id": "bed4d34b-8949-b348-d818-5c079a708d9e",
+        "name": "FUr310_12",
+        "group": "Forjados unidireccionales",
+        "conductivity": 1.33506,
+        "density": 840.0,
+        "specific_heat": 800.0,
+        "vapour_diff": 5.0
+      },
+      {
+        "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
+        "name": "Mortero de áridos ligeros [vermiculita perlita]",
+        "group": "Morteros",
+        "conductivity": 0.41,
+        "density": 900.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 10.0
+      },
+      {
+        "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
+        "name": "Hormigón armado 2300 < d < 2500",
+        "group": "Hormigones",
+        "conductivity": 2.3,
+        "density": 2400.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 80.0
+      },
+      {
+        "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
+        "name": "Cámara de aire sin ventilar vertical 5 cm",
+        "group": "Cámaras de aire",
+        "resistance": 0.18
+      },
+      {
+        "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
+        "name": "Plaqueta o baldosa cerámica",
+        "group": "Cerámicos",
+        "conductivity": 1.0,
+        "density": 2000.0,
+        "specific_heat": 800.0,
+        "vapour_diff": 30.0
+      },
+      {
+        "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
+        "name": "Placa de yeso laminado [PYL] 750 < d < 900",
+        "group": "Yesos",
+        "conductivity": 0.25,
+        "density": 825.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 4.0
+      },
+      {
+        "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
+        "name": "XPS Expandido con dióxido de carbono CO2 [ 0.034 W/[mK]]",
+        "group": "Aislantes",
+        "conductivity": 0.034,
+        "density": 37.5,
+        "specific_heat": 1000.0,
+        "vapour_diff": 100.0
       }
     ],
     "glasses": [

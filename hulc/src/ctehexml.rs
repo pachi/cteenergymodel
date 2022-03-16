@@ -207,7 +207,7 @@ pub fn parse_with_catalog(data: &str) -> Result<CtehexmlData, Error> {
     let catdb = Data::new(&dbstring)?.db;
     db.materials.extend(catdb.materials);
     db.wallcons.extend(catdb.wallcons);
-    db.windowcons.extend(catdb.windowcons);
+    db.wincons.extend(catdb.wincons);
     db.glasses.extend(catdb.glasses);
     db.frames.extend(catdb.frames);
     ctehexmldata.bdldata.db = db;

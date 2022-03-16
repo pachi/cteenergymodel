@@ -6,7 +6,7 @@
 
 use std::collections::HashSet;
 
-use super::{Model, Warning, WarningLevel};
+use super::{Model, Uuid, Warning, WarningLevel};
 
 impl Model {
     /// Comprueba consistencia del modelo y devuelve lista de avisos / errores detectados
@@ -23,44 +23,44 @@ impl Model {
     pub fn check(&self) -> Vec<Warning> {
         use WarningLevel::WARNING;
 
-        let spaceids: HashSet<&str> = self.spaces.iter().map(|s| s.id.as_str()).collect();
-        let wallids: HashSet<&str> = self.walls.iter().map(|w| w.id.as_str()).collect();
-        let wallconsids: HashSet<&str> = self.cons.wallcons.iter().map(|c| c.id.as_str()).collect();
-        let winconsids: HashSet<&str> = self.cons.wincons.iter().map(|c| c.id.as_str()).collect();
+        let spaceids: HashSet<Uuid> = self.spaces.iter().map(|s| s.id).collect();
+        let wallids: HashSet<Uuid> = self.walls.iter().map(|w| w.id).collect();
+        let wallconsids: HashSet<Uuid> = self.cons.wallcons.iter().map(|c| c.id).collect();
+        let winconsids: HashSet<Uuid> = self.cons.wincons.iter().map(|c| c.id).collect();
 
         let mut warnings = Vec::new();
 
         // Muros con referencias e espacios, construcciones o nextto incorrectas
         self.walls.iter().for_each(|w| {
-            if !spaceids.contains(w.space.as_str()) {
+            if !spaceids.contains(&w.space) {
                 warnings.push(Warning {
                     level: WARNING,
-                    id: Some(w.id.clone()),
+                    id: Some(w.id),
                     msg: format!(
                         "Muro {} ({}) con referencia incorrecta de espacio {}",
                         w.id, w.name, w.space
                     ),
                 })
             };
-            if !wallconsids.contains(w.cons.as_str()) {
+            if !wallconsids.contains(&w.cons) {
                 warnings.push(Warning {
                     level: WARNING,
-                    id: Some(w.id.clone()),
+                    id: Some(w.id),
                     msg: format!(
                         "Muro {} ({}) con referencia incorrecta de construcción {}",
                         w.id, w.name, w.cons
                     ),
                 })
             };
-            if w.next_to.is_some() && !spaceids.contains(w.next_to.clone().unwrap().as_str()) {
+            if w.next_to.is_some() && !spaceids.contains(&w.next_to.unwrap()) {
                 warnings.push(Warning {
                     level: WARNING,
-                    id: Some(w.id.clone()),
+                    id: Some(w.id),
                     msg: format!(
                         "Muro {} ({}) con referencia incorrecta de espacio adyacente {}",
                         w.id,
                         w.name,
-                        w.next_to.clone().unwrap()
+                        w.next_to.unwrap()
                     ),
                 })
             };
@@ -69,20 +69,20 @@ impl Model {
 
         // Huecos con referencias de muros o construcciones incorrectas
         self.windows.iter().for_each(|w| {
-            if !wallids.contains(w.wall.as_str()) {
+            if !wallids.contains(&w.wall) {
                 warnings.push(Warning {
                     level: WARNING,
-                    id: Some(w.id.clone()),
+                    id: Some(w.id),
                     msg: format!(
                         "Hueco {} ({}) con referencia incorrecta de opaco {}",
                         w.id, w.name, w.wall
                     ),
                 })
             };
-            if !winconsids.contains(w.cons.as_str()) {
+            if !winconsids.contains(&w.cons) {
                 warnings.push(Warning {
                     level: WARNING,
-                    id: Some(w.id.clone()),
+                    id: Some(w.id),
                     msg: format!(
                         "Hueco {} ({}) con referencia incorrecta de construcción {}",
                         w.id, w.name, w.cons
@@ -95,7 +95,7 @@ impl Model {
             if tb.l < 0.0 {
                 warnings.push(Warning {
                     level: WARNING,
-                    id: Some(tb.id.clone()),
+                    id: Some(tb.id),
                     msg: format!(
                         "Puente térmico {} ({}) con longitud negativa ({}).",
                         tb.id, tb.name, tb.l

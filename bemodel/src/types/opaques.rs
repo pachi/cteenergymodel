@@ -57,7 +57,7 @@ impl From<&Wall> for Orientation {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Shade {
     /// ID del elemento de sombra (en formato UUID)
-    pub id: String,
+    pub id: Uuid,
     /// Nombre del elemento opaco
     pub name: String,
     /// Geometría del elemento opaco

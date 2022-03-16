@@ -22,13 +22,13 @@ pub struct ConsDb {
 
 impl ConsDb {
     /// Localiza construcción de opaco por id
-    pub fn get_wallcons<'a>(&'a self, wallconsid: &'a str) -> Option<&'a WallCons> {
-        self.wallcons.iter().find(|w| w.id == wallconsid)
+    pub fn get_wallcons(&self, id: Uuid) -> Option<&WallCons> {
+        self.wallcons.iter().find(|w| w.id == id)
     }
 
     /// Localiza construcción de hueco por id
-    pub fn get_wincons<'a>(&'a self, winconsid: &'a str) -> Option<&'a WindowCons> {
-        self.wincons.iter().find(|w| w.id == winconsid)
+    pub fn get_wincons(&self, id: Uuid) -> Option<&WindowCons> {
+        self.wincons.iter().find(|w| w.id == id)
     }
 }
 
@@ -75,9 +75,9 @@ pub struct WindowCons {
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
     /// Vidrio del hueco, UUID
-    pub glass: String,
+    pub glass: Uuid,
     /// Marco del hueco, UUID
-    pub frame: String,
+    pub frame: Uuid,
     /// Fracción de marco [-]
     pub f_f: f32,
     /// Porcentaje de U debido a intercalarios y cajón de persiana (%)

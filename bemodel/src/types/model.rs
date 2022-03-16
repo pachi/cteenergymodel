@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     fround2, uuid_from_str, BoundaryType, ConsDb, HasSurface, MatsDb, Meta, Shade, Space,
-    SpaceType, ThermalBridge, Tilt, Wall, WallCons, WallGeometry, Window, WindowCons,
+    SpaceType, ThermalBridge, Tilt, Uuid, Wall, WallCons, WallGeometry, Window, WindowCons,
 };
 
 // ---------- Estructura general de datos --------------
@@ -59,28 +59,28 @@ impl Model {
     // ---------------- Aceso e identificación de elementos
 
     /// Localiza espacio
-    pub fn get_space<'a>(&'a self, spaceid: &'a str) -> Option<&'a Space> {
-        self.spaces.iter().find(|s| s.id == spaceid)
+    pub fn get_space(&self, id: Uuid) -> Option<&Space> {
+        self.spaces.iter().find(|s| s.id == id)
     }
 
     /// Localiza espacio por nombre
-    pub fn get_space_by_name<'a>(&'a self, spacename: &'a str) -> Option<&'a Space> {
-        self.spaces.iter().find(|s| s.name == spacename)
+    pub fn get_space_by_name<'a>(&'a self, name: &'a str) -> Option<&'a Space> {
+        self.spaces.iter().find(|s| s.name == name)
     }
 
     /// Localiza opaco
-    pub fn get_wall<'a>(&'a self, wallid: &'a str) -> Option<&'a Wall> {
-        self.walls.iter().find(|w| w.id == wallid)
+    pub fn get_wall(&self, id: Uuid) -> Option<&Wall> {
+        self.walls.iter().find(|w| w.id == id)
     }
 
     /// Localiza opaco por nombre
-    pub fn get_wall_by_name<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
-        self.walls.iter().find(|w| w.name == wallname)
+    pub fn get_wall_by_name<'a>(&'a self, name: &'a str) -> Option<&'a Wall> {
+        self.walls.iter().find(|w| w.name == name)
     }
 
     /// Localiza espacio de un opaco
     pub fn get_space_of_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a Space> {
-        let maybespace = self.get_space(&wall.space);
+        let maybespace = self.get_space(wall.space);
         if maybespace.is_none() {
             warn!(
                 "Muro {} ({}) con definición de espacio incorrecta {}",
@@ -92,7 +92,7 @@ impl Model {
 
     /// Localiza construcción de un opaco
     pub fn get_wallcons_of_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a WallCons> {
-        let maybecons = self.cons.get_wallcons(&wall.cons);
+        let maybecons = self.cons.get_wallcons(wall.cons);
         if maybecons.is_none() {
             warn!(
                 "Muro {} ({}) con definición de construcción incorrecta {}",
@@ -104,7 +104,7 @@ impl Model {
 
     /// Localiza muro de hueco
     pub fn get_wall_of_window<'a>(&'a self, window: &'a Window) -> Option<&'a Wall> {
-        let maybewall = self.get_wall(&window.wall);
+        let maybewall = self.get_wall(window.wall);
         if maybewall.is_none() {
             warn!(
                 "Hueco {} ({}) con definición de muro incorrecta {}",
@@ -116,7 +116,7 @@ impl Model {
 
     /// Localiza construcción de hueco a partir del hueco
     pub fn get_wincons_of_window<'a>(&'a self, win: &'a Window) -> Option<&'a WindowCons> {
-        let maybecons = self.cons.get_wincons(&win.cons);
+        let maybecons = self.cons.get_wincons(win.cons);
         if maybecons.is_none() {
             warn!(
                 "Hueco {}({}) con definición de construcción incorrecta {}",
@@ -127,16 +127,16 @@ impl Model {
     }
 
     /// Iterador de los huecos pertenecientes a un muro
-    pub fn windows_of_wall_iter<'a>(&'a self, wallid: &'a str) -> impl Iterator<Item = &'a Window> {
-        self.windows.iter().filter(move |w| w.wall == wallid)
+    pub fn windows_of_wall_iter(&self, id: Uuid) -> impl Iterator<Item = &Window> {
+        self.windows.iter().filter(move |w| w.wall == id)
     }
 
     /// Iterador de los cerramientos (incluyendo muros, suelos y techos) que delimitan un espacio
-    pub fn walls_of_space_iter<'a>(&'a self, spaceid: &'a str) -> impl Iterator<Item = &'a Wall> {
+    pub fn walls_of_space_iter(&self, id: Uuid) -> impl Iterator<Item = &Wall> {
         self.walls.iter().filter(move |w| {
-            w.space == spaceid
-                || (if let Some(ref spc) = w.next_to {
-                    spc == spaceid
+            w.space == id
+                || (if let Some(spc) = w.next_to {
+                    spc == id
                 } else {
                     false
                 })
@@ -151,7 +151,7 @@ impl Model {
             .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
             .filter(move |w| {
                 // Si el espacio no está definido se considera que no pertenece a la envolvente
-                self.get_space(&w.space)
+                self.get_space(w.space)
                     .map(|s| s.inside_tenv)
                     .unwrap_or(false)
             })
@@ -164,7 +164,7 @@ impl Model {
             .iter()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .filter(move |w| {
-                self.get_space(&w.space)
+                self.get_space(w.space)
                     .map(|s| s.inside_tenv)
                     .unwrap_or(false)
             })
@@ -229,9 +229,7 @@ impl Model {
             .filter_map(|s| {
                 if s.inside_tenv {
                     Some(
-                        s.area
-                            * (s.height - self.top_wall_thickness_of_space(&s.id))
-                            * s.multiplier,
+                        s.area * (s.height - self.top_wall_thickness_of_space(s.id)) * s.multiplier,
                     )
                 } else {
                     None
@@ -250,9 +248,7 @@ impl Model {
             .filter_map(|s| {
                 if s.inside_tenv && s.kind != SpaceType::UNINHABITED {
                     Some(
-                        s.area
-                            * (s.height - self.top_wall_thickness_of_space(&s.id))
-                            * s.multiplier,
+                        s.area * (s.height - self.top_wall_thickness_of_space(s.id)) * s.multiplier,
                     )
                 } else {
                     None
@@ -277,7 +273,10 @@ impl Model {
                     .get_space_of_wall(w)
                     .map(|s| s.multiplier)
                     .unwrap_or(1.0);
-                let win_area: f32 = self.windows_of_wall_iter(&w.id).map(|win| win.geometry.area()).sum();
+                let win_area: f32 = self
+                    .windows_of_wall_iter(w.id)
+                    .map(|win| win.geometry.area())
+                    .sum();
                 (self.wall_net_area(w) + win_area) * multiplier
             })
             .sum();
@@ -287,33 +286,33 @@ impl Model {
     }
 
     /// Grosor de un elemento opaco
-    pub fn wall_thickness(&self, wallid: &str) -> f32 {
-        self.get_wall(wallid)
+    pub fn wall_thickness(&self, id: Uuid) -> f32 {
+        self.get_wall(id)
             .and_then(|w| self.get_wallcons_of_wall(w).map(|c| c.thickness()))
             .unwrap_or(0.0)
     }
 
     /// Grosor del forjado superior de un espacio
-    pub fn top_wall_thickness_of_space(&self, spaceid: &str) -> f32 {
+    pub fn top_wall_thickness_of_space(&self, id: Uuid) -> f32 {
         // Elemento opaco de techo de un espacio
         // TODO: la altura neta debería calcularse promediando los grosores de **todos** los muros que
         // TODO: cubren el espacio y no solo el primero que se encuentre
         let top_wall_of_space = self.walls.iter().find(move |w| {
             match w.geometry.tilt.into() {
                 // Muros exteriores o cubiertas sobre el espacio
-                Tilt::TOP => w.space == spaceid,
+                Tilt::TOP => w.space == id,
                 // Es un cerramiento interior sobre este espacio
-                Tilt::BOTTOM => w.next_to.as_ref().map(|s| s == spaceid).unwrap_or(false),
+                Tilt::BOTTOM => w.next_to.map(|s| s == id).unwrap_or(false),
                 _ => false,
             }
         });
         top_wall_of_space
-            .map(|w| self.wall_thickness(&w.id))
+            .map(|w| self.wall_thickness(w.id))
             .unwrap_or(0.0)
     }
 
     /// Genera todas las sombras de retranqueo de los huecos del modelo
-    pub fn windows_setback_shades(&self) -> Vec<(String, Shade)> {
+    pub fn windows_setback_shades(&self) -> Vec<(Uuid, Shade)> {
         self.windows
             .iter()
             .filter_map(|window| {
@@ -326,7 +325,7 @@ impl Model {
 }
 
 /// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
-fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(String, Shade)> {
+fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(Uuid, Shade)> {
     let wing = &win.geometry;
     // Si no hay retranqueo no se genera geometría
     if wing.setback.abs() < 0.01 {
@@ -409,10 +408,10 @@ fn shades_for_window_setback(wall: &super::Wall, win: &super::Window) -> Vec<(St
     };
 
     vec![
-        (win.id.clone(), overhang),
-        (win.id.clone(), left_fin),
-        (win.id.clone(), right_fin),
-        (win.id.clone(), sill),
+        (win.id, overhang),
+        (win.id, left_fin),
+        (win.id, right_fin),
+        (win.id, sill),
     ]
 }
 
@@ -426,13 +425,13 @@ pub struct ExtraData {
     // Tipo de espacio
     pub spacetype: SpaceType,
     // Espacio adyacente
-    pub nextspace: Option<String>,
+    pub nextspace: Option<Uuid>,
     // Tipo de espacio adyacente
     pub nextspacetype: Option<SpaceType>,
     // Inclinación del muro
     pub tilt: Tilt,
     // Construcción
-    pub cons: String,
+    pub cons: Uuid,
     // U por defecto u obtenida de archivo KyGananciasSolares.txt
     pub u: f32,
     // U calculada con UNE-EN ISO 13789

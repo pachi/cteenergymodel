@@ -43,7 +43,7 @@ pub struct DB {
     /// Composición por capas (opacos)
     pub wallcons: HashMap<String, WallCons>,
     /// Composición por capas (huecos)
-    pub windowcons: HashMap<String, WindowCons>,
+    pub wincons: HashMap<String, WindowCons>,
     /// Vidrio
     pub glasses: HashMap<String, Glass>,
     /// Marco
