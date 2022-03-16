@@ -189,28 +189,20 @@ impl Model {
         // Opacos
         for wall in self.walls_of_envelope_iter() {
             let multiplier = self
-                .space_of_wall(wall)
+                .get_space_of_wall(wall)
                 .map(|s| s.multiplier)
                 .unwrap_or(1.0);
             // Huecos de los opacos
-            for win in self.wincons_of_window_iter(&wall.id) {
-                let wincons = match self.wincons_of_window(win) {
-                    Some(wincons) => wincons,
+            for win in self.windows_of_wall_iter(&wall.id) {
+                let win_u = match self.u_for_window(win) {
+                    Some(u) => u,
                     _ => continue,
                 };
                 let area = multiplier * win.area;
                 k.windows.a += area;
-                k.windows.au += area * wincons.u;
-                k.windows.u_max = k
-                    .windows
-                    .u_max
-                    .map(|v| v.max(wincons.u))
-                    .or(Some(wincons.u));
-                k.windows.u_min = k
-                    .windows
-                    .u_min
-                    .map(|v| v.min(wincons.u))
-                    .or(Some(wincons.u));
+                k.windows.au += area * win_u;
+                k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
+                k.windows.u_min = k.windows.u_min.map(|v| v.min(win_u)).or(Some(win_u));
             }
             let wall_u = match self.u_for_wall(wall) {
                 Some(u) => u,
@@ -324,12 +316,20 @@ impl Model {
         Ok(total_resistance)
     }
 
-    /// Transmitancia térmica del hueco, U_W, en una posición dada, en W/m2K
+    /// Transmitancia térmica total del hueco, U_W, en una posición dada, en W/m2K
+    ///
+    /// Incluye el efecto del marco, vidrio y efecto de intercalarios y/o cajones de persiana
     /// Notas:
     /// - estos valores ya deben incluir las resistencias superficiales
     ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
     pub fn u_for_window(&self, window: &Window) -> Option<f32> {
-        self.wincons_of_window(window).map(|wincons| wincons.u)
+        let wincons = self.get_wincons_of_window(window)?;
+        let glass = self.mats.glasses.iter().find(|g| g.id == wincons.glass)?;
+        let frame = self.mats.frames.iter().find(|f| f.id == wincons.frame)?;
+        Some(
+            (1.0 + wincons.delta_u / 100.0)
+                * (frame.u_value * wincons.ff + glass.u_value * (1.0 - wincons.ff)),
+        )
     }
 
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
@@ -346,7 +346,7 @@ impl Model {
         let R_n_perim_ins = self.meta.rn_perim_insulation;
         let D_perim_ins = self.meta.d_perim_insulation;
 
-        let cons = self.wallcons_of_wall(wall)?;
+        let cons = self.get_wallcons_of_wall(wall)?;
         let R_intrinsic = self.walcons_intrinsic_r(cons).ok()?;
 
         match (bounds, position) {
@@ -386,7 +386,7 @@ impl Model {
                 // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
                 // Calculamos la dimensión característica del **espacio** en el que sitúa el suelo
                 // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
-                let wspace = self.space_of_wall(wall)?;
+                let wspace = self.get_space_of_wall(wall)?;
                 let gnd_A = wspace.area;
                 let mut gnd_P = wspace
                     .exposed_perimeter
@@ -449,7 +449,7 @@ impl Model {
             (GROUND, SIDE) => {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
                 let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
-                let space = self.space_of_wall(wall)?;
+                let space = self.get_space_of_wall(wall)?;
                 // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
                 let z = if space.z < 0.0 { -space.z } else { 0.0 };
                 // Muros que realmente no son enterrados
@@ -470,7 +470,7 @@ impl Model {
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
                         // Si no está definida la construcción no participa de la envolvente
-                        self.wallcons_of_wall(w)
+                        self.get_wallcons_of_wall(w)
                             .map(|wallcons| match self.walcons_intrinsic_r(wallcons).ok() {
                                 Some(wallcons_r_intrinsic) => {
                                     (W + LAMBDA_GND
@@ -535,8 +535,8 @@ impl Model {
                 // Dos casos:
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
-                let space = self.space_of_wall(wall)?;
-                let nextto = match wall.nextto.as_ref() {
+                let space = self.get_space_of_wall(wall)?;
+                let nextto = match wall.next_to.as_ref() {
                     Some(s) => s,
                     _ => {
                         warn!(
@@ -547,7 +547,7 @@ impl Model {
                     }
                 };
 
-                let nextspace = match self.space_by_id(nextto.as_str()) {
+                let nextspace = match self.get_space(nextto.as_str()) {
                     Some(s) => s,
                     _ => {
                         warn!(
@@ -629,7 +629,7 @@ impl Model {
                             // A·U de muros (y suelos) + A.U de sus huecos
                             let wall_u = self.u_for_wall(wall)?;
                             let win_axu = self
-                                .wincons_of_window_iter(&wall.id)
+                                .windows_of_wall_iter(&wall.id)
                                 .filter_map(|win| {
                                     // Si no está definida la construcción, el hueco no participa de la envolvente
                                     self.u_for_window(win).map(|u| Some(win.area * u))?

@@ -59,18 +59,28 @@ impl Model {
     // ---------------- Aceso e identificación de elementos
 
     /// Localiza espacio
-    pub fn space_by_id<'a>(&'a self, spaceid: &'a str) -> Option<&'a Space> {
+    pub fn get_space<'a>(&'a self, spaceid: &'a str) -> Option<&'a Space> {
         self.spaces.iter().find(|s| s.id == spaceid)
     }
 
     /// Localiza espacio por nombre
-    pub fn space_by_name<'a>(&'a self, spacename: &'a str) -> Option<&'a Space> {
+    pub fn get_space_by_name<'a>(&'a self, spacename: &'a str) -> Option<&'a Space> {
         self.spaces.iter().find(|s| s.name == spacename)
     }
 
-    /// Localiza espacio de opaco
-    pub fn space_of_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a Space> {
-        let maybespace = self.space_by_id(&wall.space);
+    /// Localiza opaco
+    pub fn get_wall<'a>(&'a self, wallid: &'a str) -> Option<&'a Wall> {
+        self.walls.iter().find(|w| w.id == wallid)
+    }
+
+    /// Localiza opaco por nombre
+    pub fn get_wall_by_name<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
+        self.walls.iter().find(|w| w.name == wallname)
+    }
+
+    /// Localiza espacio de un opaco
+    pub fn get_space_of_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a Space> {
+        let maybespace = self.get_space(&wall.space);
         if maybespace.is_none() {
             warn!(
                 "Muro {} ({}) con definición de espacio incorrecta {}",
@@ -80,19 +90,9 @@ impl Model {
         maybespace
     }
 
-    /// Localiza opaco
-    pub fn wall_by_id<'a>(&'a self, wallid: &'a str) -> Option<&'a Wall> {
-        self.walls.iter().find(|w| w.id == wallid)
-    }
-
-    /// Localiza opaco por nombre
-    pub fn wall_by_name<'a>(&'a self, wallname: &'a str) -> Option<&'a Wall> {
-        self.walls.iter().find(|w| w.name == wallname)
-    }
-
-    /// Localiza construcción de opaco
-    pub fn wallcons_of_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a WallCons> {
-        let maybecons = self.cons.wallcons.iter().find(|wc| wc.id == wall.cons);
+    /// Localiza construcción de un opaco
+    pub fn get_wallcons_of_wall<'a>(&'a self, wall: &'a Wall) -> Option<&'a WallCons> {
+        let maybecons = self.cons.get_wallcons(&wall.cons);
         if maybecons.is_none() {
             warn!(
                 "Muro {} ({}) con definición de construcción incorrecta {}",
@@ -103,8 +103,8 @@ impl Model {
     }
 
     /// Localiza muro de hueco
-    pub fn wall_of_window<'a>(&'a self, window: &'a Window) -> Option<&'a Wall> {
-        let maybewall = self.wall_by_id(&window.wall);
+    pub fn get_wall_of_window<'a>(&'a self, window: &'a Window) -> Option<&'a Wall> {
+        let maybewall = self.get_wall(&window.wall);
         if maybewall.is_none() {
             warn!(
                 "Hueco {} ({}) con definición de muro incorrecta {}",
@@ -114,9 +114,9 @@ impl Model {
         maybewall
     }
 
-    /// Localiza construcción de hueco
-    pub fn wincons_of_window<'a>(&'a self, win: &'a Window) -> Option<&'a WindowCons> {
-        let maybecons = self.cons.wincons.iter().find(|wc| wc.id == win.cons);
+    /// Localiza construcción de hueco a partir del hueco
+    pub fn get_wincons_of_window<'a>(&'a self, win: &'a Window) -> Option<&'a WindowCons> {
+        let maybecons = self.cons.get_wincons(&win.cons);
         if maybecons.is_none() {
             warn!(
                 "Hueco {}({}) con definición de construcción incorrecta {}",
@@ -127,10 +127,7 @@ impl Model {
     }
 
     /// Iterador de los huecos pertenecientes a un muro
-    pub fn wincons_of_window_iter<'a>(
-        &'a self,
-        wallid: &'a str,
-    ) -> impl Iterator<Item = &'a Window> {
+    pub fn windows_of_wall_iter<'a>(&'a self, wallid: &'a str) -> impl Iterator<Item = &'a Window> {
         self.windows.iter().filter(move |w| w.wall == wallid)
     }
 
@@ -138,7 +135,7 @@ impl Model {
     pub fn walls_of_space_iter<'a>(&'a self, spaceid: &'a str) -> impl Iterator<Item = &'a Wall> {
         self.walls.iter().filter(move |w| {
             w.space == spaceid
-                || (if let Some(ref spc) = w.nextto {
+                || (if let Some(ref spc) = w.next_to {
                     spc == spaceid
                 } else {
                     false
@@ -154,7 +151,7 @@ impl Model {
             .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
             .filter(move |w| {
                 // Si el espacio no está definido se considera que no pertenece a la envolvente
-                self.space_by_id(&w.space)
+                self.get_space(&w.space)
                     .map(|s| s.inside_tenv)
                     .unwrap_or(false)
             })
@@ -167,7 +164,7 @@ impl Model {
             .iter()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
             .filter(move |w| {
-                self.space_by_id(&w.space)
+                self.get_space(&w.space)
                     .map(|s| s.inside_tenv)
                     .unwrap_or(false)
             })
@@ -262,8 +259,11 @@ impl Model {
         let area: f32 = self
             .walls_of_envelope_iter()
             .map(|w| {
-                let multiplier = self.space_of_wall(w).map(|s| s.multiplier).unwrap_or(1.0);
-                let win_area: f32 = self.wincons_of_window_iter(&w.id).map(|win| win.area).sum();
+                let multiplier = self
+                    .get_space_of_wall(w)
+                    .map(|s| s.multiplier)
+                    .unwrap_or(1.0);
+                let win_area: f32 = self.windows_of_wall_iter(&w.id).map(|win| win.area).sum();
                 (w.area + win_area) * multiplier
             })
             .sum();
@@ -274,8 +274,8 @@ impl Model {
 
     /// Grosor de un elemento opaco
     pub fn wall_thickness(&self, wallid: &str) -> f32 {
-        self.wall_by_id(wallid)
-            .and_then(|w| self.wallcons_of_wall(w).map(|c| c.thickness()))
+        self.get_wall(wallid)
+            .and_then(|w| self.get_wallcons_of_wall(w).map(|c| c.thickness()))
             .unwrap_or(0.0)
     }
 
@@ -289,7 +289,7 @@ impl Model {
                 // Muros exteriores o cubiertas sobre el espacio
                 Tilt::TOP => w.space == spaceid,
                 // Es un cerramiento interior sobre este espacio
-                Tilt::BOTTOM => w.nextto.as_ref().map(|s| s == spaceid).unwrap_or(false),
+                Tilt::BOTTOM => w.next_to.as_ref().map(|s| s == spaceid).unwrap_or(false),
                 _ => false,
             }
         });
@@ -303,7 +303,7 @@ impl Model {
         self.windows
             .iter()
             .filter_map(|window| {
-                self.wall_of_window(window)
+                self.get_wall_of_window(window)
                     .map(|wall| shades_for_window_setback(wall, window))
             })
             .flatten()

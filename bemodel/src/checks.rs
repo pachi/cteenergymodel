@@ -52,7 +52,7 @@ impl Model {
                     ),
                 })
             };
-            if w.nextto.is_some() && !spaceids.contains(w.nextto.clone().unwrap().as_str()) {
+            if w.next_to.is_some() && !spaceids.contains(w.next_to.clone().unwrap().as_str()) {
                 warnings.push(Warning {
                     level: WARNING,
                     id: Some(w.id.clone()),
@@ -60,7 +60,7 @@ impl Model {
                         "Muro {} ({}) con referencia incorrecta de espacio adyacente {}",
                         w.id,
                         w.name,
-                        w.nextto.clone().unwrap()
+                        w.next_to.clone().unwrap()
                     ),
                 })
             };

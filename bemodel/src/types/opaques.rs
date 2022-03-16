@@ -35,7 +35,7 @@ pub struct Wall {
     /// Espacio al que pertenece el elemento opaco
     pub space: Uuid,
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
-    pub nextto: Option<Uuid>,
+    pub next_to: Option<Uuid>,
     /// Geometría del elemento opaco
     pub geometry: WallGeometry,
 }

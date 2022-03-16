@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::Uuid;
+use super::{fround2, Uuid};
 
 // Materiales -----------------------------------------------
 
@@ -14,15 +14,29 @@ use super::Uuid;
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct MatsDb {
     /// Lista de materiales para elementos opacos (muro, cubierta, suelo, partición)
-    pub materials: MaterialsList,
+    pub materials: Vec<Material>,
     // /// Lista de vidrios
-    // pub glasses: todo!(),
+    pub glasses: Vec<Glass>,
     // /// Lista de marcos
-    // pub frames: todo!(),
+    pub frames: Vec<Frame>,
 }
 
-/// Lista de materiales indexada por Uuid
-pub type MaterialsList = Vec<Material>;
+impl MatsDb {
+    /// Localiza material de opaco por id
+    pub fn get_material<'a>(&'a self, id: &'a str) -> Option<&'a Material> {
+        self.materials.iter().find(|w| w.id == id)
+    }
+
+    /// Localiza vidrio por id
+    pub fn get_glass<'a>(&'a self, id: &'a str) -> Option<&'a Glass> {
+        self.glasses.iter().find(|w| w.id == id)
+    }
+
+    /// Localiza marco por id
+    pub fn get_frame<'a>(&'a self, id: &'a str) -> Option<&'a Frame> {
+        self.frames.iter().find(|w| w.id == id)
+    }
+}
 
 /// Material de elemento opaco (muro, cubierta, suelo, partición)
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -50,9 +64,9 @@ pub enum MatProps {
         // Densidad, rho (kg/m3)
         density: f32,
         // Calor específico, C_p (J/kg K) (valor por defecto 800 J/kg·K)
-        specificheat: f32,
+        specific_heat: f32,
         // Factor de difusividad al vapor de agua, mu (-)
-        vapourdiffusivity: Option<f32>,
+        vapour_diffusivity: Option<f32>,
     },
     /// Resistencia térmica (R)
     #[serde(rename = "resistance")]
@@ -60,4 +74,42 @@ pub enum MatProps {
         /// Resistencia térmica, m²K/W
         resistance: f32,
     },
+}
+
+/// Vidrio
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct Glass {
+    /// ID del vidrio (UUID)
+    pub id: Uuid,
+    /// Nombre
+    pub name: String,
+    /// Grupo al que pertenece (biblioteca)
+    pub group: String,
+    /// Conductividad W/m²K
+    pub u_value: f32,
+    /// Factor solar del vidrio a incidencia normal
+    pub g_gln: f32,
+}
+
+impl Glass {
+    /// Transmitancia térmica total del acristalmiento (g_glwi = g_gln * 0.90) [-]
+    /// Corresponde al factor solar sin protección solar activada
+    pub fn g_glwi(&self) -> f32 {
+        fround2(self.g_gln * 0.90)
+    }
+}
+
+/// Marco de hueco
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct Frame {
+    /// ID del marco (UUID)
+    pub id: Uuid,
+    /// Nombre
+    pub name: String,
+    /// Grupo al que pertenece (biblioteca)
+    pub group: String,
+    /// Transmitancia térmica, U (W/m²K)
+    pub u_value: f32,
+    /// Absortividad del marco, alpha (-)
+    pub absorptivity: f32,
 }

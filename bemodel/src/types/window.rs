@@ -25,7 +25,7 @@ pub struct Window {
     /// Muro al que pertenece el hueco
     pub wall: Uuid,
     /// Factor de obstáculos remotos
-    pub fshobst: f32,
+    pub f_shobst: f32,
     /// Geometría de hueco
     pub geometry: WindowGeometry,
 }

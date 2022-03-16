@@ -57,14 +57,14 @@ impl Model {
             .filter(|wall| wall.bounds == BoundaryType::EXTERIOR)
             .for_each(|wall| {
                 let multiplier = self
-                    .space_of_wall(wall)
+                    .get_space_of_wall(wall)
                     .map(|s| s.multiplier)
                     .unwrap_or(1.0);
                 let mut win_ah = 0.0;
                 let mut win_ah_ch = 0.0;
-                for (a, ca) in self.wincons_of_window_iter(&wall.id).filter_map(|win| {
-                    self.wincons_of_window(win)
-                        .map(|wincons| Some((win.area, win.area * wincons.infcoeff_100)))?
+                for (a, ca) in self.windows_of_wall_iter(&wall.id).filter_map(|win| {
+                    self.get_wincons_of_window(win)
+                        .map(|wincons| Some((win.area, win.area * wincons.inf_coeff_100)))?
                 }) {
                     win_ah += a;
                     win_ah_ch += ca;

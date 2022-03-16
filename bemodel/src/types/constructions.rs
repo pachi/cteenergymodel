@@ -20,6 +20,18 @@ pub struct ConsDb {
     pub wincons: Vec<WindowCons>,
 }
 
+impl ConsDb {
+    /// Localiza construcción de opaco por id
+    pub fn get_wallcons<'a>(&'a self, wallconsid: &'a str) -> Option<&'a WallCons> {
+        self.wallcons.iter().find(|w| w.id == wallconsid)
+    }
+
+    /// Localiza construcción de hueco por id
+    pub fn get_wincons<'a>(&'a self, winconsid: &'a str) -> Option<&'a WindowCons> {
+        self.wincons.iter().find(|w| w.id == winconsid)
+    }
+}
+
 /// Definición de construcción de elemento opaco
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WallCons {
@@ -62,17 +74,19 @@ pub struct WindowCons {
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     pub group: String,
-    /// Transmitancia térmica total (incluyendo marco, vidrio y efecto de intercalarios y/o cajones de persiana) [W/m2K]
-    #[serde(rename = "U")]
-    pub u: f32,
+    /// Vidrio del hueco, UUID
+    pub glass: String,
+    /// Marco del hueco, UUID
+    pub frame: String,
     /// Fracción de marco [-]
     #[serde(rename = "Ff")]
     pub ff: f32,
-    /// Factor solar del hueco sin la protección solar activada (g_glwi = g_gln * 0.90) [-]
-    pub gglwi: f32,
-    /// Factor solar del hueco con la protección solar activada [-]
-    pub gglshwi: f32,
+    /// Porcentaje de U debido a intercalarios y cajón de persiana (%)
+    pub delta_u: f32,
+    /// Factor solar del hueco con la protección solar activada (g_gl;sh;wi) [-]
+    /// Si no se define, se supone igual al factor solar sin la protección activada (g_gl;wi)
+    pub g_glshwi: Option<f32>,
     /// Permeabilidad al aire a 100 Pa [m3/hm2]
     #[serde(rename = "C_100")]
-    pub infcoeff_100: f32,
+    pub inf_coeff_100: f32,
 }

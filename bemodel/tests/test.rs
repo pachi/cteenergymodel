@@ -128,7 +128,7 @@ fn model_json_unif() {
         model
             .windows
             .iter()
-            .map(|w| format!("{}: {}", w.name, w.fshobst))
+            .map(|w| format!("{}: {}", w.name, w.f_shobst))
             .collect::<Vec<_>>()
             .join("\n")
     );

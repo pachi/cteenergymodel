@@ -32,7 +32,7 @@
       "bounds": "EXTERIOR",
       "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "nextto": null,
+      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.0,
@@ -68,7 +68,7 @@
       "bounds": "EXTERIOR",
       "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "nextto": null,
+      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.0,
@@ -104,7 +104,7 @@
       "bounds": "EXTERIOR",
       "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "nextto": null,
+      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -180.0,
@@ -140,7 +140,7 @@
       "bounds": "EXTERIOR",
       "cons": "bb332648-80e3-7bcd-282b-0b0c3ff8d20f",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "nextto": null,
+      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -90.0,
@@ -176,7 +176,7 @@
       "bounds": "GROUND",
       "cons": "6058e362-fe85-048e-7cbf-0ddf2d7c1085",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "nextto": null,
+      "next_to": null,
       "geometry": {
         "tilt": 180.0,
         "azimuth": 0.0,
@@ -212,7 +212,7 @@
       "bounds": "EXTERIOR",
       "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "nextto": null,
+      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": -90.0,
@@ -244,7 +244,7 @@
       "bounds": "EXTERIOR",
       "cons": "1e41fed4-636e-f801-bf59-f6c0e26d5ba5",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "nextto": null,
+      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": -45.0,
@@ -277,7 +277,7 @@
       "A": 2.0,
       "cons": "586cacdb-0937-fe9e-6692-d73af19b880e",
       "wall": "8cd1c70c-fc07-56f5-7968-75aa06e41c10",
-      "fshobst": 1.0,
+      "f_shobst": 1.0,
       "geometry": {
         "position": [
           3.0,
@@ -462,10 +462,11 @@
         "id": "586cacdb-0937-fe9e-6692-d73af19b880e",
         "name": "Doble -- Mrpt - Gris claro",
         "group": "Huecos",
-        "U": 3.29,
+        "glass": "eb0062c2-5173-ffea-59ee-a8afe3b544d3",
+        "frame": "50e4cd2e-752a-8888-2892-5f829c9f3308",
         "Ff": 0.1,
-        "gglwi": 0.72,
-        "gglshwi": 0.72,
+        "delta_u": 0.0,
+        "g_glshwi": null,
         "C_100": 25.0
       }
     ]
@@ -473,31 +474,22 @@
   "mats": {
     "materials": [
       {
-        "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
-        "name": "Enlucido de yeso 1000 < d < 1300",
-        "group": "Enlucidos",
-        "conductivity": 0.57,
-        "density": 1150.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 6.0
-      },
-      {
         "id": "17c92d86-cb3c-aef5-f628-48e247099509",
         "name": "1/2 pie LP métrico o catalán 40 mm< G < 60 mm",
         "group": "Fábricas de ladrillo",
         "conductivity": 0.667,
         "density": 1140.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
       },
       {
-        "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
-        "name": "Tabicón de LH doble [60 mm < E < 90 mm]",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.432,
-        "density": 930.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
+        "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
+        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000",
+        "group": "Morteros",
+        "conductivity": 1.8,
+        "density": 2100.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
       },
       {
         "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
@@ -511,8 +503,26 @@
         "group": "Fábricas de ladrillo",
         "conductivity": 0.445,
         "density": 1000.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
+      },
+      {
+        "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+        "name": "Enlucido de yeso 1000 < d < 1300",
+        "group": "Enlucidos",
+        "conductivity": 0.57,
+        "density": 1150.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 6.0
+      },
+      {
+        "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
+        "name": "Tabicón de LH doble [60 mm < E < 90 mm]",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.432,
+        "density": 930.0,
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 10.0
       },
       {
         "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
@@ -520,17 +530,26 @@
         "group": "Hormigones",
         "conductivity": 2.5,
         "density": 2600.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 80.0
-      },
+        "specific_heat": 1000.0,
+        "vapour_diffusivity": 80.0
+      }
+    ],
+    "glasses": [
       {
-        "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
-        "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido d >2000",
-        "group": "Morteros",
-        "conductivity": 1.8,
-        "density": 2100.0,
-        "specificheat": 1000.0,
-        "vapourdiffusivity": 10.0
+        "id": "eb0062c2-5173-ffea-59ee-a8afe3b544d3",
+        "name": "Doble",
+        "group": "Vidrios",
+        "u_value": 3.3,
+        "g_gln": 0.8
+      }
+    ],
+    "frames": [
+      {
+        "id": "50e4cd2e-752a-8888-2892-5f829c9f3308",
+        "name": "Mrpt - Gris claro",
+        "group": "Marcos",
+        "u_value": 3.2,
+        "absorptivity": 0.4
       }
     ]
   },

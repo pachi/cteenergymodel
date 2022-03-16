@@ -78,33 +78,34 @@ impl Model {
         let Q_soljul = self
             .windows_of_envelope_iter()
             .filter_map(|w| {
-                let wall = self.wall_of_window(w)?;
+                let wall = self.get_wall_of_window(w)?;
                 let multiplier = self
-                .space_of_wall(wall)
+                .get_space_of_wall(wall)
                 .map(|s| s.multiplier)
                 .unwrap_or(1.0);
-                let wincons = self.wincons_of_window(w)?;
+                let wincons = self.get_wincons_of_window(w)?;
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
                 let area = w.area * multiplier;
-                let Q_soljul_orient = w.fshobst * wincons.gglshwi * (1.0 - wincons.ff) * area * radjul;
+                let gglshwi = wincons.g_glshwi.or_else(|| self.mats.get_glass(&wincons.glass).map(|g| g.g_glwi()))?;
+                let Q_soljul_orient = w.f_shobst * gglshwi * (1.0 - wincons.ff) * area * radjul;
                 // Datos de detalle
                 let mut detail = q_soljul_data.detail.entry(orientation).or_default();
                 detail.a += area;
                 detail.gains += Q_soljul_orient;
                 detail.irradiance = *radjul;
                 detail.ff_mean += wincons.ff * area;
-                detail.gglshwi_mean += wincons.gglshwi * area;
-                detail.fshobst_mean += w.fshobst * area;
+                detail.gglshwi_mean += gglshwi * area;
+                detail.fshobst_mean += w.f_shobst * area;
                 // Valores medios y acumulados
                 q_soljul_data.a_wp += area;
                 q_soljul_data.irradiance_mean += *radjul * area;
-                q_soljul_data.fshobst_mean += w.fshobst * area;
-                q_soljul_data.gglshwi_mean += wincons.gglshwi * area;
+                q_soljul_data.fshobst_mean += w.f_shobst * area;
+                q_soljul_data.gglshwi_mean += gglshwi * area;
                 q_soljul_data.ff_mean += wincons.ff * area;
                 debug!(
                     "qsoljul de {}: A {:.2}, orient {}, ff {:.2}, gglshwi {:.2}, fshobst {:.2}, H_sol;jul {:.2}",
-                    w.name, area, orientation, wincons.ff, wincons.gglshwi, w.fshobst, radjul
+                    w.name, area, orientation, wincons.ff, gglshwi, w.f_shobst, radjul
                 );
                 Some(Q_soljul_orient)
             })
@@ -171,7 +172,7 @@ impl Model {
         };
         for window in &self.windows {
             // if window.name != "P01_E01_PE004_V" {continue};
-            let window_wall = match self.wall_of_window(window) {
+            let window_wall = match self.get_wall_of_window(window) {
                 None => continue,
                 Some(wall) => wall,
             };
@@ -217,7 +218,7 @@ impl Model {
         debug!("Fshobst map: {:#?}", map);
 
         for mut window in &mut self.windows {
-            window.fshobst = map
+            window.f_shobst = map
                 .get(&window.id)
                 .map(|v| fround2(v.fshobst))
                 .unwrap_or(1.0);
@@ -240,7 +241,7 @@ impl Model {
         ray_dir: &Vector3,
         occluders: &[Occluder],
     ) -> f32 {
-        let window_wall = match self.wall_of_window(window) {
+        let window_wall = match self.get_wall_of_window(window) {
             None => {
                 warn!(
                     "Hueco {} (id: {}) sin muro asociado con id: {}. Se considera superficie soleada al 100%",
@@ -339,7 +340,7 @@ impl Model {
     /// Parte de una retícula dividida entre 5 y 10 partes por dimensión
     /// - en cada rectángulo el punto de muestreo podría ser aleatorio y no el punto central
     pub fn ray_origins_for_window(&self, window: &Window) -> Vec<Point3> {
-        let wall = match self.wall_of_window(window) {
+        let wall = match self.get_wall_of_window(window) {
             None => return vec![],
             Some(wall) => wall,
         };
