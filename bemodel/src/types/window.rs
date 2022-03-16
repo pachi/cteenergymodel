@@ -17,9 +17,6 @@ pub struct Window {
     pub id: Uuid,
     /// Nombre del hueco
     pub name: String,
-    // /// Superficie del hueco (m2)
-    // #[serde(rename = "A")]
-    // pub area: f32,
     /// Construcción del hueco
     pub cons: Uuid,
     /// Muro al que pertenece el hueco

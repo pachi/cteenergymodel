@@ -28,8 +28,7 @@ pub struct Space {
     /// - CONDITIONED: acondicionado,
     /// - UNCONDITIONED: no acondicionado
     /// - UNINHABITED: no habitable
-    #[serde(rename = "type")]
-    pub space_type: SpaceType,
+    pub kind: SpaceType,
     /// Pertenencia al interior de la envolvente térmica
     pub inside_tenv: bool,
     /// Altura bruta (suelo a suelo) del espacio (m)

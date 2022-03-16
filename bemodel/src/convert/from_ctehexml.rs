@@ -177,7 +177,7 @@ fn spaces_from_bdl(bdl: &Data) -> Result<Vec<Space>, Error> {
                 height,
                 inside_tenv: s.insidete,
                 multiplier: s.multiplier * s.floor_multiplier,
-                space_type: match s.stype.as_ref() {
+                kind: match s.stype.as_ref() {
                     "CONDITIONED" => SpaceType::CONDITIONED,
                     "UNHABITED" => SpaceType::UNINHABITED,
                     _ => SpaceType::UNCONDITIONED,
@@ -589,7 +589,7 @@ fn mats_from_bdl(bdl: &Data) -> MatsDb {
                     conductivity: p.conductivity,
                     density: p.density,
                     specific_heat: p.specificheat,
-                    vapour_diffusivity: p.vapourdiffusivity,
+                    vapour_diff: p.vapourdiffusivity,
                 }
             } else {
                 MatProps::Resistance {
@@ -743,10 +743,10 @@ fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WindowCons>,
                     group: cons.group.clone(),
                     glass: glass_id.clone(),
                     frame: frame_id.clone(),
-                    ff: cons.framefrac,
+                    f_f: cons.framefrac,
                     delta_u: cons.deltau,
                     g_glshwi: cons.gglshwi,
-                    inf_coeff_100: cons.infcoeff,
+                    c_100: cons.infcoeff,
                 }
             }
             _ => {

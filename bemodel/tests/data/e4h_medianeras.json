@@ -16,7 +16,7 @@
       "name": "P01_E01",
       "area": 76.31,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.5,
       "n_v": null,
@@ -28,7 +28,7 @@
       "name": "P01_E02",
       "area": 35.18,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.5,
       "n_v": null,
@@ -40,7 +40,7 @@
       "name": "P01_E03",
       "area": 74.45,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.5,
       "n_v": null,
@@ -52,7 +52,7 @@
       "name": "P01_E04",
       "area": 41.53,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.5,
       "n_v": null,
@@ -64,7 +64,7 @@
       "name": "P01_E05",
       "area": 95.56,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.5,
       "n_v": null,
@@ -76,7 +76,7 @@
       "name": "P01_E06",
       "area": 95.45,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.5,
       "n_v": null,
@@ -88,7 +88,7 @@
       "name": "P02_E01",
       "area": 96.14,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -100,7 +100,7 @@
       "name": "P02_E02",
       "area": 95.45,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -112,7 +112,7 @@
       "name": "P02_E03",
       "area": 96.14,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -124,7 +124,7 @@
       "name": "P02_E04",
       "area": 95.56,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -136,7 +136,7 @@
       "name": "P02_E05",
       "area": 35.19,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -148,7 +148,7 @@
       "name": "P03_E01",
       "area": 96.14,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -160,7 +160,7 @@
       "name": "P03_E02",
       "area": 95.45,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -172,7 +172,7 @@
       "name": "P03_E03",
       "area": 96.14,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -184,7 +184,7 @@
       "name": "P03_E04",
       "area": 95.56,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -196,7 +196,7 @@
       "name": "P03_E05",
       "area": 35.19,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -208,7 +208,7 @@
       "name": "P04_E01",
       "area": 96.14,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -220,7 +220,7 @@
       "name": "P04_E02",
       "area": 95.45,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -232,7 +232,7 @@
       "name": "P04_E03",
       "area": 96.14,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -244,7 +244,7 @@
       "name": "P04_E04",
       "area": 95.56,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -256,7 +256,7 @@
       "name": "P04_E05",
       "area": 35.19,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -6410,70 +6410,70 @@
       "id": "c3aa6ee6-2b52-ee0f-020a-e21e0cf2dac8",
       "name": "FRENTE_FORJADO",
       "kind": "INTERMEDIATEFLOOR",
-      "L": 195.78,
+      "l": 195.78,
       "psi": 0.1
     },
     {
       "id": "e1bcff01-781b-a720-eaca-6d4a5593233e",
       "name": "UNION_CUBIERTA",
       "kind": "ROOF",
-      "L": 111.51,
+      "l": 111.51,
       "psi": 0.24
     },
     {
       "id": "ff2f6e73-273c-1589-5a2d-9f54622f43d7",
       "name": "ESQUINA_CONVEXA_FORJADO",
       "kind": "ROOF",
-      "L": 0.0,
+      "l": 0.0,
       "psi": 0.23
     },
     {
       "id": "0e048c30-c54a-226b-0d63-6f6bc91dcd80",
       "name": "ESQUINA_CONCAVA",
       "kind": "CORNER",
-      "L": 50.0,
+      "l": 50.0,
       "psi": -0.16
     },
     {
       "id": "213008aa-da80-c967-34dc-f297ebd804d2",
       "name": "ESQUINA_CONVEXA",
       "kind": "CORNER",
-      "L": 0.0,
+      "l": 0.0,
       "psi": 0.11
     },
     {
       "id": "ac671a0c-bfe0-b69a-867d-744e18eae77e",
       "name": "PILAR",
       "kind": "PILLAR",
-      "L": 1.0,
+      "l": 1.0,
       "psi": 1.2
     },
     {
       "id": "b9643c94-1718-485a-bfa6-fcd7238e4a1e",
       "name": "HUECO_CAPIALZADO",
       "kind": "WINDOW",
-      "L": 140.25,
+      "l": 140.25,
       "psi": 0.05
     },
     {
       "id": "16b7fdce-b4fc-95fe-658e-537c5add8cf8",
       "name": "HUECO_JAMBA",
       "kind": "WINDOW",
-      "L": 255.0,
+      "l": 255.0,
       "psi": 0.05
     },
     {
       "id": "6314e5b7-7aa3-c7c5-335f-f449dff26f5a",
       "name": "HUECO_ALFEIZAR",
       "kind": "WINDOW",
-      "L": 140.25,
+      "l": 140.25,
       "psi": 0.05
     },
     {
       "id": "2a8c3e1d-e562-24f6-9004-1ef7197580c8",
       "name": "UNION_SOLERA_PAREDEXT",
       "kind": "GROUNDFLOOR",
-      "L": 50.63,
+      "l": 50.63,
       "psi": 0.28
     }
   ],
@@ -7280,10 +7280,10 @@
         "group": "ventanas",
         "glass": "11851140-105c-be34-f195-82e1880ffd77",
         "frame": "3eeb2bae-1a57-e059-ec71-8f0d34cff953",
-        "Ff": 0.2,
+        "f_f": 0.2,
         "delta_u": 10.0,
         "g_glshwi": 0.08,
-        "C_100": 27.0
+        "c_100": 27.0
       },
       {
         "id": "a3afef0c-de76-e87e-6b12-b1c63d5ffdd5",
@@ -7291,69 +7291,15 @@
         "group": "ventanas",
         "glass": "d9c700e5-eeee-c16f-ca04-acb2f955e14b",
         "frame": "fe73bf33-34de-70c9-ce98-33b8f85cbe5e",
-        "Ff": 0.2,
+        "f_f": 0.2,
         "delta_u": 10.0,
         "g_glshwi": 0.08,
-        "C_100": 27.0
+        "c_100": 27.0
       }
     ]
   },
   "mats": {
     "materials": [
-      {
-        "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
-        "name": "FU Entrevigado cerámico -Canto 250 mm",
-        "group": "Forjados unidireccionales",
-        "conductivity": 0.908,
-        "density": 1220.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
-      },
-      {
-        "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
-        "name": "Plaqueta o baldosa cerámica",
-        "group": "Cerámicos",
-        "conductivity": 1.0,
-        "density": 2000.0,
-        "specific_heat": 800.0,
-        "vapour_diffusivity": 30.0
-      },
-      {
-        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
-        "name": "Hormigón armado d > 2500",
-        "group": "Hormigones",
-        "conductivity": 2.5,
-        "density": 2600.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 80.0
-      },
-      {
-        "id": "e5f312d0-e644-824e-259a-917bf8d344bf",
-        "name": "Hormigón con otros áridos ligeros d 1600",
-        "group": "Hormigones",
-        "conductivity": 0.59,
-        "density": 1600.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
-      },
-      {
-        "id": "a90add57-4ac6-032e-fe56-eece92423ac3",
-        "name": "1/2 pie LP métrico o catalán 80 mm< G < 100 mm",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.512,
-        "density": 900.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
-      },
-      {
-        "id": "80274963-698f-dbb3-3741-056857281f8c",
-        "name": "XPS Expandido con hidrofluorcarbonos HFC [ 0.032 W/[mK]]",
-        "group": "Aislantes",
-        "conductivity": 0.032,
-        "density": 37.5,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 100.0
-      },
       {
         "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
         "name": "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]",
@@ -7361,7 +7307,7 @@
         "conductivity": 0.228,
         "density": 670.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
+        "vapour_diff": 10.0
       },
       {
         "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
@@ -7370,16 +7316,34 @@
         "conductivity": 0.43,
         "density": 1050.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 4.0
+        "vapour_diff": 4.0
       },
       {
-        "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
-        "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.445,
-        "density": 1000.0,
+        "id": "80274963-698f-dbb3-3741-056857281f8c",
+        "name": "XPS Expandido con hidrofluorcarbonos HFC [ 0.032 W/[mK]]",
+        "group": "Aislantes",
+        "conductivity": 0.032,
+        "density": 37.5,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
+        "vapour_diff": 100.0
+      },
+      {
+        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+        "name": "Hormigón armado d > 2500",
+        "group": "Hormigones",
+        "conductivity": 2.5,
+        "density": 2600.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 80.0
+      },
+      {
+        "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
+        "name": "FU Entrevigado cerámico -Canto 250 mm",
+        "group": "Forjados unidireccionales",
+        "conductivity": 0.908,
+        "density": 1220.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 10.0
       },
       {
         "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
@@ -7388,23 +7352,59 @@
         "conductivity": 1.3,
         "density": 1900.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
+        "vapour_diff": 10.0
+      },
+      {
+        "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+        "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.445,
+        "density": 1000.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 10.0
+      },
+      {
+        "id": "a90add57-4ac6-032e-fe56-eece92423ac3",
+        "name": "1/2 pie LP métrico o catalán 80 mm< G < 100 mm",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.512,
+        "density": 900.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 10.0
+      },
+      {
+        "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
+        "name": "Plaqueta o baldosa cerámica",
+        "group": "Cerámicos",
+        "conductivity": 1.0,
+        "density": 2000.0,
+        "specific_heat": 800.0,
+        "vapour_diff": 30.0
+      },
+      {
+        "id": "e5f312d0-e644-824e-259a-917bf8d344bf",
+        "name": "Hormigón con otros áridos ligeros d 1600",
+        "group": "Hormigones",
+        "conductivity": 0.59,
+        "density": 1600.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 10.0
       }
     ],
     "glasses": [
-      {
-        "id": "11851140-105c-be34-f195-82e1880ffd77",
-        "name": "VER_DB1_4-6-661a",
-        "group": "Dobles bajo emisivos 0.1-0.2 en posición vertical",
-        "u_value": 2.6,
-        "g_gln": 0.7082353
-      },
       {
         "id": "d9c700e5-eeee-c16f-ca04-acb2f955e14b",
         "name": "Vidrio_igual OS",
         "group": "Dobles bajo emisivos 0.1-0.2 en posición vertical",
         "u_value": 1.0,
         "g_gln": 0.42494112
+      },
+      {
+        "id": "11851140-105c-be34-f195-82e1880ffd77",
+        "name": "VER_DB1_4-6-661a",
+        "group": "Dobles bajo emisivos 0.1-0.2 en posición vertical",
+        "u_value": 2.6,
+        "g_gln": 0.7082353
       }
     ],
     "frames": [

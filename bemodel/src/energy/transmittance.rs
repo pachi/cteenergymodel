@@ -328,7 +328,7 @@ impl Model {
         let frame = self.mats.frames.iter().find(|f| f.id == wincons.frame)?;
         Some(
             (1.0 + wincons.delta_u / 100.0)
-                * (frame.u_value * wincons.ff + glass.u_value * (1.0 - wincons.ff)),
+                * (frame.u_value * wincons.f_f + glass.u_value * (1.0 - wincons.f_f)),
         )
     }
 
@@ -560,7 +560,7 @@ impl Model {
                     }
                 };
 
-                let nexttype = nextspace.space_type;
+                let nexttype = nextspace.kind;
 
                 let posname = match position {
                     BOTTOM => "suelo",
@@ -568,7 +568,7 @@ impl Model {
                     SIDE => "muro",
                 };
 
-                if nexttype == CONDITIONED && space.space_type == CONDITIONED {
+                if nexttype == CONDITIONED && space.kind == CONDITIONED {
                     // Elemento interior con otro espacio acondicionado
                     // HULC no diferencia entre RS según posiciones para elementos interiores
                     let U = 1.0 / (R_intrinsic + 2.0 * RSI_HORIZONTAL);

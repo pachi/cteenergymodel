@@ -79,14 +79,12 @@ pub struct WindowCons {
     /// Marco del hueco, UUID
     pub frame: String,
     /// Fracción de marco [-]
-    #[serde(rename = "Ff")]
-    pub ff: f32,
+    pub f_f: f32,
     /// Porcentaje de U debido a intercalarios y cajón de persiana (%)
     pub delta_u: f32,
     /// Factor solar del hueco con la protección solar activada (g_gl;sh;wi) [-]
     /// Si no se define, se supone igual al factor solar sin la protección activada (g_gl;wi)
     pub g_glshwi: Option<f32>,
     /// Permeabilidad al aire a 100 Pa [m3/hm2]
-    #[serde(rename = "C_100")]
-    pub inf_coeff_100: f32,
+    pub c_100: f32,
 }

@@ -16,7 +16,7 @@
       "name": "P01_E01",
       "area": 100.0,
       "multiplier": 1.0,
-      "type": "CONDITIONED",
+      "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
       "n_v": null,
@@ -286,70 +286,70 @@
       "id": "965a4dbe-7efe-b5d4-ea0a-9dd1a620e1b7",
       "name": "FRENTE_FORJADO",
       "kind": "INTERMEDIATEFLOOR",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 0.97
     },
     {
       "id": "9e1d0822-d63f-7fcf-fc4c-b597bca0b442",
       "name": "UNION_CUBIERTA",
       "kind": "ROOF",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 0.96
     },
     {
       "id": "2510cca0-72c9-df93-6f99-6b6edaaec472",
       "name": "ESQUINA_CONVEXA_FORJADO",
       "kind": "ROOF",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 0.86
     },
     {
       "id": "b3128089-515a-b39b-eb3e-3983aefe13a9",
       "name": "ESQUINA_CONCAVA",
       "kind": "CORNER",
-      "L": -1.0,
+      "l": -1.0,
       "psi": -0.16
     },
     {
       "id": "de359362-e06d-5c8a-bd25-a7d5b9f48285",
       "name": "ESQUINA_CONVEXA",
       "kind": "CORNER",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 0.11
     },
     {
       "id": "b9ef5f8e-ef25-1cf6-8b47-89288e3b9541",
       "name": "PILAR",
       "kind": "PILLAR",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 1.2
     },
     {
       "id": "5fd04389-7277-010a-c94c-654146c4776c",
       "name": "HUECO_CAPIALZADO",
       "kind": "WINDOW",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 0.82
     },
     {
       "id": "7357e89d-6962-b295-9d00-da25eebae363",
       "name": "HUECO_JAMBA",
       "kind": "WINDOW",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 0.53
     },
     {
       "id": "700bb01b-d562-57d3-9f6d-771722796574",
       "name": "HUECO_ALFEIZAR",
       "kind": "WINDOW",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 0.44
     },
     {
       "id": "56fb0260-473b-afe4-8c88-223bc8556c52",
       "name": "UNION_SOLERA_PAREDEXT",
       "kind": "GROUNDFLOOR",
-      "L": -1.0,
+      "l": -1.0,
       "psi": 0.57
     }
   ],
@@ -456,24 +456,15 @@
         "group": "Huecos",
         "glass": "eb0062c2-5173-ffea-59ee-a8afe3b544d3",
         "frame": "50e4cd2e-752a-8888-2892-5f829c9f3308",
-        "Ff": 0.1,
+        "f_f": 0.1,
         "delta_u": 0.0,
         "g_glshwi": null,
-        "C_100": 25.0
+        "c_100": 25.0
       }
     ]
   },
   "mats": {
     "materials": [
-      {
-        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
-        "name": "Hormigón armado d > 2500",
-        "group": "Hormigones",
-        "conductivity": 2.5,
-        "density": 2600.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 80.0
-      },
       {
         "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
         "name": "Tabicón de LH doble [60 mm < E < 90 mm]",
@@ -481,7 +472,7 @@
         "conductivity": 0.432,
         "density": 930.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
+        "vapour_diff": 10.0
       },
       {
         "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
@@ -490,16 +481,7 @@
         "conductivity": 0.57,
         "density": 1150.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 6.0
-      },
-      {
-        "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
-        "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
-        "group": "Fábricas de ladrillo",
-        "conductivity": 0.445,
-        "density": 1000.0,
-        "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
+        "vapour_diff": 6.0
       },
       {
         "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
@@ -508,13 +490,7 @@
         "conductivity": 1.8,
         "density": 2100.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
-      },
-      {
-        "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
-        "name": "Cámara de aire ligeramente ventilada vertical 2 cm",
-        "group": "Cámaras de aire",
-        "resistance": 0.085
+        "vapour_diff": 10.0
       },
       {
         "id": "17c92d86-cb3c-aef5-f628-48e247099509",
@@ -523,7 +499,31 @@
         "conductivity": 0.667,
         "density": 1140.0,
         "specific_heat": 1000.0,
-        "vapour_diffusivity": 10.0
+        "vapour_diff": 10.0
+      },
+      {
+        "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+        "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
+        "group": "Fábricas de ladrillo",
+        "conductivity": 0.445,
+        "density": 1000.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 10.0
+      },
+      {
+        "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
+        "name": "Cámara de aire ligeramente ventilada vertical 2 cm",
+        "group": "Cámaras de aire",
+        "resistance": 0.085
+      },
+      {
+        "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+        "name": "Hormigón armado d > 2500",
+        "group": "Hormigones",
+        "conductivity": 2.5,
+        "density": 2600.0,
+        "specific_heat": 1000.0,
+        "vapour_diff": 80.0
       }
     ],
     "glasses": [

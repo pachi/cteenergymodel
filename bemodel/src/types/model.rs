@@ -193,7 +193,7 @@ impl Model {
             .spaces
             .iter()
             .filter_map(|s| {
-                if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
+                if s.inside_tenv && s.kind != SpaceType::UNINHABITED {
                     Some(s.area * s.multiplier)
                 } else {
                     None
@@ -248,7 +248,7 @@ impl Model {
             .spaces
             .iter()
             .filter_map(|s| {
-                if s.inside_tenv && s.space_type != SpaceType::UNINHABITED {
+                if s.inside_tenv && s.kind != SpaceType::UNINHABITED {
                     Some(
                         s.area
                             * (s.height - self.top_wall_thickness_of_space(&s.id))

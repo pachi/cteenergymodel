@@ -44,8 +44,7 @@ pub struct QSolJulData {
     /// Factor solar del hueco con los elementos de sombra activados, media ponderada por superficie de huecos [-]
     pub gglshwi_mean: f32,
     /// Fracción de marco, media ponderada por superficie de huecos [-]
-    #[serde(rename = "Ff_mean")]
-    pub ff_mean: f32,
+    pub f_f_mean: f32,
     /// Datos de ganancias solares (Q_soljul) resumidos por orientaciones
     pub detail: HashMap<Orientation, QSolJulDetail>,
 }
@@ -61,8 +60,7 @@ pub struct QSolJulDetail {
     /// Irradiación solar acumulada en el mes de julio (H_sol;jul) para la orientación [kWh/m²·mes]
     pub irradiance: f32,
     /// Fracción de marco media de la orientación, ponderada por superficie de huecos [-]
-    #[serde(rename = "Ff_mean")]
-    pub ff_mean: f32,
+    pub f_f_mean: f32,
     /// Factor solar con sombras móviles activadas medio de la orientación, ponderada por superficie de huecos [-]
     pub gglshwi_mean: f32,
     /// Factor de obstáculos remotos medio de la orientación, ponderado por superficie de huecos [-]
@@ -88,13 +86,13 @@ impl Model {
                 let radjul = totradjul.get(&orientation).unwrap();
                 let area = w.geometry.area() * multiplier;
                 let gglshwi = wincons.g_glshwi.or_else(|| self.mats.get_glass(&wincons.glass).map(|g| g.g_glwi()))?;
-                let Q_soljul_orient = w.f_shobst * gglshwi * (1.0 - wincons.ff) * area * radjul;
+                let Q_soljul_orient = w.f_shobst * gglshwi * (1.0 - wincons.f_f) * area * radjul;
                 // Datos de detalle
                 let mut detail = q_soljul_data.detail.entry(orientation).or_default();
                 detail.a += area;
                 detail.gains += Q_soljul_orient;
                 detail.irradiance = *radjul;
-                detail.ff_mean += wincons.ff * area;
+                detail.f_f_mean += wincons.f_f * area;
                 detail.gglshwi_mean += gglshwi * area;
                 detail.fshobst_mean += w.f_shobst * area;
                 // Valores medios y acumulados
@@ -102,10 +100,10 @@ impl Model {
                 q_soljul_data.irradiance_mean += *radjul * area;
                 q_soljul_data.fshobst_mean += w.f_shobst * area;
                 q_soljul_data.gglshwi_mean += gglshwi * area;
-                q_soljul_data.ff_mean += wincons.ff * area;
+                q_soljul_data.f_f_mean += wincons.f_f * area;
                 debug!(
                     "qsoljul de {}: A {:.2}, orient {}, ff {:.2}, gglshwi {:.2}, fshobst {:.2}, H_sol;jul {:.2}",
-                    w.name, area, orientation, wincons.ff, gglshwi, w.f_shobst, radjul
+                    w.name, area, orientation, wincons.f_f, gglshwi, w.f_shobst, radjul
                 );
                 Some(Q_soljul_orient)
             })
@@ -123,11 +121,11 @@ impl Model {
         q_soljul_data.irradiance_mean /= q_soljul_data.a_wp;
         q_soljul_data.fshobst_mean /= q_soljul_data.a_wp;
         q_soljul_data.gglshwi_mean /= q_soljul_data.a_wp;
-        q_soljul_data.ff_mean /= q_soljul_data.a_wp;
+        q_soljul_data.f_f_mean /= q_soljul_data.a_wp;
 
         // Completa cálcula de medias por orientación (dividiendo por area de cada orientación)
         for (_, detail) in q_soljul_data.detail.iter_mut() {
-            detail.ff_mean /= detail.a;
+            detail.f_f_mean /= detail.a;
             detail.gglshwi_mean /= detail.a;
             detail.fshobst_mean /= detail.a;
         }

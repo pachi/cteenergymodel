@@ -20,7 +20,6 @@ pub struct ThermalBridge {
     /// Roof|Balcony|Corner|IntermediateFloor|InternalWall|GroundFloor|Pillar|Window|Generic
     pub kind: ThermalBridgeKind,
     /// Longitud del puente térmico (m)
-    #[serde(rename = "L")]
     pub l: f32,
     /// Transmitancia térmica lineal del puente térmico (W/mK)
     pub psi: f32,

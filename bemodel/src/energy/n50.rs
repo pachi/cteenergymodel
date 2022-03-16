@@ -64,7 +64,7 @@ impl Model {
                 let mut win_ah_ch = 0.0;
                 for (a, ca) in self.windows_of_wall_iter(&wall.id).filter_map(|win| {
                     self.get_wincons_of_window(win)
-                        .map(|wincons| Some((win.geometry.area(), win.geometry.area() * wincons.inf_coeff_100)))?
+                        .map(|wincons| Some((win.geometry.area(), win.geometry.area() * wincons.c_100)))?
                 }) {
                     win_ah += a;
                     win_ah_ch += ca;
