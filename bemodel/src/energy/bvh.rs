@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-use std::{collections::HashMap, fmt::Debug, ops::Deref};
+use std::{collections::BTreeMap, fmt::Debug, ops::Deref};
 
 use super::aabb::AABB;
 use super::ray::Ray;
@@ -131,10 +131,10 @@ impl<T: Bounded> BVH<T> {
         use Side::*;
 
         // Diccionario de elementos pendientes de acabar (sin dos nodos hijos), indexados por padre
-        let mut pending: HashMap<NodeId, BVHNode<T>> = HashMap::new();
+        let mut pending: BTreeMap<NodeId, BVHNode<T>> = BTreeMap::new();
         // Diccionario de nodos completos, listos para insertar en sus padres e indexados por padre
         // Al final del proceso contiene el nodo raíz
-        let mut completed: HashMap<NodeId, BVHNode<T>> = HashMap::new();
+        let mut completed: BTreeMap<NodeId, BVHNode<T>> = BTreeMap::new();
 
         // Vamos añadiendo los nodos que tenemos a sus elementos padre y
         // a medida que los completamos los añadimos a sus respectivos padres

@@ -12,7 +12,7 @@
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
 #![allow(non_snake_case)]
 
-use std::{collections::HashMap, f32::consts::PI};
+use std::{collections::BTreeMap, f32::consts::PI};
 
 use anyhow::{format_err, Error};
 use log::{debug, info, warn};
@@ -38,9 +38,9 @@ const LAMBDA_INS: f32 = 0.035;
 /// TODO: añadir si el elemento pertenece o no a la ET ElementProps{walls: {id: Uuid, ElementData {et: bool, a: f32, u: Option<f32>}}}
 pub struct UValues {
     /// U de muros
-    pub walls: HashMap<Uuid, Option<f32>>,
+    pub walls: BTreeMap<Uuid, Option<f32>>,
     /// U de huecos
-    pub windows: HashMap<Uuid, Option<f32>>,
+    pub windows: BTreeMap<Uuid, Option<f32>>,
 }
 
 /// Reporte de cálculo de K (HE2019)
@@ -274,12 +274,12 @@ impl Model {
 
     /// Diccionario de transmitancias de elementos del modelo (walls, windows) según id
     pub fn u_values(&self) -> UValues {
-        let wallsmap: HashMap<Uuid, Option<f32>> = self
+        let wallsmap: BTreeMap<Uuid, Option<f32>> = self
             .walls
             .iter()
             .map(|w| (w.id, self.u_for_wall(w)))
             .collect();
-        let windowsmap: HashMap<Uuid, Option<f32>> = self
+        let windowsmap: BTreeMap<Uuid, Option<f32>> = self
             .windows
             .iter()
             .map(|w| (w.id, self.u_for_window(w)))

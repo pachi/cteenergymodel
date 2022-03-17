@@ -8,7 +8,7 @@
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
 #![allow(non_snake_case)]
 
-use std::{collections::HashMap, convert::From};
+use std::{collections::BTreeMap, collections::HashMap, convert::From};
 
 use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
@@ -155,7 +155,7 @@ impl Model {
             /// Factor de obstáculos remotos (sobre radiación total), ponderado por horas
             fshobst: f32,
         }
-        let mut map: HashMap<Uuid, ObstData> = HashMap::new();
+        let mut map: BTreeMap<Uuid, ObstData> = BTreeMap::new();
 
         let latitude = CLIMATEMETADATA
             .lock()

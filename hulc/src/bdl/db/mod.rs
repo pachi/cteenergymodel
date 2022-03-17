@@ -17,7 +17,7 @@
 //!      - Composición de huecos y lucernarios (GAP)
 //! - Puentes térmicos (THERMAL-BRIDGE)?
 
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 mod construction;
 mod frame;
@@ -39,13 +39,13 @@ pub use windowcons::WindowCons;
 #[derive(Debug, Clone, Default)]
 pub struct DB {
     /// Material o producto
-    pub materials: HashMap<String, Material>,
+    pub materials: BTreeMap<String, Material>,
     /// Composición por capas (opacos)
-    pub wallcons: HashMap<String, WallCons>,
+    pub wallcons: BTreeMap<String, WallCons>,
     /// Composición por capas (huecos)
-    pub wincons: HashMap<String, WindowCons>,
+    pub wincons: BTreeMap<String, WindowCons>,
     /// Vidrio
-    pub glasses: HashMap<String, Glass>,
+    pub glasses: BTreeMap<String, Glass>,
     /// Marco
-    pub frames: HashMap<String, Frame>,
+    pub frames: BTreeMap<String, Frame>,
 }
