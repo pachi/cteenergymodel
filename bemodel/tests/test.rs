@@ -3,7 +3,6 @@
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 use bemodel::{
-    climatedata,
     energy::{ray_dir_to_sun, Intersectable, Ray, AABB},
     Model, WallGeometry, Window,
 };
@@ -48,23 +47,21 @@ fn model_json_conversion() {
 
     let strdata = include_str!("./data/e4h_medianeras.json");
     let model = Model::from_json(strdata).unwrap();
-    let climatezone = model.meta.climate;
-    let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
-    let n50data = model.n50();
-    assert_almost_eq!(model.a_ref(), 1673.92, 0.01);
-    assert_almost_eq!(model.compacity(), 3.17, 0.01);
-    assert_almost_eq!(model.K().K, 0.37, 0.01);
+    let ind = model.energy_indicators();
+    assert_almost_eq!(ind.area_ref, 1673.92, 0.01);
+    assert_almost_eq!(ind.compacity, 3.17, 0.01);
+    assert_almost_eq!(ind.K_data.K, 0.37, 0.01);
     // En HULC es q_solul = 0.43
     // con model.update_fshobst = 0.47
     // con el modelo simple (solo retranqueos) = 0.53
-    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.47, 0.01);
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 0.47, 0.01);
 
-    assert_almost_eq!(n50data.n50, 2.96, 0.01);
-    assert_almost_eq!(n50data.n50_ref, 2.96, 0.01);
-    assert_almost_eq!(n50data.walls_c_ref, 16.0, 0.01);
-    assert_almost_eq!(n50data.walls_c, 16.0, 0.01);
-    assert_almost_eq!(model.vol_env_net(), 4672.34, 0.1);
-    assert_almost_eq!(model.vol_env_gross(), 5231.0, 0.1);
+    assert_almost_eq!(ind.n50_data.n50, 2.96, 0.01);
+    assert_almost_eq!(ind.n50_data.n50_ref, 2.96, 0.01);
+    assert_almost_eq!(ind.n50_data.walls_c_ref, 16.0, 0.01);
+    assert_almost_eq!(ind.n50_data.walls_c, 16.0, 0.01);
+    assert_almost_eq!(ind.vol_env_net, 4672.34, 0.1);
+    assert_almost_eq!(ind.vol_env_gross, 5231.0, 0.1);
 
     let json = model.as_json().unwrap();
     let model = Model::from_json(&json).unwrap();
@@ -108,19 +105,17 @@ fn model_json_unif() {
 
     let strdata = include_str!("./data/ejemploviv_unif.json");
     let mut model = Model::from_json(strdata).unwrap();
-    let climatezone = model.meta.climate;
-    let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
-    let n50data = model.n50();
-    assert_almost_eq!(model.a_ref(), 102.37, 0.01);
-    assert_almost_eq!(model.compacity(), 1.36, 0.01);
-    assert_almost_eq!(model.K().K, 0.62, 0.01);
+    let ind = model.energy_indicators();
+    assert_almost_eq!(ind.area_ref, 102.37, 0.01);
+    assert_almost_eq!(ind.compacity, 1.36, 0.01);
+    assert_almost_eq!(ind.K_data.K, 0.62, 0.01);
     // HULC q_sol;jul = 0.54
-    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.55, 0.01);
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 0.55, 0.01);
 
-    assert_almost_eq!(n50data.n50, 6.89, 0.01);
-    assert_almost_eq!(n50data.n50_ref, 6.89, 0.01);
-    assert_almost_eq!(model.vol_env_net(), 258.10, 0.1);
-    assert_almost_eq!(model.vol_env_gross(), 292.79, 0.1);
+    assert_almost_eq!(ind.n50_data.n50, 6.89, 0.01);
+    assert_almost_eq!(ind.n50_data.n50_ref, 6.89, 0.01);
+    assert_almost_eq!(ind.vol_env_net, 258.10, 0.1);
+    assert_almost_eq!(ind.vol_env_gross, 292.79, 0.1);
 
     model.update_fshobst();
     info!(
@@ -132,8 +127,6 @@ fn model_json_unif() {
             .collect::<Vec<_>>()
             .join("\n")
     );
-    // HULC: 0.54
-    assert_almost_eq!(model.q_soljul(&totradjul).q_soljul, 0.55, 0.01);
 }
 
 #[test]

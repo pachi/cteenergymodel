@@ -30,14 +30,14 @@ macro_rules! assert_almost_eq {
 
 #[test]
 fn test_caso_a() {
-    let data = collect_hulc_data("tests/casoA", true, true).unwrap();
-    assert_almost_eq!(data.a_ref(), 400.0, 0.001);
-    assert_eq!(&data.meta.climate.to_string(), "D3");
-    assert_eq!(data.windows.len(), 10);
-    assert_eq!(data.walls.len(), 35); // 19 en ET
-    assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
-    let mut wallsofspace = data
-        .walls_of_space_iter(data.get_space_by_name("P02_E01").unwrap().id)
+    let model = collect_hulc_data("tests/casoA", true, true).unwrap();
+    assert_almost_eq!(model.a_ref(), 400.0, 0.001);
+    assert_eq!(&model.meta.climate.to_string(), "D3");
+    assert_eq!(model.windows.len(), 10);
+    assert_eq!(model.walls.len(), 35); // 19 en ET
+    assert_eq!(model.thermal_bridges.len(), 10); // 7 en kyg
+    let mut wallsofspace = model
+        .walls_of_space_iter(model.get_space_by_name("P02_E01").unwrap().id)
         .map(|w| w.name.as_str())
         .collect::<Vec<_>>();
     wallsofspace.sort_unstable();
@@ -55,39 +55,40 @@ fn test_caso_a() {
         ]
     );
     // Suelo al exterior (aire), HULC=0.34
-    let wall = data.get_wall_by_name("P02_E01_ME001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.33, 0.001);
+    let wall = model.get_wall_by_name("P02_E01_ME001").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.33, 0.001);
     // Fachada exterior, HULC=0.30
-    let wall = data.get_wall_by_name("P01_E01_ME001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.30, 0.001);
+    let wall = model.get_wall_by_name("P01_E01_ME001").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.30, 0.001);
     // Cubierta exterior, HULC=0.34
-    let wall = data.get_wall_by_name("P03_E01_FE004").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.34, 0.001);
+    let wall = model.get_wall_by_name("P03_E01_FE004").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.34, 0.001);
     // Muro de sótano (z=0), HULC=0.0 (por no habitable)
-    let wall = data.get_wall_by_name("P01_E02_TER001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.59, 0.001);
+    let wall = model.get_wall_by_name("P01_E02_TER001").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.59, 0.001);
     // Solera (z=0), HULC=0.47
-    let wall = data.get_wall_by_name("P01_E01_FTER001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.34, 0.001);
+    let wall = model.get_wall_by_name("P01_E01_FTER001").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.34, 0.001);
     // Forjado interior, HULC=1.37
-    let wall = data.get_wall_by_name("P03_E01_FI003").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 1.37, 0.001);
+    let wall = model.get_wall_by_name("P03_E01_FI003").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 1.37, 0.001);
     // Partición interior vertical con espacio no habitable, HULC=0.81
-    let wall = data.get_wall_by_name("P01_E01_Med001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.81, 0.001);
+    let wall = model.get_wall_by_name("P01_E01_Med001").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.81, 0.001);
     // Partición interior horizontal (suelo) con espacio no habitable y enterrado, HULC=0.65
-    let wall = data.get_wall_by_name("P02_E01_FI002").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.54, 0.001);
+    let wall = model.get_wall_by_name("P02_E01_FI002").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.54, 0.001);
     // Partición interior horizontal (techo) con espacio no habitable/acondicionado, HULC=0.77
-    let wall = data.get_wall_by_name("P03_E01_FI001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.46, 0.001);
+    let wall = model.get_wall_by_name("P03_E01_FI001").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.46, 0.001);
     // Partición interior vertical con espacio no habitable/acondicionado, HULC=0.68
-    let wall = data.get_wall_by_name("P04_E01_Med001").unwrap();
-    assert_almost_eq!(fround2(data.u_for_wall(wall).unwrap()), 0.66, 0.001);
+    let wall = model.get_wall_by_name("P04_E01_Med001").unwrap();
+    assert_almost_eq!(fround2(model.u_for_wall(wall).unwrap()), 0.66, 0.001);
 
     // Cálculo de K, n50, C_o
-    let n50data = data.n50();
-    assert_almost_eq!(fround2(data.K().K), 0.51, 0.001);
+    let ind = model.energy_indicators();
+    let n50data = ind.n50_data;
+    assert_almost_eq!(fround2(ind.K_data.K), 0.51, 0.001);
     assert_almost_eq!(fround2(n50data.n50_ref), 4.58, 0.001); // HULC 4.33
     assert_almost_eq!(fround2(n50data.n50), 5.32, 0.001);
     assert_almost_eq!(fround2(n50data.walls_c_ref), 16.00, 0.001);

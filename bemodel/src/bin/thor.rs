@@ -162,7 +162,7 @@ fn main() {
     }
 
     // Indicadores en formato JSON
-    let indicadores_json = energy::indicators(&model).as_json().unwrap_or_else(|e| {
+    let indicadores_json = model.energy_indicators().as_json().unwrap_or_else(|e| {
         eprintln!("ERROR: conversión incorrecta del modelo a JSON: {}", e);
         exit(exitcode::DATAERR);
     });

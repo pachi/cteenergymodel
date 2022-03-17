@@ -79,19 +79,18 @@ pub fn cli_main() -> Result<()> {
         eprintln!("- Se usarán los datos de los archivos KyGananciasSolares.txt y NewBDL_O.tbl")
     };
     // Lee datos
-    let data = collect_hulc_data(dir, opts.use_extra_files, opts.use_extra_files)?;
-
+    let model = collect_hulc_data(dir, opts.use_extra_files, opts.use_extra_files)?;
+    let ind = model.energy_indicators();
     // Información general
-    let climatezone = data.meta.climate;
-    let totradjul = bemodel::climatedata::total_radiation_in_july_by_orientation(&climatezone);
-    let n50data = data.n50();
+    let climatezone = model.meta.climate;
+    let n50data = ind.n50_data;
     eprintln!(
         "ZC: {}, A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, q_sol;jul={:.2} kWh/m².mes, n50_ref={:.2} 1/h, C_o_ref={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
         climatezone,
-        data.a_ref(),
-        data.compacity(),
-        data.K().K,
-        data.q_soljul(&totradjul).q_soljul,
+        ind.area_ref,
+        ind.compacity,
+        ind.K_data.K,
+        ind.q_soljul_data.q_soljul,
         n50data.n50_ref,
         n50data.walls_c_ref,
         n50data.n50,
@@ -99,7 +98,7 @@ pub fn cli_main() -> Result<()> {
     );
 
     // Convierte a JSON
-    match data.as_json() {
+    match model.as_json() {
         Ok(json) => {
             eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");
             println!("{}", json);

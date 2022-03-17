@@ -1,5 +1,17 @@
 # TAREAS PENDIENTES
 
+- Completar estructura EnergyIndicators.elements (ElementProps)?
+  - Spaces: {A, V, p_ext (perimetro expuesto), inside_et}
+  - Walls: {A_gross, A_net, U, inside_et, space_id}
+  - Windows: {A, U, g_glwi, g_glshwi, f_shobst, inside_et, wall?, space_id}
+  - WallCons: { R_intrinsic }
+  - WinCons: { U-value }
+  - indicando elementos que pertenecen a la envolvente
+    - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
+    - ¿ agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR ?
+  - Podríamos usar esa estructura como caché?
+    - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos
+    - Si no, con una caché en u_for_wall() debería dar casi igual
 - Mover grupos a `model.library.{materials, glass, frame, wallcons, windowcons}=Map<groupname, uuid>` y eliminar grupos en esos objetos
 - Cachear A de huecos y de muros en bemodel::energy::indicators(), usándolo para luego calcular U
 - Convertir UValues a AUValues en IndicatorsReport
@@ -111,19 +123,6 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 ### Cálculos adicionales
 
 - Calcular más cosas:
-
-  - Completar estructura UValues?
-    - Spaces: {A, V, p_ext (perimetro expuesto), inside_et}
-    - Walls: {A_gross, A_net, U, inside_et, space_id}
-    - Windows: {A, U, g_glwi, g_glshwi, f_shobst, inside_et, wall?, space_id}
-    - WallCons: { R_intrinsic }
-    - WinCons: { U-value }
-    - indicando elementos que pertenecen a la envolvente
-      - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
-      - ¿ agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR ?
-    - Podríamos usar esa estructura como caché
-      - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos
-      - Si no, con una caché en u_for_wall() debería dar casi igual
 
 - Módulo para calcular propiedades de elementos
   - Calculador de elementos para obtener % de afección de U según intercalarios

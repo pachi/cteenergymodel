@@ -1,14 +1,14 @@
 run:
 	$(info [INFO]: Ejecutando ejemplo)
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo/cubo.ctehexml -o cubo.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/data/e4h_medianeras.ctehexml -o e4h_medianeras.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/casoA/casoa.ctehexml -o caso_a.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/ejemploviv_unif/ejemploviv_unif.ctehexml -o ejemploviv_unif.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo/cubo.ctehexml -o cubo.json -r cubo_results.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/data/e4h_medianeras.ctehexml -o e4h_medianeras.json -r e4h_medianeras_results.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/casoA/casoa.ctehexml -o caso_a.json -r caso_a_results.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/ejemploviv_unif/ejemploviv_unif.ctehexml -o ejemploviv_unif.json -r ejemploviv_unif_results.json
 	$(info [INFO]: Actualizando ejemplos en bemodel/tests/data)
-	mv e4h_medianeras.json bemodel/tests/data/e4h_medianeras.json
-	mv caso_a.json bemodel/tests/data/caso_a.json
-	mv cubo.json bemodel/tests/data/cubo.json
-	mv ejemploviv_unif.json bemodel/tests/data/ejemploviv_unif.json
+	mv e4h_medianeras.json e4h_medianeras_results.json bemodel/tests/data/
+	mv caso_a.json caso_a_results.json bemodel/tests/data/
+	mv cubo.json cubo_results.json bemodel/tests/data/
+	mv ejemploviv_unif.json ejemploviv_unif_results.json bemodel/tests/data/
 runskip:
 	cargo run -- --skip-extra hulc_tests/tests/data/ > e4h_medianeras.json.skip
 	cargo run -- --skip-extra hulc_tests/tests/casoA/ > salida_a.json.skip
