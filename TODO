@@ -4,12 +4,10 @@
 - Cachear A de huecos y de muros en bemodel::energy::indicators(), usándolo para luego calcular U
 - Convertir UValues a AUValues en IndicatorsReport
 - Separar check de cálculo energético
-- generar UUID reproducibles, con rnd y una semilla para generar los UUID. <https://stackoverflow.com/a/56757552>, <https://github.com/uuid-rs/uuid/issues/100>
 - Convertir name a ArrayString
   - <https://docs.rs/arrayvec/0.7.1/arrayvec/struct.ArrayString.html>
   - Ver tamaño máximo de name, id son 36 caracteres en representación de texto
 - Trasladar avisos en la conversión de modelos BDL
-- Con makefile generar .json y llevar a tests de hulc a bemodel en .json y copiar archivos .ctehexml, .tbl y .kyg a hulc2model
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
 - Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
 
@@ -57,6 +55,7 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 
 ### Sombras
 
+- Método del daylight coefficients para reducir cálculos y mejorar precisión
 - <http://performativedesign.com/articles/2007/shadingcalculations/>
 - <http://performativedesign.com/articles/2008/averagehourly/>
 - <https://riunet.upv.es/bitstream/handle/10251/7482/tesisUPV3258.pdf>
@@ -114,10 +113,11 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 - Calcular más cosas:
 
   - Completar estructura UValues?
+    - Spaces: {A, V, p_ext (perimetro expuesto), inside_et}
     - Walls: {A_gross, A_net, U, inside_et, space_id}
     - Windows: {A, U, g_glwi, g_glshwi, f_shobst, inside_et, wall?, space_id}
-    - Spaces: {A, V, p_ext (perimetro expuesto), inside_et}
-    - calcula superficie A con el polígono (y elimina A de propiedades)
+    - WallCons: { R_intrinsic }
+    - WinCons: { U-value }
     - indicando elementos que pertenecen a la envolvente
       - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
       - ¿ agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR ?
