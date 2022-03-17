@@ -34,12 +34,16 @@ pub struct Space {
     /// Altura bruta (suelo a suelo) del espacio (m)
     pub height: f32,
     /// Ventilación, en ren/h
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub n_v: Option<f32>,
     /// Cota del espacio respecto al suelo (m)
     pub z: f32,
     /// Perímetro expuesto del espacio (suelos) (m)
     /// Incluye la parte del perímetro que separa el espacio del exterior
     /// y excluye que lo separa de otros espacios acondicionados.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub exposed_perimeter: Option<f32>,
 }
 

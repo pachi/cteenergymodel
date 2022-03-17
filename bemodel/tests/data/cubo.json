@@ -6,7 +6,6 @@
     "num_dwellings": 1,
     "climate": "D3",
     "global_ventilation_l_s": 1.0,
-    "n50_test_ach": null,
     "d_perim_insulation": 1.0,
     "rn_perim_insulation": 1.0
   },
@@ -19,7 +18,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "n_v": null,
       "z": 0.0,
       "exposed_perimeter": 40.0
     }
@@ -31,7 +29,6 @@
       "bounds": "EXTERIOR",
       "cons": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.0,
@@ -66,7 +63,6 @@
       "bounds": "EXTERIOR",
       "cons": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.0,
@@ -101,7 +97,6 @@
       "bounds": "EXTERIOR",
       "cons": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -180.0,
@@ -136,7 +131,6 @@
       "bounds": "EXTERIOR",
       "cons": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -90.0,
@@ -171,7 +165,6 @@
       "bounds": "GROUND",
       "cons": "ff4b30e7-a6d7-9a1c-4edb-149efe056d78",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "next_to": null,
       "geometry": {
         "tilt": 180.0,
         "azimuth": 0.0,
@@ -206,7 +199,6 @@
       "bounds": "EXTERIOR",
       "cons": "b9d10887-d373-f95d-e13e-70b13caeb431",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": -90.0,
@@ -237,7 +229,6 @@
       "bounds": "EXTERIOR",
       "cons": "b9d10887-d373-f95d-e13e-70b13caeb431",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
-      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": -45.0,
@@ -458,7 +449,6 @@
         "frame": "50e4cd2e-752a-8888-2892-5f829c9f3308",
         "f_f": 0.1,
         "delta_u": 0.0,
-        "g_glshwi": null,
         "c_100": 25.0
       }
     ]
@@ -544,6 +534,5 @@
         "absorptivity": 0.4
       }
     ]
-  },
-  "extra": null
+  }
 }

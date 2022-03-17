@@ -66,6 +66,8 @@ pub enum MatProps {
         // Calor específico, C_p (J/kg K) (valor por defecto 800 J/kg·K)
         specific_heat: f32,
         // Factor de difusividad al vapor de agua, mu (-)
+        #[serde(skip_serializing_if = "Option::is_none")]
+        #[serde(default)]
         vapour_diff: Option<f32>,
     },
     /// Resistencia térmica (R)

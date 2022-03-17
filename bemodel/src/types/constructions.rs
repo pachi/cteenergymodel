@@ -84,6 +84,8 @@ pub struct WindowCons {
     pub delta_u: f32,
     /// Factor solar del hueco con la protección solar activada (g_gl;sh;wi) [-]
     /// Si no se define, se supone igual al factor solar sin la protección activada (g_gl;wi)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub g_glshwi: Option<f32>,
     /// Permeabilidad al aire a 100 Pa [m3/hm2]
     pub c_100: f32,

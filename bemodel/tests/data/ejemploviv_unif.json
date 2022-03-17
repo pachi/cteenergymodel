@@ -6,7 +6,6 @@
     "num_dwellings": 1,
     "climate": "A4",
     "global_ventilation_l_s": 33.0,
-    "n50_test_ach": null,
     "d_perim_insulation": 1.0,
     "rn_perim_insulation": 1.0
   },
@@ -19,7 +18,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
-      "n_v": null,
       "z": 0.0,
       "exposed_perimeter": 7.21
     },
@@ -31,7 +29,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
-      "n_v": null,
       "z": 0.0,
       "exposed_perimeter": 5.41
     },
@@ -43,7 +40,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
-      "n_v": null,
       "z": 0.0,
       "exposed_perimeter": 5.31
     },
@@ -55,7 +51,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
-      "n_v": null,
       "z": 0.0,
       "exposed_perimeter": 10.5
     },
@@ -67,7 +62,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 3.6
     },
@@ -79,7 +73,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 2.54
     },
@@ -91,7 +84,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 3.88
     },
@@ -103,7 +95,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 2.3
     },
@@ -115,7 +106,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 7.46
     },
@@ -127,7 +117,6 @@
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "n_v": null,
       "z": 2.7,
       "exposed_perimeter": 14.95
     }
@@ -139,7 +128,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -180.0,
@@ -174,7 +162,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.22,
@@ -279,7 +266,6 @@
       "bounds": "ADIABATIC",
       "cons": "c43166c9-471b-6073-eb5c-191bd8ffd2a4",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -90.09,
@@ -314,7 +300,6 @@
       "bounds": "GROUND",
       "cons": "400dea43-1016-409b-f998-9103282a22dc",
       "space": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
-      "next_to": null,
       "geometry": {
         "tilt": 180.0,
         "azimuth": -90.0,
@@ -353,7 +338,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "8fb42929-3639-dcb3-13d7-071296960471",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.22,
@@ -388,7 +372,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "8fb42929-3639-dcb3-13d7-071296960471",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 89.25,
@@ -493,7 +476,6 @@
       "bounds": "GROUND",
       "cons": "400dea43-1016-409b-f998-9103282a22dc",
       "space": "8fb42929-3639-dcb3-13d7-071296960471",
-      "next_to": null,
       "geometry": {
         "tilt": 180.0,
         "azimuth": -90.0,
@@ -532,7 +514,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.41,
@@ -567,7 +548,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -179.99,
@@ -672,7 +652,6 @@
       "bounds": "ADIABATIC",
       "cons": "c43166c9-471b-6073-eb5c-191bd8ffd2a4",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.08,
@@ -707,7 +686,6 @@
       "bounds": "GROUND",
       "cons": "400dea43-1016-409b-f998-9103282a22dc",
       "space": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
-      "next_to": null,
       "geometry": {
         "tilt": 180.0,
         "azimuth": -90.0,
@@ -750,7 +728,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.61,
@@ -785,7 +762,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -180.0,
@@ -820,7 +796,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -91.15,
@@ -855,7 +830,6 @@
       "bounds": "GROUND",
       "cons": "400dea43-1016-409b-f998-9103282a22dc",
       "space": "4e812179-793e-8bc5-307b-b0b052c01efe",
-      "next_to": null,
       "geometry": {
         "tilt": 180.0,
         "azimuth": -90.0,
@@ -902,7 +876,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -180.0,
@@ -937,7 +910,6 @@
       "bounds": "EXTERIOR",
       "cons": "3028f61e-36f2-d949-15e7-152fd93f5412",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
-      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": 90.0,
@@ -1077,7 +1049,6 @@
       "bounds": "ADIABATIC",
       "cons": "c43166c9-471b-6073-eb5c-191bd8ffd2a4",
       "space": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -90.09,
@@ -1112,7 +1083,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 1.1,
@@ -1147,7 +1117,6 @@
       "bounds": "EXTERIOR",
       "cons": "3028f61e-36f2-d949-15e7-152fd93f5412",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
-      "next_to": null,
       "geometry": {
         "tilt": 180.0,
         "azimuth": -92.02,
@@ -1182,7 +1151,6 @@
       "bounds": "EXTERIOR",
       "cons": "3028f61e-36f2-d949-15e7-152fd93f5412",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
-      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": 90.0,
@@ -1412,7 +1380,6 @@
       "bounds": "ADIABATIC",
       "cons": "c43166c9-471b-6073-eb5c-191bd8ffd2a4",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.09,
@@ -1447,7 +1414,6 @@
       "bounds": "ADIABATIC",
       "cons": "c43166c9-471b-6073-eb5c-191bd8ffd2a4",
       "space": "907860d4-70ba-8d41-4b5c-20605e71d821",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 87.98,
@@ -1482,7 +1448,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.22,
@@ -1517,7 +1482,6 @@
       "bounds": "EXTERIOR",
       "cons": "3028f61e-36f2-d949-15e7-152fd93f5412",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
-      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": 90.0,
@@ -1708,7 +1672,6 @@
       "bounds": "ADIABATIC",
       "cons": "c43166c9-471b-6073-eb5c-191bd8ffd2a4",
       "space": "8e7b02af-007d-5337-7ec5-482065784e11",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -90.09,
@@ -1743,7 +1706,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "839f06f9-2a5f-3316-a889-92064087fee3",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -179.99,
@@ -1778,7 +1740,6 @@
       "bounds": "EXTERIOR",
       "cons": "3028f61e-36f2-d949-15e7-152fd93f5412",
       "space": "839f06f9-2a5f-3316-a889-92064087fee3",
-      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": 90.0,
@@ -1891,7 +1852,6 @@
       "bounds": "ADIABATIC",
       "cons": "c43166c9-471b-6073-eb5c-191bd8ffd2a4",
       "space": "839f06f9-2a5f-3316-a889-92064087fee3",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.09,
@@ -1926,7 +1886,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
-      "next_to": null,
       "geometry": {
         "tilt": 180.0,
         "azimuth": -92.56,
@@ -1965,7 +1924,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -88.02,
@@ -2000,7 +1958,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.94,
@@ -2035,7 +1992,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 87.47,
@@ -2070,7 +2026,6 @@
       "bounds": "EXTERIOR",
       "cons": "3028f61e-36f2-d949-15e7-152fd93f5412",
       "space": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
-      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": 90.0,
@@ -2222,7 +2177,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.61,
@@ -2257,7 +2211,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -180.0,
@@ -2292,7 +2245,6 @@
       "bounds": "EXTERIOR",
       "cons": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
-      "next_to": null,
       "geometry": {
         "tilt": 90.0,
         "azimuth": -91.15,
@@ -2327,7 +2279,6 @@
       "bounds": "EXTERIOR",
       "cons": "3028f61e-36f2-d949-15e7-152fd93f5412",
       "space": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
-      "next_to": null,
       "geometry": {
         "tilt": 0.0,
         "azimuth": 90.0,
@@ -3141,6 +3092,5 @@
         "absorptivity": 0.7
       }
     ]
-  },
-  "extra": null
+  }
 }

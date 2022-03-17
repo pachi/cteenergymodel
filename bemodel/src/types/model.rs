@@ -38,6 +38,8 @@ pub struct Model {
     /// Materiales
     pub mats: MatsDb,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub extra: Option<Vec<ExtraData>>,
 }
 
