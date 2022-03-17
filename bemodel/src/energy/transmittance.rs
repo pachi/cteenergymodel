@@ -19,8 +19,8 @@ use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    BoundaryType, HasSurface, Layer, MatProps, Model, SpaceType, ThermalBridgeKind, Tilt, Uuid,
-    Wall, WallCons, Window,
+    BoundaryType, Layer, MatProps, Model, SpaceType, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons,
+    Window,
 };
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
@@ -198,7 +198,7 @@ impl Model {
                     Some(u) => u,
                     _ => continue,
                 };
-                let area = multiplier * win.geometry.area();
+                let area = multiplier * win.area();
                 k.windows.a += area;
                 k.windows.au += area * win_u;
                 k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
@@ -630,8 +630,7 @@ impl Model {
                                 .windows_of_wall_iter(wall.id)
                                 .filter_map(|win| {
                                     // Si no está definida la construcción, el hueco no participa de la envolvente
-                                    self.u_for_window(win)
-                                        .map(|u| Some(win.geometry.area() * u))?
+                                    self.u_for_window(win).map(|u| Some(win.area() * u))?
                                 })
                                 .sum::<f32>();
                             Some(self.wall_net_area(wall) * wall_u + win_axu)

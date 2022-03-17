@@ -7,7 +7,7 @@
 // use log::{debug, info, warn};
 
 use super::{Bounded, Intersectable, Ray, AABB};
-use crate::{point, HasSurface, WallGeometry};
+use crate::{point, types::HasSurface, WallGeometry};
 
 // -------------------------- Funciones auxiliares ---------------------------
 

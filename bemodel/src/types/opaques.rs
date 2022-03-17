@@ -36,6 +36,20 @@ pub struct Wall {
     pub geometry: WallGeometry,
 }
 
+impl Wall {
+    /// Superficie bruta del opaco, m²
+    #[inline]
+    pub fn area(&self) -> f32 {
+        self.geometry.polygon.area()
+    }
+
+    /// Perímetro del opaco, m
+    #[inline]
+    pub fn perimeter(&self) -> f32 {
+        self.geometry.polygon.perimeter()
+    }
+}
+
 /// Convierte de muro a enum Tilt
 impl From<&Wall> for Tilt {
     fn from(wall: &Wall) -> Self {

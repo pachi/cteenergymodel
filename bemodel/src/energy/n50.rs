@@ -7,7 +7,7 @@
 use log::info;
 use serde::{Deserialize, Serialize};
 
-use crate::{BoundaryType, Model, HasSurface};
+use crate::{BoundaryType, Model};
 
 /// Reporte de cálculo de n50 con valores de referencia (teóricos) y de ensayo (si está disponible)
 /// El valor teórico usa las permeabilidades del CTE DB-HE 2019
@@ -64,7 +64,7 @@ impl Model {
                 let mut win_ah_ch = 0.0;
                 for (a, ca) in self.windows_of_wall_iter(wall.id).filter_map(|win| {
                     self.get_wincons_of_window(win)
-                        .map(|wincons| Some((win.geometry.area(), win.geometry.area() * wincons.c_100)))?
+                        .map(|wincons| Some((win.area(), win.area() * wincons.c_100)))?
                 }) {
                     win_ah += a;
                     win_ah_ch += ca;

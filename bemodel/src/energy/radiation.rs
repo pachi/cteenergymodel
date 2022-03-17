@@ -19,10 +19,11 @@ use crate::{
     climatedata::{RadData, CLIMATEMETADATA, JULYRADDATA},
     energy::{Bounded, Intersectable, Ray, BVH},
     point,
+    types::HasSurface,
     utils::fround2,
     vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    HasSurface, Model, Orientation, Point3, Uuid, Vector3, Window,
+    Model, Orientation, Point3, Uuid, Vector3, Window,
 };
 
 use super::occluder::Occluder;
@@ -84,7 +85,7 @@ impl Model {
                 let wincons = self.get_wincons_of_window(w)?;
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
-                let area = w.geometry.area() * multiplier;
+                let area = w.area() * multiplier;
                 let gglshwi = wincons.g_glshwi.or_else(|| self.mats.get_glass(wincons.glass).map(|g| g.g_glwi()))?;
                 let Q_soljul_orient = w.f_shobst * gglshwi * (1.0 - wincons.f_f) * area * radjul;
                 // Datos de detalle

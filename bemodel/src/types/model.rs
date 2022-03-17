@@ -11,8 +11,8 @@ use log::{info, warn};
 use serde::{Deserialize, Serialize};
 
 use super::{
-    fround2, uuid_from_str, BoundaryType, ConsDb, HasSurface, MatsDb, Meta, Shade, Space,
-    SpaceType, ThermalBridge, Tilt, Uuid, Wall, WallCons, WallGeometry, Window, WindowCons,
+    fround2, uuid_from_str, BoundaryType, ConsDb, MatsDb, Meta, Shade, Space, SpaceType,
+    ThermalBridge, Tilt, Uuid, Wall, WallCons, WallGeometry, Window, WindowCons,
 };
 
 // ---------- Estructura general de datos --------------
@@ -175,12 +175,12 @@ impl Model {
 
     /// Superficie neta (sin huecos) del cerramiento (m²)
     pub fn wall_net_area(&self, wall: &Wall) -> f32 {
-        let wall_gross_area = wall.geometry.polygon.area();
+        let wall_gross_area = wall.area();
         let windows_area = self
             .windows
             .iter()
             .filter(|w| w.wall == wall.id)
-            .map(|w| w.geometry.area())
+            .map(|w| w.area())
             .sum::<f32>();
         fround2(wall_gross_area - windows_area)
     }
@@ -273,10 +273,7 @@ impl Model {
                     .get_space_of_wall(w)
                     .map(|s| s.multiplier)
                     .unwrap_or(1.0);
-                let win_area: f32 = self
-                    .windows_of_wall_iter(w.id)
-                    .map(|win| win.geometry.area())
-                    .sum();
+                let win_area: f32 = self.windows_of_wall_iter(w.id).map(|win| win.area()).sum();
                 (self.wall_net_area(w) + win_area) * multiplier
             })
             .sum();

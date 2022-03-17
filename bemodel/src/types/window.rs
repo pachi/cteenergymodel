@@ -28,6 +28,20 @@ pub struct Window {
     pub geometry: WindowGeometry,
 }
 
+impl Window {
+    /// Superficie del hueco, m²
+    #[inline]
+    pub fn area(&self) -> f32 {
+        self.geometry.area()
+    }
+
+    /// Perímetro del hueco, m
+    #[inline]
+    pub fn perimeter(&self) -> f32 {
+        self.geometry.perimeter()
+    }
+}
+
 /// Geometría de hueco
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WindowGeometry {
