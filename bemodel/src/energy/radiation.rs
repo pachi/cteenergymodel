@@ -77,12 +77,12 @@ impl Model {
         let Q_soljul = self
             .windows_of_envelope_iter()
             .filter_map(|w| {
-                let wall = self.get_wall_of_window(w)?;
+                let wall = self.get_wall(w.wall)?;
                 let multiplier = self
-                .get_space_of_wall(wall)
+                .get_space(wall.space)
                 .map(|s| s.multiplier)
                 .unwrap_or(1.0);
-                let wincons = self.get_wincons_of_window(w)?;
+                let wincons = self.cons.get_wincons(w.cons)?;
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
                 let area = w.area() * multiplier;
@@ -171,7 +171,7 @@ impl Model {
         };
         for window in &self.windows {
             // if window.name != "P01_E01_PE004_V" {continue};
-            let window_wall = match self.get_wall_of_window(window) {
+            let window_wall = match self.get_wall(window.wall) {
                 None => continue,
                 Some(wall) => wall,
             };
@@ -240,7 +240,7 @@ impl Model {
         ray_dir: &Vector3,
         occluders: &[Occluder],
     ) -> f32 {
-        let window_wall = match self.get_wall_of_window(window) {
+        let window_wall = match self.get_wall(window.wall) {
             None => {
                 warn!(
                     "Hueco {} (id: {}) sin muro asociado con id: {}. Se considera superficie soleada al 100%",
@@ -339,7 +339,7 @@ impl Model {
     /// Parte de una retícula dividida entre 5 y 10 partes por dimensión
     /// - en cada rectángulo el punto de muestreo podría ser aleatorio y no el punto central
     pub fn ray_origins_for_window(&self, window: &Window) -> Vec<Point3> {
-        let wall = match self.get_wall_of_window(window) {
+        let wall = match self.get_wall(window.wall) {
             None => return vec![],
             Some(wall) => wall,
         };

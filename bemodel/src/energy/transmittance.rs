@@ -18,7 +18,10 @@ use anyhow::{format_err, Error};
 use log::{debug, warn};
 
 use super::EnergyIndicators;
-use crate::{BoundaryType, Layer, MatProps, Model, SpaceType, Tilt, Wall, WallCons, Window};
+use crate::{
+    BoundaryType, ConsDb, Layer, MatProps, MatsDb, Model, SpaceType, Tilt, Wall, WallCons, Window,
+    WindowCons,
+};
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
 const RSI_ASCENDENTE: f32 = 0.10;
@@ -35,48 +38,6 @@ impl Model {
         EnergyIndicators::compute(self)
     }
 
-    /// Resistencia térmica intrínseca (sin resistencias superficiales) de una composición de capas [W/m²K]
-    pub fn walcons_intrinsic_r(&self, wallcons: &WallCons) -> Result<f32, Error> {
-        let mut total_resistance = 0.0;
-        for Layer { id, e } in &wallcons.layers {
-            match self.mats.materials.iter().find(|m| &m.id==id) {
-                None => return Err(format_err!(
-                    "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
-                    id,
-                    wallcons.name
-                )),
-                Some(mat) => {
-                    match mat.properties {
-                        MatProps::Detailed{ conductivity, .. } if conductivity > 0.0 => total_resistance += e / conductivity,
-                        MatProps::Resistance{ resistance} => total_resistance += resistance,
-                        _ => return Err(format_err!(
-                            "Material \"{}\" de la composición de capas \"{}\" con conductividad nula o casi nula",
-                            mat.name,
-                            wallcons.name
-                        ))
-                    }
-                },
-            }
-        }
-        Ok(total_resistance)
-    }
-
-    /// Transmitancia térmica total del hueco, U_W, en una posición dada, en W/m2K
-    ///
-    /// Incluye el efecto del marco, vidrio y efecto de intercalarios y/o cajones de persiana
-    /// Notas:
-    /// - estos valores ya deben incluir las resistencias superficiales
-    ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
-    pub fn u_for_window(&self, window: &Window) -> Option<f32> {
-        let wincons = self.get_wincons_of_window(window)?;
-        let glass = self.mats.glasses.iter().find(|g| g.id == wincons.glass)?;
-        let frame = self.mats.frames.iter().find(|f| f.id == wincons.frame)?;
-        Some(
-            (1.0 + wincons.delta_u / 100.0)
-                * (frame.u_value * wincons.f_f + glass.u_value * (1.0 - wincons.f_f)),
-        )
-    }
-
     /// Transmitancia térmica de una composición de cerramiento, en una posición dada, en W/m2K
     /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
     /// Notas:
@@ -91,8 +52,11 @@ impl Model {
         let R_n_perim_ins = self.meta.rn_perim_insulation;
         let D_perim_ins = self.meta.d_perim_insulation;
 
-        let cons = self.get_wallcons_of_wall(wall)?;
-        let R_intrinsic = self.walcons_intrinsic_r(cons).ok()?;
+        let R_intrinsic = self
+            .cons
+            .get_wallcons(wall.cons)?
+            .r_intrinsic(&self.mats)
+            .ok()?;
 
         match (bounds, position) {
             // Elementos adiabáticos -----------------------------
@@ -131,7 +95,7 @@ impl Model {
                 // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
                 // Calculamos la dimensión característica del **espacio** en el que sitúa el suelo
                 // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
-                let wspace = self.get_space_of_wall(wall)?;
+                let wspace = self.get_space(wall.space)?;
                 let gnd_A = wspace.area;
                 let mut gnd_P = wspace
                     .exposed_perimeter
@@ -194,7 +158,7 @@ impl Model {
             (GROUND, SIDE) => {
                 // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
                 let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
-                let space = self.get_space_of_wall(wall)?;
+                let space = self.get_space(wall.space)?;
                 // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
                 let z = if space.z < 0.0 { -space.z } else { 0.0 };
                 // Muros que realmente no son enterrados
@@ -215,8 +179,9 @@ impl Model {
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
                         // Si no está definida la construcción no participa de la envolvente
-                        self.get_wallcons_of_wall(w)
-                            .map(|wallcons| match self.walcons_intrinsic_r(wallcons).ok() {
+                        self.cons
+                            .get_wallcons(w.cons)
+                            .map(|wallcons| match wallcons.r_intrinsic(&self.mats).ok() {
                                 Some(wallcons_r_intrinsic) => {
                                     (W + LAMBDA_GND
                                         * (RSI_DESCENDENTE + wallcons_r_intrinsic + RSE)
@@ -246,7 +211,7 @@ impl Model {
                 };
 
                 // Altura neta
-                let height_net = space.height - self.top_wall_thickness_of_space(space.id);
+                let height_net = space.net_height(&self.walls, &self.cons);
 
                 // Altura sobre el terreno (muro no enterrado)
                 let h = if height_net > z { height_net - z } else { 0.0 };
@@ -280,7 +245,7 @@ impl Model {
                 // Dos casos:
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
-                let space = self.get_space_of_wall(wall)?;
+                let space = self.get_space(wall.space)?;
                 let nextto = match wall.next_to {
                     Some(s) => s,
                     _ => {
@@ -343,9 +308,8 @@ impl Model {
                     };
 
                     // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
-                    let uncondspace_v = (uncondspace.height
-                        - self.top_wall_thickness_of_space(uncondspace.id))
-                        * uncondspace.area;
+                    let uncondspace_v =
+                        uncondspace.net_height(&self.walls, &self.cons) * uncondspace.area;
                     let n_ven = match uncondspace.n_v {
                         Some(n_v) => n_v,
                         _ => match self.meta.global_ventilation_l_s {
@@ -375,17 +339,18 @@ impl Model {
                                 .windows_of_wall_iter(wall.id)
                                 .filter_map(|win| {
                                     // Si no está definida la construcción, el hueco no participa de la envolvente
-                                    self.u_for_window(win).map(|u| Some(win.area() * u))?
+                                    win.u_for_window(&self.cons, &self.mats)
+                                        .map(|u| Some(win.area() * u))?
                                 })
                                 .sum::<f32>();
-                            Some(self.wall_net_area(wall) * wall_u + win_axu)
+                            Some(wall.net_area(&self.windows) * wall_u + win_axu)
                         })
                         .sum::<f32>();
                     // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
                     // En la fórmula anterior, para espacios no acondicionados, se indica que se excluyen suelos, pero no entiendo bien por qué.
                     // Esta fórmula, cuando los A_e_k y U_e_k incluyen los muros y suelos con el terreno U_bw y U_bf, con la parte proporcional de
                     // muros al exterior, es equivalente a la que indica la 13370
-                    let A_i = self.wall_net_area(wall);
+                    let A_i = wall.net_area(&self.windows);
                     let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
                     let R_u = A_i / H_ue;
                     let U = 1.0 / (R_f + R_u);
@@ -398,5 +363,62 @@ impl Model {
                 }
             }
         }
+    }
+}
+
+impl WallCons {
+    /// Resistencia térmica intrínseca (sin resistencias superficiales) de una composición de capas [W/m²K]
+    pub fn r_intrinsic(&self, mats: &MatsDb) -> Result<f32, Error> {
+        let mut total_resistance = 0.0;
+        for Layer { id, e } in &self.layers {
+            match mats.materials.iter().find(|m| &m.id==id) {
+                None => return Err(format_err!(
+                    "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
+                    id,
+                    self.name
+                )),
+                Some(mat) => {
+                    match mat.properties {
+                        MatProps::Detailed{ conductivity, .. } if conductivity > 0.0 => total_resistance += e / conductivity,
+                        MatProps::Resistance{ resistance} => total_resistance += resistance,
+                        _ => return Err(format_err!(
+                            "Material \"{}\" de la composición de capas \"{}\" con conductividad nula o casi nula",
+                            mat.name,
+                            self.name
+                        ))
+                    }
+                },
+            }
+        }
+        Ok(total_resistance)
+    }
+}
+
+impl WindowCons {
+    /// Transmitancia térmica total de la construcción de hueco, U_W, en una posición dada, en W/m2K
+    ///
+    /// Incluye el efecto del marco, vidrio y efecto de intercalarios y/o cajones de persiana
+    /// Notas:
+    /// - estos valores ya deben incluir las resistencias superficiales
+    ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
+    pub fn u_value(&self, mats: &MatsDb) -> Option<f32> {
+        let glass = mats.glasses.iter().find(|g| g.id == self.glass)?;
+        let frame = mats.frames.iter().find(|f| f.id == self.frame)?;
+        Some(
+            (1.0 + self.delta_u / 100.0)
+                * (frame.u_value * self.f_f + glass.u_value * (1.0 - self.f_f)),
+        )
+    }
+}
+
+impl Window {
+    /// Transmitancia térmica total del hueco, U_W, en una posición dada, en W/m2K
+    ///
+    /// Incluye el efecto del marco, vidrio y efecto de intercalarios y/o cajones de persiana
+    /// Notas:
+    /// - estos valores ya deben incluir las resistencias superficiales
+    ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
+    pub fn u_for_window(&self, cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
+        cons.get_wincons(self.cons)?.u_value(mats)
     }
 }

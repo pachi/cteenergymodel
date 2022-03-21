@@ -273,12 +273,12 @@ impl KData {
         // Opacos
         for wall in model.walls_of_envelope_iter() {
             let multiplier = model
-                .get_space_of_wall(wall)
+                .get_space(wall.space)
                 .map(|s| s.multiplier)
                 .unwrap_or(1.0);
             // Huecos de los opacos
             for win in model.windows_of_wall_iter(wall.id) {
-                let win_u = match model.u_for_window(win) {
+                let win_u = match win.u_for_window(&model.cons, &model.mats) {
                     Some(u) => u,
                     _ => continue,
                 };
@@ -292,7 +292,7 @@ impl KData {
                 Some(u) => u,
                 _ => continue,
             };
-            let area = multiplier * model.wall_net_area(wall);
+            let area = multiplier * wall.net_area(&model.windows);
             let area_u = area * wall_u;
             let mut element_case = match (wall.bounds, Tilt::from(wall)) {
                 (BoundaryType::GROUND, _) => &mut k.ground,

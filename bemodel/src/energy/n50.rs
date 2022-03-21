@@ -57,20 +57,21 @@ impl Model {
             .filter(|wall| wall.bounds == BoundaryType::EXTERIOR)
             .for_each(|wall| {
                 let multiplier = self
-                    .get_space_of_wall(wall)
+                    .get_space(wall.space)
                     .map(|s| s.multiplier)
                     .unwrap_or(1.0);
                 let mut win_ah = 0.0;
                 let mut win_ah_ch = 0.0;
                 for (a, ca) in self.windows_of_wall_iter(wall.id).filter_map(|win| {
-                    self.get_wincons_of_window(win)
+                    self.cons
+                        .get_wincons(win.cons)
                         .map(|wincons| Some((win.area(), win.area() * wincons.c_100)))?
                 }) {
                     win_ah += a;
                     win_ah_ch += ca;
                 }
 
-                data.walls_a += self.wall_net_area(wall) * multiplier;
+                data.walls_a += wall.net_area(&self.windows) * multiplier;
                 data.windows_a += win_ah * multiplier;
                 data.windows_c_a += win_ah_ch * multiplier;
             });
