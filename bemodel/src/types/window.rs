@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::{vector, HasSurface, Point2, Uuid, Vector3};
+use super::{point, uuid_from_str, vector, HasSurface, Point2, Shade, Uuid, Vector3, WallGeometry};
 
 // Elementos -----------------------------------------------
 
@@ -39,6 +39,97 @@ impl Window {
     #[inline]
     pub fn perimeter(&self) -> f32 {
         self.geometry.perimeter()
+    }
+
+    /// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
+    pub(crate) fn shades_for_setback(&self, wallgeom: &WallGeometry) -> Vec<(Uuid, Shade)> {
+        let wing = &self.geometry;
+        // Si no hay retranqueo no se genera geometría
+        if wing.setback.abs() < 0.01 {
+            return vec![];
+        };
+        let wpos = match wing.position {
+            Some(pos) => pos,
+            // Si no hay definición geométrica completa no se calcula geometría
+            _ => return vec![],
+        };
+
+        // TODO: Eliminar expect permitiendo fallar a esta función
+        let wall2world = wallgeom
+            .to_global_coords_matrix()
+            .expect("El muro debe tener definición geométrica completa");
+
+        let overhang = Shade {
+            id: uuid_from_str(&format!("{}-top_setback", self.id)),
+            name: format!("{}_top_setback", self.name),
+            geometry: WallGeometry {
+                // inclinación: con 90º es perpendicular al hueco
+                tilt: wallgeom.tilt + 90.0,
+                azimuth: wallgeom.azimuth,
+                position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
+                polygon: vec![
+                    point![0.0, 0.0],
+                    point![0.0, -wing.setback],
+                    point![wing.width, -wing.setback],
+                    point![wing.width, 0.0],
+                ],
+            },
+        };
+
+        let left_fin = Shade {
+            id: uuid_from_str(&format!("{}-left_setback", self.id)),
+            name: format!("{}_left_setback", self.name),
+            geometry: WallGeometry {
+                tilt: wallgeom.tilt,
+                azimuth: wallgeom.azimuth + 90.0,
+                position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
+                polygon: vec![
+                    point![0.0, 0.0],
+                    point![0.0, -wing.height],
+                    point![wing.setback, -wing.height],
+                    point![wing.setback, 0.0],
+                ],
+            },
+        };
+
+        let right_fin = Shade {
+            id: uuid_from_str(&format!("{}-right_setback", self.id)),
+            name: format!("{}_right_setback", self.name),
+            geometry: WallGeometry {
+                tilt: wallgeom.tilt,
+                azimuth: wallgeom.azimuth - 90.0,
+                position: Some(wall2world * point![wpos.x + wing.width, wpos.y + wing.height, 0.0]),
+                polygon: vec![
+                    point![0.0, 0.0],
+                    point![-wing.setback, 0.0],
+                    point![-wing.setback, -wing.height],
+                    point![0.0, -wing.height],
+                ],
+            },
+        };
+
+        let sill = Shade {
+            id: uuid_from_str(&format!("{}-sill_setback", self.id)),
+            name: format!("{}_sill_setback", self.name),
+            geometry: WallGeometry {
+                tilt: wallgeom.tilt - 90.0,
+                azimuth: wallgeom.azimuth,
+                position: Some(wall2world * point![wpos.x, wpos.y, 0.0]),
+                polygon: vec![
+                    point![0.0, 0.0],
+                    point![wing.width, 0.0],
+                    point![wing.width, wing.setback],
+                    point![0.0, wing.setback],
+                ],
+            },
+        };
+
+        vec![
+            (self.id, overhang),
+            (self.id, left_fin),
+            (self.id, right_fin),
+            (self.id, sill),
+        ]
     }
 }
 
