@@ -339,7 +339,7 @@ impl Model {
                                 .windows_of_wall_iter(wall.id)
                                 .filter_map(|win| {
                                     // Si no está definida la construcción, el hueco no participa de la envolvente
-                                    win.u_for_window(&self.cons, &self.mats)
+                                    win.u_value(&self.cons, &self.mats)
                                         .map(|u| Some(win.area() * u))?
                                 })
                                 .sum::<f32>();
@@ -368,6 +368,7 @@ impl Model {
 
 impl WallCons {
     /// Resistencia térmica intrínseca (sin resistencias superficiales) de una composición de capas [W/m²K]
+    /// TODO: convertir errores a warning para logging y devolver Option<f32>
     pub fn r_intrinsic(&self, mats: &MatsDb) -> Result<f32, Error> {
         let mut total_resistance = 0.0;
         for Layer { id, e } in &self.layers {
@@ -418,7 +419,7 @@ impl Window {
     /// Notas:
     /// - estos valores ya deben incluir las resistencias superficiales
     ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
-    pub fn u_for_window(&self, cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
+    pub fn u_value(&self, cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
         cons.get_wincons(self.cons)?.u_value(mats)
     }
 }
