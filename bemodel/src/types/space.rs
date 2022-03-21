@@ -8,7 +8,7 @@
 
 use std::fmt::Display;
 
-use super::Uuid;
+use super::{ConsDb, Tilt, Uuid, Wall};
 use serde::{Deserialize, Serialize};
 
 // Elementos -----------------------------------------------
@@ -45,6 +45,30 @@ pub struct Space {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub exposed_perimeter: Option<f32>,
+}
+
+impl Space {
+    /// Altura neta del espacio
+    /// Se descuenta el grosor del primer forjado superior encontrado para el espacio
+    pub fn net_height(&self, walls: &[Wall], cons: &ConsDb) -> f32 {
+        // Elemento opaco de techo de un espacio
+        // TODO: la altura neta debería calcularse promediando los grosores de **todos** los muros que
+        // TODO: cubren el espacio y no solo el primero que se encuentre
+        let top_wall_of_space = walls.iter().find(move |w| {
+            match w.geometry.tilt.into() {
+                // Muros exteriores o cubiertas sobre el espacio
+                Tilt::TOP => w.space == self.id,
+                // Es un cerramiento interior sobre este espacio
+                Tilt::BOTTOM => w.next_to.map(|s| s == self.id).unwrap_or(false),
+                _ => false,
+            }
+        });
+        let top_wall_thickness = top_wall_of_space
+            .and_then(|w| cons.get_wallcons(w.cons))
+            .map(|cons| cons.thickness())
+            .unwrap_or(0.0);
+        self.height - top_wall_thickness
+    }
 }
 
 /// Tipo de espacio según su nivel de acondicionamiento
