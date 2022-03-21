@@ -75,6 +75,8 @@ impl EnergyIndicators {
 /// TODO: añadir si el elemento pertenece o no a la ET ElementProps{walls: {id: Uuid, ElementData {et: bool, a: f32, u: Option<f32>}}}
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct ElementProps {
+    /// Propiedades de espacios
+    pub spaces: BTreeMap<Uuid, SpaceProps>,
     /// Propiedades de muros
     pub walls: BTreeMap<Uuid, WallProps>,
     /// Propiedades de huecos
@@ -88,58 +90,87 @@ pub struct ElementProps {
 impl ElementProps {
     /// Completa datos de los elementos (espacios, opacos, huecos,...) por id
     pub fn compute(model: &Model) -> Self {
-        let mut wallconsmap: BTreeMap<Uuid, WallConsProps> = BTreeMap::new();
+        let mut spaces: BTreeMap<Uuid, SpaceProps> = BTreeMap::new();
+        for s in &model.spaces {
+            let sp = SpaceProps {
+                area: s.area,
+                // p_exp: todo!(),
+            };
+            spaces.insert(s.id, sp);
+        }
+
+        let mut wallcons: BTreeMap<Uuid, WallConsProps> = BTreeMap::new();
         for wc in &model.cons.wallcons {
             let wcp = WallConsProps {
                 r_instrinsic: wc.r_intrinsic(&model.mats).ok(),
             };
-            wallconsmap.insert(wc.id, wcp);
+            wallcons.insert(wc.id, wcp);
         }
 
-        let mut winconsmap: BTreeMap<Uuid, WinConsProps> = BTreeMap::new();
+        let mut wincons: BTreeMap<Uuid, WinConsProps> = BTreeMap::new();
         for wc in &model.cons.wincons {
             let wcp = WinConsProps {
                 u_value: wc.u_value(&model.mats),
             };
-            winconsmap.insert(wc.id, wcp);
+            wincons.insert(wc.id, wcp);
         }
 
-        let mut wallsmap: BTreeMap<Uuid, WallProps> = BTreeMap::new();
+        let walls_tenv: Vec<_> = model.walls_of_envelope_iter().map(|w| w.id).collect();
+
+        let mut walls: BTreeMap<Uuid, WallProps> = BTreeMap::new();
         for w in &model.walls {
             let wp = WallProps {
                 u_value: model.u_for_wall(w),
-                ..Default::default()
+                area_gross: w.area(),
+                area_net: w.area_net(&model.windows),
+                inside_tenv: walls_tenv.contains(&w.id),
             };
-            wallsmap.insert(w.id, wp);
+            walls.insert(w.id, wp);
         }
 
-        let mut windowsmap: BTreeMap<Uuid, WinProps> = BTreeMap::new();
+        let mut windows: BTreeMap<Uuid, WinProps> = BTreeMap::new();
         for w in &model.windows {
             let wp = WinProps {
-                u_value: w.u_for_window(&model.cons, &model.mats),
-                ..Default::default()
+                u_value: w.u_value(&model.cons, &model.mats),
+                area: w.area(),
+                inside_tenv: walls_tenv.contains(&w.wall),
             };
-            windowsmap.insert(w.id, wp);
+            windows.insert(w.id, wp);
         }
         Self {
-            walls: wallsmap,
-            windows: windowsmap,
-            wallcons: wallconsmap,
-            wincons: winconsmap,
+            spaces,
+            walls,
+            windows,
+            wallcons,
+            wincons,
         }
     }
+}
+
+/// Propiedades de espacios
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+pub struct SpaceProps {
+    /// Superficie del espacio, m²
+    pub area: f32,
+    // /// Altura neta del espacio, m
+    // pub height_net: f32,
+    // /// Volumen del espacio, m³
+    // pub volume: f32,
+    // /// Perímetro expuesto del espacio
+    // pub p_exp: Option<f32>,
 }
 
 /// Propiedades de muros
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct WallProps {
-    // U de muro, W/m²K
+    /// U de muro, W/m²K
     pub u_value: Option<f32>,
-    // TODO: completar propiedades
-    // pub area_gross: Option<f32>,
-    // pub area_net: Option<f32>,
-    // pub inside_et: Option<bool>,
-    // pub space_id: Option<Uuid>,
+    /// Superficie bruta del muro, m²
+    pub area_gross: f32,
+    /// Superficie neta del muro, m²
+    pub area_net: f32,
+    /// ¿Pertenece este muro a la envolvente térmica?
+    pub inside_tenv: bool,
 }
 
 /// Propiedades de huecos
@@ -147,13 +178,15 @@ pub struct WallProps {
 pub struct WinProps {
     // U de huecos, W/m²K
     pub u_value: Option<f32>,
+    /// Superficie del hueco, m²
+    pub area: f32,
     // TODO: completar propiedades
-    // pub area: Option<f32>,
     // pub g_glwi: Option<f32>,
     // pub g_glshwi: Option<f32>,
     // pub f_shobst: Option<f32>,
-    // pub inside_et: Option<bool>,
     // pub space_id: Option<Uuid>,
+    /// ¿Pertenece este muro a la envolvente térmica?
+    pub inside_tenv: bool,
 }
 
 /// Propiedades de construcciones de opacos
@@ -278,7 +311,7 @@ impl KData {
                 .unwrap_or(1.0);
             // Huecos de los opacos
             for win in model.windows_of_wall_iter(wall.id) {
-                let win_u = match win.u_for_window(&model.cons, &model.mats) {
+                let win_u = match win.u_value(&model.cons, &model.mats) {
                     Some(u) => u,
                     _ => continue,
                 };
@@ -292,7 +325,7 @@ impl KData {
                 Some(u) => u,
                 _ => continue,
             };
-            let area = multiplier * wall.net_area(&model.windows);
+            let area = multiplier * wall.area_net(&model.windows);
             let area_u = area * wall_u;
             let mut element_case = match (wall.bounds, Tilt::from(wall)) {
                 (BoundaryType::GROUND, _) => &mut k.ground,
