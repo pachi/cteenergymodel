@@ -120,7 +120,7 @@ impl ElementProps {
         let mut walls: BTreeMap<Uuid, WallProps> = BTreeMap::new();
         for w in &model.walls {
             let wp = WallProps {
-                u_value: model.u_for_wall(w),
+                u_value: w.u_value(model),
                 area_gross: w.area(),
                 area_net: w.area_net(&model.windows),
                 inside_tenv: walls_tenv.contains(&w.id),
@@ -321,7 +321,7 @@ impl KData {
                 k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
                 k.windows.u_min = k.windows.u_min.map(|v| v.min(win_u)).or(Some(win_u));
             }
-            let wall_u = match model.u_for_wall(wall) {
+            let wall_u = match wall.u_value(&model) {
                 Some(u) => u,
                 _ => continue,
             };
