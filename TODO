@@ -1,11 +1,6 @@
 # TAREAS PENDIENTES
 
 - Completar estructura EnergyIndicators.elements (ElementProps)?
-  - Spaces: {A, V, p_ext (perimetro expuesto), inside_et}
-  - Walls: {A_gross, A_net, U, inside_et, space_id}
-  - Windows: {A, U, g_glwi, g_glshwi, f_shobst, inside_et, wall?, space_id}
-  - WallCons: { R_intrinsic }
-  - WinCons: { U-value }
   - indicando elementos que pertenecen a la envolvente
     - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
     - ¿ agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR ?
