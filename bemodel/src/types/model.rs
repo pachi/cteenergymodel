@@ -82,6 +82,7 @@ impl Model {
 
     /// Iterador de los cerramientos de la envolvente térmica en contacto con el aire o el terreno
     /// Se excluyen los opacos sin espacio definido
+    /// TODO: podríamos llevar esta lógica a ElementProps y allí dejar esto calculado
     pub fn walls_of_envelope_iter(&self) -> impl Iterator<Item = &Wall> {
         self.walls
             .iter()
@@ -96,6 +97,7 @@ impl Model {
 
     /// Iterador de los huecos de la envolvente térmica en contacto con el aire exterior
     /// Se excluyen los huecos sin espacio definido
+    /// TODO: podríamos llevar esta lógica a ElementProps y allí dejar esto calculado
     pub fn windows_of_envelope_iter(&self) -> impl Iterator<Item = &Window> {
         self.walls
             .iter()
