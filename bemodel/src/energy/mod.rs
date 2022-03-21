@@ -79,11 +79,31 @@ pub struct ElementProps {
     pub walls: BTreeMap<Uuid, WallProps>,
     /// Propiedades de huecos
     pub windows: BTreeMap<Uuid, WinProps>,
+    /// Propiedades de construcciones de muros
+    pub wallcons: BTreeMap<Uuid, WallConsProps>,
+    /// Propiedades de huecos
+    pub wincons: BTreeMap<Uuid, WinConsProps>,
 }
 
 impl ElementProps {
     /// Completa datos de los elementos (espacios, opacos, huecos,...) por id
     pub fn compute(model: &Model) -> Self {
+        let mut wallconsmap: BTreeMap<Uuid, WallConsProps> = BTreeMap::new();
+        for wc in &model.cons.wallcons {
+            let wcp = WallConsProps {
+                r_instrinsic: wc.r_intrinsic(&model.mats).ok(),
+            };
+            wallconsmap.insert(wc.id, wcp);
+        }
+
+        let mut winconsmap: BTreeMap<Uuid, WinConsProps> = BTreeMap::new();
+        for wc in &model.cons.wincons {
+            let wcp = WinConsProps {
+                u_value: wc.u_value(&model.mats),
+            };
+            winconsmap.insert(wc.id, wcp);
+        }
+
         let mut wallsmap: BTreeMap<Uuid, WallProps> = BTreeMap::new();
         for w in &model.walls {
             let wp = WallProps {
@@ -96,7 +116,7 @@ impl ElementProps {
         let mut windowsmap: BTreeMap<Uuid, WinProps> = BTreeMap::new();
         for w in &model.windows {
             let wp = WinProps {
-                u_value: model.u_for_window(w),
+                u_value: w.u_for_window(&model.cons, &model.mats),
                 ..Default::default()
             };
             windowsmap.insert(w.id, wp);
@@ -104,6 +124,8 @@ impl ElementProps {
         Self {
             walls: wallsmap,
             windows: windowsmap,
+            wallcons: wallconsmap,
+            wincons: winconsmap,
         }
     }
 }
@@ -117,7 +139,7 @@ pub struct WallProps {
     // pub area_gross: Option<f32>,
     // pub area_net: Option<f32>,
     // pub inside_et: Option<bool>,
-    // pub space_id: Option<Uuid>>
+    // pub space_id: Option<Uuid>,
 }
 
 /// Propiedades de huecos
@@ -131,11 +153,23 @@ pub struct WinProps {
     // pub g_glshwi: Option<f32>,
     // pub f_shobst: Option<f32>,
     // pub inside_et: Option<bool>,
-    // pub space_id: Option<Uuid>>
+    // pub space_id: Option<Uuid>,
 }
 
-// TODO: WallConsProps: { pub r_intrinsic: Option<f32> }
-// TODO: WinConsProps: { pub u_value: Option<f32> }
+/// Propiedades de construcciones de opacos
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+pub struct WallConsProps {
+    // R intrínseca de construcción, m²K/W
+    pub r_instrinsic: Option<f32>,
+}
+
+/// Propiedades de construcciones de opacos
+#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+pub struct WinConsProps {
+    // U de construcción de hueco, W/m²K
+    pub u_value: Option<f32>,
+}
+
 // TODO: SpaceProps: { pub area: Option<f32>, pub volume: Option<f32>, pub exposed_perimeter: Option<f32>, pub inside_et: Option<bool> }
 
 /// Reporte de cálculo de K (HE2019)
