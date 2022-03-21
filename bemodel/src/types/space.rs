@@ -21,6 +21,7 @@ pub struct Space {
     /// Nombre del espacio
     pub name: String,
     /// Superficie útil del espacio (m2)
+    /// TODO: calcular a partir de superficie de suelos
     pub area: f32,
     /// Multiplicador del espacio
     pub multiplier: f32,
@@ -34,6 +35,7 @@ pub struct Space {
     /// Altura bruta (suelo a suelo) del espacio (m)
     pub height: f32,
     /// Ventilación, en ren/h
+    /// TODO: esto serán condiciones del espacio?
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub n_v: Option<f32>,
@@ -42,6 +44,7 @@ pub struct Space {
     /// Perímetro expuesto del espacio (suelos) (m)
     /// Incluye la parte del perímetro que separa el espacio del exterior
     /// y excluye que lo separa de otros espacios acondicionados.
+    /// TODO: traer cálculo de BDL
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub exposed_perimeter: Option<f32>,
