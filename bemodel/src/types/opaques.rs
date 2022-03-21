@@ -49,7 +49,7 @@ impl Wall {
     }
 
     /// Superficie neta (sin huecos) del cerramiento (m²)
-    pub fn net_area(&self, windows: &[Window]) -> f32 {
+    pub fn area_net(&self, windows: &[Window]) -> f32 {
         let wall_gross_area = self.area();
         let windows_area = windows
             .iter()

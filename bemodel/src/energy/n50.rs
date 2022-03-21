@@ -71,7 +71,7 @@ impl Model {
                     win_ah_ch += ca;
                 }
 
-                data.walls_a += wall.net_area(&self.windows) * multiplier;
+                data.walls_a += wall.area_net(&self.windows) * multiplier;
                 data.windows_a += win_ah * multiplier;
                 data.windows_c_a += win_ah_ch * multiplier;
             });

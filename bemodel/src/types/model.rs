@@ -207,7 +207,7 @@ impl Model {
             .map(|w| {
                 let multiplier = self.get_space(w.space).map(|s| s.multiplier).unwrap_or(1.0);
                 let win_area: f32 = self.windows_of_wall_iter(w.id).map(|win| win.area()).sum();
-                (w.net_area(&self.windows) + win_area) * multiplier
+                (w.area_net(&self.windows) + win_area) * multiplier
             })
             .sum();
         let compac = if area == 0.0 { 0.0 } else { vol / area };

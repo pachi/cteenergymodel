@@ -343,14 +343,14 @@ impl Model {
                                         .map(|u| Some(win.area() * u))?
                                 })
                                 .sum::<f32>();
-                            Some(wall.net_area(&self.windows) * wall_u + win_axu)
+                            Some(wall.area_net(&self.windows) * wall_u + win_axu)
                         })
                         .sum::<f32>();
                     // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
                     // En la fórmula anterior, para espacios no acondicionados, se indica que se excluyen suelos, pero no entiendo bien por qué.
                     // Esta fórmula, cuando los A_e_k y U_e_k incluyen los muros y suelos con el terreno U_bw y U_bf, con la parte proporcional de
                     // muros al exterior, es equivalente a la que indica la 13370
-                    let A_i = wall.net_area(&self.windows);
+                    let A_i = wall.area_net(&self.windows);
                     let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
                     let R_u = A_i / H_ue;
                     let U = 1.0 / (R_f + R_u);
