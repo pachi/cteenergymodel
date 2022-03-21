@@ -9,7 +9,10 @@ use nalgebra::{
 };
 use serde::{Deserialize, Serialize};
 
-use super::{BoundaryType, HasSurface, Orientation, Point3, Polygon, Tilt, Uuid, Vector2, Vector3};
+use super::{
+    fround2, BoundaryType, HasSurface, Orientation, Point3, Polygon, Tilt, Uuid, Vector2, Vector3,
+    Window,
+};
 
 // Elementos -----------------------------------------------
 
@@ -43,6 +46,17 @@ impl Wall {
     #[inline]
     pub fn area(&self) -> f32 {
         self.geometry.polygon.area()
+    }
+
+    /// Superficie neta (sin huecos) del cerramiento (m²)
+    pub fn net_area(&self, windows: &[Window]) -> f32 {
+        let wall_gross_area = self.area();
+        let windows_area = windows
+            .iter()
+            .filter(|w| w.wall == self.id)
+            .map(|w| w.area())
+            .sum::<f32>();
+        fround2(wall_gross_area - windows_area)
     }
 
     /// Perímetro del opaco, m
