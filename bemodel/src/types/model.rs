@@ -80,18 +80,6 @@ impl Model {
         self.walls.iter().find(|w| w.name == name)
     }
 
-    /// Iterador de los cerramientos (incluyendo muros, suelos y techos) que delimitan un espacio
-    pub fn walls_of_space_iter(&self, id: Uuid) -> impl Iterator<Item = &Wall> {
-        self.walls.iter().filter(move |w| {
-            w.space == id
-                || (if let Some(spc) = w.next_to {
-                    spc == id
-                } else {
-                    false
-                })
-        })
-    }
-
     /// Iterador de los cerramientos de la envolvente térmica en contacto con el aire o el terreno
     /// Se excluyen los opacos sin espacio definido
     pub fn walls_of_envelope_iter(&self) -> impl Iterator<Item = &Wall> {

@@ -72,6 +72,18 @@ impl Space {
             .unwrap_or(0.0);
         self.height - top_wall_thickness
     }
+
+    /// Iterador de los cerramientos que delimitan un espacio (muros, suelos y techos)
+    pub fn walls<'a>(&'a self, walls: &'a [Wall]) -> impl Iterator<Item = &'a Wall> {
+        walls.iter().filter(move |w| {
+            w.space == self.id
+                || (if let Some(spc) = w.next_to {
+                    spc == self.id
+                } else {
+                    false
+                })
+        })
+    }
 }
 
 /// Tipo de espacio según su nivel de acondicionamiento

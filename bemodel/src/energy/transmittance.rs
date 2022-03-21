@@ -173,8 +173,8 @@ impl Model {
                 // Dimensión característica del suelo del sótano.
                 // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
                 // Usamos el promedio de los suelos del espacio
-                let mut d_t = self
-                    .walls_of_space_iter(space.id)
+                let mut d_t = space
+                    .walls(&self.walls)
                     .filter(|w| Tilt::from(*w) == BOTTOM)
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
@@ -329,8 +329,8 @@ impl Model {
                     // Calculamos el A.U de los elementos del espacio que dan al exterior o al terreno (excluye interiores))
                     // Como hemos asignado U_bw y U_bf a los muros y suelos en contacto con el terreno, ya se tiene en cuenta
                     // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
-                    let UA_e_k = self
-                        .walls_of_space_iter(uncondspace.id)
+                    let UA_e_k = uncondspace
+                        .walls(&self.walls)
                         .filter(|wall| wall.bounds == GROUND || wall.bounds == EXTERIOR)
                         .filter_map(|wall| {
                             // A·U de muros (y suelos) + A.U de sus huecos

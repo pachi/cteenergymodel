@@ -37,7 +37,9 @@ fn test_caso_a() {
     assert_eq!(model.walls.len(), 35); // 19 en ET
     assert_eq!(model.thermal_bridges.len(), 10); // 7 en kyg
     let mut wallsofspace = model
-        .walls_of_space_iter(model.get_space_by_name("P02_E01").unwrap().id)
+        .get_space_by_name("P02_E01")
+        .unwrap()
+        .walls(&model.walls)
         .map(|w| w.name.as_str())
         .collect::<Vec<_>>();
     wallsofspace.sort_unstable();
