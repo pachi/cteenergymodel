@@ -335,8 +335,8 @@ impl Model {
                         .filter_map(|wall| {
                             // A·U de muros (y suelos) + A.U de sus huecos
                             let wall_u = self.u_for_wall(wall)?;
-                            let win_axu = self
-                                .windows_of_wall_iter(wall.id)
+                            let win_axu = wall
+                                .windows(&self.windows)
                                 .filter_map(|win| {
                                     // Si no está definida la construcción, el hueco no participa de la envolvente
                                     win.u_value(&self.cons, &self.mats)

@@ -62,7 +62,7 @@ impl Model {
                     .unwrap_or(1.0);
                 let mut win_ah = 0.0;
                 let mut win_ah_ch = 0.0;
-                for (a, ca) in self.windows_of_wall_iter(wall.id).filter_map(|win| {
+                for (a, ca) in wall.windows(&self.windows).filter_map(|win| {
                     self.cons
                         .get_wincons(win.cons)
                         .map(|wincons| Some((win.area(), win.area() * wincons.c_100)))?

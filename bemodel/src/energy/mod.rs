@@ -310,7 +310,7 @@ impl KData {
                 .map(|s| s.multiplier)
                 .unwrap_or(1.0);
             // Huecos de los opacos
-            for win in model.windows_of_wall_iter(wall.id) {
+            for win in wall.windows(&model.windows) {
                 let win_u = match win.u_value(&model.cons, &model.mats) {
                     Some(u) => u,
                     _ => continue,

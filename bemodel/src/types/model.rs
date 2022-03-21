@@ -80,11 +80,6 @@ impl Model {
         self.walls.iter().find(|w| w.name == name)
     }
 
-    /// Iterador de los huecos pertenecientes a un muro
-    pub fn windows_of_wall_iter(&self, id: Uuid) -> impl Iterator<Item = &Window> {
-        self.windows.iter().filter(move |w| w.wall == id)
-    }
-
     /// Iterador de los cerramientos (incluyendo muros, suelos y techos) que delimitan un espacio
     pub fn walls_of_space_iter(&self, id: Uuid) -> impl Iterator<Item = &Wall> {
         self.walls.iter().filter(move |w| {
@@ -206,7 +201,7 @@ impl Model {
             .walls_of_envelope_iter()
             .map(|w| {
                 let multiplier = self.get_space(w.space).map(|s| s.multiplier).unwrap_or(1.0);
-                let win_area: f32 = self.windows_of_wall_iter(w.id).map(|win| win.area()).sum();
+                let win_area: f32 = w.windows(&self.windows).map(|win| win.area()).sum();
                 (w.area_net(&self.windows) + win_area) * multiplier
             })
             .sum();

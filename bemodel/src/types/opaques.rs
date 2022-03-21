@@ -64,6 +64,11 @@ impl Wall {
     pub fn perimeter(&self) -> f32 {
         self.geometry.polygon.perimeter()
     }
+
+    /// Iterador de los huecos pertenecientes a un muro
+    pub fn windows<'a>(&'a self, windows: &'a [Window]) -> impl Iterator<Item = &'a Window> {
+        windows.iter().filter(move |w| w.wall == self.id)
+    }
 }
 
 /// Convierte de muro a enum Tilt
