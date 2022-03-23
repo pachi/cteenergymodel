@@ -87,7 +87,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
             tilt: w.geometry.tilt.into(),
             cons: w.cons,
             u: 0.0,
-            computed_u: fround2(ecdata.u_for_wall(w).unwrap_or(0.0)),
+            computed_u: fround2(w.u_value(ecdata).unwrap_or(0.0)),
         })
         .collect::<Vec<_>>();
 
