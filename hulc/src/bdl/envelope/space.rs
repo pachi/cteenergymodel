@@ -110,13 +110,13 @@ impl Space {
     pub fn exposed_perimeter(&self, db: &Data) -> f32 {
         use super::BoundaryType::{ADIABATIC, EXTERIOR, GROUND, INTERIOR};
         // Muros exteriores (verticales)
-        let vertical_walls_for_space = db
-            .walls
-            .iter()
-            .filter(|w| w.space == self.name && w.position() == Tilt::SIDE);
+        let vertical_walls = db.walls.iter().filter(|w| {
+            (w.space == self.name || w.nextto.as_ref() == Some(&self.name))
+                && w.position() == Tilt::SIDE
+        });
 
         // Area bruta total de muros y área bruta de muros exteriores
-        let (total_vwalls_area, exterior_vwalls_area) = vertical_walls_for_space
+        let (total_area, exterior_area) = vertical_walls
             .map(|w| {
                 let area = w.gross_area(db).unwrap_or(0.0);
                 match w.bounds {
@@ -144,11 +144,10 @@ impl Space {
             .fold((0.0, 0.0), |(acc_tot, acc_ext), (el_tot, el_ext)| {
                 (acc_tot + el_tot, acc_ext + el_ext)
             });
-
-        if total_vwalls_area < 0.01 {
+        if total_area < 0.01 {
             0.0
         } else {
-            self.polygon.perimeter() * exterior_vwalls_area / total_vwalls_area
+            self.polygon.perimeter() * exterior_area / total_area
         }
     }
 
