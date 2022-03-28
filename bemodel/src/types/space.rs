@@ -51,9 +51,9 @@ pub struct Space {
 }
 
 impl Space {
-    /// Altura neta del espacio
+    /// Altura neta del espacio, m
     /// Se descuenta el grosor del primer forjado superior encontrado para el espacio
-    pub fn net_height(&self, walls: &[Wall], cons: &ConsDb) -> f32 {
+    pub fn height_net(&self, walls: &[Wall], cons: &ConsDb) -> f32 {
         // Elemento opaco de techo de un espacio
         // TODO: la altura neta debería calcularse promediando los grosores de **todos** los muros que
         // TODO: cubren el espacio y no solo el primero que se encuentre
@@ -75,14 +75,9 @@ impl Space {
 
     /// Iterador de los cerramientos que delimitan un espacio (muros, suelos y techos)
     pub fn walls<'a>(&'a self, walls: &'a [Wall]) -> impl Iterator<Item = &'a Wall> {
-        walls.iter().filter(move |w| {
-            w.space == self.id
-                || (if let Some(spc) = w.next_to {
-                    spc == self.id
-                } else {
-                    false
-                })
-        })
+        walls
+            .iter()
+            .filter(move |w| w.space == self.id || w.next_to == Some(self.id))
     }
 }
 
