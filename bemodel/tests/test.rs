@@ -42,7 +42,7 @@ fn init() {
 }
 
 #[test]
-fn model_json_conversion() {
+fn model_json_e4h_medianeras() {
     init();
 
     let strdata = include_str!("./data/e4h_medianeras.json");
@@ -100,7 +100,7 @@ fn model_json_conversion() {
 }
 
 #[test]
-fn model_json_unif() {
+fn model_json_ejemploviv_unif() {
     init();
 
     let strdata = include_str!("./data/ejemploviv_unif.json");
