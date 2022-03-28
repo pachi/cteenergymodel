@@ -129,13 +129,11 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
         .map(|s| {
             let area = fround2(s.area());
             let height = fround2(s.height);
-            let exposed_perimeter = Some(fround2(s.exposed_perimeter(bdl)));
             Ok(Space {
                 id: *id_maps.space_id(&s.name)?,
                 name: s.name.clone(),
                 area,
                 z: s.z,
-                exposed_perimeter,
                 height,
                 inside_tenv: s.insidete,
                 multiplier: s.multiplier * s.floor_multiplier,

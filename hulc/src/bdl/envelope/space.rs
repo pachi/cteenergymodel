@@ -103,54 +103,6 @@ impl Space {
         self.polygon.perimeter()
     }
 
-    /// Calcula el perímetro expuesto del espacio (m)
-    ///
-    /// El perímetro expuesto es el que separa el espacio del exterior o de un espacio no calefactado fuera de la estructura aislada
-    /// Excluye las parte que separan un espacio calefactado con otros espacios calefactados
-    pub fn exposed_perimeter(&self, db: &Data) -> f32 {
-        use super::BoundaryType::{ADIABATIC, EXTERIOR, GROUND, INTERIOR};
-        // Muros exteriores (verticales)
-        let vertical_walls = db.walls.iter().filter(|w| {
-            (w.space == self.name || w.nextto.as_ref() == Some(&self.name))
-                && w.position() == Tilt::SIDE
-        });
-
-        // Area bruta total de muros y área bruta de muros exteriores
-        let (total_area, exterior_area) = vertical_walls
-            .map(|w| {
-                let area = w.gross_area(db).unwrap_or(0.0);
-                match w.bounds {
-                    // Contactos con el exterior o el terreno
-                    EXTERIOR | GROUND => (area, area),
-                    // Contactos con otros espacios no acondicionados o no habitables
-                    INTERIOR => {
-                        w.nextto
-                            .as_deref()
-                            .and_then(|nxts| db.spaces.iter().find(|s| s.name == nxts))
-                            .and_then(|nextspace| {
-                                if self.stype == "CONDITIONED" && nextspace.stype != "CONDITIONED" {
-                                    // tenemos en cuenta el contacto de espacios acondicionados con otros tipos
-                                    Some((area, area))
-                                } else {
-                                    None
-                                }
-                            })
-                            // El resto no se considera contacto con el exterior
-                            .unwrap_or((area, 0.0))
-                    }
-                    ADIABATIC => (area, 0.0),
-                }
-            })
-            .fold((0.0, 0.0), |(acc_tot, acc_ext), (el_tot, el_ext)| {
-                (acc_tot + el_tot, acc_ext + el_ext)
-            });
-        if total_area < 0.01 {
-            0.0
-        } else {
-            self.polygon.perimeter() * exterior_area / total_area
-        }
-    }
-
     /// Volumen bruto del espacio (m3)
     ///
     /// Usa el área y la altura total (suelo a suelo) del espacio

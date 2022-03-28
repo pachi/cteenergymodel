@@ -94,7 +94,8 @@ impl ElementProps {
         for s in &model.spaces {
             let sp = SpaceProps {
                 area: s.area,
-                // p_exp: todo!(),
+                height_net: s.height_net(&model.walls, &model.cons),
+                p_exp: s.perimeter_exposed(&model.walls, &model.spaces),
             };
             spaces.insert(s.id, sp);
         }
@@ -152,12 +153,12 @@ impl ElementProps {
 pub struct SpaceProps {
     /// Superficie del espacio, m²
     pub area: f32,
-    // /// Altura neta del espacio, m
-    // pub height_net: f32,
+    /// Altura neta del espacio, m
+    pub height_net: f32,
     // /// Volumen del espacio, m³
     // pub volume: f32,
-    // /// Perímetro expuesto del espacio
-    // pub p_exp: Option<f32>,
+    /// Perímetro expuesto del espacio
+    pub p_exp: f32,
 }
 
 /// Propiedades de muros

@@ -18,9 +18,10 @@ use anyhow::{format_err, Error};
 use log::{debug, warn};
 
 use super::EnergyIndicators;
+use crate::types::HasSurface;
 use crate::{
-    BoundaryType, ConsDb, Layer, MatProps, MatsDb, Model, SpaceType, Tilt, Wall, WallCons, Window,
-    WindowCons,
+    utils::fround2, BoundaryType, ConsDb, Layer, MatProps, MatsDb, Model, Space, SpaceType, Tilt,
+    Wall, WallCons, Window, WindowCons,
 };
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
@@ -36,6 +37,79 @@ impl Model {
     /// Calcula indicadores energéticos
     pub fn energy_indicators(&self) -> EnergyIndicators {
         EnergyIndicators::compute(self)
+    }
+}
+
+impl Space {
+    /// Perímetro expuesto del espacio, m
+    ///
+    /// El perímetro expuesto es el que separa el espacio del exterior o de un espacio no calefactado fuera de la estructura aislada
+    /// Excluye las parte que separan un espacio calefactado con otros espacios calefactados
+    pub fn perimeter_exposed(&self, walls: &[Wall], spaces: &[Space]) -> f32 {
+        use crate::BoundaryType::{ADIABATIC, EXTERIOR, GROUND, INTERIOR};
+
+        let spc_walls: Vec<_> = self.walls(walls).collect();
+
+        let vert_walls = spc_walls.iter().filter(|w| Tilt::from(**w) == Tilt::SIDE);
+        // Area bruta total de muros y área bruta de muros exteriores
+        let (total_area, exterior_area) = vert_walls
+            .map(|w| {
+                let area = w.area();
+                match w.bounds {
+                    // Contactos con el exterior o el terreno
+                    EXTERIOR | GROUND => (area, area),
+                    // Contactos con otros espacios no acondicionados o no habitables
+                    INTERIOR => {
+                        w.next_to
+                            .and_then(|nxts| spaces.iter().find(|s| s.id == nxts))
+                            .and_then(|nextspace| {
+                                if self.kind == SpaceType::CONDITIONED
+                                    && nextspace.kind != SpaceType::CONDITIONED
+                                {
+                                    // tenemos en cuenta el contacto de espacios acondicionados con otros tipos
+                                    Some((area, area))
+                                } else {
+                                    None
+                                }
+                            })
+                            // El resto no se considera contacto con el exterior
+                            .unwrap_or((area, 0.0))
+                    }
+                    ADIABATIC => (area, 0.0),
+                }
+            })
+            .fold((0.0, 0.0), |(acc_tot, acc_ext), (el_tot, el_ext)| {
+                (acc_tot + el_tot, acc_ext + el_ext)
+            });
+
+        if total_area < 0.01 {
+            0.0
+        } else {
+            // Walls that belong to the space and are floors (floors from .next_to are ceilings of this space)
+            let spc_floor_walls: Vec<_> = spc_walls
+                .iter()
+                .filter(|w| w.space == self.id && Tilt::from(**w) == Tilt::BOTTOM)
+                .collect();
+            if spc_floor_walls.len() > 1 {
+                warn!(
+                    "Calculando perímetro expuesto para espacio con más de un suelo: {} ({}), {:#?}",
+                    self.name, self.id, spc_floor_walls
+                );
+            };
+            match spc_floor_walls.get(0) {
+                Some(first_floor) => {
+                    if first_floor.bounds != GROUND {
+                        warn!(
+                            "Calculando perímetro expuesto para muro que no está en contacto con el terreno: {} ({})",
+                            first_floor.name, first_floor.id
+                        );
+                    }
+                    let perimeter = first_floor.geometry.perimeter();
+                    fround2(perimeter * exterior_area / total_area)
+                }
+                _ => 0.0,
+            }
+        }
     }
 }
 
@@ -78,10 +152,10 @@ impl WindowCons {
     pub fn u_value(&self, mats: &MatsDb) -> Option<f32> {
         let glass = mats.glasses.iter().find(|g| g.id == self.glass)?;
         let frame = mats.frames.iter().find(|f| f.id == self.frame)?;
-        Some(
+        Some(fround2(
             (1.0 + self.delta_u / 100.0)
                 * (frame.u_value * self.f_f + glass.u_value * (1.0 - self.f_f)),
-        )
+        ))
     }
 }
 
@@ -127,17 +201,17 @@ impl Wall {
             }
             // Elementos en contacto con el exterior -------------
             (EXTERIOR, BOTTOM) => {
-                let U = 1.0 / (R_intrinsic + RSI_DESCENDENTE + RSE);
+                let U = fround2(1.0 / (R_intrinsic + RSI_DESCENDENTE + RSE));
                 debug!("{} (suelo) U={:.2}", self.name, U);
                 Some(U)
             }
             (EXTERIOR, TOP) => {
-                let U = 1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE);
+                let U = fround2(1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE));
                 debug!("{} (cubierta) U={:.2}", self.name, U);
                 Some(U)
             }
             (EXTERIOR, SIDE) => {
-                let U = 1.0 / (R_intrinsic + RSI_HORIZONTAL + RSE);
+                let U = fround2(1.0 / (R_intrinsic + RSI_HORIZONTAL + RSE));
                 debug!("{} (muro) U={:.2}", self.name, U);
                 Some(U)
             }
@@ -157,9 +231,7 @@ impl Wall {
                 // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
                 let wspace = model.get_space(self.space)?;
                 let gnd_A = wspace.area;
-                let mut gnd_P = wspace
-                    .exposed_perimeter
-                    .unwrap_or_else(|| 4.0 * f32::sqrt(gnd_A));
+                let mut gnd_P = wspace.perimeter_exposed(&model.walls, &model.spaces);
 
                 // Soleras sin contacto perimetral con el exterior P=0 -> B' -> inf. Cambiamos P a un valor pequeño
                 if gnd_P.abs() < 0.001 {
@@ -196,7 +268,7 @@ impl Wall {
                 let psi_ge = -LAMBDA_GND / PI
                     * (f32::ln(D_perim_ins / d_t + 1.0) - f32::ln(1.0 + D_perim_ins / (d_t + D_1)));
 
-                let U = U_bf + 2.0 * psi_ge / B_1; // H_g sería U * A
+                let U = fround2(U_bf + 2.0 * psi_ge / B_1); // H_g sería U * A
 
                 debug!(
                     "{} (suelo de sótano) U={:.2} (R_n={:.2}, D={:.2}, A={:.2}, P={:.2}, B'={:.2}, z={:.2}, d_t={:.2}, R_f={:.3}, U_bf={:.2}, psi_ge = {:.3})",
@@ -233,13 +305,15 @@ impl Wall {
                 // Dimensión característica del suelo del sótano.
                 // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
                 // Usamos el promedio de los suelos del espacio
+                // TODO: ¿Tendría que ser la media ponderada por superficie?
                 let mut d_t = space
                     .walls(&model.walls)
                     .filter(|w| Tilt::from(*w) == BOTTOM)
                     .zip(1..)
                     .fold(0.0, |mean, (w, i)| {
                         // Si no está definida la construcción no participa de la envolvente
-                        model.cons
+                        model
+                            .cons
                             .get_wallcons(w.cons)
                             .map(|wallcons| match wallcons.r_intrinsic(&model.mats).ok() {
                                 Some(wallcons_r_intrinsic) => {
@@ -271,19 +345,19 @@ impl Wall {
                 };
 
                 // Altura neta
-                let height_net = space.net_height(&model.walls, &model.cons);
+                let height_net = space.height_net(&model.walls, &model.cons);
 
                 // Altura sobre el terreno (muro no enterrado)
                 let h = if height_net > z { height_net - z } else { 0.0 };
 
                 // Si el muro no es enterrado en toda su altura ponderamos U por altura
-                let U = if h == 0.0 {
+                let U = fround2(if h == 0.0 {
                     // Muro completamente enterrado
                     U_bw
                 } else {
                     // Muro con z parcialmente enterrado
                     (z * U_bw + h * U_w) / height_net
-                };
+                });
 
                 debug!(
                     "{} (muro enterrado) U={:.2} (z={:.2}, h={:.2}, U_w={:.2}, U_bw={:.2}, d_t={:.2}, d_w={:.2})",
@@ -293,7 +367,7 @@ impl Wall {
             }
             // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
             (GROUND, TOP) => {
-                let U = 1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE);
+                let U = fround2(1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE));
                 debug!(
                     "{} (cubierta enterrada) U={:.2} (R_f={:.3})",
                     self.name, U, R_intrinsic
@@ -339,7 +413,7 @@ impl Wall {
                 if nexttype == CONDITIONED && space.kind == CONDITIONED {
                     // Elemento interior con otro espacio acondicionado
                     // HULC no diferencia entre RS según posiciones para elementos interiores
-                    let U = 1.0 / (R_intrinsic + 2.0 * RSI_HORIZONTAL);
+                    let U = fround2(1.0 / (R_intrinsic + 2.0 * RSI_HORIZONTAL));
                     debug!(
                         "{} ({} acondicionado-acondicionado) U_int={:.2}",
                         self.name, posname, U
@@ -369,7 +443,7 @@ impl Wall {
 
                     // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
                     let uncondspace_v =
-                        uncondspace.net_height(&model.walls, &model.cons) * uncondspace.area;
+                        uncondspace.height_net(&model.walls, &model.cons) * uncondspace.area;
                     let n_ven = match uncondspace.n_v {
                         Some(n_v) => n_v,
                         _ => match model.meta.global_ventilation_l_s {
@@ -413,7 +487,7 @@ impl Wall {
                     let A_i = self.area_net(&model.windows);
                     let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
                     let R_u = A_i / H_ue;
-                    let U = 1.0 / (R_f + R_u);
+                    let U = fround2(1.0 / (R_f + R_u));
 
                     debug!(
                             "{} ({} acondicionado-no acondicionado/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
