@@ -80,6 +80,16 @@ impl Model {
         self.walls.iter().find(|w| w.name == name)
     }
 
+    /// Localiza hueco
+    pub fn get_window(&self, id: Uuid) -> Option<&Window> {
+        self.windows.iter().find(|w| w.id == id)
+    }
+
+    /// Localiza hueco por nombre
+    pub fn get_window_by_name<'a>(&'a self, name: &'a str) -> Option<&'a Window> {
+        self.windows.iter().find(|w| w.name == name)
+    }
+
     /// Iterador de los cerramientos de la envolvente térmica en contacto con el aire o el terreno
     /// Se excluyen los opacos sin espacio definido
     /// TODO: podríamos llevar esta lógica a ElementProps y allí dejar esto calculado
