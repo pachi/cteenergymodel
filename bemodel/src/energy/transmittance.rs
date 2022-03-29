@@ -252,13 +252,13 @@ impl Wall {
                 // 1. Es un suelo de un espacio acondicionado (9.1 y 9.3.2)
                 // 2. Es un suelo de un espacio no acondicionado (9.2 - tomamos U_bg igual a U_g, según 9.2 (8) o a U_bf según E.2)
                 // Los dos casos equivalen aproximadamente al U_bf de 9.3.2
-                let U_bf = if (d_t + 0.5 * z) < B_1 {
-                    // Soleras sin aislar y moderadamente aisladas
-                    (2.0 * LAMBDA_GND / (PI * B_1 + d_t + 0.5 * z))
-                        * f32::ln(1.0 + PI * B_1 / (d_t + 0.5 * z))
+                let B_limit = d_t + 0.5 * z;
+                let U_bf = if B_limit < B_1 {
+                    // Soleras sin aislar y moderadamente aisladas (11)
+                    (2.0 * LAMBDA_GND / (PI * B_1 + B_limit)) * f32::ln(1.0 + PI * B_1 / B_limit)
                 } else {
-                    // Soleras bien aisladas
-                    LAMBDA_GND / (0.457 * B_1 + d_t + 0.5 * z)
+                    // Soleras bien aisladas (12)
+                    LAMBDA_GND / (0.457 * B_1 + B_limit)
                 };
 
                 // Efecto del aislamiento perimetral 13770 Anexo B (B.4).
