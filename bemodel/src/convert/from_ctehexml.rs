@@ -127,14 +127,12 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
     bdl.spaces
         .iter()
         .map(|s| {
-            let area = fround2(s.area());
-            let height = fround2(s.height);
             Ok(Space {
                 id: *id_maps.space_id(&s.name)?,
                 name: s.name.clone(),
-                area,
+                area: fround2(s.polygon.area()),
                 z: s.z,
-                height,
+                height: fround2(s.height),
                 inside_tenv: s.insidete,
                 multiplier: s.multiplier * s.floor_multiplier,
                 kind: match s.stype.as_ref() {
@@ -238,13 +236,11 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeometry {
         }
     };
 
-    let tilt = fround2(wall.tilt);
-    let azimuth = fround2(orientation_bdl_to_52016(
-        global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
-    ));
     WallGeometry {
-        azimuth,
-        tilt,
+        azimuth: fround2(orientation_bdl_to_52016(
+            global_deviation + space.angle_with_building_north + wall.angle_with_space_north,
+        )),
+        tilt: fround2(wall.tilt),
         position: Some(position),
         polygon,
     }
