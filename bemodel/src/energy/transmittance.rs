@@ -20,8 +20,9 @@ use log::{debug, warn};
 use super::EnergyIndicators;
 use crate::types::HasSurface;
 use crate::{
-    utils::fround2, BoundaryType, ConsDb, Layer, MatProps, MatsDb, Model, Space, SpaceType, Tilt,
-    Wall, WallCons, Window, WindowCons,
+    utils::{fround2, fround3},
+    BoundaryType, ConsDb, Layer, MatProps, MatsDb, Model, Space, SpaceType, Tilt, Wall, WallCons,
+    Window, WindowCons,
 };
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
@@ -111,6 +112,37 @@ impl Space {
             }
         }
     }
+
+    /// Espesor total equivalente de solera (suelo de sótano), d_t, m
+    /// Según UNE-EN ISO 13370:2010 9.3.2 (10)
+    /// Ponderamos según superficie de suelos en contacto con el terreno
+    pub fn slab_on_ground_d_t(&self, walls: &[Wall], cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
+        // TODO: No sería mejor ponderar por superficie para obtener la d_t?
+
+        // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
+        // TODO: No podemos calcular este valor bien?
+        const w: f32 = 0.3;
+
+        let mut d_t = self
+            .walls(walls)
+            .filter(|wall| Tilt::from(*wall) == Tilt::BOTTOM)
+            .zip(1..)
+            .fold(0.0, |mean, (gwall_i, i)| {
+                // Si no está definida la construcción no participa de la envolvente
+                cons.get_wallcons(gwall_i.cons)
+                    .map(|cons_i| match cons_i.r_intrinsic(mats).ok() {
+                        Some(r_intrinsic_i) => {
+                            let R_ground_i = RSI_DESCENDENTE + r_intrinsic_i + RSE;
+                            // e = lambda * R // e_tot = 0.30m + lambda * R_mean
+                            (w + LAMBDA_GND * R_ground_i + mean * (i - 1) as f32) / i as f32
+                        }
+                        // BUG: Aquí no sería un valor != 0, calculado con r_intrinsic_i == 0?
+                        _ => 0.0,
+                    })
+                    .unwrap_or(0.0)
+            });
+        Some(d_t)
+    }
 }
 
 impl WallCons {
@@ -179,317 +211,369 @@ impl Wall {
     /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
     /// - se usan resistencias superficiales de referencia (DB-HE)
     pub fn u_value(&self, model: &Model) -> Option<f32> {
-        use {BoundaryType::*, SpaceType::*, Tilt::*};
-
-        let position = Tilt::from(self);
-        let bounds: BoundaryType = self.bounds;
-        let R_n_perim_ins = model.meta.rn_perim_insulation;
-        let D_perim_ins = model.meta.d_perim_insulation;
-
-        let R_intrinsic = model
+        let r_intrinsic = model
             .cons
             .get_wallcons(self.cons)?
             .r_intrinsic(&model.mats)
-            .ok()?;
-
-        match (bounds, position) {
+            .ok();
+        match self.bounds {
             // Elementos adiabáticos -----------------------------
-            (ADIABATIC, _) => {
-                let U = 0.0;
-                debug!("{} (adiabático) U={:.2}", self.name, U);
-                Some(U)
+            // Transmitancia térmica de una composición de cerramiento adiabático, en una posición dada, en W/m2K
+            // Notas:
+            // - los elementos adiabáticos se reportan con valor 0.0
+            BoundaryType::ADIABATIC => {
+                debug!("{} (adiabático) U=0.0", self.name);
+                Some(0.0)
             }
             // Elementos en contacto con el exterior -------------
-            (EXTERIOR, BOTTOM) => {
-                let U = fround2(1.0 / (R_intrinsic + RSI_DESCENDENTE + RSE));
-                debug!("{} (suelo) U={:.2}", self.name, U);
-                Some(U)
-            }
-            (EXTERIOR, TOP) => {
-                let U = fround2(1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE));
-                debug!("{} (cubierta) U={:.2}", self.name, U);
-                Some(U)
-            }
-            (EXTERIOR, SIDE) => {
-                let U = fround2(1.0 / (R_intrinsic + RSI_HORIZONTAL + RSE));
-                debug!("{} (muro) U={:.2}", self.name, U);
-                Some(U)
+            BoundaryType::EXTERIOR => {
+                let u = self.u_value_exterior(r_intrinsic);
+                debug!(
+                    "{} ({}) U={:.2}",
+                    self.name,
+                    position_to_name(Tilt::from(self)),
+                    u.unwrap_or_default()
+                );
+                u
             }
             // Elementos enterrados ------------------------------
-            (GROUND, BOTTOM) => {
-                // 1. Solera sobre el terreno: UNE-EN ISO 13370:2010 Apartado 9.1 y 9.3.2
-                // Simplificaciones:
-                // - forma cuadrada para calcular el perímetro si no está disponible
-                // - ancho de muros externos w = 0.3m
-                // - lambda de aislamiento = 0,035 W/mK
-                //
-                // HULC parece estar calculando algo más parecido al método de Winkelman o:
-                // let u = 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
+            // Transmitancia térmica de una composición de cerramiento enterrado, en una posición dada, en W/m2K
+            // Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
+            // Notas:
+            // - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
+            // - se usan resistencias superficiales de referencia (DB-HE)
+            //
+            // d_t: espesor equivalente total de solera (suelo del sótano) (10)
+            // psi_gnd_ext: transmitancia térmica lineal como efecto del aislamiento perimetral, psi_gnd_ext
+            // U_w: transmitancia del elemento considerado en contacto con el exterior
+            // gnd_P: perímetro expuesto del espacio
+            BoundaryType::GROUND => {
+                let space = model.spaces.iter().find(|s| s.id == self.space)?;
+                let d_t = space.slab_on_ground_d_t(&model.walls, &model.cons, &model.mats)?;
+                let U_w = self.u_value_exterior(r_intrinsic)?;
+                // psi_gnd_ext: transmitancia térmica lineal como efecto del aislamiento perimetral, psi_gnd_ext
+                // Calculado el efecto del aislamiento perimetral según UNE-EN ISO 13770:2010 Anexo B (B.4).
+                let psi_gnd_ext = {
+                    // Espesor aislamiento perimetral d_n = r_n_perim_ins * lambda_ins
+                    // d': Espesor equivalente adicional resultante del aislamiento perimetral (d')
+                    let d_1 = model.meta.rn_perim_insulation * (LAMBDA_GND - LAMBDA_INS);
 
-                // Dimensión característica del suelo (B'). Ver UNE-EN ISO 13370:2010 8.1
-                // Calculamos la dimensión característica del **espacio** en el que sitúa el suelo
-                // Si este espacio no define el perímetro, lo calculamos suponiendo una superficie cuadrada
-                let wspace = model.get_space(self.space)?;
-                let gnd_A = wspace.area;
-                let mut gnd_P = wspace.perimeter_exposed(&model.walls, &model.spaces);
-
-                // Soleras sin contacto perimetral con el exterior P=0 -> B' -> inf. Cambiamos P a un valor pequeño
-                if gnd_P.abs() < 0.001 {
-                    warn!(
-                        "{} (solera con perímetro expuesto nulo o casi nulo {:.2})",
-                        self.name, gnd_P,
-                    );
-                    gnd_P = 0.000001;
+                    fround3(
+                        -LAMBDA_GND / PI
+                            * (f32::ln(1.0 + 2.0 * model.meta.d_perim_insulation / d_t)
+                                - f32::ln(1.0 + 2.0 * model.meta.d_perim_insulation / (d_t + d_1))),
+                    )
                 };
+                let gnd_P = space.perimeter_exposed(&model.walls, &model.spaces);
 
-                let B_1 = gnd_A / (0.5 * gnd_P);
-                // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
-                let z = if wspace.z < 0.0 { -wspace.z } else { 0.0 };
-                const W: f32 = 0.3; // Simplificación: espesor supuesto de los muros perimetrales
-                let d_t = W + LAMBDA_GND * (RSI_DESCENDENTE + R_intrinsic + RSE);
-
-                // 2 casos:
-                // 1. Es un suelo de un espacio acondicionado (9.1 y 9.3.2)
-                // 2. Es un suelo de un espacio no acondicionado (9.2 - tomamos U_bg igual a U_g, según 9.2 (8) o a U_bf según E.2)
-                // Los dos casos equivalen aproximadamente al U_bf de 9.3.2
-                let B_limit = d_t + 0.5 * z;
-                let U_bf = if B_limit < B_1 {
-                    // Soleras sin aislar y moderadamente aisladas (11)
-                    (2.0 * LAMBDA_GND / (PI * B_1 + B_limit)) * f32::ln(1.0 + PI * B_1 / B_limit)
-                } else {
-                    // Soleras bien aisladas (12)
-                    LAMBDA_GND / (0.457 * B_1 + B_limit)
-                };
-
-                // Efecto del aislamiento perimetral 13770 Anexo B (B.4).
-                // Espesor aislamiento perimetral d_n = r_n_perim_ins * lambda_ins
-                // Espesor equivalente adicional resultante del aislamiento perimetral (d')
-                let D_1 = R_n_perim_ins * (LAMBDA_GND - LAMBDA_INS);
-                let psi_ge = -LAMBDA_GND / PI
-                    * (f32::ln(1.0 + 2.0 * D_perim_ins / d_t)
-                        - f32::ln(1.0 + 2.0 * D_perim_ins / (d_t + D_1)));
-
-                let U = fround2(U_bf + 2.0 * psi_ge / B_1); // H_g sería U * A
-
-                debug!(
-                    "{} (suelo de sótano) U={:.2} (R_n={:.2}, D={:.2}, A={:.2}, P={:.2}, B'={:.2}, z={:.2}, d_t={:.2}, R_f={:.3}, U_bf={:.2}, psi_ge = {:.3})",
-                    self.name,
-                    U,
-                    R_n_perim_ins,
-                    D_perim_ins,
-                    gnd_A,
-                    gnd_P,
-                    B_1,
-                    z,
-                    d_t,
-                    R_intrinsic,
-                    U_bf,
-                    psi_ge
-                );
-                Some(U)
-            }
-            (GROUND, SIDE) => {
-                // 2. Muros enterrados UNE-EN ISO 13370:2010 9.3.3
-                let U_w = 1.0 / (RSI_HORIZONTAL + R_intrinsic + RSE);
-                let space = model.get_space(self.space)?;
-                // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
-                let z = if space.z < 0.0 { -space.z } else { 0.0 };
-                // Muros que realmente no son enterrados
-                if z.abs() < 0.01 {
-                    warn!(
-                        "{} (muro de sótano no enterrado z=0) U_w={:.2} (z={:.2})",
-                        self.name, U_w, z,
-                    );
-                    return Some(U_w);
-                };
-
-                // Dimensión característica del suelo del sótano.
-                // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
-                // Usamos el promedio de los suelos del espacio
-                // TODO: ¿Tendría que ser la media ponderada por superficie?
-                let mut d_t = space
-                    .walls(&model.walls)
-                    .filter(|w| Tilt::from(*w) == BOTTOM)
-                    .zip(1..)
-                    .fold(0.0, |mean, (w, i)| {
-                        // Si no está definida la construcción no participa de la envolvente
-                        model
-                            .cons
-                            .get_wallcons(w.cons)
-                            .map(|wallcons| match wallcons.r_intrinsic(&model.mats).ok() {
-                                Some(wallcons_r_intrinsic) => {
-                                    (W + LAMBDA_GND
-                                        * (RSI_DESCENDENTE + wallcons_r_intrinsic + RSE)
-                                        + mean * (i - 1) as f32)
-                                        / i as f32
-                                }
-                                _ => 0.0,
-                            })
-                            .unwrap_or(0.0)
-                    });
-                const W: f32 = 0.3;
-
-                // Espesor equivalente de los muros de sótano (13)
-                let d_w = LAMBDA_GND * (RSI_HORIZONTAL + R_intrinsic + RSE);
-
-                // si d_w < d_t -> d_t = d_w
-                d_t = d_w.min(d_t);
-
-                // U del muro completamente enterrado a profundidad z (14)
-                let U_bw = if z != 0.0 {
-                    (2.0 * LAMBDA_GND / (PI * z))
-                        * (1.0 + 0.5 * d_t / (d_t + z))
-                        * f32::ln(z / d_w + 1.0)
-                } else {
-                    U_w
-                };
-
-                // Altura neta
-                let height_net = space.height_net(&model.walls, &model.cons);
-
-                // Altura sobre el terreno (muro no enterrado)
-                let h = if height_net > z { height_net - z } else { 0.0 };
-
-                // Si el muro no es enterrado en toda su altura ponderamos U por altura
-                let U = fround2(if h == 0.0 {
-                    // Muro completamente enterrado
-                    U_bw
-                } else {
-                    // Muro con z parcialmente enterrado
-                    (z * U_bw + h * U_w) / height_net
-                });
-
-                debug!(
-                    "{} (muro enterrado) U={:.2} (z={:.2}, h={:.2}, U_w={:.2}, U_bw={:.2}, d_t={:.2}, d_w={:.2})",
-                    self.name, U, z, h, U_w, U_bw, d_t, d_w,
-                );
-                Some(U)
-            }
-            // Cubiertas enterradas: el terreno debe estar definido como una capa de tierra con lambda = 2 W/K
-            (GROUND, TOP) => {
-                let U = fround2(1.0 / (R_intrinsic + RSI_ASCENDENTE + RSE));
-                debug!(
-                    "{} (cubierta enterrada) U={:.2} (R_f={:.3})",
-                    self.name, U, R_intrinsic
-                );
-                Some(U)
+                match Tilt::from(self) {
+                    Tilt::TOP => self.u_value_gnd_top(U_w, r_intrinsic),
+                    Tilt::BOTTOM => self.u_value_gnd_slab(
+                        gnd_P,
+                        psi_gnd_ext,
+                        space.area,
+                        space.z,
+                        d_t,
+                        r_intrinsic,
+                    ),
+                    Tilt::SIDE => self.u_value_gnd_wall(space, U_w, d_t, &model.walls, &model.cons),
+                }
             }
             // Elementos en contacto con otros espacios ---------------------
-            (INTERIOR, position) => {
-                // Dos casos:
-                // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
-                // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
-                let space = model.get_space(self.space)?;
-                let nextto = match self.next_to {
-                    Some(s) => s,
+            BoundaryType::INTERIOR => self.u_value_interior(
+                r_intrinsic,
+                &model.walls,
+                &model.windows,
+                &model.spaces,
+                &model.cons,
+                &model.mats,
+                model,
+            ),
+        }
+    }
+
+    /// Transmitancia térmica de una composición de cerramiento exterior, en una posición dada, en W/m2K
+    /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
+    /// Notas:
+    /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
+    /// - se usan resistencias superficiales de referencia (DB-HE)
+    pub fn u_value_exterior(&self, r_intrinsic: Option<f32>) -> Option<f32> {
+        let r = r_intrinsic?;
+        let rsi = match Tilt::from(self) {
+            Tilt::BOTTOM => RSI_DESCENDENTE,
+            Tilt::TOP => RSI_ASCENDENTE,
+            Tilt::SIDE => RSI_HORIZONTAL,
+        };
+        Some(fround2(1.0 / (r + rsi + RSE)))
+    }
+
+    /// Transmitancia térmica de una composición de cerramiento enterrado, en una posición dada, en W/m2K
+    /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
+    /// Notas:
+    /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
+    /// - se usan resistencias superficiales de referencia (DB-HE)
+    pub fn u_value_interior(
+        &self,
+        r_intrinsic: Option<f32>,
+        walls: &[Wall],
+        windows: &[Window],
+        spaces: &[Space],
+        cons: &ConsDb,
+        mats: &MatsDb,
+        model: &Model,
+    ) -> Option<f32> {
+        // Dos casos:
+        // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
+        // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
+        let space = spaces.iter().find(|s| s.id == self.space)?;
+
+        let nextto = match self.next_to {
+            Some(s) => s,
+            _ => {
+                warn!(
+                    "Muro {} ({}) sin definición de espacio adyacente",
+                    self.id, self.name
+                );
+                return None;
+            }
+        };
+        let nextspace = match spaces.iter().find(|s| s.id == nextto) {
+            Some(s) => s,
+            _ => {
+                warn!(
+                    "Muro {} ({}) con definición de espacio adyacente incorrecta {}",
+                    self.id, self.name, nextto
+                );
+                return None;
+            }
+        };
+
+        let position = Tilt::from(self);
+        if nextspace.kind == SpaceType::CONDITIONED && space.kind == SpaceType::CONDITIONED {
+            // Elemento interior con otro espacio acondicionado
+            // HULC no diferencia entre RS según posiciones para elementos interiores
+            let U = fround2(1.0 / (r_intrinsic? + 2.0 * RSI_HORIZONTAL));
+            debug!(
+                "{} ({} acondicionado-acondicionado) U_int={:.2}",
+                self.name,
+                position_to_name(position),
+                U
+            );
+            Some(U)
+        } else {
+            // Comunica un espacio acondicionado con otro no acondicionado
+
+            // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
+            // Localizamos el espacio no acondicionado
+            let (uncondspace, thiscondspace) = if nextspace.kind == SpaceType::CONDITIONED {
+                (space, false)
+            } else {
+                (nextspace, true)
+            };
+            let uncondspace_v = uncondspace.height_net(walls, cons) * uncondspace.area;
+            let n_ven = match uncondspace.n_v {
+                Some(n_v) => n_v,
+                _ => match model.meta.global_ventilation_l_s {
+                    Some(global_ventilation) => 3.6 * global_ventilation / model.vol_env_inh_net(),
                     _ => {
-                        warn!(
-                            "Muro {} ({}) sin definición de espacio adyacente",
-                            self.id, self.name
-                        );
-                        return None;
+                        // Espacio mal definido (ni tiene n_v ni hay definición global de ventilación)
+                        warn!("Definición global (l/s) no definida para espacio no acondicionado sin n_v {} ({})", uncondspace.id, uncondspace.name);
+                        0.0
                     }
-                };
+                },
+            };
 
-                let nextspace = match model.get_space(nextto) {
-                    Some(s) => s,
-                    _ => {
-                        warn!(
-                            "Muro {} ({}) con definición de espacio adyacente incorrecta {}",
-                            self.id, self.name, nextto
-                        );
-                        return None;
-                    }
-                };
-
-                if nextspace.kind == CONDITIONED && space.kind == CONDITIONED {
-                    // Elemento interior con otro espacio acondicionado
-                    // HULC no diferencia entre RS según posiciones para elementos interiores
-                    let U = fround2(1.0 / (R_intrinsic + 2.0 * RSI_HORIZONTAL));
-                    debug!(
-                        "{} ({} acondicionado-acondicionado) U_int={:.2}",
-                        self.name, position_to_name(position), U
-                    );
-                    Some(U)
-                } else {
-                    // Comunica un espacio acondicionado con otro no acondicionado
-
-                    // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
-                    // Localizamos el espacio no acondicionado
-                    let (uncondspace, thiscondspace) = if nextspace.kind == CONDITIONED {
-                        (space, false)
-                    } else {
-                        (nextspace, true)
-                    };
-                    let uncondspace_v =
-                        uncondspace.height_net(&model.walls, &model.cons) * uncondspace.area;
-                    let n_ven = match uncondspace.n_v {
-                        Some(n_v) => n_v,
-                        _ => match model.meta.global_ventilation_l_s {
-                            Some(global_ventilation) => {
-                                3.6 * global_ventilation / model.vol_env_inh_net()
-                            }
-                            _ => {
-                                // Espacio mal definido (ni tiene n_v ni hay definición global de ventilación)
-                                warn!("Definición global (l/s) no definida para espacio no acondicionado sin n_v {} ({})", uncondspace.id, uncondspace.name);
-                                0.0
-                            }
-                        },
-                    };
-
-                    // CASO: interior en contacto con sótano no calefactado - ISO 13370:2010 (9.4)
-                    // CASO: interior en contacto con otro espacio no habitable / no acondicionado - UNE-EN ISO 6946:2007 (5.4.3)
-                    // Calculamos el A.U de los elementos del espacio que dan al exterior o al terreno (excluye interiores))
-                    // Como hemos asignado U_bw y U_bf a los muros y suelos en contacto con el terreno, ya se tiene en cuenta
-                    // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
-                    let UA_e_k = uncondspace
-                        .walls(&model.walls)
-                        .filter(|wall| wall.bounds == GROUND || wall.bounds == EXTERIOR)
-                        .filter_map(|wall| {
-                            // A·U de muros (y suelos) + A.U de sus huecos
-                            let wall_u = self.u_value(model)?;
-                            let win_axu = wall
-                                .windows(&model.windows)
-                                .filter_map(|win| {
-                                    // Si no está definida la construcción, el hueco no participa de la envolvente
-                                    win.u_value(&model.cons, &model.mats)
-                                        .map(|u| Some(win.area() * u))?
-                                })
-                                .sum::<f32>();
-                            Some(wall.area_net(&model.windows) * wall_u + win_axu)
+            // CASO: interior en contacto con sótano no calefactado - ISO 13370:2010 (9.4)
+            // CASO: interior en contacto con otro espacio no habitable / no acondicionado - UNE-EN ISO 6946:2007 (5.4.3)
+            // Calculamos el A.U de los elementos del espacio que dan al exterior o al terreno (excluye interiores))
+            // Como hemos asignado U_bw y U_bf a los muros y suelos en contacto con el terreno, ya se tiene en cuenta
+            // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
+            let UA_e_k = uncondspace
+                .walls(walls)
+                .filter(|wall| {
+                    wall.bounds == BoundaryType::GROUND || wall.bounds == BoundaryType::EXTERIOR
+                })
+                .filter_map(|wall| {
+                    // A·U de muros (y suelos) + A.U de sus huecos
+                    let wall_u = self.u_value(model)?;
+                    let win_axu = wall
+                        .windows(windows)
+                        .filter_map(|win| {
+                            // Si no está definida la construcción, el hueco no participa de la envolvente
+                            win.u_value(cons, mats).map(|u| Some(win.area() * u))?
                         })
                         .sum::<f32>();
-                    // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
-                    // En la fórmula anterior, para espacios no acondicionados, se indica que se excluyen suelos, pero no entiendo bien por qué.
-                    // Esta fórmula, cuando los A_e_k y U_e_k incluyen los muros y suelos con el terreno U_bw y U_bf, con la parte proporcional de
-                    // muros al exterior, es equivalente a la que indica la 13370
-                    let A_i = self.area_net(&model.windows);
-                    let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
-                    let R_u = A_i / H_ue;
-                    // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789 Tabla 8)
-                    let R_f = match (position, thiscondspace) {
-                        // Suelo de espacio acondicionado hacia no acondicionado inferior
-                        // Techo de espacio no acondicionado hacia acondicionado inferior
-                        (BOTTOM, true) | (TOP, false) => R_intrinsic + 2.0 * RSI_DESCENDENTE,
-                        // Techo de espacio acondicionado hacia no acondicionado superior
-                        // Suelo de espacio no acondicionado hacia acondicionado superior
-                        (TOP, true) | (BOTTOM, false) => R_intrinsic + 2.0 * RSI_ASCENDENTE,
-                        // Muro
-                        (SIDE, _) => R_intrinsic + 2.0 * RSI_HORIZONTAL,
-                    };
-                    let U = fround2(1.0 / (R_f + R_u));
+                    Some(wall.area_net(windows) * wall_u + win_axu)
+                })
+                .sum::<f32>();
+            // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
+            // En la fórmula anterior, para espacios no acondicionados, se indica que se excluyen suelos, pero no entiendo bien por qué.
+            // Esta fórmula, cuando los A_e_k y U_e_k incluyen los muros y suelos con el terreno U_bw y U_bf, con la parte proporcional de
+            // muros al exterior, es equivalente a la que indica la 13370
+            let A_i = self.area_net(windows);
+            let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
+            let R_u = A_i / H_ue;
+            // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789 Tabla 8)
+            let R_f = match (position, thiscondspace) {
+                // Suelo de espacio acondicionado hacia no acondicionado inferior
+                // Techo de espacio no acondicionado hacia acondicionado inferior
+                (Tilt::BOTTOM, true) | (Tilt::TOP, false) => r_intrinsic? + 2.0 * RSI_DESCENDENTE,
+                // Techo de espacio acondicionado hacia no acondicionado superior
+                // Suelo de espacio no acondicionado hacia acondicionado superior
+                (Tilt::TOP, true) | (Tilt::BOTTOM, false) => r_intrinsic? + 2.0 * RSI_ASCENDENTE,
+                // Muro
+                (Tilt::SIDE, _) => r_intrinsic? + 2.0 * RSI_HORIZONTAL,
+            };
+            let U = fround2(1.0 / (R_f + R_u));
 
-                    debug!(
+            debug!(
                             "{} ({} acondicionado-no acondicionado/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
                             self.name, position_to_name(position), U, R_f, R_u, A_i, 1.0/R_f
                         );
-                    Some(U)
-                }
-            }
+            Some(U)
         }
+    }
+
+    /// Transmitancia térmica de una cubierta enterrada, W/m²K
+    ///
+    /// La composición del muro debe incluir una capa de terreno con lambda = 2 W/K
+    fn u_value_gnd_top(&self, U_w: f32, r_intrinsic: Option<f32>) -> Option<f32> {
+        debug!(
+            "{} (cubierta enterrada) U={:.2} (R_f={:.3})",
+            self.name, U_w, r_intrinsic?
+        );
+        Some(U_w)
+    }
+
+    /// Transmitancia térmica de solera sobre el terreno (suelo de sótano)
+    ///
+    /// Cálculo según UNE-EN ISO 13370:2010 Apartado 9.1 y 9.3.2
+    /// Hipótesis:
+    /// - la cota z del suelo del espacio es relativa a la cota 0 del terreno
+    /// Simplificaciones:
+    /// - forma cuadrada para calcular el perímetro si no está disponible
+    /// - ancho de muros externos w = 0.3m
+    /// - lambda de aislamiento = 0,035 W/mK
+    ///
+    /// HULC parece estar calculando algo más parecido al método de Winkelman o:
+    /// let u = 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
+    ///
+    /// psi_gnd_ext: transmitancia térmica lineal como efecto del aislamiento perimetral
+    fn u_value_gnd_slab(
+        &self,
+        gnd_P: f32,
+        psi_gnd_ext: f32,
+        space_area: f32,
+        space_z: f32,
+        d_t: f32,
+        r_intrinsic: Option<f32>,
+    ) -> Option<f32> {
+        let gnd_A = space_area;
+        // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
+        let z = if space_z < 0.0 { -space_z } else { 0.0 };
+        // Soleras sin contacto perimetral con el exterior P=0 -> B' -> inf. Cambiamos P a un valor pequeño
+        let gnd_P = if gnd_P.abs() < 0.001 {
+            warn!(
+                "{} (solera con perímetro expuesto nulo o casi nulo {:.2})",
+                self.name, gnd_P,
+            );
+            0.000001
+        } else {
+            gnd_P
+        };
+        // B': Dimensión caracterísitica del suelo de sótano. Ver UNE-EN ISO 13370:2010 8.1
+        let B_1 = gnd_A / (0.5 * gnd_P);
+        // 2 casos:
+        // 1. Es un suelo de un espacio acondicionado (9.1 y 9.3.2)
+        // 2. Es un suelo de un espacio no acondicionado (9.2 - tomamos U_bg igual a U_g, según 9.2 (8) o a U_bf según E.2)
+        // Los dos casos equivalen aproximadamente al U_bf de 9.3.2
+        let B_limit = d_t + 0.5 * z;
+        let U_bf = if B_limit < B_1 {
+            // Soleras sin aislar y moderadamente aisladas (11)
+            (2.0 * LAMBDA_GND / (PI * B_1 + B_limit)) * f32::ln(1.0 + PI * B_1 / B_limit)
+        } else {
+            // Soleras bien aisladas (12)
+            LAMBDA_GND / (0.457 * B_1 + B_limit)
+        };
+
+        let U = fround2(U_bf + 2.0 * psi_gnd_ext / B_1);
+        // H_g sería U * A
+        debug!(
+            "{} (suelo de sótano) U={:.2} (A={:.2}, P={:.2}, B'={:.2}, z={:.2}, d_t={:.2}, R_f={:.3}, U_bf={:.2}, psi_ge = {:.3})",
+            self.name,
+            U,
+            gnd_A,
+            gnd_P,
+            B_1,
+            z,
+            d_t,
+            r_intrinsic?,
+            U_bf,
+            psi_gnd_ext
+        );
+        Some(U)
+    }
+
+    /// Transmitancia térmica de muro enterrado, en W/m²K
+    ///
+    /// Cálculo según UNE-EN ISO 13370:2010 9.3.3
+    /// Hipótesis:
+    /// - la cota z del suelo del espacio es relativa a la cota 0 del terreno
+    fn u_value_gnd_wall(
+        &self,
+        space: &Space,
+        U_w: f32,
+        d_t: f32,
+        walls: &[Wall],
+        cons: &ConsDb,
+    ) -> Option<f32> {
+        let z = if space.z < 0.0 { -space.z } else { 0.0 };
+        // Muros que realmente no son enterrados
+        if z.abs() < 0.01 {
+            warn!(
+                "{} (muro de sótano no enterrado z=0) U_w={:.2} (z={:.2})",
+                self.name, U_w, z,
+            );
+            return Some(U_w);
+        };
+        // d_w: Espesor equivalente de los muros de sótano (13)
+        let d_w = LAMBDA_GND / U_w;
+        // U del muro completamente enterrado a profundidad z (14)
+        let U_bw = if z.abs() < f32::EPSILON {
+            // Muro no enterrado
+            // Si z = 0 -> U = U_w
+            U_w
+        } else {
+            // Muro parcialmente enterrado
+            // Si d_w < d_t -> d_t = d_w
+            let d_t = d_w.min(d_t);
+            fround2(
+                (2.0 * LAMBDA_GND / (PI * z))
+                    * (1.0 + 0.5 * d_t / (d_t + z))
+                    * f32::ln(z / d_w + 1.0),
+            )
+        };
+        // Altura neta
+        let height_net = space.height_net(walls, cons);
+        // Altura sobre el terreno (muro no enterrado)
+        let h = if height_net > z { height_net - z } else { 0.0 };
+        // Si el muro no es enterrado en toda su altura ponderamos U por altura
+        let U = if h.abs() < f32::EPSILON {
+            // Muro completamente enterrado
+            U_bw
+        } else {
+            // Muro con z parcialmente enterrado
+            fround2((z * U_bw + h * U_w) / height_net)
+        };
+        debug!(
+            "{} (muro enterrado) U={:.2} (z={:.2}, h={:.2}, U_w={:.2}, U_bw={:.2}, d_t={:.2}, d_w={:.2})",
+            self.name, U, z, h, U_w, U_bw, d_t, d_w,
+        );
+        Some(U)
     }
 }
 
+/// Convierte inclinación a nombre de elemento (suelo, techo, muro)
 fn position_to_name<'a>(position: Tilt) -> &'a str {
     match position {
         Tilt::BOTTOM => "suelo",
