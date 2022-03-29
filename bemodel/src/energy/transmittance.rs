@@ -331,9 +331,8 @@ impl Wall {
                 // Espesor equivalente de los muros de sótano (13)
                 let d_w = LAMBDA_GND * (RSI_HORIZONTAL + R_intrinsic + RSE);
 
-                if d_w < d_t {
-                    d_t = d_w
-                };
+                // si d_w < d_t -> d_t = d_w
+                d_t = d_w.min(d_t);
 
                 // U del muro completamente enterrado a profundidad z (14)
                 let U_bw = if z != 0.0 {
