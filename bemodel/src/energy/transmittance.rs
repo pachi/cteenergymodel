@@ -402,46 +402,25 @@ impl Wall {
                     }
                 };
 
-                let nexttype = nextspace.kind;
-
-                let posname = match position {
-                    BOTTOM => "suelo",
-                    TOP => "techo",
-                    SIDE => "muro",
-                };
-
-                if nexttype == CONDITIONED && space.kind == CONDITIONED {
+                if nextspace.kind == CONDITIONED && space.kind == CONDITIONED {
                     // Elemento interior con otro espacio acondicionado
                     // HULC no diferencia entre RS según posiciones para elementos interiores
                     let U = fround2(1.0 / (R_intrinsic + 2.0 * RSI_HORIZONTAL));
                     debug!(
                         "{} ({} acondicionado-acondicionado) U_int={:.2}",
-                        self.name, posname, U
+                        self.name, position_to_name(position), U
                     );
                     Some(U)
                 } else {
                     // Comunica un espacio acondicionado con otro no acondicionado
 
+                    // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
                     // Localizamos el espacio no acondicionado
-                    let (uncondspace, thiscondspace) = if nexttype == CONDITIONED {
+                    let (uncondspace, thiscondspace) = if nextspace.kind == CONDITIONED {
                         (space, false)
                     } else {
                         (nextspace, true)
                     };
-
-                    // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789 Tabla 8)
-                    let R_f = match (position, thiscondspace) {
-                        // Suelo de espacio acondicionado hacia no acondicionado inferior
-                        // Techo de espacio no acondicionado hacia acondicionado inferior
-                        (BOTTOM, true) | (TOP, false) => R_intrinsic + 2.0 * RSI_DESCENDENTE,
-                        // Techo de espacio acondicionado hacia no acondicionado superior
-                        // Suelo de espacio no acondicionado hacia acondicionado superior
-                        (TOP, true) | (BOTTOM, false) => R_intrinsic + 2.0 * RSI_ASCENDENTE,
-                        // Muro
-                        (SIDE, _) => R_intrinsic + 2.0 * RSI_HORIZONTAL,
-                    };
-
-                    // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
                     let uncondspace_v =
                         uncondspace.height_net(&model.walls, &model.cons) * uncondspace.area;
                     let n_ven = match uncondspace.n_v {
@@ -487,15 +466,34 @@ impl Wall {
                     let A_i = self.area_net(&model.windows);
                     let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
                     let R_u = A_i / H_ue;
+                    // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789 Tabla 8)
+                    let R_f = match (position, thiscondspace) {
+                        // Suelo de espacio acondicionado hacia no acondicionado inferior
+                        // Techo de espacio no acondicionado hacia acondicionado inferior
+                        (BOTTOM, true) | (TOP, false) => R_intrinsic + 2.0 * RSI_DESCENDENTE,
+                        // Techo de espacio acondicionado hacia no acondicionado superior
+                        // Suelo de espacio no acondicionado hacia acondicionado superior
+                        (TOP, true) | (BOTTOM, false) => R_intrinsic + 2.0 * RSI_ASCENDENTE,
+                        // Muro
+                        (SIDE, _) => R_intrinsic + 2.0 * RSI_HORIZONTAL,
+                    };
                     let U = fround2(1.0 / (R_f + R_u));
 
                     debug!(
                             "{} ({} acondicionado-no acondicionado/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
-                            self.name, posname, U, R_f, R_u, A_i, 1.0/R_f
+                            self.name, position_to_name(position), U, R_f, R_u, A_i, 1.0/R_f
                         );
                     Some(U)
                 }
             }
         }
+    }
+}
+
+fn position_to_name<'a>(position: Tilt) -> &'a str {
+    match position {
+        Tilt::BOTTOM => "suelo",
+        Tilt::TOP => "techo",
+        Tilt::SIDE => "muro",
     }
 }
