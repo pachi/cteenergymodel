@@ -96,6 +96,13 @@ impl ElementProps {
                 area: s.area,
                 height_net: s.height_net(&model.walls, &model.cons),
                 p_exp: s.perimeter_exposed(&model.walls, &model.spaces),
+                // inside_tenv: s.inside_tenv,
+                // space_walls: model
+                //     .walls
+                //     .iter()
+                //     .filter_map(|w| if w.space == s.id { Some(w.id) } else { None })
+                //     .collect(),
+                // z: s.z,
             };
             spaces.insert(s.id, sp);
         }
@@ -159,6 +166,12 @@ pub struct SpaceProps {
     // pub volume: f32,
     /// Perímetro expuesto del espacio
     pub p_exp: f32,
+    // /// ¿Pertenece este muro a la envolvente térmica?
+    // pub inside_tenv: bool,
+    // /// Muros que pertenecen al espacio
+    // pub space_walls: Vec<Uuid>,
+    // /// Cota del espacio
+    // pub z: f32,
 }
 
 /// Propiedades de muros
@@ -301,6 +314,7 @@ impl KData {
     /// Transmitancia media de opacos, huecos y puentes térmicos en contacto con el aire exterior o con el terreno
     ///
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
+    #[allow(non_snake_case)]
     pub fn K(model: &Model) -> KData {
         use crate::{BoundaryType, Tilt};
         let mut k = Self::default();
@@ -322,7 +336,7 @@ impl KData {
                 k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
                 k.windows.u_min = k.windows.u_min.map(|v| v.min(win_u)).or(Some(win_u));
             }
-            let wall_u = match wall.u_value(&model) {
+            let wall_u = match wall.u_value(model) {
                 Some(u) => u,
                 _ => continue,
             };
