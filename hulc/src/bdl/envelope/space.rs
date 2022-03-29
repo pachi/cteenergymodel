@@ -14,9 +14,7 @@ use std::convert::TryFrom;
 use anyhow::{bail, format_err, Error};
 
 use super::super::BdlBlock;
-use super::super::Data;
 use super::geom::Polygon;
-use super::walls::{Tilt, Wall};
 
 /// Espacio
 #[derive(Debug, Clone, Default)]
@@ -67,78 +65,6 @@ pub struct Space {
     /// Tasa de renovación de aire (ventilación), en renh
     /// En edificios residenciales no se guarda (es None) y se usa el global, repartiendo por volumen
     pub airchanges_h: Option<f32>,
-}
-
-impl Space {
-    /// Altura (suelo a techo) del espacio (m)
-    ///
-    /// Usa la altura bruta y resta espesores de cubiertas y forjados
-    pub fn space_height(&self, db: &Data) -> Result<f32, Error> {
-        let topwall = &self.top_wall(db)?;
-        let topheight = db
-            .db
-            .wallcons
-            .get(&topwall.cons)
-            .ok_or_else(|| {
-                format_err!(
-                    "No se encuentra la composición de capas \"{}\"",
-                    &topwall.cons
-                )
-            })?
-            .thickness();
-        Ok(self.height - topheight)
-    }
-
-    /// Superficie del espacio (m2)
-    ///
-    /// Usa el área del polígono que define el espacio
-    pub fn area(&self) -> f32 {
-        self.polygon.area()
-    }
-
-    /// Calcula el perímetro del espacio (m)
-    ///
-    /// Usa el perímetro del polígono que define el espacio
-    pub fn perimeter(&self) -> f32 {
-        self.polygon.perimeter()
-    }
-
-    /// Volumen bruto del espacio (m3)
-    ///
-    /// Usa el área y la altura total (suelo a suelo) del espacio
-    pub fn gross_volume(&self) -> f32 {
-        self.area() * self.height
-    }
-
-    /// Volumen neto del espacio (m3)
-    ///
-    /// Usa el área y la altura libre (suelo a techo) del espacio
-    pub fn net_volume(&self, db: &Data) -> Result<f32, Error> {
-        Ok(self.area() * self.space_height(db)?)
-    }
-
-    /// Muro superior de un espacio
-    pub fn top_wall<'a>(&self, db: &'a Data) -> Result<&'a Wall, Error> {
-        db
-            .walls
-            .iter()
-            .find(|w| {
-                match w.position() {
-                    // Muros exteriores o cubiertas sobre el espacio
-                    Tilt::TOP => w.space == self.name,
-                    // Es un cerramiento interior sobre este espacio
-                    Tilt::BOTTOM => {
-                        w.nextto.as_ref().map(|s| s == &self.name).unwrap_or(false)}
-                    _ => false
-                }
-            })
-            .ok_or_else(|| {
-                format_err!(
-                    "Cerramiento superior del espacio {} no encontrado. No se puede calcular la altura libre",
-                    self.name
-                )
-            })
-    }
 }
 
 impl TryFrom<BdlBlock> for Space {

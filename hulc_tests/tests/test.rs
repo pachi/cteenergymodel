@@ -185,22 +185,15 @@ fn test_bdl_parse() {
     // Espacio
     let s = bdldb.get_space("P02_E01").unwrap();
     assert_almost_eq!(s.height, 3.0, 0.001); // Altura
-    assert_almost_eq!(s.space_height(bdldb).unwrap(), 2.65, 0.001); // Altura libre
-    assert_almost_eq!(s.area(), 150.0, 0.001); // Área 10m x 15m
-    assert_almost_eq!(s.perimeter(), 50.0, 0.001); // Perímetro (10 + 15) x 2
 
     // Forjado interior
     let w = bdldb.get_wall("P02_E01_FI001").unwrap();
-    assert_almost_eq!(w.gross_area(bdldb).unwrap(), 49.985004, 0.001);
-    assert_almost_eq!(w.net_area(bdldb).unwrap(), 49.985004, 0.001);
     assert_eq!(w.space, "P02_E01");
     assert_almost_eq!(w.tilt, 180.0, 0.001);
     assert_almost_eq!(w.angle_with_space_north, 90.0, 0.001); // Horizontal
 
     // Solera
     let w = bdldb.get_wall("P01_E01_FTER001").unwrap();
-    assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.0, 0.001);
-    assert_almost_eq!(w.net_area(bdldb).unwrap(), 50.0, 0.001);
     assert_eq!(w.space, "P01_E01");
     assert_almost_eq!(w.tilt, 180.0, 0.001);
     assert_almost_eq!(w.angle_with_space_north, 180.0, 0.001); // Horizontal
@@ -210,7 +203,6 @@ fn test_bdl_parse() {
     assert_almost_eq!(w.angle_with_space_north, 0.0, 0.001); // Norte
     let w = bdldb.get_wall("P04_E01_ME001").unwrap();
     assert_almost_eq!(w.angle_with_space_north, 0.0, 0.001); // Norte
-    assert_almost_eq!(w.gross_area(bdldb).unwrap(), 17.5, 0.001);
 
     // Muro exterior
     let w = bdldb.get_wall("P01_E01_PE001").unwrap();
@@ -222,23 +214,19 @@ fn test_bdl_parse() {
 
     // Muro interior
     let w = bdldb.get_wall("P02_E01_PE001").unwrap();
-    assert_almost_eq!(w.gross_area(bdldb).unwrap(), 30.0, 0.001);
-    assert_almost_eq!(w.net_area(bdldb).unwrap(), 28.0, 0.001);
     assert_eq!(w.space, "P02_E01");
     assert_almost_eq!(w.tilt, 90.0, 0.001);
     assert_almost_eq!(w.angle_with_space_north, 270.0, 0.001); // Oeste
 
     let v = bdldb.get_window("P02_E01_PE001_V").unwrap();
-    assert_almost_eq!(v.area(), 2.0, 0.001);
+    // assert_almost_eq!(v.area(), 2.0, 0.001);
     assert_eq!(v.wall, "P02_E01_PE001");
 
     // Cubiertas
     let w = bdldb.get_wall("P03_E01_CUB001").unwrap();
-    assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.0, 0.005);
     assert_almost_eq!(w.angle_with_space_north, 180.0, 0.001); // Horizontal
     assert_almost_eq!(w.tilt, 0.0, 0.001); // Horizontal
     let w = bdldb.get_wall("P04_E01_CUB001").unwrap();
-    assert_almost_eq!(w.gross_area(bdldb).unwrap(), 50.9902, 0.005);
     assert_almost_eq!(w.angle_with_space_north, 90.0, 0.001); // Este
     assert_almost_eq!(w.tilt, 11.30993, 0.001);
 

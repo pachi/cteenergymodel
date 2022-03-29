@@ -49,19 +49,6 @@ pub struct Window {
     pub louvres: Option<Louvres>,
 }
 
-// TODO: Muchas de estas cosas seguramente tendrían que ir a types y quedar Window como datos simplemente
-impl Window {
-    /// Superficie de la ventana [m2]
-    pub fn area(&self) -> f32 {
-        self.width * self.height
-    }
-
-    /// Perímetro del hueco [m]
-    pub fn perimeter(&self) -> f32 {
-        2.0 * (self.width + self.height)
-    }
-}
-
 impl TryFrom<BdlBlock> for Window {
     type Error = Error;
 

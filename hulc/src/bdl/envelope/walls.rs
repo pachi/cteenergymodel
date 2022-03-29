@@ -17,7 +17,7 @@ use std::convert::TryFrom;
 
 use anyhow::{bail, format_err, Error};
 
-use crate::bdl::{envelope::Polygon, BdlBlock, Data};
+use crate::bdl::{envelope::Polygon, BdlBlock};
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
@@ -102,82 +102,6 @@ pub struct Wall {
 }
 
 impl Wall {
-    /// Superficie bruta (incluyendo huecos) del muro (m2)
-    ///
-    /// TODO: la búsqueda de polígonos y espacios no es óptima (se podría cachear)
-    pub fn gross_area(&self, db: &Data) -> Result<f32, Error> {
-        if let Some(polygon) = &self.polygon {
-            // Superficie para muros definidos por polígono
-            Ok(polygon.area())
-        } else if let Some(location) = self.location.as_deref() {
-            // Superficie para muros definidos por posición, en un espacio
-            let space = db.get_space(self.space.as_str()).ok_or_else(|| {
-                format_err!(
-                    "Espacio {} del cerramiento {} no encontrado. No se puede calcular la superficie",
-                    self.space,
-                    self.name
-                )
-            })?;
-            // Elementos de suelo o techo
-            if ["TOP", "BOTTOM"].contains(&location) {
-                Ok(space.area())
-            // Elementos definidos por vértice (location contiene el nombre del vértice)
-            } else {
-                let poly = &space.polygon;
-                let height = space.height;
-                let length = poly.edge_length(location);
-                Ok(height * length)
-            }
-        } else {
-            bail!("Formato de cerramiento incorrecto. No se define por polígono ni por vértice")
-        }
-    }
-
-    /// Superficie neta (sin huecos) del cerramiento (m2)
-    pub fn net_area(&self, db: &Data) -> Result<f32, Error> {
-        let wall_gross_area = self.gross_area(db)?;
-        let windows_area = db
-            .windows
-            .iter()
-            .filter(|w| w.wall == self.name)
-            .map(|w| w.area())
-            .sum::<f32>();
-        Ok(wall_gross_area - windows_area)
-    }
-
-    /// Perímetro del cerramiento (m)
-    pub fn perimeter(&self, db: &Data) -> Result<f32, Error> {
-        // 1. Elementos definidos por geometría -> perímetro del polígono
-        // 2. Elementos definidos por posición TOP, BOTTOM o SPACE-Vxx
-        // 2.1 Elementos TOP o BOTTOM -> perímetro del polígono del espacio
-        // 2.2 Elementos definidos por vértice en el espacio -> longitud de lado * altura
-        if let Some(polygon) = &self.polygon {
-            // 1. Muros definidos por geometría (polígono)
-            Ok(polygon.perimeter())
-        } else if let Some(location) = self.location.as_deref() {
-            // 2. Muros definidos por posición, en un espacio (polígono del espacio)
-            let space = db.get_space(self.space.as_str()).ok_or_else(|| {
-                format_err!(
-                    "Espacio {} del cerramiento {} no encontrado. No se puede calcular el perímetro",
-                    self.space,
-                    self.name
-                )
-            })?;
-            // 2.1 Elementos de suelo o techo
-            if ["TOP", "BOTTOM"].contains(&location) {
-                Ok(space.perimeter())
-            // 2.2 Elementos definidos por vértice (location contiene el nombre del vértice)
-            } else {
-                let poly = &space.polygon;
-                let height = space.height;
-                let length = poly.edge_length(location);
-                Ok(2.0 * (height + length))
-            }
-        } else {
-            bail!("Formato de cerramiento incorrecto. No se define por polígono ni por vértice")
-        }
-    }
-
     /// Posición del elemento (TOP, BOTTOM, SIDE) según su inclinación
     /// Los elementos con inclinación > 60º Con la horizontal son verticales.
     pub fn position(&self) -> Tilt {

@@ -47,6 +47,13 @@ fn model_json_e4h_medianeras() {
 
     let strdata = include_str!("./data/e4h_medianeras.json");
     let model = Model::from_json(strdata).unwrap();
+
+    // // Cubiertas
+    let wall = model.get_wall_by_name("P04_E01_CUB001").unwrap();
+    assert_almost_eq!(wall.area(), 96.14, 0.01);
+    let wall = model.get_wall_by_name("P04_E02_CUB001").unwrap();
+    assert_almost_eq!(wall.area(), 95.45, 0.01);
+
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 1673.92, 0.01);
     assert_almost_eq!(ind.compacity, 3.17, 0.01);
@@ -105,6 +112,56 @@ fn model_json_ejemploviv_unif() {
 
     let strdata = include_str!("./data/ejemploviv_unif.json");
     let mut model = Model::from_json(strdata).unwrap();
+    // Datos geométricos
+
+    // Espacio
+    let spc = model.get_space_by_name("P01_E01").unwrap();
+    assert_almost_eq!(spc.area, 25.04, 0.01);
+    assert_almost_eq!(spc.height_net(&model.walls, &model.cons), 2.48, 0.01);
+    assert_almost_eq!(
+        spc.perimeter_exposed(&model.walls, &model.spaces),
+        7.21,
+        0.01
+    );
+
+    // Forjado interior
+    let wall = model.get_wall_by_name("P02_E01_FI001").unwrap();
+    assert_almost_eq!(wall.area(), 11.12, 0.01);
+    assert_almost_eq!(wall.area_net(&model.windows), 11.12, 0.01);
+    assert_almost_eq!(wall.perimeter(), 13.37, 0.01);
+
+    // Solera
+    let wall = model.get_wall_by_name("P01_E01_FTER001").unwrap();
+    assert_almost_eq!(wall.area(), 25.04, 0.01);
+    assert_almost_eq!(wall.area_net(&model.windows), 25.04, 0.01);
+    assert_eq!(wall.space, model.get_space_by_name("P01_E01").unwrap().id);
+
+    // Pared exterior
+    let wall = model.get_wall_by_name("P01_E01_PE003").unwrap();
+    assert_almost_eq!(wall.area(), 9.76, 0.01);
+
+    let wall = model.get_wall_by_name("P01_E01_PE001").unwrap();
+    assert_almost_eq!(wall.area(), 9.71, 0.01);
+
+    // Medianera
+    let wall = model.get_wall_by_name("P02_E02_ME001").unwrap();
+    assert_almost_eq!(wall.area(), 5.27, 0.01);
+
+    // Muro interior
+    let wall = model.get_wall_by_name("P02_E01_PE001").unwrap();
+    assert_almost_eq!(wall.area(), 10.79, 0.01);
+    assert_almost_eq!(wall.area_net(&model.windows), 9.35, 0.01);
+    assert_eq!(wall.space, model.get_space_by_name("P02_E01").unwrap().id);
+
+    let win = model.get_window_by_name("P02_E01_PE001_V").unwrap();
+    assert_almost_eq!(win.area(), 1.44, 0.01);
+    assert_eq!(
+        win.wall,
+        model.get_wall_by_name("P02_E01_PE001").unwrap().id
+    );
+
+    // Indicators
+
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 102.37, 0.01);
     assert_almost_eq!(ind.compacity, 1.36, 0.01);
