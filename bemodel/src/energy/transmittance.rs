@@ -266,7 +266,8 @@ impl Wall {
                 // Espesor equivalente adicional resultante del aislamiento perimetral (d')
                 let D_1 = R_n_perim_ins * (LAMBDA_GND - LAMBDA_INS);
                 let psi_ge = -LAMBDA_GND / PI
-                    * (f32::ln(D_perim_ins / d_t + 1.0) - f32::ln(1.0 + D_perim_ins / (d_t + D_1)));
+                    * (f32::ln(1.0 + 2.0 * D_perim_ins / d_t)
+                        - f32::ln(1.0 + 2.0 * D_perim_ins / (d_t + D_1)));
 
                 let U = fround2(U_bf + 2.0 * psi_ge / B_1); // H_g sería U * A
 
