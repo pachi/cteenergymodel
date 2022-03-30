@@ -116,7 +116,7 @@ impl Space {
     /// Espesor total equivalente de solera (suelo de sótano), d_t, m
     /// Según UNE-EN ISO 13370:2010 9.3.2 (10)
     /// Ponderamos según superficie de suelos en contacto con el terreno
-    pub fn slab_on_ground_d_t(&self, walls: &[Wall], cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
+    fn slab_on_ground_d_t(&self, walls: &[Wall], cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
         // TODO: No sería mejor ponderar por superficie para obtener la d_t?
 
         // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
@@ -142,6 +142,32 @@ impl Space {
                     .unwrap_or(0.0)
             });
         Some(d_t)
+    }
+
+    // A.U de los elementos del espacio que dan al exterior o al terreno (excluye interiores)
+    // Como hemos asignado U_bw y U_bf a los muros y suelos en contacto con el terreno, ya se tiene en cuenta
+    // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
+    fn ua_of_external_and_ground_surfaces(&self, model: &Model) -> f32 {
+        let UA_e_k = self
+            .walls(&model.walls)
+            .filter(|wall| {
+                wall.bounds == BoundaryType::GROUND || wall.bounds == BoundaryType::EXTERIOR
+            })
+            .filter_map(|wall| {
+                // A·U de muros (y suelos) + A.U de sus huecos
+                let wall_u = wall.u_value(model)?;
+                let win_axu = wall
+                    .windows(&model.windows)
+                    .filter_map(|win| {
+                        // Si no está definida la construcción, el hueco no participa de la envolvente
+                        win.u_value(&model.cons, &model.mats)
+                            .map(|u| Some(win.area() * u))?
+                    })
+                    .sum::<f32>();
+                Some(wall.area_net(&model.windows) * wall_u + win_axu)
+            })
+            .sum::<f32>();
+        UA_e_k
     }
 }
 
@@ -211,6 +237,10 @@ impl Wall {
     /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
     /// - se usan resistencias superficiales de referencia (DB-HE)
     pub fn u_value(&self, model: &Model) -> Option<f32> {
+        use BoundaryType::*;
+        use SpaceType::*;
+        use Tilt::*;
+
         let r_intrinsic = model
             .cons
             .get_wallcons(self.cons)?
@@ -221,12 +251,12 @@ impl Wall {
             // Transmitancia térmica de una composición de cerramiento adiabático, en una posición dada, en W/m2K
             // Notas:
             // - los elementos adiabáticos se reportan con valor 0.0
-            BoundaryType::ADIABATIC => {
+            ADIABATIC => {
                 debug!("{} (adiabático) U=0.0", self.name);
                 Some(0.0)
             }
             // Elementos en contacto con el exterior -------------
-            BoundaryType::EXTERIOR => {
+            EXTERIOR => {
                 let u = self.u_value_exterior(r_intrinsic);
                 debug!(
                     "{} ({}) U={:.2}",
@@ -247,7 +277,7 @@ impl Wall {
             // psi_gnd_ext: transmitancia térmica lineal como efecto del aislamiento perimetral, psi_gnd_ext
             // U_w: transmitancia del elemento considerado en contacto con el exterior
             // gnd_P: perímetro expuesto del espacio
-            BoundaryType::GROUND => {
+            GROUND => {
                 let space = model.get_space(self.space)?;
                 let d_t = space.slab_on_ground_d_t(&model.walls, &model.cons, &model.mats)?;
                 let U_w = self.u_value_exterior(r_intrinsic)?;
@@ -267,23 +297,96 @@ impl Wall {
                 let gnd_P = space.perimeter_exposed(&model.walls, &model.spaces);
 
                 match Tilt::from(self) {
-                    Tilt::TOP => self.u_value_gnd_top(U_w),
-                    Tilt::BOTTOM => {
-                        self.u_value_gnd_slab(gnd_P, psi_gnd_ext, space.area, space.z, d_t)
-                    }
-                    Tilt::SIDE => self.u_value_gnd_wall(space, U_w, d_t, &model.walls, &model.cons),
+                    TOP => self.u_value_gnd_top(U_w),
+                    BOTTOM => self.u_value_gnd_slab(gnd_P, psi_gnd_ext, space.area, space.z, d_t),
+                    SIDE => self.u_value_gnd_wall(space, U_w, d_t, &model.walls, &model.cons),
                 }
             }
             // Elementos en contacto con otros espacios ---------------------
-            BoundaryType::INTERIOR => self.u_value_interior(
-                r_intrinsic,
-                &model.walls,
-                &model.windows,
-                &model.spaces,
-                &model.cons,
-                &model.mats,
-                model,
-            ),
+            INTERIOR => {
+                // Dos casos:
+                // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
+                // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
+                let space = model.get_space(self.space)?;
+                let nextto = self.next_to?;
+                let nextspace = model.get_space(nextto)?;
+
+                let this_cond = space.kind == CONDITIONED;
+                let next_cond = nextspace.kind == CONDITIONED;
+
+                let uncondspace_by_condspace = match (this_cond, next_cond) {
+                    (true, false) => Some(nextspace),
+                    (false, true) => Some(space),
+                    _ => None,
+                };
+
+                // Calculamos la resistencial del elemento R_f, e identificamos el espacio no acondicionado
+                // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789:2017 Tabla 8)
+                let R_f = match (this_cond, next_cond, Tilt::from(self)) {
+                    // Suelo de espacio acondicionado hacia no acondicionado inferior
+                    // Techo de espacio no acondicionado hacia acondicionado superior
+                    (true, false, BOTTOM) | (false, true, TOP) => {
+                        // Flujo descendente
+                        r_intrinsic? + 2.0 * RSI_DESCENDENTE
+                    }
+                    // Techo de espacio acondicionado hacia no acondicionado superior
+                    // Suelo de espacio no acondicionado hacia acondicionado inferior
+                    (true, false, TOP) | (false, true, BOTTOM) => {
+                        // Flujo ascendente
+                        r_intrinsic? + 2.0 * RSI_ASCENDENTE
+                    }
+                    // Muro entre espacios con distinto nivel de acondicionamiento
+                    // Flujo entre espacios acondicionados
+                    _ => {
+                        // Flujo horizontal
+                        r_intrinsic? + 2.0 * RSI_HORIZONTAL
+                    }
+                };
+
+                match uncondspace_by_condspace {
+                    None => {
+                        // 1) Elemento interior que comunica dos espacios igualmente acondicionados
+                        let U = fround2(1.0 / R_f);
+                        debug!(
+                            "{} ({} acond-acond / no acond-no acond) U_int={:.2}",
+                            self.name,
+                            position_to_name(Tilt::from(self)),
+                            U
+                        );
+                        Some(U)
+                    }
+                    Some(uncondspace) => {
+                        // 1) Elemento interior que comunica un espacio acondicionado con otro no acondicionado
+
+                        // Flow rate between the unheated space and the external environment 13789, (12), m³/h
+                        // En los no habitables debe estar definido n_v pero en los no acondicionados no
+                        // Se puede obtener n_v a partir de la Tabla 6 de la UNE-EN ISO 13789:2017 y n_50/20.
+                        // Para sótanos no calefactados la 13370:2007 (9.4) dice que se podría usar n_v = 0.30
+                        let q_ue = {
+                            let volume = uncondspace.height_net(&model.walls, &model.cons)
+                                * uncondspace.area;
+                            let n_v = match uncondspace.n_v {
+                                Some(n_v) => n_v,
+                                _ => match model.meta.global_ventilation_l_s {
+                                    Some(global_ventilation) => {
+                                        3.6 * global_ventilation / model.vol_env_inh_net()
+                                    }
+                                    _ => {
+                                        // Espacio mal definido (ni tiene n_v ni hay definición global de ventilación)
+                                        warn!("Definición global (l/s) no definida para espacio no acondicionado sin n_v {} ({})", uncondspace.id, uncondspace.name);
+                                        0.0
+                                    }
+                                },
+                            };
+                            // m^3 * 1/h
+                            volume * n_v
+                        };
+                        // Calculamos el A.U de los elementos del espacio que dan al exterior o al terreno (excluye interiores))
+                        let UA_e_k = uncondspace.ua_of_external_and_ground_surfaces(model);
+                        self.u_value_interior_cond_uncond(R_f, UA_e_k, q_ue)
+                    }
+                }
+            }
         }
     }
 
@@ -302,148 +405,36 @@ impl Wall {
         Some(fround2(1.0 / (r + rsi + RSE)))
     }
 
-    /// Transmitancia térmica de una composición de cerramiento enterrado, en una posición dada, en W/m2K
-    /// Tiene en cuenta la posición del elemento para fijar las resistencias superficiales
+    /// Transmitancia térmica de cerramiento interior entre espacio acondicionado y no acondicionado, en W/m2K
+    ///
+    /// Cálculo de elemento interior en contacto con sótano no calefactado según ISO 13370:2010 (9.4)
+    /// y de elemento interior en contacto con otro espacio no habitable / no acondicionado según UNE-EN ISO 6946:2007 (5.4.3)
+    ///
     /// Notas:
-    /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
-    /// - se usan resistencias superficiales de referencia (DB-HE)
-    pub fn u_value_interior(
+    /// -  Los huecos de las particiones interiores se ignoran para el cálculo de A_i;
+    pub fn u_value_interior_cond_uncond(
         &self,
-        r_intrinsic: Option<f32>,
-        walls: &[Wall],
-        windows: &[Window],
-        spaces: &[Space],
-        cons: &ConsDb,
-        mats: &MatsDb,
-        model: &Model,
+        R_f: f32, // Resistencia térmica del elemento, sin considerar corrección por diferencia de acondicionamiento
+        UA_e_k: f32, // U.A de los elementos al exterior o con el terreno del espacio no acondicionado
+        q_ue: f32,   // tasa de ventilación (m³/h) entre el espacio no acondicionado y el exterior
     ) -> Option<f32> {
-        use SpaceType::*;
-        use Tilt::*;
+        // 1) Elemento interior que comunica un espacio acondicionado con otro no acondicionado
+        // CASO: interior en contacto con sótano no calefactado - ISO 13370:2010 (9.4)
+        // CASO: interior en contacto con otro espacio no habitable / no acondicionado - UNE-EN ISO 6946:2007 (5.4.3)
+        // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
+        // En la fórmula anterior, para espacios no acondicionados, se indica que se excluyen suelos, pero no entiendo bien por qué.
+        // Esta fórmula, cuando los A_e_k y U_e_k incluyen los muros y suelos con el terreno U_bw y U_bf, con la parte proporcional de
+        // muros al exterior, es equivalente a la que indica la 13370
+        let A_i = self.area();
+        let H_ue = UA_e_k + 0.33 * q_ue;
+        let R_u = A_i / H_ue;
+        let U = fround2(1.0 / (R_f + R_u));
 
-        // Dos casos:
-        // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
-        // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
-        let space = spaces.iter().find(|s| s.id == self.space)?;
-        let nextto = self.next_to?;
-        let nextspace = spaces.iter().find(|s| s.id == nextto)?;
-
-        let this_cond = space.kind == CONDITIONED;
-        let next_cond = nextspace.kind == CONDITIONED;
-
-        let uncondspace_by_condspace = match (this_cond, next_cond) {
-            (true, false) => Some(nextspace),
-            (false, true) => Some(space),
-            _ => None,
-        };
-
-        enum FlowDir {
-            Ascending,
-            Descending,
-            Other,
-        }
-
-        let flow_dir = match (this_cond, next_cond, Tilt::from(self)) {
-            // Suelo de espacio acondicionado hacia no acondicionado inferior
-            // Techo de espacio no acondicionado hacia acondicionado superior
-            (true, false, BOTTOM) | (false, true, TOP) => {
-                // Flujo descendente
-                FlowDir::Descending
-            }
-            // Techo de espacio acondicionado hacia no acondicionado superior
-            // Suelo de espacio no acondicionado hacia acondicionado inferior
-            (true, false, TOP) | (false, true, BOTTOM) => {
-                // Flujo ascendente
-                FlowDir::Ascending
-            }
-            // Muro entre espacios con distinto nivel de acondicionamiento
-            // Flujo entre espacios acondicionados
-            _ => {
-                // Flujo horizontal
-                FlowDir::Other
-            }
-        };
-
-        // Calculamos la resistencial del elemento R_f, e identificamos el espacio no acondicionado
-        // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789:2017 Tabla 8)
-        let R_f = match flow_dir {
-            FlowDir::Ascending => r_intrinsic? + 2.0 * RSI_ASCENDENTE,
-            FlowDir::Descending => r_intrinsic? + 2.0 * RSI_DESCENDENTE,
-            _ => r_intrinsic? + 2.0 * RSI_HORIZONTAL,
-        };
-
-        if let Some(uncondspace) = uncondspace_by_condspace {
-            // 1) Elemento interior que comunica un espacio acondicionado con otro no acondicionado
-            // En los no habitables debe estar definido n_v pero en los no acondicionados no
-            // Se puede obtener n_v a partir de la Tabla 6 de la UNE-EN ISO 13789:2017 y n_50/20.
-            // Para sótanos no calefactados la 13370:2007 (9.4) dice que se podría usar n_v = 0.30
-
-            // Flow rate between the unheated space and the external environment 13789, (12)
-            let q_ue = {
-                let uncondspace_v = uncondspace.height_net(walls, cons) * uncondspace.area;
-                let n_ven = match uncondspace.n_v {
-                    Some(n_v) => n_v,
-                    _ => match model.meta.global_ventilation_l_s {
-                        Some(global_ventilation) => {
-                            3.6 * global_ventilation / model.vol_env_inh_net()
-                        }
-                        _ => {
-                            // Espacio mal definido (ni tiene n_v ni hay definición global de ventilación)
-                            warn!("Definición global (l/s) no definida para espacio no acondicionado sin n_v {} ({})", uncondspace.id, uncondspace.name);
-                            0.0
-                        }
-                    },
-                };
-                uncondspace_v * n_ven
-            };
-
-            // CASO: interior en contacto con sótano no calefactado - ISO 13370:2010 (9.4)
-            // CASO: interior en contacto con otro espacio no habitable / no acondicionado - UNE-EN ISO 6946:2007 (5.4.3)
-            // Calculamos el A.U de los elementos del espacio que dan al exterior o al terreno (excluye interiores))
-            // Como hemos asignado U_bw y U_bf a los muros y suelos en contacto con el terreno, ya se tiene en cuenta
-            // la parte enterrada correctamente (fracción enterrada y superficie expuesta, ya que no se consideran los que dan a interiores)
-            let UA_e_k = uncondspace
-                .walls(walls)
-                .filter(|wall| {
-                    wall.bounds == BoundaryType::GROUND || wall.bounds == BoundaryType::EXTERIOR
-                })
-                .filter_map(|wall| {
-                    // A·U de muros (y suelos) + A.U de sus huecos
-                    let wall_u = self.u_value(model)?;
-                    let win_axu = wall
-                        .windows(windows)
-                        .filter_map(|win| {
-                            // Si no está definida la construcción, el hueco no participa de la envolvente
-                            win.u_value(cons, mats).map(|u| Some(win.area() * u))?
-                        })
-                        .sum::<f32>();
-                    Some(wall.area_net(windows) * wall_u + win_axu)
-                })
-                .sum::<f32>();
-            // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
-            // En la fórmula anterior, para espacios no acondicionados, se indica que se excluyen suelos, pero no entiendo bien por qué.
-            // Esta fórmula, cuando los A_e_k y U_e_k incluyen los muros y suelos con el terreno U_bw y U_bf, con la parte proporcional de
-            // muros al exterior, es equivalente a la que indica la 13370
-            let A_i = self.area_net(windows);
-            let H_ue = UA_e_k + 0.33 * q_ue;
-            let R_u = A_i / H_ue;
-            let U = fround2(1.0 / (R_f + R_u));
-
-            debug!(
-                            "{} ({} acond-no acond/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
-                            self.name, position_to_name(Tilt::from(self)), U, R_f, R_u, A_i, 1.0/R_f
-                        );
-            Some(U)
-        } else {
-            // 2) Elemento interior que comunica dos espacios igualmente acondicionados
-            let U = fround2(1.0 / R_f);
-            debug!(
-                "{} ({} acond-acond / no acond-no acond) U_int={:.2}",
-                self.name,
-                position_to_name(Tilt::from(self)),
-                U
-            );
-            Some(U)
-        }
+        debug!(
+            "{} ({} acond-no acond/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
+            self.name, position_to_name(Tilt::from(self)), U, R_f, R_u, A_i, 1.0/R_f
+        );
+        Some(U)
     }
 
     /// Transmitancia térmica de una cubierta enterrada, W/m²K
