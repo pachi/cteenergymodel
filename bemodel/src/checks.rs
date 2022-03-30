@@ -21,6 +21,7 @@ impl Model {
     ///     - comprobar que elementos geométricos tengan punto de inserción != None
     ///     - la superficie de elemento (wall.a) coincide con la de su polígono
     ///     - espacio no habitable sin n_v definido
+    ///     - las ventanas en particiones interiores se ignoran en los cálculos de U_i
     pub fn check(&self) -> Vec<Warning> {
         use WarningLevel::WARNING;
 
