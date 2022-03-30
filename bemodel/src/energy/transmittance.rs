@@ -121,9 +121,9 @@ impl Space {
 
         // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
         // TODO: No podemos calcular este valor bien?
-        const w: f32 = 0.3;
+        const W: f32 = 0.3;
 
-        let mut d_t = self
+        let d_t = self
             .walls(walls)
             .filter(|wall| Tilt::from(*wall) == Tilt::BOTTOM)
             .zip(1..)
@@ -134,7 +134,7 @@ impl Space {
                         Some(r_intrinsic_i) => {
                             let R_ground_i = RSI_DESCENDENTE + r_intrinsic_i + RSE;
                             // e = lambda * R // e_tot = 0.30m + lambda * R_mean
-                            (w + LAMBDA_GND * R_ground_i + mean * (i - 1) as f32) / i as f32
+                            (W + LAMBDA_GND * R_ground_i + mean * (i - 1) as f32) / i as f32
                         }
                         // BUG: Aquí no sería un valor != 0, calculado con r_intrinsic_i == 0?
                         _ => 0.0,
@@ -327,67 +327,73 @@ impl Wall {
         let nextto = self.next_to?;
         let nextspace = spaces.iter().find(|s| s.id == nextto)?;
 
-        // Calculamos la resistencial del elemento R_f, e identificamos el espacio no acondicionado
-        // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789:2017 Tabla 8)
-        let (R_f, uncondspace, are_equally_conditioned) = match (
-            space.kind == CONDITIONED,
-            Tilt::from(self),
-            nextspace.kind == CONDITIONED,
-        ) {
-            (true, BOTTOM, false) => {
+        let this_cond = space.kind == CONDITIONED;
+        let next_cond = nextspace.kind == CONDITIONED;
+
+        let uncondspace_by_condspace = match (this_cond, next_cond) {
+            (true, false) => Some(nextspace),
+            (false, true) => Some(space),
+            _ => None,
+        };
+
+        enum FlowDir {
+            Ascending,
+            Descending,
+            Other,
+        }
+
+        let flow_dir = match (this_cond, next_cond, Tilt::from(self)) {
+            // Suelo de espacio acondicionado hacia no acondicionado inferior
+            // Techo de espacio no acondicionado hacia acondicionado superior
+            (true, false, BOTTOM) | (false, true, TOP) => {
                 // Flujo descendente
-                // Suelo de espacio acondicionado hacia no acondicionado inferior
-                (r_intrinsic? + 2.0 * RSI_DESCENDENTE, nextspace, false)
+                FlowDir::Descending
             }
-            (false, TOP, true) => {
-                // Flujo descendente
-                // Techo de espacio no acondicionado hacia acondicionado superior
-                (r_intrinsic? + 2.0 * RSI_DESCENDENTE, space, false)
-            }
-            (true, TOP, false) => {
+            // Techo de espacio acondicionado hacia no acondicionado superior
+            // Suelo de espacio no acondicionado hacia acondicionado inferior
+            (true, false, TOP) | (false, true, BOTTOM) => {
                 // Flujo ascendente
-                // Techo de espacio acondicionado hacia no acondicionado superior
-                (r_intrinsic? + 2.0 * RSI_ASCENDENTE, nextspace, false)
+                FlowDir::Ascending
             }
-            (false, BOTTOM, true) => {
-                // Flujo ascendente
-                // Suelo de espacio no acondicionado hacia acondicionado inferior
-                (r_intrinsic? + 2.0 * RSI_ASCENDENTE, space, false)
-            }
-            (true, SIDE, false) => {
+            // Muro entre espacios con distinto nivel de acondicionamiento
+            // Flujo entre espacios acondicionados
+            _ => {
                 // Flujo horizontal
-                // Muro entre espacios con distinto nivel de acondicionamiento
-                (r_intrinsic? + 2.0 * RSI_HORIZONTAL, nextspace, false)
-            }
-            (_, _, _) => {
-                // Flujo entre espacios igualmente acondicionados
-                (r_intrinsic? + 2.0 * RSI_HORIZONTAL, space, true)
+                FlowDir::Other
             }
         };
 
-        if are_equally_conditioned {
-            // 1) Elemento interior que comunica dos espacios igualmente acondicionados
-            let U = fround2(1.0 / R_f);
-            debug!(
-                "{} ({} acond-acond / no acond-no acond) U_int={:.2}",
-                self.name,
-                position_to_name(Tilt::from(self)),
-                U
-            );
-            Some(U)
-        } else {
-            // 2) Elemento interior que comunica un espacio acondicionado con otro no acondicionado
-            let uncondspace_v = uncondspace.height_net(walls, cons) * uncondspace.area;
-            let n_ven = match uncondspace.n_v {
-                Some(n_v) => n_v,
-                _ => match model.meta.global_ventilation_l_s {
-                    Some(global_ventilation) => 3.6 * global_ventilation / model.vol_env_inh_net(),
-                    _ => {
-                        // Espacio mal definido (ni tiene n_v ni hay definición global de ventilación)
-                        warn!("Definición global (l/s) no definida para espacio no acondicionado sin n_v {} ({})", uncondspace.id, uncondspace.name);
-                        0.0
-                    }
-                },
+        // Calculamos la resistencial del elemento R_f, e identificamos el espacio no acondicionado
+        // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789:2017 Tabla 8)
+        let R_f = match flow_dir {
+            FlowDir::Ascending => r_intrinsic? + 2.0 * RSI_ASCENDENTE,
+            FlowDir::Descending => r_intrinsic? + 2.0 * RSI_DESCENDENTE,
+            _ => r_intrinsic? + 2.0 * RSI_HORIZONTAL,
+        };
+
+        if let Some(uncondspace) = uncondspace_by_condspace {
+            // 1) Elemento interior que comunica un espacio acondicionado con otro no acondicionado
+            // En los no habitables debe estar definido n_v pero en los no acondicionados no
+            // Se puede obtener n_v a partir de la Tabla 6 de la UNE-EN ISO 13789:2017 y n_50/20.
+            // Para sótanos no calefactados la 13370:2007 (9.4) dice que se podría usar n_v = 0.30
+
+            // Flow rate between the unheated space and the external environment 13789, (12)
+            let q_ue = {
+                let uncondspace_v = uncondspace.height_net(walls, cons) * uncondspace.area;
+                let n_ven = match uncondspace.n_v {
+                    Some(n_v) => n_v,
+                    _ => match model.meta.global_ventilation_l_s {
+                        Some(global_ventilation) => {
+                            3.6 * global_ventilation / model.vol_env_inh_net()
+                        }
+                        _ => {
+                            // Espacio mal definido (ni tiene n_v ni hay definición global de ventilación)
+                            warn!("Definición global (l/s) no definida para espacio no acondicionado sin n_v {} ({})", uncondspace.id, uncondspace.name);
+                            0.0
+                        }
+                    },
+                };
+                uncondspace_v * n_ven
             };
 
             // CASO: interior en contacto con sótano no calefactado - ISO 13370:2010 (9.4)
@@ -418,7 +424,7 @@ impl Wall {
             // Esta fórmula, cuando los A_e_k y U_e_k incluyen los muros y suelos con el terreno U_bw y U_bf, con la parte proporcional de
             // muros al exterior, es equivalente a la que indica la 13370
             let A_i = self.area_net(windows);
-            let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
+            let H_ue = UA_e_k + 0.33 * q_ue;
             let R_u = A_i / H_ue;
             let U = fround2(1.0 / (R_f + R_u));
 
@@ -426,6 +432,16 @@ impl Wall {
                             "{} ({} acond-no acond/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
                             self.name, position_to_name(Tilt::from(self)), U, R_f, R_u, A_i, 1.0/R_f
                         );
+            Some(U)
+        } else {
+            // 2) Elemento interior que comunica dos espacios igualmente acondicionados
+            let U = fround2(1.0 / R_f);
+            debug!(
+                "{} ({} acond-acond / no acond-no acond) U_int={:.2}",
+                self.name,
+                position_to_name(Tilt::from(self)),
+                U
+            );
             Some(U)
         }
     }
