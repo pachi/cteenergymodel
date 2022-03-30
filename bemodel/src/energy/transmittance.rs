@@ -287,11 +287,12 @@ impl Wall {
                     // Espesor aislamiento perimetral d_n = r_n_perim_ins * lambda_ins
                     // d': Espesor equivalente adicional resultante del aislamiento perimetral (d')
                     let d_1 = model.meta.rn_perim_insulation * (LAMBDA_GND - LAMBDA_INS);
-
+                    // Suponemos aislamiento perimetral horizontal (B.5)
+                    // Para aislamiento vertical D = 2D. (B.6)
+                    let D = model.meta.d_perim_insulation;
                     fround3(
                         -LAMBDA_GND / PI
-                            * (f32::ln(1.0 + 2.0 * model.meta.d_perim_insulation / d_t)
-                                - f32::ln(1.0 + 2.0 * model.meta.d_perim_insulation / (d_t + d_1))),
+                            * (f32::ln(1.0 + D / d_t) - f32::ln(1.0 + D / (d_t + d_1))),
                     )
                 };
                 let gnd_P = space.perimeter_exposed(&model.walls, &model.spaces);

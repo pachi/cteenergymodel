@@ -32,6 +32,7 @@ pub struct Meta {
     #[serde(default)]
     pub n50_test_ach: Option<f32>,
     /// Anchura o profundidad del aislamiento perimetral horizontal o vertical de la solera [m]
+    /// En el caso de aislamiento vertical se debe introducir el doble de la dimensión física del aislamiento
     pub d_perim_insulation: f32,
     /// Resistencia térmica del aislamiento perimetral horizontal o vertical de la solera [m2K/W]
     pub rn_perim_insulation: f32,
