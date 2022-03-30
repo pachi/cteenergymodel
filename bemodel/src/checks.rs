@@ -16,7 +16,7 @@ impl Model {
     ///     - Huecos sin referencias de muros válidas
     ///     - Muros sin referencias de espacios válidas
     ///     - Muros sin referencias de construcciones válidas
-    ///     - Muros con nextto con referencia no válida
+    ///     - Muros INTERIOR con nextto con referencia no válida
     /// TODO: Comprobaciones pendientes
     ///     - comprobar que elementos geométricos tengan punto de inserción != None
     ///     - la superficie de elemento (wall.a) coincide con la de su polígono
