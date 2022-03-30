@@ -20,6 +20,7 @@ impl Model {
     /// TODO: Comprobaciones pendientes
     ///     - comprobar que elementos geométricos tengan punto de inserción != None
     ///     - la superficie de elemento (wall.a) coincide con la de su polígono
+    ///     - espacio no habitable sin n_v definido
     pub fn check(&self) -> Vec<Warning> {
         use WarningLevel::WARNING;
 
