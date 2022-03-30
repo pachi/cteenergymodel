@@ -248,7 +248,7 @@ impl Wall {
             // U_w: transmitancia del elemento considerado en contacto con el exterior
             // gnd_P: perímetro expuesto del espacio
             BoundaryType::GROUND => {
-                let space = model.spaces.iter().find(|s| s.id == self.space)?;
+                let space = model.get_space(self.space)?;
                 let d_t = space.slab_on_ground_d_t(&model.walls, &model.cons, &model.mats)?;
                 let U_w = self.u_value_exterior(r_intrinsic)?;
                 // psi_gnd_ext: transmitancia térmica lineal como efecto del aislamiento perimetral, psi_gnd_ext
@@ -267,15 +267,10 @@ impl Wall {
                 let gnd_P = space.perimeter_exposed(&model.walls, &model.spaces);
 
                 match Tilt::from(self) {
-                    Tilt::TOP => self.u_value_gnd_top(U_w, r_intrinsic),
-                    Tilt::BOTTOM => self.u_value_gnd_slab(
-                        gnd_P,
-                        psi_gnd_ext,
-                        space.area,
-                        space.z,
-                        d_t,
-                        r_intrinsic,
-                    ),
+                    Tilt::TOP => self.u_value_gnd_top(U_w),
+                    Tilt::BOTTOM => {
+                        self.u_value_gnd_slab(gnd_P, psi_gnd_ext, space.area, space.z, d_t)
+                    }
                     Tilt::SIDE => self.u_value_gnd_wall(space, U_w, d_t, &model.walls, &model.cons),
                 }
             }
@@ -322,54 +317,66 @@ impl Wall {
         mats: &MatsDb,
         model: &Model,
     ) -> Option<f32> {
+        use SpaceType::*;
+        use Tilt::*;
+
         // Dos casos:
         // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
         // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
         let space = spaces.iter().find(|s| s.id == self.space)?;
+        let nextto = self.next_to?;
+        let nextspace = spaces.iter().find(|s| s.id == nextto)?;
 
-        let nextto = match self.next_to {
-            Some(s) => s,
-            _ => {
-                warn!(
-                    "Muro {} ({}) sin definición de espacio adyacente",
-                    self.id, self.name
-                );
-                return None;
+        // Calculamos la resistencial del elemento R_f, e identificamos el espacio no acondicionado
+        // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789:2017 Tabla 8)
+        let (R_f, uncondspace, are_equally_conditioned) = match (
+            space.kind == CONDITIONED,
+            Tilt::from(self),
+            nextspace.kind == CONDITIONED,
+        ) {
+            (true, BOTTOM, false) => {
+                // Flujo descendente
+                // Suelo de espacio acondicionado hacia no acondicionado inferior
+                (r_intrinsic? + 2.0 * RSI_DESCENDENTE, nextspace, false)
+            }
+            (false, TOP, true) => {
+                // Flujo descendente
+                // Techo de espacio no acondicionado hacia acondicionado superior
+                (r_intrinsic? + 2.0 * RSI_DESCENDENTE, space, false)
+            }
+            (true, TOP, false) => {
+                // Flujo ascendente
+                // Techo de espacio acondicionado hacia no acondicionado superior
+                (r_intrinsic? + 2.0 * RSI_ASCENDENTE, nextspace, false)
+            }
+            (false, BOTTOM, true) => {
+                // Flujo ascendente
+                // Suelo de espacio no acondicionado hacia acondicionado inferior
+                (r_intrinsic? + 2.0 * RSI_ASCENDENTE, space, false)
+            }
+            (true, SIDE, false) => {
+                // Flujo horizontal
+                // Muro entre espacios con distinto nivel de acondicionamiento
+                (r_intrinsic? + 2.0 * RSI_HORIZONTAL, nextspace, false)
+            }
+            (_, _, _) => {
+                // Flujo entre espacios igualmente acondicionados
+                (r_intrinsic? + 2.0 * RSI_HORIZONTAL, space, true)
             }
         };
-        let nextspace = match spaces.iter().find(|s| s.id == nextto) {
-            Some(s) => s,
-            _ => {
-                warn!(
-                    "Muro {} ({}) con definición de espacio adyacente incorrecta {}",
-                    self.id, self.name, nextto
-                );
-                return None;
-            }
-        };
 
-        let position = Tilt::from(self);
-        if nextspace.kind == SpaceType::CONDITIONED && space.kind == SpaceType::CONDITIONED {
-            // Elemento interior con otro espacio acondicionado
-            // HULC no diferencia entre RS según posiciones para elementos interiores
-            let U = fround2(1.0 / (r_intrinsic? + 2.0 * RSI_HORIZONTAL));
+        if are_equally_conditioned {
+            // 1) Elemento interior que comunica dos espacios igualmente acondicionados
+            let U = fround2(1.0 / R_f);
             debug!(
-                "{} ({} acondicionado-acondicionado) U_int={:.2}",
+                "{} ({} acond-acond / no acond-no acond) U_int={:.2}",
                 self.name,
-                position_to_name(position),
+                position_to_name(Tilt::from(self)),
                 U
             );
             Some(U)
         } else {
-            // Comunica un espacio acondicionado con otro no acondicionado
-
-            // Intercambio de aire en el espacio no acondicionado (¿o podría ser el actual si es el no acondicionado?)
-            // Localizamos el espacio no acondicionado
-            let (uncondspace, thiscondspace) = if nextspace.kind == SpaceType::CONDITIONED {
-                (space, false)
-            } else {
-                (nextspace, true)
-            };
+            // 2) Elemento interior que comunica un espacio acondicionado con otro no acondicionado
             let uncondspace_v = uncondspace.height_net(walls, cons) * uncondspace.area;
             let n_ven = match uncondspace.n_v {
                 Some(n_v) => n_v,
@@ -413,22 +420,11 @@ impl Wall {
             let A_i = self.area_net(windows);
             let H_ue = UA_e_k + 0.33 * n_ven * uncondspace_v;
             let R_u = A_i / H_ue;
-            // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789 Tabla 8)
-            let R_f = match (position, thiscondspace) {
-                // Suelo de espacio acondicionado hacia no acondicionado inferior
-                // Techo de espacio no acondicionado hacia acondicionado inferior
-                (Tilt::BOTTOM, true) | (Tilt::TOP, false) => r_intrinsic? + 2.0 * RSI_DESCENDENTE,
-                // Techo de espacio acondicionado hacia no acondicionado superior
-                // Suelo de espacio no acondicionado hacia acondicionado superior
-                (Tilt::TOP, true) | (Tilt::BOTTOM, false) => r_intrinsic? + 2.0 * RSI_ASCENDENTE,
-                // Muro
-                (Tilt::SIDE, _) => r_intrinsic? + 2.0 * RSI_HORIZONTAL,
-            };
             let U = fround2(1.0 / (R_f + R_u));
 
             debug!(
-                            "{} ({} acondicionado-no acondicionado/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
-                            self.name, position_to_name(position), U, R_f, R_u, A_i, 1.0/R_f
+                            "{} ({} acond-no acond/sotano) U={:.2} (R_f={:.3}, R_u={:.3}, A_i={:.2}, U_f=1/R_f={:.2}",
+                            self.name, position_to_name(Tilt::from(self)), U, R_f, R_u, A_i, 1.0/R_f
                         );
             Some(U)
         }
@@ -437,11 +433,8 @@ impl Wall {
     /// Transmitancia térmica de una cubierta enterrada, W/m²K
     ///
     /// La composición del muro debe incluir una capa de terreno con lambda = 2 W/K
-    fn u_value_gnd_top(&self, U_w: f32, r_intrinsic: Option<f32>) -> Option<f32> {
-        debug!(
-            "{} (cubierta enterrada) U={:.2} (R_f={:.3})",
-            self.name, U_w, r_intrinsic?
-        );
+    fn u_value_gnd_top(&self, U_w: f32) -> Option<f32> {
+        debug!("{} (cubierta enterrada) U={:.2}", self.name, U_w);
         Some(U_w)
     }
 
@@ -466,7 +459,6 @@ impl Wall {
         space_area: f32,
         space_z: f32,
         d_t: f32,
-        r_intrinsic: Option<f32>,
     ) -> Option<f32> {
         let gnd_A = space_area;
         // XXX: Estamos suponiendo que la cota z es la del suelo del espacio
@@ -499,7 +491,7 @@ impl Wall {
         let U = fround2(U_bf + 2.0 * psi_gnd_ext / B_1);
         // H_g sería U * A
         debug!(
-            "{} (suelo de sótano) U={:.2} (A={:.2}, P={:.2}, B'={:.2}, z={:.2}, d_t={:.2}, R_f={:.3}, U_bf={:.2}, psi_ge = {:.3})",
+            "{} (suelo de sótano) U={:.2} (A={:.2}, P={:.2}, B'={:.2}, z={:.2}, d_t={:.2}, U_bf={:.2}, psi_ge = {:.3})",
             self.name,
             U,
             gnd_A,
@@ -507,7 +499,6 @@ impl Wall {
             B_1,
             z,
             d_t,
-            r_intrinsic?,
             U_bf,
             psi_gnd_ext
         );
