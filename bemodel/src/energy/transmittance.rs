@@ -15,7 +15,7 @@
 use std::f32::consts::PI;
 
 use anyhow::{format_err, Error};
-use log::{debug, warn};
+use log::{debug, info, warn};
 
 use super::EnergyIndicators;
 use crate::types::HasSurface;
@@ -78,7 +78,7 @@ impl Space {
             Some(space) => space,
             _ => {
                 warn!(
-                    "Petición de cálculo de dimensión característica de solera de espacio sin solera en contacto con el terreno (espacio {}, {})",
+                    "Petición de cálculo de dimensión característica de solera de espacio sin solera (espacio {}, {})",
                     self.name, self.id
                 );
                 return None;
@@ -133,13 +133,18 @@ impl Space {
             let p = if total_area < 0.001 {
                 0.0
             } else {
-                let perimeter = gnd_floor.geometry.perimeter();
-                fround2(perimeter * exterior_area / total_area)
+                let perimeter =
+                    fround2(gnd_floor.geometry.perimeter() * exterior_area / total_area);
+                debug!(
+                    "Perímetro expuesto del espacio {} ({}): {}",
+                    self.name, self.id, perimeter
+                );
+                perimeter
             };
             if p < 0.01 {
-                warn!(
-                    "{} (solera con perímetro expuesto nulo o casi nulo) en espacio {}, {}",
-                    gnd_floor.name, self.name, self.id
+                info!(
+                    "Solera {} ({}) con perímetro expuesto nulo o casi nulo) en espacio {}, {}",
+                    gnd_floor.name, gnd_floor.id, self.name, self.id
                 )
             };
             p.max(0.01)
@@ -179,17 +184,31 @@ impl Space {
         Some(d_t)
     }
 
-    /// psi_gnd_ext: transmitancia térmica lineal como efecto del aislamiento perimetral, psi_gnd_ext, W/m
+    /// Transmitancia térmica lineal como efecto del aislamiento perimetral, psi_gnd_ext, W/m
     /// Calculado el efecto del aislamiento perimetral según UNE-EN ISO 13770:2010 Anexo B (B.4).
     ///
+    /// # Argumentos
+    /// 
+    /// * `d_t` - Espesor total equivalente de solera (suelo de sótano), m
+    /// * `model` - modelo del edificio
     /// TODO: ¿debería usar datos de aislamiento por solera en lugar de global del modelo?
     fn slab_psi_gnd_ext(&self, d_t: f32, model: &Model) -> f32 {
-        // Espesor aislamiento perimetral d_n = r_n_perim_ins * lambda_ins
-        // d': Espesor equivalente adicional resultante del aislamiento perimetral (d')
+        // d': Espesor equivalente adicional resultante del aislamiento perimetral
+        // - R_n: Resistencia del aislamiento perimetral, m²K/W
+        // - λ: coeficiente de transmisión del terreno, W/mK
+        // - λ_ins: coeficiente de transmisión del aislamiento perimetral, W/mK
+        // - d_n: espesor aislamiento perimetral, m = R_n * λ_ins
+        // - d' = R'.λ = (R_n - d_n / λ)·λ = R_n·λ - d_n = R_n·λ - R_n·λ_ins = R_n·(λ - λ_ins)
         let d_1 = model.meta.rn_perim_insulation * (LAMBDA_GND - LAMBDA_INS);
         // Suponemos aislamiento perimetral horizontal (B.5)
-        // Para aislamiento vertical D = 2D. (B.6)
+        // D: profundidad / ancho de la banda de aislamiento perimetral.
+        // Para aislamiento horizontal, D es el ancho de la banda perimetral de aislameinto (B.5)
+        // Para aislamiento vertical, D es el doble de la profundidad de la banda de aislamiento (B.6)
         let D = model.meta.d_perim_insulation;
+        debug!(
+            "Aislamiento perimetral en espacio {} ({}): d_1 = {}, D = {}",
+            self.name, self.id, d_1, D
+        );
         fround3(-LAMBDA_GND / PI * (f32::ln(1.0 + D / d_t) - f32::ln(1.0 + D / (d_t + d_1))))
     }
 
@@ -337,13 +356,13 @@ impl Wall {
                 let space_height_net = space.height_net(&model.walls, &model.cons); // Altura neta
 
                 match Tilt::from(self) {
-                    TOP => self.u_value_gnd_top(U_w),
-                    BOTTOM => self.u_value_gnd_slab(
+                    TOP => Some(self.u_value_gnd_top(U_w)),
+                    BOTTOM => Some(self.u_value_gnd_slab(
                         space.z,
                         d_t,
                         slab_characteristic_dimension,
                         slab_psi_gnd_ext,
-                    ),
+                    )),
                     SIDE => self.u_value_gnd_wall(space.z, U_w, d_t, space_height_net),
                 }
             }
@@ -440,6 +459,10 @@ impl Wall {
     /// Notas:
     /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
     /// - se usan resistencias superficiales de referencia (DB-HE)
+    ///
+    /// # Argumentos
+    ///
+    /// * `r_intrinsic`: Resistencia intrínseca del elemento, en W/m²K
     pub fn u_value_exterior(&self, r_intrinsic: Option<f32>) -> Option<f32> {
         let r = r_intrinsic?;
         let rsi = match Tilt::from(self) {
@@ -457,16 +480,13 @@ impl Wall {
     ///
     /// Notas:
     /// -  Los huecos de las particiones interiores se ignoran para el cálculo de A_i;
-    pub fn u_value_interior_cond_uncond(
-        &self,
-        // Resistencia térmica del elemento, sin considerar corrección por diferencia de acondicionamiento
-        R_f: f32,
-        // U.A de los elementos al exterior o con el terreno del espacio no acondicionado
-        UA_e_k: f32,
-        // tasa de ventilación (m³/h) entre el espacio no acondicionado y el exterior
-        q_ue: f32,
-    ) -> Option<f32> {
-        // 1) Elemento interior que comunica un espacio acondicionado con otro no acondicionado
+    ///
+    /// # Argumentos
+    ///
+    /// * `R_f` - Resistencia térmica del elemento, sin considerar corrección por diferencia de acondicionamiento
+    /// * `UA_e_k` - U.A de los elementos al exterior o con el terreno del espacio no acondicionado
+    /// * `q_ue` - tasa de ventilación entre el espacio no acondicionado y el exterior, m³/h
+    pub fn u_value_interior_cond_uncond(&self, R_f: f32, UA_e_k: f32, q_ue: f32) -> Option<f32> {
         // CASO: interior en contacto con sótano no calefactado - ISO 13370:2010 (9.4)
         // CASO: interior en contacto con otro espacio no habitable / no acondicionado - UNE-EN ISO 6946:2007 (5.4.3)
         // 1/U = 1/U_f + A_i / (sum_k(A_e_k·U_e_k) + 0.33·n·V) (17)
@@ -488,13 +508,13 @@ impl Wall {
     /// Transmitancia térmica de una cubierta enterrada, W/m²K
     ///
     /// La composición del muro debe incluir una capa de terreno con lambda = 2 W/K
-    fn u_value_gnd_top(
-        &self,
-        // U_w: transmitancia del elemento considerado en contacto con el exterior
-        U_w: f32,
-    ) -> Option<f32> {
+    ///
+    /// # Argumentos
+    ///
+    /// * `U_w`- transmitancia del elemento considerado en contacto con el exterior
+    fn u_value_gnd_top(&self, U_w: f32) -> f32 {
         debug!("{} (cubierta enterrada) U={:.2}", self.name, U_w);
-        Some(U_w)
+        U_w
     }
 
     /// Transmitancia térmica de solera sobre el terreno (suelo de sótano)
@@ -506,7 +526,7 @@ impl Wall {
     /// Los dos casos equivalen aproximadamente al U_bf de 9.3.2
     ///
     /// Hipótesis:
-    /// - la cota z del suelo del espacio es relativa a la cota 0 del terreno
+    /// - la cota z=0 del suelo del espacio coincide con la cota 0 del terreno
     /// Simplificaciones:
     /// - forma cuadrada para calcular el perímetro si no está disponible
     /// - ancho de muros externos w = 0.3m
@@ -514,18 +534,15 @@ impl Wall {
     ///
     /// HULC parece estar calculando algo más parecido al método de Winkelman o:
     /// let u = 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
-    fn u_value_gnd_slab(
-        &self,
-        // space_z: cota de la solera respecto al 0 del terreno
-        space_z: f32,
-        // d_t: espesor equivalente total de solera (suelo del sótano) (10)
-        d_t: f32,
-        // slab_char_dim: dimensión característica de la solera (B', según UNE-EN ISO 13370:2010 8.1)
-        slab_char_dim: f32,
-        // slab_psi_gnd_ext: transmitancia térmica lineal de la solera considerando aislamiento perimetral
-        slab_psi_gnd_ext: f32,
-    ) -> Option<f32> {
-        let z = if space_z < 0.0 { -space_z } else { 0.0 }; // Supuesto: la profundidad z es la cota del suelo del espacio
+    ///
+    /// # Argumentos
+    ///
+    /// * `z`- cota de la solera respecto al 0 del terreno, m
+    /// * `d_t`- espesor equivalente total de solera (suelo del sótano) (10)
+    /// * `slab_char_dim` - dimensión característica de la solera (B', según UNE-EN ISO 13370:2010 8.1), m
+    /// * `slab_psi_gnd_ext` - transmitancia térmica lineal de la solera considerando aislamiento perimetral, W/mK
+    fn u_value_gnd_slab(&self, z: f32, d_t: f32, slab_char_dim: f32, slab_psi_gnd_ext: f32) -> f32 {
+        let z = if z < 0.0 { -z } else { 0.0 };
         let B_limit = d_t + 0.5 * z;
         let U_bf = if B_limit < slab_char_dim {
             // Soleras sin aislar y moderadamente aisladas (11)
@@ -536,6 +553,7 @@ impl Wall {
             LAMBDA_GND / (0.457 * slab_char_dim + B_limit)
         };
 
+        // Valor teniendo en cuenta el efecto del aislamiento perimetral en régimen estacionario B.4
         let U = fround2(U_bf + 2.0 * slab_psi_gnd_ext / slab_char_dim);
         // H_g sería U * A
         debug!(
@@ -548,7 +566,7 @@ impl Wall {
             U_bf,
             slab_psi_gnd_ext
         );
-        Some(U)
+        U
     }
 
     /// Transmitancia térmica de muro enterrado, en W/m²K
@@ -556,18 +574,15 @@ impl Wall {
     /// Cálculo según UNE-EN ISO 13370:2010 9.3.3
     /// Hipótesis:
     /// - la cota z del suelo del espacio es relativa a la cota 0 del terreno
-    fn u_value_gnd_wall(
-        &self,
-        // space_z: cota de la solera respecto al 0 del terreno, m
-        space_z: f32,
-        // U_w: transmitancia del elemento considerado en contacto con el exterior
-        U_w: f32,
-        // d_t: espesor equivalente total de solera (suelo del sótano), m (10)
-        d_t: f32,
-        // space_height_net: altura neta del espacio, m
-        space_height_net: f32,
-    ) -> Option<f32> {
-        let z = if space_z < 0.0 { -space_z } else { 0.0 };
+    ///
+    /// # Argumentos
+    ///
+    /// `z` - cota de la solera respecto al 0 del terreno, m
+    /// `U_w` - transmitancia del elemento considerado en contacto con el exterior
+    /// `d_t` - espesor equivalente total de solera (suelo del sótano), m (10)
+    /// `space_height_net` - altura neta del espacio, m
+    fn u_value_gnd_wall(&self, z: f32, U_w: f32, d_t: f32, space_height_net: f32) -> Option<f32> {
+        let z = if z < 0.0 { -z } else { 0.0 };
         // Muros que realmente no son enterrados
         if z.abs() < 0.01 {
             warn!(
