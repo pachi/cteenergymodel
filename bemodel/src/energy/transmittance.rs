@@ -159,13 +159,20 @@ impl Space {
     fn slab_d_t(&self, walls: &[Wall], cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
         // TODO: No sería mejor ponderar por superficie para obtener la d_t?
 
-        // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
-        // TODO: No podemos calcular este valor bien?
-        const W: f32 = 0.3;
-
-        let d_t = self
+        let ground_slabs: Vec<_> = self
             .walls(walls)
-            .filter(|wall| Tilt::from(*wall) == Tilt::BOTTOM)
+            .filter(|wall| Tilt::from(*wall) == Tilt::BOTTOM && wall.bounds == BoundaryType::GROUND)
+            .collect();
+
+        if ground_slabs.is_empty() {
+            return None;
+        };
+
+        // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
+        // TODO: Podríamos calcular este valor bien, tomando la media de los muros verticales
+        const W: f32 = 0.3;
+        let d_t = ground_slabs
+            .iter()
             .zip(1..)
             .fold(0.0, |mean, (gwall_i, i)| {
                 // Si no está definida la construcción no participa de la envolvente
