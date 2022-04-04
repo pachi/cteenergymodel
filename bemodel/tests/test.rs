@@ -119,7 +119,7 @@ fn model_json_ejemploviv_unif() {
     assert_almost_eq!(spc.area, 25.04, 0.01);
     assert_almost_eq!(spc.height_net(&model.walls, &model.cons), 2.48, 0.01);
     assert_almost_eq!(
-        spc.slab_characteristic_dimension(&model.walls, &model.spaces)
+        spc.slab_char_dim(&model.walls, &model.spaces)
             .unwrap_or_default(),
         6.95,
         0.01

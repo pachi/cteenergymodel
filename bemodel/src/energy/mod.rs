@@ -95,7 +95,7 @@ impl ElementProps {
             let sp = SpaceProps {
                 area: s.area,
                 height_net: s.height_net(&model.walls, &model.cons),
-                slab_char_dim: s.slab_characteristic_dimension(&model.walls, &model.spaces),
+                slab_char_dim: s.slab_char_dim(&model.walls, &model.spaces),
                 // inside_tenv: s.inside_tenv,
                 // space_walls: model
                 //     .walls
