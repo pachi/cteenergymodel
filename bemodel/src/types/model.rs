@@ -93,7 +93,7 @@ impl Model {
     /// Iterador de los cerramientos de la envolvente térmica en contacto con el aire o el terreno
     /// Se excluyen los opacos sin espacio definido
     /// TODO: podríamos llevar esta lógica a ElementProps y allí dejar esto calculado
-    pub fn walls_of_envelope_iter(&self) -> impl Iterator<Item = &Wall> {
+    pub fn exterior_and_ground_walls_of_envelope_iter(&self) -> impl Iterator<Item = &Wall> {
         self.walls
             .iter()
             .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
@@ -108,7 +108,7 @@ impl Model {
     /// Iterador de los huecos de la envolvente térmica en contacto con el aire exterior
     /// Se excluyen los huecos sin espacio definido
     /// TODO: podríamos llevar esta lógica a ElementProps y allí dejar esto calculado
-    pub fn windows_of_envelope_iter(&self) -> impl Iterator<Item = &Window> {
+    pub fn exterior_windows_of_envelope_iter(&self) -> impl Iterator<Item = &Window> {
         self.walls
             .iter()
             .filter(|w| w.bounds == BoundaryType::EXTERIOR)
@@ -198,7 +198,7 @@ impl Model {
     pub fn compacity(&self) -> f32 {
         let vol: f32 = self.vol_env_gross();
         let area: f32 = self
-            .walls_of_envelope_iter()
+            .exterior_and_ground_walls_of_envelope_iter()
             .map(|w| {
                 let multiplier = self.get_space(w.space).map(|s| s.multiplier).unwrap_or(1.0);
                 let win_area: f32 = w.windows(&self.windows).map(|win| win.area()).sum();

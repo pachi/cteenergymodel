@@ -61,7 +61,7 @@ impl Model {
             ..Default::default()
         };
 
-        self.walls_of_envelope_iter()
+        self.exterior_and_ground_walls_of_envelope_iter()
             .filter(|wall| wall.bounds == BoundaryType::EXTERIOR)
             .for_each(|wall| {
                 let multiplier = self

@@ -118,7 +118,10 @@ impl ElementProps {
             wincons.insert(wc.id, wcp);
         }
 
-        let walls_tenv: Vec<_> = model.walls_of_envelope_iter().map(|w| w.id).collect();
+        let ext_and_gnd_walls_tenv: Vec<_> = model
+            .exterior_and_ground_walls_of_envelope_iter()
+            .map(|w| w.id)
+            .collect();
 
         let mut walls: BTreeMap<Uuid, WallProps> = BTreeMap::new();
         for w in &model.walls {
@@ -305,7 +308,7 @@ impl KData {
         use crate::{BoundaryType, Tilt};
         let mut k = Self::default();
         // Opacos
-        for wall in model.walls_of_envelope_iter() {
+        for wall in model.exterior_and_ground_walls_of_envelope_iter() {
             let multiplier = model
                 .get_space(wall.space)
                 .map(|s| s.multiplier)

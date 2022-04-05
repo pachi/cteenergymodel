@@ -75,7 +75,7 @@ impl Model {
         let mut q_soljul_data = QSolJulData::default();
 
         let Q_soljul = self
-            .windows_of_envelope_iter()
+            .exterior_windows_of_envelope_iter()
             .filter_map(|w| {
                 let wall = self.get_wall(w.wall)?;
                 let multiplier = self
