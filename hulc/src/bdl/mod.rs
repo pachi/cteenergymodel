@@ -25,7 +25,7 @@ mod envelope;
 
 pub use blocks::{build_blocks, BdlBlock};
 pub use common::{extract_f32vec, extract_namesvec, AttrMap};
-pub use db::{Construction, Frame, Glass, Material, MaterialProperties, WallCons, WindowCons, DB};
+pub use db::{Construction, Frame, Glass, Material, MaterialProperties, WallCons, WinCons, DB};
 pub use envelope::{
     BoundaryType, Floor, Polygon, Shading, Space, ThermalBridge, Tilt, Wall, Window,
 };
@@ -134,7 +134,7 @@ impl Data {
                     bdldata.db.wallcons.insert(e.name.clone(), e);
                 }
                 "GAP" => {
-                    let e = WindowCons::try_from(block)?;
+                    let e = WinCons::try_from(block)?;
                     bdldata.db.wincons.insert(e.name.clone(), e);
                 }
                 "NAME-FRAME" => {

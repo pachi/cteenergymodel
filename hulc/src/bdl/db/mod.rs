@@ -32,7 +32,7 @@ pub use glass::Glass;
 pub use material::Material;
 pub use material::MaterialProperties;
 pub use wallcons::WallCons;
-pub use windowcons::WindowCons;
+pub use windowcons::WinCons;
 
 /// Elementos constructivos y de materiales pertenecientes a la base de datos
 /// Se organizan por nombre y grupo (tipo)
@@ -43,7 +43,7 @@ pub struct DB {
     /// Composición por capas (opacos)
     pub wallcons: BTreeMap<String, WallCons>,
     /// Composición por capas (huecos)
-    pub wincons: BTreeMap<String, WindowCons>,
+    pub wincons: BTreeMap<String, WinCons>,
     /// Vidrio
     pub glasses: BTreeMap<String, Glass>,
     /// Marco

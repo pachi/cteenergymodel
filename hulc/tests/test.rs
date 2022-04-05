@@ -146,7 +146,7 @@ r#""Forjado interior" = LAYERS
 
 #[test]
 fn bdl_wincons() {
-    use bdl::{BdlBlock, WindowCons};
+    use bdl::{BdlBlock, WinCons};
     let wcblk: BdlBlock = r#""ventana estandar" = GAP
     NAME           = "ventana estandar"
     TYPE           = 1
@@ -176,7 +176,7 @@ fn bdl_wincons() {
 "#
     .parse()
     .unwrap();
-    let wc = WindowCons::try_from(wcblk).unwrap();
+    let wc = WinCons::try_from(wcblk).unwrap();
     assert_eq!(wc.name, "ventana estandar");
     assert_eq!(wc.group, "muro_cortina");
     assert_eq!(wc.glass, "Doble baja emisividad argon");

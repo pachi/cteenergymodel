@@ -21,7 +21,7 @@ pub struct Window {
     pub name: String,
     /// Muro, cubierta o suelo en el que se sitúa
     pub wall: String,
-    /// Definición de la composición del hueco (WindowCons::name)
+    /// Definición de la composición del hueco (WinCons::name)
     pub cons: String,
     /// Distancia (m) del borde izquierdo del hueco al borde izquierdo del cerramiento que lo contiene (mirando desde fuera)
     pub x: f32,

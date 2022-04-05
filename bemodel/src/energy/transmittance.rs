@@ -22,7 +22,7 @@ use crate::types::HasSurface;
 use crate::{
     utils::{fround2, fround3},
     BoundaryType, ConsDb, Layer, MatProps, MatsDb, Model, Space, SpaceType, Tilt, Wall, WallCons,
-    WindowCons,
+    WinCons,
 };
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
@@ -275,7 +275,7 @@ impl WallCons {
     }
 }
 
-impl WindowCons {
+impl WinCons {
     /// Transmitancia térmica total de la construcción de hueco, U_W, en una posición dada, en W/m2K
     ///
     /// Incluye el efecto del marco, vidrio y efecto de intercalarios y/o cajones de persiana

@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Construcciones de la envolvente térmica: WallCons, WindowCons
+//! Construcciones de la envolvente térmica: WallCons, WinCons
 
 use serde::{Deserialize, Serialize};
 
@@ -17,7 +17,7 @@ pub struct ConsDb {
     /// Construcciones de opacos
     pub wallcons: Vec<WallCons>,
     /// Construcciones de huecos
-    pub wincons: Vec<WindowCons>,
+    pub wincons: Vec<WinCons>,
 }
 
 impl ConsDb {
@@ -27,7 +27,7 @@ impl ConsDb {
     }
 
     /// Localiza construcción de hueco por id
-    pub fn get_wincons(&self, id: Uuid) -> Option<&WindowCons> {
+    pub fn get_wincons(&self, id: Uuid) -> Option<&WinCons> {
         self.wincons.iter().find(|w| w.id == id)
     }
 }
@@ -67,7 +67,7 @@ pub struct Layer {
 
 /// Definición de construcción de hueco o lucernario
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub struct WindowCons {
+pub struct WinCons {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre

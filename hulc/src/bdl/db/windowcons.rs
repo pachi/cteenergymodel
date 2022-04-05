@@ -14,7 +14,7 @@ use crate::bdl::{BdlBlock, Frame, Glass};
 
 /// Definición de hueco o lucernario (GAP)
 #[derive(Debug, Clone, Default)]
-pub struct WindowCons {
+pub struct WinCons {
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
@@ -37,9 +37,9 @@ pub struct WindowCons {
     pub gglshwi: Option<f32>,
 }
 
-// TODO: Llevar estas implementaciones a las WindowCons de types, que es donde deberían estar
+// TODO: Llevar estas implementaciones a las WinCons de types, que es donde deberían estar
 // y dejar esto solo como contenedores de datos
-impl WindowCons {
+impl WinCons {
     /// Cálculo de U de la construcción del hueco
     /// Incluye las resistencias superficiales (que ya están consideradas en vidrio y marco, para sus posiciones)
     pub fn u(
@@ -72,7 +72,7 @@ impl WindowCons {
     }
 }
 
-impl TryFrom<BdlBlock> for WindowCons {
+impl TryFrom<BdlBlock> for WinCons {
     type Error = Error;
 
     /// Conversión de bloque BDL a definición de hueco o lucernario (GAP)

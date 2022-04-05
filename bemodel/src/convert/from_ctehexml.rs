@@ -22,7 +22,7 @@ use hulc::{
 pub use crate::{
     BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, MatsDb, Meta, Model,
     Orientation, Shade, Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall,
-    WallCons, WallGeometry, Window, WindowCons, WindowGeometry,
+    WallCons, WallGeometry, Window, WinCons, WindowGeometry,
 };
 
 // Utilidades varias de conversión
@@ -643,7 +643,7 @@ fn wallcons_from_bdl(
 }
 
 /// Construcciones de huecos a partir de datos BDL
-fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WindowCons>, Error> {
+fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WinCons>, Error> {
     let mut wcnames: Vec<String> = bdl
         .windows
         .iter()
@@ -685,7 +685,7 @@ fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WindowCons>,
                     _ => return Err(format_err!("Marco no encontrado: {}", cons.frame,)),
                 };
                 used_frames_ids.insert(frame);
-                WindowCons {
+                WinCons {
                     id,
                     name: cons.name.clone(),
                     group: cons.group.clone(),
