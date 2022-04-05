@@ -96,14 +96,6 @@ impl ElementProps {
                 area: s.area,
                 height_net: s.height_net(&model.walls, &model.cons),
                 volume_net: s.volume_net(&model.walls, &model.cons),
-                slab_char_dim: s.slab_char_dim(&model.walls, &model.spaces),
-                // inside_tenv: s.inside_tenv,
-                // space_walls: model
-                //     .walls
-                //     .iter()
-                //     .filter_map(|w| if w.space == s.id { Some(w.id) } else { None })
-                //     .collect(),
-                // z: s.z,
             };
             spaces.insert(s.id, sp);
         }
@@ -111,7 +103,7 @@ impl ElementProps {
         let mut wallcons: BTreeMap<Uuid, WallConsProps> = BTreeMap::new();
         for wc in &model.cons.wallcons {
             let wcp = WallConsProps {
-                r_instrinsic: wc.r_intrinsic(&model.mats).ok(),
+                r_intrinsic: wc.r_intrinsic(&model.mats).ok(),
             };
             wallcons.insert(wc.id, wcp);
         }
@@ -167,50 +159,39 @@ pub struct SpaceProps {
     pub height_net: f32,
     /// Volumen neto del espacio, m³
     pub volume_net: f32,
-    /// Dimensión característica de la solera (B', UNE-EN ISO 13370:2010 8.1), m
-    pub slab_char_dim: Option<f32>,
-    // /// ¿Pertenece este muro a la envolvente térmica?
-    // pub inside_tenv: bool,
-    // /// Muros que pertenecen al espacio
-    // pub space_walls: Vec<Uuid>,
-    // /// Cota del espacio
-    // pub z: f32,
 }
 
 /// Propiedades de muros
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct WallProps {
-    /// U de muro, W/m²K
-    pub u_value: Option<f32>,
     /// Superficie bruta del muro, m²
     pub area_gross: f32,
     /// Superficie neta del muro, m²
     pub area_net: f32,
     /// ¿Pertenece este muro a la envolvente térmica?
     pub inside_tenv: bool,
+    /// U de muro, W/m²K
+    pub u_value: Option<f32>,
 }
 
 /// Propiedades de huecos
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct WinProps {
-    // U de huecos, W/m²K
-    pub u_value: Option<f32>,
     /// Superficie del hueco, m²
     pub area: f32,
-    // TODO: completar propiedades
-    // pub g_glwi: Option<f32>,
-    // pub g_glshwi: Option<f32>,
-    // pub f_shobst: Option<f32>,
-    // pub space_id: Option<Uuid>,
     /// ¿Pertenece este muro a la envolvente térmica?
     pub inside_tenv: bool,
+    /// U de huecos, W/m²K
+    pub u_value: Option<f32>,
+    // TODO: completar propiedades
+    // pub f_shobst: Option<f32>,
 }
 
 /// Propiedades de construcciones de opacos
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct WallConsProps {
     // R intrínseca de construcción, m²K/W
-    pub r_instrinsic: Option<f32>,
+    pub r_intrinsic: Option<f32>,
 }
 
 /// Propiedades de construcciones de opacos
