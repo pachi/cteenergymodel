@@ -189,6 +189,15 @@ impl From<&Model> for EnergyProps {
             .map(|n_v_g| 3.6 * n_v_g / vol_env_inh_net)
             .unwrap_or_default();
 
+        // Manejo de los opacos según disponibilidad de ensayo
+        // Permeabilidad de opacos calculada según criterio de edad por defecto DB-HE2019 (1/h)
+        // NOTE: usamos is_new_building pero igual merecería la pena una variable para permeabilidad mejorada
+        let c_o_100 = if model.meta.is_new_building {
+            16.0
+        } else {
+            29.0
+        };
+
         let global = GlobalProps {
             a_ref,
             vol_env_gross,
@@ -196,6 +205,8 @@ impl From<&Model> for EnergyProps {
             vol_env_inh_net,
             compacity,
             global_ventilation_rate,
+            n_50_test_ach: model.meta.n50_test_ach,
+            c_o_100,
         };
 
         Self {
@@ -231,6 +242,12 @@ pub struct GlobalProps {
     pub compacity: f32,
     /// Tasa de ventilación global del edificio (1/h)
     pub global_ventilation_rate: f32,
+    /// Tasa de renovación de aire a 50Pa obtenida mediante ensayo de puerta soplante (1/h)
+    pub n_50_test_ach: Option<f32>,
+    /// Permeabilidad al aire de opacos de referencia a 100 Pa [m³/hm²]
+    /// Permeabilidad de opacos calculada según criterio de edad por defecto DB-HE2019 (1/h)
+    /// NOTE: usamos is_new_building pero igual merecería la pena una variable para permeabilidad mejorada
+    pub c_o_100: f32,
 }
 
 /// Propiedades de espacios

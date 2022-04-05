@@ -7,7 +7,7 @@
 use log::info;
 use serde::{Deserialize, Serialize};
 
-use crate::{BoundaryType, Model, energy::EnergyProps};
+use crate::{energy::EnergyProps, BoundaryType};
 
 /// Reporte de cálculo de n50 con valores de referencia (teóricos) y de ensayo (si está disponible)
 /// El valor teórico usa las permeabilidades del CTE DB-HE 2019
@@ -38,7 +38,7 @@ pub struct N50Data {
     pub vol: f32,
 }
 
-impl Model {
+impl From<&EnergyProps> for N50Data {
     /// Calcula la tasa teórica de intercambio de aire a 50Pa según DB-HE2019 (1/h)
     /// Se considera:
     /// - las superficies opacos en contacto con el aire exterior
@@ -47,31 +47,26 @@ impl Model {
     /// - la permeabilidad al aire de huecos definida en su construcción
     /// - el volumen interior de la envolvente térmica ()
     /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
-    pub fn n50(&self, props: &EnergyProps) -> N50Data {
+    fn from(props: &EnergyProps) -> Self {
         let mut data = N50Data {
             vol: props.global.vol_env_net,
             ..Default::default()
         };
 
-        self.exterior_and_ground_walls_of_envelope_iter()
-            .filter(|wall| wall.bounds == BoundaryType::EXTERIOR)
-            .for_each(|wall| {
-                let multiplier = self
-                    .get_space(wall.space)
-                    .map(|s| s.multiplier)
-                    .unwrap_or(1.0);
+        props
+            .walls
+            .iter()
+            .filter(|(_, w)| w.is_ext_or_gnd_tenv && w.bounds == BoundaryType::EXTERIOR)
+            .for_each(|(wall_id, wall)| {
+                let multiplier = wall.multiplier;
                 let mut win_ah = 0.0;
                 let mut win_ah_ch = 0.0;
-                for (a, ca) in wall.windows(&self.windows).filter_map(|win| {
-                    self.cons
-                        .get_wincons(win.cons)
-                        .map(|wincons| Some((win.area(), win.area() * wincons.c_100)))?
-                }) {
-                    win_ah += a;
-                    win_ah_ch += ca;
+                for win in props.windows.values().filter(|win| &win.wall == wall_id) {
+                    let wincons = props.wincons.get(&win.cons);
+                    win_ah += win.area;
+                    win_ah_ch += win.area * wincons.map(|wc| wc.c_100).unwrap_or_default();
                 }
-
-                data.walls_a += wall.area_net(&self.windows) * multiplier;
+                data.walls_a += wall.area_net * multiplier;
                 data.windows_a += win_ah * multiplier;
                 data.windows_c_a += win_ah_ch * multiplier;
             });
@@ -84,11 +79,7 @@ impl Model {
         // Manejo de los opacos según disponibilidad de ensayo
         // Permeabilidad de opacos calculada según criterio de edad por defecto DB-HE2019 (1/h)
         // NOTE: usamos is_new_building pero igual merecería la pena una variable para permeabilidad mejorada
-        data.walls_c_ref = if self.meta.is_new_building {
-            16.0
-        } else {
-            29.0
-        };
+        data.walls_c_ref = props.global.c_o_100;
         data.walls_c_a_ref = data.walls_a * data.walls_c_ref;
 
         if data.vol > 0.001 {
@@ -96,7 +87,7 @@ impl Model {
             data.n50_ref = 0.629 * (data.walls_c_a_ref + data.windows_c_a) / data.vol
         };
 
-        if let Some(n50test) = self.meta.n50_test_ach {
+        if let Some(n50test) = props.global.n_50_test_ach {
             data.n50 = n50test;
             if data.walls_a > 0.001 {
                 data.walls_c = ((n50test * data.vol) / 0.629 - data.windows_c_a) / data.walls_a;

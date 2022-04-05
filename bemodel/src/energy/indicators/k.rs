@@ -6,58 +6,11 @@
 //!
 //! Cálculo de K, qsoljul, Fshobst, etc
 
-use anyhow::Error;
 use log::info;
 use serde::{Deserialize, Serialize};
 
-use super::{EnergyProps, N50Data, QSolJulData};
-use crate::{climatedata, BoundaryType, Model, Tilt, Warning};
-
-/// Estructura que contiene los resultados del cálculo de indicadores y parámetros energéticos
-#[allow(non_snake_case)]
-#[derive(Debug, Serialize, Deserialize)]
-pub struct EnergyIndicators {
-    pub area_ref: f32,
-    pub compacity: f32,
-    pub vol_env_net: f32,
-    pub vol_env_gross: f32,
-    pub props: EnergyProps,
-    pub K_data: KData,
-    pub q_soljul_data: QSolJulData,
-    pub n50_data: N50Data,
-    pub warnings: Vec<Warning>,
-}
-
-impl EnergyIndicators {
-    /// Devuelve resultados en formato JSON
-    pub fn as_json(&self) -> Result<String, Error> {
-        let json = serde_json::to_string_pretty(&self)?;
-        Ok(json)
-    }
-
-    /// Calcula indicadores energéticos del modelo
-    pub fn compute(model: &Model) -> Self {
-        let climatezone = model.meta.climate;
-        let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
-
-        let props = EnergyProps::from(model);
-
-        Self {
-            area_ref: props.global.a_ref,
-            compacity: props.global.compacity,
-            vol_env_net: props.global.vol_env_net,
-            vol_env_gross: props.global.vol_env_gross,
-
-            K_data: KData::K(&props),
-            q_soljul_data: model.q_soljul(&props, &totradjul),
-            n50_data: model.n50(&props),
-
-            props,
-
-            warnings: model.check(),
-        }
-    }
-}
+use crate::energy::EnergyProps;
+use crate::{BoundaryType, Tilt};
 
 /// Reporte de cálculo de K (HE2019)
 #[allow(non_snake_case)]
@@ -149,13 +102,13 @@ pub struct KTBElementProps {
     pub psil: f32,
 }
 
-impl KData {
+impl From<&EnergyProps> for KData {
     /// Calcula la transmitancia térmica global K (W/m2K)
     /// Transmitancia media de opacos, huecos y puentes térmicos en contacto con el aire exterior o con el terreno
     ///
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
-    #[allow(non_snake_case)]
-    pub fn K(props: &EnergyProps) -> KData {
+    // #[allow(non_snake_case)]
+    fn from(props: &EnergyProps) -> Self {
         let mut k = Self::default();
 
         // Opacos
