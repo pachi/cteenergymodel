@@ -36,7 +36,7 @@ pub struct EnergyIndicators {
     pub compacity: f32,
     pub vol_env_net: f32,
     pub vol_env_gross: f32,
-    pub elements: ElementProps,
+    pub elements: EnergyProps,
     pub K_data: KData,
     pub q_soljul_data: QSolJulData,
     pub n50_data: N50Data,
@@ -60,7 +60,7 @@ impl EnergyIndicators {
             vol_env_net: model.vol_env_net(),
             vol_env_gross: model.vol_env_gross(),
 
-            elements: ElementProps::compute(model),
+            elements: EnergyProps::from(model),
             K_data: KData::K(model),
             q_soljul_data: model.q_soljul(&totradjul),
             n50_data: model.n50(),
@@ -73,7 +73,7 @@ impl EnergyIndicators {
 /// Reporte de cálculo de propiedades térmicas y geométricas de los elementos
 /// TODO: llevar a un atributo model las propiedades del modelo y warnings que ahora están en EnergyIndicators y dejar ahí solo K, q_soljul, n50
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ElementProps {
+pub struct EnergyProps {
     /// Propiedades de espacios
     pub spaces: BTreeMap<Uuid, SpaceProps>,
     /// Propiedades de muros
@@ -86,9 +86,9 @@ pub struct ElementProps {
     pub wincons: BTreeMap<Uuid, WinConsProps>,
 }
 
-impl ElementProps {
+impl From<&Model> for EnergyProps {
     /// Completa datos de los elementos (espacios, opacos, huecos,...) por id
-    pub fn compute(model: &Model) -> Self {
+    fn from(model: &Model) -> Self {
         let mut spaces: BTreeMap<Uuid, SpaceProps> = BTreeMap::new();
         for s in &model.spaces {
             let sp = SpaceProps {
