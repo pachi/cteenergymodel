@@ -95,6 +95,7 @@ impl ElementProps {
             let sp = SpaceProps {
                 area: s.area,
                 height_net: s.height_net(&model.walls, &model.cons),
+                volume_net: s.volume_net(&model.walls, &model.cons),
                 slab_char_dim: s.slab_char_dim(&model.walls, &model.spaces),
                 // inside_tenv: s.inside_tenv,
                 // space_walls: model
@@ -162,8 +163,8 @@ pub struct SpaceProps {
     pub area: f32,
     /// Altura neta del espacio, m
     pub height_net: f32,
-    // /// Volumen del espacio, m³
-    // pub volume: f32,
+    /// Volumen neto del espacio, m³
+    pub volume_net: f32,
     /// Dimensión característica de la solera (B', UNE-EN ISO 13370:2010 8.1), m
     pub slab_char_dim: Option<f32>,
     // /// ¿Pertenece este muro a la envolvente térmica?

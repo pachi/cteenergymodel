@@ -442,21 +442,14 @@ impl Wall {
                         // Se puede obtener n_v a partir de la Tabla 6 de la UNE-EN ISO 13789:2017 y n_50/20.
                         // Para sótanos no calefactados la 13370:2007 (9.4) dice que se podría usar n_v = 0.30
                         let q_ue = {
-                            let volume = uncondspace.height_net(&model.walls, &model.cons)
-                                * uncondspace.area;
-                            let n_v = match uncondspace.n_v {
-                                Some(n_v) => n_v,
-                                _ => match model.meta.global_ventilation_l_s {
-                                    Some(global_ventilation) => {
-                                        3.6 * global_ventilation / model.vol_env_inh_net()
-                                    }
-                                    _ => {
-                                        // Espacio mal definido (ni tiene n_v ni hay definición global de ventilación)
-                                        warn!("Definición global (l/s) no definida para espacio no acondicionado sin n_v {} ({})", uncondspace.id, uncondspace.name);
-                                        0.0
-                                    }
-                                },
-                            };
+                            let volume = uncondspace.volume_net(&model.walls, &model.cons);
+                            let n_v = uncondspace
+                                .n_v
+                                .unwrap_or_else(|| model.global_ventilation_rate());
+                            if n_v.abs() < f32::EPSILON {
+                                // Espacio mal definido (ni tiene n_v ni hay definición global de ventilación)
+                                warn!("Nivel de ventilación (1/h) nulo o casi nulo del espacio no acondicionado {} ({})", uncondspace.id, uncondspace.name);
+                            }
                             // m^3 * 1/h
                             volume * n_v
                         };

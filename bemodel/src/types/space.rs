@@ -66,6 +66,12 @@ impl Space {
         self.height - top_wall_thickness
     }
 
+    /// Volumen neto del espacio, m^3
+    /// Se calcula con area * altura neta
+    pub fn volume_net(&self, walls: &[Wall], cons: &ConsDb) -> f32 {
+        self.area * self.height_net(walls, cons)
+    }
+
     /// Iterador de los cerramientos que delimitan un espacio (muros, suelos y techos)
     pub fn walls<'a>(&'a self, walls: &'a [Wall]) -> impl Iterator<Item = &'a Wall> {
         walls

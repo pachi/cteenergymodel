@@ -39,6 +39,14 @@ pub struct N50Data {
 }
 
 impl Model {
+    /// Calcula la tasa de ventilación global (1/h)
+    pub fn global_ventilation_rate(&self) -> f32 {
+        self.meta
+            .global_ventilation_l_s
+            .map(|n_v_g| 3.6 * n_v_g / self.vol_env_inh_net())
+            .unwrap_or_default()
+    }
+
     /// Calcula la tasa teórica de intercambio de aire a 50Pa según DB-HE2019 (1/h)
     /// Se considera:
     /// - las superficies opacos en contacto con el aire exterior
