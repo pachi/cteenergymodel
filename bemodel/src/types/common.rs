@@ -109,6 +109,12 @@ pub enum Orientation {
     HZ,
 }
 
+impl Default for Orientation {
+    fn default() -> Self {
+        Orientation::S
+    }
+}
+
 impl Display for Orientation {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         let printable = match *self {
