@@ -9,7 +9,9 @@
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
-use crate::{utils::fround2, BoundaryType, Model, Orientation, SpaceType, Uuid};
+use crate::{
+    utils::fround2, BoundaryType, Model, Orientation, SpaceType, ThermalBridgeKind, Tilt, Uuid,
+};
 
 /// Reporte de cálculo de propiedades térmicas y geométricas del modelo
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -22,6 +24,8 @@ pub struct EnergyProps {
     pub walls: BTreeMap<Uuid, WallProps>,
     /// Propiedades de huecos
     pub windows: BTreeMap<Uuid, WinProps>,
+    /// Propiedades de puentes térmicos
+    pub thermal_bridges: BTreeMap<Uuid, TbProps>,
     /// Propiedades de construcciones de muros
     pub wallcons: BTreeMap<Uuid, WallConsProps>,
     /// Propiedades de huecos
@@ -75,9 +79,12 @@ impl From<&Model> for EnergyProps {
         let mut walls: BTreeMap<Uuid, WallProps> = BTreeMap::new();
         for w in &model.walls {
             let wp = WallProps {
+                space: w.space,
+                space_next: w.next_to,
                 bounds: w.bounds,
                 cons: w.cons,
                 orientation: Orientation::from(w),
+                tilt: Tilt::from(w),
                 area_gross: w.area(),
                 area_net: w.area_net(&model.windows),
                 multiplier: spaces.get(&w.space).map(|sp| sp.multiplier).unwrap_or(1.0),
@@ -92,14 +99,27 @@ impl From<&Model> for EnergyProps {
         for w in &model.windows {
             let wall = walls.get(&w.wall);
             let wp = WinProps {
+                wall: w.wall,
                 cons: w.cons,
                 orientation: wall.map(|w| w.orientation).unwrap_or_default(),
+                tilt: wall.map(|w| w.tilt).unwrap_or_default(),
                 area: w.area(),
                 multiplier: wall.map(|wp| wp.multiplier).unwrap_or(1.0),
                 is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
             };
             windows.insert(w.id, wp);
+        }
+
+        // Propiedades de puentes térmicos
+        let mut thermal_bridges: BTreeMap<Uuid, TbProps> = BTreeMap::new();
+        for tb in &model.thermal_bridges {
+            let tbp = TbProps {
+                kind: tb.kind,
+                l: tb.l,
+                psi: tb.psi,
+            };
+            thermal_bridges.insert(tb.id, tbp);
         }
 
         // Propiedades globales
@@ -183,6 +203,7 @@ impl From<&Model> for EnergyProps {
             spaces,
             walls,
             windows,
+            thermal_bridges,
             wallcons,
             wincons,
         }
@@ -234,12 +255,18 @@ pub struct SpaceProps {
 /// Propiedades de muros
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WallProps {
+    /// Espacio al que pertenece el muro
+    pub space: Uuid,
+    /// Espacio adyacente
+    pub space_next: Option<Uuid>,
     /// Condición de contorno
     pub bounds: BoundaryType,
     /// Construcción de muro
     pub cons: Uuid,
-    /// Orientación (heredada del muro)
+    /// Orientación del opaco
     pub orientation: Orientation,
+    /// Inclinación del opaco
+    pub tilt: Tilt,
     /// Superficie bruta del muro, [m²]
     pub area_gross: f32,
     /// Superficie neta del muro, [m²]
@@ -257,8 +284,12 @@ pub struct WallProps {
 pub struct WinProps {
     /// Construcción de hueco
     pub cons: Uuid,
-    /// Orientación (heredada del muro)
+    /// Opaco al que está asociado
+    pub wall: Uuid,
+    /// Orientación del hueco (heredada del muro)
     pub orientation: Orientation,
+    /// Inclinación del hueco (heredada del muro)
+    pub tilt: Tilt,
     /// Superficie del hueco, [m²]
     pub area: f32,
     /// Multiplicador del espacio, [-]
@@ -272,6 +303,18 @@ pub struct WinProps {
     // pub f_shobst_user: Option<f32>,
     // /// Factor de obstrucción de obstáculos remotos (calculado), [-]
     // pub f_shobst: f32,
+}
+
+/// Propiedades de puentes térmicos
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TbProps {
+    /// Tipo de puente térmico
+    /// Roof|Balcony|Corner|IntermediateFloor|InternalWall|GroundFloor|Pillar|Window|Generic
+    pub kind: ThermalBridgeKind,
+    /// Longitud del puente térmico (m)
+    pub l: f32,
+    /// Transmitancia térmica lineal del puente térmico (W/mK)
+    pub psi: f32,
 }
 
 /// Propiedades de construcciones de opacos
