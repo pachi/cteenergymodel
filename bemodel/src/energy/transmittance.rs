@@ -157,8 +157,6 @@ impl Space {
     /// Según UNE-EN ISO 13370:2010 9.3.2 (10)
     /// Ponderamos según superficie de suelos en contacto con el terreno
     fn slab_d_t(&self, walls: &[Wall], cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
-        // TODO: No sería mejor ponderar por superficie para obtener la d_t?
-
         let ground_slabs: Vec<_> = self
             .walls(walls)
             .filter(|wall| Tilt::from(*wall) == Tilt::BOTTOM && wall.bounds == BoundaryType::GROUND)
@@ -169,25 +167,22 @@ impl Space {
         };
 
         // Suponemos espesor de muros de sótano = 0.30m para cálculo de soleras
-        // TODO: Podríamos calcular este valor bien, tomando la media de los muros verticales
+        // NOTA: Podríamos calcular el espesor medio de muros perimetrales bien, pero probablemente no merece la pena
+        // NOTA: Ponderamos por superficie las d_t de cada solera para obtener la d_t media
         const W: f32 = 0.3;
-        let d_t = ground_slabs
-            .iter()
-            .zip(1..)
-            .fold(0.0, |mean, (gwall_i, i)| {
-                // Si no está definida la construcción no participa de la envolvente
-                cons.get_wallcons(gwall_i.cons)
-                    .map(|cons_i| match cons_i.r_intrinsic(mats).ok() {
-                        Some(r_intrinsic_i) => {
-                            let R_ground_i = RSI_DESCENDENTE + r_intrinsic_i + RSE;
-                            // e = lambda * R // e_tot = 0.30m + lambda * R_mean
-                            (W + LAMBDA_GND * R_ground_i + mean * (i - 1) as f32) / i as f32
-                        }
-                        // BUG: Aquí no sería un valor != 0, calculado con r_intrinsic_i == 0?
-                        _ => 0.0,
-                    })
-                    .unwrap_or(0.0)
-            });
+        let mut e_tot = 0.0;
+        let mut a_total = 0.0;
+        for slab in &ground_slabs {
+            let a = slab.area();
+            a_total += a;
+            // NOTA: Cuando el modelo no está completamente definido usamos solo las resistencias superficiales
+            let r_intrinsic = cons
+                .get_wallcons(slab.cons)
+                .and_then(|c| c.r_intrinsic(mats).ok())
+                .unwrap_or_default();
+            e_tot += a * (W + LAMBDA_GND * (RSI_DESCENDENTE + r_intrinsic + RSE));
+        }
+        let d_t = e_tot / a_total / ground_slabs.len() as f32;
         Some(d_t)
     }
 
