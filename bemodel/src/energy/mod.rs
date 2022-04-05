@@ -11,7 +11,7 @@ use log::info;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
-use crate::{climatedata, BoundaryType, Model, Orientation, Tilt, Uuid, Warning};
+use crate::{climatedata, BoundaryType, Model, Orientation, SpaceType, Tilt, Uuid, Warning};
 
 mod aabb;
 mod bvh;
@@ -89,6 +89,7 @@ impl ElementProps {
         let mut spaces: BTreeMap<Uuid, SpaceProps> = BTreeMap::new();
         for s in &model.spaces {
             let sp = SpaceProps {
+                kind: s.kind,
                 area: s.area,
                 multiplier: s.multiplier,
                 height_net: s.height_net(&model.walls, &model.cons),
@@ -162,6 +163,8 @@ impl ElementProps {
 /// Propiedades de espacios
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpaceProps {
+    /// Nivel de acondicionamiento del espacio, [-]
+    pub kind: SpaceType,
     /// Superficie del espacio, [m²]
     pub area: f32,
     /// Multiplicador del espacio, [-]
