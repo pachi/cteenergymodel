@@ -18,7 +18,7 @@ pub type Uuid = uuid::Uuid;
 /// Condiciones de contorno de los cerramientos
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum BoundaryType {
-    /// Cerramiento en contacto con el aire exterior
+    /// Cerramiento en contacto con el aire exterior (valor por defecto)
     EXTERIOR,
     /// Cerramiento en contacto con el aire de otro espacio
     INTERIOR,
@@ -53,8 +53,14 @@ pub enum Tilt {
     BOTTOM,
     /// Cubierta (inclinación > 120º)
     TOP,
-    /// Muro (inclinación entre 60 y 120º)
+    /// Muro (inclinación entre 60 y 120º) (valor por defecto)
     SIDE,
+}
+
+impl Default for Tilt {
+    fn default() -> Self {
+        Tilt::SIDE
+    }
 }
 
 impl Display for Tilt {
@@ -97,7 +103,7 @@ pub enum Orientation {
     E,
     /// Sureste
     SE,
-    /// Sur
+    /// Sur (valor por defecto)
     S,
     /// Suroeste
     SW,
@@ -180,7 +186,8 @@ impl From<&str> for Orientation {
             "NW" => Self::NW,
             "W" => Self::W,
             "SW" => Self::SW,
-            _ => Self::HZ,
+            "Horiz." | "H" | "Hz" | "Horiz" => Self::HZ,
+            _ => Self::S,
         }
     }
 }
