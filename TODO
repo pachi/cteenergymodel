@@ -1,5 +1,8 @@
 # TAREAS PENDIENTES
 
+- Ver si los Uuid se ponen como `Option<Uuid>` (pueden no estar vinculados y eliminarse cuando se borre una construcción)
+- Cambiar f_shobst a f_shobst_user: Option<f32>. Solo se calcula si no está definido por el usuario
+- Calcular K, n50 y qsoljul con ElementProps
 - Completar estructura EnergyIndicators.elements (ElementProps)?
   - indicando elementos que pertenecen a la envolvente
     - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
