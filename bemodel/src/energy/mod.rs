@@ -59,16 +59,19 @@ impl EnergyIndicators {
             compacity: model.compacity(),
             vol_env_net: model.vol_env_net(),
             vol_env_gross: model.vol_env_gross(),
+
             elements: ElementProps::compute(model),
             K_data: KData::K(model),
             q_soljul_data: model.q_soljul(&totradjul),
             n50_data: model.n50(),
+
             warnings: model.check(),
         }
     }
 }
 
 /// Reporte de cálculo de propiedades térmicas y geométricas de los elementos
+/// TODO: llevar a un atributo model las propiedades del modelo y warnings que ahora están en EnergyIndicators y dejar ahí solo K, q_soljul, n50
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ElementProps {
     /// Propiedades de espacios
@@ -109,10 +112,10 @@ impl ElementProps {
         let mut wincons: BTreeMap<Uuid, WinConsProps> = BTreeMap::new();
         for wc in &model.cons.wincons {
             let wcp = WinConsProps {
+                c_100: wc.c_100,
                 u_value: wc.u_value(&model.mats),
                 g_glwi: wc.g_glwi(&model.mats),
                 g_glshwi: wc.g_glshwi(&model.mats),
-                c_100: wc.c_100,
             };
             wincons.insert(wc.id, wcp);
         }
@@ -125,14 +128,14 @@ impl ElementProps {
         let mut walls: BTreeMap<Uuid, WallProps> = BTreeMap::new();
         for w in &model.walls {
             let wp = WallProps {
+                bounds: w.bounds,
+                cons: w.cons,
+                orientation: Orientation::from(w),
                 area_gross: w.area(),
                 area_net: w.area_net(&model.windows),
                 multiplier: spaces.get(&w.space).map(|sp| sp.multiplier).unwrap_or(1.0),
                 is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.id),
                 u_value: w.u_value(model),
-                orientation: Orientation::from(w),
-                cons: w.cons,
-                bounds: w.bounds,
             };
             walls.insert(w.id, wp);
         }
@@ -141,12 +144,12 @@ impl ElementProps {
         for w in &model.windows {
             let wall = walls.get(&w.wall);
             let wp = WinProps {
+                cons: w.cons,
+                orientation: wall.map(|w| w.orientation).unwrap_or_default(),
                 area: w.area(),
                 multiplier: wall.map(|wp| wp.multiplier).unwrap_or(1.0),
                 is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
-                orientation: wall.map(|w| w.orientation).unwrap_or_default(),
-                cons: w.cons,
             };
             windows.insert(w.id, wp);
         }
@@ -178,6 +181,12 @@ pub struct SpaceProps {
 /// Propiedades de muros
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WallProps {
+    /// Condición de contorno
+    pub bounds: BoundaryType,
+    /// Construcción de muro
+    pub cons: Uuid,
+    /// Orientación (heredada del muro)
+    pub orientation: Orientation,
     /// Superficie bruta del muro, [m²]
     pub area_gross: f32,
     /// Superficie neta del muro, [m²]
@@ -188,17 +197,15 @@ pub struct WallProps {
     pub is_ext_or_gnd_tenv: bool,
     /// U de muro, [W/m²K]
     pub u_value: Option<f32>,
-    /// Orientación (heredada del muro)
-    pub orientation: Orientation,
-    /// Construcción de muro
-    pub cons: Uuid,
-    /// Condición de contorno
-    pub bounds: BoundaryType,
 }
 
 /// Propiedades de huecos
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WinProps {
+    /// Construcción de hueco
+    pub cons: Uuid,
+    /// Orientación (heredada del muro)
+    pub orientation: Orientation,
     /// Superficie del hueco, [m²]
     pub area: f32,
     /// Multiplicador del espacio, [-]
@@ -207,12 +214,11 @@ pub struct WinProps {
     pub is_ext_or_gnd_tenv: bool,
     /// U de huecos, [W/m²K]
     pub u_value: Option<f32>,
-    /// Orientación (heredada del muro)
-    pub orientation: Orientation,
-    /// Construcción de hueco
-    pub cons: Uuid,
     // TODO: completar propiedades
+    // /// Factor de obstrucción de obstáculos remotos (usuario), [-]
     // pub f_shobst_user: Option<f32>,
+    // /// Factor de obstrucción de obstáculos remotos (calculado), [-]
+    // pub f_shobst: f32,
 }
 
 /// Propiedades de construcciones de opacos
