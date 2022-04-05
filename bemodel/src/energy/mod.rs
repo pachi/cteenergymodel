@@ -120,6 +120,8 @@ impl ElementProps {
         for wc in &model.cons.wincons {
             let wcp = WinConsProps {
                 u_value: wc.u_value(&model.mats),
+                g_glwi: wc.g_glwi(&model.mats),
+                g_glshwi: wc.g_glshwi(&model.mats),
             };
             wincons.insert(wc.id, wcp);
         }
@@ -129,10 +131,10 @@ impl ElementProps {
         let mut walls: BTreeMap<Uuid, WallProps> = BTreeMap::new();
         for w in &model.walls {
             let wp = WallProps {
-                u_value: w.u_value(model),
                 area_gross: w.area(),
                 area_net: w.area_net(&model.windows),
                 inside_tenv: walls_tenv.contains(&w.id),
+                u_value: w.u_value(model),
             };
             walls.insert(w.id, wp);
         }
@@ -140,9 +142,9 @@ impl ElementProps {
         let mut windows: BTreeMap<Uuid, WinProps> = BTreeMap::new();
         for w in &model.windows {
             let wp = WinProps {
-                u_value: w.u_value(&model.cons, &model.mats),
                 area: w.area(),
                 inside_tenv: walls_tenv.contains(&w.wall),
+                u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
             };
             windows.insert(w.id, wp);
         }
@@ -214,11 +216,13 @@ pub struct WallConsProps {
 /// Propiedades de construcciones de opacos
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct WinConsProps {
+    /// Transmitancia térmica total del acristalamiento, sin protecciones solares, [-]
+    pub g_glwi: Option<f32>,
+    /// Transmitancia térmica total del acristalamiento, con protecciones solares, [-]
+    pub g_glshwi: Option<f32>,
     // U de construcción de hueco, W/m²K
     pub u_value: Option<f32>,
 }
-
-// TODO: SpaceProps: { pub area: Option<f32>, pub volume: Option<f32>, pub exposed_perimeter: Option<f32>, pub inside_et: Option<bool> }
 
 /// Reporte de cálculo de K (HE2019)
 #[allow(non_snake_case)]
@@ -327,8 +331,12 @@ impl KData {
                 .unwrap_or(1.0);
             // Huecos de los opacos
             for win in wall.windows(&model.windows) {
-                let win_u = match win.u_value(&model.cons, &model.mats) {
-                    Some(u) => u,
+                let win_u = match &model
+                    .cons
+                    .get_wincons(win.cons)
+                    .and_then(|c| c.u_value(&model.mats))
+                {
+                    Some(u) => *u,
                     _ => continue,
                 };
                 let area = multiplier * win.area();

@@ -22,7 +22,7 @@ use crate::types::HasSurface;
 use crate::{
     utils::{fround2, fround3},
     BoundaryType, ConsDb, Layer, MatProps, MatsDb, Model, Space, SpaceType, Tilt, Wall, WallCons,
-    Window, WindowCons,
+    WindowCons,
 };
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
@@ -235,8 +235,8 @@ impl Space {
                     .windows(&model.windows)
                     .filter_map(|win| {
                         // Si no está definida la construcción, el hueco no participa de la envolvente
-                        win.u_value(&model.cons, &model.mats)
-                            .map(|u| Some(win.area() * u))?
+                        let u = &model.cons.get_wincons(win.cons)?.u_value(&model.mats)?;
+                        Some(win.area() * u)
                     })
                     .sum::<f32>();
                 Some(wall.area_net(&model.windows) * wall_u + win_axu)
@@ -248,11 +248,11 @@ impl Space {
 
 impl WallCons {
     /// Resistencia térmica intrínseca (sin resistencias superficiales) de una composición de capas [W/m²K]
-    /// TODO: convertir errores a warning para logging y devolver Option<f32>
+    /// TODO: convertir errores a logging y devolver Option<f32>
     pub fn r_intrinsic(&self, mats: &MatsDb) -> Result<f32, Error> {
         let mut total_resistance = 0.0;
         for Layer { id, e } in &self.layers {
-            match mats.materials.iter().find(|m| &m.id==id) {
+            match mats.get_material(*id) {
                 None => return Err(format_err!(
                     "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
                     id,
@@ -279,28 +279,31 @@ impl WindowCons {
     /// Transmitancia térmica total de la construcción de hueco, U_W, en una posición dada, en W/m2K
     ///
     /// Incluye el efecto del marco, vidrio y efecto de intercalarios y/o cajones de persiana
+    ///
     /// Notas:
-    /// - estos valores ya deben incluir las resistencias superficiales
+    /// - los valores de U de acristalamiento y marco son para su posición final
+    /// - los valores de acristalamiento y marco ya deben incluir las resistencias superficiales
     ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
     pub fn u_value(&self, mats: &MatsDb) -> Option<f32> {
-        let glass = mats.glasses.iter().find(|g| g.id == self.glass)?;
-        let frame = mats.frames.iter().find(|f| f.id == self.frame)?;
+        let glass = mats.get_glass(self.glass)?;
+        let frame = mats.get_frame(self.frame)?;
         Some(fround2(
             (1.0 + self.delta_u / 100.0)
                 * (frame.u_value * self.f_f + glass.u_value * (1.0 - self.f_f)),
         ))
     }
-}
 
-impl Window {
-    /// Transmitancia térmica total del hueco, U_W, en una posición dada, en W/m2K
-    ///
-    /// Incluye el efecto del marco, vidrio y efecto de intercalarios y/o cajones de persiana
-    /// Notas:
-    /// - estos valores ya deben incluir las resistencias superficiales
-    ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
-    pub fn u_value(&self, cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
-        cons.get_wincons(self.cons)?.u_value(mats)
+    /// Transmitancia térmica total del acristalmiento (g_glwi = g_gln * 0.90) [-]
+    /// Corresponde al factor solar sin protección solar activada
+    pub fn g_glwi(&self, mats: &MatsDb) -> Option<f32> {
+        let glass = mats.get_glass(self.glass)?;
+        Some(fround2(glass.g_gln * 0.90))
+    }
+
+    /// Transmitancia térmica del acristalamiento con protecciones solares activadas, g_glshwi [-]
+    /// Corresponde al factor solar con protección solar activada
+    pub fn g_glshwi(&self, mats: &MatsDb) -> Option<f32> {
+        self.g_glshwi.map(fround2).or_else(|| self.g_glwi(mats))
     }
 }
 

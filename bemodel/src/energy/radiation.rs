@@ -86,7 +86,7 @@ impl Model {
                 let orientation = Orientation::from(wall);
                 let radjul = totradjul.get(&orientation).unwrap();
                 let area = w.area() * multiplier;
-                let gglshwi = wincons.g_glshwi.or_else(|| self.mats.get_glass(wincons.glass).map(|g| g.g_glwi()))?;
+                let gglshwi = wincons.g_glshwi(&self.mats)?;
                 let Q_soljul_orient = w.f_shobst * gglshwi * (1.0 - wincons.f_f) * area * radjul;
                 // Datos de detalle
                 let mut detail = q_soljul_data.detail.entry(orientation).or_default();

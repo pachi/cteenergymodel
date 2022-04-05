@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::{fround2, Uuid};
+use super::Uuid;
 
 // Materiales -----------------------------------------------
 
@@ -91,14 +91,6 @@ pub struct Glass {
     pub u_value: f32,
     /// Factor solar del vidrio a incidencia normal
     pub g_gln: f32,
-}
-
-impl Glass {
-    /// Transmitancia térmica total del acristalmiento (g_glwi = g_gln * 0.90) [-]
-    /// Corresponde al factor solar sin protección solar activada
-    pub fn g_glwi(&self) -> f32 {
-        fround2(self.g_gln * 0.90)
-    }
 }
 
 /// Marco de hueco
