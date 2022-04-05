@@ -11,7 +11,7 @@ use log::info;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
-use crate::{climatedata, Model, Uuid, Warning};
+use crate::{climatedata, BoundaryType, Model, Orientation, Tilt, Uuid, Warning};
 
 mod aabb;
 mod bvh;
@@ -30,7 +30,7 @@ pub use ray::Ray;
 
 /// Estructura que contiene los resultados del cálculo de indicadores y parámetros energéticos
 #[allow(non_snake_case)]
-#[derive(Debug, Serialize, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct EnergyIndicators {
     pub area_ref: f32,
     pub compacity: f32,
@@ -54,8 +54,6 @@ impl EnergyIndicators {
     pub fn compute(model: &Model) -> Self {
         let climatezone = model.meta.climate;
         let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
-        // TODO: calcula aquí las áreas de huecos y muros y guardar, luego pasar a u_values
-        // Ver si también se calculan las R_intrinseca de las construcciones
         Self {
             area_ref: model.a_ref(),
             compacity: model.compacity(),
@@ -70,10 +68,8 @@ impl EnergyIndicators {
     }
 }
 
-/// Reporte de cálculo de las transmitancias de los elementos
-/// TODO: cambiar a ElementProps=IndexMap<id, ElementProps> e indexar todo por id?
-/// TODO: añadir si el elemento pertenece o no a la ET ElementProps{walls: {id: Uuid, ElementData {et: bool, a: f32, u: Option<f32>}}}
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+/// Reporte de cálculo de propiedades térmicas y geométricas de los elementos
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ElementProps {
     /// Propiedades de espacios
     pub spaces: BTreeMap<Uuid, SpaceProps>,
@@ -94,6 +90,7 @@ impl ElementProps {
         for s in &model.spaces {
             let sp = SpaceProps {
                 area: s.area,
+                multiplier: s.multiplier,
                 height_net: s.height_net(&model.walls, &model.cons),
                 volume_net: s.volume_net(&model.walls, &model.cons),
             };
@@ -114,6 +111,7 @@ impl ElementProps {
                 u_value: wc.u_value(&model.mats),
                 g_glwi: wc.g_glwi(&model.mats),
                 g_glshwi: wc.g_glshwi(&model.mats),
+                c_100: wc.c_100,
             };
             wincons.insert(wc.id, wcp);
         }
@@ -128,18 +126,26 @@ impl ElementProps {
             let wp = WallProps {
                 area_gross: w.area(),
                 area_net: w.area_net(&model.windows),
-                inside_tenv: walls_tenv.contains(&w.id),
+                multiplier: spaces.get(&w.space).map(|sp| sp.multiplier).unwrap_or(1.0),
+                is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.id),
                 u_value: w.u_value(model),
+                orientation: Orientation::from(w),
+                cons: w.cons,
+                bounds: w.bounds,
             };
             walls.insert(w.id, wp);
         }
 
         let mut windows: BTreeMap<Uuid, WinProps> = BTreeMap::new();
         for w in &model.windows {
+            let wall = walls.get(&w.wall);
             let wp = WinProps {
                 area: w.area(),
-                inside_tenv: walls_tenv.contains(&w.wall),
+                multiplier: wall.map(|wp| wp.multiplier).unwrap_or(1.0),
+                is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
+                orientation: wall.map(|w| w.orientation).unwrap_or_default(),
+                cons: w.cons,
             };
             windows.insert(w.id, wp);
         }
@@ -154,58 +160,76 @@ impl ElementProps {
 }
 
 /// Propiedades de espacios
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpaceProps {
-    /// Superficie del espacio, m²
+    /// Superficie del espacio, [m²]
     pub area: f32,
-    /// Altura neta del espacio, m
+    /// Multiplicador del espacio, [-]
+    pub multiplier: f32,
+    /// Altura neta del espacio, [m]
     pub height_net: f32,
-    /// Volumen neto del espacio, m³
+    /// Volumen neto del espacio, [m³]
     pub volume_net: f32,
 }
 
 /// Propiedades de muros
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WallProps {
-    /// Superficie bruta del muro, m²
+    /// Superficie bruta del muro, [m²]
     pub area_gross: f32,
-    /// Superficie neta del muro, m²
+    /// Superficie neta del muro, [m²]
     pub area_net: f32,
+    /// Multiplicador del espacio, [-]
+    pub multiplier: f32,
     /// ¿Pertenece este muro a la envolvente térmica?
-    pub inside_tenv: bool,
-    /// U de muro, W/m²K
+    pub is_ext_or_gnd_tenv: bool,
+    /// U de muro, [W/m²K]
     pub u_value: Option<f32>,
+    /// Orientación (heredada del muro)
+    pub orientation: Orientation,
+    /// Construcción de muro
+    pub cons: Uuid,
+    /// Condición de contorno
+    pub bounds: BoundaryType,
 }
 
 /// Propiedades de huecos
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WinProps {
-    /// Superficie del hueco, m²
+    /// Superficie del hueco, [m²]
     pub area: f32,
+    /// Multiplicador del espacio, [-]
+    pub multiplier: f32,
     /// ¿Pertenece este muro a la envolvente térmica?
-    pub inside_tenv: bool,
-    /// U de huecos, W/m²K
+    pub is_ext_or_gnd_tenv: bool,
+    /// U de huecos, [W/m²K]
     pub u_value: Option<f32>,
+    /// Orientación (heredada del muro)
+    pub orientation: Orientation,
+    /// Construcción de hueco
+    pub cons: Uuid,
     // TODO: completar propiedades
-    // pub f_shobst: Option<f32>,
+    // pub f_shobst_user: Option<f32>,
 }
 
 /// Propiedades de construcciones de opacos
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WallConsProps {
-    // R intrínseca de construcción, m²K/W
+    // R intrínseca de construcción, [m²K/W]
     pub r_intrinsic: Option<f32>,
 }
 
 /// Propiedades de construcciones de opacos
-#[derive(Debug, Default, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WinConsProps {
     /// Transmitancia térmica total del acristalamiento, sin protecciones solares, [-]
     pub g_glwi: Option<f32>,
     /// Transmitancia térmica total del acristalamiento, con protecciones solares, [-]
     pub g_glshwi: Option<f32>,
-    // U de construcción de hueco, W/m²K
+    /// U de construcción de hueco, [W/m²K]
     pub u_value: Option<f32>,
+    /// Permeabilidad al aire del hueco a 100 Pa, [m³/h·m²]
+    pub c_100: f32,
 }
 
 /// Reporte de cálculo de K (HE2019)
@@ -305,7 +329,6 @@ impl KData {
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
     #[allow(non_snake_case)]
     pub fn K(model: &Model) -> KData {
-        use crate::{BoundaryType, Tilt};
         let mut k = Self::default();
         // Opacos
         for wall in model.exterior_and_ground_walls_of_envelope_iter() {
