@@ -38,7 +38,7 @@ pub struct Wall {
     #[serde(default)]
     pub next_to: Option<Uuid>,
     /// Geometría del elemento opaco
-    pub geometry: WallGeometry,
+    pub geometry: WallGeom,
 }
 
 impl Wall {
@@ -96,12 +96,12 @@ pub struct Shade {
     /// Nombre del elemento opaco
     pub name: String,
     /// Geometría del elemento opaco
-    pub geometry: WallGeometry,
+    pub geometry: WallGeom,
 }
 
 /// Geometría de muro
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct WallGeometry {
+pub struct WallGeom {
     /// Inclinación (beta) [0, 180]
     /// Ángulo con la vertical (0 -> suelo, 180 -> techo)
     pub tilt: f32,
@@ -117,7 +117,7 @@ pub struct WallGeometry {
     pub polygon: Polygon,
 }
 
-impl WallGeometry {
+impl WallGeom {
     /// Matriz de transformación de coordenadas locales a coordenadas globales
     /// Traslada de coordenadas de opaco / sombra a coordenadas globales (giros y desplazamientos)
     pub fn to_global_coords_matrix(&self) -> Option<IsometryMatrix3<f32>> {
@@ -144,7 +144,7 @@ impl WallGeometry {
     }
 }
 
-impl HasSurface for WallGeometry {
+impl HasSurface for WallGeom {
     /// Vector unitario normal a la geometría, en coordenadas globales
     fn normal(&self) -> Vector3 {
         let zrot = Rotation3::new(Vector3::z() * self.azimuth.to_radians());

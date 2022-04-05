@@ -15,8 +15,8 @@ pub mod energy;
 pub use types::{
     point, vector, BoundaryType, ConsDb, ExtraData, Frame, Glass, Layer, MatProps, Material,
     MatsDb, Meta, Model, Orientation, Point2, Point3, Polygon, Shade, Space, SpaceType,
-    ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Vector2, Vector3, Wall, WallCons, WallGeometry,
-    Warning, WarningLevel, Window, WinCons, WindowGeometry,
+    ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Vector2, Vector3, Wall, WallCons, WallGeom,
+    Warning, WarningLevel, WinCons, WinGeom, Window,
 };
 
 /// Versión del programa

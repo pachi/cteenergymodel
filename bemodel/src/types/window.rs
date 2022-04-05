@@ -2,11 +2,11 @@
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Elementos semitransparentes del edificio: Window, WindowGeometry
+//! Elementos semitransparentes del edificio: Window, WinGeom
 
 use serde::{Deserialize, Serialize};
 
-use super::{point, uuid_from_str, vector, HasSurface, Point2, Shade, Uuid, Vector3, WallGeometry};
+use super::{point, uuid_from_str, vector, HasSurface, Point2, Shade, Uuid, Vector3, WallGeom};
 
 // Elementos -----------------------------------------------
 
@@ -25,7 +25,7 @@ pub struct Window {
     /// TODO: debería ser Option<f32> y solo usarse si no se quiere autocalculado
     pub f_shobst: f32,
     /// Geometría de hueco
-    pub geometry: WindowGeometry,
+    pub geometry: WinGeom,
 }
 
 impl Window {
@@ -42,7 +42,7 @@ impl Window {
     }
 
     /// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
-    pub(crate) fn shades_for_setback(&self, wallgeom: &WallGeometry) -> Vec<(Uuid, Shade)> {
+    pub(crate) fn shades_for_setback(&self, wallgeom: &WallGeom) -> Vec<(Uuid, Shade)> {
         let wing = &self.geometry;
         // Si no hay retranqueo no se genera geometría
         if wing.setback.abs() < 0.01 {
@@ -62,7 +62,7 @@ impl Window {
         let overhang = Shade {
             id: uuid_from_str(&format!("{}-top_setback", self.id)),
             name: format!("{}_top_setback", self.name),
-            geometry: WallGeometry {
+            geometry: WallGeom {
                 // inclinación: con 90º es perpendicular al hueco
                 tilt: wallgeom.tilt + 90.0,
                 azimuth: wallgeom.azimuth,
@@ -79,7 +79,7 @@ impl Window {
         let left_fin = Shade {
             id: uuid_from_str(&format!("{}-left_setback", self.id)),
             name: format!("{}_left_setback", self.name),
-            geometry: WallGeometry {
+            geometry: WallGeom {
                 tilt: wallgeom.tilt,
                 azimuth: wallgeom.azimuth + 90.0,
                 position: Some(wall2world * point![wpos.x, wpos.y + wing.height, 0.0]),
@@ -95,7 +95,7 @@ impl Window {
         let right_fin = Shade {
             id: uuid_from_str(&format!("{}-right_setback", self.id)),
             name: format!("{}_right_setback", self.name),
-            geometry: WallGeometry {
+            geometry: WallGeom {
                 tilt: wallgeom.tilt,
                 azimuth: wallgeom.azimuth - 90.0,
                 position: Some(wall2world * point![wpos.x + wing.width, wpos.y + wing.height, 0.0]),
@@ -111,7 +111,7 @@ impl Window {
         let sill = Shade {
             id: uuid_from_str(&format!("{}-sill_setback", self.id)),
             name: format!("{}_sill_setback", self.name),
-            geometry: WallGeometry {
+            geometry: WallGeom {
                 tilt: wallgeom.tilt - 90.0,
                 azimuth: wallgeom.azimuth,
                 position: Some(wall2world * point![wpos.x, wpos.y, 0.0]),
@@ -135,7 +135,7 @@ impl Window {
 
 /// Geometría de hueco
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WindowGeometry {
+pub struct WinGeom {
     /// Posición del hueco, en coordenadas de muro
     /// Un valor None señala que no hay definición geométrica completa
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -149,9 +149,9 @@ pub struct WindowGeometry {
     pub setback: f32,
 }
 
-impl Default for WindowGeometry {
+impl Default for WinGeom {
     fn default() -> Self {
-        WindowGeometry {
+        WinGeom {
             position: None,
             height: 1.0,
             width: 1.0,
@@ -160,7 +160,7 @@ impl Default for WindowGeometry {
     }
 }
 
-impl HasSurface for WindowGeometry {
+impl HasSurface for WinGeom {
     /// Vector unitario normal a la geometría
     fn normal(&self) -> Vector3 {
         vector![0.0, 0.0, 1.0]
