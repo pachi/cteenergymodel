@@ -48,7 +48,7 @@ impl EnergyIndicators {
             vol_env_net: props.global.vol_env_net,
             vol_env_gross: props.global.vol_env_gross,
 
-            K_data: KData::K(&props, model),
+            K_data: KData::K(&props),
             q_soljul_data: model.q_soljul(&props, &totradjul),
             n50_data: model.n50(&props),
 
@@ -155,46 +155,35 @@ impl KData {
     ///
     /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
     #[allow(non_snake_case)]
-    pub fn K(props: &EnergyProps, model: &Model) -> KData {
+    pub fn K(props: &EnergyProps) -> KData {
         let mut k = Self::default();
+
         // Opacos
-        for wall in model.exterior_and_ground_walls_of_envelope_iter() {
-            let multiplier = model
-                .get_space(wall.space)
-                .map(|s| s.multiplier)
-                .unwrap_or(1.0);
-            // Huecos de los opacos
-            for win in wall.windows(&model.windows) {
-                let win_u = match &model
-                    .cons
-                    .get_wincons(win.cons)
-                    .and_then(|c| c.u_value(&model.mats))
-                {
-                    Some(u) => *u,
-                    _ => continue,
-                };
-                let area = multiplier * win.area();
-                k.windows.a += area;
-                k.windows.au += area * win_u;
-                k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
-                k.windows.u_min = k.windows.u_min.map(|v| v.min(win_u)).or(Some(win_u));
+        for (wall_id, wall) in props.walls.iter().filter(|(_, w)| w.is_ext_or_gnd_tenv) {
+            let multiplier = wall.multiplier;
+            for window in props.windows.values().filter(|win| &win.wall == wall_id) {
+                if let Some(win_u) = window.u_value {
+                    let area = multiplier * window.area;
+                    k.windows.a += area;
+                    k.windows.au += area * win_u;
+                    k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
+                    k.windows.u_min = k.windows.u_min.map(|v| v.min(win_u)).or(Some(win_u));
+                }
             }
-            let wall_u = match wall.u_value(model) {
-                Some(u) => u,
-                _ => continue,
+            if let Some(wall_u) = wall.u_value {
+                let area = multiplier * wall.area_net;
+                let area_u = area * wall_u;
+                let mut element_case = match (wall.bounds, wall.tilt) {
+                    (BoundaryType::GROUND, _) => &mut k.ground,
+                    (_, Tilt::TOP) => &mut k.roofs,
+                    (_, Tilt::BOTTOM) => &mut k.floors,
+                    (_, Tilt::SIDE) => &mut k.walls,
+                };
+                element_case.a += area;
+                element_case.au += area_u;
+                element_case.u_max = element_case.u_max.map(|v| v.max(wall_u)).or(Some(wall_u));
+                element_case.u_min = element_case.u_min.map(|v| v.min(wall_u)).or(Some(wall_u));
             };
-            let area = multiplier * wall.area_net(&model.windows);
-            let area_u = area * wall_u;
-            let mut element_case = match (wall.bounds, Tilt::from(wall)) {
-                (BoundaryType::GROUND, _) => &mut k.ground,
-                (_, Tilt::TOP) => &mut k.roofs,
-                (_, Tilt::BOTTOM) => &mut k.floors,
-                (_, Tilt::SIDE) => &mut k.walls,
-            };
-            element_case.a += area;
-            element_case.au += area_u;
-            element_case.u_max = element_case.u_max.map(|v| v.max(wall_u)).or(Some(wall_u));
-            element_case.u_min = element_case.u_min.map(|v| v.min(wall_u)).or(Some(wall_u));
         }
         // Valores medios de huecos y opacos
         if k.windows.a > 0.001 {
@@ -213,7 +202,7 @@ impl KData {
             k.walls.u_mean = Some(k.walls.au / k.walls.a);
         };
         // PTs
-        for tb in &model.thermal_bridges {
+        for tb in props.thermal_bridges.values() {
             use crate::ThermalBridgeKind::*;
             let l = tb.l;
             // A veces se incluyen longitudes < 0 para señalar que no se han medido
