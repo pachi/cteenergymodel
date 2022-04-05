@@ -17,7 +17,7 @@ use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
 use crate::{
     climatedata::{RadData, CLIMATEMETADATA, JULYRADDATA},
-    energy::{Bounded, Intersectable, Ray, BVH},
+    energy::{Bounded, EnergyProps, Intersectable, Ray, BVH},
     point,
     types::HasSurface,
     utils::fround2,
@@ -71,7 +71,11 @@ pub struct QSolJulDetail {
 impl Model {
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
     /// Los huecos para los que no está definido su opaco o su construcción no se consideran en el cálculo
-    pub fn q_soljul(&self, totradjul: &HashMap<Orientation, f32>) -> QSolJulData {
+    pub fn q_soljul(
+        &self,
+        props: &EnergyProps,
+        totradjul: &HashMap<Orientation, f32>,
+    ) -> QSolJulData {
         let mut q_soljul_data = QSolJulData::default();
 
         let Q_soljul = self
@@ -109,7 +113,7 @@ impl Model {
                 Some(Q_soljul_orient)
             })
             .sum::<f32>();
-        let a_ref = self.a_ref();
+        let a_ref = props.global.a_ref;
         let q_soljul = Q_soljul / a_ref;
         info!(
             "q_sol;jul={:.2} kWh/m².mes, Q_soljul={:.2} kWh/mes, A_ref={:.2}",

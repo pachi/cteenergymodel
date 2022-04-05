@@ -7,7 +7,7 @@
 use log::info;
 use serde::{Deserialize, Serialize};
 
-use crate::{BoundaryType, Model};
+use crate::{BoundaryType, Model, energy::EnergyProps};
 
 /// Reporte de cálculo de n50 con valores de referencia (teóricos) y de ensayo (si está disponible)
 /// El valor teórico usa las permeabilidades del CTE DB-HE 2019
@@ -39,14 +39,6 @@ pub struct N50Data {
 }
 
 impl Model {
-    /// Calcula la tasa de ventilación global (1/h)
-    pub fn global_ventilation_rate(&self) -> f32 {
-        self.meta
-            .global_ventilation_l_s
-            .map(|n_v_g| 3.6 * n_v_g / self.vol_env_inh_net())
-            .unwrap_or_default()
-    }
-
     /// Calcula la tasa teórica de intercambio de aire a 50Pa según DB-HE2019 (1/h)
     /// Se considera:
     /// - las superficies opacos en contacto con el aire exterior
@@ -55,9 +47,9 @@ impl Model {
     /// - la permeabilidad al aire de huecos definida en su construcción
     /// - el volumen interior de la envolvente térmica ()
     /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
-    pub fn n50(&self) -> N50Data {
+    pub fn n50(&self, props: &EnergyProps) -> N50Data {
         let mut data = N50Data {
-            vol: self.vol_env_net(),
+            vol: props.global.vol_env_net,
             ..Default::default()
         };
 

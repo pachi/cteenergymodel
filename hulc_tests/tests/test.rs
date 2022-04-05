@@ -31,7 +31,6 @@ macro_rules! assert_almost_eq {
 #[test]
 fn test_caso_a() {
     let model = collect_hulc_data("tests/casoA", true, true).unwrap();
-    assert_almost_eq!(model.a_ref(), 400.0, 0.001);
     assert_eq!(&model.meta.climate.to_string(), "D3");
     assert_eq!(model.windows.len(), 10);
     assert_eq!(model.walls.len(), 35); // 19 en ET
@@ -86,10 +85,11 @@ fn test_caso_a() {
     // Partición interior vertical con espacio no habitable/acondicionado, HULC=0.68
     let wall = model.get_wall_by_name("P04_E01_Med001").unwrap();
     assert_almost_eq!(fround2(wall.u_value(&model).unwrap()), 0.66, 0.001);
-
+    
     // Cálculo de K, n50, C_o
     let ind = model.energy_indicators();
     let n50data = ind.n50_data;
+    assert_almost_eq!(ind.area_ref, 400.0, 0.001);
     assert_almost_eq!(fround2(ind.K_data.K), 0.51, 0.001);
     assert_almost_eq!(fround2(n50data.n50_ref), 4.58, 0.001); // HULC 4.33
     assert_almost_eq!(fround2(n50data.n50), 5.32, 0.001);
@@ -99,34 +99,43 @@ fn test_caso_a() {
 
 #[test]
 fn test_caso_c() {
-    let data = collect_hulc_data("tests/casoC", true, true).unwrap();
-    assert_almost_eq!(data.a_ref(), 400.0, 0.001);
-    assert_eq!(&data.meta.climate.to_string(), "D3");
-    assert_eq!(data.windows.len(), 9);
-    assert_eq!(data.walls.len(), 33); // 27 en ET
-    assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
+    let model = collect_hulc_data("tests/casoC", true, true).unwrap();
+    assert_eq!(&model.meta.climate.to_string(), "D3");
+    assert_eq!(model.windows.len(), 9);
+    assert_eq!(model.walls.len(), 33); // 27 en ET
+    assert_eq!(model.thermal_bridges.len(), 10); // 7 en kyg
+    // Cálculo de indicadores
+    let ind = model.energy_indicators();
+
+    assert_almost_eq!(ind.area_ref, 400.0, 0.001);
 }
 
 // Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
 #[test]
 fn parse_test_data() {
-    let data = collect_hulc_data("tests/data", true, true).unwrap();
-    assert_almost_eq!(data.a_ref(), 1673.92, 0.001);
-    assert_eq!(&data.meta.climate.to_string(), "D3");
-    assert_eq!(data.windows.len(), 92);
-    assert_eq!(data.walls.len(), 127); // 68 en ET
-    assert_eq!(data.thermal_bridges.len(), 10); // 6 en kyg
+    let model = collect_hulc_data("tests/data", true, true).unwrap();
+    assert_eq!(&model.meta.climate.to_string(), "D3");
+    assert_eq!(model.windows.len(), 92);
+    assert_eq!(model.walls.len(), 127); // 68 en ET
+    assert_eq!(model.thermal_bridges.len(), 10); // 6 en kyg
+    // Cálculo de indicadores
+    let ind = model.energy_indicators();
+
+    assert_almost_eq!(ind.area_ref, 1673.92, 0.001);
 }
 
 #[test]
 fn parse_test_data2() {
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
-    let data = collect_hulc_data("tests/ejemplopmt_HuecosOK", true, true).unwrap();
-    assert_almost_eq!(data.a_ref(), 1063.03, 0.001);
-    assert_eq!(&data.meta.climate.to_string(), "B3");
-    assert_eq!(data.windows.len(), 29);
-    assert_eq!(data.walls.len(), 95); // 60 en ET
-    assert_eq!(data.thermal_bridges.len(), 10); // 7 en kyg
+    let model = collect_hulc_data("tests/ejemplopmt_HuecosOK", true, true).unwrap();
+    assert_eq!(&model.meta.climate.to_string(), "B3");
+    assert_eq!(model.windows.len(), 29);
+    assert_eq!(model.walls.len(), 95); // 60 en ET
+    assert_eq!(model.thermal_bridges.len(), 10); // 7 en kyg
+    // Cálculo de indicadores
+    let ind = model.energy_indicators();
+
+    assert_almost_eq!(ind.area_ref, 1063.03, 0.001);
 }
 
 #[test]

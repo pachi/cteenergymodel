@@ -17,7 +17,6 @@ use std::f32::consts::PI;
 use anyhow::{format_err, Error};
 use log::{debug, info, warn};
 
-use super::EnergyIndicators;
 use crate::types::HasSurface;
 use crate::{
     utils::{fround2, fround3},
@@ -33,13 +32,6 @@ const RSE: f32 = 0.04;
 // conductividad del terreno no helado, en [W/(m·K)]
 const LAMBDA_GND: f32 = 2.0;
 const LAMBDA_INS: f32 = 0.035;
-
-impl Model {
-    /// Calcula indicadores energéticos
-    pub fn energy_indicators(&self) -> EnergyIndicators {
-        EnergyIndicators::compute(self)
-    }
-}
 
 impl Space {
     /// Dimensión característica de un suelo de sótano (B') (en contacto con el terreno), m

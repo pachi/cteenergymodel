@@ -7,12 +7,11 @@
 pub use nalgebra::{point, vector};
 
 use anyhow::Error;
-use log::info;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    fround2, BoundaryType, ConsDb, MatsDb, Meta, Shade, Space, SpaceType, ThermalBridge, Tilt,
-    Uuid, Wall, Window,
+    BoundaryType, ConsDb, MatsDb, Meta, Shade, Space, SpaceType, ThermalBridge, Tilt, Uuid, Wall,
+    Window,
 };
 
 // ---------- Estructura general de datos --------------
@@ -121,94 +120,6 @@ impl Model {
     }
 
     // ---------------- Cálculos geométricos generales
-
-    /// Calcula la superficie útil de los espacios habitables de la envolvente térmica [m²]
-    pub fn a_ref(&self) -> f32 {
-        let a_util: f32 = self
-            .spaces
-            .iter()
-            .filter_map(|s| {
-                if s.inside_tenv && s.kind != SpaceType::UNINHABITED {
-                    Some(s.area * s.multiplier)
-                } else {
-                    None
-                }
-            })
-            .sum();
-        fround2(a_util)
-    }
-
-    /// Calcula el volumen bruto de los espacios de la envolvente [m³]
-    /// Computa el volumen de todos los espacios (habitables o no) de la envolvente
-    pub fn vol_env_gross(&self) -> f32 {
-        let v_env: f32 = self
-            .spaces
-            .iter()
-            .filter_map(|s| {
-                if s.inside_tenv {
-                    Some(s.area * s.height * s.multiplier)
-                } else {
-                    None
-                }
-            })
-            .sum();
-        fround2(v_env)
-    }
-    /// Calcula el volumen neto de los espacios de la envolvente [m³]
-    /// Computa el volumen de todos los espacios (habitables o no) de la envolvente y
-    /// descuenta los volúmenes de forjados y cubiertas
-    pub fn vol_env_net(&self) -> f32 {
-        let v_env: f32 = self
-            .spaces
-            .iter()
-            .filter_map(|s| {
-                if s.inside_tenv {
-                    Some(s.volume_net(&self.walls, &self.cons) * s.multiplier)
-                } else {
-                    None
-                }
-            })
-            .sum();
-        fround2(v_env)
-    }
-    /// Calcula el volumen neto de los espacios habitables de la envolvente [m³]
-    /// Computa el volumen de todos los espacios (solo habitables) de la envolvente y
-    /// descuenta los volúmenes de forjados y cubiertas
-    pub fn vol_env_inh_net(&self) -> f32 {
-        let v_env: f32 = self
-            .spaces
-            .iter()
-            .filter_map(|s| {
-                if s.inside_tenv && s.kind != SpaceType::UNINHABITED {
-                    Some(s.volume_net(&self.walls, &self.cons) * s.multiplier)
-                } else {
-                    None
-                }
-            })
-            .sum();
-        fround2(v_env)
-    }
-
-    /// Calcula la compacidad de la envolvente térmica del edificio V/A (m³/m²)
-    /// De acuerdo con la definición del DB-HE comprende el volumen interior de la envolvente térmica (V)
-    /// y la superficie de muros y huecos con intercambio térmico con el aire exterior o el terreno (A)
-    /// Esta superficie tiene en cuenta los multiplicadores de espacios
-    /// Se excluyen los huecos sin muro definido y los muros sin espacio definido
-    /// Para area expuesta => compacidad = 0.0
-    pub fn compacity(&self) -> f32 {
-        let vol: f32 = self.vol_env_gross();
-        let area: f32 = self
-            .exterior_and_ground_walls_of_envelope_iter()
-            .map(|w| {
-                let multiplier = self.get_space(w.space).map(|s| s.multiplier).unwrap_or(1.0);
-                let win_area: f32 = w.windows(&self.windows).map(|win| win.area()).sum();
-                (w.area_net(&self.windows) + win_area) * multiplier
-            })
-            .sum();
-        let compac = if area == 0.0 { 0.0 } else { vol / area };
-        info!("V/A={:.2} m³/m², V={:.2} m³, A={:.2} m²", compac, vol, area);
-        compac
-    }
 
     /// Genera todas las sombras de retranqueo de los huecos del modelo
     pub fn windows_setback_shades(&self) -> Vec<(Uuid, Shade)> {

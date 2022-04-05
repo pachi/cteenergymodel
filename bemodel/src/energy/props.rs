@@ -9,11 +9,13 @@
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
-use crate::{BoundaryType, Model, Orientation, SpaceType, Uuid};
+use crate::{utils::fround2, BoundaryType, Model, Orientation, SpaceType, Uuid};
 
 /// Reporte de cálculo de propiedades térmicas y geométricas del modelo
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EnergyProps {
+    /// Propiedades globales del modelo
+    pub global: GlobalProps,
     /// Propiedades de espacios
     pub spaces: BTreeMap<Uuid, SpaceProps>,
     /// Propiedades de muros
@@ -29,18 +31,7 @@ pub struct EnergyProps {
 impl From<&Model> for EnergyProps {
     /// Completa datos de los elementos (espacios, opacos, huecos,...) por id
     fn from(model: &Model) -> Self {
-        let mut spaces: BTreeMap<Uuid, SpaceProps> = BTreeMap::new();
-        for s in &model.spaces {
-            let sp = SpaceProps {
-                kind: s.kind,
-                area: s.area,
-                multiplier: s.multiplier,
-                height_net: s.height_net(&model.walls, &model.cons),
-                volume_net: s.volume_net(&model.walls, &model.cons),
-            };
-            spaces.insert(s.id, sp);
-        }
-
+        // Propiedades de construcciones
         let mut wallcons: BTreeMap<Uuid, WallConsProps> = BTreeMap::new();
         for wc in &model.cons.wallcons {
             let wcp = WallConsProps {
@@ -60,6 +51,22 @@ impl From<&Model> for EnergyProps {
             wincons.insert(wc.id, wcp);
         }
 
+        // Propiedades de espacios
+        let mut spaces: BTreeMap<Uuid, SpaceProps> = BTreeMap::new();
+        for s in &model.spaces {
+            let sp = SpaceProps {
+                kind: s.kind,
+                inside_tenv: s.inside_tenv,
+                area: s.area,
+                multiplier: s.multiplier,
+                height: s.height,
+                height_net: s.height_net(&model.walls, &model.cons),
+                volume_net: s.volume_net(&model.walls, &model.cons),
+            };
+            spaces.insert(s.id, sp);
+        }
+
+        // Propiedades de opacos
         let ext_and_gnd_walls_tenv: Vec<_> = model
             .exterior_and_ground_walls_of_envelope_iter()
             .map(|w| w.id)
@@ -80,6 +87,7 @@ impl From<&Model> for EnergyProps {
             walls.insert(w.id, wp);
         }
 
+        // Propiedades de huecos
         let mut windows: BTreeMap<Uuid, WinProps> = BTreeMap::new();
         for w in &model.windows {
             let wall = walls.get(&w.wall);
@@ -93,7 +101,85 @@ impl From<&Model> for EnergyProps {
             };
             windows.insert(w.id, wp);
         }
+
+        // Propiedades globales
+        let a_ref: f32 = fround2(
+            spaces
+                .values()
+                .map(|s| {
+                    if s.inside_tenv && s.kind != SpaceType::UNINHABITED {
+                        s.area * s.multiplier
+                    } else {
+                        0.0
+                    }
+                })
+                .sum(),
+        );
+        let vol_env_gross = fround2(
+            spaces
+                .values()
+                .map(|s| {
+                    if s.inside_tenv {
+                        s.area * s.height * s.multiplier
+                    } else {
+                        0.0
+                    }
+                })
+                .sum(),
+        );
+        let vol_env_net = fround2(
+            spaces
+                .values()
+                .map(|s| {
+                    if s.inside_tenv {
+                        s.area * s.height_net * s.multiplier
+                    } else {
+                        0.0
+                    }
+                })
+                .sum(),
+        );
+        let vol_env_inh_net = fround2(
+            spaces
+                .values()
+                .map(|s| {
+                    if !s.inside_tenv && s.kind != SpaceType::UNINHABITED {
+                        s.area * s.height_net * s.multiplier
+                    } else {
+                        0.0
+                    }
+                })
+                .sum(),
+        );
+        let compacity = {
+            let exposed_area: f32 = walls
+                .values()
+                .filter(|w| w.is_ext_or_gnd_tenv)
+                .map(|w| w.area_gross * w.multiplier)
+                .sum();
+            if exposed_area == 0.0 {
+                0.0
+            } else {
+                vol_env_gross / exposed_area
+            }
+        };
+        let global_ventilation_rate = model
+            .meta
+            .global_ventilation_l_s
+            .map(|n_v_g| 3.6 * n_v_g / vol_env_inh_net)
+            .unwrap_or_default();
+
+        let global = GlobalProps {
+            a_ref,
+            vol_env_gross,
+            vol_env_net,
+            vol_env_inh_net,
+            compacity,
+            global_ventilation_rate,
+        };
+
         Self {
+            global,
             spaces,
             walls,
             windows,
@@ -103,16 +189,43 @@ impl From<&Model> for EnergyProps {
     }
 }
 
+/// Propiedades generales del modelo
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GlobalProps {
+    /// Superficie útil de los espacios habitables de la envolvente térmica [m²]
+    pub a_ref: f32,
+    /// Volumen bruto de los espacios de la envolvente [m³]
+    pub vol_env_gross: f32,
+    /// Volumen neto de los espacios de la envolvente [m³]
+    pub vol_env_net: f32,
+    /// Volumen neto de los espacios habitables de la envolvente [m³]
+    /// Descuenta los volúmenes de forjados y cubiertas del volumen bruto
+    pub vol_env_inh_net: f32,
+    /// Compacidad de la envolvente térmica del edificio V/A (m³/m²)
+    /// De acuerdo con la definición del DB-HE comprende el volumen interior de la envolvente térmica (V)
+    /// y la superficie de muros y huecos con intercambio térmico con el aire exterior o el terreno (A)
+    /// Tiene en cuenta los multiplicadores de espacios (en superficie y volumen)
+    /// Se excluyen los huecos sin muro definido y los muros sin espacio definido
+    /// Para area expuesta => compacidad = 0.0
+    pub compacity: f32,
+    /// Tasa de ventilación global del edificio (1/h)
+    pub global_ventilation_rate: f32,
+}
+
 /// Propiedades de espacios
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpaceProps {
     /// Nivel de acondicionamiento del espacio, [-]
     pub kind: SpaceType,
+    /// ¿Pertenece al interior de la envolvente térmica?
+    pub inside_tenv: bool,
     /// Superficie del espacio, [m²]
     pub area: f32,
     /// Multiplicador del espacio, [-]
     pub multiplier: f32,
-    /// Altura neta del espacio, [m]
+    /// Altura bruta (suelo a suelo) del espacio, [m]
+    pub height: f32,
+    /// Altura neta (suelo a techo) del espacio, [m]
     pub height_net: f32,
     /// Volumen neto del espacio, [m³]
     pub volume_net: f32,
