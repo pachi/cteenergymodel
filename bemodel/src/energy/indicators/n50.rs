@@ -4,7 +4,7 @@
 
 //! Implementación del cálculo de la tasa de renovación de aire a 50 Pa del edificio, según CTE DB-HE 2019
 
-use log::info;
+use log::{info, warn};
 use serde::{Deserialize, Serialize};
 
 use crate::{energy::EnergyProps, BoundaryType};
@@ -46,7 +46,8 @@ impl From<&EnergyProps> for N50Data {
     /// - los huecos de las superficies opacas anteriores
     /// - la permeabilidad al aire de huecos definida en su construcción
     /// - el volumen interior de la envolvente térmica ()
-    /// Se ignoran los huecos sin construcción definida y los muros sin espacio definido
+    /// Los huecos sin construcción definida se consideran con la permeabilidad al aire
+    /// de huecos poco estancos, C_100=100 m³/h·m² (clase 0)
     fn from(props: &EnergyProps) -> Self {
         let mut data = N50Data {
             vol: props.global.vol_env_net,
@@ -61,10 +62,15 @@ impl From<&EnergyProps> for N50Data {
                 let multiplier = wall.multiplier;
                 let mut win_ah = 0.0;
                 let mut win_ah_ch = 0.0;
-                for win in props.windows.values().filter(|win| &win.wall == wall_id) {
-                    let wincons = props.wincons.get(&win.cons);
+                for (win_id, win) in props.windows.iter().filter(|(_, win)| &win.wall == wall_id) {
+                    let win_c_100 = if let Some(win_c_100) = props.wincons.get(&win.cons).map(|wc| wc.c_100) {
+                        win_c_100
+                    } else {
+                        warn!("No se ha podido calcular el valor C_100 del hueco {}. Se usará el valor por defecto C_100 = 100 m³/h·m² en el cálculo de n_50", win_id);
+                        100.0
+                    };
                     win_ah += win.area;
-                    win_ah_ch += win.area * wincons.map(|wc| wc.c_100).unwrap_or_default();
+                    win_ah_ch += win.area * win_c_100;
                 }
                 data.walls_a += wall.area_net * multiplier;
                 data.windows_a += win_ah * multiplier;
@@ -87,6 +93,7 @@ impl From<&EnergyProps> for N50Data {
             data.n50_ref = 0.629 * (data.walls_c_a_ref + data.windows_c_a) / data.vol
         };
 
+        // Si hay valor de ensayo se usa, si no usamos valor de referencia
         if let Some(n50test) = props.global.n_50_test_ach {
             data.n50 = n50test;
             if data.walls_a > 0.001 {

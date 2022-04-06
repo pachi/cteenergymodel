@@ -57,7 +57,9 @@ pub struct QSolJulDetail {
 
 impl QSolJulData {
     /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
-    /// Los huecos para los que no está definido su opaco o su construcción no se consideran en el cálculo
+    /// Los huecos para los que no está definido su factor de obstáculos remotos, transmitancia total con protecciones solares
+    /// activadas o fracción de marco se calculan con los valores por defecto:
+    /// f_f = 0.20 (DCT), g_glshwi=g_glwi=0.90 * 0.85 = 0.77 (vidrio sencillo), f_shobst=1.0 (sin obstrucciones)
     pub fn from(props: &EnergyProps, totradjul: &HashMap<Orientation, f32>) -> Self {
         let mut q_soljul_data = QSolJulData::default();
 

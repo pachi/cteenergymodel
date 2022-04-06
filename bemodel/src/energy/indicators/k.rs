@@ -6,7 +6,7 @@
 //!
 //! Cálculo de K, qsoljul, Fshobst, etc
 
-use log::info;
+use log::{info, warn};
 use serde::{Deserialize, Serialize};
 
 use crate::energy::EnergyProps;
@@ -103,40 +103,51 @@ pub struct KTBElementProps {
 }
 
 impl From<&EnergyProps> for KData {
-    /// Calcula la transmitancia térmica global K (W/m2K)
+    /// Calcula la transmitancia térmica global K (W/m²K)
     /// Transmitancia media de opacos, huecos y puentes térmicos en contacto con el aire exterior o con el terreno
     ///
-    /// Se ignoran los huecos y muros para los que no está definida su construcción, transmitancia o espacio
-    // #[allow(non_snake_case)]
+    /// Los huecos y opacos para los que no se puede calcular la U se consideran con U=5.7 W/m²K
     fn from(props: &EnergyProps) -> Self {
         let mut k = Self::default();
 
         // Opacos
         for (wall_id, wall) in props.walls.iter().filter(|(_, w)| w.is_ext_or_gnd_tenv) {
             let multiplier = wall.multiplier;
-            for window in props.windows.values().filter(|win| &win.wall == wall_id) {
-                if let Some(win_u) = window.u_value {
-                    let area = multiplier * window.area;
-                    k.windows.a += area;
-                    k.windows.au += area * win_u;
-                    k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
-                    k.windows.u_min = k.windows.u_min.map(|v| v.min(win_u)).or(Some(win_u));
-                }
-            }
-            if let Some(wall_u) = wall.u_value {
-                let area = multiplier * wall.area_net;
-                let area_u = area * wall_u;
-                let mut element_case = match (wall.bounds, wall.tilt) {
-                    (BoundaryType::GROUND, _) => &mut k.ground,
-                    (_, Tilt::TOP) => &mut k.roofs,
-                    (_, Tilt::BOTTOM) => &mut k.floors,
-                    (_, Tilt::SIDE) => &mut k.walls,
+            // Huecos
+            for (win_id, window) in props.windows.iter().filter(|(_, win)| &win.wall == wall_id) {
+                // Si no está definida la U del hueco se usa un valor por defecto U_w = 5.7 W/m²K
+                let win_u = if let Some(win_u) = window.u_value {
+                    win_u
+                } else {
+                    warn!("No se ha podido calcular el valor U del hueco {}. Se usará el valor por defecto U_w=5.7W/m²K en el cálculo de K", win_id);
+                    5.7
                 };
-                element_case.a += area;
-                element_case.au += area_u;
-                element_case.u_max = element_case.u_max.map(|v| v.max(wall_u)).or(Some(wall_u));
-                element_case.u_min = element_case.u_min.map(|v| v.min(wall_u)).or(Some(wall_u));
+                let area = multiplier * window.area;
+                k.windows.a += area;
+                k.windows.au += area * win_u;
+                k.windows.u_max = k.windows.u_max.map(|v| v.max(win_u)).or(Some(win_u));
+                k.windows.u_min = k.windows.u_min.map(|v| v.min(win_u)).or(Some(win_u));
+            }
+            // Parte opaca
+            // Si no está definido el muro, se usa un valor por defecto U_o = 5.7 W/m²K
+            let wall_u = if let Some(wall_u) = wall.u_value {
+                wall_u
+            } else {
+                warn!("No se ha podido calcular el valor U del muro {}. Se usará el valor por defecto U_o=5.7W/m²K en el cálculo de K", wall_id);
+                5.7
             };
+            let area = multiplier * wall.area_net;
+            let area_u = area * wall_u;
+            let mut element_case = match (wall.bounds, wall.tilt) {
+                (BoundaryType::GROUND, _) => &mut k.ground,
+                (_, Tilt::TOP) => &mut k.roofs,
+                (_, Tilt::BOTTOM) => &mut k.floors,
+                (_, Tilt::SIDE) => &mut k.walls,
+            };
+            element_case.a += area;
+            element_case.au += area_u;
+            element_case.u_max = element_case.u_max.map(|v| v.max(wall_u)).or(Some(wall_u));
+            element_case.u_min = element_case.u_min.map(|v| v.min(wall_u)).or(Some(wall_u));
         }
         // Valores medios de huecos y opacos
         if k.windows.a > 0.001 {
