@@ -21,9 +21,10 @@ pub struct Window {
     pub cons: Uuid,
     /// Muro al que pertenece el hueco
     pub wall: Uuid,
-    /// Factor de obstáculos remotos
-    /// TODO: debería ser Option<f32> y solo usarse si no se quiere autocalculado
-    pub f_shobst: f32,
+    /// Factor de obstáculos remotos suministrado por el usuario
+    pub f_shobst: Option<f32>,
+    /// Factor de obstáculos remotos calculado a partir del modelo
+    pub f_shobst_calc: Option<f32>,
     /// Geometría de hueco
     pub geometry: WinGeom,
 }

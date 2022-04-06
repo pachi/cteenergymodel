@@ -46,11 +46,16 @@ impl From<&Model> for EnergyProps {
 
         let mut wincons: BTreeMap<Uuid, WinConsProps> = BTreeMap::new();
         for wc in &model.cons.wincons {
+            // Valores por defecto para elementos sin vidrio definido
+            // corresponde a vidrio sencillo: g_gl;n = 0.85; g_gl;wi = g_gl;n * 0.9 = 0.77
+            let g_glwi = wc.g_glwi(&model.mats).unwrap_or(0.77 );
+            let g_glshwi = wc.g_glshwi(&model.mats).unwrap_or(g_glwi);
             let wcp = WinConsProps {
                 c_100: wc.c_100,
                 u_value: wc.u_value(&model.mats),
-                g_glwi: wc.g_glwi(&model.mats),
-                g_glshwi: wc.g_glshwi(&model.mats),
+                g_glwi,
+                g_glshwi,
+                f_f: wc.f_f,
             };
             wincons.insert(wc.id, wcp);
         }
@@ -107,6 +112,8 @@ impl From<&Model> for EnergyProps {
                 multiplier: wall.map(|wp| wp.multiplier).unwrap_or(1.0),
                 is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
+                f_shobst: w.f_shobst,
+                f_shobst_calc: w.f_shobst_calc,
             };
             windows.insert(w.id, wp);
         }
@@ -290,7 +297,7 @@ pub struct WallProps {
     pub area_net: f32,
     /// Multiplicador del espacio, [-]
     pub multiplier: f32,
-    /// ¿Pertenece este muro a la envolvente térmica?
+    /// ¿Pertenece este muro a la envolvente térmica exterior o en contacto con el terreno?
     pub is_ext_or_gnd_tenv: bool,
     /// U de muro, [W/m²K]
     pub u_value: Option<f32>,
@@ -311,15 +318,14 @@ pub struct WinProps {
     pub area: f32,
     /// Multiplicador del espacio, [-]
     pub multiplier: f32,
-    /// ¿Pertenece este muro a la envolvente térmica?
+    /// ¿Pertenece este hueco a la envolvente térmica exterior o en contacto con el terreno?
     pub is_ext_or_gnd_tenv: bool,
     /// U de huecos, [W/m²K]
     pub u_value: Option<f32>,
-    // TODO: completar propiedades
-    // /// Factor de obstrucción de obstáculos remotos (usuario), [-]
-    // pub f_shobst_user: Option<f32>,
-    // /// Factor de obstrucción de obstáculos remotos (calculado), [-]
-    // pub f_shobst: f32,
+    /// Factor de obstrucción de obstáculos remotos (usuario), [-]
+    pub f_shobst: Option<f32>,
+    // Factor de obstrucción de obstáculos remotos (calculado), [-]
+    pub f_shobst_calc: Option<f32>,
 }
 
 /// Propiedades de puentes térmicos
@@ -345,11 +351,15 @@ pub struct WallConsProps {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WinConsProps {
     /// Transmitancia térmica total del acristalamiento, sin protecciones solares, [-]
-    pub g_glwi: Option<f32>,
+    /// Si no está definido en el modelo se usa el del vidrio sencillo = 0.77
+    pub g_glwi: f32,
     /// Transmitancia térmica total del acristalamiento, con protecciones solares, [-]
-    pub g_glshwi: Option<f32>,
+    /// Si no está definido en el modelo se usa el valor de g_glwi
+    pub g_glshwi: f32,
     /// U de construcción de hueco, [W/m²K]
     pub u_value: Option<f32>,
     /// Permeabilidad al aire del hueco a 100 Pa, [m³/h·m²]
     pub c_100: f32,
+    /// Fracción de marco del hueco, [-]
+    pub f_f: f32,
 }

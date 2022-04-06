@@ -9,7 +9,9 @@
 mod types;
 pub mod k;
 pub mod n50;
+pub mod qsoljul;
 
 pub use types::EnergyIndicators;
 pub use n50::N50Data;
 pub use k::KData;
+pub use qsoljul::QSolJulData;

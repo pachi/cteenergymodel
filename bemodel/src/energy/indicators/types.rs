@@ -4,15 +4,16 @@
 
 //! Información energética relativa al modelo
 //!
-//! Cálculo de K, qsoljul, Fshobst, etc
-
-use super::KData;
-use super::N50Data;
+//! Tipo para la obtención de los indicadores energéticos K, n50, qsoljul, etc
 
 use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
-use crate::energy::{EnergyProps, QSolJulData};
+use super::KData;
+use super::N50Data;
+use super::QSolJulData;
+
+use crate::energy::EnergyProps;
 use crate::{climatedata, Model, Warning};
 
 /// Estructura que contiene los resultados del cálculo de indicadores y parámetros energéticos
@@ -51,7 +52,7 @@ impl EnergyIndicators {
             vol_env_gross: props.global.vol_env_gross,
 
             K_data: KData::from(&props),
-            q_soljul_data: model.q_soljul(&props, &totradjul),
+            q_soljul_data: QSolJulData::from(&props, &totradjul),
             n50_data: N50Data::from(&props),
 
             props,

@@ -181,7 +181,7 @@ fn model_json_ejemploviv_unif() {
         model
             .windows
             .iter()
-            .map(|w| format!("{}: {}", w.name, w.f_shobst))
+            .map(|w| format!("{}: {}", w.name, w.f_shobst.unwrap()))
             .collect::<Vec<_>>()
             .join("\n")
     );

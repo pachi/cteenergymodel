@@ -279,19 +279,6 @@ impl WinCons {
                 * (frame.u_value * self.f_f + glass.u_value * (1.0 - self.f_f)),
         ))
     }
-
-    /// Transmitancia térmica total del acristalmiento (g_glwi = g_gln * 0.90) [-]
-    /// Corresponde al factor solar sin protección solar activada
-    pub fn g_glwi(&self, mats: &MatsDb) -> Option<f32> {
-        let glass = mats.get_glass(self.glass)?;
-        Some(fround2(glass.g_gln * 0.90))
-    }
-
-    /// Transmitancia térmica del acristalamiento con protecciones solares activadas, g_glshwi [-]
-    /// Corresponde al factor solar con protección solar activada
-    pub fn g_glshwi(&self, mats: &MatsDb) -> Option<f32> {
-        self.g_glshwi.map(fround2).or_else(|| self.g_glwi(mats))
-    }
 }
 
 impl Wall {

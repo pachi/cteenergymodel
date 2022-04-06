@@ -20,7 +20,7 @@ pub use aabb::AABB;
 pub use bvh::{Bounded, Intersectable, BVH};
 pub use indicators::EnergyIndicators;
 pub use props::EnergyProps;
-pub use radiation::{ray_dir_to_sun, QSolJulData};
+pub use radiation::ray_dir_to_sun;
 pub use ray::Ray;
 
 use crate::Model;

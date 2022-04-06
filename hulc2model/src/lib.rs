@@ -113,7 +113,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
         for win in ecdata.windows.iter_mut() {
             let kygwin = kygdata.windows.get(&win.name);
             if let Some(kw) = kygwin {
-                win.f_shobst = fround2(kw.fshobst);
+                win.f_shobst = Some(fround2(kw.fshobst));
             }
         }
     }

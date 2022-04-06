@@ -8,136 +8,26 @@
 //! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
 #![allow(non_snake_case)]
 
-use std::{collections::BTreeMap, collections::HashMap, convert::From};
+use std::collections::BTreeMap;
 
-use log::{debug, info, warn};
-use serde::{Deserialize, Serialize};
+use log::{debug, warn};
 
 use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
 use crate::{
     climatedata::{RadData, CLIMATEMETADATA, JULYRADDATA},
-    energy::{Bounded, EnergyProps, Intersectable, Ray, BVH},
+    energy::{Bounded, Intersectable, Ray, BVH},
     point,
     types::HasSurface,
     utils::fround2,
     vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    Model, Orientation, Point3, Uuid, Vector3, Window,
+    MatsDb, Model, Point3, Uuid, Vector3, WinCons, Window,
 };
 
 use super::occluder::Occluder;
 
-/// Reporte de cálculo del parámetro de control solar q_sol:jul (HE2019)
-#[allow(non_snake_case)]
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub struct QSolJulData {
-    /// Parámetro de control solar q_sol:jul [kWh/m²·mes]
-    pub q_soljul: f32,
-    /// Ganancias para el mes de julio (Q_soljul) [kWh/mes]
-    pub Q_soljul: f32,
-    /// Superficie total de huecos [m²]
-    pub a_wp: f32,
-    /// Irradiación solar acumulada, media ponderada por superficie de huecos [kWh/m²·mes]
-    pub irradiance_mean: f32,
-    /// Factor de obstáculos remoto, media ponderada por superficie de huecos [-]
-    pub fshobst_mean: f32,
-    /// Factor solar del hueco con los elementos de sombra activados, media ponderada por superficie de huecos [-]
-    pub gglshwi_mean: f32,
-    /// Fracción de marco, media ponderada por superficie de huecos [-]
-    pub f_f_mean: f32,
-    /// Datos de ganancias solares (Q_soljul) resumidos por orientaciones
-    pub detail: HashMap<Orientation, QSolJulDetail>,
-}
-
-/// Detalles del parámetro de control solar q_sol:jul (HE2019) por orientación
-#[allow(non_snake_case)]
-#[derive(Debug, Copy, Clone, Default, Serialize, Deserialize)]
-pub struct QSolJulDetail {
-    /// Ganancias para el mes de julio (Q_soljul) para la orientación [kWh/mes]
-    pub gains: f32,
-    /// Superficie de huecos por orientación [m²]
-    pub a: f32,
-    /// Irradiación solar acumulada en el mes de julio (H_sol;jul) para la orientación [kWh/m²·mes]
-    pub irradiance: f32,
-    /// Fracción de marco media de la orientación, ponderada por superficie de huecos [-]
-    pub f_f_mean: f32,
-    /// Factor solar con sombras móviles activadas medio de la orientación, ponderada por superficie de huecos [-]
-    pub gglshwi_mean: f32,
-    /// Factor de obstáculos remotos medio de la orientación, ponderado por superficie de huecos [-]
-    pub fshobst_mean: f32,
-}
-
 impl Model {
-    /// Calcula el parámetro de control solar (q_sol;jul) a partir de los datos de radiación total acumulada en julio
-    /// Los huecos para los que no está definido su opaco o su construcción no se consideran en el cálculo
-    pub fn q_soljul(
-        &self,
-        props: &EnergyProps,
-        totradjul: &HashMap<Orientation, f32>,
-    ) -> QSolJulData {
-        let mut q_soljul_data = QSolJulData::default();
-
-        let Q_soljul = self
-            .exterior_windows_of_envelope_iter()
-            .filter_map(|w| {
-                let wall = self.get_wall(w.wall)?;
-                let multiplier = self
-                .get_space(wall.space)
-                .map(|s| s.multiplier)
-                .unwrap_or(1.0);
-                let wincons = self.cons.get_wincons(w.cons)?;
-                let orientation = Orientation::from(wall);
-                let radjul = totradjul.get(&orientation).unwrap();
-                let area = w.area() * multiplier;
-                let gglshwi = wincons.g_glshwi(&self.mats)?;
-                let Q_soljul_orient = w.f_shobst * gglshwi * (1.0 - wincons.f_f) * area * radjul;
-                // Datos de detalle
-                let mut detail = q_soljul_data.detail.entry(orientation).or_default();
-                detail.a += area;
-                detail.gains += Q_soljul_orient;
-                detail.irradiance = *radjul;
-                detail.f_f_mean += wincons.f_f * area;
-                detail.gglshwi_mean += gglshwi * area;
-                detail.fshobst_mean += w.f_shobst * area;
-                // Valores medios y acumulados
-                q_soljul_data.a_wp += area;
-                q_soljul_data.irradiance_mean += *radjul * area;
-                q_soljul_data.fshobst_mean += w.f_shobst * area;
-                q_soljul_data.gglshwi_mean += gglshwi * area;
-                q_soljul_data.f_f_mean += wincons.f_f * area;
-                debug!(
-                    "qsoljul de {}: A {:.2}, orient {}, ff {:.2}, gglshwi {:.2}, fshobst {:.2}, H_sol;jul {:.2}",
-                    w.name, area, orientation, wincons.f_f, gglshwi, w.f_shobst, radjul
-                );
-                Some(Q_soljul_orient)
-            })
-            .sum::<f32>();
-        let a_ref = props.global.a_ref;
-        let q_soljul = Q_soljul / a_ref;
-        info!(
-            "q_sol;jul={:.2} kWh/m².mes, Q_soljul={:.2} kWh/mes, A_ref={:.2}",
-            q_soljul, Q_soljul, a_ref
-        );
-
-        // Guarda datos globales y corrige medias globales
-        q_soljul_data.q_soljul = q_soljul;
-        q_soljul_data.Q_soljul = Q_soljul;
-        q_soljul_data.irradiance_mean /= q_soljul_data.a_wp;
-        q_soljul_data.fshobst_mean /= q_soljul_data.a_wp;
-        q_soljul_data.gglshwi_mean /= q_soljul_data.a_wp;
-        q_soljul_data.f_f_mean /= q_soljul_data.a_wp;
-
-        // Completa cálcula de medias por orientación (dividiendo por area de cada orientación)
-        for (_, detail) in q_soljul_data.detail.iter_mut() {
-            detail.f_f_mean /= detail.a;
-            detail.gglshwi_mean /= detail.a;
-            detail.fshobst_mean /= detail.a;
-        }
-
-        q_soljul_data
-    }
-
     /// Recalcula los factores de obstáculos remotos para los huecos
     ///
     /// Considera el sombreamiento de elementos de muro y sombra sobre el hueco
@@ -221,10 +111,7 @@ impl Model {
         debug!("Fshobst map: {:#?}", map);
 
         for mut window in &mut self.windows {
-            window.f_shobst = map
-                .get(&window.id)
-                .map(|v| fround2(v.fshobst))
-                .unwrap_or(1.0);
+            window.f_shobst_calc = map.get(&window.id).map(|v| fround2(v.fshobst)).or(Some(1.0));
         }
     }
 
@@ -388,6 +275,21 @@ impl Model {
             .map(|p| to_poly_tr * p)
             .map(|p| to_global_tr * point![p.x, p.y, -wg.setback])
             .collect()
+    }
+}
+
+impl WinCons {
+    /// Transmitancia térmica total del acristalmiento (g_glwi = g_gln * 0.90) [-]
+    /// Corresponde al factor solar sin protección solar activada
+    pub fn g_glwi(&self, mats: &MatsDb) -> Option<f32> {
+        let glass = mats.get_glass(self.glass)?;
+        Some(fround2(glass.g_gln * 0.90))
+    }
+
+    /// Transmitancia térmica del acristalamiento con protecciones solares activadas, g_glshwi [-]
+    /// Corresponde al factor solar con protección solar activada
+    pub fn g_glshwi(&self, mats: &MatsDb) -> Option<f32> {
+        self.g_glshwi.map(fround2).or_else(|| self.g_glwi(mats))
     }
 }
 

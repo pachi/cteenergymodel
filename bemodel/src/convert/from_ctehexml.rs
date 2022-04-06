@@ -299,7 +299,8 @@ fn windows_and_shades_from_bdl(
             cons: *id_maps.wincons_id(&win.cons).unwrap(),
             wall: *id_maps.wall_id(&win.wall).unwrap(),
             // XXX: Usamos un valor por defecto ya que al final se actualiza con model.update_fshobst()
-            f_shobst: 1.0,
+            f_shobst: None,
+            f_shobst_calc: None, 
             geometry: WinGeom {
                 position: Some(point![win.x, win.y]),
                 width: win.width,
