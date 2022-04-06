@@ -18,6 +18,7 @@ impl Model {
     ///     - Muros sin referencias de construcciones válidas
     ///     - Muros INTERIOR con nextto con referencia no válida
     /// TODO: Comprobaciones pendientes
+    ///     - Construcciones de hueco sin marco o vidrio válidos o de opacos sin materiales válidos
     ///     - comprobar que elementos geométricos tengan punto de inserción != None
     ///     - la superficie de elemento (wall.a) coincide con la de su polígono
     ///     - espacio no habitable sin n_v definido
