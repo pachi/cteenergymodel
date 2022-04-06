@@ -1,18 +1,11 @@
 # TAREAS PENDIENTES
 
 - Ver si los Uuid se ponen como `Option<Uuid>` (pueden no estar vinculados y eliminarse cuando se borre una construcción)
-- Cambiar f_shobst a f_shobst_user: Option<f32>. Solo se calcula si no está definido por el usuario
-- Calcular K, n50 y qsoljul con ElementProps
+- Ver si se serializa y deserializa f_shobst_calc: Option<f32> (y si se omiten los valores None)
 - Completar estructura EnergyIndicators.elements (ElementProps)?
   - indicando elementos que pertenecen a la envolvente
     - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
-    - ¿ agrupados por tipo y con datos de condición de contorno EXTERIOR, GROUND, ADIABATIC, INTERIOR ?
-  - Podríamos usar esa estructura como caché?
-    - Si los recorremos en el orden adecuado (ADIABATIC -> EXTERIOR, GROUND, INTERIOR) deberíamos minimizar recálculos
-    - Si no, con una caché en u_for_wall() debería dar casi igual
 - Mover grupos a `model.library.{materials, glass, frame, wallcons, windowcons}=Map<groupname, uuid>` y eliminar grupos en esos objetos
-- Cachear A de huecos y de muros en bemodel::energy::indicators(), usándolo para luego calcular U
-- Convertir UValues a AUValues en IndicatorsReport
 - Separar check de cálculo energético
 - Convertir name a ArrayString
   - <https://docs.rs/arrayvec/0.7.1/arrayvec/struct.ArrayString.html>
