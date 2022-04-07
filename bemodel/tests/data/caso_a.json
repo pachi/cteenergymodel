@@ -14,70 +14,58 @@
     {
       "id": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "name": "P01_E01",
-      "area": 50.0,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 0.0,
-      "exposed_perimeter": 25.0
+      "z": 0.0
     },
     {
       "id": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
       "name": "P01_E02",
-      "area": 50.0,
       "multiplier": 1.0,
       "kind": "UNINHABITED",
       "inside_tenv": false,
       "height": 3.0,
       "n_v": 0.1,
-      "z": 0.0,
-      "exposed_perimeter": 22.5
+      "z": 0.0
     },
     {
       "id": "54239679-cf77-3097-b426-71c92a7e5e99",
       "name": "P02_E01",
-      "area": 150.0,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 3.0,
-      "exposed_perimeter": 35.0
+      "z": 3.0
     },
     {
       "id": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "name": "P03_E01",
-      "area": 150.0,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 6.0,
-      "exposed_perimeter": 35.0
+      "z": 6.0
     },
     {
       "id": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "name": "P04_E01",
-      "area": 50.0,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 9.0,
-      "exposed_perimeter": 25.0
+      "z": 9.0
     },
     {
       "id": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "name": "P04_E02",
-      "area": 50.0,
       "multiplier": 1.0,
       "kind": "UNINHABITED",
       "inside_tenv": false,
       "height": 3.0,
       "n_v": 0.1,
-      "z": 9.0,
-      "exposed_perimeter": 22.5
+      "z": 9.0
     }
   ],
   "walls": [
@@ -1267,9 +1255,9 @@
     {
       "id": "85fc6cc6-06e6-62ff-9d9b-1342607b5044",
       "name": "P02_E01_PE001_V",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "547be19f-bc09-0f8d-3cb3-ef4b2b9a8599",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1283,9 +1271,9 @@
     {
       "id": "0f624831-0621-e74d-c6ff-a6cfd7634a3b",
       "name": "P02_E01_PE002_V",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "2accf7eb-84c4-7283-ee50-5e3e391ead20",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           2.0,
@@ -1299,9 +1287,9 @@
     {
       "id": "4239d37d-53a4-c82b-94eb-42125f6ec3fe",
       "name": "P02_E01_PE002_V_1",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "2accf7eb-84c4-7283-ee50-5e3e391ead20",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           8.0,
@@ -1315,9 +1303,9 @@
     {
       "id": "8e3defae-8d0d-e08f-bd27-9e02f794b499",
       "name": "P02_E01_PE003_V",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "b993bbb7-a49b-e8e2-5265-36b9baf74cbf",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1331,9 +1319,9 @@
     {
       "id": "faa5cce1-13ea-cee8-5299-2e87210f9386",
       "name": "P03_E01_PE006_V",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "78ecae57-6753-4551-4a41-97dcf1e0c16f",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1347,9 +1335,9 @@
     {
       "id": "a4d93465-8973-0906-1cfa-fe40cb43556a",
       "name": "P03_E01_PE007_V",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "785307c4-2fc5-1f6c-d024-4decfcf726e4",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           2.0,
@@ -1363,9 +1351,9 @@
     {
       "id": "b2e4b3d4-0c03-6222-5a94-6b8cf7e61b7f",
       "name": "P03_E01_PE007_V_1",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "785307c4-2fc5-1f6c-d024-4decfcf726e4",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           8.0,
@@ -1379,9 +1367,9 @@
     {
       "id": "0e12d15b-ca00-ec19-7ebf-4cf3b5eebf20",
       "name": "P03_E01_PE008_V",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "c91be448-7926-1a7c-3cb2-48e544a9de39",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1395,9 +1383,9 @@
     {
       "id": "1d3fee33-d10f-abba-e289-f956a82b9c84",
       "name": "P04_E01_PE001_V",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "0f2b4364-da31-6b8f-b377-2f4be1d8f202",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           1.77,
@@ -1411,9 +1399,9 @@
     {
       "id": "7bd76503-b198-5d40-d00b-a824c4b15961",
       "name": "P04_E01_PE002_V",
-      "cons": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+      "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "94154415-1d9e-89db-3594-ef926981d10c",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1497,7 +1485,6 @@
       "psi": 0.3975
     }
   ],
-  "shades": [],
   "cons": {
     "wallcons": [
       {
@@ -1647,7 +1634,7 @@
     ],
     "wincons": [
       {
-        "id": "97f3ee3d-1ebe-f7ac-e00e-dd0f09762e79",
+        "id": "eb934160-2d31-b25c-7bbd-486b36786335",
         "name": "PVC 2",
         "group": "Ventanas de PVC",
         "glass": "071479bf-e057-0554-cc2e-55808e2a47aa",

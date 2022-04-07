@@ -13,112 +13,92 @@
     {
       "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "name": "P01_E01",
-      "area": 25.04,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
-      "z": 0.0,
-      "exposed_perimeter": 7.21
+      "z": 0.0
     },
     {
       "id": "8fb42929-3639-dcb3-13d7-071296960471",
       "name": "P01_E02",
-      "area": 5.45,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
-      "z": 0.0,
-      "exposed_perimeter": 5.41
+      "z": 0.0
     },
     {
       "id": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "name": "P01_E03",
-      "area": 10.78,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
-      "z": 0.0,
-      "exposed_perimeter": 5.31
+      "z": 0.0
     },
     {
       "id": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "name": "P01_E04",
-      "area": 6.47,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 2.7,
-      "z": 0.0,
-      "exposed_perimeter": 10.5
+      "z": 0.0
     },
     {
       "id": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
       "name": "P02_E01",
-      "area": 11.12,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 2.7,
-      "exposed_perimeter": 3.6
+      "z": 2.7
     },
     {
       "id": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "name": "P02_E02",
-      "area": 9.87,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 2.7,
-      "exposed_perimeter": 2.54
+      "z": 2.7
     },
     {
       "id": "8e7b02af-007d-5337-7ec5-482065784e11",
       "name": "P02_E03",
-      "area": 12.4,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 2.7,
-      "exposed_perimeter": 3.88
+      "z": 2.7
     },
     {
       "id": "839f06f9-2a5f-3316-a889-92064087fee3",
       "name": "P02_E04",
-      "area": 5.76,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 2.7,
-      "exposed_perimeter": 2.3
+      "z": 2.7
     },
     {
       "id": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "name": "P02_E05",
-      "area": 5.88,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 2.7,
-      "exposed_perimeter": 7.46
+      "z": 2.7
     },
     {
       "id": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "name": "P02_E06",
-      "area": 9.6,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 2.7,
-      "exposed_perimeter": 14.95
+      "z": 2.7
     }
   ],
   "walls": [
@@ -2461,9 +2441,9 @@
     {
       "id": "316e9a63-d88a-c58a-1024-caf10461d8b6",
       "name": "P01_E01_PE001_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "533865ce-8e6a-c0a8-a2d9-cbb2fbea4ab5",
-      "f_shobst": 0.76,
+      "f_shobst_calc": 0.76,
       "geometry": {
         "position": [
           1.1,
@@ -2477,9 +2457,9 @@
     {
       "id": "45dd41e3-faf3-5e6b-4687-d4d7f1a26681",
       "name": "P01_E01_PE003_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "d42ed212-0e16-17c6-c916-95290d4db5ef",
-      "f_shobst": 0.75,
+      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           0.6,
@@ -2493,9 +2473,9 @@
     {
       "id": "ba0ebd21-3983-aadc-15ef-5f4370706232",
       "name": "P01_E02_PE004_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "287e688a-5fda-decf-438b-58013a2ada83",
-      "f_shobst": 0.69,
+      "f_shobst_calc": 0.69,
       "geometry": {
         "position": [
           0.1,
@@ -2509,9 +2489,9 @@
     {
       "id": "babc3f61-3c6d-b24c-777c-0e76f80bd34f",
       "name": "P01_E03_PE001_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "3a5df886-d7c7-c80f-9dcd-edb41be26016",
-      "f_shobst": 0.68,
+      "f_shobst_calc": 0.68,
       "geometry": {
         "position": [
           1.12,
@@ -2525,9 +2505,9 @@
     {
       "id": "0166f04c-fbbc-8fbc-5990-a037e0813a36",
       "name": "P01_E03_PE003_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "a663d3cf-1dcd-00e1-f931-77f139985df5",
-      "f_shobst": 0.73,
+      "f_shobst_calc": 0.73,
       "geometry": {
         "position": [
           0.5,
@@ -2541,9 +2521,9 @@
     {
       "id": "6c4bc7d0-01bf-eee9-9969-399c0def7707",
       "name": "P01_E04_PE002_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "4f9ceedd-a380-5452-be9b-faa5a2b35bd6",
-      "f_shobst": 0.77,
+      "f_shobst_calc": 0.77,
       "geometry": {
         "position": [
           0.5,
@@ -2557,9 +2537,9 @@
     {
       "id": "db0809b9-cfca-9d87-ee3d-7f0d62efd628",
       "name": "P02_E01_PE001_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "aa702707-b64b-1280-d199-ed7fac965bec",
-      "f_shobst": 0.76,
+      "f_shobst_calc": 0.76,
       "geometry": {
         "position": [
           1.2,
@@ -2573,9 +2553,9 @@
     {
       "id": "47fb9a41-fc6a-8508-6daf-891713c6b46f",
       "name": "P02_E02_PE003_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "bace5dde-0b16-53fe-4491-a30edbadb765",
-      "f_shobst": 0.74,
+      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           0.9,
@@ -2589,9 +2569,9 @@
     {
       "id": "2160addf-a6bb-eb4d-329f-cd140b61d783",
       "name": "P02_E03_PE007_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "c6b34d7f-8fff-299e-992a-4123e90ca2ed",
-      "f_shobst": 0.75,
+      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           0.6,
@@ -2605,9 +2585,9 @@
     {
       "id": "ecda039e-8295-b0d6-3bfb-b3635fd62b20",
       "name": "P02_E04_PE002_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "497af7dc-502b-536d-c8ac-405410e48a74",
-      "f_shobst": 0.74,
+      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           0.4,
@@ -2621,9 +2601,9 @@
     {
       "id": "b86217e4-3590-8496-9206-5f18ad78655d",
       "name": "P02_E05_PE001_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "190b88e2-95c9-b398-96d7-1eb7581318c4",
-      "f_shobst": 0.75,
+      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           0.2,
@@ -2637,9 +2617,9 @@
     {
       "id": "56b64cd9-4175-3126-46bd-b912a118f7a3",
       "name": "P02_E06_PE002_V",
-      "cons": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+      "cons": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
       "wall": "6ca93c51-be77-3188-0e7c-4e97516588a0",
-      "f_shobst": 0.77,
+      "f_shobst_calc": 0.77,
       "geometry": {
         "position": [
           0.4,
@@ -2723,7 +2703,6 @@
       "psi": 0.28
     }
   ],
-  "shades": [],
   "cons": {
     "wallcons": [
       {
@@ -2909,7 +2888,7 @@
     ],
     "wincons": [
       {
-        "id": "2e19d7be-fd62-8a1c-0709-2e0abae09fdf",
+        "id": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
         "name": "Vidrio doble",
         "group": "Vidrios dobles",
         "glass": "d9488465-5281-01a9-50b5-08885a14f751",

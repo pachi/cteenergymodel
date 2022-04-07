@@ -13,13 +13,11 @@
     {
       "id": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "name": "P01_E01",
-      "area": 100.0,
       "multiplier": 1.0,
       "kind": "CONDITIONED",
       "inside_tenv": true,
       "height": 3.0,
-      "z": 0.0,
-      "exposed_perimeter": 40.0
+      "z": 0.0
     }
   ],
   "walls": [
@@ -258,9 +256,9 @@
     {
       "id": "92283670-72ad-8db5-4e0f-5f76295a439d",
       "name": "P01_E01_PE001_V",
-      "cons": "586cacdb-0937-fe9e-6692-d73af19b880e",
+      "cons": "e5b3afb2-bc3b-2125-002f-3e34d6106a42",
       "wall": "8cd1c70c-fc07-56f5-7968-75aa06e41c10",
-      "f_shobst": 1.0,
+      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           3.0,
@@ -442,7 +440,7 @@
     ],
     "wincons": [
       {
-        "id": "586cacdb-0937-fe9e-6692-d73af19b880e",
+        "id": "e5b3afb2-bc3b-2125-002f-3e34d6106a42",
         "name": "Doble -- Mrpt - Gris claro",
         "group": "Huecos",
         "glass": "eb0062c2-5173-ffea-59ee-a8afe3b544d3",
