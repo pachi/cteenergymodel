@@ -22,6 +22,7 @@ pub struct Wall {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre del elemento opaco
+    #[serde(default)]
     pub name: String,
     /// Condiciones de contorno del cerramiento:
     /// - GROUND: cerramientos en contacto con el terreno
@@ -93,6 +94,7 @@ pub struct Shade {
     /// ID del elemento de sombra (en formato UUID)
     pub id: Uuid,
     /// Nombre del elemento opaco
+    #[serde(default)]
     pub name: String,
     /// Geometría del elemento opaco
     pub geometry: WallGeom,

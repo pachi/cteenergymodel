@@ -42,6 +42,34 @@ fn init() {
 }
 
 #[test]
+fn parse() {
+    init();
+    
+    let space = bemodel::Space {
+        id: uuid::Uuid::parse_str("df9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap(),
+        name: "P01_E01".to_string(),
+        area: 25.04,
+        multiplier: 1.0,
+        kind: bemodel::SpaceType::CONDITIONED,
+        inside_tenv: true,
+        height: 2.7,
+        n_v: None,
+        z: 0.0,
+    };
+    let space_str = r#"{
+        "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
+        "name": "P01_E01",
+        "area": 25.04,
+        "kind": "CONDITIONED",
+        "inside_tenv": true,
+        "height": 2.7
+      }"#;
+    let sp: bemodel::Space = serde_json::from_str(space_str).unwrap();
+
+    assert_eq!(sp.multiplier, space.multiplier);
+}
+
+#[test]
 fn model_json_e4h_medianeras() {
     init();
 

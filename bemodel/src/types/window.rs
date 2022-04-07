@@ -17,6 +17,7 @@ pub struct Window {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre del hueco
+    #[serde(default)]
     pub name: String,
     /// Construcción del hueco
     pub cons: Uuid,

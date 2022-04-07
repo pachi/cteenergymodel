@@ -19,18 +19,22 @@ pub struct Space {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre del espacio
+    #[serde(default)]
     pub name: String,
     /// Superficie útil del espacio (m2)
     /// TODO: calcular a partir de superficie de suelos
     pub area: f32,
     /// Multiplicador del espacio
+    #[serde(default = "multiplier_1")]
     pub multiplier: f32,
     /// Tipo de espacio:
     /// - CONDITIONED: acondicionado,
     /// - UNCONDITIONED: no acondicionado
     /// - UNINHABITED: no habitable
+    #[serde(default)]
     pub kind: SpaceType,
     /// Pertenencia al interior de la envolvente térmica
+    #[serde(default = "inside_tenv_true")]
     pub inside_tenv: bool,
     /// Altura bruta (suelo a suelo) del espacio (m)
     pub height: f32,
@@ -39,8 +43,18 @@ pub struct Space {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub n_v: Option<f32>,
     /// Cota del espacio respecto al suelo (m)
-    #[serde(default, skip_serializing_if = "crate::utils::is_equal_to_default")]
+    #[serde(default)]
     pub z: f32,
+}
+
+/// Devuelve el default de multiplicador
+fn multiplier_1() -> f32 {
+    1.0
+}
+
+/// Devuelve el default de pertenencia a la envolvente térmica
+fn inside_tenv_true() -> bool {
+    true
 }
 
 impl Space {

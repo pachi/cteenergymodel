@@ -31,11 +31,16 @@ pub struct Meta {
     pub n50_test_ach: Option<f32>,
     /// Anchura o profundidad del aislamiento perimetral horizontal o vertical de la solera [m]
     /// En el caso de aislamiento vertical se debe introducir el doble de la dimensión física del aislamiento
-    #[serde(default, skip_serializing_if = "crate::utils::is_equal_to_default")]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub d_perim_insulation: f32,
     /// Resistencia térmica del aislamiento perimetral horizontal o vertical de la solera [m²K/W]
-    #[serde(default, skip_serializing_if = "crate::utils::is_equal_to_default")]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub rn_perim_insulation: f32,
+}
+
+/// Comprueba si el valor es igual al valor por defecto
+fn is_default<T: Default + PartialEq>(t: &T) -> bool {
+    t == &Default::default()
 }
 
 impl Default for Meta {

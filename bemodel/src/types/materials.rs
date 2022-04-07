@@ -47,6 +47,7 @@ pub struct Material {
     /// ID del material (UUID)
     pub id: Uuid,
     /// Nombre del material
+    #[serde(default)]
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     #[serde(default)]
@@ -88,6 +89,7 @@ pub struct Glass {
     /// ID del vidrio (UUID)
     pub id: Uuid,
     /// Nombre
+    #[serde(default)]
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     #[serde(default)]
@@ -104,6 +106,7 @@ pub struct Frame {
     /// ID del marco (UUID)
     pub id: Uuid,
     /// Nombre
+    #[serde(default)]
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     #[serde(default)]

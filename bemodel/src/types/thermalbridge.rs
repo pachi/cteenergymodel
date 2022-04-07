@@ -15,6 +15,7 @@ pub struct ThermalBridge {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre del puente térmico
+    #[serde(default)]
     pub name: String,
     /// Tipo de puente térmico
     /// Roof|Balcony|Corner|IntermediateFloor|InternalWall|GroundFloor|Pillar|Window|Generic

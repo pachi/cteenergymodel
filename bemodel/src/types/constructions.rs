@@ -40,6 +40,7 @@ pub struct WallCons {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre
+    #[serde(default)]
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     #[serde(default)]
@@ -73,6 +74,7 @@ pub struct WinCons {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre
+    #[serde(default)]
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     #[serde(default)]
