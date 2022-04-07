@@ -44,7 +44,7 @@ fn init() {
 #[test]
 fn parse() {
     init();
-    
+
     let space = bemodel::Space {
         id: uuid::Uuid::parse_str("df9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap(),
         name: "P01_E01".to_string(),
@@ -72,7 +72,8 @@ fn model_json_e4h_medianeras() {
     init();
 
     let strdata = include_str!("./data/e4h_medianeras.json");
-    let model = Model::from_json(strdata).unwrap();
+    let mut model = Model::from_json(strdata).unwrap();
+    model.update_fshobst();
 
     // // Cubiertas
     let wall = model.get_wall_by_name("P04_E01_CUB001").unwrap();
@@ -138,6 +139,8 @@ fn model_json_ejemploviv_unif() {
 
     let strdata = include_str!("./data/ejemploviv_unif.json");
     let mut model = Model::from_json(strdata).unwrap();
+    model.update_fshobst();
+
     // Datos geométricos
 
     // Espacio
@@ -201,7 +204,6 @@ fn model_json_ejemploviv_unif() {
     assert_almost_eq!(ind.vol_env_net, 257.98, 0.1);
     assert_almost_eq!(ind.vol_env_gross, 292.67, 0.1);
 
-    model.update_fshobst();
     info!(
         "sunlit map:\n{}",
         model

@@ -106,7 +106,7 @@ impl Model {
         debug!("Fshobst map: {:#?}", map);
 
         for mut window in &mut self.windows {
-            window.f_shobst_calc = map
+            window.f_shobst = map
                 .get(&window.id)
                 .map(|v| fround2(v.fshobst))
                 .or(Some(1.0));

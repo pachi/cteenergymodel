@@ -297,10 +297,10 @@ fn windows_and_shades_from_bdl(
             name: win.name.clone(),
             cons: *id_maps.wincons_id(&win.cons).unwrap(),
             wall: *id_maps.wall_id(&win.wall).unwrap(),
-            // Este valor se usa para valores impuestos por el usuario y podría tener sentido, tal vez, en importaciones de KyGananciasSolares.txt
-            f_shobst: None,
+            // Este valor se usa para valores impuestos por el usuario
+            f_shobst_override: None,
             // El valor calculado del f_shobst se actualiza con model.update_fshobst() al final del proceso de importación
-            f_shobst_calc: None, 
+            f_shobst: None, 
             geometry: WinGeom {
                 position: Some(point![win.x, win.y]),
                 width: win.width,

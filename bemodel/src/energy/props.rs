@@ -114,8 +114,8 @@ impl From<&Model> for EnergyProps {
                 multiplier: wall.map(|wp| wp.multiplier).unwrap_or(1.0),
                 is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
+                f_shobst_override: w.f_shobst_override,
                 f_shobst: w.f_shobst,
-                f_shobst_calc: w.f_shobst_calc,
             };
             windows.insert(w.id, wp);
         }
@@ -325,9 +325,9 @@ pub struct WinProps {
     /// U de huecos, [W/m²K]
     pub u_value: Option<f32>,
     /// Factor de obstrucción de obstáculos remotos (usuario), [-]
-    pub f_shobst: Option<f32>,
+    pub f_shobst_override: Option<f32>,
     // Factor de obstrucción de obstáculos remotos (calculado), [-]
-    pub f_shobst_calc: Option<f32>,
+    pub f_shobst: Option<f32>,
 }
 
 /// Propiedades de puentes térmicos

@@ -1,5 +1,6 @@
 # TAREAS PENDIENTES
 
+- ¿Hacer un update_fshobst en Model::from_json("xx") incondicionalmente? (intentar antes hacer profiling y detectar cambios en huecos y opacos con hash)
 - Completar estructura EnergyIndicators.elements (ElementProps)?
   - indicando elementos que pertenecen a la envolvente (adiabáticos + interiores que no comunican con otros espacios interiores a la envolvente)
 - Mover grupos a `model.library.{materials, glass, frame, wallcons, windowcons}=Map<groupname, uuid>` y eliminar grupos en esos objetos

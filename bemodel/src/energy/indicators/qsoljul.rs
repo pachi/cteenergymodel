@@ -77,7 +77,7 @@ impl QSolJulData {
                 (0.77, 0.20)
             };
             // Si no hay definido un valor de usuario se usa el valor calculado o el valor por defecto f_shobst=1.0
-            let f_shobst = win.f_shobst.or(win.f_shobst_calc).unwrap_or(1.0);
+            let f_shobst = win.f_shobst_override.or(win.f_shobst).unwrap_or(1.0);
 
             let Q_soljul_orient = f_shobst * g_glshwi * (1.0 - f_f) * area * radjul;
             // Datos de detalle
