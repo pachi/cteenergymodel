@@ -46,22 +46,24 @@ impl Window {
     }
 
     /// Crea elementos de sombra correpondientes el perímetro de retranqueo del hueco
-    pub(crate) fn shades_for_setback(&self, wallgeom: &WallGeom) -> Vec<(Uuid, Shade)> {
+    pub(crate) fn shades_for_setback(&self, wallgeom: &WallGeom) -> Option<Vec<(Uuid, Shade)>> {
         let wing = &self.geometry;
         // Si no hay retranqueo no se genera geometría
         if wing.setback.abs() < 0.01 {
-            return vec![];
+            return Some(vec![]);
         };
         let wpos = match wing.position {
             Some(pos) => pos,
             // Si no hay definición geométrica completa no se calcula geometría
-            _ => return vec![],
+            _ => return Some(vec![]),
         };
 
-        // TODO: Eliminar expect permitiendo fallar a esta función
-        let wall2world = wallgeom
-            .to_global_coords_matrix()
-            .expect("El muro debe tener definición geométrica completa");
+        let wall2world = if let Some(matrix) = wallgeom.to_global_coords_matrix() {
+            matrix
+        } else {
+            info!("El muro debe tener definición geométrica completa");
+            return None;
+        };
 
         let overhang = Shade {
             id: uuid_from_str(&format!("{}-top_setback", self.id)),
@@ -128,12 +130,12 @@ impl Window {
             },
         };
 
-        vec![
+        Some(vec![
             (self.id, overhang),
             (self.id, left_fin),
             (self.id, right_fin),
             (self.id, sill),
-        ]
+        ])
     }
 }
 

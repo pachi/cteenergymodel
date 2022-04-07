@@ -136,6 +136,7 @@ impl Model {
                     .map(|wall| window.shades_for_setback(&wall.geometry))
             })
             .flatten()
+            .flatten()
             .collect()
     }
 }
