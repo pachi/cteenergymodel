@@ -6,22 +6,16 @@
 //!
 //! Cálculo de propiedades e indicadores energéticos del modelo y sus elementos
 
-mod aabb;
-mod bvh;
-mod geometry;
 mod indicators;
-mod occluder;
 mod props;
 mod radiation;
-mod ray;
+mod raytracing;
 mod transmittance;
 
-pub use aabb::AABB;
-pub use bvh::{Bounded, Intersectable, BVH};
 pub use indicators::EnergyIndicators;
 pub use props::EnergyProps;
 pub use radiation::ray_dir_to_sun;
-pub use ray::Ray;
+pub use raytracing::{Bounded, Intersectable, Ray, AABB, BVH};
 
 use crate::Model;
 

@@ -1,12 +1,9 @@
-// Copyright (c) 2018-2021 Rafael Villar Burke <pachi@ietcc.csic.es>
+// Copyright (c) 2018-2022 Rafael Villar Burke <pachi@ietcc.csic.es>
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Implementación del cálculo de la U de una composión constructiva de opaco, según su posición
-//! - UNE-EN ISO 13789:2010 transmisión general
-//! - UNE-EN ISO 6946:2012 para elementos opacos
-//! - UNE-EN ISO 13770:2017 para elementos en contacto con el terremo
-#![allow(non_snake_case)]
+//! Implementación del cálculo del factor de obstáculos remotos de los huecos. Usa raytracing
+//! sobre una malla de puntos del hueco y una estructura BVH para acelerar el cálculo.
 
 use std::collections::BTreeMap;
 
@@ -16,16 +13,14 @@ use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
 use crate::{
     climatedata::{RadData, CLIMATEMETADATA, JULYRADDATA},
-    energy::{Bounded, Intersectable, Ray, BVH},
+    energy::raytracing::{AABB, Bounded, Intersectable, Occluder, Ray, BVH},
     point,
     types::HasSurface,
     utils::fround2,
     vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    MatsDb, Model, Point3, Uuid, Vector3, WinCons, Window,
+    MatsDb, Model, Point3, Uuid, Vector3, WallGeom, WinCons, Window,
 };
-
-use super::occluder::Occluder;
 
 impl Model {
     /// Recalcula los factores de obstáculos remotos para los huecos
@@ -111,7 +106,10 @@ impl Model {
         debug!("Fshobst map: {:#?}", map);
 
         for mut window in &mut self.windows {
-            window.f_shobst_calc = map.get(&window.id).map(|v| fround2(v.fshobst)).or(Some(1.0));
+            window.f_shobst_calc = map
+                .get(&window.id)
+                .map(|v| fround2(v.fshobst))
+                .or(Some(1.0));
         }
     }
 
@@ -259,13 +257,13 @@ impl Model {
         };
 
         // Puntos 2D del centro de cada bloque en el plano del muro
-        let stepX = wg.width / n_x as f32;
-        let stepY = wg.height / n_y as f32;
+        let step_x = wg.width / n_x as f32;
+        let step_y = wg.height / n_y as f32;
         let mut points = vec![];
         for j in 0..n_y {
             for i in 0..n_x {
-                let px = x + (i as f32 + 0.5) * stepX;
-                let py = y + (j as f32 + 0.5) * stepY;
+                let px = x + (i as f32 + 0.5) * step_x;
+                let py = y + (j as f32 + 0.5) * step_y;
                 points.push(point![px, py]);
             }
         }
@@ -306,4 +304,51 @@ pub fn ray_dir_to_sun(sun_azimuth: f32, sun_altitude: f32) -> Vector3 {
         salt.sin()
     ]
     .normalize()
+}
+
+// --------------- Implementación de los traits Bounded e Intersectable para Geometry --------------
+
+impl Intersectable for WallGeom {
+    /// Calcula la intersección entre rayo y geometría, e indica el factor t en la dirección del rayo
+    ///
+    /// ray_origin: punto de origen del rayo en coordenadas globales (Vector3)
+    /// ray_dir: dirección del rayo en coordenadas globales (Vector3)
+    ///
+    /// Si es un punto interior devuelve t tal que la intersección se produce en ray_origin + t * ray_dir
+    /// Comprueba la intersección transformando el rayo con la transformación inversa de la geometría
+    fn intersects(&self, ray: &Ray) -> Option<f32> {
+        // Matrices de transformación de geometría
+        let trans_inv = self.to_global_coords_matrix().map(|m| m.inverse());
+        // Normal to the planar polygon
+        ray.intersects_with_data(&self.polygon, trans_inv.as_ref(), &self.polygon.normal())
+    }
+}
+
+impl Bounded for WallGeom {
+    fn aabb(&self) -> AABB {
+        if let Some(trans) = self.to_global_coords_matrix() {
+            let mut min_x = f32::INFINITY;
+            let mut min_y = f32::INFINITY;
+            let mut min_z = f32::INFINITY;
+            let mut max_x = f32::NEG_INFINITY;
+            let mut max_y = f32::NEG_INFINITY;
+            let mut max_z = f32::NEG_INFINITY;
+
+            for p in self.polygon.iter().map(|p| trans * point![p.x, p.y, 0.0]) {
+                min_x = min_x.min(p.x);
+                max_x = max_x.max(p.x);
+                min_y = min_y.min(p.y);
+                max_y = max_y.max(p.y);
+                min_z = min_z.min(p.z);
+                max_z = max_z.max(p.z);
+            }
+
+            AABB {
+                min: point![min_x, min_y, min_z],
+                max: point![max_x, max_y, max_z],
+            }
+        } else {
+            Default::default()
+        }
+    }
 }
