@@ -18,11 +18,14 @@ impl Model {
     ///     - Muros sin referencias de construcciones válidas
     ///     - Muros INTERIOR con nextto con referencia no válida
     /// TODO: Comprobaciones pendientes
+    ///     - Muros sin definición geométrica completa
+    ///     - UUIDs nulos: "00000000-0000-0000-0000-000000000000"
     ///     - Construcciones de hueco sin marco o vidrio válidos o de opacos sin materiales válidos
     ///     - comprobar que elementos geométricos tengan punto de inserción != None
     ///     - la superficie de elemento (wall.a) coincide con la de su polígono
     ///     - espacio no habitable sin n_v definido
     ///     - las ventanas en particiones interiores se ignoran en los cálculos de U_i
+    ///     - superficies de hueco < superficie de opaco en el que se inserta
     pub fn check(&self) -> Vec<Warning> {
         use WarningLevel::WARNING;
 
