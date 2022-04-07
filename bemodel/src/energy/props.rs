@@ -63,10 +63,11 @@ impl From<&Model> for EnergyProps {
         // Propiedades de espacios
         let mut spaces: BTreeMap<Uuid, SpaceProps> = BTreeMap::new();
         for s in &model.spaces {
+            let area = s.area(&model.walls);
             let sp = SpaceProps {
                 kind: s.kind,
                 inside_tenv: s.inside_tenv,
-                area: s.area,
+                area,
                 multiplier: s.multiplier,
                 height: s.height,
                 height_net: s.height_net(&model.walls, &model.cons),

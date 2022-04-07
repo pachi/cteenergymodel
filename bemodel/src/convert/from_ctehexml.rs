@@ -130,7 +130,6 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
             Ok(Space {
                 id: *id_maps.space_id(&s.name)?,
                 name: s.name.clone(),
-                area: fround2(s.polygon.area()),
                 z: s.z,
                 height: fround2(s.height),
                 inside_tenv: s.insidete,

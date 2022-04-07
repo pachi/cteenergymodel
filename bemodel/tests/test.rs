@@ -48,7 +48,6 @@ fn parse() {
     let space = bemodel::Space {
         id: uuid::Uuid::parse_str("df9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap(),
         name: "P01_E01".to_string(),
-        area: 25.04,
         multiplier: 1.0,
         kind: bemodel::SpaceType::CONDITIONED,
         inside_tenv: true,
@@ -59,7 +58,6 @@ fn parse() {
     let space_str = r#"{
         "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
         "name": "P01_E01",
-        "area": 25.04,
         "kind": "CONDITIONED",
         "inside_tenv": true,
         "height": 2.7
@@ -83,7 +81,7 @@ fn model_json_e4h_medianeras() {
     assert_almost_eq!(wall.area(), 95.45, 0.01);
 
     let ind = model.energy_indicators();
-    assert_almost_eq!(ind.area_ref, 1673.92, 0.01);
+    assert_almost_eq!(ind.area_ref, 1673.56, 0.1);
     assert_almost_eq!(ind.compacity, 3.17, 0.01);
     assert_almost_eq!(ind.K_data.K, 0.37, 0.01);
     // En HULC es q_solul = 0.43
@@ -95,8 +93,8 @@ fn model_json_e4h_medianeras() {
     assert_almost_eq!(ind.n50_data.n50_ref, 2.96, 0.01);
     assert_almost_eq!(ind.n50_data.walls_c_ref, 16.0, 0.01);
     assert_almost_eq!(ind.n50_data.walls_c, 16.0, 0.01);
-    assert_almost_eq!(ind.vol_env_net, 4672.34, 0.1);
-    assert_almost_eq!(ind.vol_env_gross, 5231.0, 0.1);
+    assert_almost_eq!(ind.vol_env_net, 4671.36, 0.1);
+    assert_almost_eq!(ind.vol_env_gross, 5229.93, 0.1);
 
     let json = model.as_json().unwrap();
     let model = Model::from_json(&json).unwrap();
@@ -144,7 +142,7 @@ fn model_json_ejemploviv_unif() {
 
     // Espacio
     let spc = model.get_space_by_name("P01_E01").unwrap();
-    assert_almost_eq!(spc.area, 25.04, 0.01);
+    assert_almost_eq!(spc.area(&model.walls), 25.04, 0.01);
     assert_almost_eq!(spc.height_net(&model.walls, &model.cons), 2.48, 0.01);
     assert_almost_eq!(
         spc.slab_char_dim(&model.walls, &model.spaces)
@@ -192,7 +190,7 @@ fn model_json_ejemploviv_unif() {
     // Indicators
 
     let ind = model.energy_indicators();
-    assert_almost_eq!(ind.area_ref, 102.37, 0.01);
+    assert_almost_eq!(ind.area_ref, 102.33, 0.1);
     assert_almost_eq!(ind.compacity, 1.36, 0.01);
     assert_almost_eq!(ind.K_data.K, 0.62, 0.01);
     // HULC q_sol;jul = 0.54
@@ -200,8 +198,8 @@ fn model_json_ejemploviv_unif() {
 
     assert_almost_eq!(ind.n50_data.n50, 6.89, 0.01);
     assert_almost_eq!(ind.n50_data.n50_ref, 6.89, 0.01);
-    assert_almost_eq!(ind.vol_env_net, 258.10, 0.1);
-    assert_almost_eq!(ind.vol_env_gross, 292.79, 0.1);
+    assert_almost_eq!(ind.vol_env_net, 257.98, 0.1);
+    assert_almost_eq!(ind.vol_env_gross, 292.67, 0.1);
 
     model.update_fshobst();
     info!(

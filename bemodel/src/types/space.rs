@@ -8,8 +8,9 @@
 
 use std::fmt::Display;
 
-use super::{ConsDb, Tilt, Uuid, Wall};
 use serde::{Deserialize, Serialize};
+
+use super::{ConsDb, HasSurface, Tilt, Uuid, Wall};
 
 // Elementos -----------------------------------------------
 
@@ -21,9 +22,6 @@ pub struct Space {
     /// Nombre del espacio
     #[serde(default)]
     pub name: String,
-    /// Superficie útil del espacio (m2)
-    /// TODO: calcular a partir de superficie de suelos
-    pub area: f32,
     /// Multiplicador del espacio
     #[serde(default = "multiplier_1")]
     pub multiplier: f32,
@@ -39,7 +37,7 @@ pub struct Space {
     /// Altura bruta (suelo a suelo) del espacio (m)
     pub height: f32,
     /// Ventilación, en ren/h
-    /// TODO: esto serán condiciones del espacio?
+    /// TODO: en el futuro esto serían condiciones de uso del espacio?
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub n_v: Option<f32>,
     /// Cota del espacio respecto al suelo (m)
@@ -80,10 +78,15 @@ impl Space {
         self.height - top_wall_thickness
     }
 
-    /// Volumen neto del espacio, m^3
-    /// Se calcula con area * altura neta
-    pub fn volume_net(&self, walls: &[Wall], cons: &ConsDb) -> f32 {
-        self.area * self.height_net(walls, cons)
+    /// Superficie del espacio (m²)
+    pub fn area(&self, walls: &[Wall]) -> f32 {
+        let mut area = 0.0;
+        for w in walls {
+            if (w.space == self.id) && (Tilt::BOTTOM == w.geometry.tilt.into()) {
+                area += w.geometry.area();
+            }
+        }
+        area
     }
 
     /// Iterador de los cerramientos que delimitan un espacio (muros, suelos y techos)

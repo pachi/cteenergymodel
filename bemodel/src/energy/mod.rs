@@ -39,7 +39,11 @@ impl Model {
                 .iter()
                 .filter_map(|s| {
                     if s.inside_tenv && s.kind != SpaceType::UNINHABITED {
-                        Some(s.volume_net(&self.walls, &self.cons) * s.multiplier)
+                        Some(
+                            s.area(&self.walls)
+                                * s.height_net(&self.walls, &self.cons)
+                                * s.multiplier,
+                        )
                     } else {
                         None
                     }
