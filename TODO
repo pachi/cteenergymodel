@@ -1,9 +1,17 @@
 # TAREAS PENDIENTES
 
-- ¿Hacer un update_fshobst en Model::from_json("xx") incondicionalmente? (intentar antes hacer profiling y detectar cambios en huecos y opacos con hash)
-- Completar estructura EnergyIndicators.elements (ElementProps)?
-  - indicando elementos que pertenecen a la envolvente (adiabáticos + interiores que no comunican con otros espacios interiores a la envolvente)
-- Mover grupos a `model.library.{materials, glass, frame, wallcons, windowcons}=Map<groupname, uuid>` y eliminar grupos en esos objetos
+- Actualización de f_shobst siempre al traer datos al modelo
+  - Ahora mismo al importar el JSON (Model::from_json("xx")) no se calcula
+  - Guardar hash de geometrías (opacos, sombras y huecos) y solo recalcular si han cambiado
+  - Hacer profiling y benchmarks con tracing
+- Guardar en EnergyProps si el elemento pertenece a la envolvente
+  - elementos en contacto con el terreno o el exterior en espacios habitables (es lo que tenemos ahora)
+  - adiabáticos (no lo tenemos)
+  - interiores que no comunican con otros espacios interiores a la envolvente (no lo tenemos)
+- Cambiar gestión de grupos de materiales
+  - Eliminar `group` de los objetos `Wall, Window, Material, WinCons, WallCons`
+  - Generar Objeto de grupos de biblioteca con referencias a UUID `library.{materials, glass, frame, wallcons, windowcons}=Map<groupname, uuid>`
+  - Ver dónde se guarda esa biblioteca (¿la tenemos en el wasm y la usamos para la importación o es solo del lado del cliente?
 - Separar check de cálculo energético
 - Trasladar avisos en la conversión de modelos BDL
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
