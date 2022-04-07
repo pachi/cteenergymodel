@@ -1,10 +1,11 @@
 # TAREAS PENDIENTES
 
-- Ver si los Uuid se ponen como `Option<Uuid>` (pueden no estar vinculados y eliminarse cuando se borre una construcción)
+- Hacer name también #[serde(default)]?
+- Convertir multiplier a Newtype(f32) con Default=1.0 (y conversión a float) para hacer #[serde(default)]
+- Eliminar area de Space y calcular
 - Ver si se serializa y deserializa f_shobst_calc: Option<f32> (y si se omiten los valores None)
 - Completar estructura EnergyIndicators.elements (ElementProps)?
-  - indicando elementos que pertenecen a la envolvente
-    - los elementos interiores de la ET son aquellos que no comunican con otros espacios interiores a la envolvente
+  - indicando elementos que pertenecen a la envolvente (adiabáticos + interiores que no comunican con otros espacios interiores a la envolvente)
 - Mover grupos a `model.library.{materials, glass, frame, wallcons, windowcons}=Map<groupname, uuid>` y eliminar grupos en esos objetos
 - Separar check de cálculo energético
 - Convertir name a ArrayString
@@ -33,17 +34,9 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
   - huecos:
     - alto = 1m
     - ancho = superficie / alto
-- El perímetro expuesto se podría eliminar de bemodel/space, calculándolo como en bdl/space l.110 a partir de los muros y suelos
-  - parte del perímetro que tiene muros con el exterior
 - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
 - Crear biblioteca base de materiales en Rust para interpretar construcciones:
   - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
-
-### Chequeos de modelo
-
-- Perímetro expuesto < perímetro de suelos del espacio
-- Superficie de espacio < % de suma de superficie de opacos suelo
-- Superficies de hueco < superficie de opaco en el que se inserta
 
 ### bemodel
 
@@ -131,7 +124,6 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
   - horarios
   - condiciones operacionales
   - consignas
-- Trasladar cálculo de Fshobst de 52016-1 en lugar de DA DB-HE/1 y reutilizar módulo nuevo
 
 ## docs
 
