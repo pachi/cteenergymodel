@@ -1,16 +1,9 @@
 # TAREAS PENDIENTES
 
-- Hacer name también #[serde(default)]?
-- Convertir multiplier a Newtype(f32) con Default=1.0 (y conversión a float) para hacer #[serde(default)]
-- Eliminar area de Space y calcular
-- Ver si se serializa y deserializa f_shobst_calc: Option<f32> (y si se omiten los valores None)
 - Completar estructura EnergyIndicators.elements (ElementProps)?
   - indicando elementos que pertenecen a la envolvente (adiabáticos + interiores que no comunican con otros espacios interiores a la envolvente)
 - Mover grupos a `model.library.{materials, glass, frame, wallcons, windowcons}=Map<groupname, uuid>` y eliminar grupos en esos objetos
 - Separar check de cálculo energético
-- Convertir name a ArrayString
-  - <https://docs.rs/arrayvec/0.7.1/arrayvec/struct.ArrayString.html>
-  - Ver tamaño máximo de name, id son 36 caracteres en representación de texto
 - Trasladar avisos en la conversión de modelos BDL
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
 - Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
@@ -37,6 +30,11 @@ Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibi
 - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
 - Crear biblioteca base de materiales en Rust para interpretar construcciones:
   - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
+- condiciones de uso:
+  - nivel de ventilación (n_v: Option<f32> [1/h])
+  - consignas (cal, cal_red, ref, ref_red, horas_cal, horas_cal_red, horas_sin, horas_ref, horas_ref_red)
+  - ocupación (horas_ocupación)
+  - pensar nivel de agregación (semana tipo con día entre semana y fin de semana?, ver normas)
 
 ### bemodel
 
