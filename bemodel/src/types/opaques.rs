@@ -34,8 +34,7 @@ pub struct Wall {
     /// Espacio al que pertenece el elemento opaco
     pub space: Uuid,
     /// Espacio adyacente con el que comunica el elemento opaco cuando es interior
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub next_to: Option<Uuid>,
     /// Geometría del elemento opaco
     pub geometry: WallGeom,
@@ -112,8 +111,10 @@ pub struct WallGeom {
     pub azimuth: f32,
     /// Posición del muro, en coordenadas de espacio
     /// Un valor None señala que no hay definición geométrica completa
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub position: Option<Point3>,
     /// Polígono del muro, en coordenadas de muro
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub polygon: Polygon,
 }
 

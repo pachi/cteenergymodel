@@ -24,17 +24,17 @@ pub struct Meta {
     /// Ventilación global del edificio, para los espacios habitables de uso residencial, en l/s
     /// Las zonas no habitables y todas las zonas de uso terciario tienen definida su tasa
     /// de ventilación definida (en renh)
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub global_ventilation_l_s: Option<f32>,
     /// n50 medido mediante ensayo [renh]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub n50_test_ach: Option<f32>,
     /// Anchura o profundidad del aislamiento perimetral horizontal o vertical de la solera [m]
     /// En el caso de aislamiento vertical se debe introducir el doble de la dimensión física del aislamiento
+    #[serde(default, skip_serializing_if = "crate::utils::is_equal_to_default")]
     pub d_perim_insulation: f32,
-    /// Resistencia térmica del aislamiento perimetral horizontal o vertical de la solera [m2K/W]
+    /// Resistencia térmica del aislamiento perimetral horizontal o vertical de la solera [m²K/W]
+    #[serde(default, skip_serializing_if = "crate::utils::is_equal_to_default")]
     pub rn_perim_insulation: f32,
 }
 

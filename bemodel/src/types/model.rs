@@ -23,22 +23,28 @@ pub struct Model {
     /// Metadatos
     pub meta: Meta,
     /// Espacios
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub spaces: Vec<Space>,
     /// Opacos
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub walls: Vec<Wall>,
     /// Huecos
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub windows: Vec<Window>,
     /// Puentes térmicos
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub thermal_bridges: Vec<ThermalBridge>,
     /// Sombras
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub shades: Vec<Shade>,
     /// Construcciones
+    #[serde(default)]
     pub cons: ConsDb,
     /// Materiales
+    #[serde(default)]
     pub mats: MatsDb,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub extra: Option<Vec<ExtraData>>,
 }
 

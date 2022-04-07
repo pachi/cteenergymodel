@@ -14,10 +14,13 @@ use super::Uuid;
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct MatsDb {
     /// Lista de materiales para elementos opacos (muro, cubierta, suelo, partición)
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub materials: Vec<Material>,
-    // /// Lista de vidrios
+    /// Lista de vidrios
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub glasses: Vec<Glass>,
-    // /// Lista de marcos
+    /// Lista de marcos
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub frames: Vec<Frame>,
 }
 
@@ -46,6 +49,7 @@ pub struct Material {
     /// Nombre del material
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
+    #[serde(default)]
     pub group: String,
     /// Definición de propiedades, detallada (lambda, rho, C_p, mu, ...) o solo resistencia
     #[serde(flatten)]
@@ -86,6 +90,7 @@ pub struct Glass {
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
+    #[serde(default)]
     pub group: String,
     /// Conductividad W/m²K
     pub u_value: f32,
@@ -101,6 +106,7 @@ pub struct Frame {
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
+    #[serde(default)]
     pub group: String,
     /// Transmitancia térmica, U (W/m²K)
     pub u_value: f32,

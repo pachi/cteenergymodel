@@ -15,8 +15,10 @@ use crate::utils::fround3;
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct ConsDb {
     /// Construcciones de opacos
+    #[serde(default)]
     pub wallcons: Vec<WallCons>,
     /// Construcciones de huecos
+    #[serde(default)]
     pub wincons: Vec<WinCons>,
 }
 
@@ -73,6 +75,7 @@ pub struct WinCons {
     /// Nombre
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
+    #[serde(default)]
     pub group: String,
     /// Vidrio del hueco, UUID
     pub glass: Uuid,
@@ -83,9 +86,8 @@ pub struct WinCons {
     /// Porcentaje de U debido a intercalarios y cajón de persiana (%)
     pub delta_u: f32,
     /// Factor solar del hueco con la protección solar activada (g_gl;sh;wi) [-]
-    /// Si no se define, se supone igual al factor solar sin la protección activada (g_gl;wi)
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
+    /// Si no se define (valor None), se supone igual al factor solar sin la protección activada (g_gl;wi)
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub g_glshwi: Option<f32>,
     /// Permeabilidad al aire a 100 Pa [m3/hm2]
     pub c_100: f32,

@@ -26,6 +26,11 @@ pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     (offset - (f32::floor(offset / width) * width)) + start
 }
 
+/// Comprueba si el valor es igual al valor por defecto
+pub fn is_equal_to_default<T: Default + PartialEq>(t: &T) -> bool {
+    t == &Default::default()
+}
+
 /// Calcula UUID a partir de hash MD5 del objeto
 ///
 /// Este no es un método muy robusto pero da valores estables para los mismos objetos

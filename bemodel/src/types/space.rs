@@ -36,10 +36,10 @@ pub struct Space {
     pub height: f32,
     /// Ventilación, en ren/h
     /// TODO: esto serán condiciones del espacio?
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub n_v: Option<f32>,
     /// Cota del espacio respecto al suelo (m)
+    #[serde(default, skip_serializing_if = "crate::utils::is_equal_to_default")]
     pub z: f32,
 }
 

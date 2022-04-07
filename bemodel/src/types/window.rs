@@ -4,6 +4,7 @@
 
 //! Elementos semitransparentes del edificio: Window, WinGeom
 
+use log::info;
 use serde::{Deserialize, Serialize};
 
 use super::{point, uuid_from_str, vector, HasSurface, Point2, Shade, Uuid, Vector3, WallGeom};
@@ -22,8 +23,10 @@ pub struct Window {
     /// Muro al que pertenece el hueco
     pub wall: Uuid,
     /// Factor de obstáculos remotos suministrado por el usuario
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub f_shobst: Option<f32>,
     /// Factor de obstáculos remotos calculado a partir del modelo
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub f_shobst_calc: Option<f32>,
     /// Geometría de hueco
     pub geometry: WinGeom,
