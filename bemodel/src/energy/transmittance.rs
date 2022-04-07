@@ -419,7 +419,8 @@ impl Wall {
                         // Se puede obtener n_v a partir de la Tabla 6 de la UNE-EN ISO 13789:2017 y n_50/20.
                         // Para sótanos no calefactados la 13370:2007 (9.4) dice que se podría usar n_v = 0.30
                         let q_ue = {
-                            let volume = uncondspace.volume_net(&model.walls, &model.cons);
+                            let volume = uncondspace.area(&model.walls)
+                                * uncondspace.height_net(&model.walls, &model.cons);
                             let n_v = uncondspace
                                 .n_v
                                 .unwrap_or_else(|| model.global_ventilation_rate());
