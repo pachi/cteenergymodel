@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2021 Rafael Villar Burke <pachi@ietcc.csic.es>
+// Copyright (c) 2018-2022 Rafael Villar Burke <pachi@ietcc.csic.es>
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
@@ -13,7 +13,7 @@ use hulc::ctehexml;
 
 const APP_TITLE: &str = r#"Thor"#;
 const APP_DESCRIPTION: &str = r#"
-Copyright (c) 2018-2021 Instituto de CC. de la Construcción Eduardo Torroja (IETcc-CSIC)
+Copyright (c) 2018-2022 Instituto de CC. de la Construcción Eduardo Torroja (IETcc-CSIC)
 
 Autores: Rafael Villar Burke <pachi@ietcc.csic.es>,
          Daniel Jiménez González <danielj@ietcc.csic.es>
@@ -25,7 +25,7 @@ Licencia: Publicado bajo licencia MIT.
 const APP_ABOUT: &str =
     r#"Thor - Indicadores de eficiencia energética de la envolvente del edificio (CTE DB-HE)."#;
 const APP_LICENSE: &str = r#"
-Copyright (c) 2018-2021 Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
+Copyright (c) 2018-2022 Instituto de Ciencias de la Construcción Eduardo Torroja (IETcc-CSIC)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the 'Software'), to deal

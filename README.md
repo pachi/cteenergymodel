@@ -49,4 +49,4 @@ El código fuente se encuentra disponible en [http://github.com/pachi/cteenergym
 
 ## Autores
 
-Copyright (c) 2018-2021 Rafael Villar Burke <pachi@ietcc.csic.es>,  Daniel Jiménez González <danielj@ietcc.csic.es>, Marta Sorribes Gil <msorribes@ietcc.csic.es>
+Copyright (c) 2018-2022 Rafael Villar Burke <pachi@ietcc.csic.es>,  Daniel Jiménez González <danielj@ietcc.csic.es>, Marta Sorribes Gil <msorribes@ietcc.csic.es>

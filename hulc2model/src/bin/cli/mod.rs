@@ -1,5 +1,5 @@
 #![cfg(not(windows))]
-// Copyright (c) 2018-2021 Rafael Villar Burke <pachi@ietcc.csic.es>
+// Copyright (c) 2018-2022 Rafael Villar Burke <pachi@ietcc.csic.es>
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 

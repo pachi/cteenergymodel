@@ -1,4 +1,4 @@
-// Copyright (c) 2018-2021 Rafael Villar Burke <pachi@ietcc.csic.es>
+// Copyright (c) 2018-2022 Rafael Villar Burke <pachi@ietcc.csic.es>
 // Distributed under the MIT License
 // (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
@@ -23,7 +23,7 @@ pub fn get_copytxt() -> String {
     format!(
         "{} {} - Exportación de datos de HULC a EnvolventeCTE
 
-Copyright (c) 2018-2021 Rafael Villar Burke <pachi@ietcc.csic.es>
+Copyright (c) 2018-2022 Rafael Villar Burke <pachi@ietcc.csic.es>
                    Daniel Jiménez González <danielj@ietcc.csic.es>
                    Marta Sorribes Gil <msorribes@ietcc.csic.es>
 
