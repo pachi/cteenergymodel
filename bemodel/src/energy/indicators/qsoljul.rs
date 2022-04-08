@@ -13,7 +13,7 @@ use std::collections::HashMap;
 use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
 
-use crate::{energy::EnergyProps, Orientation};
+use crate::{energy::EnergyProps, BoundaryType, Orientation};
 
 /// Reporte de cálculo del parámetro de control solar q_sol:jul (HE2019)
 #[allow(non_snake_case)]
@@ -61,10 +61,13 @@ impl QSolJulData {
     /// activadas o fracción de marco se calculan con los valores por defecto:
     /// f_f = 0.20 (DCT), g_glshwi=g_glwi=0.90 * 0.85 = 0.77 (vidrio sencillo), f_shobst=1.0 (sin obstrucciones)
     pub fn from(props: &EnergyProps, totradjul: &HashMap<Orientation, f32>) -> Self {
+        use BoundaryType::{EXTERIOR, GROUND};
         let mut q_soljul_data = QSolJulData::default();
 
         let mut Q_soljul = 0.0;
-        for (win_id, win) in props.windows.iter().filter(|(_, w)| w.is_ext_or_gnd_tenv) {
+        for (win_id, win) in props.windows.iter().filter(|(_, w)| {
+            w.is_tenv && (w.bounds == EXTERIOR || w.bounds == GROUND)
+        }) {
             let orientation = win.orientation;
             let radjul = *totradjul.get(&orientation).unwrap();
             let area = win.area * win.multiplier;

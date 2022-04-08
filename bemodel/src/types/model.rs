@@ -95,21 +95,6 @@ impl Model {
         self.windows.iter().find(|w| w.name == name)
     }
 
-    /// Iterador de los cerramientos de la envolvente térmica en contacto con el aire o el terreno
-    /// Se excluyen los opacos sin espacio definido
-    /// TODO: podríamos llevar esta lógica a ElementProps y allí dejar esto calculado
-    pub fn exterior_and_ground_walls_of_envelope_iter(&self) -> impl Iterator<Item = &Wall> {
-        self.walls
-            .iter()
-            .filter(|w| [BoundaryType::EXTERIOR, BoundaryType::GROUND].contains(&w.bounds))
-            .filter(move |w| {
-                // Si el espacio no está definido se considera que no pertenece a la envolvente
-                self.get_space(w.space)
-                    .map(|s| s.inside_tenv)
-                    .unwrap_or(false)
-            })
-    }
-
     /// Iterador de los huecos de la envolvente térmica en contacto con el aire exterior
     /// Se excluyen los huecos sin espacio definido
     /// TODO: podríamos llevar esta lógica a ElementProps y allí dejar esto calculado

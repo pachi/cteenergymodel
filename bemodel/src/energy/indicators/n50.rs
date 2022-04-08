@@ -57,7 +57,7 @@ impl From<&EnergyProps> for N50Data {
         props
             .walls
             .iter()
-            .filter(|(_, w)| w.is_ext_or_gnd_tenv && w.bounds == BoundaryType::EXTERIOR)
+            .filter(|(_, w)| w.is_tenv && w.bounds == BoundaryType::EXTERIOR)
             .for_each(|(wall_id, wall)| {
                 let multiplier = wall.multiplier;
                 let mut win_ah = 0.0;

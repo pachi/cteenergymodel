@@ -108,10 +108,16 @@ impl From<&EnergyProps> for KData {
     ///
     /// Los huecos y opacos para los que no se puede calcular la U se consideran con U=5.7 W/m²K
     fn from(props: &EnergyProps) -> Self {
+        use BoundaryType::{EXTERIOR, GROUND};
+
         let mut k = Self::default();
 
         // Opacos
-        for (wall_id, wall) in props.walls.iter().filter(|(_, w)| w.is_ext_or_gnd_tenv) {
+        for (wall_id, wall) in props
+            .walls
+            .iter()
+            .filter(|(_, w)| w.is_tenv && (w.bounds == EXTERIOR || w.bounds == GROUND))
+        {
             let multiplier = wall.multiplier;
             // Huecos
             for (win_id, window) in props.windows.iter().filter(|(_, win)| &win.wall == wall_id) {

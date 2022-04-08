@@ -78,8 +78,29 @@ impl From<&Model> for EnergyProps {
         }
 
         // Propiedades de opacos
-        let ext_and_gnd_walls_tenv: Vec<_> = model
-            .exterior_and_ground_walls_of_envelope_iter()
+        // Opacos de la envolvente térmica
+        let tenv_wall_ids: Vec<_> = model
+            .walls
+            .iter()
+            .filter(|w| {
+                let this_space_is_inside_tenv = model
+                    .get_space(w.space)
+                    .map(|s| s.inside_tenv)
+                    .unwrap_or(false);
+                let next_space_is_inside_tenv = w
+                    .next_to
+                    .and_then(|next_to| model.get_space(next_to))
+                    .map(|s| s.inside_tenv)
+                    .unwrap_or(false);
+                match w.bounds {
+                    BoundaryType::EXTERIOR | BoundaryType::GROUND | BoundaryType::ADIABATIC => {
+                        this_space_is_inside_tenv
+                    }
+                    BoundaryType::INTERIOR => {
+                        this_space_is_inside_tenv != next_space_is_inside_tenv
+                    }
+                }
+            })
             .map(|w| w.id)
             .collect();
 
@@ -95,7 +116,7 @@ impl From<&Model> for EnergyProps {
                 area_gross: w.area(),
                 area_net: w.area_net(&model.windows),
                 multiplier: spaces.get(&w.space).map(|sp| sp.multiplier).unwrap_or(1.0),
-                is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.id),
+                is_tenv: tenv_wall_ids.contains(&w.id),
                 u_value: w.u_value(model),
             };
             walls.insert(w.id, wp);
@@ -112,7 +133,8 @@ impl From<&Model> for EnergyProps {
                 tilt: wall.map(|w| w.tilt).unwrap_or_default(),
                 area: w.area(),
                 multiplier: wall.map(|wp| wp.multiplier).unwrap_or(1.0),
-                is_ext_or_gnd_tenv: ext_and_gnd_walls_tenv.contains(&w.wall),
+                bounds: wall.map(|w| w.bounds).unwrap_or_default(),
+                is_tenv: tenv_wall_ids.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
                 f_shobst_override: w.f_shobst_override,
                 f_shobst: w.f_shobst,
@@ -183,7 +205,10 @@ impl From<&Model> for EnergyProps {
         let compacity = {
             let exposed_area: f32 = walls
                 .values()
-                .filter(|w| w.is_ext_or_gnd_tenv)
+                .filter(|w| {
+                    w.is_tenv
+                        && (w.bounds == BoundaryType::EXTERIOR || w.bounds == BoundaryType::GROUND)
+                })
                 .map(|w| w.area_gross * w.multiplier)
                 .sum();
             if exposed_area == 0.0 {
@@ -299,9 +324,9 @@ pub struct WallProps {
     pub area_net: f32,
     /// Multiplicador del espacio, [-]
     pub multiplier: f32,
-    /// ¿Pertenece este muro a la envolvente térmica exterior o en contacto con el terreno?
-    pub is_ext_or_gnd_tenv: bool,
-    /// U de muro, [W/m²K]
+    /// ¿Pertenece este opaco a la envolvente térmica?
+    pub is_tenv: bool,
+    /// U de opaco, [W/m²K]
     pub u_value: Option<f32>,
 }
 
@@ -320,8 +345,10 @@ pub struct WinProps {
     pub area: f32,
     /// Multiplicador del espacio, [-]
     pub multiplier: f32,
-    /// ¿Pertenece este hueco a la envolvente térmica exterior o en contacto con el terreno?
-    pub is_ext_or_gnd_tenv: bool,
+    /// Condiciones de contorno del opaco en el que se sitúa el hueco
+    pub bounds: BoundaryType,
+    /// ¿Pertenece a la envolvente térmica el opaco en el que se sitúa el hueco?
+    pub is_tenv: bool,
     /// U de huecos, [W/m²K]
     pub u_value: Option<f32>,
     /// Factor de obstrucción de obstáculos remotos (usuario), [-]
