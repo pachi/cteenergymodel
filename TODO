@@ -12,6 +12,14 @@
 - Trasladar avisos en la conversión de modelos BDL
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
 - Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
+- Introducir perfiles de uso y operacionales:
+  - `model.loads`
+  - quitar de Space `{n_v, SpaceKind }`
+  - nuevos elementos `{ id, occupation, ilumination, equipment, ventilation, heating_sch, cooling_sch, ilum_sch, equipment_sch, ventilation_sch }` en `model.loads`
+  - `Space.loads`
+  - Identificar habitable / habitable acondicionado / no habitable según perfil del espacio
+- Introducir sistemas
+  - `model.systems`
 
 Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K. - añadiendo un identificador en el nombre (p.e. EXCLUYE_HE1_K) - pasando una lista de elementos excluidos
 
