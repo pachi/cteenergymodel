@@ -18,6 +18,7 @@ impl Model {
     ///     - Muros sin referencias de construcciones válidas
     ///     - Muros INTERIOR con nextto con referencia no válida
     /// TODO: Comprobaciones pendientes
+    ///     - Muros con boundarytype INTERIOR y nextto con referencia no válida
     ///     - Muros sin definición geométrica completa
     ///     - UUIDs nulos: "00000000-0000-0000-0000-000000000000"
     ///     - Construcciones de hueco sin marco o vidrio válidos o de opacos sin materiales válidos
