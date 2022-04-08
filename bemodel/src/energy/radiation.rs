@@ -25,7 +25,7 @@ use crate::{
 impl Model {
     /// Recalcula los factores de obstáculos remotos para los huecos
     ///
-    /// Considera el sombreamiento de elementos de muro y sombra sobre el hueco
+    /// Considera el sombreamiento de elementos de opaco y sombra sobre el hueco
     /// Toma la zona climática del modelo y usa los datos del 1 de julio para los cálculos
     /// Calcula únicamente la radiación directa bloqueada, y asume factores de visibilidad fijos
     /// sin calcularlos a partir de la visión del cielo o el terreno y las reflexiones.
@@ -115,7 +115,7 @@ impl Model {
 
     /// Fracción del hueco con radiación solar directa para la posición solar dada [0.0 - 1.0]
     ///
-    /// Devuelve 1.0 (sin obstrucción) para definición geométrica incompleta (sin posición o hueco sin muro)
+    /// Devuelve 1.0 (sin obstrucción) para definición geométrica incompleta (sin posición o hueco sin opaco)
     /// Devuelve 0.0 para huecos cuya normal no mira hacia el sol (backface culling)
     ///
     /// window: window.id
@@ -132,7 +132,7 @@ impl Model {
         let window_wall = match self.get_wall(window.wall) {
             None => {
                 warn!(
-                    "Hueco {} (id: {}) sin muro asociado con id: {}. Se considera superficie soleada al 100%",
+                    "Hueco {} (id: {}) sin opaco asociado con id: {}. Se considera superficie soleada al 100%",
                     window.name, window.id, window.wall
                 );
                 return 1.0;
@@ -150,7 +150,7 @@ impl Model {
             return 1.0;
         };
 
-        // Comprobamos que la normal del muro y el rayo hacia el sol no son opuestos (backface culling)
+        // Comprobamos que la normal del opaco y el rayo hacia el sol no son opuestos (backface culling)
         // Si no, el rayo iría al interior del hueco, está en sombra, y devolvemos 0.0
         if window_wall.geometry.normal().dot(ray_dir) < 0.01 {
             return 0.0;
@@ -159,7 +159,7 @@ impl Model {
         let candidate_occluders: Vec<_> = occluders
             .iter()
             .filter(|oc| {
-                // Descartamos el muro al que pertenece el hueco
+                // Descartamos el opaco al que pertenece el hueco
                 if oc.id == window_wall.id {
                     return false;
                 };
@@ -245,8 +245,8 @@ impl Model {
             _ => return Vec::new(),
         };
 
-        // Conversión a coordenadas globales desde coordenadas de muro
-        // Conversión de coordenadas locales de muro a coordenadas de polígono de muro
+        // Conversión a coordenadas globales desde coordenadas de opaco
+        // Conversión de coordenadas locales de opaco a coordenadas de polígono de opaco
         let (to_global_tr, to_poly_tr) = match (
             wall.geometry.to_global_coords_matrix(),
             wall.geometry.to_polygon_coords_matrix(),
@@ -256,7 +256,7 @@ impl Model {
             _ => return Vec::new(),
         };
 
-        // Puntos 2D del centro de cada bloque en el plano del muro
+        // Puntos 2D del centro de cada bloque en el plano del opaco
         let step_x = wg.width / n_x as f32;
         let step_y = wg.height / n_y as f32;
         let mut points = vec![];

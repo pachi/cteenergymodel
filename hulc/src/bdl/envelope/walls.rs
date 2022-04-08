@@ -76,14 +76,14 @@ pub struct Wall {
     /// Coordenada Z de la esquina inferior izquierda
     /// usa coordenadas del espacio y es el cerramiento visto desde fuera
     pub z: f32,
-    /// Desviación de la proyeccción horizontal de la normal del muro con la Y+ del espacio (grados sexagesimales, sentido horario, 0-360)
+    /// Desviación de la proyeccción horizontal de la normal del opaco con la Y+ del espacio (grados sexagesimales, sentido horario, 0-360)
     /// 0 -> orientación norte, 90 -> orientación este, 180 -> orientación sur y 270 -> orientación oeste
     pub angle_with_space_north: f32,
     /// Inclinación (grados sexagesimales)
-    /// Ángulo entre el eje Z y la normal exterior del muro
+    /// Ángulo entre el eje Z y la normal exterior del opaco
     pub tilt: f32,
     /// Nombre del polígono que define la geometría
-    /// Definición geométrica de un muro (EXTERIOR-WALL, ROOF o INTERIOR-WALL)
+    /// Definición geométrica de un opaco (EXTERIOR-WALL, ROOF o INTERIOR-WALL)
     /// Se usa cuando no se define respecto a un vértice del espacio padre sino por polígono
     pub polygon: Option<Polygon>,
     /// Tipos de cerramiento:

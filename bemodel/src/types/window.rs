@@ -62,7 +62,7 @@ impl Window {
         let wall2world = if let Some(matrix) = wallgeom.to_global_coords_matrix() {
             matrix
         } else {
-            info!("El muro debe tener definición geométrica completa");
+            info!("El elemento opaco debe tener definición geométrica completa");
             return None;
         };
 
@@ -143,7 +143,7 @@ impl Window {
 /// Geometría de hueco
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WinGeom {
-    /// Posición del hueco, en coordenadas de muro
+    /// Posición del hueco, en coordenadas de opaco
     /// Un valor None señala que no hay definición geométrica completa
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]

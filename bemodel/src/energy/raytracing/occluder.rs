@@ -10,7 +10,7 @@ use crate::{Polygon, Vector3, Uuid};
 
 /// Elemento oclusor, con información geométrica e identificación
 ///
-/// - el id permite excluir el muro de un hueco
+/// - el id permite excluir el opaco de un hueco
 /// - el origin_id permite excluir las geometrías de retranqueo que no son del hueco analizado
 /// - normal y trans_matrix permiten cachear resultados para cálculo de intersecciones con el polígono 2D transformando un rayo
 pub struct Occluder {

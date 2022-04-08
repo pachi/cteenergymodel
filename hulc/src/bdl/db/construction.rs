@@ -8,7 +8,7 @@
 //!
 //! Este es un elemento intermedio que se elimina en el postproceso,
 //! ya que su información se almacena en los muros (ABSORPTANCE) o en
-//! la construcción de muro (LAYERS).
+//! la construcción de opaco (LAYERS).
 
 use std::convert::TryFrom;
 
@@ -21,7 +21,7 @@ use crate::bdl::BdlBlock;
 pub struct Construction {
     /// Nombre
     pub name: String,
-    /// Elemento vinculado (muro, etc)
+    /// Elemento vinculado (opaco, etc)
     pub parent: String,
     /// Definición de capas (HULC solo admite definición por capas)
     pub wallcons: String,

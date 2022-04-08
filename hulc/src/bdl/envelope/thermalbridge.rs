@@ -57,9 +57,9 @@ pub struct TbByCatalog {
     pub classes: Vec<String>,
     /// Lista de porcentajes de la longitud total
     pub pcts: Vec<f32>,
-    /// Lista de transmitancias del primer elemento del encuentro (muro) W/m2k
+    /// Lista de transmitancias del primer elemento del encuentro (opaco) W/m2k
     pub firstelems: Vec<f32>,
-    /// Lista de transmitancias del segundo elemento del encuentro (muro) W/m2k
+    /// Lista de transmitancias del segundo elemento del encuentro (opaco) W/m2k
     pub secondelems: Option<Vec<f32>>,
 }
 

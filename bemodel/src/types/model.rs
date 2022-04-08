@@ -129,9 +129,9 @@ impl Model {
 /// Datos adicionales para comprobación de muros
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct ExtraData {
-    // Nombre del muro
+    // Nombre del opaco
     pub name: String,
-    // Condiciones de contorno del muro
+    // Condiciones de contorno del opaco
     pub bounds: BoundaryType,
     // Tipo de espacio
     pub spacetype: SpaceType,
@@ -139,7 +139,7 @@ pub struct ExtraData {
     pub nextspace: Option<Uuid>,
     // Tipo de espacio adyacente
     pub nextspacetype: Option<SpaceType>,
-    // Inclinación del muro
+    // Inclinación del opaco
     pub tilt: Tilt,
     // Construcción
     pub cons: Uuid,

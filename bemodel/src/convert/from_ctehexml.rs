@@ -34,7 +34,7 @@ pub fn normalize_azimuth(azimuth: f32) -> f32 {
 }
 
 /// Convierte el azimuth desde el criterio del BDL al criterio de la 52016-1 y normaliza
-/// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro (N=0, E=+90, W=-90)
+/// BDL: Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del opaco (N=0, E=+90, W=-90)
 /// UNE-EN ISO 52016-1: S=0, E=+90, W=-90
 pub fn orientation_bdl_to_52016(azimuth: f32) -> f32 {
     normalize_azimuth(180.0 - azimuth)
@@ -145,11 +145,11 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
         .collect::<Result<Vec<Space>, Error>>()
 }
 
-/// Construye geometría de muro
+/// Construye geometría de opaco
 ///
 /// La posición se calcula en coordenadas globales, teniendo en cuenta las coordenadas de espacio y las desviaciones global y de espacio.
 ///
-/// El polígono 3D del muro se obtiene a partir de los datos de muro y del espacio
+/// El polígono 3D del opaco se obtiene a partir de los datos de opaco y del espacio
 /// Para cada nivel, primero se gira el azimuth y luego se desplaza x, y, z
 fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
     let space = bdl.spaces.iter().find(|s| s.name == wall.space).unwrap();
@@ -157,7 +157,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
     let global_deviation = global_deviation_from_north(bdl);
 
     // Calculamos la posición en coordenadas globales, teniendo en cuenta las posiciones y desviaciones
-    // La posición del muro es en coordenadas globales, incluyendo un giro en Z según desviación global del norte y la desviación del espacio
+    // La posición del opaco es en coordenadas globales, incluyendo un giro en Z según desviación global del norte y la desviación del espacio
     // Los ángulos los cambiamos a radianes y de sentido horario (criterio BDL) a antihorario (-).
     let angle = -(space.angle_with_building_north + global_deviation).to_radians();
     let rot = Rotation3::from_euler_angles(0.0, 0.0, angle);
@@ -195,7 +195,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
         (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
         // 3. Elementos TOP definidos por la geometría de su espacio
         (Some("TOP"), None) => {
-            // Giramos el polígono según la desviación respecto al norte del muro y el espacio
+            // Giramos el polígono según la desviación respecto al norte del opaco y el espacio
             // El giro global del edificio respecto al norte ya está incluido
             let azimuth = orientation_bdl_to_52016(
                 space.angle_with_building_north + wall.angle_with_space_north,
@@ -204,7 +204,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
         }
         // 4. Elementos BOTTOM definidos por la geometría de su espacio
         (Some("BOTTOM"), None) => {
-            // Giramos el polígono según la desviación respecto al norte del muro y el espacio
+            // Giramos el polígono según la desviación respecto al norte del opaco y el espacio
             // El giro global del edificio respecto al norte ya está incluido
             let azimuth = orientation_bdl_to_52016(
                 space.angle_with_building_north + wall.angle_with_space_north,
@@ -218,7 +218,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
         // 5. Elementos definidos por un vértice del espacio
         (Some(vertex), _) => {
             // Definimos el polígono con inicio en 0,0 y ancho y alto según vértices y espacio
-            // La "position (x, y, z)" que define el origen de coordenadas del muro será la del primer vértice
+            // La "position (x, y, z)" que define el origen de coordenadas del opaco será la del primer vértice
             // Pero se calcula fuera de esta función
             let [p1, p2] = space_polygon.edge_vertices(vertex).unwrap();
             let width = (p2 - p1).magnitude();
@@ -231,7 +231,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
             ]
         }
         _ => {
-            panic!("Definición de polígono de muro {} desconocida", wall.name)
+            panic!("Definición de polígono de opaco {} desconocida", wall.name)
         }
     };
 
@@ -246,7 +246,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
 }
 
 /// Construye muros de la envolvente a partir de datos BDL
-// Convertimos la posición del muro a coordenadas globales y el polígono está en coordenadas de muro
+// Convertimos la posición del opaco a coordenadas globales y el polígono está en coordenadas de opaco
 fn walls_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Wall>, Error> {
     bdl.walls
         .iter()
@@ -319,7 +319,7 @@ fn windows_and_shades_from_bdl(
             let wall2world = wall
                 .geometry
                 .to_global_coords_matrix()
-                .expect("El muro debe tener definición geométrica completa");
+                .expect("El opaco debe tener definición geométrica completa");
 
             // Alero sobre el hueco
             if let Some(overhang) = &win.overhang {
@@ -630,7 +630,7 @@ fn wallcons_from_bdl(
             }
             _ => {
                 return Err(format_err!(
-                    "Construcción de muro no encontrada o incorrecta: '{}'\n",
+                    "Construcción de opaco no encontrada o incorrecta: '{}'\n",
                     wcons,
                 ))
             }
@@ -725,7 +725,7 @@ struct IdMaps<'a> {
 }
 
 impl<'a> IdMaps<'a> {
-    /// Localiza id de muro desde nombre
+    /// Localiza id de opaco desde nombre
     fn wall_id<T: AsRef<str>>(&self, name: T) -> Result<&Uuid, anyhow::Error> {
         self.walls
             .get(name.as_ref())
@@ -739,7 +739,7 @@ impl<'a> IdMaps<'a> {
             .ok_or_else(|| format_err!("Espacio {} no identificado", name.as_ref()))
     }
 
-    /// Localiza id de construcción de muro desde nombre
+    /// Localiza id de construcción de opaco desde nombre
     fn wallcons_id<T: AsRef<str>>(&self, name: T) -> Result<&Uuid, anyhow::Error> {
         self.wallcons
             .get(name.as_ref())

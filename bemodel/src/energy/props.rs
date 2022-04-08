@@ -20,13 +20,13 @@ pub struct EnergyProps {
     pub global: GlobalProps,
     /// Propiedades de espacios
     pub spaces: BTreeMap<Uuid, SpaceProps>,
-    /// Propiedades de muros
+    /// Propiedades de opacos
     pub walls: BTreeMap<Uuid, WallProps>,
     /// Propiedades de huecos
     pub windows: BTreeMap<Uuid, WinProps>,
     /// Propiedades de puentes térmicos
     pub thermal_bridges: BTreeMap<Uuid, TbProps>,
-    /// Propiedades de construcciones de muros
+    /// Propiedades de construcciones de opacos
     pub wallcons: BTreeMap<Uuid, WallConsProps>,
     /// Propiedades de huecos
     pub wincons: BTreeMap<Uuid, WinConsProps>,
@@ -48,7 +48,7 @@ impl From<&Model> for EnergyProps {
         for wc in &model.cons.wincons {
             // Valores por defecto para elementos sin vidrio definido
             // corresponde a vidrio sencillo: g_gl;n = 0.85; g_gl;wi = g_gl;n * 0.9 = 0.77
-            let g_glwi = wc.g_glwi(&model.mats).unwrap_or(0.77 );
+            let g_glwi = wc.g_glwi(&model.mats).unwrap_or(0.77);
             let g_glshwi = wc.g_glshwi(&model.mats).unwrap_or(g_glwi);
             let wcp = WinConsProps {
                 c_100: wc.c_100,
@@ -64,7 +64,7 @@ impl From<&Model> for EnergyProps {
         let mut spaces: BTreeMap<Uuid, SpaceProps> = BTreeMap::new();
         for s in &model.spaces {
             let area = s.area(&model.walls);
-            let height_net= s.height_net(&model.walls, &model.cons);
+            let height_net = s.height_net(&model.walls, &model.cons);
             let sp = SpaceProps {
                 kind: s.kind,
                 inside_tenv: s.inside_tenv,
@@ -269,9 +269,9 @@ pub struct GlobalProps {
     pub vol_env_inh_net: f32,
     /// Compacidad de la envolvente térmica del edificio V/A (m³/m²)
     /// De acuerdo con la definición del DB-HE comprende el volumen interior de la envolvente térmica (V)
-    /// y la superficie de muros y huecos con intercambio térmico con el aire exterior o el terreno (A)
+    /// y la superficie de opacos y huecos con intercambio térmico con el aire exterior o el terreno (A)
     /// Tiene en cuenta los multiplicadores de espacios (en superficie y volumen)
-    /// Se excluyen los huecos sin muro definido y los muros sin espacio definido
+    /// Se excluyen los huecos sin opaco definido y los opacos sin espacio definido
     /// Para area expuesta => compacidad = 0.0
     pub compacity: f32,
     /// Tasa de ventilación global del edificio (1/h)
@@ -303,24 +303,24 @@ pub struct SpaceProps {
     pub volume_net: f32,
 }
 
-/// Propiedades de muros
+/// Propiedades de opacos
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WallProps {
-    /// Espacio al que pertenece el muro
+    /// Espacio al que pertenece el opaco
     pub space: Uuid,
     /// Espacio adyacente
     pub space_next: Option<Uuid>,
     /// Condición de contorno
     pub bounds: BoundaryType,
-    /// Construcción de muro
+    /// Construcción de opaco
     pub cons: Uuid,
     /// Orientación del opaco
     pub orientation: Orientation,
     /// Inclinación del opaco
     pub tilt: Tilt,
-    /// Superficie bruta del muro, [m²]
+    /// Superficie bruta del opaco, [m²]
     pub area_gross: f32,
-    /// Superficie neta del muro, [m²]
+    /// Superficie neta del opaco, [m²]
     pub area_net: f32,
     /// Multiplicador del espacio, [-]
     pub multiplier: f32,
@@ -337,9 +337,9 @@ pub struct WinProps {
     pub cons: Uuid,
     /// Opaco al que está asociado
     pub wall: Uuid,
-    /// Orientación del hueco (heredada del muro)
+    /// Orientación del hueco (heredada del opaco)
     pub orientation: Orientation,
-    /// Inclinación del hueco (heredada del muro)
+    /// Inclinación del hueco (heredada del opaco)
     pub tilt: Tilt,
     /// Superficie del hueco, [m²]
     pub area: f32,

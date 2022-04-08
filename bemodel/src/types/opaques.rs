@@ -65,13 +65,13 @@ impl Wall {
         self.geometry.polygon.perimeter()
     }
 
-    /// Iterador de los huecos pertenecientes a un muro
+    /// Iterador de los huecos pertenecientes a un opaco
     pub fn windows<'a>(&'a self, windows: &'a [Window]) -> impl Iterator<Item = &'a Window> {
         windows.iter().filter(move |w| w.wall == self.id)
     }
 }
 
-/// Convierte de muro a enum Tilt
+/// Convierte de opaco a enum Tilt
 impl From<&Wall> for Tilt {
     fn from(wall: &Wall) -> Self {
         Tilt::from(wall.geometry.tilt)
@@ -100,7 +100,7 @@ pub struct Shade {
     pub geometry: WallGeom,
 }
 
-/// Geometría de muro
+/// Geometría de opaco
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct WallGeom {
     /// Inclinación (beta) [0, 180]
@@ -111,11 +111,11 @@ pub struct WallGeom {
     /// Coincide con el criterio de la UNE-EN ISO 52016-1
     /// Difiere del criterio BDL, que parte del norte, con E+ y W- y sentido horario
     pub azimuth: f32,
-    /// Posición del muro, en coordenadas de espacio
+    /// Posición del opaco, en coordenadas de espacio
     /// Un valor None señala que no hay definición geométrica completa
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub position: Option<Point3>,
-    /// Polígono del muro, en coordenadas de muro
+    /// Polígono del opaco, en coordenadas de opaco
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub polygon: Polygon,
 }
@@ -132,7 +132,7 @@ impl WallGeom {
     }
 
     /// Matriz de transformación de coordenadas locales de la geometría a coordenadas de polígono interno 2D
-    /// Se gira el eje X en la dirección del polígono de muro p1 - p0 y se traslada a p0 el origen
+    /// Se gira el eje X en la dirección del polígono de opaco p1 - p0 y se traslada a p0 el origen
     pub fn to_polygon_coords_matrix(&self) -> Option<IsometryMatrix2<f32>> {
         if self.polygon.len() <= 2 {
             return None;

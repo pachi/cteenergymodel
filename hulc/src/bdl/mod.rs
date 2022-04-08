@@ -194,7 +194,7 @@ impl Data {
                     wall.polygon = if let Some(polygon_name) = maybe_polygon_name {
                         Some(polygons.remove(&polygon_name).ok_or_else(|| {
                             format_err!(
-                                "Polígono {} no encontrado para definición de muro {}",
+                                "Polígono {} no encontrado para definición de opaco {}",
                                 &polygon_name,
                                 &wall.name,
                             )
@@ -204,7 +204,7 @@ impl Data {
                     };
 
                     // Sustituimos la construcción por el nombre de la composición de capas
-                    // La absortividad ya está correcta en el muro y así podemos eliminar constructions
+                    // La absortividad ya está correcta en el opaco y así podemos eliminar constructions
                     // XXX: El problema es que algunas construcciones comparten layers pero no absortividad
                     let cons = constructions.get(&wall.cons).ok_or_else(|| {
                         format_err!(
@@ -241,7 +241,7 @@ impl Data {
                     wall.angle_with_space_north =
                         compute_wall_angle_with_space_north(&wall, &bdldata)?;
 
-                    // Guardamos el muro
+                    // Guardamos el opaco
                     bdldata.walls.push(wall);
                 }
                 // Puentes térmicos ----------
@@ -281,7 +281,7 @@ impl Data {
         self.windows.iter().find(|w| w.name == name.as_ref())
     }
 
-    /// Localiza muro
+    /// Localiza opaco
     pub fn get_wall<T: AsRef<str>>(&self, name: T) -> Option<&Wall> {
         self.walls.iter().find(|w| w.name == name.as_ref())
     }
@@ -292,9 +292,9 @@ impl Data {
     }
 }
 
-/// Ángulo del muro respecto al norte (grados sexagesimales, sentido horario, [0, 360])
+/// Ángulo del opaco respecto al norte (grados sexagesimales, sentido horario, [0, 360])
 ///
-/// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del muro
+/// Ángulo entre el eje Y del espacio y la proyección horizontal de la normal exterior del opaco
 /// Se puede indicar una desviación del norte geográfico respecto al geométrico (northangle)
 ///
 /// Se calcula:
@@ -307,9 +307,9 @@ fn compute_wall_angle_with_space_north(wall: &Wall, db: &Data) -> Result<f32, Er
     // tilt == 180 -> tenemos que hacer un espejo del polígono
 
     // En DOE2.3 Volume 3 Topics p.153 se indica cómo obtener el AZIMUTH para superficies horizontales:
-    // - se gira virtualmente el muro a una posición vertical (90º con el eje Z del espacio)
-    // - sin que se mueva el origen del muro.
-    // El azimuth es el ángulo entre la proyección horizontal de la normal del muro así levantado con
+    // - se gira virtualmente el opaco a una posición vertical (90º con el eje Z del espacio)
+    // - sin que se mueva el origen del opaco.
+    // El azimuth es el ángulo entre la proyección horizontal de la normal del opaco así levantado con
     // el eje Y del espacio.
     if wall.location.as_deref() == Some("BOTTOM")
         || wall.location.as_deref() == Some("TOP")
@@ -332,6 +332,6 @@ fn compute_wall_angle_with_space_north(wall: &Wall, db: &Data) -> Result<f32, Er
     }
     // Resto de casos
     else {
-        bail!("Imposible calcular azimut del muro {}", wall.name)
+        bail!("Imposible calcular azimut del opaco {}", wall.name)
     }
 }

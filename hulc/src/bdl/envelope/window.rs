@@ -104,7 +104,7 @@ impl TryFrom<BdlBlock> for Window {
             mut attrs,
             ..
         } = value;
-        let wall = parent.ok_or_else(|| format_err!("Hueco sin muro asociado '{}'", &name))?;
+        let wall = parent.ok_or_else(|| format_err!("Hueco sin opaco asociado '{}'", &name))?;
         let cons = attrs.remove_str("GAP")?;
         let x = attrs.remove_f32("X")?;
         let y = attrs.remove_f32("Y")?;
@@ -208,9 +208,9 @@ impl TryFrom<BdlBlock> for Window {
 /// Aleros sobre huecos
 #[derive(Debug, Clone, Default)]
 pub struct Overhang {
-    /// Distancia horizontal (hacia la izquierda) del vértice superior izquierdo del hueco al vértice izquierdo del alero en el muro [m]
+    /// Distancia horizontal (hacia la izquierda) del vértice superior izquierdo del hueco al vértice izquierdo del alero en el opaco [m]
     pub a: f32,
-    /// Distancia vertical (hacia arriba) del vértice superior izquierdo del hueco al vértice izquierdo del alero en el muro [m]
+    /// Distancia vertical (hacia arriba) del vértice superior izquierdo del hueco al vértice izquierdo del alero en el opaco [m]
     pub b: f32,
     /// Profundidad del alero [m]
     pub depth: f32,
@@ -227,7 +227,7 @@ pub struct Fin {
     /// Distancia horizontal desde el lado del hueco al vértice superior de la aleta [m]
     /// En aletas a la izquierda esta es una distancia hacia la izquierda y en las aletas a la derecha, hacia la derecha desde el lado más próximo
     pub a: f32,
-    /// Distancia vertical (hacia abajo) desde el lado superior del hueco al vértice superior de la aleta en el muro [m]
+    /// Distancia vertical (hacia abajo) desde el lado superior del hueco al vértice superior de la aleta en el opaco [m]
     pub b: f32,
     /// Profundidad de la aleta (en perpendicular al hueco, desde a) [m]
     pub depth: f32,

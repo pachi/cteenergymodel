@@ -338,7 +338,7 @@ impl Wall {
                 let char_dim = space
                     .slab_char_dim(&model.walls, &model.spaces)
                     .unwrap_or_default();
-                // TODO: calcular altura neta del muro y no la del espacio a partir de sus datos geométricos
+                // TODO: calcular altura neta del opaco y no la del espacio a partir de sus datos geométricos
                 // Altura neta
                 let space_height_net = space.height_net(&model.walls, &model.cons);
                 // Profundidad enterrada
@@ -497,7 +497,7 @@ impl Wall {
 
     /// Transmitancia térmica de una cubierta enterrada, W/m²K
     ///
-    /// La composición del muro debe incluir una capa de terreno con lambda = 2 W/K
+    /// La composición de la cubierta debe incluir una capa de terreno con lambda = 2 W/K
     ///
     /// # Argumentos
     ///
