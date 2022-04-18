@@ -3,6 +3,7 @@ Ventana;P01_E01_PE001_V;1.44;1.83;N ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P01_E01_PE001;8.27;0.42;1.00;Fachada;N ;Muro exterior
 Ventana;P01_E01_PE003_V;1.44;1.83;S ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P01_E01_PE003;8.32;0.42;1.00;Fachada;S ;Muro exterior
+Muro;P01_E01_MED001;18.76;0.56;0.00;Adiabático;O ;Medianera
 Muro;P01_E01_FTER001;25.04;0.57;1.00;Suelo;H ;Forjado terreno
 Ventana;P01_E02_PE004_V;1.68;1.83;S ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P01_E02_PE004;1.53;0.42;1.00;Fachada;S ;Muro exterior
@@ -12,6 +13,7 @@ Ventana;P01_E03_PE001_V;0.86;1.83;S ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P01_E03_PE001;6.11;0.42;1.00;Fachada;S ;Muro exterior
 Ventana;P01_E03_PE003_V;0.84;1.83;N ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P01_E03_PE003;4.18;0.42;1.00;Fachada;N ;Muro exterior
+Muro;P01_E03_MED001;13.02;0.56;0.00;Adiabático;E ;Medianera
 Muro;P01_E03_FTER003;10.78;0.57;1.00;Suelo;H ;Forjado terreno
 Muro;P01_E04_PE001;2.55;0.42;1.00;Fachada;E ;Muro exterior
 Ventana;P01_E04_PE002_V;1.84;1.83;N ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
@@ -21,16 +23,21 @@ Muro;P01_E04_FTER004;6.47;0.57;1.00;Suelo;H ;Forjado terreno
 Ventana;P02_E01_PE001_V;1.44;1.83;N ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P02_E01_PE001;9.35;0.42;1.00;Fachada;N ;Muro exterior
 Muro;P02_E01_FE001;11.12;0.29;1.00;Cubierta;H ;Cubierta plana
+Muro;P02_E01_MED001;9.24;0.56;0.00;Adiabático;O ;Medianera
 Ventana;P02_E02_PE003_V;0.96;1.83;S ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P02_E02_PE003;6.66;0.42;1.00;Fachada;S ;Muro exterior
 Muro;P02_E02_ME001;5.27;0.29;1.00;Fachada;S ;Cubierta plana
 Muro;P02_E02_ME002;9.87;0.29;1.00;Cubierta;H ;Cubierta plana
+Muro;P02_E02_MED001;5.23;0.56;0.00;Adiabático;E ;Medianera
+Muro;P02_E02_MED002;6.13;0.56;0.00;Adiabático;E ;Medianera
 Ventana;P02_E03_PE007_V;1.44;1.83;S ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P02_E03_PE007;7.39;0.42;1.00;Fachada;S ;Muro exterior
 Muro;P02_E03_FE002;12.40;0.29;1.00;Cubierta;H ;Cubierta plana
+Muro;P02_E03_MED001;11.61;0.56;0.00;Adiabático;O ;Medianera
 Ventana;P02_E04_PE002_V;0.96;1.83;N ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P02_E04_PE002;4.62;0.42;1.00;Fachada;N ;Muro exterior
 Muro;P02_E04_ME001;5.76;0.29;1.00;Cubierta;H ;Cubierta plana
+Muro;P02_E04_MED001;9.24;0.56;0.00;Adiabático;E ;Medianera
 Muro;P02_E05_FE001;1.61;0.42;1.00;Fachada;N ;Muro exterior
 Ventana;P02_E05_PE001_V;0.50;1.83;O ;15.00;0.70;-1.00;1.00;27.00;Vidrio doble
 Muro;P02_E05_PE001;2.18;0.42;1.00;Fachada;O ;Muro exterior
@@ -50,7 +57,7 @@ PPTT;20,10;0,110;ESQUINA_CONVEXA_CERRAMIENTO;SDINT
 PPTT;30,22;0,020;PILAR;SDINT
 PPTT;17,11;0,280;UNION_SOLERA_PAREDEXT;SDINT
 PPTT;53,72;0,050;HUECO_VENTANA;SDINT
-Coeficiente K = ;0,619
+Coeficiente K = ;0,620
 ###;Datos para Factor de Insolación
 0 ; 62.235336
 1 ; 96.000572

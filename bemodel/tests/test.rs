@@ -194,8 +194,7 @@ fn model_json_ejemploviv_unif() {
     assert_almost_eq!(ind.area_ref, 102.33, 0.1);
     assert_almost_eq!(ind.compacity, 1.36, 0.01);
     assert_almost_eq!(ind.K_data.K, 0.62, 0.01);
-    // HULC q_sol;jul = 0.54
-    assert_almost_eq!(ind.q_soljul_data.q_soljul, 0.55, 0.01);
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 0.55, 0.01); // HULC 0.54
 
     assert_almost_eq!(ind.n50_data.n50, 6.89, 0.01);
     assert_almost_eq!(ind.n50_data.n50_ref, 6.89, 0.01);
