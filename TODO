@@ -1,7 +1,6 @@
 # TAREAS PENDIENTES
 
-- Actualización de f_shobst siempre al traer datos al modelo
-  - Ahora mismo al importar el JSON (Model::from_json("xx")) no se calcula
+- Optimizar recálculo de propiedades
   - Guardar hash de geometrías (opacos, sombras y huecos) y solo recalcular si han cambiado
   - Hacer profiling y benchmarks con tracing
 - Cambiar gestión de grupos de materiales
