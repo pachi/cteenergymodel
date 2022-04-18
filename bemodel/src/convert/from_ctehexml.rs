@@ -127,7 +127,7 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
         .iter()
         .map(|s| {
             Ok(Space {
-                id: *id_maps.space_id(&s.name)?,
+                id: id_maps.space_id(&s.name)?,
                 name: s.name.clone(),
                 z: s.z,
                 height: fround2(s.height),
@@ -251,12 +251,12 @@ fn walls_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Wall>, Error> {
         .iter()
         .map(|wall| -> Result<Wall, Error> {
             Ok(Wall {
-                id: *id_maps.wall_id(&wall.name)?,
+                id: id_maps.wall_id(&wall.name)?,
                 name: wall.name.clone(),
-                cons: *id_maps.wallcons_id(&wall.cons)?,
-                space: *id_maps.space_id(&wall.space)?,
+                cons: id_maps.wallcons_id(&wall.cons)?,
+                space: id_maps.space_id(&wall.space)?,
                 next_to: match wall.nextto.as_ref() {
-                    Some(nextto) => Some(*id_maps.space_id(nextto)?),
+                    Some(nextto) => Some(id_maps.space_id(nextto)?),
                     _ => None,
                 },
                 bounds: wall.bounds.into(),
@@ -290,12 +290,11 @@ fn windows_and_shades_from_bdl(
         let wall = walls.iter().find(|w| w.name == win.wall).unwrap();
 
         // Definición del hueco
-        // TODO: eliminar los unwrap()
         let window = Window {
             id,
             name: win.name.clone(),
-            cons: *id_maps.wincons_id(&win.cons).unwrap(),
-            wall: *id_maps.wall_id(&win.wall).unwrap(),
+            cons: id_maps.wincons_id(&win.cons).unwrap_or_default(),
+            wall: id_maps.wall_id(&win.wall).unwrap_or_default(),
             // Este valor se usa para valores impuestos por el usuario
             f_shobst_override: None,
             geometry: WinGeom {
@@ -539,7 +538,7 @@ fn mats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> MatsDb {
     let mut materials = Vec::new();
     for (name, material) in &bdl.db.materials {
         materials.push(Material {
-            id: *id_maps.material_id(&material.name).unwrap(),
+            id: id_maps.material_id(&material.name).unwrap_or_default(),
             name: name.clone(),
             group: material.group.clone(),
             properties: if let Some(p) = material.properties {
@@ -614,10 +613,10 @@ fn wallcons_from_bdl(
                     .iter()
                     .cloned()
                     .zip(cons.thickness.iter().cloned())
-                    .map(|(id, e)| Layer { id: *id, e })
+                    .map(|(id, e)| Layer { id, e })
                     .collect();
                 let wallcons = WallCons {
-                    id: *id_maps.wallcons_id(wcons)?,
+                    id: id_maps.wallcons_id(wcons)?,
                     name: cons.name.clone(),
                     group: cons.group.clone(),
                     layers,
@@ -653,14 +652,14 @@ fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WinCons>, Er
     let glass_name_to_id = mats
         .glasses
         .iter()
-        .map(|m| (&m.name, &m.id))
-        .collect::<BTreeMap<&String, &Uuid>>();
+        .map(|m| (&m.name, m.id))
+        .collect::<BTreeMap<&String, Uuid>>();
 
     let frame_name_to_id = mats
         .frames
         .iter()
-        .map(|m| (&m.name, &m.id))
-        .collect::<BTreeMap<&String, &Uuid>>();
+        .map(|m| (&m.name, m.id))
+        .collect::<BTreeMap<&String, Uuid>>();
 
     let mut used_glasses_ids = HashSet::new();
     let mut used_frames_ids = HashSet::new();
@@ -671,17 +670,17 @@ fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WinCons>, Er
             Some(cons) => {
                 let id = uuid_from_obj(cons);
                 // Vidrio del hueco (Glass)
-                let glass = *match glass_name_to_id.get(&cons.glass) {
-                    Some(id) => *id,
-                    _ => return Err(format_err!("Vidrio no encontrado: {}", cons.glass,)),
-                };
+                let glass = glass_name_to_id
+                    .get(&cons.glass)
+                    .copied()
+                    .ok_or_else(|| format_err!("Vidrio no encontrado: {}", cons.glass,))?;
                 used_glasses_ids.insert(glass);
 
                 // Marco del hueco (Frame)
-                let frame = *match frame_name_to_id.get(&cons.frame) {
-                    Some(id) => *id,
-                    _ => return Err(format_err!("Marco no encontrado: {}", cons.frame,)),
-                };
+                let frame = frame_name_to_id
+                    .get(&cons.frame)
+                    .copied()
+                    .ok_or_else(|| format_err!("Marco no encontrado: {}", cons.frame,))?;
                 used_frames_ids.insert(frame);
                 WinCons {
                     id,
@@ -723,37 +722,42 @@ struct IdMaps<'a> {
 
 impl<'a> IdMaps<'a> {
     /// Localiza id de opaco desde nombre
-    fn wall_id<T: AsRef<str>>(&self, name: T) -> Result<&Uuid, anyhow::Error> {
+    fn wall_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
         self.walls
             .get(name.as_ref())
+            .copied()
             .ok_or_else(|| format_err!("Muro {} no identificado", name.as_ref()))
     }
 
     /// Localiza id de espacio desde nombre
-    fn space_id<T: AsRef<str>>(&self, name: T) -> Result<&Uuid, anyhow::Error> {
+    fn space_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
         self.spaces
             .get(name.as_ref())
+            .copied()
             .ok_or_else(|| format_err!("Espacio {} no identificado", name.as_ref()))
     }
 
     /// Localiza id de construcción de opaco desde nombre
-    fn wallcons_id<T: AsRef<str>>(&self, name: T) -> Result<&Uuid, anyhow::Error> {
+    fn wallcons_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
         self.wallcons
             .get(name.as_ref())
+            .copied()
             .ok_or_else(|| format_err!("Construcción de opaco {} no identificada", name.as_ref()))
     }
 
     /// Localiza id de construcción de hueco desde nombre
-    fn wincons_id<T: AsRef<str>>(&self, name: T) -> Result<&Uuid, anyhow::Error> {
+    fn wincons_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
         self.wincons
             .get(name.as_ref())
+            .copied()
             .ok_or_else(|| format_err!("Construcción de hueco {} no identificada", name.as_ref()))
     }
 
     /// Localiza id de material de opaco desde nombre
-    fn material_id<T: AsRef<str>>(&self, name: T) -> Result<&Uuid, anyhow::Error> {
+    fn material_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
         self.materials
             .get(name.as_ref())
+            .copied()
             .ok_or_else(|| format_err!("Material de opaco {} no identificado", name.as_ref()))
     }
 
