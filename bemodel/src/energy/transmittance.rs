@@ -300,12 +300,18 @@ impl Wall {
             .ok();
         match self.bounds {
             // Elementos adiabáticos -----------------------------
-            // Transmitancia térmica de una composición de cerramiento adiabático, en una posición dada, en W/m2K
+            // Transmitancia térmica de una composición de cerramiento adiabático, en una posición dada, en W/m²K
             // Notas:
-            // - los elementos adiabáticos se reportan con valor 0.0
+            // - los elementos adiabáticos se reportan con el valor del elemento exterior (para poder comprobar U de particiones)
             ADIABATIC => {
-                debug!("{} (adiabático) U=0.0", self.name);
-                Some(0.0)
+                let u = self.u_value_exterior(r_intrinsic);
+                debug!(
+                    "{} ({}, adiabático) U={:.2}",
+                    self.name,
+                    position_to_name(Tilt::from(self)),
+                    u.unwrap_or_default()
+                );
+                u
             }
             // Elementos en contacto con el exterior -------------
             EXTERIOR => {
