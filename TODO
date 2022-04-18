@@ -1,5 +1,6 @@
 # TAREAS PENDIENTES
 
+- Usar overrides de U para elementos especiales de la ET o para cuando se definan lamas en huecos?
 - Optimizar recálculo de propiedades
   - Guardar hash de geometrías (opacos, sombras y huecos) y solo recalcular si han cambiado
   - Hacer profiling y benchmarks con tracing
