@@ -91,8 +91,8 @@ fn test_caso_a() {
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 400.0, 0.1);
     assert_almost_eq!(ind.compacity, 2.40, 0.01); // HULC 2.40
-    assert_almost_eq!(ind.K_data.K, 0.51, 0.01); // HULC 0.52
-    assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.63, 0.01); // HULC ?
+    assert_almost_eq!(ind.K_data.K, 0.47, 0.01); // HULC 0.46
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.63, 0.01); // HULC 4.33
     assert_almost_eq!(ind.n50_data.n50_ref, 4.58, 0.01); // HULC 4.33
     assert_almost_eq!(ind.n50_data.n50, 5.32, 0.01);
     assert_almost_eq!(ind.n50_data.walls_c_ref, 16.00, 0.01);
@@ -173,11 +173,11 @@ fn parse_test_ejemplopmt_huecosok() {
 fn test_kyg() {
     let kygpath = kyg::find_kyg("tests/casoA").unwrap().unwrap();
     let kyg = kyg::parse_from_path(kygpath).unwrap();
-    assert_eq!(kyg.walls.len(), 19);
+    assert_eq!(kyg.walls.len(), 23);
     assert_eq!(kyg.windows.len(), 10);
-    assert_eq!(kyg.thermal_bridges.len(), 7);
+    assert_eq!(kyg.thermal_bridges.len(), 6);
     assert_eq!(kyg.hfactors.len(), 9);
-    assert_almost_eq!(kyg.k, 0.51, 0.01);
+    assert_almost_eq!(kyg.k, 0.46, 0.01);
 }
 
 #[test]
