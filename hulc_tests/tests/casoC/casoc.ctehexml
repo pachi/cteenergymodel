@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<CTE-HE-XML><DatosGenerales><refCatastral>ninguno</refCatastral><tipoVivienda>Bloque</tipoVivienda><anio/><tipoDefinicion>Nuevo</tipoDefinicion><comunidad>Madrid</comunidad><provincia>Madrid</provincia><poblacion>Madrid</poblacion><zonaClimatica>D3</zonaClimatica><altitud>600</altitud><tipoUso>Residencial</tipoUso><claseHigrometria>3</claseHigrometria><numRenovacionesHS3>1</numRenovacionesHS3><ventilacionPorDefecto>NO</ventilacionPorDefecto><numViviendasBloque>5</numViviendasBloque><valorImpulsionAire>66.67</valorImpulsionAire><valorExtraccionAireCocina>1.00</valorExtraccionAireCocina><valorExtraccionAireBanos>1.00</valorExtraccionAireBanos><valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos><vent_p1>25.00</vent_p1><vent_p2>25.00</vent_p2><vent_p3>25.00</vent_p3><vent_p4>25.00</vent_p4><nomPro>Nombre del Proyecto</nomPro><usoPro>- Seleccione de la lista -</usoPro><usoProOtros/><comunidadPro>Madrid</comunidadPro><proPro>Madrid</proPro><locPro>Madrid</locPro><cpPro>C&#xF3;digo Postal</cpPro><tipoViaPro>Calle</tipoViaPro><viaPro>C/</viaPro><tipoNPro>Num</tipoNPro><nPro>-</nPro><blqPro>-</blqPro><portalPro>-</portalPro><escPro>-</escPro><pisoPro>-</pisoPro><puertaPro>-</puertaPro><datosAdicPro>-</datosAdicPro><normativaEdificacion>- Seleccione de la lista -</normativaEdificacion><normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones><normativaOtros>- Seleccione de la lista -</normativaOtros><normativaEdificacionOtros/><normativaInstalacionesOtros/><normativaOtrosOtros/><superficieConstruida>0.00</superficieConstruida><SupConsCubierta>0.00</SupConsCubierta><supOcupada>0.00</supOcupada><alturaTotal>0.00</alturaTotal><plantaSobreRasante>0</plantaSobreRasante><plantaBajoRasante>0</plantaBajoRasante><EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida><panelFotoVoltaicoAutoConsumido>0</panelFotoVoltaicoAutoConsumido><contribucionResACS>0</contribucionResACS><puertaPro>-</puertaPro><cifAut>CIF</cifAut><nomAut>Nombres</nomAut><apellido1Aut>Apellido1</apellido1Aut><apellido2Aut>Apellido2</apellido2Aut><razAut>Raz&#xF3;n Social</razAut><NIFEntidad/><comunidadAut>- Seleccione de la lista -</comunidadAut><proAut>- Seleccione de la lista -</proAut><locAut>Localidad</locAut><cpAut>Codigo postal</cpAut><tipoViaAut>Calle</tipoViaAut><viaAut>Nombre calle</viaAut><tipoNAut>Num</tipoNAut><nAut>-</nAut><blqAut>-</blqAut><portalAut>-</portalAut><escAut>-</escAut><pisoAut>-</pisoAut><puertaAut>-</puertaAut><datosAdicAut>-</datosAdicAut><correoAut>-</correoAut><telAut>-</telAut><titulacionAut>- Seleccione de la lista -</titulacionAut><titulacionOtrosAut>-</titulacionOtrosAut><colegioAut>- Seleccione de la lista -</colegioAut><colegioOtrosAut>-</colegioOtrosAut><numeroColegiadoAut>-</numeroColegiadoAut><fechaVisita>13/11/19</fechaVisita><extInfo>SI</extInfo><VentNoct>SI</VentNoct><SistSus>SI</SistSus><pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado><imgEdif>Especifique imagen para el edificio</imgEdif><imgPlano>Especifique imagen para el plano de situaci&#xF3;n del edificio</imgPlano><MesIniPerSom>Junio</MesIniPerSom><MesFinPerSom>Septiembre</MesFinPerSom><energiaGT>true</energiaGT><directoCALENERGT>NO</directoCALENERGT><valMenELE>NO</valMenELE><valMenACS>NO</valMenACS><valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE><valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS><datoGeneralNuevo>0</datoGeneralNuevo><potenciaFVInstalada>0</potenciaFVInstalada><IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu><estimacionConsumoACSGT>0.00</estimacionConsumoACSGT><bajaPermeabilidad>SI</bajaPermeabilidad><ensayoPermeabilidad>SI</ensayoPermeabilidad><ValorN50Medido>5.32</ValorN50Medido><datosVentilacion>1;240.000;0.00;0;0.00;0.00;0.000;0.00;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;240.000;0.00;0.00;0.0000</datosVentilacion><venPotEC>0.000</venPotEC><recEFC>-1.000</recEFC><cambios>NO</cambios><cambioscalener>NO</cambioscalener><RED1>RED1  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED1><RED2>RED2  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED2></DatosGenerales><EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
+<CTE-HE-XML><DatosGenerales><refCatastral>ninguno</refCatastral><tipoVivienda>Bloque</tipoVivienda><anio/><tipoDefinicion>Nuevo</tipoDefinicion><comunidad>Madrid</comunidad><provincia>Madrid</provincia><poblacion>Madrid</poblacion><zonaClimatica>D3</zonaClimatica><altitud>600</altitud><tipoUso>Residencial</tipoUso><claseHigrometria>3</claseHigrometria><numRenovacionesHS3>1</numRenovacionesHS3><ventilacionPorDefecto>NO</ventilacionPorDefecto><numViviendasBloque>5</numViviendasBloque><valorImpulsionAire>66.67</valorImpulsionAire><valorExtraccionAireCocina>1.00</valorExtraccionAireCocina><valorExtraccionAireBanos>1.00</valorExtraccionAireBanos><valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos><vent_p1>25.00</vent_p1><vent_p2>25.00</vent_p2><vent_p3>25.00</vent_p3><vent_p4>25.00</vent_p4><nomPro>Nombre del Proyecto</nomPro><usoPro>- Seleccione de la lista -</usoPro><usoProOtros/><comunidadPro>Madrid</comunidadPro><proPro>Madrid</proPro><locPro>Madrid</locPro><cpPro>C&#xF3;digo Postal</cpPro><tipoViaPro>Calle</tipoViaPro><viaPro>C/</viaPro><tipoNPro>Num</tipoNPro><nPro>-</nPro><blqPro>-</blqPro><portalPro>-</portalPro><escPro>-</escPro><pisoPro>-</pisoPro><puertaPro>-</puertaPro><datosAdicPro>-</datosAdicPro><normativaEdificacion>- Seleccione de la lista -</normativaEdificacion><normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones><normativaOtros>- Seleccione de la lista -</normativaOtros><normativaEdificacionOtros/><normativaInstalacionesOtros/><normativaOtrosOtros/><superficieConstruida>0.00</superficieConstruida><SupConsCubierta>0.00</SupConsCubierta><supOcupada>0.00</supOcupada><alturaTotal>0.00</alturaTotal><plantaSobreRasante>0</plantaSobreRasante><plantaBajoRasante>0</plantaBajoRasante><EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida><panelFotoVoltaicoAutoConsumido>0.00</panelFotoVoltaicoAutoConsumido><contribucionResACS>0.00</contribucionResACS><puertaPro>-</puertaPro><cifAut>CIF</cifAut><nomAut>Nombres</nomAut><apellido1Aut>Apellido1</apellido1Aut><apellido2Aut>Apellido2</apellido2Aut><razAut>Raz&#xF3;n Social</razAut><NIFEntidad/><comunidadAut>- Seleccione de la lista -</comunidadAut><proAut>- Seleccione de la lista -</proAut><locAut>Localidad</locAut><cpAut>Codigo postal</cpAut><tipoViaAut>Calle</tipoViaAut><viaAut>Nombre calle</viaAut><tipoNAut>Num</tipoNAut><nAut>-</nAut><blqAut>-</blqAut><portalAut>-</portalAut><escAut>-</escAut><pisoAut>-</pisoAut><puertaAut>-</puertaAut><datosAdicAut>-</datosAdicAut><correoAut>-</correoAut><telAut>-</telAut><titulacionAut>- Seleccione de la lista -</titulacionAut><titulacionOtrosAut>-</titulacionOtrosAut><colegioAut>- Seleccione de la lista -</colegioAut><colegioOtrosAut>-</colegioOtrosAut><numeroColegiadoAut>-</numeroColegiadoAut><fechaVisita>13/11/19</fechaVisita><extInfo>SI</extInfo><VentNoct>SI</VentNoct><SistSus>SI</SistSus><pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado><imgEdif>Especifique imagen para el edificio</imgEdif><imgPlano>Especifique imagen para el plano de situaci&#xF3;n del edificio</imgPlano><MesIniPerSom>Junio</MesIniPerSom><MesFinPerSom>Septiembre</MesFinPerSom><energiaGT>true</energiaGT><directoCALENERGT>NO</directoCALENERGT><valMenELE>NO</valMenELE><valMenACS>NO</valMenACS><valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE><valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS><fpECGaPT>0.000</fpECGaPT><fpECGaPNR>0.000</fpECGaPNR><fpECGaCO2>0.000</fpECGaCO2><datoGeneralNuevo>0</datoGeneralNuevo><fechaCertificado>NO;29;10;1960</fechaCertificado><potenciaFVInstalada>0</potenciaFVInstalada><IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu><estimacionConsumoACSGT>300.00</estimacionConsumoACSGT><bajaPermeabilidad>SI</bajaPermeabilidad><ensayoPermeabilidad>SI</ensayoPermeabilidad><ValorN50Medido>5.32</ValorN50Medido><datosVentilacion>1;240.000;0.00;0;0.00;0.00;0.000;0.00;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;240.000;0.00;0.00;0.0000</datosVentilacion><venPotEC>120.000</venPotEC><recEFC>-1.000</recEFC><cambios>NO</cambios><cambioscalener>NO</cambioscalener><RED1>RED1    <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED1><RED2>RED2    <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED2></DatosGenerales><EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
 $ |         FICHERO GENERADO CON CTE-HE-2019           |
 $ +----------------------------------------------------+
 $
@@ -2149,196 +2149,172 @@ $
     DAY   = ( 31)
     WEEK-SCHEDULES = ( "HA3_HS0_SS_")
     ..
-"HA4_SS_D-8h-Lab" = DAY-SCHEDULE-PD
+"HA4_SS_D-Calef-Temp-Lab-AP" = DAY-SCHEDULE-PD
+    TYPE  = "TEMPERATURE"
+    GROUP = "Temperaturas"
+    INDEX = 0
+    VALUES  = ( -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0, -20.0)
+    ..
+  "HA4_HS0_SS_" = WEEK-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    DAY-SCHEDULES = ( "HA4_SS_D-Calef-Temp-Lab-AP",
+                      "HA4_SS_D-Calef-Temp-Lab-AP",
+                      "HA4_SS_D-Calef-Temp-Lab-AP",
+                      "HA4_SS_D-Calef-Temp-Lab-AP",
+                      "HA4_SS_D-Calef-Temp-Lab-AP",
+                      "HA4_SS_D-Calef-Temp-Lab-AP",
+                      "HA4_SS_D-Calef-Temp-Lab-AP")
+    ..
+"Horario-Calefaccion-AP" = SCHEDULE-PD
+    TYPE   = "TEMPERATURE"
+    GROUP  = "Temperaturas"
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA4_HS0_SS_")
+    ..
+"HA5_SS_D-Refrig-Temp-Lab-AP" = DAY-SCHEDULE-PD
+    TYPE  = "TEMPERATURE"
+    GROUP = "Temperaturas"
+    INDEX = 0
+    VALUES  = ( 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0, 70.0)
+    ..
+  "HA5_HS0_SS_" = WEEK-SCHEDULE-PD
+    TYPE  = TEMPERATURE
+    DAY-SCHEDULES = ( "HA5_SS_D-Refrig-Temp-Lab-AP",
+                      "HA5_SS_D-Refrig-Temp-Lab-AP",
+                      "HA5_SS_D-Refrig-Temp-Lab-AP",
+                      "HA5_SS_D-Refrig-Temp-Lab-AP",
+                      "HA5_SS_D-Refrig-Temp-Lab-AP",
+                      "HA5_SS_D-Refrig-Temp-Lab-AP",
+                      "HA5_SS_D-Refrig-Temp-Lab-AP")
+    ..
+"Horario-Refrigeracion-AP" = SCHEDULE-PD
+    TYPE   = "TEMPERATURE"
+    GROUP  = "Temperaturas"
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA5_HS0_SS_")
+    ..
+"HA6_SS_D-8h-Lab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 0
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-"HA4_SS_D-8h-Sab" = DAY-SCHEDULE-PD
+"HA6_SS_D-8h-Sab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 1
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-"HA4_SS_D-8h-Fest" = DAY-SCHEDULE-PD
+"HA6_SS_D-8h-Fest" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 2
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-  "HA4_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA6_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA4_SS_D-8h-Lab",
-                      "HA4_SS_D-8h-Lab",
-                      "HA4_SS_D-8h-Lab",
-                      "HA4_SS_D-8h-Lab",
-                      "HA4_SS_D-8h-Lab",
-                      "HA4_SS_D-8h-Sab",
-                      "HA4_SS_D-8h-Fest")
+    DAY-SCHEDULES = ( "HA6_SS_D-8h-Lab",
+                      "HA6_SS_D-8h-Lab",
+                      "HA6_SS_D-8h-Lab",
+                      "HA6_SS_D-8h-Lab",
+                      "HA6_SS_D-8h-Lab",
+                      "HA6_SS_D-8h-Sab",
+                      "HA6_SS_D-8h-Fest")
     ..
 "UsoEspacio-8h" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Internas"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA4_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA6_HS0_SS_")
     ..
-"HA5_SS_D-8h-Lab_eq" = DAY-SCHEDULE-PD
+"HA7_SS_D-8h-Lab_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 0
     VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     ..
-"HA5_SS_D-8h-Sab_eq" = DAY-SCHEDULE-PD
+"HA7_SS_D-8h-Sab_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 1
     VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     ..
-"HA5_SS_D-8h-Fest_eq" = DAY-SCHEDULE-PD
+"HA7_SS_D-8h-Fest_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 2
     VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     ..
-  "HA5_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA7_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = ON/OFF
-    DAY-SCHEDULES = ( "HA5_SS_D-8h-Lab_eq",
-                      "HA5_SS_D-8h-Lab_eq",
-                      "HA5_SS_D-8h-Lab_eq",
-                      "HA5_SS_D-8h-Lab_eq",
-                      "HA5_SS_D-8h-Lab_eq",
-                      "HA5_SS_D-8h-Sab_eq",
-                      "HA5_SS_D-8h-Fest_eq")
+    DAY-SCHEDULES = ( "HA7_SS_D-8h-Lab_eq",
+                      "HA7_SS_D-8h-Lab_eq",
+                      "HA7_SS_D-8h-Lab_eq",
+                      "HA7_SS_D-8h-Lab_eq",
+                      "HA7_SS_D-8h-Lab_eq",
+                      "HA7_SS_D-8h-Sab_eq",
+                      "HA7_SS_D-8h-Fest_eq")
     ..
 "UsoEspacio-8h_eq" = SCHEDULE-PD
     TYPE   = "ON/OFF"
     GROUP  = "Equipos"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA5_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA7_HS0_SS_")
     ..
-"HA6_SS_D-8h-Lab_vent" = DAY-SCHEDULE-PD
+"HA8_SS_D-8h-Lab_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 0
     VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-"HA6_SS_D-8h-Sab_vent" = DAY-SCHEDULE-PD
+"HA8_SS_D-8h-Sab_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 1
     VALUES  = ( 17.08, 17.08, 17.08, 17.08, 17.08, 17.08, 17.08, 17.08, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-"HA6_SS_D-8h-Fest_vent" = DAY-SCHEDULE-PD
+"HA8_SS_D-8h-Fest_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 2
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-  "HA6_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA8_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA6_SS_D-8h-Lab_vent",
-                      "HA6_SS_D-8h-Lab_vent",
-                      "HA6_SS_D-8h-Lab_vent",
-                      "HA6_SS_D-8h-Lab_vent",
-                      "HA6_SS_D-8h-Lab_vent",
-                      "HA6_SS_D-8h-Sab_vent",
-                      "HA6_SS_D-8h-Fest_vent")
+    DAY-SCHEDULES = ( "HA8_SS_D-8h-Lab_vent",
+                      "HA8_SS_D-8h-Lab_vent",
+                      "HA8_SS_D-8h-Lab_vent",
+                      "HA8_SS_D-8h-Lab_vent",
+                      "HA8_SS_D-8h-Lab_vent",
+                      "HA8_SS_D-8h-Sab_vent",
+                      "HA8_SS_D-8h-Fest_vent")
     ..
 "UsoEspacio-8h_vent" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Ventilación"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA6_HS0_SS_")
-    ..
-"HA7_SS_D-12h-Lab" = DAY-SCHEDULE-PD
-    TYPE  = "FRACTION"
-    GROUP = "Internas"
-    INDEX = 0
-    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00)
-    ..
-"HA7_SS_D-12h-Sab" = DAY-SCHEDULE-PD
-    TYPE  = "FRACTION"
-    GROUP = "Internas"
-    INDEX = 1
-    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
-    ..
-"HA7_SS_D-12h-Fest" = DAY-SCHEDULE-PD
-    TYPE  = "FRACTION"
-    GROUP = "Internas"
-    INDEX = 2
-    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
-    ..
-  "HA7_HS0_SS_" = WEEK-SCHEDULE-PD
-    TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA7_SS_D-12h-Lab",
-                      "HA7_SS_D-12h-Lab",
-                      "HA7_SS_D-12h-Lab",
-                      "HA7_SS_D-12h-Lab",
-                      "HA7_SS_D-12h-Lab",
-                      "HA7_SS_D-12h-Sab",
-                      "HA7_SS_D-12h-Fest")
-    ..
-"UsoEspacio-12h" = SCHEDULE-PD
-    TYPE   = "FRACTION"
-    GROUP  = "Internas"
-    MONTH = ( 12)
-    DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA7_HS0_SS_")
-    ..
-"HA8_SS_D-12h-Lab_eq" = DAY-SCHEDULE-PD
-    TYPE  = "ON/OFF"
-    GROUP = "Equipos"
-    INDEX = 0
-    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0)
-    ..
-"HA8_SS_D-12h-Sab_eq" = DAY-SCHEDULE-PD
-    TYPE  = "ON/OFF"
-    GROUP = "Equipos"
-    INDEX = 1
-    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    ..
-"HA8_SS_D-12h-Fest_eq" = DAY-SCHEDULE-PD
-    TYPE  = "ON/OFF"
-    GROUP = "Equipos"
-    INDEX = 2
-    VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-    ..
-  "HA8_HS0_SS_" = WEEK-SCHEDULE-PD
-    TYPE  = ON/OFF
-    DAY-SCHEDULES = ( "HA8_SS_D-12h-Lab_eq",
-                      "HA8_SS_D-12h-Lab_eq",
-                      "HA8_SS_D-12h-Lab_eq",
-                      "HA8_SS_D-12h-Lab_eq",
-                      "HA8_SS_D-12h-Lab_eq",
-                      "HA8_SS_D-12h-Sab_eq",
-                      "HA8_SS_D-12h-Fest_eq")
-    ..
-"UsoEspacio-12h_eq" = SCHEDULE-PD
-    TYPE   = "ON/OFF"
-    GROUP  = "Equipos"
-    MONTH = ( 12)
-    DAY   = ( 31)
     WEEK-SCHEDULES = ( "HA8_HS0_SS_")
     ..
 "HA9_SS_D-12h-Lab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
-    GROUP = "Ventilación"
+    GROUP = "Internas"
     INDEX = 0
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00)
     ..
 "HA9_SS_D-12h-Sab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
-    GROUP = "Ventilación"
+    GROUP = "Internas"
     INDEX = 1
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
 "HA9_SS_D-12h-Fest" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
-    GROUP = "Ventilación"
+    GROUP = "Internas"
     INDEX = 2
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
@@ -2352,448 +2328,518 @@ $
                       "HA9_SS_D-12h-Sab",
                       "HA9_SS_D-12h-Fest")
     ..
+"UsoEspacio-12h" = SCHEDULE-PD
+    TYPE   = "FRACTION"
+    GROUP  = "Internas"
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA9_HS0_SS_")
+    ..
+"HA10_SS_D-12h-Lab_eq" = DAY-SCHEDULE-PD
+    TYPE  = "ON/OFF"
+    GROUP = "Equipos"
+    INDEX = 0
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0)
+    ..
+"HA10_SS_D-12h-Sab_eq" = DAY-SCHEDULE-PD
+    TYPE  = "ON/OFF"
+    GROUP = "Equipos"
+    INDEX = 1
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+"HA10_SS_D-12h-Fest_eq" = DAY-SCHEDULE-PD
+    TYPE  = "ON/OFF"
+    GROUP = "Equipos"
+    INDEX = 2
+    VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+    ..
+  "HA10_HS0_SS_" = WEEK-SCHEDULE-PD
+    TYPE  = ON/OFF
+    DAY-SCHEDULES = ( "HA10_SS_D-12h-Lab_eq",
+                      "HA10_SS_D-12h-Lab_eq",
+                      "HA10_SS_D-12h-Lab_eq",
+                      "HA10_SS_D-12h-Lab_eq",
+                      "HA10_SS_D-12h-Lab_eq",
+                      "HA10_SS_D-12h-Sab_eq",
+                      "HA10_SS_D-12h-Fest_eq")
+    ..
+"UsoEspacio-12h_eq" = SCHEDULE-PD
+    TYPE   = "ON/OFF"
+    GROUP  = "Equipos"
+    MONTH = ( 12)
+    DAY   = ( 31)
+    WEEK-SCHEDULES = ( "HA10_HS0_SS_")
+    ..
+"HA11_SS_D-12h-Lab" = DAY-SCHEDULE-PD
+    TYPE  = "FRACTION"
+    GROUP = "Ventilación"
+    INDEX = 0
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA11_SS_D-12h-Sab" = DAY-SCHEDULE-PD
+    TYPE  = "FRACTION"
+    GROUP = "Ventilación"
+    INDEX = 1
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+"HA11_SS_D-12h-Fest" = DAY-SCHEDULE-PD
+    TYPE  = "FRACTION"
+    GROUP = "Ventilación"
+    INDEX = 2
+    VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
+    ..
+  "HA11_HS0_SS_" = WEEK-SCHEDULE-PD
+    TYPE  = FRACTION
+    DAY-SCHEDULES = ( "HA11_SS_D-12h-Lab",
+                      "HA11_SS_D-12h-Lab",
+                      "HA11_SS_D-12h-Lab",
+                      "HA11_SS_D-12h-Lab",
+                      "HA11_SS_D-12h-Lab",
+                      "HA11_SS_D-12h-Sab",
+                      "HA11_SS_D-12h-Fest")
+    ..
 "UsoEspacio-12h_vent" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Ventilación"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA9_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA11_HS0_SS_")
     ..
-"HA10_SS_D-16h-Lab" = DAY-SCHEDULE-PD
+"HA12_SS_D-16h-Lab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 0
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00)
     ..
-"HA10_SS_D-16h-Sab" = DAY-SCHEDULE-PD
+"HA12_SS_D-16h-Sab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 1
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-"HA10_SS_D-16h-Fest" = DAY-SCHEDULE-PD
+"HA12_SS_D-16h-Fest" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 2
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-  "HA10_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA12_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA10_SS_D-16h-Lab",
-                      "HA10_SS_D-16h-Lab",
-                      "HA10_SS_D-16h-Lab",
-                      "HA10_SS_D-16h-Lab",
-                      "HA10_SS_D-16h-Lab",
-                      "HA10_SS_D-16h-Sab",
-                      "HA10_SS_D-16h-Fest")
+    DAY-SCHEDULES = ( "HA12_SS_D-16h-Lab",
+                      "HA12_SS_D-16h-Lab",
+                      "HA12_SS_D-16h-Lab",
+                      "HA12_SS_D-16h-Lab",
+                      "HA12_SS_D-16h-Lab",
+                      "HA12_SS_D-16h-Sab",
+                      "HA12_SS_D-16h-Fest")
     ..
 "UsoEspacio-16h" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Internas"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA10_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA12_HS0_SS_")
     ..
-"HA11_SS_D-16h-Lab_eq" = DAY-SCHEDULE-PD
+"HA13_SS_D-16h-Lab_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 0
     VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0)
     ..
-"HA11_SS_D-16h-Sab_eq" = DAY-SCHEDULE-PD
+"HA13_SS_D-16h-Sab_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 1
     VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     ..
-"HA11_SS_D-16h-Fest_eq" = DAY-SCHEDULE-PD
+"HA13_SS_D-16h-Fest_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 2
     VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     ..
-  "HA11_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA13_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = ON/OFF
-    DAY-SCHEDULES = ( "HA11_SS_D-16h-Lab_eq",
-                      "HA11_SS_D-16h-Lab_eq",
-                      "HA11_SS_D-16h-Lab_eq",
-                      "HA11_SS_D-16h-Lab_eq",
-                      "HA11_SS_D-16h-Lab_eq",
-                      "HA11_SS_D-16h-Sab_eq",
-                      "HA11_SS_D-16h-Fest_eq")
+    DAY-SCHEDULES = ( "HA13_SS_D-16h-Lab_eq",
+                      "HA13_SS_D-16h-Lab_eq",
+                      "HA13_SS_D-16h-Lab_eq",
+                      "HA13_SS_D-16h-Lab_eq",
+                      "HA13_SS_D-16h-Lab_eq",
+                      "HA13_SS_D-16h-Sab_eq",
+                      "HA13_SS_D-16h-Fest_eq")
     ..
 "UsoEspacio-16h_eq" = SCHEDULE-PD
     TYPE   = "ON/OFF"
     GROUP  = "Equipos"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA11_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA13_HS0_SS_")
     ..
-"HA12_SS_D-16h-Lab_vent" = DAY-SCHEDULE-PD
+"HA14_SS_D-16h-Lab_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 0
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00)
     ..
-"HA12_SS_D-16h-Sab_vent" = DAY-SCHEDULE-PD
+"HA14_SS_D-16h-Sab_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 1
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-"HA12_SS_D-16h-Fest_vent" = DAY-SCHEDULE-PD
+"HA14_SS_D-16h-Fest_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 2
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-  "HA12_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA14_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA12_SS_D-16h-Lab_vent",
-                      "HA12_SS_D-16h-Lab_vent",
-                      "HA12_SS_D-16h-Lab_vent",
-                      "HA12_SS_D-16h-Lab_vent",
-                      "HA12_SS_D-16h-Lab_vent",
-                      "HA12_SS_D-16h-Sab_vent",
-                      "HA12_SS_D-16h-Fest_vent")
+    DAY-SCHEDULES = ( "HA14_SS_D-16h-Lab_vent",
+                      "HA14_SS_D-16h-Lab_vent",
+                      "HA14_SS_D-16h-Lab_vent",
+                      "HA14_SS_D-16h-Lab_vent",
+                      "HA14_SS_D-16h-Lab_vent",
+                      "HA14_SS_D-16h-Sab_vent",
+                      "HA14_SS_D-16h-Fest_vent")
     ..
 "UsoEspacio-16h_vent" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Ventilación"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA12_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA14_HS0_SS_")
     ..
-"HA13_SS_D-24h-Lab" = DAY-SCHEDULE-PD
+"HA15_SS_D-24h-Lab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 0
     VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-"HA13_SS_D-24h-Sab" = DAY-SCHEDULE-PD
+"HA15_SS_D-24h-Sab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 1
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-"HA13_SS_D-24h-Fest" = DAY-SCHEDULE-PD
+"HA15_SS_D-24h-Fest" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 2
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-  "HA13_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA15_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA13_SS_D-24h-Lab",
-                      "HA13_SS_D-24h-Lab",
-                      "HA13_SS_D-24h-Lab",
-                      "HA13_SS_D-24h-Lab",
-                      "HA13_SS_D-24h-Lab",
-                      "HA13_SS_D-24h-Sab",
-                      "HA13_SS_D-24h-Fest")
+    DAY-SCHEDULES = ( "HA15_SS_D-24h-Lab",
+                      "HA15_SS_D-24h-Lab",
+                      "HA15_SS_D-24h-Lab",
+                      "HA15_SS_D-24h-Lab",
+                      "HA15_SS_D-24h-Lab",
+                      "HA15_SS_D-24h-Sab",
+                      "HA15_SS_D-24h-Fest")
     ..
 "UsoEspacio-24h" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Internas"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA13_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA15_HS0_SS_")
     ..
-"HA14_SS_D-24h-Lab_eq" = DAY-SCHEDULE-PD
+"HA16_SS_D-24h-Lab_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 0
     VALUES  = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
     ..
-"HA14_SS_D-24h-Sab_eq" = DAY-SCHEDULE-PD
+"HA16_SS_D-24h-Sab_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 1
     VALUES  = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     ..
-"HA14_SS_D-24h-Fest_eq" = DAY-SCHEDULE-PD
+"HA16_SS_D-24h-Fest_eq" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 2
     VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     ..
-  "HA14_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA16_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = ON/OFF
-    DAY-SCHEDULES = ( "HA14_SS_D-24h-Lab_eq",
-                      "HA14_SS_D-24h-Lab_eq",
-                      "HA14_SS_D-24h-Lab_eq",
-                      "HA14_SS_D-24h-Lab_eq",
-                      "HA14_SS_D-24h-Lab_eq",
-                      "HA14_SS_D-24h-Sab_eq",
-                      "HA14_SS_D-24h-Fest_eq")
+    DAY-SCHEDULES = ( "HA16_SS_D-24h-Lab_eq",
+                      "HA16_SS_D-24h-Lab_eq",
+                      "HA16_SS_D-24h-Lab_eq",
+                      "HA16_SS_D-24h-Lab_eq",
+                      "HA16_SS_D-24h-Lab_eq",
+                      "HA16_SS_D-24h-Sab_eq",
+                      "HA16_SS_D-24h-Fest_eq")
     ..
 "UsoEspacio-24h_eq" = SCHEDULE-PD
     TYPE   = "ON/OFF"
     GROUP  = "Equipos"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA14_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA16_HS0_SS_")
     ..
-"HA15_SS_D-24h-Lab_vent" = DAY-SCHEDULE-PD
+"HA17_SS_D-24h-Lab_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 0
     VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-"HA15_SS_D-24h-Sab_vent" = DAY-SCHEDULE-PD
+"HA17_SS_D-24h-Sab_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 1
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-"HA15_SS_D-24h-Fest_vent" = DAY-SCHEDULE-PD
+"HA17_SS_D-24h-Fest_vent" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 2
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-  "HA15_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA17_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA15_SS_D-24h-Lab_vent",
-                      "HA15_SS_D-24h-Lab_vent",
-                      "HA15_SS_D-24h-Lab_vent",
-                      "HA15_SS_D-24h-Lab_vent",
-                      "HA15_SS_D-24h-Lab_vent",
-                      "HA15_SS_D-24h-Sab_vent",
-                      "HA15_SS_D-24h-Fest_vent")
+    DAY-SCHEDULES = ( "HA17_SS_D-24h-Lab_vent",
+                      "HA17_SS_D-24h-Lab_vent",
+                      "HA17_SS_D-24h-Lab_vent",
+                      "HA17_SS_D-24h-Lab_vent",
+                      "HA17_SS_D-24h-Lab_vent",
+                      "HA17_SS_D-24h-Sab_vent",
+                      "HA17_SS_D-24h-Fest_vent")
     ..
 "UsoEspacio-24h_vent" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Ventilación"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA15_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA17_HS0_SS_")
     ..
-"HA16_SS_D-Resid-Ocup-Lab" = DAY-SCHEDULE-PD
+"HA18_SS_D-Resid-Ocup-Lab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 0
     VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 0.50, 1.00)
     ..
-"HA16_SS_D-Resid-Ocup-Sab" = DAY-SCHEDULE-PD
+"HA18_SS_D-Resid-Ocup-Sab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 1
     VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-"HA16_SS_D-Resid-Ocup-Fest" = DAY-SCHEDULE-PD
+"HA18_SS_D-Resid-Ocup-Fest" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 2
     VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-  "HA16_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA18_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA16_SS_D-Resid-Ocup-Lab",
-                      "HA16_SS_D-Resid-Ocup-Lab",
-                      "HA16_SS_D-Resid-Ocup-Lab",
-                      "HA16_SS_D-Resid-Ocup-Lab",
-                      "HA16_SS_D-Resid-Ocup-Lab",
-                      "HA16_SS_D-Resid-Ocup-Sab",
-                      "HA16_SS_D-Resid-Ocup-Fest")
+    DAY-SCHEDULES = ( "HA18_SS_D-Resid-Ocup-Lab",
+                      "HA18_SS_D-Resid-Ocup-Lab",
+                      "HA18_SS_D-Resid-Ocup-Lab",
+                      "HA18_SS_D-Resid-Ocup-Lab",
+                      "HA18_SS_D-Resid-Ocup-Lab",
+                      "HA18_SS_D-Resid-Ocup-Sab",
+                      "HA18_SS_D-Resid-Ocup-Fest")
     ..
 "Ocupacion-Residencia" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Internas"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA16_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA18_HS0_SS_")
     ..
-"HA17_SS_D-Resid-ilum-Lab" = DAY-SCHEDULE-PD
+"HA19_SS_D-Resid-ilum-Lab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 0
     VALUES  = ( 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.50, 1.00, 1.00, 1.00, 1.00, 0.50)
     ..
-"HA17_SS_D-Resid-ilum-Sab" = DAY-SCHEDULE-PD
+"HA19_SS_D-Resid-ilum-Sab" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 1
     VALUES  = ( 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.50, 1.00, 1.00, 1.00, 1.00, 0.50)
     ..
-"HA17_SS_D-Resid-ilum-Fest" = DAY-SCHEDULE-PD
+"HA19_SS_D-Resid-ilum-Fest" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 2
     VALUES  = ( 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.30, 0.50, 1.00, 1.00, 1.00, 1.00, 0.50)
     ..
-  "HA17_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA19_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA17_SS_D-Resid-ilum-Lab",
-                      "HA17_SS_D-Resid-ilum-Lab",
-                      "HA17_SS_D-Resid-ilum-Lab",
-                      "HA17_SS_D-Resid-ilum-Lab",
-                      "HA17_SS_D-Resid-ilum-Lab",
-                      "HA17_SS_D-Resid-ilum-Sab",
-                      "HA17_SS_D-Resid-ilum-Fest")
+    DAY-SCHEDULES = ( "HA19_SS_D-Resid-ilum-Lab",
+                      "HA19_SS_D-Resid-ilum-Lab",
+                      "HA19_SS_D-Resid-ilum-Lab",
+                      "HA19_SS_D-Resid-ilum-Lab",
+                      "HA19_SS_D-Resid-ilum-Lab",
+                      "HA19_SS_D-Resid-ilum-Sab",
+                      "HA19_SS_D-Resid-ilum-Fest")
     ..
 "Iluminacion-Residencia" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Internas"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA17_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA19_HS0_SS_")
     ..
-"HA18_SS_D-Resid-Func-Lab" = DAY-SCHEDULE-PD
+"HA20_SS_D-Resid-Func-Lab" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 0
     VALUES  = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
     ..
-"HA18_SS_D-Resid-Func-Sab" = DAY-SCHEDULE-PD
+"HA20_SS_D-Resid-Func-Sab" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 1
     VALUES  = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
     ..
-"HA18_SS_D-Resid-Func-Fest" = DAY-SCHEDULE-PD
+"HA20_SS_D-Resid-Func-Fest" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 2
     VALUES  = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
     ..
-  "HA18_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA20_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = ON/OFF
-    DAY-SCHEDULES = ( "HA18_SS_D-Resid-Func-Lab",
-                      "HA18_SS_D-Resid-Func-Lab",
-                      "HA18_SS_D-Resid-Func-Lab",
-                      "HA18_SS_D-Resid-Func-Lab",
-                      "HA18_SS_D-Resid-Func-Lab",
-                      "HA18_SS_D-Resid-Func-Sab",
-                      "HA18_SS_D-Resid-Func-Fest")
+    DAY-SCHEDULES = ( "HA20_SS_D-Resid-Func-Lab",
+                      "HA20_SS_D-Resid-Func-Lab",
+                      "HA20_SS_D-Resid-Func-Lab",
+                      "HA20_SS_D-Resid-Func-Lab",
+                      "HA20_SS_D-Resid-Func-Lab",
+                      "HA20_SS_D-Resid-Func-Sab",
+                      "HA20_SS_D-Resid-Func-Fest")
     ..
 "Funcionam-Residencia" = SCHEDULE-PD
     TYPE   = "ON/OFF"
     GROUP  = "Equipos"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA18_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA20_HS0_SS_")
     ..
-"HA19_SS_D-Resid-Inf-Inv" = DAY-SCHEDULE-PD
+"HA21_SS_D-Resid-Inf-Inv" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 0
     VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-"HA19_SS_D-Resid-Inf-Ver" = DAY-SCHEDULE-PD
+"HA21_SS_D-Resid-Inf-Ver" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 1
     VALUES  = ( 15.38, 15.38, 15.38, 15.38, 15.38, 15.38, 15.38, 15.38, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-  "HA19_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA21_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv")
+    DAY-SCHEDULES = ( "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv")
     ..
-  "HA19_HS1_SS_" = WEEK-SCHEDULE-PD
+  "HA21_HS1_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Inv",
-                      "HA19_SS_D-Resid-Inf-Ver",
-                      "HA19_SS_D-Resid-Inf-Ver",
-                      "HA19_SS_D-Resid-Inf-Ver")
+    DAY-SCHEDULES = ( "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Inv",
+                      "HA21_SS_D-Resid-Inf-Ver",
+                      "HA21_SS_D-Resid-Inf-Ver",
+                      "HA21_SS_D-Resid-Inf-Ver")
     ..
-  "HA19_HS2_SS_" = WEEK-SCHEDULE-PD
+  "HA21_HS2_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA19_SS_D-Resid-Inf-Ver",
-                      "HA19_SS_D-Resid-Inf-Ver",
-                      "HA19_SS_D-Resid-Inf-Ver",
-                      "HA19_SS_D-Resid-Inf-Ver",
-                      "HA19_SS_D-Resid-Inf-Ver",
-                      "HA19_SS_D-Resid-Inf-Ver",
-                      "HA19_SS_D-Resid-Inf-Ver")
+    DAY-SCHEDULES = ( "HA21_SS_D-Resid-Inf-Ver",
+                      "HA21_SS_D-Resid-Inf-Ver",
+                      "HA21_SS_D-Resid-Inf-Ver",
+                      "HA21_SS_D-Resid-Inf-Ver",
+                      "HA21_SS_D-Resid-Inf-Ver",
+                      "HA21_SS_D-Resid-Inf-Ver",
+                      "HA21_SS_D-Resid-Inf-Ver")
     ..
 "Infiltracion-Residencia" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Ventilación"
     MONTH = ( 5, 6, 9, 12)
     DAY   = ( 27, 3, 30, 31)
-    WEEK-SCHEDULES = ( "HA19_HS0_SS_",
-                       "HA19_HS1_SS_",
-                       "HA19_HS2_SS_",
-                       "HA19_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA21_HS0_SS_",
+                       "HA21_HS1_SS_",
+                       "HA21_HS2_SS_",
+                       "HA21_HS0_SS_")
     ..
-"HA20_SS_D-No-Habitable" = DAY-SCHEDULE-PD
+"HA22_SS_D-No-Habitable" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Internas"
     INDEX = 0
     VALUES  = ( 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)
     ..
-  "HA20_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA22_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA20_SS_D-No-Habitable",
-                      "HA20_SS_D-No-Habitable",
-                      "HA20_SS_D-No-Habitable",
-                      "HA20_SS_D-No-Habitable",
-                      "HA20_SS_D-No-Habitable",
-                      "HA20_SS_D-No-Habitable",
-                      "HA20_SS_D-No-Habitable")
+    DAY-SCHEDULES = ( "HA22_SS_D-No-Habitable",
+                      "HA22_SS_D-No-Habitable",
+                      "HA22_SS_D-No-Habitable",
+                      "HA22_SS_D-No-Habitable",
+                      "HA22_SS_D-No-Habitable",
+                      "HA22_SS_D-No-Habitable",
+                      "HA22_SS_D-No-Habitable")
     ..
 "Anual-No-Habitable" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Internas"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA20_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA22_HS0_SS_")
     ..
-"HA21_SS_D-No-habitable-Func" = DAY-SCHEDULE-PD
+"HA23_SS_D-No-habitable-Func" = DAY-SCHEDULE-PD
     TYPE  = "ON/OFF"
     GROUP = "Equipos"
     INDEX = 0
     VALUES  = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     ..
-  "HA21_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA23_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = ON/OFF
-    DAY-SCHEDULES = ( "HA21_SS_D-No-habitable-Func",
-                      "HA21_SS_D-No-habitable-Func",
-                      "HA21_SS_D-No-habitable-Func",
-                      "HA21_SS_D-No-habitable-Func",
-                      "HA21_SS_D-No-habitable-Func",
-                      "HA21_SS_D-No-habitable-Func",
-                      "HA21_SS_D-No-habitable-Func")
+    DAY-SCHEDULES = ( "HA23_SS_D-No-habitable-Func",
+                      "HA23_SS_D-No-habitable-Func",
+                      "HA23_SS_D-No-habitable-Func",
+                      "HA23_SS_D-No-habitable-Func",
+                      "HA23_SS_D-No-habitable-Func",
+                      "HA23_SS_D-No-habitable-Func",
+                      "HA23_SS_D-No-habitable-Func")
     ..
 "Anual-No-habitable-Func" = SCHEDULE-PD
     TYPE   = "ON/OFF"
     GROUP  = "Equipos"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA21_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA23_HS0_SS_")
     ..
-"HA22_SS_D-No-habitable-Inf" = DAY-SCHEDULE-PD
+"HA24_SS_D-No-habitable-Inf" = DAY-SCHEDULE-PD
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 0
     VALUES  = ( 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
-  "HA22_HS0_SS_" = WEEK-SCHEDULE-PD
+  "HA24_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
-    DAY-SCHEDULES = ( "HA22_SS_D-No-habitable-Inf",
-                      "HA22_SS_D-No-habitable-Inf",
-                      "HA22_SS_D-No-habitable-Inf",
-                      "HA22_SS_D-No-habitable-Inf",
-                      "HA22_SS_D-No-habitable-Inf",
-                      "HA22_SS_D-No-habitable-Inf",
-                      "HA22_SS_D-No-habitable-Inf")
+    DAY-SCHEDULES = ( "HA24_SS_D-No-habitable-Inf",
+                      "HA24_SS_D-No-habitable-Inf",
+                      "HA24_SS_D-No-habitable-Inf",
+                      "HA24_SS_D-No-habitable-Inf",
+                      "HA24_SS_D-No-habitable-Inf",
+                      "HA24_SS_D-No-habitable-Inf",
+                      "HA24_SS_D-No-habitable-Inf")
     ..
 "Anual-No-habitable-Inf" = SCHEDULE-PD
     TYPE   = "FRACTION"
     GROUP  = "Ventilación"
     MONTH = ( 12)
     DAY   = ( 31)
-    WEEK-SCHEDULES = ( "HA22_HS0_SS_")
+    WEEK-SCHEDULES = ( "HA24_HS0_SS_")
     ..
 $
 $ +----------------------------+
@@ -2810,7 +2856,7 @@ $
       DEFINICION = 1
     ..
 "FRENTE_FORJADO" = THERMAL-BRIDGE
-      LONG-TOTAL = 110.000000
+      LONG-TOTAL = 99.999992
       DEFINICION = 3
       TTL    = 0.000000
       LISTA-N   = ( "Frentes de forjados - Forjado no interrumpe el aislamiento en fachada") 
@@ -2824,7 +2870,7 @@ $
       PARTITION   = YES
     ..
 "UNION_CUBIERTA" = THERMAL-BRIDGE
-      LONG-TOTAL = 113.541031
+      LONG-TOTAL = 90.395073
       DEFINICION = 3
       TTL    = 0.258750
       LISTA-N   = ( "Cubiertas planas - Forjado no interrumpe el aislamiento en fachada") 
@@ -2874,7 +2920,7 @@ $
       PARTITION   = BOTH
     ..
 "PILAR" = THERMAL-BRIDGE
-      LONG-TOTAL = 1.000000
+      LONG-TOTAL = 0.000000
       DEFINICION = 3
       TTL    = 0.000000
       LISTA-N   = ( "Pilar aislado") 
@@ -2885,7 +2931,7 @@ $
       TYPE        = PILLAR
     ..
 "HUECO_CAPIALZADO" = THERMAL-BRIDGE
-      LONG-TOTAL = 12.000000
+      LONG-TOTAL = 18.000000
       DEFINICION = 3
       TTL    = 0.111000
       LISTA-N   = ( "Dintel - Continuidad entre aislamiento de muro y carpinteria") 
@@ -2896,7 +2942,7 @@ $
       TYPE        = WINDOW-FRAME
     ..
 "HUECO_JAMBA" = THERMAL-BRIDGE
-      LONG-TOTAL = 24.000000
+      LONG-TOTAL = 18.000000
       DEFINICION = 3
       TTL    = 0.010000
       LISTA-N   = ( "Jamba - Continuidad entre aislamiento de muro y carpinteria") 
@@ -2907,7 +2953,7 @@ $
       TYPE        = WINDOW-FRAME
     ..
 "HUECO_ALFEIZAR" = THERMAL-BRIDGE
-      LONG-TOTAL = 12.000000
+      LONG-TOTAL = 18.000000
       DEFINICION = 3
       TTL    = 0.080000
       LISTA-N   = ( "Alfeizar - Continuidad entre el aislamiento de muro y la carpinteria") 
@@ -2935,4 +2981,4 @@ $
 $ +-----------------------------------------------------------------+
 $ |                        Final del fichero                        |
 $ +-----------------------------------------------------------------+
-]]></EntradaGraficaLIDER><Definicion_Sistema><elementos><FactoresDeCorreccion/><Sistemas/></elementos></Definicion_Sistema></CTE-HE-XML>
+]]></EntradaGraficaLIDER><Definicion_Sistema><elementos><FactoresDeCorreccion><CurvaComportamiento nombre="ren_FCP_Tiempo-EQ_Caldera-unidad"><nombre_usuario>ren_FCP_Tiempo-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_FCP_Tiempo</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Factor Carga Parcial</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="ren_FCP_Potencia-EQ_Caldera-Condensacion-Defecto"><nombre_usuario>ren_FCP_Potencia-EQ_Caldera-Condensacion-Defecto</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_FCP_Potencia</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Factor Carga Parcial</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1.0914;-0.0914"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="ren_T-EQ_Caldera-unidad"><nombre_usuario>ren_T-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_T</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Temperatura impulsion</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="cap_T-EQ_Caldera-unidad"><nombre_usuario>cap_T-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>cap_T</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Temperatura impulsion</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento></FactoresDeCorreccion><Sistemas><SIS_Acs nombre="SIS"><nombre_usuario>SIS_ACS</nombre_usuario><porcentajeES>0.00</porcentajeES><contribucionSolarMinima>0.00</contribucionSolarMinima><multiplicador>1</multiplicador><tImpulsion>60.00</tImpulsion><equipos><EQ_Caldera nombre="SIS_EQ1"><nombre_usuario>SIS_EQ1_EQ_Caldera-Condensacion-Defecto</nombre_usuario><capNom>24.00</capNom><renNom>0.95</renNom><tipoEnergia>"Gas Natural"</tipoEnergia><tipoCaldera/><cap_T>"cap_T-EQ_Caldera-unidad"</cap_T><ren_T>"ren_T-EQ_Caldera-unidad"</ren_T><ren_FCP_Potencia>"ren_FCP_Potencia-EQ_Caldera-Condensacion-Defecto"</ren_FCP_Potencia><ren_FCP_Tiempo>"ren_FCP_Tiempo-EQ_Caldera-unidad"</ren_FCP_Tiempo></EQ_Caldera></equipos><demandas><DemandaACS nombre="SIS_ACS1"><perfilDiario>Demanda_Hor</perfilDiario><conACSDiario>300</conACSDiario><TUso>60</TUso><TRed>13.3021392822266</TRed><nombre_usuario>SIS_ACS1_Demanda_de_ACS</nombre_usuario></DemandaACS></demandas></SIS_Acs></Sistemas></elementos></Definicion_Sistema></CTE-HE-XML>
