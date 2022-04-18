@@ -195,16 +195,21 @@ pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
 
 static LIDERCATSTRZ: &[u8] = include_bytes!("BDCatalogo.bdc.utf8.gz");
 
+/// Carga datos del catálogo comprimido de LIDER
+pub fn load_lider_catalog() -> Result<crate::bdl::DB, Error>{
+    let mut gz = GzDecoder::new(LIDERCATSTRZ);
+    let mut dbstring = String::new();
+    gz.read_to_string(&mut dbstring)?;
+    Ok(Data::new(&dbstring)?.db)
+}
+
 /// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
 pub fn parse_with_catalog(data: &str) -> Result<CtehexmlData, Error> {
     // Carga datos del .ctehexml
     let mut ctehexmldata = parse(data)?;
     let mut db = ctehexmldata.bdldata.db;
     // Carga datos del catálogo comprimido
-    let mut gz = GzDecoder::new(LIDERCATSTRZ);
-    let mut dbstring = String::new();
-    gz.read_to_string(&mut dbstring)?;
-    let catdb = Data::new(&dbstring)?.db;
+    let catdb = load_lider_catalog()?;
     db.materials.extend(catdb.materials);
     db.wallcons.extend(catdb.wallcons);
     db.wincons.extend(catdb.wincons);
