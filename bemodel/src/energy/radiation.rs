@@ -13,7 +13,7 @@ use climate::{nday_from_md, radiation_for_surface, SolarRadiation};
 
 use crate::{
     climatedata::{RadData, CLIMATEMETADATA, JULYRADDATA},
-    energy::raytracing::{AABB, Bounded, Intersectable, Occluder, Ray, BVH},
+    energy::raytracing::{Bounded, Intersectable, Occluder, Ray, AABB, BVH},
     point,
     types::HasSurface,
     utils::fround2,
@@ -30,9 +30,7 @@ impl Model {
     /// Calcula únicamente la radiación directa bloqueada, y asume factores de visibilidad fijos
     /// sin calcularlos a partir de la visión del cielo o el terreno y las reflexiones.
     /// Por esto, tiende a sobreestimar el valor respecto a un método con backwards raytracing completo.
-    pub fn update_fshobst(&mut self) {
-        let occluders = self.collect_occluders();
-
+    pub fn compute_fshobst(&self) -> BTreeMap<Uuid, f32> {
         /// Estructura interna de datos para el soporte del cálculo de fshobst de huecos
         #[derive(Default, Debug)]
         struct ObstData {
@@ -42,10 +40,12 @@ impl Model {
             dir: Vec<f32>,
             /// Radiación difusa en el plano del hueco para cada hora, W/m²
             dif: Vec<f32>,
-            /// Factor de obstáculos remotos (sobre radiación total), ponderado por horas
-            fshobst: f32,
         }
+
+        let occluders = self.collect_occluders();
+
         let mut map: BTreeMap<Uuid, ObstData> = BTreeMap::new();
+        let mut fshobstmap: BTreeMap<Uuid, f32> = BTreeMap::new();
 
         let latitude = CLIMATEMETADATA
             .lock()
@@ -56,7 +56,7 @@ impl Model {
         let julyraddata = JULYRADDATA.lock().unwrap();
         let raddata = match julyraddata.get(&self.meta.climate) {
             Some(data) => data,
-            None => return,
+            None => return fshobstmap,
         };
         for window in &self.windows {
             // if window.name != "P01_E01_PE004_V" {continue};
@@ -94,23 +94,18 @@ impl Model {
                 windata.dif.push(rad_on_win.dif);
             }
         }
-        map.values_mut().for_each(|d| {
+        map.iter().for_each(|(id, d)| {
             let nvalues = d.fshdir.len();
             let mut fshobst_sum = 0.0;
             for i in 0..nvalues {
                 let fshobst_i = (d.fshdir[i] * d.dir[i] + d.dif[i]) / (d.dir[i] + d.dif[i]);
                 fshobst_sum += fshobst_i
             }
-            d.fshobst = fshobst_sum / nvalues as f32;
+            fshobstmap.insert(*id, fround2(fshobst_sum / nvalues as f32));
+            // d.fshobst = fshobst_sum / nvalues as f32;
         });
-        debug!("Fshobst map: {:#?}", map);
-
-        for mut window in &mut self.windows {
-            window.f_shobst = map
-                .get(&window.id)
-                .map(|v| fround2(v.fshobst))
-                .or(Some(1.0));
-        }
+        debug!("Fshobst map: {:#?}", fshobstmap);
+        fshobstmap
     }
 
     /// Fracción del hueco con radiación solar directa para la posición solar dada [0.0 - 1.0]

@@ -26,9 +26,6 @@ pub struct Window {
     /// Factor de obstáculos remotos suministrado por el usuario
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub f_shobst_override: Option<f32>,
-    /// Factor de obstáculos remotos calculado a partir del modelo
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub f_shobst: Option<f32>,
     /// Geometría de hueco
     pub geometry: WinGeom,
 }

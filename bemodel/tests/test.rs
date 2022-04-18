@@ -72,8 +72,7 @@ fn model_json_e4h_medianeras() {
     init();
 
     let strdata = include_str!("./data/e4h_medianeras.json");
-    let mut model = Model::from_json(strdata).unwrap();
-    model.update_fshobst();
+    let model = Model::from_json(strdata).unwrap();
 
     // // Cubiertas
     let wall = model.get_wall_by_name("P04_E01_CUB001").unwrap();
@@ -86,7 +85,7 @@ fn model_json_e4h_medianeras() {
     assert_almost_eq!(ind.compacity, 3.17, 0.01);
     assert_almost_eq!(ind.K_data.K, 0.37, 0.01);
     // En HULC es q_solul = 0.43
-    // con model.update_fshobst = 0.47
+    // con compute_fshobst = 0.47
     // con el modelo simple (solo retranqueos) = 0.53
     assert_almost_eq!(ind.q_soljul_data.q_soljul, 0.47, 0.01);
 
@@ -138,8 +137,7 @@ fn model_json_ejemploviv_unif() {
     init();
 
     let strdata = include_str!("./data/ejemploviv_unif.json");
-    let mut model = Model::from_json(strdata).unwrap();
-    model.update_fshobst();
+    let model = Model::from_json(strdata).unwrap();
 
     // Datos geométricos
 
@@ -204,15 +202,9 @@ fn model_json_ejemploviv_unif() {
     assert_almost_eq!(ind.vol_env_net, 257.98, 0.1);
     assert_almost_eq!(ind.vol_env_gross, 292.67, 0.1);
 
-    info!(
-        "sunlit map:\n{}",
-        model
-            .windows
-            .iter()
-            .map(|w| format!("{}: {}", w.name, w.f_shobst.unwrap()))
-            .collect::<Vec<_>>()
-            .join("\n")
-    );
+    // Ventanas
+    let winid = model.get_window_by_name("P02_E01_PE001_V").unwrap().id;
+    assert_almost_eq!(ind.props.windows.get(&winid).unwrap().f_shobst.unwrap(), 0.76, 0.01);
 }
 
 #[test]

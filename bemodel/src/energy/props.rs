@@ -123,6 +123,7 @@ impl From<&Model> for EnergyProps {
         }
 
         // Propiedades de huecos
+        let fshobstmap = model.compute_fshobst();
         let mut windows: BTreeMap<Uuid, WinProps> = BTreeMap::new();
         for w in &model.windows {
             let wall = walls.get(&w.wall);
@@ -137,7 +138,7 @@ impl From<&Model> for EnergyProps {
                 is_tenv: tenv_wall_ids.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
                 f_shobst_override: w.f_shobst_override,
-                f_shobst: w.f_shobst,
+                f_shobst: fshobstmap.get(&w.id).copied(),
             };
             windows.insert(w.id, wp);
         }

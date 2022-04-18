@@ -106,7 +106,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             rn_perim_insulation,
         };
 
-        let mut model = Model {
+        let model = Model {
             meta,
             walls,
             windows,
@@ -117,7 +117,6 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             mats,
             extra: None,
         };
-        model.update_fshobst();
         Ok(model)
     }
 }
@@ -299,8 +298,6 @@ fn windows_and_shades_from_bdl(
             wall: *id_maps.wall_id(&win.wall).unwrap(),
             // Este valor se usa para valores impuestos por el usuario
             f_shobst_override: None,
-            // El valor calculado del f_shobst se actualiza con model.update_fshobst() al final del proceso de importación
-            f_shobst: None, 
             geometry: WinGeom {
                 position: Some(point![win.x, win.y]),
                 width: win.width,
