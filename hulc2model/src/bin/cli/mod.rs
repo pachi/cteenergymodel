@@ -11,10 +11,10 @@ use hulc2model::{collect_hulc_data, get_copytxt, PROGNAME};
 
 fn get_help() -> String {
     format!(
-        "Uso: {} [--skip-kyg] DIRECTORIO
+        "Uso: {} [--use-kyg] DIRECTORIO
 
 Opciones:
---skip-kyg      Ignorar datos obtenidos del archivo KyGananciasSolares.txt
+--use-extra      Utiliza datos de transmitancia y radiación de KyGananciasSolares.txt y NewBDL_O.tbl
 
 Argumentos:
 DIRECTORIO     Directorio del proyecto de HULC
@@ -30,17 +30,9 @@ Puede redirigir la salida de resultados a un archivo para su uso posterior:
     )
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Default)]
 struct Options {
     use_extra_files: bool,
-}
-
-impl Default for Options {
-    fn default() -> Self {
-        Self {
-            use_extra_files: true,
-        }
-    }
 }
 
 pub fn cli_main() -> Result<()> {
@@ -62,11 +54,11 @@ pub fn cli_main() -> Result<()> {
         _ => {
             let mut opts = Options::default();
             for opt in &args[1..args.len() - 1] {
-                if opt.as_str() == "--skip-extra" {
+                if opt.as_str() == "--use-extra" {
                     eprintln!(
-                            "Se ignorará la información en los archivos KyGananciasSolares.txt y NewBDL_O.tbl"
+                            "Se usará la información en los archivos KyGananciasSolares.txt y NewBDL_O.tbl"
                         );
-                    opts.use_extra_files = false;
+                    opts.use_extra_files = true;
                 }
             }
             (opts, &args[args.len() - 1])
