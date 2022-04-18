@@ -1,0 +1,58 @@
+###;Datos para Factor de Pérdidas
+Ventana;P01_E01_PE001_V;2.00;3.62;S ;10.00;0.79;-1.00;1.00;25.00;Doble -- Mrpt - Gris claro
+Muro;P01_E01_PE001;28.00;1.72;1.00;Fachada;S ;Fachada por defecto D
+Muro;P01_E01_PE002;30.00;1.72;1.00;Fachada;E ;Fachada por defecto D
+Muro;P01_E01_PE003;30.00;1.72;1.00;Fachada;N ;Fachada por defecto D
+Muro;P01_E01_PE004;30.00;1.72;1.00;Fachada;O ;Fachada por defecto D
+Muro;P01_E01_FTER001;100.00;0.58;1.00;Suelo;H ;Contacto por defecto
+Muro;P01_E01C001;50.00;2.06;1.00;Cubierta;H ;PIV por defecto
+Muro;P01_E01C002;50.00;2.06;1.00;Cubierta;H ;PIV por defecto
+PPTT;54,14;0,960;UNION_CUBIERTA;SDINT
+PPTT;12,00;0,110;ESQUINA_CONVEXA_CERRAMIENTO;SDINT
+PPTT;40,00;0,490;UNION_SOLERA_PAREDEXT;SDINT
+PPTT;6,00;0,597;HUECO_VENTANA;SDINT
+Coeficiente K = ;1,720
+###;Datos para Factor de Insolación
+0 ; 61.031345
+1 ; 91.267944
+2 ; 116.883369
+3 ; 110.644028
+4 ; 88.472504
+5 ; 113.330009
+6 ; 120.642815
+7 ; 93.898636
+8 ; 220.007599
+"P01_E01_PE001_V"; 180.000000; 2.000000; 88472.460938; 52435.878906; 48153.050781; 48153.050781; 43337.710938
+###;Fin
+###
+### DOCUMENTACIÓN
+###
+### Cerramientos Opacos
+###
+### Muro (texto fijo); Nombre; Superficie (m2); Transmitancia (W/m2K);Factor b (-); Tipo de cerramiento (Fachada Suelo Cubierta ...); Orientación; Nombre de Construcción
+###
+### Huecos
+###
+### Ventana (texto fijo); Nombre; Superficie (m2); Transmitancia (W/m2K); Orientación; Porcentaje de marco (%); Factor solar vidrio (-); No se usa (-1); Factor de Sombra del hueco (-); Permeabilidad del hueco (m3/hm2 a 100 Pa); Nombre de Hueco
+###
+### Puentes térmicos
+###
+### PPTT (texto fijo); Longitud (m); Transmitancia térmica lineal (W/mK); Tipo de PPTT
+###
+### Lineas correspondientes a Ganancias Solares en Julio
+###
+### 8 lineas con la radiación solar global incidente en una superficie vertical (kWh/m2) (0: Norte, 1: NE, ... 7: NO)
+### 1 linea con la radiación solar global incidente en una superficie horizontal (kWh/m2) (8: Horizontal)
+###
+### Para cada hueco en el edificio, una linea que contiene:
+### Nombre del hueco
+### Orientación (grados respecto al norte, (NE=45, E=90, ...))
+### Superficie (m2)
+### Radiación solar global en el plano del vidrio sin obstáculos (Wh/m2)
+### Radiación solar global en el plano del vidrio tras obstaculos remotos (Wh/m2)
+### Radiación solar global en el plano del vidrio tras obstaculos de fachada (voladizos, retranqueos, ...) (Wh/m2)
+### Radiación solar global en el plano del vidrio tras sombras por lamas (Wh/m2)
+### Ganancia Solar a través de este hueco (Wh/m2)
+###
+##
+#

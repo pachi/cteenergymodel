@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<CTE-HE-XML><DatosGenerales><refCatastral>ninguno</refCatastral><tipoVivienda>Unifamiliar</tipoVivienda><anio/><tipoDefinicion>Nuevo</tipoDefinicion><comunidad>Madrid</comunidad><provincia>Madrid</provincia><poblacion>Madrid</poblacion><zonaClimatica>D3</zonaClimatica><altitud>650</altitud><tipoUso>Residencial</tipoUso><claseHigrometria>3</claseHigrometria><numRenovacionesHS3>1</numRenovacionesHS3><ventilacionPorDefecto>NO</ventilacionPorDefecto><numViviendasBloque>1</numViviendasBloque><valorImpulsionAire>1.00</valorImpulsionAire><valorExtraccionAireCocina>1.00</valorExtraccionAireCocina><valorExtraccionAireBanos>1.00</valorExtraccionAireBanos><valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos><vent_p1>25.00</vent_p1><vent_p2>25.00</vent_p2><vent_p3>25.00</vent_p3><vent_p4>25.00</vent_p4><nomPro>Nombre del Proyecto</nomPro><usoPro>- Seleccione de la lista -</usoPro><usoProOtros/><comunidadPro>Madrid</comunidadPro><proPro>Madrid</proPro><locPro>Madrid</locPro><cpPro>C&#xF3;digo Postal</cpPro><tipoViaPro>Calle</tipoViaPro><viaPro>C/</viaPro><tipoNPro>Num</tipoNPro><nPro>-</nPro><blqPro>-</blqPro><portalPro>-</portalPro><escPro>-</escPro><pisoPro>-</pisoPro><puertaPro>-</puertaPro><datosAdicPro>-</datosAdicPro><normativaEdificacion>- Seleccione de la lista -</normativaEdificacion><normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones><normativaOtros>- Seleccione de la lista -</normativaOtros><normativaEdificacionOtros/><normativaInstalacionesOtros/><normativaOtrosOtros/><superficieConstruida>0.00</superficieConstruida><SupConsCubierta>0.00</SupConsCubierta><supOcupada>0.00</supOcupada><alturaTotal>0.00</alturaTotal><plantaSobreRasante>0</plantaSobreRasante><plantaBajoRasante>0</plantaBajoRasante><EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida><panelFotoVoltaicoAutoConsumido>0</panelFotoVoltaicoAutoConsumido><contribucionResACS>0.00</contribucionResACS><puertaPro>-</puertaPro><cifAut>CIF</cifAut><nomAut>Nombres</nomAut><apellido1Aut>Apellido1</apellido1Aut><apellido2Aut>Apellido2</apellido2Aut><razAut>Raz&#xF3;n Social</razAut><NIFEntidad/><comunidadAut>- Seleccione de la lista -</comunidadAut><proAut>- Seleccione de la lista -</proAut><locAut>Localidad</locAut><cpAut>Codigo postal</cpAut><tipoViaAut>Calle</tipoViaAut><viaAut>Nombre calle</viaAut><tipoNAut>Num</tipoNAut><nAut>-</nAut><blqAut>-</blqAut><portalAut>-</portalAut><escAut>-</escAut><pisoAut>-</pisoAut><puertaAut>-</puertaAut><datosAdicAut>-</datosAdicAut><correoAut>-</correoAut><telAut>-</telAut><titulacionAut>- Seleccione de la lista -</titulacionAut><titulacionOtrosAut>-</titulacionOtrosAut><colegioAut>- Seleccione de la lista -</colegioAut><colegioOtrosAut>-</colegioOtrosAut><numeroColegiadoAut>-</numeroColegiadoAut><fechaVisita>10/02/21</fechaVisita><extInfo>SI</extInfo><VentNoct>SI</VentNoct><SistSus>SI</SistSus><pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado><imgEdif>Especifique imagen para el edificio</imgEdif><imgPlano>Especifique imagen para el plano de situaci&#xF3;n del edificio</imgPlano><MesIniPerSom>Junio</MesIniPerSom><MesFinPerSom>Septiembre</MesFinPerSom><energiaGT>true</energiaGT><directoCALENERGT>NO</directoCALENERGT><valMenELE>NO</valMenELE><valMenACS>NO</valMenACS><valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE><valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS><datoGeneralNuevo>0</datoGeneralNuevo><potenciaFVInstalada>0</potenciaFVInstalada><IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu><estimacionConsumoACSGT>0.00</estimacionConsumoACSGT><bajaPermeabilidad>SI</bajaPermeabilidad><ensayoPermeabilidad>NO</ensayoPermeabilidad><ValorN50Medido>0</ValorN50Medido><datosVentilacion>0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0</datosVentilacion><venPotEC>-1.000</venPotEC><recEFC>-1.000</recEFC><cambios>NO</cambios><cambioscalener>NO</cambioscalener><RED1>RED1    <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED1><RED2>RED2    <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED2></DatosGenerales><EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
+<CTE-HE-XML><DatosGenerales><refCatastral>ninguno</refCatastral><tipoVivienda>Unifamiliar</tipoVivienda><anio/><tipoDefinicion>Nuevo</tipoDefinicion><comunidad>Madrid</comunidad><provincia>Madrid</provincia><poblacion>Madrid</poblacion><zonaClimatica>D3</zonaClimatica><altitud>650</altitud><tipoUso>Residencial</tipoUso><claseHigrometria>3</claseHigrometria><numRenovacionesHS3>1</numRenovacionesHS3><ventilacionPorDefecto>NO</ventilacionPorDefecto><numViviendasBloque>1</numViviendasBloque><valorImpulsionAire>50.00</valorImpulsionAire><valorExtraccionAireCocina>1.00</valorExtraccionAireCocina><valorExtraccionAireBanos>1.00</valorExtraccionAireBanos><valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos><vent_p1>25.00</vent_p1><vent_p2>25.00</vent_p2><vent_p3>25.00</vent_p3><vent_p4>25.00</vent_p4><nomPro>Nombre del Proyecto</nomPro><usoPro>- Seleccione de la lista -</usoPro><usoProOtros/><comunidadPro>Madrid</comunidadPro><proPro>Madrid</proPro><locPro>Madrid</locPro><cpPro>C&#xF3;digo Postal</cpPro><tipoViaPro>Calle</tipoViaPro><viaPro>C/</viaPro><tipoNPro>Num</tipoNPro><nPro>-</nPro><blqPro>-</blqPro><portalPro>-</portalPro><escPro>-</escPro><pisoPro>-</pisoPro><puertaPro>-</puertaPro><datosAdicPro>-</datosAdicPro><normativaEdificacion>- Seleccione de la lista -</normativaEdificacion><normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones><normativaOtros>- Seleccione de la lista -</normativaOtros><normativaEdificacionOtros/><normativaInstalacionesOtros/><normativaOtrosOtros/><superficieConstruida>0.00</superficieConstruida><SupConsCubierta>0.00</SupConsCubierta><supOcupada>0.00</supOcupada><alturaTotal>0.00</alturaTotal><plantaSobreRasante>0</plantaSobreRasante><plantaBajoRasante>0</plantaBajoRasante><EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida><panelFotoVoltaicoAutoConsumido>0.00</panelFotoVoltaicoAutoConsumido><contribucionResACS>0.00</contribucionResACS><puertaPro>-</puertaPro><cifAut>CIF</cifAut><nomAut>Nombres</nomAut><apellido1Aut>Apellido1</apellido1Aut><apellido2Aut>Apellido2</apellido2Aut><razAut>Raz&#xF3;n Social</razAut><NIFEntidad/><comunidadAut>- Seleccione de la lista -</comunidadAut><proAut>- Seleccione de la lista -</proAut><locAut>Localidad</locAut><cpAut>Codigo postal</cpAut><tipoViaAut>Calle</tipoViaAut><viaAut>Nombre calle</viaAut><tipoNAut>Num</tipoNAut><nAut>-</nAut><blqAut>-</blqAut><portalAut>-</portalAut><escAut>-</escAut><pisoAut>-</pisoAut><puertaAut>-</puertaAut><datosAdicAut>-</datosAdicAut><correoAut>-</correoAut><telAut>-</telAut><titulacionAut>- Seleccione de la lista -</titulacionAut><titulacionOtrosAut>-</titulacionOtrosAut><colegioAut>- Seleccione de la lista -</colegioAut><colegioOtrosAut>-</colegioOtrosAut><numeroColegiadoAut>-</numeroColegiadoAut><fechaVisita>10/02/21</fechaVisita><extInfo>SI</extInfo><VentNoct>SI</VentNoct><SistSus>SI</SistSus><pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado><imgEdif>Especifique imagen para el edificio</imgEdif><imgPlano>Especifique imagen para el plano de situaci&#xF3;n del edificio</imgPlano><MesIniPerSom>Junio</MesIniPerSom><MesFinPerSom>Septiembre</MesFinPerSom><energiaGT>true</energiaGT><directoCALENERGT>NO</directoCALENERGT><valMenELE>NO</valMenELE><valMenACS>NO</valMenACS><valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE><valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS><fpECGaPT>0.000</fpECGaPT><fpECGaPNR>0.000</fpECGaPNR><fpECGaCO2>0.000</fpECGaCO2><datoGeneralNuevo>NO;29;10;1960</datoGeneralNuevo><fechaCertificado>NO;29;10;1960</fechaCertificado><potenciaFVInstalada>0</potenciaFVInstalada><IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu><estimacionConsumoACSGT>28.00</estimacionConsumoACSGT><bajaPermeabilidad>SI</bajaPermeabilidad><ensayoPermeabilidad>NO</ensayoPermeabilidad><ValorN50Medido>0</ValorN50Medido><datosVentilacion>1;180.000;90.00;1;300.00;150.00;0.020;0.50;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;180.000;0.00;0.00;0.0000</datosVentilacion><venPotEC>90.000</venPotEC><recEFC>-1.000</recEFC><cambios>NO</cambios><cambioscalener>NO</cambioscalener><RED1>RED1  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED1><RED2>RED2  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED2></DatosGenerales><EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
 $ |         FICHERO GENERADO CON CTE-HE-2019           |
 $ +----------------------------------------------------+
 $
@@ -27,7 +27,7 @@ CAMBIO-CALENER = NO
      NUMRENHS3           = "1"
      NUM-VIVIENDAS       = 1
      VENTILACION-POR-DEFECTO = "NO"
-     VALORES-VENTILACION = ( "1.00", "1.00", "1.00", "2.00" )
+     VALORES-VENTILACION = ( "50.00", "1.00", "1.00", "2.00" )
      VALORES-PORCENTAJES = ( 25.000000, 25.000000, 25.000000, 25.000000 )
      NAME-PROJECT        	= "Nombre del Proyecto"
      USE-PROJECT         	= "- Seleccione de la lista -"
@@ -144,6 +144,168 @@ TEMPLARY = USER
 $ ++++++++++++++++++++++++++++++
 $           MATERIALES
 $ ++++++++++++++++++++++++++++++
+"Material_Base" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =          0.075
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =              1
+    DENSITY           =           3000
+    SPECIFIC-HEAT     =           1000
+    VAPOUR-DIFFUSIVITY-FACTOR =             10
+    NAME          = "Material_Base"
+    GROUP         = "Otro"
+    IMAGE          = "C:\ProgramasCTEyCEE\CTEHE2019\Imagenes\Ladrillo.bmp"
+    NAME_CALENER   = ""
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
+"Teja cerámica-porcelana" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =           0.02
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            1.3
+    DENSITY           =           2300
+    SPECIFIC-HEAT     =            840
+    VAPOUR-DIFFUSIVITY-FACTOR =             30
+    NAME          = "Teja cerámica-porcelana"
+    GROUP         = "Cerámicos"
+    IMAGE          = "arcilla.bmp"
+    NAME_CALENER   = "Teja cerámica-porcelana"
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
+"FU Entrevigado de EPS moldeado descolgado -Canto 250 mm" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =           0.25
+    THICKNESS_CHANGE         = NO
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =      0.1760563
+    DENSITY           =            710
+    SPECIFIC-HEAT     =           1000
+    VAPOUR-DIFFUSIVITY-FACTOR =             60
+    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 250 mm"
+    GROUP         = "Forjados unidireccionales"
+    IMAGE          = "ladrillo.bmp"
+    NAME_CALENER   = "oldeado descolgado -Canto 250 "
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
+"FU Entrevigado de EPS moldeado descolgado -Canto 300 mm" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.3
+    THICKNESS_CHANGE         = NO
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =            0.2
+    DENSITY           =            670
+    SPECIFIC-HEAT     =           1000
+    VAPOUR-DIFFUSIVITY-FACTOR =             60
+    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 300 mm"
+    GROUP         = "Forjados unidireccionales"
+    IMAGE          = "ladrillo.bmp"
+    NAME_CALENER   = "oldeado descolgado -Canto 30 "
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
+"FU Entrevigado de EPS moldeado descolgado -Canto 350 mm" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =           0.35
+    THICKNESS_CHANGE         = NO
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =      0.2229299
+    DENSITY           =            640
+    SPECIFIC-HEAT     =           1000
+    VAPOUR-DIFFUSIVITY-FACTOR =             60
+    NAME          = "FU Entrevigado de EPS moldeado descolgado -Canto 350 mm"
+    GROUP         = "Forjados unidireccionales"
+    IMAGE          = "ladrillo.bmp"
+    NAME_CALENER   = "oldeado descolgado -Canto 35 "
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
+"FR Entrevigado de EPS moldeado descolgado -Canto 300 mm" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.3
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =      0.3571429
+    DENSITY           =           1330
+    SPECIFIC-HEAT     =           1000
+    VAPOUR-DIFFUSIVITY-FACTOR =             60
+    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 300 mm"
+    GROUP         = "Forjados reticulares"
+    IMAGE          = "ladrillo.bmp"
+    NAME_CALENER   = "oldeado descolgado -Canto 300 "
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
+"FR Entrevigado de EPS moldeado descolgado -Canto 350 mm" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =           0.35
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =      0.4022988
+    DENSITY           =           1310
+    SPECIFIC-HEAT     =           1000
+    VAPOUR-DIFFUSIVITY-FACTOR =             60
+    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 350 mm"
+    GROUP         = "Forjados reticulares"
+    IMAGE          = "ladrillo.bmp"
+    NAME_CALENER   = "oldeado descolgado -Canto 350 "
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
+"FR Entrevigado de EPS moldeado descolgado -Canto 400 mm" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =            0.4
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =      0.4395604
+    DENSITY           =           1290
+    SPECIFIC-HEAT     =           1000
+    VAPOUR-DIFFUSIVITY-FACTOR =             60
+    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 400 mm"
+    GROUP         = "Forjados reticulares"
+    IMAGE          = "ladrillo.bmp"
+    NAME_CALENER   = "oldeado descolgado -Canto 400 "
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
+"FR Entrevigado de EPS moldeado descolgado -Canto 450 mm" = MATERIAL
+    TYPE              = PROPERTIES
+    THICKNESS         =           0.45
+    THICKNESS_CHANGE         = YES
+    THICKNESS_MAX         =              2
+    THICKNESS_MIN         =          0.001
+    CONDUCTIVITY      =      0.4787234
+    DENSITY           =           1280
+    SPECIFIC-HEAT     =           1000
+    VAPOUR-DIFFUSIVITY-FACTOR =             60
+    NAME          = "FR Entrevigado de EPS moldeado descolgado -Canto 450 mm"
+    GROUP         = "Forjados reticulares"
+    IMAGE          = "ladrillo.bmp"
+    NAME_CALENER   = "oldeado descolgado -Canto 450 "
+    LIBRARY       = NO
+    UTIL          =  NO
+    OBSOLETE      = NO
+    ..
 "Material_Base" = MATERIAL
     TYPE              = PROPERTIES
     THICKNESS         =          0.075
@@ -469,6 +631,33 @@ $ ++++++++++++++++++++++++++++++
                 LIBRARY       = NO
     UTIL          =  NO
 ..
+ "Met - Gris claro" = NAME-FRAME
+      GROUP         = "Marcos"
+      FRAME-WIDTH   =            0.1
+      FRAME-CONDUCT =            5.7
+      FRAME-ABS     =            0.4
+      NAME_CALENER  = ""
+                LIBRARY       = NO
+    UTIL          =  NO
+..
+ "Mrpt - Gris claro" = NAME-FRAME
+      GROUP         = "Marcos"
+      FRAME-WIDTH   =            0.1
+      FRAME-CONDUCT =            3.2
+      FRAME-ABS     =            0.4
+      NAME_CALENER  = ""
+                LIBRARY       = NO
+    UTIL          =  NO
+..
+ "Mpvc o mad - Gris claro" = NAME-FRAME
+      GROUP         = "Marcos"
+      FRAME-WIDTH   =            0.1
+      FRAME-CONDUCT =            2.2
+      FRAME-ABS     =            0.4
+      NAME_CALENER  = ""
+                LIBRARY       = NO
+    UTIL          =  NO
+..
 $ ++++++++++++++++++++++++++++++
 $             HUECOS
 $ ++++++++++++++++++++++++++++++
@@ -526,32 +715,6 @@ $ ------------------
 $ Sombras exteriores
 $ ------------------
 $
-"Sombra001" = BUILDING-SHADE
-      X        = 2.000000
-      Y        = 0.000000
-      Z        = 0.000000
-      HEIGHT   = 0.000000
-      WIDTH    = 0.000000
-      TILT     = 90.000000
-      AZIMUTH  = 0.000000
-      BULB-TRA = "Default.bulb"
-      BULB-REF = "Default.bulb"
-      TRAN     =              0
-      REFL     =            0.7
-    ..
-"Sombra005" = BUILDING-SHADE
-      X        = 2.000000
-      Y        = 0.000000
-      Z        = 0.000000
-      HEIGHT   = 0.000000
-      WIDTH    = 0.000000
-      TILT     = 90.000000
-      AZIMUTH  = 0.000000
-      BULB-TRA = "Default.bulb"
-      BULB-REF = "Default.bulb"
-      TRAN     =              0
-      REFL     =            0.7
-    ..
 $ --------------------
 $ Sombras Del Edificio
 $ --------------------
@@ -630,7 +793,7 @@ $          TYPE-OPER = "Acondicionado"
            INTERNAL-PARTITIONS = CUSTOM
            TYPE-CASE          = Nuevo
            TYPE-BUILD         = Unifamiliar
-           INF-FLOW  = ( -3.600000, -183.600006 )
+           INF-FLOW  = ( -180.000000, -360.000000 )
            PERCENTAGE-AIR-CHANGES  = ( 23, 1 )
            VENTILACION-NOCTURNA = SI 
            RENOVACIONES-HORA-VERANO-NOCHE = 4.0 
@@ -1604,7 +1767,7 @@ $
     TYPE  = "FRACTION"
     GROUP = "Ventilación"
     INDEX = 1
-    VALUES  = ( 103.78, 103.78, 103.78, 103.78, 103.78, 103.78, 103.78, 103.78, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
+    VALUES  = ( 6.14, 6.14, 6.14, 6.14, 6.14, 6.14, 6.14, 6.14, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00)
     ..
   "HA21_HS0_SS_" = WEEK-SCHEDULE-PD
     TYPE  = FRACTION
@@ -1726,11 +1889,11 @@ $ | PUENTES TÉRMICOS |
 $ +------------------+
 $
 "LONGITUDES_CALCULADAS" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 0.000000
       DEFINICION = 1
     ..
 "FRENTE_FORJADO" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 0.000000
       DEFINICION = 1
       TTL    = 0.970000
       FRSI        = 0.45
@@ -1740,7 +1903,7 @@ $
       PARTITION   = YES
     ..
 "UNION_CUBIERTA" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 54.142136
       DEFINICION = 1
       TTL    = 0.960000
       FRSI        = 0.28
@@ -1750,7 +1913,7 @@ $
       PARTITION   = BOTH
     ..
 "ESQUINA_CONVEXA_FORJADO" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 0.000000
       DEFINICION = 1
       TTL    = 0.860000
       FRSI        = 0.03
@@ -1760,7 +1923,7 @@ $
       PARTITION   = BOTH
     ..
 "ESQUINA_CONCAVA" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 0.000000
       DEFINICION = 1
       TTL    = -0.160000
       FRSI        = 0.02
@@ -1770,7 +1933,7 @@ $
       PARTITION   = BOTH
     ..
 "ESQUINA_CONVEXA" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 12.000000
       DEFINICION = 1
       TTL    = 0.110000
       FRSI        = 0.32
@@ -1780,35 +1943,35 @@ $
       PARTITION   = BOTH
     ..
 "PILAR" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 0.000000
       DEFINICION = 1
       TTL    = 1.200000
       FRSI        = 0.2
       TYPE        = PILLAR
     ..
 "HUECO_CAPIALZADO" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 2.000000
       DEFINICION = 1
       TTL    = 0.820000
       FRSI        = 0.17
       TYPE        = WINDOW-FRAME
     ..
 "HUECO_JAMBA" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 2.000000
       DEFINICION = 1
       TTL    = 0.530000
       FRSI        = 0.17
       TYPE        = WINDOW-FRAME
     ..
 "HUECO_ALFEIZAR" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 2.000000
       DEFINICION = 1
       TTL    = 0.440000
       FRSI        = 0.17
       TYPE        = WINDOW-FRAME
     ..
 "UNION_SOLERA_PAREDEXT" = THERMAL-BRIDGE
-      LONG-TOTAL = -1.000000
+      LONG-TOTAL = 40.000000
       DEFINICION = 1
       TTL    = 0.570000
       FRSI        = 0.09
@@ -1821,4 +1984,4 @@ $
 $ +-----------------------------------------------------------------+
 $ |                        Final del fichero                        |
 $ +-----------------------------------------------------------------+
-]]></EntradaGraficaLIDER><Definicion_Sistema><elementos><FactoresDeCorreccion/><Sistemas/></elementos></Definicion_Sistema></CTE-HE-XML>
+]]></EntradaGraficaLIDER><Definicion_Sistema><elementos><FactoresDeCorreccion><CurvaComportamiento nombre="ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto"><nombre_usuario>ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_FCP_Tiempo</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Factor Carga Parcial</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="ren_FCP_Potencia-EQ_Caldera-unidad"><nombre_usuario>ren_FCP_Potencia-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_FCP_Potencia</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Factor Carga Parcial</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="ren_T-EQ_Caldera-unidad"><nombre_usuario>ren_T-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_T</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Temperatura impulsion</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="cap_T-EQ_Caldera-unidad"><nombre_usuario>cap_T-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>cap_T</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Temperatura impulsion</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento></FactoresDeCorreccion><Sistemas><SIS_Acs nombre="SIS"><nombre_usuario>SIS_ACS</nombre_usuario><porcentajeES>0.00</porcentajeES><contribucionSolarMinima>0.00</contribucionSolarMinima><multiplicador>1</multiplicador><tImpulsion>60.00</tImpulsion><equipos><EQ_Caldera nombre="SIS_EQ1"><nombre_usuario>SIS_EQ1_EQ_Caldera-ACS-Electrica-Defecto</nombre_usuario><capNom>10.00</capNom><renNom>0.90</renNom><tipoEnergia>"Electricidad"</tipoEnergia><tipoCaldera>electrica</tipoCaldera><cap_T>"cap_T-EQ_Caldera-unidad"</cap_T><ren_T>"ren_T-EQ_Caldera-unidad"</ren_T><ren_FCP_Potencia>"ren_FCP_Potencia-EQ_Caldera-unidad"</ren_FCP_Potencia><ren_FCP_Tiempo>"ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto"</ren_FCP_Tiempo></EQ_Caldera></equipos><demandas><DemandaACS nombre="SIS_ACS1"><perfilDiario>Demanda_Hor</perfilDiario><conACSDiario>28</conACSDiario><TUso>60</TUso><TRed>13.0548658370972</TRed><nombre_usuario>SIS_ACS1_Demanda_de_ACS</nombre_usuario></DemandaACS></demandas></SIS_Acs></Sistemas></elementos></Definicion_Sistema></CTE-HE-XML>
