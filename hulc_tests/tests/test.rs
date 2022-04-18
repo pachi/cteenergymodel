@@ -149,7 +149,7 @@ fn parse_test_e4h_medianeras() {
 fn parse_test_ejemplopmt_huecosok() {
     // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
-    let model = collect_hulc_data("tests/ejemplopmt_HuecosOK", false, false).unwrap();
+    let model = collect_hulc_data("tests/ejemplopmt_huecosok", false, false).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "B3");
     assert_eq!(model.windows.len(), 29);
     assert_eq!(model.walls.len(), 95); // 60 en ET
@@ -163,7 +163,7 @@ fn parse_test_ejemplopmt_huecosok() {
     assert_almost_eq!(ind.n50_data.n50, 5.23, 0.01); // HULC ?
 
     // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
-    let model = collect_hulc_data("tests/ejemplopmt_HuecosOK", true, true).unwrap();
+    let model = collect_hulc_data("tests/ejemplopmt_huecosok", true, true).unwrap();
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.K_data.K, 0.72, 0.01); // HULC ?
     assert_almost_eq!(ind.q_soljul_data.q_soljul, 3.49, 0.01); // HULC ?
