@@ -258,7 +258,6 @@
       "name": "P01_E01_PE001_V",
       "cons": "e5b3afb2-bc3b-2125-002f-3e34d6106a42",
       "wall": "8cd1c70c-fc07-56f5-7968-75aa06e41c10",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           3.0,

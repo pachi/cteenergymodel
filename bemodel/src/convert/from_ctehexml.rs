@@ -115,7 +115,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             spaces,
             cons: ConsDb { wincons, wallcons },
             mats,
-            extra: None,
+            overrides: Default::default(),
+            extra: Default::default(),
         };
         Ok(model)
     }
@@ -295,8 +296,6 @@ fn windows_and_shades_from_bdl(
             name: win.name.clone(),
             cons: id_maps.wincons_id(&win.cons).unwrap_or_default(),
             wall: id_maps.wall_id(&win.wall).unwrap_or_default(),
-            // Este valor se usa para valores impuestos por el usuario
-            f_shobst_override: None,
             geometry: WinGeom {
                 position: Some(point![win.x, win.y]),
                 width: win.width,

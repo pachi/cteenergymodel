@@ -67,32 +67,41 @@ pub fn collect_hulc_data<T: AsRef<str>>(
 
 /// Incorpora datos que no se obtienen desde el xml y añade datos extra cuando el valor de U calculado y el obtenido no coinciden
 pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
-    ecdata: &mut Model,
+    model: &mut Model,
     kygpath: Option<T>,
     tblpath: Option<T>,
 ) {
-    let mut extra = ecdata
+    let ind = model.energy_indicators();
+
+    let mut extra = model
         .walls
         .iter()
         .map(|w| ExtraData {
             name: w.name.clone(),
             bounds: w.bounds,
-            spacetype: ecdata.get_space(w.space).unwrap().kind,
+            spacetype: model.get_space(w.space).unwrap().kind,
             nextspace: w.next_to,
             nextspacetype: w
                 .next_to
                 .as_ref()
-                .and_then(|s| ecdata.get_space(*s))
+                .and_then(|s| model.get_space(*s))
                 .map(|s| s.kind),
             tilt: w.geometry.tilt.into(),
             cons: w.cons,
             u: 0.0,
-            computed_u: fround2(w.u_value(ecdata).unwrap_or(0.0)),
+            computed_u: fround2(
+                ind.props
+                    .walls
+                    .get(&w.id)
+                    .and_then(|wp| wp.u_value)
+                    .unwrap_or(0.0),
+            ),
         })
         .collect::<Vec<_>>();
 
     // Actualizaciones de los datos del ctehexmldata con valores del archivo kyg -------
     // Interpreta .kyg y añade datos que faltan
+    // TODO: Los añadimos al overrides... podríamos eliminar el extra
     if let Some(kygpath) = &kygpath {
         let kygdata = kyg::parse_from_path(&kygpath).unwrap();
 
@@ -105,15 +114,43 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
             let wallname = e.name.as_str();
             let kygwall = kygdata.walls.get(wallname);
             if let Some(kw) = kygwall {
-                e.u = fround2(kw.u);
+                let u_value_override = fround2(kw.u);
+                e.u = u_value_override;
+
+                // Si la diferencia con la U calculada no es significativa no guardamos el dato como override
+                let u_diff_significant = f32::abs(e.u - e.computed_u) > 0.001;
+                if !u_diff_significant {
+                    continue;
+                };
+
+                if let Some(wall) = model.get_wall_by_name(wallname) {
+                    let wall_id = wall.id;
+                    // Actualiza overrides
+                    let mut props = model.overrides.walls.entry(wall_id).or_default();
+                    props.u_value = Some(u_value_override);
+                }
             }
         }
 
-        // Modifica fshobst con datos del .kyg
-        for win in ecdata.windows.iter_mut() {
+        // Guarda overrides de f_shobst con datos del .kyg
+        for win in model.windows.iter_mut() {
             let kygwin = kygdata.windows.get(&win.name);
             if let Some(kw) = kygwin {
-                win.f_shobst_override = Some(fround2(kw.fshobst));
+                let f_shobst_override = fround2(kw.fshobst);
+
+                // Guardamos como override si la diferencia con el fshobst calculado es significativo o este no existe
+                let fshobst_diff_significant = ind
+                    .props
+                    .windows
+                    .get(&win.id)
+                    .and_then(|wp| wp.f_shobst)
+                    .map(|computed| f32::abs(computed - f_shobst_override) > 0.01)
+                    .unwrap_or(true);
+                if !fshobst_diff_significant {
+                    continue;
+                };
+                let mut props = model.overrides.windows.entry(win.id).or_default();
+                props.f_shobst = Some(f_shobst_override);
             }
         }
     }
@@ -121,17 +158,30 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     // Actualizamos datos de U de particiones interiores desde el archivo .tbl
     if let Some(tblpath) = &tblpath {
         let tbldata = tbl::parse(&tblpath).unwrap();
-        #[allow(unused_assignments, unused_variables)]
         for e in &mut extra {
             if e.bounds != BoundaryType::INTERIOR {
                 continue;
             };
             let w = tbldata.elements.get(e.name.as_str()).unwrap();
-            e.u = fround2(w.u);
+            let u_value_override = fround2(w.u);
+            e.u = u_value_override;
+
+            // Si la diferencia con la U calculada no es significativa no guardamos el dato como override
+            let u_diff_significant = f32::abs(e.u - e.computed_u) > 0.001;
+            if !u_diff_significant {
+                continue;
+            };
+
+            // Actualiza overrides
+            if let Some(wall) = model.get_wall_by_name(&w.name) {
+                let wall_id = wall.id;
+                let mut props = model.overrides.walls.entry(wall_id).or_default();
+                props.u_value = Some(u_value_override);
+            }
         }
     }
 
     extra.retain(|e| f32::abs(e.u - e.computed_u) > 0.001);
 
-    ecdata.extra = Some(extra);
+    model.extra = Some(extra);
 }

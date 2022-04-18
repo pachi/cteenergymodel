@@ -1257,7 +1257,6 @@
       "name": "P02_E01_PE001_V",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "547be19f-bc09-0f8d-3cb3-ef4b2b9a8599",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1273,7 +1272,6 @@
       "name": "P02_E01_PE002_V",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "2accf7eb-84c4-7283-ee50-5e3e391ead20",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           2.0,
@@ -1289,7 +1287,6 @@
       "name": "P02_E01_PE002_V_1",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "2accf7eb-84c4-7283-ee50-5e3e391ead20",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           8.0,
@@ -1305,7 +1302,6 @@
       "name": "P02_E01_PE003_V",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "b993bbb7-a49b-e8e2-5265-36b9baf74cbf",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1321,7 +1317,6 @@
       "name": "P03_E01_PE006_V",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "78ecae57-6753-4551-4a41-97dcf1e0c16f",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1337,7 +1332,6 @@
       "name": "P03_E01_PE007_V",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "785307c4-2fc5-1f6c-d024-4decfcf726e4",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           2.0,
@@ -1353,7 +1347,6 @@
       "name": "P03_E01_PE007_V_1",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "785307c4-2fc5-1f6c-d024-4decfcf726e4",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           8.0,
@@ -1369,7 +1362,6 @@
       "name": "P03_E01_PE008_V",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "c91be448-7926-1a7c-3cb2-48e544a9de39",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,
@@ -1385,7 +1377,6 @@
       "name": "P04_E01_PE001_V",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "0f2b4364-da31-6b8f-b377-2f4be1d8f202",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           1.77,
@@ -1401,7 +1392,6 @@
       "name": "P04_E01_PE002_V",
       "cons": "eb934160-2d31-b25c-7bbd-486b36786335",
       "wall": "94154415-1d9e-89db-3594-ef926981d10c",
-      "f_shobst_calc": 1.0,
       "geometry": {
         "position": [
           4.0,

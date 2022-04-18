@@ -4787,7 +4787,6 @@
       "name": "P01_E01_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "6caee817-b447-fb34-3d52-18bdec2ce88b",
-      "f_shobst_calc": 0.76,
       "geometry": {
         "position": [
           1.75,
@@ -4803,7 +4802,6 @@
       "name": "P01_E01_PE001_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "6caee817-b447-fb34-3d52-18bdec2ce88b",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           4.25,
@@ -4819,7 +4817,6 @@
       "name": "P01_E01_PE001_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "6caee817-b447-fb34-3d52-18bdec2ce88b",
-      "f_shobst_calc": 0.69,
       "geometry": {
         "position": [
           0.25,
@@ -4835,7 +4832,6 @@
       "name": "P01_E01_PE003_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "03892ba7-8066-e6cc-dbcf-f6ab7c90c699",
-      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           1.0,
@@ -4851,7 +4847,6 @@
       "name": "P01_E01_PE004_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "1fc93cdb-6b75-9df7-015c-66bf877c94de",
-      "f_shobst_calc": 0.6,
       "geometry": {
         "position": [
           0.5,
@@ -4867,7 +4862,6 @@
       "name": "P01_E02_PE006_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "245c33f0-b4eb-00f7-ecfa-a978d2c38c5b",
-      "f_shobst_calc": 0.62,
       "geometry": {
         "position": [
           0.3,
@@ -4883,7 +4877,6 @@
       "name": "P01_E02_PE006_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "245c33f0-b4eb-00f7-ecfa-a978d2c38c5b",
-      "f_shobst_calc": 0.63,
       "geometry": {
         "position": [
           1.6,
@@ -4899,7 +4892,6 @@
       "name": "P01_E03_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "51b77ff9-b303-f1ba-5ac3-7fa723da0139",
-      "f_shobst_calc": 0.6,
       "geometry": {
         "position": [
           0.5,
@@ -4915,7 +4907,6 @@
       "name": "P01_E03_PE002_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "1edecef5-30b5-5b43-dbc3-cf162dc12666",
-      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           0.8,
@@ -4931,7 +4922,6 @@
       "name": "P01_E03_PE004_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "267d5157-d1c6-d96d-15eb-48d3b3841778",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           1.15,
@@ -4947,7 +4937,6 @@
       "name": "P01_E03_PE004_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "267d5157-d1c6-d96d-15eb-48d3b3841778",
-      "f_shobst_calc": 0.77,
       "geometry": {
         "position": [
           4.45,
@@ -4963,7 +4952,6 @@
       "name": "P01_E03_PE004_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "267d5157-d1c6-d96d-15eb-48d3b3841778",
-      "f_shobst_calc": 0.7,
       "geometry": {
         "position": [
           6.0,
@@ -4979,7 +4967,6 @@
       "name": "P01_E04_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "33b5b12b-e346-ee78-510f-bb5d006b4f4b",
-      "f_shobst_calc": 0.66,
       "geometry": {
         "position": [
           1.0,
@@ -4995,7 +4982,6 @@
       "name": "P01_E05_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "b3cc4c64-1189-3491-e4a1-f61d5b7f9ea5",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           0.7,
@@ -5011,7 +4997,6 @@
       "name": "P01_E05_PE001_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "b3cc4c64-1189-3491-e4a1-f61d5b7f9ea5",
-      "f_shobst_calc": 0.83,
       "geometry": {
         "position": [
           3.5,
@@ -5027,7 +5012,6 @@
       "name": "P01_E05_PE001_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "b3cc4c64-1189-3491-e4a1-f61d5b7f9ea5",
-      "f_shobst_calc": 0.87,
       "geometry": {
         "position": [
           6.0,
@@ -5043,7 +5027,6 @@
       "name": "P01_E05_PE003_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "55fedf12-a77d-302e-d0dd-8cfe48899145",
-      "f_shobst_calc": 0.71,
       "geometry": {
         "position": [
           1.0,
@@ -5059,7 +5042,6 @@
       "name": "P01_E05_PE004_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "cb5b1eac-255c-81e6-c007-f50aa85a11fc",
-      "f_shobst_calc": 0.63,
       "geometry": {
         "position": [
           0.5,
@@ -5075,7 +5057,6 @@
       "name": "P01_E06_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "d49cc280-d0bd-eb22-dd30-346de9e4529e",
-      "f_shobst_calc": 0.62,
       "geometry": {
         "position": [
           0.6,
@@ -5091,7 +5072,6 @@
       "name": "P01_E06_PE002_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "19242636-b354-1059-c664-908c5dd09cfc",
-      "f_shobst_calc": 0.71,
       "geometry": {
         "position": [
           0.8,
@@ -5107,7 +5087,6 @@
       "name": "P01_E06_PE004_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "987bdc0c-74e4-cd50-c532-67d5424af590",
-      "f_shobst_calc": 0.87,
       "geometry": {
         "position": [
           1.0,
@@ -5123,7 +5102,6 @@
       "name": "P01_E06_PE004_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "987bdc0c-74e4-cd50-c532-67d5424af590",
-      "f_shobst_calc": 0.84,
       "geometry": {
         "position": [
           4.0,
@@ -5139,7 +5117,6 @@
       "name": "P01_E06_PE004_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "987bdc0c-74e4-cd50-c532-67d5424af590",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           6.5,
@@ -5155,7 +5132,6 @@
       "name": "P02_E01_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "02a1d1c0-8bb7-264a-2336-fd633056209c",
-      "f_shobst_calc": 0.61,
       "geometry": {
         "position": [
           0.5,
@@ -5171,7 +5147,6 @@
       "name": "P02_E01_PE002_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "07028d58-e8d4-c3c0-7739-8239b7c9d142",
-      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           0.8,
@@ -5187,7 +5162,6 @@
       "name": "P02_E01_PE004_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "10def459-503b-77fe-4cfd-eb0d2689d819",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           1.15,
@@ -5203,7 +5177,6 @@
       "name": "P02_E01_PE004_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "10def459-503b-77fe-4cfd-eb0d2689d819",
-      "f_shobst_calc": 0.73,
       "geometry": {
         "position": [
           4.0,
@@ -5219,7 +5192,6 @@
       "name": "P02_E01_PE004_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "10def459-503b-77fe-4cfd-eb0d2689d819",
-      "f_shobst_calc": 0.66,
       "geometry": {
         "position": [
           6.5,
@@ -5235,7 +5207,6 @@
       "name": "P02_E02_PE005_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "43f21c5d-ab82-2cd8-db8b-c55c9c4e01ec",
-      "f_shobst_calc": 0.67,
       "geometry": {
         "position": [
           0.6,
@@ -5251,7 +5222,6 @@
       "name": "P02_E02_PE006_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "60f31063-c1ae-c833-435e-63cd1985d679",
-      "f_shobst_calc": 0.72,
       "geometry": {
         "position": [
           0.8,
@@ -5267,7 +5237,6 @@
       "name": "P02_E02_PE008_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "c56916a7-c264-d200-ae90-95ca321aa8cc",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           1.0,
@@ -5283,7 +5252,6 @@
       "name": "P02_E02_PE008_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "c56916a7-c264-d200-ae90-95ca321aa8cc",
-      "f_shobst_calc": 0.84,
       "geometry": {
         "position": [
           4.0,
@@ -5299,7 +5267,6 @@
       "name": "P02_E02_PE008_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "c56916a7-c264-d200-ae90-95ca321aa8cc",
-      "f_shobst_calc": 0.87,
       "geometry": {
         "position": [
           6.5,
@@ -5315,7 +5282,6 @@
       "name": "P02_E03_PE009_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "f8606b8b-ddfe-39ed-2988-4ce8b2d56ecf",
-      "f_shobst_calc": 0.66,
       "geometry": {
         "position": [
           0.5,
@@ -5331,7 +5297,6 @@
       "name": "P02_E03_PE009_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "f8606b8b-ddfe-39ed-2988-4ce8b2d56ecf",
-      "f_shobst_calc": 0.72,
       "geometry": {
         "position": [
           3.5,
@@ -5347,7 +5312,6 @@
       "name": "P02_E03_PE009_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "f8606b8b-ddfe-39ed-2988-4ce8b2d56ecf",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           6.0,
@@ -5363,7 +5327,6 @@
       "name": "P02_E03_PE011_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "f394d526-16cf-778c-a654-3cb31308b538",
-      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           1.0,
@@ -5379,7 +5342,6 @@
       "name": "P02_E03_PE012_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "9c844512-c9c4-6e8d-6697-89fc8c226ece",
-      "f_shobst_calc": 0.6,
       "geometry": {
         "position": [
           0.5,
@@ -5395,7 +5357,6 @@
       "name": "P02_E04_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "76b0c81f-4a36-f0bd-6fbc-e607a29ea0ac",
-      "f_shobst_calc": 0.87,
       "geometry": {
         "position": [
           0.7,
@@ -5411,7 +5372,6 @@
       "name": "P02_E04_PE001_V_1",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "76b0c81f-4a36-f0bd-6fbc-e607a29ea0ac",
-      "f_shobst_calc": 0.83,
       "geometry": {
         "position": [
           3.5,
@@ -5427,7 +5387,6 @@
       "name": "P02_E04_PE001_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "76b0c81f-4a36-f0bd-6fbc-e607a29ea0ac",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           6.0,
@@ -5443,7 +5402,6 @@
       "name": "P02_E04_PE003_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "42ec34c4-0f76-bbef-28e1-d72e644a5b17",
-      "f_shobst_calc": 0.72,
       "geometry": {
         "position": [
           1.0,
@@ -5459,7 +5417,6 @@
       "name": "P02_E04_PE004_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "a60e1940-f207-0804-0c74-2f570bed1939",
-      "f_shobst_calc": 0.68,
       "geometry": {
         "position": [
           0.5,
@@ -5475,7 +5432,6 @@
       "name": "P02_E05_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "a9e9ac92-c736-4b25-5a45-2a162240c2ae",
-      "f_shobst_calc": 0.69,
       "geometry": {
         "position": [
           1.1,
@@ -5491,7 +5447,6 @@
       "name": "P02_E05_PE002_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "47054fa0-7fcc-edab-f09b-f585ed17efc9",
-      "f_shobst_calc": 0.67,
       "geometry": {
         "position": [
           0.3,
@@ -5507,7 +5462,6 @@
       "name": "P02_E05_PE002_V_1",
       "cons": "e8003958-9341-e211-fa9a-dcdb9fd4307d",
       "wall": "47054fa0-7fcc-edab-f09b-f585ed17efc9",
-      "f_shobst_calc": 0.67,
       "geometry": {
         "position": [
           1.6,
@@ -5523,7 +5477,6 @@
       "name": "P03_E01_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "f3e78039-2c04-4ad8-b0ca-4c094c92ec58",
-      "f_shobst_calc": 0.71,
       "geometry": {
         "position": [
           0.5,
@@ -5539,7 +5492,6 @@
       "name": "P03_E01_PE002_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "43aae6c0-4fb3-b7b6-65e2-5fb3e7bb1f54",
-      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           0.8,
@@ -5555,7 +5507,6 @@
       "name": "P03_E01_PE004_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "cb0f38ff-51c3-cd01-c6da-755332efdc89",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           1.15,
@@ -5571,7 +5522,6 @@
       "name": "P03_E01_PE004_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "cb0f38ff-51c3-cd01-c6da-755332efdc89",
-      "f_shobst_calc": 0.73,
       "geometry": {
         "position": [
           4.0,
@@ -5587,7 +5537,6 @@
       "name": "P03_E01_PE004_V_3",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "cb0f38ff-51c3-cd01-c6da-755332efdc89",
-      "f_shobst_calc": 0.66,
       "geometry": {
         "position": [
           6.5,
@@ -5603,7 +5552,6 @@
       "name": "P03_E02_PE005_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "4b9501d6-20d3-eefe-cb07-379450ec547f",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           0.6,
@@ -5619,7 +5567,6 @@
       "name": "P03_E02_PE006_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "7d04b887-c7f6-ecb3-74ba-68675532a244",
-      "f_shobst_calc": 0.73,
       "geometry": {
         "position": [
           0.8,
@@ -5635,7 +5582,6 @@
       "name": "P03_E02_PE008_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "df4311d3-576d-5486-ee3d-7e5236273cae",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           1.0,
@@ -5651,7 +5597,6 @@
       "name": "P03_E02_PE008_V_5",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "df4311d3-576d-5486-ee3d-7e5236273cae",
-      "f_shobst_calc": 0.84,
       "geometry": {
         "position": [
           4.0,
@@ -5667,7 +5612,6 @@
       "name": "P03_E02_PE008_V_6",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "df4311d3-576d-5486-ee3d-7e5236273cae",
-      "f_shobst_calc": 0.87,
       "geometry": {
         "position": [
           6.5,
@@ -5683,7 +5627,6 @@
       "name": "P03_E03_PE009_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "dc253e7c-8080-0ecd-09cc-ead69e1b3f38",
-      "f_shobst_calc": 0.66,
       "geometry": {
         "position": [
           0.5,
@@ -5699,7 +5642,6 @@
       "name": "P03_E03_PE009_V_7",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "dc253e7c-8080-0ecd-09cc-ead69e1b3f38",
-      "f_shobst_calc": 0.72,
       "geometry": {
         "position": [
           3.5,
@@ -5715,7 +5657,6 @@
       "name": "P03_E03_PE009_V_8",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "dc253e7c-8080-0ecd-09cc-ead69e1b3f38",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           6.0,
@@ -5731,7 +5672,6 @@
       "name": "P03_E03_PE011_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "60fbe545-8fde-6ebf-7239-3ca014d084c9",
-      "f_shobst_calc": 0.75,
       "geometry": {
         "position": [
           1.0,
@@ -5747,7 +5687,6 @@
       "name": "P03_E03_PE012_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "6e742f44-d5b5-91a1-5a5f-4100d11713e1",
-      "f_shobst_calc": 0.69,
       "geometry": {
         "position": [
           0.5,
@@ -5763,7 +5702,6 @@
       "name": "P03_E04_PE013_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "ec845c90-c06e-1beb-6211-ad67ff768e7a",
-      "f_shobst_calc": 0.87,
       "geometry": {
         "position": [
           0.7,
@@ -5779,7 +5717,6 @@
       "name": "P03_E04_PE013_V_10",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "ec845c90-c06e-1beb-6211-ad67ff768e7a",
-      "f_shobst_calc": 0.83,
       "geometry": {
         "position": [
           3.5,
@@ -5795,7 +5732,6 @@
       "name": "P03_E04_PE013_V_11",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "ec845c90-c06e-1beb-6211-ad67ff768e7a",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           6.0,
@@ -5811,7 +5747,6 @@
       "name": "P03_E04_PE015_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "85047f9b-cce5-3aa5-a41c-a6226e91589f",
-      "f_shobst_calc": 0.73,
       "geometry": {
         "position": [
           1.0,
@@ -5827,7 +5762,6 @@
       "name": "P03_E04_PE016_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "a9e0ec6f-9c08-7bda-f4c7-1e37b8942bdf",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           0.5,
@@ -5843,7 +5777,6 @@
       "name": "P03_E05_PE017_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "b4dc6aa7-407d-0f11-1963-98d1cb02bf74",
-      "f_shobst_calc": 0.78,
       "geometry": {
         "position": [
           1.1,
@@ -5859,7 +5792,6 @@
       "name": "P03_E05_PE018_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "8b15d8bf-06e4-b33b-da00-ca82849c006d",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           0.3,
@@ -5875,7 +5807,6 @@
       "name": "P03_E05_PE018_V_13",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "8b15d8bf-06e4-b33b-da00-ca82849c006d",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           1.6,
@@ -5891,7 +5822,6 @@
       "name": "P04_E01_PE001_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "9ee699e0-fda2-ea8e-c0cc-cdc3f9614f35",
-      "f_shobst_calc": 0.86,
       "geometry": {
         "position": [
           0.5,
@@ -5907,7 +5837,6 @@
       "name": "P04_E01_PE002_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "035bcd2f-5d5a-4c0e-be73-f2536203a788",
-      "f_shobst_calc": 0.77,
       "geometry": {
         "position": [
           0.8,
@@ -5923,7 +5852,6 @@
       "name": "P04_E01_PE004_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "8cc09147-6d07-660d-f72a-3c2def31e13c",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           1.15,
@@ -5939,7 +5867,6 @@
       "name": "P04_E01_PE004_V_2",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "8cc09147-6d07-660d-f72a-3c2def31e13c",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           4.0,
@@ -5955,7 +5882,6 @@
       "name": "P04_E01_PE004_V_3",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "8cc09147-6d07-660d-f72a-3c2def31e13c",
-      "f_shobst_calc": 0.66,
       "geometry": {
         "position": [
           6.5,
@@ -5971,7 +5897,6 @@
       "name": "P04_E02_PE005_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "e1da097d-dea5-93a6-e71e-0eec60c90122",
-      "f_shobst_calc": 0.83,
       "geometry": {
         "position": [
           0.6,
@@ -5987,7 +5912,6 @@
       "name": "P04_E02_PE006_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "609f2839-5cd0-aaf6-c293-c51850f53276",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           0.8,
@@ -6003,7 +5927,6 @@
       "name": "P04_E02_PE008_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "24ae8d74-1168-bbdb-2b82-6682669cad4e",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           1.0,
@@ -6019,7 +5942,6 @@
       "name": "P04_E02_PE008_V_5",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "24ae8d74-1168-bbdb-2b82-6682669cad4e",
-      "f_shobst_calc": 0.84,
       "geometry": {
         "position": [
           4.0,
@@ -6035,7 +5957,6 @@
       "name": "P04_E02_PE008_V_6",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "24ae8d74-1168-bbdb-2b82-6682669cad4e",
-      "f_shobst_calc": 0.87,
       "geometry": {
         "position": [
           6.5,
@@ -6051,7 +5972,6 @@
       "name": "P04_E03_PE009_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "4166972e-9911-a517-a617-e192718d3c2f",
-      "f_shobst_calc": 0.66,
       "geometry": {
         "position": [
           0.5,
@@ -6067,7 +5987,6 @@
       "name": "P04_E03_PE009_V_7",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "4166972e-9911-a517-a617-e192718d3c2f",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           3.5,
@@ -6083,7 +6002,6 @@
       "name": "P04_E03_PE009_V_8",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "4166972e-9911-a517-a617-e192718d3c2f",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           6.0,
@@ -6099,7 +6017,6 @@
       "name": "P04_E03_PE011_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "370ff208-ae69-29fc-1039-6e0e9be2c719",
-      "f_shobst_calc": 0.77,
       "geometry": {
         "position": [
           1.0,
@@ -6115,7 +6032,6 @@
       "name": "P04_E03_PE012_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "212c4e4e-2c4d-b2a3-1462-80e9c30166fc",
-      "f_shobst_calc": 0.86,
       "geometry": {
         "position": [
           0.5,
@@ -6131,7 +6047,6 @@
       "name": "P04_E04_PE013_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "80b0f1a5-08b0-4588-dd5a-ab1df8938683",
-      "f_shobst_calc": 0.87,
       "geometry": {
         "position": [
           0.7,
@@ -6147,7 +6062,6 @@
       "name": "P04_E04_PE013_V_10",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "80b0f1a5-08b0-4588-dd5a-ab1df8938683",
-      "f_shobst_calc": 0.83,
       "geometry": {
         "position": [
           3.5,
@@ -6163,7 +6077,6 @@
       "name": "P04_E04_PE013_V_11",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "80b0f1a5-08b0-4588-dd5a-ab1df8938683",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           6.0,
@@ -6179,7 +6092,6 @@
       "name": "P04_E04_PE015_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "9839972e-a4a4-f82c-2c80-65e7254b3676",
-      "f_shobst_calc": 0.74,
       "geometry": {
         "position": [
           1.0,
@@ -6195,7 +6107,6 @@
       "name": "P04_E04_PE016_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "79d9bf16-1be9-4eed-6009-dc52168f715e",
-      "f_shobst_calc": 0.82,
       "geometry": {
         "position": [
           0.5,
@@ -6211,7 +6122,6 @@
       "name": "P04_E05_PE017_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "831a235e-c21a-6bbd-90be-09ea122a0938",
-      "f_shobst_calc": 0.88,
       "geometry": {
         "position": [
           1.1,
@@ -6227,7 +6137,6 @@
       "name": "P04_E05_PE018_V",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "740c527f-3f22-525f-6946-0e40e55a9421",
-      "f_shobst_calc": 0.86,
       "geometry": {
         "position": [
           0.3,
@@ -6243,7 +6152,6 @@
       "name": "P04_E05_PE018_V_13",
       "cons": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
       "wall": "740c527f-3f22-525f-6946-0e40e55a9421",
-      "f_shobst_calc": 0.86,
       "geometry": {
         "position": [
           1.6,

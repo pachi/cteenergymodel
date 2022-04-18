@@ -106,6 +106,7 @@ impl From<&Model> for EnergyProps {
 
         let mut walls: BTreeMap<Uuid, WallProps> = BTreeMap::new();
         for w in &model.walls {
+            let wall_override = model.overrides.walls.get(&w.id);
             let wp = WallProps {
                 space: w.space,
                 space_next: w.next_to,
@@ -118,6 +119,7 @@ impl From<&Model> for EnergyProps {
                 multiplier: spaces.get(&w.space).map(|sp| sp.multiplier).unwrap_or(1.0),
                 is_tenv: tenv_wall_ids.contains(&w.id),
                 u_value: w.u_value(model),
+                u_value_override: wall_override.and_then(|o| o.u_value),
             };
             walls.insert(w.id, wp);
         }
@@ -127,6 +129,7 @@ impl From<&Model> for EnergyProps {
         let mut windows: BTreeMap<Uuid, WinProps> = BTreeMap::new();
         for w in &model.windows {
             let wall = walls.get(&w.wall);
+            let win_override = model.overrides.windows.get(&w.id);
             let wp = WinProps {
                 wall: w.wall,
                 cons: w.cons,
@@ -137,8 +140,9 @@ impl From<&Model> for EnergyProps {
                 bounds: wall.map(|w| w.bounds).unwrap_or_default(),
                 is_tenv: tenv_wall_ids.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
-                f_shobst_override: w.f_shobst_override,
+                u_value_override: win_override.and_then(|o| o.u_value),
                 f_shobst: fshobstmap.get(&w.id).copied(),
+                f_shobst_override: win_override.and_then(|o| o.f_shobst),
             };
             windows.insert(w.id, wp);
         }
@@ -327,8 +331,10 @@ pub struct WallProps {
     pub multiplier: f32,
     /// ¿Pertenece este opaco a la envolvente térmica?
     pub is_tenv: bool,
-    /// U de opaco, [W/m²K]
+    /// U de opaco (calculado), [W/m²K]
     pub u_value: Option<f32>,
+    /// U de opaco (usuario), [W/m²K]
+    pub u_value_override: Option<f32>,
 }
 
 /// Propiedades de huecos
@@ -350,12 +356,14 @@ pub struct WinProps {
     pub bounds: BoundaryType,
     /// ¿Pertenece a la envolvente térmica el opaco en el que se sitúa el hueco?
     pub is_tenv: bool,
-    /// U de huecos, [W/m²K]
+    /// U de huecos (calculado), [W/m²K]
     pub u_value: Option<f32>,
-    /// Factor de obstrucción de obstáculos remotos (usuario), [-]
-    pub f_shobst_override: Option<f32>,
+    /// U de huecos (usuario), [W/m²K]
+    pub u_value_override: Option<f32>,
     // Factor de obstrucción de obstáculos remotos (calculado), [-]
     pub f_shobst: Option<f32>,
+    /// Factor de obstrucción de obstáculos remotos (usuario), [-]
+    pub f_shobst_override: Option<f32>,
 }
 
 /// Propiedades de puentes térmicos

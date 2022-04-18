@@ -121,8 +121,8 @@ impl From<&EnergyProps> for KData {
             let multiplier = wall.multiplier;
             // Huecos
             for (win_id, window) in props.windows.iter().filter(|(_, win)| &win.wall == wall_id) {
-                // Si no está definida la U del hueco se usa un valor por defecto U_w = 5.7 W/m²K
-                let win_u = if let Some(win_u) = window.u_value {
+                // Se usa el valor de usuario, el valor calculado o el valor por defecto U_o = 5.7 W/m²K
+                let win_u = if let Some(win_u) = window.u_value_override.or(window.u_value) {
                     win_u
                 } else {
                     warn!("No se ha podido calcular el valor U del hueco {}. Se usará el valor por defecto U_w=5.7W/m²K en el cálculo de K", win_id);
@@ -135,8 +135,8 @@ impl From<&EnergyProps> for KData {
                 k.windows.u_min = k.windows.u_min.map(|v| v.min(win_u)).or(Some(win_u));
             }
             // Parte opaca
-            // Si no está definido el opaco, se usa un valor por defecto U_o = 5.7 W/m²K
-            let wall_u = if let Some(wall_u) = wall.u_value {
+            // Se usa el valor de usuario, el valor calculado o el valor por defecto U_o = 5.7 W/m²K
+            let wall_u = if let Some(wall_u) = wall.u_value_override.or(wall.u_value) {
                 wall_u
             } else {
                 warn!("No se ha podido calcular el valor U del elemento opaco {}. Se usará el valor por defecto U_o=5.7W/m²K en el cálculo de K", wall_id);

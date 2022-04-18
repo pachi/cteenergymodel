@@ -30,7 +30,8 @@ macro_rules! assert_almost_eq {
 
 #[test]
 fn test_caso_a() {
-    let model = collect_hulc_data("tests/casoA", true, true).unwrap();
+    // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
+    let model = collect_hulc_data("tests/casoA", false, false).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "D3");
     assert_eq!(model.windows.len(), 10);
     assert_eq!(model.walls.len(), 35); // 19 en ET
@@ -90,7 +91,7 @@ fn test_caso_a() {
     let ind = model.energy_indicators();
     let n50data = ind.n50_data;
     assert_almost_eq!(ind.area_ref, 400.0, 0.1);
-    assert_almost_eq!(fround2(ind.K_data.K), 0.51, 0.001);
+    assert_almost_eq!(fround2(ind.K_data.K), 0.51, 0.001); // HULC 0.52
     assert_almost_eq!(fround2(n50data.n50_ref), 4.58, 0.001); // HULC 4.33
     assert_almost_eq!(fround2(n50data.n50), 5.32, 0.001);
     assert_almost_eq!(fround2(n50data.walls_c_ref), 16.00, 0.001);
@@ -99,6 +100,7 @@ fn test_caso_a() {
 
 #[test]
 fn test_caso_c() {
+    // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
     let model = collect_hulc_data("tests/casoC", true, true).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "D3");
     assert_eq!(model.windows.len(), 9);
@@ -113,6 +115,7 @@ fn test_caso_c() {
 // Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
 #[test]
 fn parse_test_data() {
+    // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
     let model = collect_hulc_data("tests/data", true, true).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "D3");
     assert_eq!(model.windows.len(), 92);
@@ -126,6 +129,7 @@ fn parse_test_data() {
 
 #[test]
 fn parse_test_data2() {
+    // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
     let model = collect_hulc_data("tests/ejemplopmt_HuecosOK", true, true).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "B3");
