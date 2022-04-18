@@ -158,15 +158,15 @@ fn parse_test_ejemplopmt_huecosok() {
     // Cálculo de indicadores
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 1063.03, 0.1);
-    assert_almost_eq!(ind.K_data.K, 0.70, 0.01); // HULC ?
-    assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.37, 0.01); // HULC ?
-    assert_almost_eq!(ind.n50_data.n50, 5.23, 0.01); // HULC ?
+    assert_almost_eq!(ind.K_data.K, 0.70, 0.01); // HULC 0.70
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.37, 0.01); // HULC 3.47
+    assert_almost_eq!(ind.n50_data.n50, 5.23, 0.01); // HULC 5.09
 
     // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
     let model = collect_hulc_data("tests/ejemplopmt_huecosok", true, true).unwrap();
     let ind = model.energy_indicators();
-    assert_almost_eq!(ind.K_data.K, 0.72, 0.01); // HULC ?
-    assert_almost_eq!(ind.q_soljul_data.q_soljul, 3.49, 0.01); // HULC ?
+    assert_almost_eq!(ind.K_data.K, 0.70, 0.01); // HULC 0.70
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 3.49, 0.01); // HULC 3.47
 }
 
 #[test]

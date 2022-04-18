@@ -1,0 +1,169 @@
+###;Datos para Factor de Pérdidas
+Muro;P01_E02_PE001;12.39;0.26;1.00;Fachada;S ;muro_opaco
+Muro;P01_E02_PE002;16.71;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P01_E02_PE003;25.05;0.60;1.00;Fachada;N ;tabique
+Muro;P01_E02_PE004;33.06;0.60;1.00;Fachada;S ;tabique
+Ventana;P01_E02_PE005_V;13.00;1.65;E ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P01_E02_PE005;12.50;0.26;1.00;Fachada;E ;muro_opaco
+Ventana;P01_E02_PE006_V;13.00;1.65;O ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P01_E02_PE006;12.50;0.26;1.00;Fachada;O ;muro_opaco
+Muro;P01_E02_FTER004;126.64;0.55;1.00;Suelo;H ;solera
+Muro;P01_E04_PE007;12.30;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P01_E04_PE008;34.41;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P01_E04_PE001_V;13.00;1.65;O ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P01_E04_PE001;12.50;0.26;1.00;Fachada;O ;muro_opaco
+Ventana;P01_E04_PE002_V;11.70;1.65;E ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P01_E04_PE002;2.91;0.26;1.00;Fachada;E ;muro_opaco
+Muro;P01_E04_FTER001;70.87;0.60;1.00;Suelo;H ;solera
+Muro;P01_E06_PE003;8.76;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P01_E06_FTER003;10.75;0.55;1.00;Suelo;H ;solera
+Muro;P01_E07_PE001;5.04;0.26;1.00;Fachada;S ;muro_opaco
+Muro;P01_E07_FTER005;5.71;0.55;1.00;Suelo;H ;solera
+Ventana;P01_E08_PE001_V;2.60;1.65;N ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P01_E08_PE001;19.51;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P01_E08_PE002;10.89;0.26;1.00;Fachada;E ;muro_opaco
+Muro;P01_E08_FTER002;26.63;0.60;1.00;Suelo;H ;solera
+Ventana;P02_E01_PE001_V1;10.40;1.76;N ;20.00;0.79;-1.00;1.00;9.00;ventana estandar
+Muro;P02_E01_PE001;1.90;0.26;1.00;Fachada;N ;muro_opaco
+Ventana;P02_E01_PE002_V1;12.48;1.76;N ;20.00;0.79;-1.00;1.00;9.00;ventana estandar
+Muro;P02_E01_PE002;2.25;0.26;1.00;Fachada;N ;muro_opaco
+Ventana;P02_E01_PE003_V1;13.78;1.76;N ;20.00;0.79;-1.00;1.00;9.00;ventana estandar
+Muro;P02_E01_PE003;2.93;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P02_E01_PE004;25.05;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P02_E01_PE005;15.33;0.26;1.00;Fachada;N ;muro_opaco
+Ventana;P02_E01_PE006_V;2.86;1.65;O ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E01_PE006;22.64;0.26;1.00;Fachada;O ;muro_opaco
+Ventana;P02_E01_PE007_V;13.00;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E01_PE007;2.36;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P02_E01_PE008_V;28.60;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E01_PE008;4.46;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P02_E01_PE009_V1;10.40;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E01_PE009;1.99;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P02_E01_PE010_V;12.48;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E01_PE010;2.25;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P02_E01_PE011_V;29.12;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E01_PE011;5.29;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P02_E01_PE012_V;27.30;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E01_PE012;4.74;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P02_E01_PE013_V_2;2.86;1.65;E ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E01_PE013;22.64;0.26;1.00;Fachada;E ;muro_opaco
+Muro;P02_E01_PE014;32.04;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P02_E01_FE001;90.78;0.26;1.00;Fachada;E ;muro_opaco
+Muro;P02_E01_FE002;41.74;0.26;1.00;Fachada;O ;muro_opaco
+Muro;P02_E01_FE003;43.48;0.26;1.00;Fachada;O ;muro_opaco
+Muro;P02_E02_PE015;8.76;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P02_E03_PE001;5.04;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P02_E04_PE001_V;2.60;1.65;N ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P02_E04_PE001;19.51;0.26;1.00;Fachada;N ;muro_opaco
+Ventana;P03_E01_PE001_V1;10.40;1.76;N ;20.00;0.79;-1.00;1.00;9.00;ventana estandar
+Muro;P03_E01_PE001;1.90;0.26;1.00;Fachada;N ;muro_opaco
+Ventana;P03_E01_PE002_V1;12.48;1.76;N ;20.00;0.79;-1.00;1.00;9.00;ventana estandar
+Muro;P03_E01_PE002;2.25;0.26;1.00;Fachada;N ;muro_opaco
+Ventana;P03_E01_PE003_V1;13.78;1.76;N ;20.00;0.79;-1.00;1.00;9.00;ventana estandar
+Muro;P03_E01_PE003;2.93;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P03_E01_PE004;25.05;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P03_E01_PE005;15.33;0.26;1.00;Fachada;N ;muro_opaco
+Ventana;P03_E01_PE006_V;2.86;1.65;O ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E01_PE006;22.64;0.26;1.00;Fachada;O ;muro_opaco
+Ventana;P03_E01_PE007_V;13.00;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E01_PE007;2.36;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P03_E01_PE008_V;28.60;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E01_PE008;4.46;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P03_E01_PE009_V1;10.40;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E01_PE009;1.99;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P03_E01_PE010_V;12.48;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E01_PE010;2.25;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P03_E01_PE011_V;29.12;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E01_PE011;5.29;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P03_E01_PE012_V;27.30;1.65;S ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E01_PE012;4.74;0.26;1.00;Fachada;S ;muro_opaco
+Ventana;P03_E01_PE013_V_4;2.86;1.65;E ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E01_PE013;22.64;0.26;1.00;Fachada;E ;muro_opaco
+Muro;P03_E01_PE014;32.04;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P03_E01_CUB001;373.50;0.32;1.00;Cubierta;H ;cubierta
+Muro;P03_E02_PE015;8.76;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P03_E02_CUB001;10.75;0.32;1.00;Cubierta;H ;cubierta
+Muro;P03_E03_PE016;5.04;0.26;1.00;Fachada;S ;muro_opaco
+Muro;P03_E03_CUB001;5.71;0.32;1.00;Cubierta;H ;cubierta
+Ventana;P03_E04_PE017_V;2.60;1.65;N ;15.00;0.79;-1.00;1.00;9.00;muro_cortina_controlsolar
+Muro;P03_E04_PE017;19.51;0.26;1.00;Fachada;N ;muro_opaco
+Muro;P03_E04_CUB001;26.63;0.32;1.00;Cubierta;H ;cubierta
+PPTT;171,63;0,080;FRENTE_FORJADO;SDINT
+PPTT;148,34;0,240;UNION_CUBIERTA;SDINT
+PPTT;92,41;0,220;ESQUINA_CONVEXA_FORJADO;SDINT
+PPTT;48,00;0,050;ESQUINA_CONVEXA_CERRAMIENTO;SDINT
+PPTT;90,61;0,270;UNION_SOLERA_PAREDEXT;SDINT
+PPTT;447,00;0,067;HUECO_VENTANA;SDINT
+Coeficiente K = ;0,700
+###;Datos para Factor de Insolación
+0 ; 60.764145
+1 ; 90.434280
+2 ; 116.229530
+3 ; 110.912521
+4 ; 89.265694
+5 ; 111.601257
+6 ; 117.662712
+7 ; 91.772369
+8 ; 220.045319
+"P01_E02_PE005_V"; 90.000000; 13.000000; 116229.601562; 45054.238281; 45054.238281; 45054.238281; 8425.138672
+"P01_E02_PE006_V"; 269.931915; 12.999999; 117682.468750; 55670.867188; 55670.867188; 55670.867188; 10410.448242
+"P01_E04_PE001_V"; 270.000000; 12.999997; 117662.789062; 44991.125000; 44991.125000; 44991.125000; 8413.333984
+"P01_E04_PE002_V"; 90.000000; 11.700002; 116229.601562; 47680.945312; 47680.945312; 47680.945312; 8916.337891
+"P01_E08_PE001_V"; 0.000000; 2.600000; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 11115.893555
+"P02_E01_PE001_V1"; 0.000000; 10.400000; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 10462.017578
+"P02_E01_PE002_V1"; 0.000000; 12.480002; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 10462.017578
+"P02_E01_PE003_V1"; 0.000000; 13.780003; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 10462.017578
+"P02_E01_PE006_V"; 270.000000; 2.860000; 117662.789062; 117620.578125; 117620.578125; 117620.578125; 21995.058594
+"P02_E01_PE007_V"; 180.000000; 13.000000; 89265.695312; 49600.781250; 49600.781250; 49600.781250; 9275.344727
+"P02_E01_PE008_V"; 180.000000; 28.599998; 89265.695312; 46497.550781; 46497.550781; 46497.550781; 8695.042969
+"P02_E01_PE009_V1"; 180.000000; 10.400000; 89265.695312; 46434.593750; 46434.593750; 46434.593750; 8683.273438
+"P02_E01_PE010_V"; 180.000000; 12.480002; 89265.695312; 46434.593750; 46434.593750; 46434.593750; 8683.273438
+"P02_E01_PE011_V"; 180.000000; 29.119995; 89265.695312; 46497.550781; 46497.550781; 46497.550781; 8695.042969
+"P02_E01_PE012_V"; 180.000000; 27.299999; 89265.695312; 47761.539062; 47761.539062; 47761.539062; 8931.413086
+"P02_E01_PE013_V_2"; 89.999405; 2.860000; 116229.460938; 116137.335938; 116137.335938; 116137.335938; 21717.660156
+"P02_E04_PE001_V"; 0.000000; 2.600000; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 11115.893555
+"P03_E01_PE001_V1"; 0.000000; 10.400000; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 10462.017578
+"P03_E01_PE002_V1"; 0.000000; 12.480002; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 10462.017578
+"P03_E01_PE003_V1"; 0.000000; 13.780003; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 10462.017578
+"P03_E01_PE006_V"; 270.000000; 2.860000; 117662.789062; 117620.578125; 117620.578125; 117620.578125; 21995.058594
+"P03_E01_PE007_V"; 180.000000; 13.000000; 89265.695312; 49600.781250; 49600.781250; 49600.781250; 9275.344727
+"P03_E01_PE008_V"; 180.000000; 28.599998; 89265.695312; 46497.550781; 46497.550781; 46497.550781; 8695.042969
+"P03_E01_PE009_V1"; 180.000000; 10.400000; 89265.695312; 46434.593750; 46434.593750; 46434.593750; 8683.273438
+"P03_E01_PE010_V"; 180.000000; 12.480002; 89265.695312; 46434.593750; 46434.593750; 46434.593750; 8683.273438
+"P03_E01_PE011_V"; 180.000000; 29.119995; 89265.695312; 46497.550781; 46497.550781; 46497.550781; 8695.042969
+"P03_E01_PE012_V"; 180.000000; 27.299999; 89265.695312; 47761.539062; 47761.539062; 47761.539062; 8931.413086
+"P03_E01_PE013_V_4"; 89.999405; 2.860000; 116229.460938; 116137.335938; 116137.335938; 116137.335938; 21717.660156
+"P03_E04_PE017_V"; 0.000000; 2.600000; 60764.273438; 59443.316406; 59443.316406; 59443.316406; 11115.893555
+###;Fin
+###
+### DOCUMENTACIÓN
+###
+### Cerramientos Opacos
+###
+### Muro (texto fijo); Nombre; Superficie (m2); Transmitancia (W/m2K);Factor b (-); Tipo de cerramiento (Fachada Suelo Cubierta ...); Orientación; Nombre de Construcción
+###
+### Huecos
+###
+### Ventana (texto fijo); Nombre; Superficie (m2); Transmitancia (W/m2K); Orientación; Porcentaje de marco (%); Factor solar vidrio (-); No se usa (-1); Factor de Sombra del hueco (-); Permeabilidad del hueco (m3/hm2 a 100 Pa); Nombre de Hueco
+###
+### Puentes térmicos
+###
+### PPTT (texto fijo); Longitud (m); Transmitancia térmica lineal (W/mK); Tipo de PPTT
+###
+### Lineas correspondientes a Ganancias Solares en Julio
+###
+### 8 lineas con la radiación solar global incidente en una superficie vertical (kWh/m2) (0: Norte, 1: NE, ... 7: NO)
+### 1 linea con la radiación solar global incidente en una superficie horizontal (kWh/m2) (8: Horizontal)
+###
+### Para cada hueco en el edificio, una linea que contiene:
+### Nombre del hueco
+### Orientación (grados respecto al norte, (NE=45, E=90, ...))
+### Superficie (m2)
+### Radiación solar global en el plano del vidrio sin obstáculos (Wh/m2)
+### Radiación solar global en el plano del vidrio tras obstaculos remotos (Wh/m2)
+### Radiación solar global en el plano del vidrio tras obstaculos de fachada (voladizos, retranqueos, ...) (Wh/m2)
+### Radiación solar global en el plano del vidrio tras sombras por lamas (Wh/m2)
+### Ganancia Solar a través de este hueco (Wh/m2)
+###
+##
+#
