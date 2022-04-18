@@ -86,60 +86,87 @@ fn test_caso_a() {
     // Partición interior vertical con espacio no habitable/acondicionado, HULC=0.68
     let wall = model.get_wall_by_name("P04_E01_Med001").unwrap();
     assert_almost_eq!(fround2(wall.u_value(&model).unwrap()), 0.66, 0.001);
-    
-    // Cálculo de K, n50, C_o
+
+    // Cálculo de indicadores
     let ind = model.energy_indicators();
-    let n50data = ind.n50_data;
     assert_almost_eq!(ind.area_ref, 400.0, 0.1);
-    assert_almost_eq!(fround2(ind.K_data.K), 0.51, 0.001); // HULC 0.52
-    assert_almost_eq!(fround2(n50data.n50_ref), 4.58, 0.001); // HULC 4.33
-    assert_almost_eq!(fround2(n50data.n50), 5.32, 0.001);
-    assert_almost_eq!(fround2(n50data.walls_c_ref), 16.00, 0.001);
-    assert_almost_eq!(fround2(n50data.walls_c), 18.97, 0.001);
+    assert_almost_eq!(ind.compacity, 2.40, 0.01); // HULC 2.40
+    assert_almost_eq!(ind.K_data.K, 0.51, 0.01); // HULC 0.52
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.63, 0.01); // HULC ?
+    assert_almost_eq!(ind.n50_data.n50_ref, 4.58, 0.01); // HULC 4.33
+    assert_almost_eq!(ind.n50_data.n50, 5.32, 0.01);
+    assert_almost_eq!(ind.n50_data.walls_c_ref, 16.00, 0.01);
+    assert_almost_eq!(ind.n50_data.walls_c, 18.97, 0.01);
 }
 
 #[test]
 fn test_caso_c() {
     // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
-    let model = collect_hulc_data("tests/casoC", true, true).unwrap();
+    let model = collect_hulc_data("tests/casoC", false, false).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "D3");
     assert_eq!(model.windows.len(), 9);
     assert_eq!(model.walls.len(), 33); // 27 en ET
     assert_eq!(model.thermal_bridges.len(), 10); // 7 en kyg
+
     // Cálculo de indicadores
     let ind = model.energy_indicators();
-
     assert_almost_eq!(ind.area_ref, 400.0, 0.1);
+    assert_almost_eq!(ind.compacity, 1.58, 0.01); // HULC 1.76
+    assert_almost_eq!(ind.K_data.K, 0.42, 0.01); // HULC 0.43
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.43, 0.01); // HULC 4.24
+    assert_almost_eq!(ind.n50_data.n50, 5.32, 0.01);
+
+    // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
+    let model = collect_hulc_data("tests/casoC", true, true).unwrap();
+
+    // Cálculo de indicadores
+    let ind = model.energy_indicators();
+    assert_almost_eq!(ind.K_data.K, 0.44, 0.01); // HULC 0.43
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.43, 0.01); // HULC 4.24
 }
 
 // Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
+// e4h_medianeras.ctehexml
 #[test]
 fn parse_test_data() {
     // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
-    let model = collect_hulc_data("tests/data", true, true).unwrap();
+    let model = collect_hulc_data("tests/data", false, false).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "D3");
     assert_eq!(model.windows.len(), 92);
     assert_eq!(model.walls.len(), 127); // 68 en ET
     assert_eq!(model.thermal_bridges.len(), 10); // 6 en kyg
+
     // Cálculo de indicadores
     let ind = model.energy_indicators();
-
     assert_almost_eq!(ind.area_ref, 1673.56, 0.1);
+    assert_almost_eq!(ind.compacity, 3.16, 0.01); // HULC ?
+    assert_almost_eq!(ind.K_data.K, 0.36, 0.01); // HULC ?
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 0.47, 0.01); // HULC ?
+    assert_almost_eq!(ind.n50_data.n50, 2.95, 0.01); // HULC ?
 }
 
 #[test]
-fn parse_test_data2() {
+fn parse_test_ejemplopmt_huecosok() {
     // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
     // Las versiones más nuevas usan la coma en KyGananciasSolares.txt como separador decimal
-    let model = collect_hulc_data("tests/ejemplopmt_HuecosOK", true, true).unwrap();
+    let model = collect_hulc_data("tests/ejemplopmt_HuecosOK", false, false).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "B3");
     assert_eq!(model.windows.len(), 29);
     assert_eq!(model.walls.len(), 95); // 60 en ET
     assert_eq!(model.thermal_bridges.len(), 10); // 7 en kyg
+
     // Cálculo de indicadores
     let ind = model.energy_indicators();
-
     assert_almost_eq!(ind.area_ref, 1063.03, 0.1);
+    assert_almost_eq!(ind.K_data.K, 0.70, 0.01); // HULC ?
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.37, 0.01); // HULC ?
+    assert_almost_eq!(ind.n50_data.n50, 5.23, 0.01); // HULC ?
+
+    // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
+    let model = collect_hulc_data("tests/ejemplopmt_HuecosOK", true, true).unwrap();
+    let ind = model.energy_indicators();
+    assert_almost_eq!(ind.K_data.K, 0.72, 0.01); // HULC ?
+    assert_almost_eq!(ind.q_soljul_data.q_soljul, 3.49, 0.01); // HULC ?
 }
 
 #[test]
