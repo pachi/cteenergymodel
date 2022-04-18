@@ -195,7 +195,6 @@ impl From<&EnergyProps> for KData {
             tb_case.psil += psil;
         }
         // Cálculo de K y resumen
-        #[allow(non_snake_case)]
         let Self {
             roofs,
             floors,
