@@ -1,6 +1,6 @@
 {
   "meta": {
-    "name": "Caso A",
+    "name": "Caso a",
     "is_new_building": true,
     "is_dwelling": true,
     "num_dwellings": 5,
@@ -1405,24 +1405,24 @@
   ],
   "thermal_bridges": [
     {
-      "id": "9bf65f35-63ba-d976-e9c9-05e201fd1dbf",
+      "id": "28b60a4b-d516-b4cc-1b3a-084137704619",
       "name": "FRENTE_FORJADO",
       "kind": "INTERMEDIATEFLOOR",
-      "l": 110.0,
+      "l": 50.0,
       "psi": 0.0
     },
     {
-      "id": "1c64e84e-dfb3-87cf-2924-bfd2dce5251f",
+      "id": "dbc3d826-8950-f402-97b9-689249e2b32e",
       "name": "UNION_CUBIERTA",
       "kind": "ROOF",
-      "l": 113.54,
+      "l": 56.18,
       "psi": 0.25875
     },
     {
-      "id": "2ec0a28d-a4c1-a771-6524-1203fa4082ae",
+      "id": "1953dd98-f297-dfb0-f4fe-17a57fd6b445",
       "name": "ESQUINA_CONVEXA_FORJADO",
       "kind": "ROOF",
-      "l": 30.0,
+      "l": 35.0,
       "psi": 0.86
     },
     {
@@ -1433,45 +1433,45 @@
       "psi": -0.08
     },
     {
-      "id": "41082820-1276-0616-fc65-2344a71842c5",
+      "id": "28b15277-d558-40e5-062f-52dbc48bf37a",
       "name": "ESQUINA_CONVEXA",
       "kind": "CORNER",
-      "l": 48.0,
+      "l": 18.0,
       "psi": 0.06
     },
     {
-      "id": "eead7979-5cb0-c0a3-20f9-a08fe7b6ebb4",
+      "id": "8151c573-b673-0e51-97ff-e17981e751a5",
       "name": "PILAR",
       "kind": "PILLAR",
-      "l": 1.0,
+      "l": 0.0,
       "psi": 0.0
     },
     {
-      "id": "3aff3f7f-3e73-0c87-c395-3c29d165f50e",
+      "id": "f5649add-2544-f280-bd79-2cf15cd2880e",
       "name": "HUECO_CAPIALZADO",
       "kind": "WINDOW",
-      "l": 12.0,
+      "l": 19.0,
       "psi": 0.111
     },
     {
-      "id": "a2e634ff-f081-858f-dea5-c59de219ec89",
+      "id": "7661960a-5ba9-91bd-e59c-c109e9ae80eb",
       "name": "HUECO_JAMBA",
       "kind": "WINDOW",
-      "l": 24.0,
+      "l": 20.0,
       "psi": 0.01
     },
     {
-      "id": "4ea4e8b6-1b58-e0e5-4ae7-ddc18374e6ff",
+      "id": "ed57f7d6-b76e-06b9-863f-018f5d324854",
       "name": "HUECO_ALFEIZAR",
       "kind": "WINDOW",
-      "l": 12.0,
+      "l": 19.0,
       "psi": 0.08
     },
     {
-      "id": "b4588da5-e575-e53c-4e0f-c6c16daf1222",
+      "id": "9c5067ca-a269-d832-73e6-9d2462dceea6",
       "name": "UNION_SOLERA_PAREDEXT",
       "kind": "GROUNDFLOOR",
-      "l": 40.0,
+      "l": 13.0,
       "psi": 0.3975
     }
   ],

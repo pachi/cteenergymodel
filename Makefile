@@ -1,20 +1,20 @@
 run:
 	$(info [INFO]: Ejecutando ejemplo)
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo/cubo.ctehexml -o cubo.json -r cubo_results.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/data/e4h_medianeras.ctehexml -o e4h_medianeras.json -r e4h_medianeras_results.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/e4h_medianeras/e4h_medianeras.ctehexml -o e4h_medianeras.json -r e4h_medianeras_results.json
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/casoA/casoa.ctehexml -o caso_a.json -r caso_a_results.json
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/ejemploviv_unif/ejemploviv_unif.ctehexml -o ejemploviv_unif.json -r ejemploviv_unif_results.json
-	$(info [INFO]: Actualizando ejemplos en bemodel/tests/data)
+	$(info [INFO]: Actualizando ejemplos en bemodel/tests/e4h_medianeras)
 	mv e4h_medianeras.json e4h_medianeras_results.json bemodel/tests/data/
 	mv caso_a.json caso_a_results.json bemodel/tests/data/
 	mv cubo.json cubo_results.json bemodel/tests/data/
 	mv ejemploviv_unif.json ejemploviv_unif_results.json bemodel/tests/data/
 runskip:
-	cargo run -- --skip-extra hulc_tests/tests/data/ > e4h_medianeras.json.skip
+	cargo run -- --skip-extra hulc_tests/tests/e4h_medianeras/ > e4h_medianeras.json.skip
 	cargo run -- --skip-extra hulc_tests/tests/casoA/ > salida_a.json.skip
-	cargo run -- --skip-extra hulc_tests/tests/data/cubo.json > cubo.json.skip
+	cargo run -- --skip-extra hulc_tests/tests/e4h_medianeras/cubo.json > cubo.json.skip
 compare: run runskip
-	(meld bemodel/tests/data/e4h_medianeras.json e4h_medianeras.json.skip&) && (meld -n bemodel/tests/data/caso_a.json salida_a.json.skip&) && (meld -n bemodel/tests/data/cubo.json cubo.json.skip&)
+	(meld bemodel/tests/e4h_medianeras/e4h_medianeras.json e4h_medianeras.json.skip&) && (meld -n bemodel/tests/e4h_medianeras/caso_a.json salida_a.json.skip&) && (meld -n bemodel/tests/e4h_medianeras/cubo.json cubo.json.skip&)
 climatedata:
 	# cargo run --release --bin metconvert ../climascte
 	cargo run --release --bin metconvert -- --pretty ../climascte

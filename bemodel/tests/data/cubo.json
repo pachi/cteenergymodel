@@ -5,7 +5,7 @@
     "is_dwelling": true,
     "num_dwellings": 1,
     "climate": "D3",
-    "global_ventilation_l_s": 1.0,
+    "global_ventilation_l_s": 50.0,
     "d_perim_insulation": 1.0,
     "rn_perim_insulation": 1.0
   },
@@ -271,73 +271,73 @@
   ],
   "thermal_bridges": [
     {
-      "id": "965a4dbe-7efe-b5d4-ea0a-9dd1a620e1b7",
+      "id": "8cf75855-2dd6-92bb-531e-7267df5ad3f5",
       "name": "FRENTE_FORJADO",
       "kind": "INTERMEDIATEFLOOR",
-      "l": -1.0,
+      "l": 0.0,
       "psi": 0.97
     },
     {
-      "id": "9e1d0822-d63f-7fcf-fc4c-b597bca0b442",
+      "id": "6118acdd-d286-668e-3b2b-d7719ed1b924",
       "name": "UNION_CUBIERTA",
       "kind": "ROOF",
-      "l": -1.0,
+      "l": 54.14,
       "psi": 0.96
     },
     {
-      "id": "2510cca0-72c9-df93-6f99-6b6edaaec472",
+      "id": "22bfd531-f09a-7158-ff36-5f0988a21126",
       "name": "ESQUINA_CONVEXA_FORJADO",
       "kind": "ROOF",
-      "l": -1.0,
+      "l": 0.0,
       "psi": 0.86
     },
     {
-      "id": "b3128089-515a-b39b-eb3e-3983aefe13a9",
+      "id": "0d7fa8ba-6c88-62a2-9d5d-016ed5bcd705",
       "name": "ESQUINA_CONCAVA",
       "kind": "CORNER",
-      "l": -1.0,
+      "l": 0.0,
       "psi": -0.16
     },
     {
-      "id": "de359362-e06d-5c8a-bd25-a7d5b9f48285",
+      "id": "e40187af-1fd5-df49-d090-3a034e73222a",
       "name": "ESQUINA_CONVEXA",
       "kind": "CORNER",
-      "l": -1.0,
+      "l": 12.0,
       "psi": 0.11
     },
     {
-      "id": "b9ef5f8e-ef25-1cf6-8b47-89288e3b9541",
+      "id": "62220916-df26-d944-ea5d-30ce2aefd551",
       "name": "PILAR",
       "kind": "PILLAR",
-      "l": -1.0,
+      "l": 0.0,
       "psi": 1.2
     },
     {
-      "id": "5fd04389-7277-010a-c94c-654146c4776c",
+      "id": "f3153f80-d9bc-fe8b-1062-5670a502235f",
       "name": "HUECO_CAPIALZADO",
       "kind": "WINDOW",
-      "l": -1.0,
+      "l": 2.0,
       "psi": 0.82
     },
     {
-      "id": "7357e89d-6962-b295-9d00-da25eebae363",
+      "id": "8d3ea878-f8b0-5f9d-96c2-388f12157c7e",
       "name": "HUECO_JAMBA",
       "kind": "WINDOW",
-      "l": -1.0,
+      "l": 2.0,
       "psi": 0.53
     },
     {
-      "id": "700bb01b-d562-57d3-9f6d-771722796574",
+      "id": "6611e0b9-7203-42fb-e501-894e0334c80f",
       "name": "HUECO_ALFEIZAR",
       "kind": "WINDOW",
-      "l": -1.0,
+      "l": 2.0,
       "psi": 0.44
     },
     {
-      "id": "56fb0260-473b-afe4-8c88-223bc8556c52",
+      "id": "eefa1a39-4907-821e-4532-dc3aadaff5b8",
       "name": "UNION_SOLERA_PAREDEXT",
       "kind": "GROUNDFLOOR",
-      "l": -1.0,
+      "l": 40.0,
       "psi": 0.57
     }
   ],

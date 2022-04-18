@@ -16,7 +16,7 @@ fn load_caso_c() {
 
 // Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
 fn load_test_data() {
-    let _data = collect_hulc_data("tests/data", true, true).unwrap();
+    let _data = collect_hulc_data("tests/e4h_medianeras", true, true).unwrap();
 }
 
 fn criterion_benchmark(c: &mut Criterion) {

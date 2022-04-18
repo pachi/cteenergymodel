@@ -128,9 +128,9 @@ fn test_caso_c() {
 // Caso más antiguo con archivo generado con el HULC2018 que salió a información pública
 // e4h_medianeras.ctehexml
 #[test]
-fn parse_test_data() {
+fn parse_test_e4h_medianeras() {
     // Se pueden probar los valores de HULC con use_kyg = true, y use_tbl a true)
-    let model = collect_hulc_data("tests/data", false, false).unwrap();
+    let model = collect_hulc_data("tests/e4h_medianeras", false, false).unwrap();
     assert_eq!(&model.meta.climate.to_string(), "D3");
     assert_eq!(model.windows.len(), 92);
     assert_eq!(model.walls.len(), 127); // 68 en ET
