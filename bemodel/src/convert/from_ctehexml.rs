@@ -64,8 +64,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let walls = walls_from_bdl(bdl, &id_maps)?;
         let (windows, shades) = windows_and_shades_from_bdl(bdl, &walls, &id_maps);
         let thermal_bridges = thermal_bridges_from_bdl(bdl);
-        let wallcons = wallcons_from_bdl(bdl, &mut mats, &id_maps)?;
-        let wincons = windowcons_from_bdl(bdl, &mut mats)?;
+        let cons = cons_from_bdl(bdl, &mut mats, &id_maps)?;
 
         // Completa metadatos desde ctehexml y el bdl
         // Desviación general respecto al Norte (criterio BDL)
@@ -113,7 +112,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             thermal_bridges,
             shades,
             spaces,
-            cons: ConsDb { wincons, wallcons },
+            cons,
             mats,
             warnings: Default::default(),
             overrides: Default::default(),
@@ -584,12 +583,12 @@ fn mats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> MatsDb {
     }
 }
 
-/// Construcciones de muros a partir de datos BDL
-fn wallcons_from_bdl(
+/// Construcciones de muros y huecos a partir de datos BDL
+fn cons_from_bdl(
     bdl: &Data,
     mats: &mut MatsDb,
     id_maps: &IdMaps,
-) -> Result<Vec<WallCons>, Error> {
+) -> Result<ConsDb, Error> {
     let mut used_wallcons = bdl
         .walls
         .iter()
@@ -599,7 +598,7 @@ fn wallcons_from_bdl(
     used_wallcons.dedup();
 
     let mut used_material_ids = HashSet::new();
-    let mut wclist = Vec::with_capacity(used_wallcons.len());
+    let mut wallcons = Vec::with_capacity(used_wallcons.len());
     for wcons in &used_wallcons {
         match bdl.db.wallcons.get(wcons) {
             Some(cons) => {
@@ -615,14 +614,14 @@ fn wallcons_from_bdl(
                     .zip(cons.thickness.iter().cloned())
                     .map(|(id, e)| Layer { id, e })
                     .collect();
-                let wallcons = WallCons {
+                let wc = WallCons {
                     id: id_maps.wallcons_id(wcons)?,
                     name: cons.name.clone(),
                     group: cons.group.clone(),
                     layers,
                     absorptance: cons.absorptance,
                 };
-                wclist.push(wallcons)
+                wallcons.push(wc)
             }
             _ => {
                 return Err(format_err!(
@@ -635,12 +634,6 @@ fn wallcons_from_bdl(
     // Purgamos materiales no usados
     mats.materials.retain(|v| used_material_ids.contains(&v.id));
 
-    // Devolvemos lista
-    Ok(wclist)
-}
-
-/// Construcciones de huecos a partir de datos BDL
-fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WinCons>, Error> {
     let mut wcnames: Vec<String> = bdl
         .windows
         .iter()
@@ -664,9 +657,9 @@ fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WinCons>, Er
     let mut used_glasses_ids = HashSet::new();
     let mut used_frames_ids = HashSet::new();
 
-    let mut wcons = Vec::new();
-    for wincons in &wcnames {
-        let cons = match bdl.db.wincons.get(wincons) {
+    let mut wincons = Vec::new();
+    for winconsname in &wcnames {
+        let cons = match bdl.db.wincons.get(winconsname) {
             Some(cons) => {
                 let id = uuid_from_obj(cons);
                 // Vidrio del hueco (Glass)
@@ -697,18 +690,19 @@ fn windowcons_from_bdl(bdl: &Data, mats: &mut MatsDb) -> Result<Vec<WinCons>, Er
             _ => {
                 return Err(format_err!(
                     "Construcción de hueco no encontrada o mal formada: {}",
-                    &wincons,
+                    &winconsname,
                 ))
             }
         };
-        wcons.push(cons);
+        wincons.push(cons);
     }
 
     // Purgamos materiales no usados
     mats.glasses.retain(|v| used_glasses_ids.contains(&v.id));
     mats.frames.retain(|v| used_frames_ids.contains(&v.id));
 
-    Ok(wcons)
+    // Devolvemos lista
+    Ok(ConsDb { wallcons, wincons})
 }
 
 /// Mapping de nombres a ids
