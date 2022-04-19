@@ -11,7 +11,7 @@ use super::Uuid;
 // Materiales -----------------------------------------------
 
 /// Base de datos de materiales
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct MatsDb {
     /// Lista de materiales para elementos opacos (muro, cubierta, suelo, partición)
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -39,6 +39,11 @@ impl MatsDb {
     pub fn get_frame(&self, id: Uuid) -> Option<&Frame> {
         self.frames.iter().find(|w| w.id == id)
     }
+
+    /// Comprueba si la base de datos está vacía
+    pub(crate) fn is_empty(&self) -> bool {
+        self.materials.is_empty() && self.glasses.is_empty() && self.frames.is_empty()
+    }
 }
 
 /// Material de elemento opaco (muro, cubierta, suelo, partición)
@@ -47,7 +52,7 @@ pub struct Material {
     /// ID del material (UUID)
     pub id: Uuid,
     /// Nombre del material
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     #[serde(default)]
@@ -55,6 +60,17 @@ pub struct Material {
     /// Definición de propiedades, detallada (lambda, rho, C_p, mu, ...) o solo resistencia
     #[serde(flatten)]
     pub properties: MatProps,
+}
+
+impl Default for Material {
+    fn default() -> Self {
+        Material {
+            id: Uuid::new_v4(),
+            name: "Fábrica 1/2' LP G > 80".to_string(),
+            group: String::default(),
+            properties: MatProps::default(),
+        }
+    }
 }
 
 /// Tipos de propiedades de materiales
@@ -68,11 +84,10 @@ pub enum MatProps {
         conductivity: f32,
         // Densidad, rho (kg/m3)
         density: f32,
-        // Calor específico, C_p (J/kg K) (valor por defecto 800 J/kg·K)
+        // Calor específico, C_p (J/kg K) (valor por defecto 1000 J/kg·K)
         specific_heat: f32,
         // Factor de difusividad al vapor de agua, mu (-)
-        #[serde(skip_serializing_if = "Option::is_none")]
-        #[serde(default)]
+        #[serde(default, skip_serializing_if = "Option::is_none")]
         vapour_diff: Option<f32>,
     },
     /// Resistencia térmica (R)
@@ -83,13 +98,25 @@ pub enum MatProps {
     },
 }
 
+impl Default for MatProps {
+    fn default() -> Self {
+        // Caso por defecto (Fábrica 1/2' LP G > 80 del CEC)
+        MatProps::Detailed {
+            conductivity: 0.23,
+            density: 900.0,
+            specific_heat: 1000.0,
+            vapour_diff: Some(10.0),
+        }
+    }
+}
+
 /// Vidrio
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Glass {
     /// ID del vidrio (UUID)
     pub id: Uuid,
     /// Nombre
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     #[serde(default)]
@@ -100,13 +127,26 @@ pub struct Glass {
     pub g_gln: f32,
 }
 
+impl Default for Glass {
+    fn default() -> Self {
+        // Caso por defecto (Acristalamiento vidrio sencillo 6mm vert del CEC)
+        Glass {
+            id: Uuid::new_v4(),
+            name: "Vidrio sencillo 6mm (Vert)".to_string(),
+            group: "".to_string(),
+            u_value: 5.7,
+            g_gln: 0.83,
+        }
+    }
+}
+
 /// Marco de hueco
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Frame {
     /// ID del marco (UUID)
     pub id: Uuid,
     /// Nombre
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Grupo al que pertenece (biblioteca)
     #[serde(default)]
@@ -116,3 +156,17 @@ pub struct Frame {
     /// Absortividad del marco, alpha (-)
     pub absorptivity: f32,
 }
+
+impl Default for Frame {
+    fn default() -> Self {
+        // Caso por defecto (Marco metálico con RPT > 12mm)
+        Frame {
+            id: Uuid::new_v4(),
+            name: "Marco metálico con RPT > 12 mm".to_string(),
+            group: "".to_string(),
+            u_value: 3.2,
+            absorptivity: 0.6,
+        }
+    }
+}
+

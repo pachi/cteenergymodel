@@ -17,12 +17,12 @@ use super::{
 // Elementos -----------------------------------------------
 
 /// Elemento opaco (muro, cubierta, suelo, partición)
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Wall {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre del elemento opaco
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Condiciones de contorno del cerramiento:
     /// - GROUND: cerramientos en contacto con el terreno
@@ -39,6 +39,20 @@ pub struct Wall {
     pub next_to: Option<Uuid>,
     /// Geometría del elemento opaco
     pub geometry: WallGeom,
+}
+
+impl Default for Wall {
+    fn default() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            name: "Opaco".to_string(),
+            bounds: BoundaryType::EXTERIOR,
+            cons: Uuid::default(),
+            space: Uuid::default(),
+            next_to: None,
+            geometry: WallGeom::default(),
+        }
+    }
 }
 
 impl Wall {
@@ -94,14 +108,24 @@ pub struct Shade {
     /// ID del elemento de sombra (en formato UUID)
     pub id: Uuid,
     /// Nombre del elemento opaco
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Geometría del elemento opaco
     pub geometry: WallGeom,
 }
 
+impl Default for Shade {
+    fn default() -> Self {
+        Self {
+            id: Uuid::new_v4(),
+            name: "Sombra".to_string(),
+            geometry: WallGeom::default(),
+        }
+    }
+}
+
 /// Geometría de opaco
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WallGeom {
     /// Inclinación (beta) [0, 180]
     /// Ángulo con la vertical (0 -> suelo, 180 -> techo)

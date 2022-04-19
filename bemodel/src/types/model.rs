@@ -10,8 +10,8 @@ use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    PropsOverrides, BoundaryType, ConsDb, MatsDb, Meta, Shade, Space, SpaceType,
-    ThermalBridge, Tilt, Uuid, Wall, Window,
+    BoundaryType, ConsDb, MatsDb, Meta, PropsOverrides, Shade, Space, SpaceType, ThermalBridge,
+    Tilt, Uuid, Wall, Window,
 };
 
 // ---------- Estructura general de datos --------------
@@ -38,13 +38,13 @@ pub struct Model {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub shades: Vec<Shade>,
     /// Construcciones
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "ConsDb::is_empty")]
     pub cons: ConsDb,
     /// Materiales
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "MatsDb::is_empty")]
     pub mats: MatsDb,
     /// Overrides de propiedades de elementos (opacos y huecos)
-    #[serde(default, skip_serializing_if = "props_overrides_is_empty")]
+    #[serde(default, skip_serializing_if = "PropsOverrides::is_empty")]
     pub overrides: PropsOverrides,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -150,8 +150,4 @@ pub struct ExtraData {
     pub u: f32,
     // U calculada con UNE-EN ISO 13789
     pub computed_u: f32,
-}
-
-fn props_overrides_is_empty(overrides: &PropsOverrides) -> bool {
-    overrides.walls.is_empty() && overrides.windows.is_empty()
 }

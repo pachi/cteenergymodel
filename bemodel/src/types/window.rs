@@ -12,12 +12,12 @@ use super::{point, uuid_from_str, vector, HasSurface, Point2, Shade, Uuid, Vecto
 // Elementos -----------------------------------------------
 
 /// Hueco
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Window {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre del hueco
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Construcción del hueco
     pub cons: Uuid,
@@ -131,6 +131,18 @@ impl Window {
             (self.id, right_fin),
             (self.id, sill),
         ])
+    }
+}
+
+impl Default for Window {
+    fn default() -> Self {
+        Window {
+            id: Uuid::new_v4(),
+            name: "Ventana".to_string(),
+            cons: Uuid::default(),
+            wall: Uuid::default(),
+            geometry: WinGeom::default(),
+        }
     }
 }
 

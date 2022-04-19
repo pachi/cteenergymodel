@@ -12,6 +12,7 @@ use crate::climatedata::ClimateZone;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Meta {
     /// Nombre del proyecto
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// ¿Edificio nuevo?
     pub is_new_building: bool,

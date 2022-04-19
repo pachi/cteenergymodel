@@ -4,13 +4,14 @@
 
 //! Espacios : Space
 //!
-//! XXX: realmente los tratamos como zonas térmicas y no como recintos
+//! Corresponden a zonas térmicas
 
 use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
 
 use super::{ConsDb, HasSurface, Tilt, Uuid, Wall};
+use crate::utils::{default_1, default_true, is_default, is_true, multiplier_is_1};
 
 // Elementos -----------------------------------------------
 
@@ -20,19 +21,19 @@ pub struct Space {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre del espacio
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Multiplicador del espacio
-    #[serde(default = "multiplier_1")]
+    #[serde(default = "default_1", skip_serializing_if = "multiplier_is_1")]
     pub multiplier: f32,
     /// Tipo de espacio:
     /// - CONDITIONED: acondicionado,
     /// - UNCONDITIONED: no acondicionado
     /// - UNINHABITED: no habitable
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub kind: SpaceType,
     /// Pertenencia al interior de la envolvente térmica
-    #[serde(default = "inside_tenv_true")]
+    #[serde(default = "default_true", skip_serializing_if = "is_true")]
     pub inside_tenv: bool,
     /// Altura bruta (suelo a suelo) del espacio (m)
     pub height: f32,
@@ -41,18 +42,8 @@ pub struct Space {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub n_v: Option<f32>,
     /// Cota del espacio respecto al suelo (m)
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "is_default")]
     pub z: f32,
-}
-
-/// Devuelve el default de multiplicador
-fn multiplier_1() -> f32 {
-    1.0
-}
-
-/// Devuelve el default de pertenencia a la envolvente térmica
-fn inside_tenv_true() -> bool {
-    true
 }
 
 impl Space {
@@ -94,6 +85,21 @@ impl Space {
         walls
             .iter()
             .filter(move |w| w.space == self.id || w.next_to == Some(self.id))
+    }
+}
+
+impl Default for Space {
+    fn default() -> Self {
+        Space {
+            id: Uuid::new_v4(),
+            name: "Espacio".to_string(),
+            multiplier: 1.0,
+            kind: SpaceType::default(),
+            inside_tenv: true,
+            height: 3.0,
+            n_v: None,
+            z: 0.0,
+        }
     }
 }
 

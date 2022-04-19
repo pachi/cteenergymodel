@@ -18,6 +18,12 @@ pub struct PropsOverrides {
     pub windows: BTreeMap<Uuid, WinPropsOverrides>,
 }
 
+impl PropsOverrides {
+    pub(crate) fn is_empty(&self) -> bool {
+        self.walls.is_empty() && self.windows.is_empty()
+    }
+}
+
 /// Propiedades de elemento opaco (muro, cubierta, suelo, partición) definidas por el usuario
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WallPropsOverrides {

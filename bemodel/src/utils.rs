@@ -57,3 +57,33 @@ pub fn uuid_from_str(str: &str) -> Uuid {
     ))
     .unwrap()
 }
+
+
+// Utilidades para serialización y deserialización de datos ---------------------
+
+/// Comprueba que el valor coincide con su valor por defecto
+/// Útil para evitar serialización de algunos valores
+pub(crate) fn is_default<T: Default + PartialEq>(t: &T) -> bool {
+    t == &T::default()
+}
+
+
+/// Devuelve el default de multiplicador
+pub(crate) fn default_1() -> f32 {
+    1.0
+}
+
+/// Comprueba si el multiplicador es 1.0
+pub(crate) fn multiplier_is_1(m: &f32) -> bool {
+    *m == 1.0
+}
+
+/// Comprueba si el valor es true
+pub(crate) fn is_true(b: &bool) -> bool {
+    *b
+}
+
+/// Devuelve como default true
+pub(crate) fn default_true() -> bool {
+    true
+}

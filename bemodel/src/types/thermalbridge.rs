@@ -4,26 +4,43 @@
 
 //! Puentes térmicos lineales: ThermalBridge, ThermalBridgeKind
 
-use super::Uuid;
 use serde::{Deserialize, Serialize};
+
+use super::Uuid;
+use crate::utils::is_default;
 
 // Elementos -----------------------------------------------
 
 /// Puente térmico
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ThermalBridge {
     /// ID del espacio (en formato UUID)
     pub id: Uuid,
     /// Nombre del puente térmico
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Tipo de puente térmico
     /// Roof|Balcony|Corner|IntermediateFloor|InternalWall|GroundFloor|Pillar|Window|Generic
+    #[serde(default, skip_serializing_if = "is_default")]
     pub kind: ThermalBridgeKind,
     /// Longitud del puente térmico (m)
+    #[serde(default, skip_serializing_if = "is_default")]
     pub l: f32,
     /// Transmitancia térmica lineal del puente térmico (W/mK)
+    #[serde(default, skip_serializing_if = "is_default")]
     pub psi: f32,
+}
+
+impl Default for ThermalBridge {
+    fn default() -> Self {
+        ThermalBridge {
+            id: Uuid::new_v4(),
+            name: "Puente térmico".to_string(),
+            kind: ThermalBridgeKind::default(),
+            l: 1.0,
+            psi: 0.1,
+        }
+    }
 }
 
 /// Tipo de puente térmico según el tipo de elementos conectados
@@ -32,7 +49,7 @@ pub struct ThermalBridge {
 ///     cubiertas, balcones, fachadas, soleras / cámaras sanitarias,
 ///     pilares, huecos, particiones interiores, forjados (suelos interiores)
 /// Usamos abreviaturas similares a las de la norma UNE-EN ISO 14683
-#[derive(Debug, Copy, Clone, Serialize, Deserialize)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ThermalBridgeKind {
     /// Cubierta-fachada (R)
     ROOF,
