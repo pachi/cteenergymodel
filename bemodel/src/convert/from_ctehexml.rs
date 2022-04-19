@@ -115,6 +115,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             spaces,
             cons: ConsDb { wincons, wallcons },
             mats,
+            warnings: Default::default(),
             overrides: Default::default(),
             extra: Default::default(),
         };

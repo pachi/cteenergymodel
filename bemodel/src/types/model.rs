@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     BoundaryType, ConsDb, MatsDb, Meta, PropsOverrides, Shade, Space, SpaceType, ThermalBridge,
-    Tilt, Uuid, Wall, Window,
+    Tilt, Uuid, Wall, Window, Warning
 };
 
 // ---------- Estructura general de datos --------------
@@ -46,6 +46,9 @@ pub struct Model {
     /// Overrides de propiedades de elementos (opacos y huecos)
     #[serde(default, skip_serializing_if = "PropsOverrides::is_empty")]
     pub overrides: PropsOverrides,
+    /// Avisos de consistencia o de conversión del modelo
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub warnings: Vec<Warning>,
     // XXX: Lista de elementos con diferencias con HULC, mientras no se pueda asegurar que el cálculo es correcto
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub extra: Option<Vec<ExtraData>>,
