@@ -97,36 +97,6 @@ impl Model {
     pub fn get_window_by_name<'a>(&'a self, name: &'a str) -> Option<&'a Window> {
         self.windows.iter().find(|w| w.name == name)
     }
-
-    /// Iterador de los huecos de la envolvente térmica en contacto con el aire exterior
-    /// Se excluyen los huecos sin espacio definido
-    /// TODO: podríamos llevar esta lógica a ElementProps y allí dejar esto calculado
-    pub fn exterior_windows_of_envelope_iter(&self) -> impl Iterator<Item = &Window> {
-        self.walls
-            .iter()
-            .filter(|w| w.bounds == BoundaryType::EXTERIOR)
-            .filter(move |w| {
-                self.get_space(w.space)
-                    .map(|s| s.inside_tenv)
-                    .unwrap_or(false)
-            })
-            .flat_map(move |wall| self.windows.iter().filter(move |w| w.wall == wall.id))
-    }
-
-    // ---------------- Cálculos geométricos generales
-
-    /// Genera todas las sombras de retranqueo de los huecos del modelo
-    pub fn windows_setback_shades(&self) -> Vec<(Uuid, Shade)> {
-        self.windows
-            .iter()
-            .filter_map(|window| {
-                self.get_wall(window.wall)
-                    .map(|wall| window.shades_for_setback(&wall.geometry))
-            })
-            .flatten()
-            .flatten()
-            .collect()
-    }
 }
 
 /// Datos adicionales para comprobación de muros

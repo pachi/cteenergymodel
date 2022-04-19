@@ -19,7 +19,7 @@ use crate::{
     utils::fround2,
     vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    MatsDb, Model, Point3, Uuid, Vector3, WallGeom, WinCons, Window,
+    MatsDb, Model, Point3, Shade, Uuid, Vector3, WallGeom, WinCons, Window,
 };
 
 impl Model {
@@ -180,6 +180,19 @@ impl Model {
         }
 
         1.0 - num_intersects as f32 / num_rays as f32
+    }
+
+    /// Genera todas las sombras de retranqueo de los huecos del modelo
+    pub(crate) fn windows_setback_shades(&self) -> Vec<(Uuid, Shade)> {
+        self.windows
+            .iter()
+            .filter_map(|window| {
+                self.get_wall(window.wall)
+                    .map(|wall| window.shades_for_setback(&wall.geometry))
+            })
+            .flatten()
+            .flatten()
+            .collect()
     }
 
     /// Genera lista de elementos oclusores a partir de muros, sombras y sombras de retranqueo
