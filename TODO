@@ -10,6 +10,7 @@
   - Ver dónde se guarda esa biblioteca (¿la tenemos en el wasm y la usamos para la importación o es solo del lado del cliente?
 - Separar check de cálculo energético
 - Trasladar avisos en la conversión de modelos BDL
+  - Usar Model.warnings
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
 - Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
 - Introducir perfiles de uso y operacionales:
