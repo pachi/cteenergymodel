@@ -1,7 +1,7 @@
 [workspace]
 
 members = [
-    "bemodel", "climate", "hulc", "hulc2model", "hulc_tests"
+    "bemodel", "climate", "hulc", "hulc2model", "hulc_tests", "convertdb"
 ]
 
 [profile.release]

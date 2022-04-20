@@ -1,0 +1,22 @@
+[package]
+name = "convertdb"
+version = "0.1.0"
+authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+edition = "2021"
+description = "Convert HULC Database to BeModel data"
+repository = "https://github.com/pachi/cteenergymodel"
+readme = "README.md"
+keywords = ["buildings", "energy", "ISO_EN_52000", "CTE", "EnvolventeCTE"]
+categories = ["command-line-utilities", "science"]
+license = "MIT"
+
+[dependencies]
+bemodel = { path = "../bemodel" }
+hulc = { path = "../hulc" }
+anyhow = "1.0"
+clap = "2.34"
+exitcode = "1.1"
+flate2 = "1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uneval="0.2"
