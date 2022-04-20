@@ -19,3 +19,6 @@ flamegraph*
 *.ods
 *.txt
 **/zcraddata.json
+convertdb/dhat.out.0
+convertdb/massif.out.0
+convertdb/hulcdb.rs
