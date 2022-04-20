@@ -46,9 +46,6 @@ pub struct WallCons {
     /// Nombre
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    /// Grupo al que pertenece (biblioteca)
-    #[serde(default)]
-    pub group: String,
     /// Capas que forman la construcción de opaco, como lista de tuplas (material, espesor)
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub layers: Vec<Layer>,
@@ -68,7 +65,6 @@ impl Default for WallCons {
         WallCons {
             id: Uuid::new_v4(),
             name: "Construcción de opaco".to_string(),
-            group: String::default(),
             layers: Vec::default(),
             absorptance: 0.7,
         }
@@ -92,9 +88,6 @@ pub struct WinCons {
     /// Nombre
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    /// Grupo al que pertenece (biblioteca)
-    #[serde(default)]
-    pub group: String,
     /// Vidrio del hueco, UUID
     pub glass: Uuid,
     /// Marco del hueco, UUID
@@ -116,7 +109,6 @@ impl Default for WinCons {
         WinCons {
             id: Uuid::new_v4(),
             name: "Construcción de hueco".to_string(),
-            group: String::default(),
             glass: Uuid::default(),
             frame: Uuid::default(),
             f_f: 0.20,
@@ -126,4 +118,3 @@ impl Default for WinCons {
         }
     }
 }
-

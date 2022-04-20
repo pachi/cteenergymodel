@@ -539,7 +539,6 @@ fn mats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> MatsDb {
         materials.push(Material {
             id: id_maps.material_id(&material.name).unwrap_or_default(),
             name: name.clone(),
-            group: material.group.clone(),
             properties: if let Some(p) = material.properties {
                 MatProps::Detailed {
                     conductivity: p.conductivity,
@@ -560,7 +559,6 @@ fn mats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> MatsDb {
         glasses.push(Glass {
             id,
             name: name.clone(),
-            group: glass.group.clone(),
             u_value: glass.conductivity,
             g_gln: glass.g_gln,
         })
@@ -571,7 +569,6 @@ fn mats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> MatsDb {
         frames.push(Frame {
             id,
             name: name.clone(),
-            group: frame.group.clone(),
             u_value: frame.conductivity,
             absorptivity: frame.absorptivity,
         })
@@ -617,7 +614,6 @@ fn cons_from_bdl(
                 let wc = WallCons {
                     id: id_maps.wallcons_id(wcons)?,
                     name: cons.name.clone(),
-                    group: cons.group.clone(),
                     layers,
                     absorptance: cons.absorptance,
                 };
@@ -678,7 +674,6 @@ fn cons_from_bdl(
                 WinCons {
                     id,
                     name: cons.name.clone(),
-                    group: cons.group.clone(),
                     glass,
                     frame,
                     f_f: cons.framefrac,

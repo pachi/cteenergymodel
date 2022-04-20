@@ -54,9 +54,6 @@ pub struct Material {
     /// Nombre del material
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    /// Grupo al que pertenece (biblioteca)
-    #[serde(default)]
-    pub group: String,
     /// Definición de propiedades, detallada (lambda, rho, C_p, mu, ...) o solo resistencia
     #[serde(flatten)]
     pub properties: MatProps,
@@ -67,7 +64,6 @@ impl Default for Material {
         Material {
             id: Uuid::new_v4(),
             name: "Fábrica 1/2' LP G > 80".to_string(),
-            group: String::default(),
             properties: MatProps::default(),
         }
     }
@@ -118,9 +114,6 @@ pub struct Glass {
     /// Nombre
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    /// Grupo al que pertenece (biblioteca)
-    #[serde(default)]
-    pub group: String,
     /// Conductividad W/m²K
     pub u_value: f32,
     /// Factor solar del vidrio a incidencia normal
@@ -133,7 +126,6 @@ impl Default for Glass {
         Glass {
             id: Uuid::new_v4(),
             name: "Vidrio sencillo 6mm (Vert)".to_string(),
-            group: "".to_string(),
             u_value: 5.7,
             g_gln: 0.83,
         }
@@ -148,9 +140,6 @@ pub struct Frame {
     /// Nombre
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    /// Grupo al que pertenece (biblioteca)
-    #[serde(default)]
-    pub group: String,
     /// Transmitancia térmica, U (W/m²K)
     pub u_value: f32,
     /// Absortividad del marco, alpha (-)
@@ -163,7 +152,6 @@ impl Default for Frame {
         Frame {
             id: Uuid::new_v4(),
             name: "Marco metálico con RPT > 12 mm".to_string(),
-            group: "".to_string(),
             u_value: 3.2,
             absorptivity: 0.6,
         }
