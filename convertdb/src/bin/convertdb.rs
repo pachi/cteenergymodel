@@ -4,6 +4,8 @@
 
 use std::process::exit;
 
+use regex::Regex;
+
 const APP_TITLE: &str = r#"ConvertDB"#;
 const APP_DESCRIPTION: &str = r#"
 Copyright (c) 2018-2022 Instituto de CC. de la Construcción Eduardo Torroja (IETcc-CSIC)
@@ -87,7 +89,6 @@ fn main() {
         .replace(",WallCons", ",\nWallCons")
         .replace(",Frame", ",\nFrame")
         .replace(",Glass", ",\nGlass")
-        .replace("),(", "),\n(")
         .replace("\\u{e1}", "á")
         .replace("\\u{e9}", "é")
         .replace("\\u{ed}", "í")
@@ -95,24 +96,66 @@ fn main() {
         .replace("\\u{fa}", "ú")
         .replace("\\u{f1}", "ñ")
         .replace(",1000f32", ",1000.0")
+        .replace("(10f32)", "(10.0)")
         .replace(",10f32", ",10.0")
+        .replace(" 0f32", " 0.0")
         .replace("collect(),vec!", "collect(),\nvec!")
         .replace(
-            "mats: MatsDb {materials: vec!",
-            "\n\nmats:\nMatsDb {\nmaterials:\nvec!",
+            "mats: MatsDb {materials: vec![",
+            "\n\nmats:\nMatsDb {\nmaterials:\nvec![\n",
         )
-        .replace(",glasses: vec!", ",\n\nglasses:\nvec!")
-        .replace(",frames: vec!", ",\n\nframes:\nvec!")
         .replace(
-            ",cons: ConsDb {wallcons: vec!",
-            ",\n\ncons:\nConsDb {\nwallcons:\nvec!",
+            "].into_iter().collect()},cons: ConsDb {wallcons: vec![",
+            "\n].into_iter().collect()\n},\n\ncons:\nConsDb {\nwallcons:\nvec![\n",
         )
-        .replace(",wallcons: vec!", ",\n\nwallcons:\nvec!")
-        .replace(",wincons: vec!", ",\n\nwincons:\nvec!")
         .replace(
-            ",groups: Groups {materials: vec!",
-            ",\n\ngroups:\nGroups {\nmaterials:\nvec!",
-        );
+            ",groups: Groups {materials: vec![",
+            ",\n\ngroups:\nGroups {\nmaterials:\nvec![\n",
+        )
+        .replace("vec![WallCons", "vec![\nWallCons")
+        .replace("vec![WinCons", "vec![\nWinCons")
+        .replace("vec![vec![", "vec![\nvec![")
+        .replace(
+            "].into_iter().collect(),glasses: vec![",
+            "\n].into_iter().collect(),\n\nglasses:\nvec![\n",
+        )
+        .replace(
+            "].into_iter().collect(),frames: vec![",
+            "\n].into_iter().collect(),\n\nframes:\nvec![\n",
+        )
+        .replace(
+            "].into_iter().collect(),wallcons: vec![",
+            "\n].into_iter().collect(),\n\nwallcons:\nvec![\n",
+        )
+        .replace(
+            "].into_iter().collect(),wincons: vec![",
+            "\n].into_iter().collect(),\n\nwincons:\nvec![\n",
+        )
+        .replace(".into_iter().collect()}", ".into_iter().collect()\n}")
+        .replace(
+            "collect()].into_iter().collect()",
+            "collect()\n].into_iter().collect()",
+        )
+        .replace(
+            "collect())].into_iter().collect()",
+            "collect())\n].into_iter().collect()",
+        )
+        .replace("\"id\".into()", "\"id\"")
+        .replace("\"name\".into()", "\"name\"")
+        .replace("\"conductivity\".into()", "\"conductivity\"")
+        .replace("\"density\".into()", "\"density\"")
+        .replace("\"specific_heat\".into()", "\"specific_heat\"")
+        .replace("\"vapour_diff\".into()", "\"vapour_diff\"")
+        .replace("\"resistance\".into()", "\"resistance\"");
+
+    let re_mat_props = Regex::new(r#"vec!\[\("id",(?P<id>.*)\),\("name",(?P<name>.*)\),\("conductivity",(?P<conductivity>.*)\),\("density",(?P<density>.*)\),\("specific_heat",(?P<specific_heat>.*)\),\("vapour_diff",(?P<vapour_diff>.*)\)\]\.into_iter\(\)\.collect\(\),?"#).unwrap();
+    let re_mat_resistance = Regex::new(r#"vec!\[\("id",(?P<id>.*)\),\("name",(?P<name>.*)\),\("resistance",(?P<resistance>.*)\)\]\.into_iter\(\)\.collect\(\),?"#).unwrap();
+    let re_numbers = Regex::new(r#"(?P<sep>\s|\()(?P<number>\d+)f32"#).unwrap();
+    let re_numbers_2 = Regex::new(r#" (?P<number>\d.\d+)f32"#).unwrap();
+    let data = re_mat_props.replace_all(&data, "Material {id: $id, name: $name, properties: MatProps::Detailed { conductivity: $conductivity, density: $density, specific_heat: $specific_heat, vapour_diff: $vapour_diff }},");
+    let data = re_mat_resistance.replace_all(&data, "Material {id: $id, name: $name, properties: MatProps::Resistance { resistance: $resistance }},");
+    let data = re_numbers.replace_all(&data, "$sep$number.0");
+    let data = re_numbers_2.replace_all(&data, " $number");
 
     let contents = format!(
         r#"
@@ -123,7 +166,7 @@ fn main() {
         WinCons,
     }};
 
-    static LIBRARY: Lazy<Library> = Lazy::new(||
+    pub static LIBRARY: Lazy<Library> = Lazy::new(||
         {}
     );
     "#,
