@@ -13,90 +13,56 @@
     {
       "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "name": "P01_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 2.7,
-      "z": 0.0
+      "height": 2.7
     },
     {
       "id": "8fb42929-3639-dcb3-13d7-071296960471",
       "name": "P01_E02",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 2.7,
-      "z": 0.0
+      "height": 2.7
     },
     {
       "id": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "name": "P01_E03",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 2.7,
-      "z": 0.0
+      "height": 2.7
     },
     {
       "id": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "name": "P01_E04",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 2.7,
-      "z": 0.0
+      "height": 2.7
     },
     {
       "id": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
       "name": "P02_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 2.7
     },
     {
       "id": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "name": "P02_E02",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 2.7
     },
     {
       "id": "8e7b02af-007d-5337-7ec5-482065784e11",
       "name": "P02_E03",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 2.7
     },
     {
       "id": "839f06f9-2a5f-3316-a889-92064087fee3",
       "name": "P02_E04",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 2.7
     },
     {
       "id": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "name": "P02_E05",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 2.7
     },
     {
       "id": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "name": "P02_E06",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 2.7
     }
@@ -2696,7 +2662,6 @@
       {
         "id": "3028f61e-36f2-d949-15e7-152fd93f5412",
         "name": "Cubierta plana",
-        "group": "Cubiertas planas",
         "layers": [
           {
             "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
@@ -2736,7 +2701,6 @@
       {
         "id": "44353b76-bbe2-012f-f936-1fa880e005ba",
         "name": "Forjado interior",
-        "group": "Forjados interiores",
         "layers": [
           {
             "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
@@ -2764,7 +2728,6 @@
       {
         "id": "400dea43-1016-409b-f998-9103282a22dc",
         "name": "Forjado terreno",
-        "group": "Forjados terrenos",
         "layers": [
           {
             "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
@@ -2788,7 +2751,6 @@
       {
         "id": "c43166c9-471b-6073-eb5c-191bd8ffd2a4",
         "name": "Medianera",
-        "group": "Medianeras",
         "layers": [
           {
             "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
@@ -2828,7 +2790,6 @@
       {
         "id": "e7f50cb6-fe19-8f4b-63dc-8bc350228169",
         "name": "Muro exterior",
-        "group": "Muros exteriores",
         "layers": [
           {
             "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
@@ -2856,7 +2817,6 @@
       {
         "id": "2d8df2f3-78f7-234a-e700-8b3c46a93e54",
         "name": "Tabique",
-        "group": "Tabiques",
         "layers": [
           {
             "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
@@ -2878,7 +2838,6 @@
       {
         "id": "4ca223c7-974b-1d43-a867-e6f9d1bf0ff6",
         "name": "Vidrio doble",
-        "group": "Vidrios dobles",
         "glass": "d9488465-5281-01a9-50b5-08885a14f751",
         "frame": "00b8e9e6-1f77-8b23-f7ea-942a66223c34",
         "f_f": 0.15,
@@ -2893,7 +2852,6 @@
       {
         "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
         "name": "BC140",
-        "group": "Fábricas de bloque cerámico de arcilla aligerada",
         "conductivity": 0.4375,
         "density": 1170.0,
         "specific_heat": 1000.0,
@@ -2902,7 +2860,6 @@
       {
         "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
         "name": "EPS037",
-        "group": "Aislantes",
         "conductivity": 0.037,
         "density": 30.0,
         "specific_heat": 1000.0,
@@ -2911,7 +2868,6 @@
       {
         "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
         "name": "FUhal250",
-        "group": "Forjados unidireccionales",
         "conductivity": 1.0,
         "density": 1230.0,
         "specific_heat": 1000.0,
@@ -2920,7 +2876,6 @@
       {
         "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
         "name": "HAlq2300",
-        "group": "Hormigones",
         "conductivity": 2.3,
         "density": 2400.0,
         "specific_heat": 1000.0,
@@ -2929,7 +2884,6 @@
       {
         "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
         "name": "HMlt2300",
-        "group": "Hormigones",
         "conductivity": 1.65,
         "density": 2150.0,
         "specific_heat": 1000.0,
@@ -2938,7 +2892,6 @@
       {
         "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
         "name": "LHs",
-        "group": "Fábricas de ladrillo",
         "conductivity": 0.556,
         "density": 1000.0,
         "specific_heat": 1000.0,
@@ -2947,7 +2900,6 @@
       {
         "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
         "name": "LMmp",
-        "group": "Fábricas de ladrillo",
         "conductivity": 1.02,
         "density": 2170.0,
         "specific_heat": 1000.0,
@@ -2956,7 +2908,6 @@
       {
         "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
         "name": "LPmp_50",
-        "group": "Fábricas de ladrillo",
         "conductivity": 0.68,
         "density": 1140.0,
         "specific_heat": 1000.0,
@@ -2965,7 +2916,6 @@
       {
         "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
         "name": "MAL",
-        "group": "Morteros",
         "conductivity": 0.41,
         "density": 1000.0,
         "specific_heat": 1000.0,
@@ -2974,7 +2924,6 @@
       {
         "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
         "name": "MORgt1000",
-        "group": "Morteros",
         "conductivity": 0.55,
         "density": 1125.0,
         "specific_heat": 1000.0,
@@ -2983,7 +2932,6 @@
       {
         "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
         "name": "MW_04",
-        "group": "Aislantes",
         "conductivity": 0.04,
         "density": 40.0,
         "specific_heat": 1000.0,
@@ -2992,7 +2940,6 @@
       {
         "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
         "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
-        "group": "Pétreos y suelos",
         "conductivity": 1.1,
         "density": 1885.0,
         "specific_heat": 1000.0,
@@ -3001,7 +2948,6 @@
       {
         "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
         "name": "azulejo",
-        "group": "Cerámicos",
         "conductivity": 1.3,
         "density": 2300.0,
         "specific_heat": 840.0,
@@ -3010,7 +2956,6 @@
       {
         "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
         "name": "betun_lamina",
-        "group": "Bituminosos",
         "conductivity": 0.23,
         "density": 1100.0,
         "specific_heat": 1000.0,
@@ -3019,13 +2964,11 @@
       {
         "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
         "name": "cnv_ver_5",
-        "group": "Cámaras de aire",
         "resistance": 0.18
       },
       {
         "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
         "name": "enlYlq1300",
-        "group": "Enlucidos",
         "conductivity": 0.57,
         "density": 1150.0,
         "specific_heat": 1000.0,
@@ -3034,7 +2977,6 @@
       {
         "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
         "name": "plaqCer",
-        "group": "Cerámicos",
         "conductivity": 1.0,
         "density": 2000.0,
         "specific_heat": 800.0,
@@ -3045,7 +2987,6 @@
       {
         "id": "d9488465-5281-01a9-50b5-08885a14f751",
         "name": "VER_DB2_4-15-6",
-        "group": "Dobles bajo emisivos 0.03-0.1 en posición vertical",
         "u_value": 1.6,
         "g_gln": 0.7082353
       }
@@ -3054,7 +2995,6 @@
       {
         "id": "00b8e9e6-1f77-8b23-f7ea-942a66223c34",
         "name": "VER_Madera de densidad media baja",
-        "group": "De Madera en posición vertical",
         "u_value": 2.0,
         "absorptivity": 0.7
       }

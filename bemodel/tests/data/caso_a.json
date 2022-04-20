@@ -14,53 +14,37 @@
     {
       "id": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "name": "P01_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 3.0,
-      "z": 0.0
+      "height": 3.0
     },
     {
       "id": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
       "name": "P01_E02",
-      "multiplier": 1.0,
       "kind": "UNINHABITED",
       "inside_tenv": false,
       "height": 3.0,
-      "n_v": 0.1,
-      "z": 0.0
+      "n_v": 0.1
     },
     {
       "id": "54239679-cf77-3097-b426-71c92a7e5e99",
       "name": "P02_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 3.0
     },
     {
       "id": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "name": "P03_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 6.0
     },
     {
       "id": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "name": "P04_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 9.0
     },
     {
       "id": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
       "name": "P04_E02",
-      "multiplier": 1.0,
       "kind": "UNINHABITED",
       "inside_tenv": false,
       "height": 3.0,
@@ -1408,8 +1392,7 @@
       "id": "28b60a4b-d516-b4cc-1b3a-084137704619",
       "name": "FRENTE_FORJADO",
       "kind": "INTERMEDIATEFLOOR",
-      "l": 50.0,
-      "psi": 0.0
+      "l": 50.0
     },
     {
       "id": "dbc3d826-8950-f402-97b9-689249e2b32e",
@@ -1429,7 +1412,6 @@
       "id": "46c39593-0173-ca6d-81fa-a1a9420aae40",
       "name": "ESQUINA_CONCAVA",
       "kind": "CORNER",
-      "l": 0.0,
       "psi": -0.08
     },
     {
@@ -1442,9 +1424,7 @@
     {
       "id": "8151c573-b673-0e51-97ff-e17981e751a5",
       "name": "PILAR",
-      "kind": "PILLAR",
-      "l": 0.0,
-      "psi": 0.0
+      "kind": "PILLAR"
     },
     {
       "id": "f5649add-2544-f280-bd79-2cf15cd2880e",
@@ -1480,7 +1460,6 @@
       {
         "id": "bded062f-338e-a024-2ca4-45868ac6ebbc",
         "name": "Cubierta no transitable",
-        "group": "Cubiertas planas",
         "layers": [
           {
             "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
@@ -1508,7 +1487,6 @@
       {
         "id": "ed6d4955-5fda-664f-f85f-6cb248a3373b",
         "name": "Forjado interior",
-        "group": "Forjados Interiores",
         "layers": [
           {
             "id": "bbe62996-0f75-da18-c562-ec609d76127e",
@@ -1532,7 +1510,6 @@
       {
         "id": "0c5481fc-26b0-d26d-c284-6e29bc729acd",
         "name": "Placas de yeso",
-        "group": "Tabiques",
         "layers": [
           {
             "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
@@ -1560,7 +1537,6 @@
       {
         "id": "17380b90-6397-ca20-bf2d-bbb469412c7c",
         "name": "SATE",
-        "group": "Fachada",
         "layers": [
           {
             "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
@@ -1596,7 +1572,6 @@
       {
         "id": "9edf4fca-267f-554b-c656-2a7af171377c",
         "name": "Solera",
-        "group": "Soleras",
         "layers": [
           {
             "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
@@ -1626,7 +1601,6 @@
       {
         "id": "eb934160-2d31-b25c-7bbd-486b36786335",
         "name": "PVC 2",
-        "group": "Ventanas de PVC",
         "glass": "071479bf-e057-0554-cc2e-55808e2a47aa",
         "frame": "95f2ea94-7b00-3363-2a9e-273d5a57b2fb",
         "f_f": 0.1,
@@ -1641,7 +1615,6 @@
       {
         "id": "17c92d86-cb3c-aef5-f628-48e247099509",
         "name": "1/2 pie LP métrico o catalán 40 mm< G < 60 mm",
-        "group": "Fábricas de ladrillo",
         "conductivity": 0.667,
         "density": 1140.0,
         "specific_heat": 1000.0,
@@ -1650,7 +1623,6 @@
       {
         "id": "d2b63da2-39ad-a836-2613-026cb38463c0",
         "name": "Arena y grava [1700 < d < 2200]",
-        "group": "Pétreos y suelos",
         "conductivity": 2.0,
         "density": 1450.0,
         "specific_heat": 1050.0,
@@ -1659,19 +1631,16 @@
       {
         "id": "edad6fe9-b71e-c3db-b22c-648911e53b48",
         "name": "Cámara de aire sin ventilar horizontal 2 cm",
-        "group": "Cámaras de aire",
         "resistance": 0.16
       },
       {
         "id": "7617e6ee-af08-0e1b-3bb8-3a2a73fbe5f9",
         "name": "Cámara de aire sin ventilar vertical 5 cm",
-        "group": "Cámaras de aire",
         "resistance": 0.18
       },
       {
         "id": "9904021e-6d18-e151-1094-c776bc669d51",
         "name": "FU Entrevigado cerámico -Canto 300 mm",
-        "group": "Forjados unidireccionales",
         "conductivity": 0.846,
         "density": 1110.0,
         "specific_heat": 1000.0,
@@ -1680,7 +1649,6 @@
       {
         "id": "bed4d34b-8949-b348-d818-5c079a708d9e",
         "name": "FUr310_12",
-        "group": "Forjados unidireccionales",
         "conductivity": 1.33506,
         "density": 840.0,
         "specific_heat": 800.0,
@@ -1689,7 +1657,6 @@
       {
         "id": "bbe62996-0f75-da18-c562-ec609d76127e",
         "name": "Frondosa ligera 435 < d < 565",
-        "group": "Maderas",
         "conductivity": 0.15,
         "density": 500.0,
         "specific_heat": 1600.0,
@@ -1698,7 +1665,6 @@
       {
         "id": "aa688a4a-4c45-475d-6e89-f65a22f250f9",
         "name": "Hormigón armado 2300 < d < 2500",
-        "group": "Hormigones",
         "conductivity": 2.3,
         "density": 2400.0,
         "specific_heat": 1000.0,
@@ -1707,7 +1673,6 @@
       {
         "id": "dc3abf69-8a81-b5d5-39d0-4e414ca54e59",
         "name": "MW Lana mineral [0.031 W/[mK]]",
-        "group": "Aislantes",
         "conductivity": 0.031,
         "density": 40.0,
         "specific_heat": 1000.0,
@@ -1716,7 +1681,6 @@
       {
         "id": "f9ef7f1e-8187-6c89-039a-06711fb8bd85",
         "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1000 < d < 1250",
-        "group": "Morteros",
         "conductivity": 0.55,
         "density": 1125.0,
         "specific_heat": 1000.0,
@@ -1725,7 +1689,6 @@
       {
         "id": "795488fe-a232-3eab-ffd2-dc3f95ea4b75",
         "name": "Mortero de yeso",
-        "group": "Morteros",
         "conductivity": 0.8,
         "density": 1500.0,
         "specific_heat": 1000.0,
@@ -1734,7 +1697,6 @@
       {
         "id": "2a1e8836-4ce7-a4a4-a4eb-7877e63547aa",
         "name": "Mortero de áridos ligeros [vermiculita perlita]",
-        "group": "Morteros",
         "conductivity": 0.41,
         "density": 900.0,
         "specific_heat": 1000.0,
@@ -1743,7 +1705,6 @@
       {
         "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
         "name": "Placa de yeso laminado [PYL] 750 < d < 900",
-        "group": "Yesos",
         "conductivity": 0.25,
         "density": 825.0,
         "specific_heat": 1000.0,
@@ -1752,7 +1713,6 @@
       {
         "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
         "name": "Plaqueta o baldosa cerámica",
-        "group": "Cerámicos",
         "conductivity": 1.0,
         "density": 2000.0,
         "specific_heat": 800.0,
@@ -1761,7 +1721,6 @@
       {
         "id": "770d2370-953c-4c98-d712-6de5b71a00e0",
         "name": "Subcapa fieltro",
-        "group": "Textiles",
         "conductivity": 0.05,
         "density": 120.0,
         "specific_heat": 1300.0,
@@ -1770,7 +1729,6 @@
       {
         "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
         "name": "Tierra apisonada adobe bloques de tierra comprimida [1770 < d < 2000]",
-        "group": "Pétreos y suelos",
         "conductivity": 1.1,
         "density": 1885.0,
         "specific_heat": 1000.0,
@@ -1779,7 +1737,6 @@
       {
         "id": "f6131aa7-7524-3bd1-48f4-1f6bd4a3597b",
         "name": "XPS Expandido con dióxido de carbono CO2 [ 0.034 W/[mK]]",
-        "group": "Aislantes",
         "conductivity": 0.034,
         "density": 37.5,
         "specific_heat": 1000.0,
@@ -1790,7 +1747,6 @@
       {
         "id": "071479bf-e057-0554-cc2e-55808e2a47aa",
         "name": "Doble baja emisividad argon258",
-        "group": "Vidrios",
         "u_value": 1.2,
         "g_gln": 0.8
       }
@@ -1799,7 +1755,6 @@
       {
         "id": "95f2ea94-7b00-3363-2a9e-273d5a57b2fb",
         "name": "VER_PVC tres cámaras",
-        "group": "De PVC en posición vertical",
         "u_value": 1.8,
         "absorptivity": 0.7
       }

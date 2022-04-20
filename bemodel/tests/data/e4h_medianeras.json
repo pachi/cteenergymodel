@@ -11,189 +11,120 @@
     {
       "id": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
       "name": "P01_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 3.5,
-      "z": 0.0
+      "height": 3.5
     },
     {
       "id": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
       "name": "P01_E02",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 3.5,
-      "z": 0.0
+      "height": 3.5
     },
     {
       "id": "9b819691-7ca1-fe58-1db2-2be0051b1a1b",
       "name": "P01_E03",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 3.5,
-      "z": 0.0
+      "height": 3.5
     },
     {
       "id": "f27e5c13-523f-d73e-7f86-9c9fb1d8ac2c",
       "name": "P01_E04",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 3.5,
-      "z": 0.0
+      "height": 3.5
     },
     {
       "id": "0ea2bc6a-0fc5-1091-922e-3a48d6b7eeb1",
       "name": "P01_E05",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 3.5,
-      "z": 0.0
+      "height": 3.5
     },
     {
       "id": "0e14f305-ae0f-c770-ac55-ef09fb85b284",
       "name": "P01_E06",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
-      "height": 3.5,
-      "z": 0.0
+      "height": 3.5
     },
     {
       "id": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
       "name": "P02_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 3.5
     },
     {
       "id": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
       "name": "P02_E02",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 3.5
     },
     {
       "id": "be65044c-9404-f1db-b961-0d25ed3f87d9",
       "name": "P02_E03",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 3.5
     },
     {
       "id": "9c123d73-221f-1132-227b-1cc29312fa74",
       "name": "P02_E04",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 3.5
     },
     {
       "id": "97146638-ea1f-57c8-bf98-6921c92575ac",
       "name": "P02_E05",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 3.5
     },
     {
       "id": "b293153e-71a3-c32f-ee77-c4c064d95812",
       "name": "P03_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 6.5
     },
     {
       "id": "c20e74c0-39b3-4d23-7733-26456a6d927c",
       "name": "P03_E02",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 6.5
     },
     {
       "id": "f45f6108-a38f-e401-5d08-8427489d337d",
       "name": "P03_E03",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 6.5
     },
     {
       "id": "3f80985c-8936-44c9-09c7-68364bd2251a",
       "name": "P03_E04",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 6.5
     },
     {
       "id": "cb7b7744-ff05-cd5d-81f1-b741bbf632b7",
       "name": "P03_E05",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 6.5
     },
     {
       "id": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
       "name": "P04_E01",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 9.5
     },
     {
       "id": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
       "name": "P04_E02",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 9.5
     },
     {
       "id": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
       "name": "P04_E03",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 9.5
     },
     {
       "id": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
       "name": "P04_E04",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 9.5
     },
     {
       "id": "3b883139-ac45-3eff-f6d0-4426be697579",
       "name": "P04_E05",
-      "multiplier": 1.0,
-      "kind": "CONDITIONED",
-      "inside_tenv": true,
       "height": 3.0,
       "z": 9.5
     }
@@ -6182,7 +6113,6 @@
       "id": "ff2f6e73-273c-1589-5a2d-9f54622f43d7",
       "name": "ESQUINA_CONVEXA_FORJADO",
       "kind": "ROOF",
-      "l": 0.0,
       "psi": 0.23
     },
     {
@@ -6196,14 +6126,12 @@
       "id": "213008aa-da80-c967-34dc-f297ebd804d2",
       "name": "ESQUINA_CONVEXA",
       "kind": "CORNER",
-      "l": 0.0,
       "psi": 0.11
     },
     {
       "id": "62220916-df26-d944-ea5d-30ce2aefd551",
       "name": "PILAR",
       "kind": "PILLAR",
-      "l": 0.0,
       "psi": 1.2
     },
     {
@@ -6893,7 +6821,6 @@
       {
         "id": "c1789d81-cd91-cd20-42df-2e7c78ed546e",
         "name": "cubierta tipo",
-        "group": "Horizontales",
         "layers": [
           {
             "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
@@ -6921,7 +6848,6 @@
       {
         "id": "2fca559d-2ba5-3cbc-8182-8852cc8340d9",
         "name": "division_viviendas",
-        "group": "Tabiques",
         "layers": [
           {
             "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
@@ -6941,7 +6867,6 @@
       {
         "id": "7a6fe4a4-71ff-b629-eaa5-38ad783d5b3d",
         "name": "fachada tipo",
-        "group": "Fachada",
         "layers": [
           {
             "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
@@ -6969,7 +6894,6 @@
       {
         "id": "15d7ca5e-50cb-3da8-a35f-d02e59bcca44",
         "name": "forjado tipo",
-        "group": "Horizontales",
         "layers": [
           {
             "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
@@ -6989,7 +6913,6 @@
       {
         "id": "e6d386ac-dfa6-4f9d-c8b6-8528f9292630",
         "name": "solera tipo",
-        "group": "Horizontales",
         "layers": [
           {
             "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
@@ -7013,7 +6936,6 @@
       {
         "id": "541f7340-b4f4-ff9a-ebcc-38f374251c35",
         "name": "tabique tipo",
-        "group": "Tabiques",
         "layers": [
           {
             "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
@@ -7035,7 +6957,6 @@
       {
         "id": "e8003958-9341-e211-fa9a-dcdb9fd4307d",
         "name": "ventana tipo",
-        "group": "ventanas",
         "glass": "11851140-105c-be34-f195-82e1880ffd77",
         "frame": "3eeb2bae-1a57-e059-ec71-8f0d34cff953",
         "f_f": 0.2,
@@ -7046,7 +6967,6 @@
       {
         "id": "16fa3d06-0e15-99a0-23e6-938ee50c873f",
         "name": "ventana_igualOS",
-        "group": "ventanas",
         "glass": "d9c700e5-eeee-c16f-ca04-acb2f955e14b",
         "frame": "fe73bf33-34de-70c9-ce98-33b8f85cbe5e",
         "f_f": 0.2,
@@ -7061,7 +6981,6 @@
       {
         "id": "a90add57-4ac6-032e-fe56-eece92423ac3",
         "name": "1/2 pie LP métrico o catalán 80 mm< G < 100 mm",
-        "group": "Fábricas de ladrillo",
         "conductivity": 0.512,
         "density": 900.0,
         "specific_heat": 1000.0,
@@ -7070,7 +6989,6 @@
       {
         "id": "de671b0e-ce46-2f58-aa6d-117c81b0b403",
         "name": "FU Entrevigado cerámico -Canto 250 mm",
-        "group": "Forjados unidireccionales",
         "conductivity": 0.908,
         "density": 1220.0,
         "specific_heat": 1000.0,
@@ -7079,7 +6997,6 @@
       {
         "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
         "name": "Hormigón armado d > 2500",
-        "group": "Hormigones",
         "conductivity": 2.5,
         "density": 2600.0,
         "specific_heat": 1000.0,
@@ -7088,7 +7005,6 @@
       {
         "id": "e5f312d0-e644-824e-259a-917bf8d344bf",
         "name": "Hormigón con otros áridos ligeros d 1600",
-        "group": "Hormigones",
         "conductivity": 0.59,
         "density": 1600.0,
         "specific_heat": 1000.0,
@@ -7097,7 +7013,6 @@
       {
         "id": "680d148f-b816-bc8f-a1b1-bc96e4eaf5cf",
         "name": "Mortero de cemento o cal para albañilería y para revoco/enlucido 1800 < d < 2000",
-        "group": "Morteros",
         "conductivity": 1.3,
         "density": 1900.0,
         "specific_heat": 1000.0,
@@ -7106,7 +7021,6 @@
       {
         "id": "63a4e6dd-4357-a415-6da9-7e639f0e3abd",
         "name": "Plaqueta o baldosa cerámica",
-        "group": "Cerámicos",
         "conductivity": 1.0,
         "density": 2000.0,
         "specific_heat": 800.0,
@@ -7115,7 +7029,6 @@
       {
         "id": "e885d544-2d21-1e4d-d5a4-7e60276ceb5d",
         "name": "Tabique de LH sencillo Gran Formato [40 mm < E < 60 mm]",
-        "group": "Fábricas de ladrillo",
         "conductivity": 0.228,
         "density": 670.0,
         "specific_heat": 1000.0,
@@ -7124,7 +7037,6 @@
       {
         "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
         "name": "Tabique de LH sencillo [40 mm < Espesor < 60 mm]",
-        "group": "Fábricas de ladrillo",
         "conductivity": 0.445,
         "density": 1000.0,
         "specific_heat": 1000.0,
@@ -7133,7 +7045,6 @@
       {
         "id": "80274963-698f-dbb3-3741-056857281f8c",
         "name": "XPS Expandido con hidrofluorcarbonos HFC [ 0.032 W/[mK]]",
-        "group": "Aislantes",
         "conductivity": 0.032,
         "density": 37.5,
         "specific_heat": 1000.0,
@@ -7142,7 +7053,6 @@
       {
         "id": "f6a256d7-3c7c-c116-60fd-dc1f9a7635fd",
         "name": "Yeso de alta dureza 900 < d < 1200",
-        "group": "Yesos",
         "conductivity": 0.43,
         "density": 1050.0,
         "specific_heat": 1000.0,
@@ -7153,14 +7063,12 @@
       {
         "id": "11851140-105c-be34-f195-82e1880ffd77",
         "name": "VER_DB1_4-6-661a",
-        "group": "Dobles bajo emisivos 0.1-0.2 en posición vertical",
         "u_value": 2.6,
         "g_gln": 0.7082353
       },
       {
         "id": "d9c700e5-eeee-c16f-ca04-acb2f955e14b",
         "name": "Vidrio_igual OS",
-        "group": "Dobles bajo emisivos 0.1-0.2 en posición vertical",
         "u_value": 1.0,
         "g_gln": 0.42494112
       }
@@ -7169,14 +7077,12 @@
       {
         "id": "fe73bf33-34de-70c9-ce98-33b8f85cbe5e",
         "name": "Marco_igualOS",
-        "group": "Metálicos en posición vertical",
         "u_value": 1.3,
         "absorptivity": 0.7
       },
       {
         "id": "3eeb2bae-1a57-e059-ec71-8f0d34cff953",
         "name": "VER_Con rotura de puente térmico mayor de 12 mm",
-        "group": "Metálicos en posición vertical",
         "u_value": 3.2,
         "absorptivity": 0.7
       }
