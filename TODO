@@ -4,9 +4,7 @@
 - Optimizar recálculo de propiedades
   - Guardar hash de geometrías (opacos, sombras y huecos) y solo recalcular si han cambiado
   - Hacer profiling y benchmarks con tracing
-- Cambiar gestión de grupos de materiales
-  - Eliminar `group` de los objetos `Wall, Window, Material, WinCons, WallCons`
-  - Generar Objeto de grupos de biblioteca con referencias a UUID `library.{materials, glass, frame, wallcons, windowcons}=Map<groupname, uuid>`
+- Cambiar gestión de grupos de materiales y construcciones
   - Ver dónde se guarda esa biblioteca (¿la tenemos en el wasm y la usamos para la importación o es solo del lado del cliente?
 - Separar check de cálculo energético
 - Trasladar avisos en la conversión de modelos BDL
@@ -22,7 +20,7 @@
 - Introducir sistemas
   - `model.systems`
 
-Ver qué ocurre con elementos especiales de la ET, y cómo se habilita la posibilidad de ignorar esos elementos para el cálculo de la K. - añadiendo un identificador en el nombre (p.e. EXCLUYE_HE1_K) - pasando una lista de elementos excluidos
+Marcar elementos especiales de la ET para hacer override de esos elementos para el cálculo de la K.
 
 ## Comprobaciones
 
