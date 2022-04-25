@@ -18,10 +18,10 @@
   ],
   "walls": [
     {
-      "id": "8cd1c70c-fc07-56f5-7968-75aa06e41c10",
+      "id": "a5c05210-ca96-9973-1cb5-e14406bfb3c6",
       "name": "P01_E01_PE001",
       "bounds": "EXTERIOR",
-      "cons": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
+      "cons": "b5b848e6-003c-579a-30b3-9144d755d482",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "geometry": {
         "tilt": 90.0,
@@ -52,10 +52,10 @@
       }
     },
     {
-      "id": "40a45c08-4627-ba91-d653-4f937f749989",
+      "id": "9ec6994e-c6f2-c560-9b64-17ab82e0ea0a",
       "name": "P01_E01_PE002",
       "bounds": "EXTERIOR",
-      "cons": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
+      "cons": "b5b848e6-003c-579a-30b3-9144d755d482",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "geometry": {
         "tilt": 90.0,
@@ -86,10 +86,10 @@
       }
     },
     {
-      "id": "a0f9aa63-199f-7d43-aa56-9f69aa958856",
+      "id": "52a3ab63-08c6-c834-363a-fdeb8a95c3c5",
       "name": "P01_E01_PE003",
       "bounds": "EXTERIOR",
-      "cons": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
+      "cons": "b5b848e6-003c-579a-30b3-9144d755d482",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "geometry": {
         "tilt": 90.0,
@@ -120,10 +120,10 @@
       }
     },
     {
-      "id": "53ec49df-5b64-5b3a-11fa-91a87ad6cff7",
+      "id": "1cd809f6-5cbd-2fa4-4507-1ac9faf633aa",
       "name": "P01_E01_PE004",
       "bounds": "EXTERIOR",
-      "cons": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
+      "cons": "b5b848e6-003c-579a-30b3-9144d755d482",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "geometry": {
         "tilt": 90.0,
@@ -157,7 +157,7 @@
       "id": "2dbc83af-1d3e-983b-5eba-f56ed3c8d65d",
       "name": "P01_E01_FTER001",
       "bounds": "GROUND",
-      "cons": "ff4b30e7-a6d7-9a1c-4edb-149efe056d78",
+      "cons": "e565f1dd-a339-2718-308a-72a9630f30a7",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "geometry": {
         "tilt": 180.0,
@@ -191,7 +191,7 @@
       "id": "948c1beb-b16f-818a-48a5-30532a18bfd8",
       "name": "P01_E01C001",
       "bounds": "EXTERIOR",
-      "cons": "b9d10887-d373-f95d-e13e-70b13caeb431",
+      "cons": "95feea57-ee61-a038-5c48-9f33a4bbcc10",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "geometry": {
         "tilt": 0.0,
@@ -221,7 +221,7 @@
       "id": "4e0a818b-682e-552b-53de-427500bcbe65",
       "name": "P01_E01C002",
       "bounds": "EXTERIOR",
-      "cons": "b9d10887-d373-f95d-e13e-70b13caeb431",
+      "cons": "95feea57-ee61-a038-5c48-9f33a4bbcc10",
       "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "geometry": {
         "tilt": 0.0,
@@ -253,7 +253,7 @@
       "id": "92283670-72ad-8db5-4e0f-5f76295a439d",
       "name": "P01_E01_PE001_V",
       "cons": "e5b3afb2-bc3b-2125-002f-3e34d6106a42",
-      "wall": "8cd1c70c-fc07-56f5-7968-75aa06e41c10",
+      "wall": "a5c05210-ca96-9973-1cb5-e14406bfb3c6",
       "geometry": {
         "position": [
           3.0,
@@ -369,7 +369,7 @@
   "cons": {
     "wallcons": [
       {
-        "id": "ff4b30e7-a6d7-9a1c-4edb-149efe056d78",
+        "id": "e565f1dd-a339-2718-308a-72a9630f30a7",
         "name": "Contacto por defecto",
         "layers": [
           {
@@ -381,11 +381,11 @@
             "e": 0.02
           }
         ],
-        "absorptance": 0.0
+        "absorptance": 0.6
       },
       {
-        "id": "84eacf8f-2d19-6b46-e49b-03cf3cf3eabb",
-        "name": "Fachada por defecto D",
+        "id": "b5b848e6-003c-579a-30b3-9144d755d482",
+        "name": "Fachada por defecto D0.60",
         "layers": [
           {
             "id": "17c92d86-cb3c-aef5-f628-48e247099509",
@@ -404,10 +404,10 @@
             "e": 0.02
           }
         ],
-        "absorptance": 0.0
+        "absorptance": 0.6
       },
       {
-        "id": "b9d10887-d373-f95d-e13e-70b13caeb431",
+        "id": "95feea57-ee61-a038-5c48-9f33a4bbcc10",
         "name": "PIV por defecto",
         "layers": [
           {
@@ -423,7 +423,7 @@
             "e": 0.02
           }
         ],
-        "absorptance": 0.0
+        "absorptance": 0.6
       }
     ],
     "wincons": [

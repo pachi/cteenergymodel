@@ -24,9 +24,10 @@ pub struct Construction {
     /// Elemento vinculado (opaco, etc)
     pub parent: String,
     /// Definición de capas (HULC solo admite definición por capas)
-    pub wallcons: String,
+    pub layers: String,
     /// Absortividad (a la radiación solar) (-)
-    pub absorptance: Option<f32>,
+    /// Cuando no se defina usamos como valor por defecto 0.60
+    pub absorptance: f32,
 }
 
 impl TryFrom<BdlBlock> for Construction {
@@ -45,6 +46,8 @@ impl TryFrom<BdlBlock> for Construction {
     /// HULC solo usa construcciones definidas por capas (LAYERS) y únicamente permite
     /// definir la absortividad (ABSORPTANCE)
     ///
+    /// HULC: en muros exteriores el valor por defecto de absortividad es 0.6 (color medio)
+    /// (aunque usa, por lo general, en cubiertas 0.7 y en marcos de hueco 0.9)
     fn try_from(value: BdlBlock) -> Result<Self, Self::Error> {
         let BdlBlock {
             name,
@@ -56,13 +59,13 @@ impl TryFrom<BdlBlock> for Construction {
         if attrs.remove_str("TYPE")? != "LAYERS" {
             bail!("Construcción {} no definida por capas (LAYERS)", name);
         }
-        let wallcons = attrs.remove_str("LAYERS").map_err(|_| {
+        let layers = attrs.remove_str("LAYERS").map_err(|_| {
             format_err!(
                 "No se ha definido la composición de capas de la construcción {}",
                 name
             )
         })?;
-        let absorptance = attrs.remove_f32("ABSORPTANCE").ok();
+        let absorptance = attrs.remove_f32("ABSORPTANCE").unwrap_or(0.60);
         let parent = parent.ok_or_else(|| {
             format_err!(
                 "No se encuentra la referencia al elemento en la construcción {}",
@@ -72,7 +75,7 @@ impl TryFrom<BdlBlock> for Construction {
         Ok(Self {
             name,
             parent,
-            wallcons,
+            layers,
             absorptance,
         })
     }

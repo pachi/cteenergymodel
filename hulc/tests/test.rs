@@ -106,8 +106,8 @@ fn bdl_construction() {
     ccblk.parent = Some("Muro_ficticio".to_string());
     let cc = Construction::try_from(ccblk).unwrap();
     assert_eq!(cc.name, "muro_opaco0.40");
-    assert_eq!(cc.wallcons, "muro_opaco");
-    assert_almost_eq!(cc.absorptance.unwrap(), 0.40, 0.01);
+    assert_eq!(cc.layers, "muro_opaco");
+    assert_almost_eq!(cc.absorptance, 0.40, 0.01);
 }
 
 #[test]

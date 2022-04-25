@@ -88,13 +88,14 @@ impl Data {
 
         // Materiales y construcciones ---------------------------------------------
 
-        let mut constructions: BTreeMap<String, Construction> = BTreeMap::new();
         let mut materials: BTreeMap<String, Material> = BTreeMap::new();
         let mut glasses: BTreeMap<String, Glass> = BTreeMap::new();
         let mut frames: BTreeMap<String, Frame> = BTreeMap::new();
         let mut wallcons: BTreeMap<String, WallCons> = BTreeMap::new();
         let mut wincons: BTreeMap<String, WinCons> = BTreeMap::new();
 
+        let mut constructions: BTreeMap<String, Construction> = BTreeMap::new();
+        let mut layers: BTreeMap<String, WallCons> = BTreeMap::new();
         for block in db_blocks {
             match block.btype.as_str() {
                 "CONSTRUCTION" => {
@@ -114,7 +115,7 @@ impl Data {
                 }
                 "LAYERS" => {
                     let e = WallCons::try_from(block)?;
-                    wallcons.insert(e.name.clone(), e);
+                    layers.insert(e.name.clone(), e);
                 }
                 "GAP" => {
                     let e = WinCons::try_from(block)?;
@@ -123,6 +124,40 @@ impl Data {
                 _ => unreachable!(),
             }
         }
+        // Añadir, si no existe la composición e capas por defecto
+        layers.entry("Ninguno".to_string()).or_insert(WallCons {
+            name: "Ninguno".into(),
+            ..Default::default()
+        });
+
+        // Generar construcciones con Constructions y Layers
+        // Caso en el que no se han definido las construcciones de los elementos, tienen asignado WallCons "Ninguno"
+        for cons in constructions.values() {
+            let mut layers_obj = layers
+                .get_mut(&cons.layers)
+                .ok_or_else(|| {
+                    format_err!(
+                        "No se ha encontrado la definición de capas {} de la construcción {}",
+                        cons.layers,
+                        cons.name
+                    )
+                })?
+                .clone();
+            // TODO: esto incluye muchas veces el nombre de las capas layers_obj.name con la absortividad
+            // cuando no hay más construcciones con distinta absortividad. Podríamos simplificarlo.
+            layers_obj.name = cons.name.clone();
+            layers_obj.absorptance = cons.absorptance;
+
+            wallcons.insert(layers_obj.name.clone(), layers_obj);
+        }
+
+        let db = DB {
+            materials,
+            frames,
+            glasses,
+            wallcons,
+            wincons,
+        };
 
         // Plantas y polígnos -----------------------------------------------------
 
@@ -141,17 +176,13 @@ impl Data {
             floors.insert(block.name.clone(), Floor::try_from(block)?);
         }
 
-        // Resto de bloques ------------------------------
-        let mut bdldata: Self = Default::default();
-
-        bdldata.db.materials = materials;
-        bdldata.db.frames = frames;
-        bdldata.db.glasses = glasses;
-        bdldata.db.wallcons = wallcons;
-        bdldata.db.wincons = wincons;
-
         // Componentes de la envolvente ===============
         // Necesita tener los constructions, floors y polygons ya resueltos
+        let mut spaces: Vec<Space> = Vec::new();
+        let mut walls: Vec<Wall> = Vec::new();
+        let mut windows: Vec<Window> = Vec::new();
+        let mut tbridges: Vec<ThermalBridge> = Vec::new();
+        let mut shadings: Vec<Shading> = Vec::new();
         for block in env_blocks {
             match block.btype.as_str() {
                 // Espacios -----------
@@ -186,7 +217,7 @@ impl Data {
                     space.z += floor.z; // Esto es siempre la z de la planta, ya que HULC no admite espacios a otro nivel distinto al de la planta
                     space.floor_multiplier = floor.multiplier;
 
-                    bdldata.spaces.push(space);
+                    spaces.push(space);
                 }
 
                 // Cerramientos opacos de la envolvente -----------
@@ -205,87 +236,69 @@ impl Data {
                         None
                     };
 
-                    // Sustituimos la construcción por el nombre de la composición de capas
-                    // La absortividad ya está correcta en el opaco y así podemos eliminar constructions
-                    // XXX: El problema es que algunas construcciones comparten layers pero no absortividad
-                    let cons = constructions.get(&wall.cons).ok_or_else(|| {
-                        format_err!(
-                            "No se ha definido la construcción {} del cerramiento {}",
+                    if !db.wallcons.contains_key(&wall.cons) {
+                        bail!(
+                            "Construcción {} no encontrada para definicón de opaco {}",
                             wall.cons,
                             wall.name
-                        )
-                    })?;
-                    // HULC: en muros exteriores el valor por defecto es 0.6 (en cubiertas 0.7 y marcos de hueco 0.9)
-                    let absorptance = cons.absorptance.unwrap_or(0.6);
-                    let layersname = cons.wallcons.clone();
-                    // Caso en el que no se han definido las construcciones de los elementos, tienen asignado WallCons "Ninguno"
-                    if &layersname == "Ninguno" && !bdldata.db.wallcons.contains_key(&layersname) {
-                        bdldata.db.wallcons.insert(
-                            "Ninguno".into(),
-                            WallCons {
-                                name: "Ninguno".into(),
-                                ..Default::default()
-                            },
                         );
                     };
-                    let mut layers = bdldata.db.wallcons.get_mut(&layersname).ok_or_else(|| {
-                        format_err!(
-                            "No se ha encontrado la definición de capas {} de la construcción {}",
-                            layersname,
-                            cons.wallcons
-                        )
-                    })?;
-                    layers.absorptance = absorptance;
-                    wall.cons = layersname;
 
                     // Corregimos el ángulo con el norte para los casos con polígono o definidos por posición
                     // En el caso de elementos BOTTOM tenemos que, al exportar, alterar el polígno para que con tilt 180 se quede bien
                     wall.angle_with_space_north =
-                        compute_wall_angle_with_space_north(&wall, &bdldata)?;
+                        compute_wall_angle_with_space_north(&wall, &spaces)?;
 
                     // Guardamos el opaco
-                    bdldata.walls.push(wall);
-                }
-                // Puentes térmicos ----------
-                "THERMAL-BRIDGE" => {
-                    let e = ThermalBridge::try_from(block)?;
-                    bdldata.tbridges.push(e);
+                    walls.push(wall);
                 }
 
                 // Elementos transparentes de la envolvente -----
                 // Hueco
                 "WINDOW" => {
-                    bdldata.windows.push(Window::try_from(block)?);
+                    windows.push(Window::try_from(block)?);
+                }
+
+                // Puentes térmicos ----------
+                "THERMAL-BRIDGE" => {
+                    tbridges.push(ThermalBridge::try_from(block)?);
                 }
 
                 // Sombras --------------------------------------
                 "BUILDING-SHADE" => {
-                    bdldata.shadings.push(Shading::try_from(block)?);
+                    shadings.push(Shading::try_from(block)?);
                 }
 
                 _ => unreachable!(),
             }
         }
 
+        // Resto de bloques ------------------------------
+
         // Resto de elementos
+        let mut meta: BTreeMap<String, BdlBlock> = BTreeMap::new();
+        let mut schedules: BTreeMap<String, BdlBlock> = BTreeMap::new();
+        let mut spaceconds: BTreeMap<String, BdlBlock> = BTreeMap::new();
+        let mut systemconds: BTreeMap<String, BdlBlock> = BTreeMap::new();
+
         for block in other_blocks {
             match block.btype.as_str() {
                 // Elementos generales =========================
                 // Valores por defecto, Datos generales, espacio de trabajo y edificio
                 "DEFECTOS" | "GENERAL-DATA" | "WORK-SPACE" | "BUILD-PARAMETERS" => {
-                    bdldata.meta.insert(block.btype.clone(), block);
+                    meta.insert(block.btype.clone(), block);
                 }
                 // Horarios ----------
                 "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
-                    bdldata.schedules.insert(block.name.clone(), block);
+                    schedules.insert(block.name.clone(), block);
                 }
                 // Condiciones de uso y ocupación ----------
                 "SPACE-CONDITIONS" => {
-                    bdldata.spaceconds.insert(block.name.clone(), block);
+                    spaceconds.insert(block.name.clone(), block);
                 }
                 // Consignas y horarios de sistemas ----------
                 "SYSTEM-CONDITIONS" => {
-                    bdldata.systemconds.insert(block.name.clone(), block);
+                    systemconds.insert(block.name.clone(), block);
                 }
 
                 // Elemento desconocido -------------------------
@@ -300,7 +313,18 @@ impl Data {
             };
         }
 
-        Ok(bdldata)
+        Ok(Self {
+            spaces,
+            walls,
+            windows,
+            tbridges,
+            shadings,
+            db,
+            meta,
+            schedules,
+            spaceconds,
+            systemconds,
+        })
     }
 
     /// Localiza hueco
@@ -328,7 +352,7 @@ impl Data {
 /// 1. Los elementos horizontales se definen con azimut igual a 0.0
 /// 2. Los elementos definidos por geometría ya tiene definido su azimut
 /// 3. Los elementos definidos por vértice de polígono del espacio consultan la orientación del polígono del espacio
-fn compute_wall_angle_with_space_north(wall: &Wall, db: &Data) -> Result<f32, Error> {
+fn compute_wall_angle_with_space_north(wall: &Wall, spaces: &[Space]) -> Result<f32, Error> {
     // Elementos horizontales (hacia arriba o hacia abajo) con tilt definido o elementos definidos por polígono
     // tilt == 0 -> azimuth 0
     // tilt == 180 -> tenemos que hacer un espejo del polígono
@@ -348,13 +372,16 @@ fn compute_wall_angle_with_space_north(wall: &Wall, db: &Data) -> Result<f32, Er
     }
     // Elementos definidos por vértice del polígono de un espacio
     else if let Some(vertex) = wall.location.as_deref() {
-        let space = db.get_space(wall.space.as_str()).ok_or_else(|| {
-            format_err!(
-                "Espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
-                wall.space,
-                wall.name
-            )
-        })?;
+        let space = spaces
+            .iter()
+            .find(|s| s.name == wall.space.as_str())
+            .ok_or_else(|| {
+                format_err!(
+                    "Espacio {} del cerramiento {} no encontrado. No se puede calcular el azimut",
+                    wall.space,
+                    wall.name
+                )
+            })?;
         Ok(space.polygon.edge_normal_to_y(vertex))
     }
     // Resto de casos
