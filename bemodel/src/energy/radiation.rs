@@ -19,7 +19,7 @@ use crate::{
     utils::fround2,
     vector,
     BoundaryType::{ADIABATIC, EXTERIOR},
-    MatsDb, Model, Point3, Shade, Uuid, Vector3, WallGeom, WinCons, Window,
+    ConsDb, Model, Point3, Shade, Uuid, Vector3, WallGeom, WinCons, Window,
 };
 
 impl Model {
@@ -287,15 +287,15 @@ impl Model {
 impl WinCons {
     /// Transmitancia térmica total del acristalmiento (g_glwi = g_gln * 0.90) [-]
     /// Corresponde al factor solar sin protección solar activada
-    pub fn g_glwi(&self, mats: &MatsDb) -> Option<f32> {
-        let glass = mats.get_glass(self.glass)?;
+    pub fn g_glwi(&self, db: &ConsDb) -> Option<f32> {
+        let glass = db.get_glass(self.glass)?;
         Some(fround2(glass.g_gln * 0.90))
     }
 
     /// Transmitancia térmica del acristalamiento con protecciones solares activadas, g_glshwi [-]
     /// Corresponde al factor solar con protección solar activada
-    pub fn g_glshwi(&self, mats: &MatsDb) -> Option<f32> {
-        self.g_glshwi.map(fround2).or_else(|| self.g_glwi(mats))
+    pub fn g_glshwi(&self, db: &ConsDb) -> Option<f32> {
+        self.g_glshwi.map(fround2).or_else(|| self.g_glwi(db))
     }
 }
 

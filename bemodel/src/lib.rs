@@ -14,7 +14,7 @@ pub mod utils;
 
 pub use types::{
     point, vector, BoundaryType, ConsDb, ExtraData, Frame, Glass, Groups, Layer, Library, MatProps,
-    Material, MatsDb, Meta, Model, Orientation, Point2, Point3, Polygon, PropsOverrides, Shade,
+    Material, Meta, Model, Orientation, Point2, Point3, Polygon, PropsOverrides, Shade,
     Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Vector2, Vector3, Wall,
     WallCons, WallGeom, WallPropsOverrides, Warning, WarningLevel, WinCons, WinGeom,
     WinPropsOverrides, Window,

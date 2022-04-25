@@ -20,9 +20,9 @@ use hulc::{
 };
 
 pub use crate::{
-    BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, MatsDb, Meta, Model,
-    Orientation, Shade, Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall,
-    WallCons, WallGeom, WinCons, WinGeom, Window,
+    BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, Meta, Model, Orientation, Shade,
+    Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeom,
+    WinCons, WinGeom, Window,
 };
 
 // Utilidades varias de conversión
@@ -59,12 +59,11 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         let bdl = &d.bdldata;
         let id_maps = IdMaps::new(bdl);
 
-        let mut mats = mats_from_bdl(bdl, &id_maps);
+        let cons = cons_from_bdl(bdl, &id_maps)?;
         let spaces = spaces_from_bdl(bdl, &id_maps)?;
         let walls = walls_from_bdl(bdl, &id_maps)?;
         let (windows, shades) = windows_and_shades_from_bdl(bdl, &walls, &id_maps);
         let thermal_bridges = thermal_bridges_from_bdl(bdl);
-        let cons = cons_from_bdl(bdl, &mut mats, &id_maps)?;
 
         // Completa metadatos desde ctehexml y el bdl
         // Desviación general respecto al Norte (criterio BDL)
@@ -113,7 +112,6 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             shades,
             spaces,
             cons,
-            mats,
             warnings: Default::default(),
             overrides: Default::default(),
             extra: Default::default(),
@@ -532,8 +530,8 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
         .collect()
 }
 
-/// Materiales partir de datos BDL
-fn mats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> MatsDb {
+/// Construcciones de muros y huecos y materiales a partir de datos BDL
+fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
     let mut materials = Vec::new();
     for (name, material) in &bdl.db.materials {
         materials.push(Material {
@@ -573,19 +571,7 @@ fn mats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> MatsDb {
             absorptivity: frame.absorptivity,
         })
     }
-    MatsDb {
-        materials,
-        glasses,
-        frames,
-    }
-}
 
-/// Construcciones de muros y huecos a partir de datos BDL
-fn cons_from_bdl(
-    bdl: &Data,
-    mats: &mut MatsDb,
-    id_maps: &IdMaps,
-) -> Result<ConsDb, Error> {
     let mut used_wallcons = bdl
         .walls
         .iter()
@@ -595,6 +581,7 @@ fn cons_from_bdl(
     used_wallcons.dedup();
 
     let mut used_material_ids = HashSet::new();
+
     let mut wallcons = Vec::with_capacity(used_wallcons.len());
     for wcons in &used_wallcons {
         match bdl.db.wallcons.get(wcons) {
@@ -628,7 +615,7 @@ fn cons_from_bdl(
         };
     }
     // Purgamos materiales no usados
-    mats.materials.retain(|v| used_material_ids.contains(&v.id));
+    materials.retain(|v| used_material_ids.contains(&v.id));
 
     let mut wcnames: Vec<String> = bdl
         .windows
@@ -638,14 +625,12 @@ fn cons_from_bdl(
     wcnames.sort();
     wcnames.dedup();
 
-    let glass_name_to_id = mats
-        .glasses
+    let glass_name_to_id = glasses
         .iter()
         .map(|m| (&m.name, m.id))
         .collect::<BTreeMap<&String, Uuid>>();
 
-    let frame_name_to_id = mats
-        .frames
+    let frame_name_to_id = frames
         .iter()
         .map(|m| (&m.name, m.id))
         .collect::<BTreeMap<&String, Uuid>>();
@@ -693,11 +678,17 @@ fn cons_from_bdl(
     }
 
     // Purgamos materiales no usados
-    mats.glasses.retain(|v| used_glasses_ids.contains(&v.id));
-    mats.frames.retain(|v| used_frames_ids.contains(&v.id));
+    glasses.retain(|v| used_glasses_ids.contains(&v.id));
+    frames.retain(|v| used_frames_ids.contains(&v.id));
 
     // Devolvemos lista
-    Ok(ConsDb { wallcons, wincons})
+    Ok(ConsDb {
+        wallcons,
+        wincons,
+        materials,
+        glasses,
+        frames,
+    })
 }
 
 /// Mapping de nombres a ids

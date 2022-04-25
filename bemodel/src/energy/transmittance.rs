@@ -20,7 +20,7 @@ use log::{debug, info, warn};
 use crate::types::HasSurface;
 use crate::{
     utils::{fround2, fround3},
-    BoundaryType, ConsDb, Layer, MatProps, MatsDb, Model, Space, SpaceType, Tilt, Wall, WallCons,
+    BoundaryType, ConsDb, Layer, MatProps, Model, Space, SpaceType, Tilt, Wall, WallCons,
     WinCons,
 };
 
@@ -148,7 +148,7 @@ impl Space {
     /// Espesor total equivalente de solera (suelo de sótano), d_t, m
     /// Según UNE-EN ISO 13370:2010 9.3.2 (10)
     /// Ponderamos según superficie de suelos en contacto con el terreno
-    fn slab_d_t(&self, walls: &[Wall], cons: &ConsDb, mats: &MatsDb) -> Option<f32> {
+    fn slab_d_t(&self, walls: &[Wall], db: &ConsDb) -> Option<f32> {
         let ground_slabs: Vec<_> = self
             .walls(walls)
             .filter(|wall| Tilt::from(*wall) == Tilt::BOTTOM && wall.bounds == BoundaryType::GROUND)
@@ -168,9 +168,9 @@ impl Space {
             let a = slab.area();
             a_total += a;
             // NOTA: Cuando el modelo no está completamente definido usamos solo las resistencias superficiales
-            let r_intrinsic = cons
+            let r_intrinsic = db
                 .get_wallcons(slab.cons)
-                .and_then(|c| c.r_intrinsic(mats).ok())
+                .and_then(|c| c.r_intrinsic(db).ok())
                 .unwrap_or_default();
             e_tot += a * (W + LAMBDA_GND * (RSI_DESCENDENTE + r_intrinsic + RSE));
         }
@@ -222,7 +222,7 @@ impl Space {
                     .windows(&model.windows)
                     .filter_map(|win| {
                         // Si no está definida la construcción, el hueco no participa de la envolvente
-                        let u = &model.cons.get_wincons(win.cons)?.u_value(&model.mats)?;
+                        let u = &model.cons.get_wincons(win.cons)?.u_value(&model.cons)?;
                         Some(win.area() * u)
                     })
                     .sum::<f32>();
@@ -236,10 +236,10 @@ impl Space {
 impl WallCons {
     /// Resistencia térmica intrínseca (sin resistencias superficiales) de una composición de capas [W/m²K]
     /// TODO: convertir errores a logging y devolver Option<f32>
-    pub fn r_intrinsic(&self, mats: &MatsDb) -> Result<f32, Error> {
+    pub fn r_intrinsic(&self, db: &ConsDb) -> Result<f32, Error> {
         let mut total_resistance = 0.0;
         for Layer { id, e } in &self.layers {
-            match mats.get_material(*id) {
+            match db.get_material(*id) {
                 None => return Err(format_err!(
                     "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
                     id,
@@ -271,9 +271,9 @@ impl WinCons {
     /// - los valores de U de acristalamiento y marco son para su posición final
     /// - los valores de acristalamiento y marco ya deben incluir las resistencias superficiales
     ///   (U_g se calcula con resistencias superficiales y U_w es una ponderación)
-    pub fn u_value(&self, mats: &MatsDb) -> Option<f32> {
-        let glass = mats.get_glass(self.glass)?;
-        let frame = mats.get_frame(self.frame)?;
+    pub fn u_value(&self, db: &ConsDb) -> Option<f32> {
+        let glass = db.get_glass(self.glass)?;
+        let frame = db.get_frame(self.frame)?;
         Some(fround2(
             (1.0 + self.delta_u / 100.0)
                 * (frame.u_value * self.f_f + glass.u_value * (1.0 - self.f_f)),
@@ -296,7 +296,7 @@ impl Wall {
         let r_intrinsic = model
             .cons
             .get_wallcons(self.cons)?
-            .r_intrinsic(&model.mats)
+            .r_intrinsic(&model.cons)
             .ok();
         match self.bounds {
             // Elementos adiabáticos -----------------------------
@@ -337,7 +337,7 @@ impl Wall {
                 // TODO: Parámetros ligados al espacio: d_t, psi_gnd_ext, char_dim, z, space_height_net
                 let space = model.get_space(self.space)?;
                 // d_t: espesor equivalente total de solera (suelo del sótano) (10)
-                let d_t = space.slab_d_t(&model.walls, &model.cons, &model.mats)?;
+                let d_t = space.slab_d_t(&model.walls, &model.cons)?;
                 // transmitancia térmica lineal como efecto del aislamiento perimetral, psi_gnd_ext
                 let psi_gnd_ext = space.slab_psi_gnd_ext(d_t, model);
                 // Suponemos valor cuando se calcule en espacios sin solera (no podría pasar)

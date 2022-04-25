@@ -10,7 +10,7 @@ use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    BoundaryType, ConsDb, MatsDb, Meta, PropsOverrides, Shade, Space, SpaceType, ThermalBridge,
+    BoundaryType, ConsDb, Meta, PropsOverrides, Shade, Space, SpaceType, ThermalBridge,
     Tilt, Uuid, Wall, Window, Warning
 };
 
@@ -40,9 +40,6 @@ pub struct Model {
     /// Construcciones
     #[serde(default, skip_serializing_if = "ConsDb::is_empty")]
     pub cons: ConsDb,
-    /// Materiales
-    #[serde(default, skip_serializing_if = "MatsDb::is_empty")]
-    pub mats: MatsDb,
     /// Overrides de propiedades de elementos (opacos y huecos)
     #[serde(default, skip_serializing_if = "PropsOverrides::is_empty")]
     pub overrides: PropsOverrides,

@@ -39,7 +39,7 @@ impl From<&Model> for EnergyProps {
         let mut wallcons: BTreeMap<Uuid, WallConsProps> = BTreeMap::new();
         for wc in &model.cons.wallcons {
             let wcp = WallConsProps {
-                r_intrinsic: wc.r_intrinsic(&model.mats).ok(),
+                r_intrinsic: wc.r_intrinsic(&model.cons).ok(),
             };
             wallcons.insert(wc.id, wcp);
         }
@@ -48,11 +48,11 @@ impl From<&Model> for EnergyProps {
         for wc in &model.cons.wincons {
             // Valores por defecto para elementos sin vidrio definido
             // corresponde a vidrio sencillo: g_gl;n = 0.85; g_gl;wi = g_gl;n * 0.9 = 0.77
-            let g_glwi = wc.g_glwi(&model.mats).unwrap_or(0.77);
-            let g_glshwi = wc.g_glshwi(&model.mats).unwrap_or(g_glwi);
+            let g_glwi = wc.g_glwi(&model.cons).unwrap_or(0.77);
+            let g_glshwi = wc.g_glshwi(&model.cons).unwrap_or(g_glwi);
             let wcp = WinConsProps {
                 c_100: wc.c_100,
-                u_value: wc.u_value(&model.mats),
+                u_value: wc.u_value(&model.cons),
                 g_glwi,
                 g_glshwi,
                 f_f: wc.f_f,

@@ -87,6 +87,7 @@ fn main() {
         .unwrap()
         .replace(".into_iter().collect()),", ".into_iter().collect()),\n")
         .replace(",WallCons", ",\nWallCons")
+        .replace(",WinCons", ",\nWinCons")
         .replace(",Frame", ",\nFrame")
         .replace(",Glass", ",\nGlass")
         .replace("\\u{e1}", "á")
@@ -101,20 +102,20 @@ fn main() {
         .replace(" 0f32", " 0.0")
         .replace("collect(),vec!", "collect(),\nvec!")
         .replace(
-            "mats: MatsDb {materials: vec![",
-            "\n\nmats:\nMatsDb {\nmaterials:\nvec![\n",
-        )
-        .replace(
             "].into_iter().collect()},cons: ConsDb {wallcons: vec![",
             "\n].into_iter().collect()\n},\n\ncons:\nConsDb {\nwallcons:\nvec![\n",
         )
         .replace(
-            ",groups: Groups {materials: vec![",
-            ",\n\ngroups:\nGroups {\nmaterials:\nvec![\n",
+            "},groups: Groups {wallcons: vec![",
+            "},\n\ngroups:\nGroups {\nwallcons:\nvec![\n",
         )
         .replace("vec![WallCons", "vec![\nWallCons")
         .replace("vec![WinCons", "vec![\nWinCons")
         .replace("vec![vec![", "vec![\nvec![")
+        .replace(
+            "].into_iter().collect(),materials: vec![",
+            "\n].into_iter().collect(),\n\nmaterials:\nvec![\n",
+        )
         .replace(
             "].into_iter().collect(),glasses: vec![",
             "\n].into_iter().collect(),\n\nglasses:\nvec![\n",
@@ -161,10 +162,7 @@ fn main() {
         r#"
     use once_cell::unsync::Lazy;
 
-    use bemodel::{{
-        ConsDb, Frame, Glass, Groups, Layer, MatProps, Material, MatsDb, Uuid, WallCons,
-        WinCons,
-    }};
+    use bemodel::{{ ConsDb, Frame, Glass, Groups, Layer, MatProps, Material, Uuid, WallCons, WinCons }};
 
     pub static LIBRARY: Lazy<Library> = Lazy::new(||
         {}

@@ -10,15 +10,12 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 
-use super::{ConsDb, MatsDb, Uuid};
+use super::{ConsDb, Uuid};
 
 /// Base de datos de materiales y construcciones
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Library {
-    /// Materiales de opacos, vidrios y marcos
-    #[serde(default)]
-    pub mats: MatsDb,
-    /// Construcciones de opacos y huecos
+    /// Materiales de opacos, vidrios y marcos y construcciones de opacos y huecos
     #[serde(default)]
     pub cons: ConsDb,
     /// Grupos de materiales y construcciones
@@ -31,6 +28,12 @@ pub struct Library {
 /// Asocia al UUID de cada tipo de objeto un nombre de grupo
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Groups {
+    /// Construcciones de opacos
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub wallcons: BTreeMap<String, Vec<Uuid>>,
+    /// Construcciones de huecos
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub wincons: BTreeMap<String, Vec<Uuid>>,
     /// Lista de materiales para elementos opacos (muro, cubierta, suelo, partición)
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub materials: BTreeMap<String, Vec<Uuid>>,
@@ -40,10 +43,4 @@ pub struct Groups {
     /// Lista de marcos
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub frames: BTreeMap<String, Vec<Uuid>>,
-    /// Construcciones de opacos
-    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub wallcons: BTreeMap<String, Vec<Uuid>>,
-    /// Construcciones de huecos
-    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
-    pub wincons: BTreeMap<String, Vec<Uuid>>,
 }

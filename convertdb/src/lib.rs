@@ -7,8 +7,8 @@ use std::path::Path;
 use flate2::read::GzDecoder;
 
 use bemodel::{
-    utils::uuid_from_obj, ConsDb, Frame, Glass, Groups, Layer, Library, MatProps, Material, MatsDb,
-    Uuid, WallCons, WinCons,
+    utils::uuid_from_obj, ConsDb, Frame, Glass, Groups, Layer, Library, MatProps, Material, Uuid,
+    WallCons, WinCons,
 };
 use hulc::bdl::Data;
 
@@ -18,16 +18,14 @@ pub fn get_library<T: AsRef<Path>>(path: T) -> Library {
     let mut dbstring = String::new();
     gz.read_to_string(&mut dbstring).unwrap();
     let data = Data::new(&dbstring).unwrap();
-    
+
     let mut groups = Groups::default();
-    let mats = mats_from_bdl(&data, &mut groups);
-    let cons = cons_from_bdl(&data, &mats, &mut groups);
-    // TODO: ordenar vectores de grupos según orden alfabético de nombres
-    Library { mats, cons, groups }
+    let cons = cons_from_bdl(&data, &mut groups);
+    Library { cons, groups }
 }
 
-/// Materiales partir de datos BDL
-fn mats_from_bdl(bdl: &Data, groups: &mut Groups) -> MatsDb {
+/// Construcciones de muros y huecos a partir de datos BDL
+fn cons_from_bdl(bdl: &Data, groups: &mut Groups) -> ConsDb {
     let mut materials = Vec::new();
 
     for (name, material) in &bdl.db.materials {
@@ -81,30 +79,19 @@ fn mats_from_bdl(bdl: &Data, groups: &mut Groups) -> MatsDb {
             absorptivity: frame.absorptivity,
         })
     }
-    MatsDb {
-        materials,
-        glasses,
-        frames,
-    }
-}
 
-/// Construcciones de muros y huecos a partir de datos BDL
-fn cons_from_bdl(bdl: &Data, mats: &MatsDb, groups: &mut Groups) -> ConsDb {
     // Mapas de nombre a id
-    let mat_name_to_id = mats
-        .materials
+    let mat_name_to_id = materials
         .iter()
         .map(|m| (&m.name, m.id))
         .collect::<BTreeMap<&String, Uuid>>();
 
-    let glass_name_to_id = mats
-        .glasses
+    let glass_name_to_id = glasses
         .iter()
         .map(|m| (&m.name, m.id))
         .collect::<BTreeMap<&String, Uuid>>();
 
-    let frame_name_to_id = mats
-        .frames
+    let frame_name_to_id = frames
         .iter()
         .map(|m| (&m.name, m.id))
         .collect::<BTreeMap<&String, Uuid>>();
@@ -188,5 +175,11 @@ fn cons_from_bdl(bdl: &Data, mats: &MatsDb, groups: &mut Groups) -> ConsDb {
         });
     }
 
-    ConsDb { wallcons, wincons }
+    ConsDb {
+        wallcons,
+        wincons,
+        materials,
+        glasses,
+        frames,
+    }
 }
