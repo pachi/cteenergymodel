@@ -131,6 +131,7 @@ impl Data {
         });
 
         // Generar construcciones con Constructions y Layers
+
         // Caso en el que no se han definido las construcciones de los elementos, tienen asignado WallCons "Ninguno"
         for cons in constructions.values() {
             let mut layers_obj = layers
@@ -143,11 +144,20 @@ impl Data {
                     )
                 })?
                 .clone();
-            // TODO: esto incluye muchas veces el nombre de las capas layers_obj.name con la absortividad
+            // Cuando TODO: esto incluye muchas veces el nombre de las capas layers_obj.name con la absortividad
             // cuando no hay más construcciones con distinta absortividad. Podríamos simplificarlo.
-            layers_obj.name = cons.name.clone();
-            layers_obj.absorptance = cons.absorptance;
+            if cons.name != cons.layers {
+                layers_obj.name = cons.name.clone();
+                layers_obj.absorptance = cons.absorptance;
 
+                wallcons.insert(layers_obj.name.clone(), layers_obj);
+            }
+        }
+
+        for mut layers_obj in layers.into_values() {
+            if layers_obj.absorptance == 0.0 {
+                layers_obj.absorptance = 0.6;
+            };
             wallcons.insert(layers_obj.name.clone(), layers_obj);
         }
 
