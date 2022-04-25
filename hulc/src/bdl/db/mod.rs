@@ -38,14 +38,14 @@ pub use windowcons::WinCons;
 /// Se organizan por nombre y grupo (tipo)
 #[derive(Debug, Clone, Default)]
 pub struct DB {
-    /// Material o producto
+    /// Material o producto de opaco
     pub materials: BTreeMap<String, Material>,
-    /// Composición por capas (opacos)
-    pub wallcons: BTreeMap<String, WallCons>,
-    /// Composición por capas (huecos)
-    pub wincons: BTreeMap<String, WinCons>,
     /// Vidrio
     pub glasses: BTreeMap<String, Glass>,
     /// Marco
     pub frames: BTreeMap<String, Frame>,
+    /// Composición por capas (opacos)
+    pub wallcons: BTreeMap<String, WallCons>,
+    /// Composición por capas (huecos)
+    pub wincons: BTreeMap<String, WinCons>,
 }
