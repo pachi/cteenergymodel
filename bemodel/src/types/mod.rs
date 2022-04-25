@@ -26,9 +26,9 @@ mod window;
 use crate::utils::{fround2, uuid_from_str};
 
 pub use common::{BoundaryType, Orientation, Tilt, Uuid};
-pub use constructions::{ConsDb, Layer, WallCons, WinCons, Frame, Glass, MatProps, Material};
+pub use constructions::{ConsDb, Frame, Glass, Layer, MatProps, Material, WallCons, WinCons};
 pub use geometry::{HasSurface, Point2, Point3, Polygon, Vector2, Vector3};
-pub use library::{Groups, Library};
+pub use library::{ConsDbGroups, Library};
 pub use meta::Meta;
 pub use model::{ExtraData, Model};
 pub use opaques::{Shade, Wall, WallGeom};

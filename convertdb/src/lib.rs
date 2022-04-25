@@ -7,8 +7,8 @@ use std::path::Path;
 use flate2::read::GzDecoder;
 
 use bemodel::{
-    utils::uuid_from_obj, ConsDb, Frame, Glass, Groups, Layer, Library, MatProps, Material, Uuid,
-    WallCons, WinCons,
+    utils::uuid_from_obj, ConsDb, ConsDbGroups, Frame, Glass, Layer, Library, MatProps, Material,
+    Uuid, WallCons, WinCons,
 };
 use hulc::bdl::Data;
 
@@ -19,13 +19,13 @@ pub fn get_library<T: AsRef<Path>>(path: T) -> Library {
     gz.read_to_string(&mut dbstring).unwrap();
     let data = Data::new(&dbstring).unwrap();
 
-    let mut groups = Groups::default();
+    let mut groups = ConsDbGroups::default();
     let cons = cons_from_bdl(&data, &mut groups);
     Library { cons, groups }
 }
 
 /// Construcciones de muros y huecos a partir de datos BDL
-fn cons_from_bdl(bdl: &Data, groups: &mut Groups) -> ConsDb {
+fn cons_from_bdl(bdl: &Data, groups: &mut ConsDbGroups) -> ConsDb {
     let mut materials = Vec::new();
 
     for (name, material) in &bdl.db.materials {

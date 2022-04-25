@@ -20,14 +20,14 @@ pub struct Library {
     pub cons: ConsDb,
     /// Grupos de materiales y construcciones
     #[serde(default)]
-    pub groups: Groups,
+    pub groups: ConsDbGroups,
 }
 
 /// Grupos de materiales de opacos, vidrios y marcos y construcciones de opacos y huecos
 ///
 /// Asocia al UUID de cada tipo de objeto un nombre de grupo
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub struct Groups {
+pub struct ConsDbGroups {
     /// Construcciones de opacos
     #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
     pub wallcons: BTreeMap<String, Vec<Uuid>>,
