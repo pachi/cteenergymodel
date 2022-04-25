@@ -40,8 +40,6 @@ Marcar elementos especiales de la ET para hacer override de esos elementos para 
     - alto = 1m
     - ancho = superficie / alto
 - Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
-- Crear biblioteca base de materiales en Rust para interpretar construcciones:
-  - BDCatalogo.bdc.utf8 -> Convertir a datos Rust
 - condiciones de uso:
   - nivel de ventilación (n_v: Option<f32> [1/h])
   - consignas (cal, cal_red, ref, ref_red, horas_cal, horas_cal_red, horas_sin, horas_ref, horas_ref_red)
