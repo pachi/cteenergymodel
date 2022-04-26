@@ -617,13 +617,13 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
     // Purgamos materiales no usados
     materials.retain(|v| used_material_ids.contains(&v.id));
 
-    let mut wcnames: Vec<String> = bdl
+    let mut used_wincons: Vec<String> = bdl
         .windows
         .iter()
         .map(|w| w.cons.clone())
         .collect::<Vec<String>>();
-    wcnames.sort();
-    wcnames.dedup();
+    used_wincons.sort();
+    used_wincons.dedup();
 
     let glass_name_to_id = glasses
         .iter()
@@ -639,7 +639,7 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
     let mut used_frames_ids = HashSet::new();
 
     let mut wincons = Vec::new();
-    for winconsname in &wcnames {
+    for winconsname in &used_wincons {
         let cons = match bdl.db.wincons.get(winconsname) {
             Some(cons) => {
                 let id = uuid_from_obj(cons);
