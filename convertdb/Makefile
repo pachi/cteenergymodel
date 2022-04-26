@@ -1,5 +1,6 @@
 convert:
 	cargo run -- ../hulc/src/BDCatalogo.bdc.utf8.gz
+	cp ./hulcdb.rs ../bemodel/src/db/ctedb.rs
 
 # Nota: usar Valgrind 3.17 al menos (ver snap)
 massif:
