@@ -38,7 +38,7 @@ impl Default for ThermalBridge {
             name: "Puente térmico".to_string(),
             kind: ThermalBridgeKind::default(),
             l: 1.0,
-            psi: 0.1,
+            psi: 0.0,
         }
     }
 }
