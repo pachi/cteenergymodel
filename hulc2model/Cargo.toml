@@ -1,6 +1,6 @@
 [package]
 name = "hulc2model"
-version = "2.2.0"
+version = "22.5.0"
 authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
 edition = "2018"
 description = "Export data from a HULC project to the EnvolventeCTE JSON format"

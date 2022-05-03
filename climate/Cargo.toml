@@ -1,6 +1,6 @@
 [package]
 name = "climate"
-version = "0.1.0"
+version = "22.5.0"
 authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
 repository = "https://github.com/pachi/cteenergymodel"
 edition = "2018"
