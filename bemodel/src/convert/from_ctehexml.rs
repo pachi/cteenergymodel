@@ -547,6 +547,7 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
             } else {
                 MatProps::Resistance {
                     resistance: material.resistance.unwrap_or_default(),
+                    vapour_diff: None,
                 }
             },
         })

@@ -20,8 +20,7 @@ use log::{debug, info, warn};
 use crate::types::HasSurface;
 use crate::{
     utils::{fround2, fround3},
-    BoundaryType, ConsDb, Layer, MatProps, Model, Space, SpaceType, Tilt, Wall, WallCons,
-    WinCons,
+    BoundaryType, ConsDb, Layer, MatProps, Model, Space, SpaceType, Tilt, Wall, WallCons, WinCons,
 };
 
 // Resistencias superficiales UNE-EN ISO 6946 [m2·K/W]
@@ -248,7 +247,7 @@ impl WallCons {
                 Some(mat) => {
                     match mat.properties {
                         MatProps::Detailed{ conductivity, .. } if conductivity > 0.0 => total_resistance += e / conductivity,
-                        MatProps::Resistance{ resistance} => total_resistance += resistance,
+                        MatProps::Resistance{ resistance, ..} => total_resistance += resistance,
                         _ => return Err(format_err!(
                             "Material \"{}\" de la composición de capas \"{}\" con conductividad nula o casi nula",
                             mat.name,

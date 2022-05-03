@@ -47,6 +47,7 @@ fn consdb_and_groups_from_bdl(bdl: &Data) -> (ConsDb, ConsDbGroups) {
             } else {
                 MatProps::Resistance {
                     resistance: material.resistance.unwrap_or_default(),
+                    vapour_diff: None,
                 }
             },
         })

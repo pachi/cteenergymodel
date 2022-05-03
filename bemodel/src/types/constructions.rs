@@ -220,6 +220,9 @@ pub enum MatProps {
     Resistance {
         /// Resistencia térmica, m²K/W
         resistance: f32,
+        // Factor de difusividad al vapor de agua, mu (-)
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        vapour_diff: Option<f32>,
     },
 }
 
