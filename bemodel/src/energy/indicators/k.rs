@@ -202,7 +202,7 @@ impl From<&EnergyProps> for KData {
             ground,
             tbs,
             windows,
-            mut summary,
+            ref mut summary,
             ..
         } = k;
         summary.opaques_a = roofs.a + floors.a + walls.a + ground.a;
