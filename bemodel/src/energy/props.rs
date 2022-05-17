@@ -40,7 +40,7 @@ impl From<&Model> for EnergyProps {
         for wc in &model.cons.wallcons {
             let wcp = WallConsProps {
                 thickness: wc.thickness(),
-                r_intrinsic: wc.r_intrinsic(&model.cons).ok(),
+                resistance: wc.resistance(&model.cons).ok(),
             };
             wallcons.insert(wc.id, wcp);
         }
@@ -384,8 +384,8 @@ pub struct TbProps {
 pub struct WallConsProps {
     /// Espesor total de la construcción, [m]
     pub thickness: f32,
-    // R intrínseca de construcción, [m²K/W]
-    pub r_intrinsic: Option<f32>,
+    // Resistencia térmica de la construcción (excluyendo resistencias superficiales), [m²K/W]
+    pub resistance: Option<f32>,
 }
 
 /// Propiedades de construcciones de opacos

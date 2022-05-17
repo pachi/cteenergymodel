@@ -10,8 +10,8 @@ use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    BoundaryType, ConsDb, Meta, PropsOverrides, Shade, Space, SpaceType, ThermalBridge,
-    Tilt, Uuid, Wall, Window, Warning
+    BoundaryType, ConsDb, Meta, PropsOverrides, Shade, Space, SpaceType, ThermalBridge, Tilt, Uuid,
+    Wall, Warning, Window,
 };
 
 // ---------- Estructura general de datos --------------

@@ -167,11 +167,11 @@ impl Space {
             let a = slab.area();
             a_total += a;
             // NOTA: Cuando el modelo no está completamente definido usamos solo las resistencias superficiales
-            let r_intrinsic = db
+            let resistance = db
                 .get_wallcons(slab.cons)
-                .and_then(|c| c.r_intrinsic(db).ok())
+                .and_then(|c| c.resistance(db).ok())
                 .unwrap_or_default();
-            e_tot += a * (W + LAMBDA_GND * (RSI_DESCENDENTE + r_intrinsic + RSE));
+            e_tot += a * (W + LAMBDA_GND * (RSI_DESCENDENTE + resistance + RSE));
         }
         let d_t = e_tot / a_total / ground_slabs.len() as f32;
         Some(d_t)
@@ -235,7 +235,7 @@ impl Space {
 impl WallCons {
     /// Resistencia térmica intrínseca (sin resistencias superficiales) de una composición de capas [W/m²K]
     /// TODO: convertir errores a logging y devolver Option<f32>
-    pub fn r_intrinsic(&self, db: &ConsDb) -> Result<f32, Error> {
+    pub fn resistance(&self, db: &ConsDb) -> Result<f32, Error> {
         let mut total_resistance = 0.0;
         for Layer { id, e } in &self.layers {
             match db.get_material(*id) {
@@ -292,10 +292,10 @@ impl Wall {
         use SpaceType::*;
         use Tilt::*;
 
-        let r_intrinsic = model
+        let resistance = model
             .cons
             .get_wallcons(self.cons)?
-            .r_intrinsic(&model.cons)
+            .resistance(&model.cons)
             .ok();
         match self.bounds {
             // Elementos adiabáticos -----------------------------
@@ -303,7 +303,7 @@ impl Wall {
             // Notas:
             // - los elementos adiabáticos se reportan con el valor del elemento exterior (para poder comprobar U de particiones)
             ADIABATIC => {
-                let u = self.u_value_exterior(r_intrinsic);
+                let u = self.u_value_exterior(resistance);
                 debug!(
                     "{} ({}, adiabático) U={:.2}",
                     self.name,
@@ -314,7 +314,7 @@ impl Wall {
             }
             // Elementos en contacto con el exterior -------------
             EXTERIOR => {
-                let u = self.u_value_exterior(r_intrinsic);
+                let u = self.u_value_exterior(resistance);
                 debug!(
                     "{} ({}) U={:.2}",
                     self.name,
@@ -331,7 +331,7 @@ impl Wall {
             // - se usan resistencias superficiales de referencia (DB-HE)
             GROUND => {
                 // U_w: transmitancia del elemento considerado en contacto con el exterior
-                let U_w = self.u_value_exterior(r_intrinsic)?;
+                let U_w = self.u_value_exterior(resistance)?;
 
                 // TODO: Parámetros ligados al espacio: d_t, psi_gnd_ext, char_dim, z, space_height_net
                 let space = model.get_space(self.space)?;
@@ -380,19 +380,19 @@ impl Wall {
                     // Techo de espacio no acondicionado hacia acondicionado superior
                     (true, false, BOTTOM) | (false, true, TOP) => {
                         // Flujo descendente
-                        r_intrinsic? + 2.0 * RSI_DESCENDENTE
+                        resistance? + 2.0 * RSI_DESCENDENTE
                     }
                     // Techo de espacio acondicionado hacia no acondicionado superior
                     // Suelo de espacio no acondicionado hacia acondicionado inferior
                     (true, false, TOP) | (false, true, BOTTOM) => {
                         // Flujo ascendente
-                        r_intrinsic? + 2.0 * RSI_ASCENDENTE
+                        resistance? + 2.0 * RSI_ASCENDENTE
                     }
                     // Muro entre espacios con distinto nivel de acondicionamiento
                     // Flujo entre espacios acondicionados
                     _ => {
                         // Flujo horizontal
-                        r_intrinsic? + 2.0 * RSI_HORIZONTAL
+                        resistance? + 2.0 * RSI_HORIZONTAL
                     }
                 };
 
@@ -451,9 +451,9 @@ impl Wall {
     ///
     /// # Argumentos
     ///
-    /// * `r_intrinsic`: Resistencia intrínseca del elemento, en W/m²K
-    pub fn u_value_exterior(&self, r_intrinsic: Option<f32>) -> Option<f32> {
-        let r = r_intrinsic?;
+    /// * `resistance`: Resistencia térmica del elemento opaco (excluyendo resistencias superficiales), en W/m²K
+    pub fn u_value_exterior(&self, resistance: Option<f32>) -> Option<f32> {
+        let r = resistance?;
         let rsi = match Tilt::from(self) {
             Tilt::BOTTOM => RSI_DESCENDENTE,
             Tilt::TOP => RSI_ASCENDENTE,
@@ -528,7 +528,7 @@ impl Wall {
     /// - lambda de aislamiento = 0,035 W/mK
     ///
     /// HULC parece estar calculando algo más parecido al método de Winkelman o:
-    /// let u = 1.0 / (r_intrinsic + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
+    /// let u = 1.0 / (resistance + RSI_DESCENDENTE + RSE + 0.25 / LAMBDA_GND + 0.01 / LAMBDA_INS);
     ///
     /// # Argumentos
     ///

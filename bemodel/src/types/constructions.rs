@@ -151,6 +151,7 @@ pub struct WinCons {
     /// Fracción de marco [-]
     pub f_f: f32,
     /// Porcentaje de U debido a intercalarios y cajón de persiana (%)
+    /// TODO: skip if default
     pub delta_u: f32,
     /// Factor solar del hueco con la protección solar activada (g_gl;sh;wi) [-]
     /// Si no se define (valor None), se supone igual al factor solar sin la protección activada (g_gl;wi)
