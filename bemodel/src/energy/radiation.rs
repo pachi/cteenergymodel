@@ -202,7 +202,11 @@ impl Model {
         let mut occluders: Vec<_> = self
             .walls
             .iter()
-            .filter(|&e| e.bounds == ADIABATIC || e.bounds == EXTERIOR)
+            .filter(|&e| {
+                (e.bounds == ADIABATIC || e.bounds == EXTERIOR)
+                    && e.geometry.position.is_some()
+                    && !e.geometry.polygon.is_empty()
+            })
             .map(|e| Occluder {
                 id: e.id,
                 linked_to_id: None,
@@ -212,14 +216,19 @@ impl Model {
                 aabb: e.geometry.aabb(),
             })
             .collect();
-        occluders.extend(self.shades.iter().map(|e| Occluder {
-            id: e.id,
-            linked_to_id: None,
-            normal: e.geometry.polygon.normal(),
-            trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
-            polygon: e.geometry.polygon.clone(),
-            aabb: e.geometry.aabb(),
-        }));
+        occluders.extend(
+            self.shades
+                .iter()
+                .filter(|&e| e.geometry.position.is_some() && !e.geometry.polygon.is_empty())
+                .map(|e| Occluder {
+                    id: e.id,
+                    linked_to_id: None,
+                    normal: e.geometry.polygon.normal(),
+                    trans_matrix: e.geometry.to_global_coords_matrix().map(|m| m.inverse()),
+                    polygon: e.geometry.polygon.clone(),
+                    aabb: e.geometry.aabb(),
+                }),
+        );
         occluders.extend(setback_shades.iter().map(|(wid, e)| Occluder {
             id: e.id,
             linked_to_id: Some(*wid),
