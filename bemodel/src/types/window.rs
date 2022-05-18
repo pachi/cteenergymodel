@@ -151,8 +151,7 @@ impl Default for Window {
 pub struct WinGeom {
     /// Posición del hueco, en coordenadas de opaco
     /// Un valor None señala que no hay definición geométrica completa
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub position: Option<Point2>,
     /// Altura del hueco, m
     pub height: f32,
