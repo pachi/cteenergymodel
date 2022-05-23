@@ -237,11 +237,11 @@ impl WallCons {
     /// TODO: convertir errores a logging y devolver Option<f32>
     pub fn resistance(&self, db: &ConsDb) -> Result<f32, Error> {
         let mut total_resistance = 0.0;
-        for Layer { id, e } in &self.layers {
-            match db.get_material(*id) {
+        for Layer { material, e } in &self.layers {
+            match db.get_material(*material) {
                 None => return Err(format_err!(
                     "No se encuentra el material \"{}\" de la composición de capas \"{}\"",
-                    id,
+                    material,
                     self.name
                 )),
                 Some(mat) => {

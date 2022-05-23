@@ -2664,35 +2664,35 @@
         "name": "Cubierta plana0.60",
         "layers": [
           {
-            "id": "a4d11b87-cb45-3b19-3afd-e3a989776694",
+            "material": "a4d11b87-cb45-3b19-3afd-e3a989776694",
             "e": 0.02
           },
           {
-            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "material": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
             "e": 0.01
           },
           {
-            "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+            "material": "f575f078-723f-7fda-0ed4-497390da2ea1",
             "e": 0.12
           },
           {
-            "id": "af68f390-42d3-d781-7cf1-2652ab064ab0",
+            "material": "af68f390-42d3-d781-7cf1-2652ab064ab0",
             "e": 0.003
           },
           {
-            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "material": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
             "e": 0.01
           },
           {
-            "id": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
+            "material": "f68a1cef-6076-5fe1-d313-4ee72ac1fb7c",
             "e": 0.02
           },
           {
-            "id": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
+            "material": "177eb66c-c66e-8da8-0179-dffb9b76adc1",
             "e": 0.25
           },
           {
-            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "material": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
             "e": 0.01
           }
         ],
@@ -2703,23 +2703,23 @@
         "name": "Forjado interior",
         "layers": [
           {
-            "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
+            "material": "83550c95-fb95-9f36-bd59-5176a21f510a",
             "e": 0.02
           },
           {
-            "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+            "material": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
             "e": 0.02
           },
           {
-            "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+            "material": "815682fe-3749-eab1-e0eb-41f2906ba489",
             "e": 0.03
           },
           {
-            "id": "3db6f046-4bff-07da-cceb-0cea86b35187",
+            "material": "3db6f046-4bff-07da-cceb-0cea86b35187",
             "e": 0.14
           },
           {
-            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "material": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
             "e": 0.01
           }
         ],
@@ -2730,19 +2730,19 @@
         "name": "Forjado terreno",
         "layers": [
           {
-            "id": "83550c95-fb95-9f36-bd59-5176a21f510a",
+            "material": "83550c95-fb95-9f36-bd59-5176a21f510a",
             "e": 0.02
           },
           {
-            "id": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
+            "material": "47d41a9c-fada-88be-83c1-c0ff49a1eaff",
             "e": 0.02
           },
           {
-            "id": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
+            "material": "a4ff7bd9-a5a8-a554-a585-b8e7a1bbae01",
             "e": 0.02
           },
           {
-            "id": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
+            "material": "97696bc6-3e8d-be70-3915-45ebc100a9ba",
             "e": 0.15
           }
         ],
@@ -2753,35 +2753,35 @@
         "name": "Medianera",
         "layers": [
           {
-            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "material": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
             "e": 0.01
           },
           {
-            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "material": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
             "e": 0.01
           },
           {
-            "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+            "material": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
             "e": 0.115
           },
           {
-            "id": "815682fe-3749-eab1-e0eb-41f2906ba489",
+            "material": "815682fe-3749-eab1-e0eb-41f2906ba489",
             "e": 0.04
           },
           {
-            "id": "3316ee35-2376-269d-d260-bbdafe2ab18e",
+            "material": "3316ee35-2376-269d-d260-bbdafe2ab18e",
             "e": 0.05
           },
           {
-            "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+            "material": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
             "e": 0.115
           },
           {
-            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "material": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
             "e": 0.01
           },
           {
-            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "material": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
             "e": 0.01
           }
         ],
@@ -2792,23 +2792,23 @@
         "name": "Muro exterior0.60",
         "layers": [
           {
-            "id": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
+            "material": "4db95cd7-2e6b-4e24-a1ee-5bc286c642d3",
             "e": 0.115
           },
           {
-            "id": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
+            "material": "f3aa9db2-1fba-2bb8-df90-c20da21edd38",
             "e": 0.01
           },
           {
-            "id": "f575f078-723f-7fda-0ed4-497390da2ea1",
+            "material": "f575f078-723f-7fda-0ed4-497390da2ea1",
             "e": 0.08
           },
           {
-            "id": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
+            "material": "27698b6b-44cb-6d93-b8eb-967d1c3c588c",
             "e": 0.04
           },
           {
-            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "material": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
             "e": 0.01
           }
         ],
@@ -2819,15 +2819,15 @@
         "name": "Tabique",
         "layers": [
           {
-            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "material": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
             "e": 0.01
           },
           {
-            "id": "7ab8c325-3bae-c7fb-e51c-815289003f18",
+            "material": "7ab8c325-3bae-c7fb-e51c-815289003f18",
             "e": 0.115
           },
           {
-            "id": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
+            "material": "bc053d6a-98b5-7a5e-5fd4-1aa90b932630",
             "e": 0.01
           }
         ],

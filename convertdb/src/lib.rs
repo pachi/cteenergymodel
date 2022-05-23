@@ -116,7 +116,7 @@ fn consdb_and_groups_from_bdl(bdl: &Data) -> (ConsDb, ConsDbGroups) {
             .iter()
             .cloned()
             .zip(cons.thickness.iter().cloned())
-            .map(|(id, e)| Layer { id, e })
+            .map(|(material, e)| Layer { material, e })
             .collect();
 
         let id = uuid_from_obj(cons);

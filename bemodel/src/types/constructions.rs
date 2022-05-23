@@ -79,7 +79,7 @@ impl ConsDb {
         let used_mats_ids: Vec<Uuid> = self
             .wallcons
             .iter()
-            .flat_map(|cons| cons.layers.iter().map(|l| l.id).collect::<Vec<Uuid>>())
+            .flat_map(|cons| cons.layers.iter().map(|l| l.material).collect::<Vec<Uuid>>())
             .collect();
         self.materials
             .retain(|mat| used_mats_ids.iter().any(|used_id| *used_id == mat.id));
@@ -131,7 +131,7 @@ impl Default for WallCons {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Layer {
     /// ID del material
-    pub id: Uuid,
+    pub material: Uuid,
     /// Espesor, m
     pub e: f32,
 }

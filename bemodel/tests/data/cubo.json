@@ -373,11 +373,11 @@
         "name": "Contacto por defecto",
         "layers": [
           {
-            "id": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
+            "material": "cb6c584f-b667-d6db-2fc8-0e133e9c5f2d",
             "e": 0.3
           },
           {
-            "id": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
+            "material": "325ca1f7-1075-6440-dac4-6e9f2d775a01",
             "e": 0.02
           }
         ],
@@ -388,19 +388,19 @@
         "name": "Fachada por defecto D0.60",
         "layers": [
           {
-            "id": "17c92d86-cb3c-aef5-f628-48e247099509",
+            "material": "17c92d86-cb3c-aef5-f628-48e247099509",
             "e": 0.12
           },
           {
-            "id": "78ebd691-ddae-7e7a-d188-ff67e878be71",
+            "material": "78ebd691-ddae-7e7a-d188-ff67e878be71",
             "e": 0.02
           },
           {
-            "id": "a14db341-a3e0-233e-3897-0e99b620bca1",
+            "material": "a14db341-a3e0-233e-3897-0e99b620bca1",
             "e": 0.05
           },
           {
-            "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+            "material": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
             "e": 0.02
           }
         ],
@@ -411,15 +411,15 @@
         "name": "PIV por defecto",
         "layers": [
           {
-            "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+            "material": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
             "e": 0.02
           },
           {
-            "id": "46b0c377-fd88-4584-7c2d-398659acad1d",
+            "material": "46b0c377-fd88-4584-7c2d-398659acad1d",
             "e": 0.08
           },
           {
-            "id": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
+            "material": "b5b44575-ea28-0353-8bc8-8ad8726ec897",
             "e": 0.02
           }
         ],
