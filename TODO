@@ -22,6 +22,9 @@
   - Identificar habitable / habitable acondicionado / no habitable según perfil del espacio
 - Introducir sistemas
   - `model.systems`
+- Informe de mediciones:
+  - por superficies, agrupando por orientaciones, construcciones, etc
+  - por pesos o volumen? Ver si la definición de materiales es suficiente
 
 Marcar elementos especiales de la ET para hacer override de esos elementos para el cálculo de la K.
 
