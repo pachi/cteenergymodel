@@ -45,7 +45,7 @@ Marcar elementos especiales de la ET para hacer override de esos elementos para 
   - huecos:
     - alto = 1m
     - ancho = superficie / alto
-- Ushwi: transmitancia de huecos con contraventanas activadas (en construcción de hueco)
+- U_w;sht: transmitancia de huecos con contraventanas activadas (en construcción de hueco) - Ver UNE-EN ISO 52016-1, G.2.2.2.2 Window with movable shutter or solar shading device
 - condiciones de uso:
   - nivel de ventilación (n_v: Option<f32> [1/h])
   - consignas (cal, cal_red, ref, ref_red, horas_cal, horas_cal_red, horas_sin, horas_ref, horas_ref_red)
