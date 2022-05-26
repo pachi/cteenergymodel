@@ -1,6 +1,6 @@
 [package]
 name = "bemodel"
-version = "22.5.0"
+version = "22.5.1"
 authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
 edition = "2018"
 description = "Basic data model for energy modelling of buildings"

@@ -361,6 +361,34 @@ impl Wall {
                 // - Suelos en contacto con sótanos no acondicionados / no habitables en contacto con el terreno - ISO 13370:2010 (9.4)
                 // - Elementos en contacto con espacios no acondicionados / no habitables - UNE-EN ISO 6946:2007 (5.4.3)
                 let space = model.get_space(self.space)?;
+                let tilt = Tilt::from(self);
+
+                // Casos sin espacio adyacente (probablemente modelizados como resistencia adicional)
+                if self.next_to.is_none() {
+                    let R_f = match tilt {
+                        BOTTOM => {
+                            // Flujo descendente
+                            resistance? + 2.0 * RSI_DESCENDENTE
+                        }
+                        TOP => {
+                            // Flujo ascendente
+                            resistance? + 2.0 * RSI_ASCENDENTE
+                        }
+                        SIDE => {
+                            // Flujo horizontal
+                            resistance? + 2.0 * RSI_HORIZONTAL
+                        }
+                    };
+                    let U = fround2(1.0 / R_f);
+                    debug!(
+                        "{} ({} sin espacio adyacente) U_int={:.2}",
+                        self.name,
+                        position_to_name(Tilt::from(self)),
+                        U
+                    );
+                    return Some(U);
+                }
+
                 let nextto = self.next_to?;
                 let nextspace = model.get_space(nextto)?;
 
@@ -375,7 +403,7 @@ impl Wall {
 
                 // Calculamos la resistencial del elemento R_f, e identificamos el espacio no acondicionado
                 // Resistencia del elemento teniendo en cuenta el flujo de calor (UNE-EN ISO 13789:2017 Tabla 8)
-                let R_f = match (this_cond, next_cond, Tilt::from(self)) {
+                let R_f = match (this_cond, next_cond, tilt) {
                     // Suelo de espacio acondicionado hacia no acondicionado inferior
                     // Techo de espacio no acondicionado hacia acondicionado superior
                     (true, false, BOTTOM) | (false, true, TOP) => {
