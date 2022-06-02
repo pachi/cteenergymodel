@@ -13,6 +13,8 @@ use flate2::read::GzDecoder;
 use crate::bdl::Data;
 use crate::fileutils::{find_file_in_basedir, read_file};
 
+static LIDERCATSTRZ: &[u8] = include_bytes!("BDCatalogo.bdc.utf8.gz");
+
 /// Datos del archivo .ctehexml
 #[derive(Debug, Default, Clone)]
 pub struct CtehexmlData {
@@ -93,28 +95,41 @@ pub fn find_ctehexml<T: AsRef<str>>(basedir: T) -> Result<Option<PathBuf>, Error
     find_file_in_basedir(basedir, "*.ctehexml")
 }
 
-/// Devuelve contenido de la etiqueta como texto
-fn get_tag_as_str<'a>(parent: &'a roxmltree::Node, tag: &str) -> &'a str {
-    parent
-        .descendants()
-        .find(|n| n.has_tag_name(tag))
-        .and_then(|e| e.text())
-        .unwrap_or("")
-        .trim()
+/// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
+pub fn parse_with_catalog_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
+    // Carga archivo .ctehexml
+    let data = read_file(path.as_ref())?;
+    parse_with_catalog(&data)
 }
 
-/// Devuelve contenido de la etiqueta como f32
-fn get_tag_as_f32(parent: &roxmltree::Node, tag: &str) -> Result<f32, Error> {
-    get_tag_as_str(parent, tag)
-        .parse::<f32>()
-        .map_err(|_e| format_err!("Error al convertir número"))
+/// Lee estructura de datos desde patch de archivo .ctehexml
+pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
+    let utf8data = read_file(path.as_ref())?;
+    parse(&utf8data)
 }
 
-/// Devuelve contenido de la etiqueta como i32
-fn get_tag_as_i32(parent: &roxmltree::Node, tag: &str) -> Result<i32, Error> {
-    get_tag_as_str(parent, tag)
-        .parse::<i32>()
-        .map_err(|_e| format_err!("Error al convertir número"))
+/// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
+pub fn parse_with_catalog(data: &str) -> Result<CtehexmlData, Error> {
+    // Carga datos del .ctehexml
+    let mut ctehexmldata = parse(data)?;
+    let mut db = ctehexmldata.bdldata.db;
+    // Carga datos del catálogo comprimido
+    let catdb = load_lider_catalog()?;
+    db.materials.extend(catdb.materials);
+    db.wallcons.extend(catdb.wallcons);
+    db.wincons.extend(catdb.wincons);
+    db.glasses.extend(catdb.glasses);
+    db.frames.extend(catdb.frames);
+    ctehexmldata.bdldata.db = db;
+    Ok(ctehexmldata)
+}
+
+/// Carga datos del catálogo comprimido de LIDER
+pub fn load_lider_catalog() -> Result<crate::bdl::DB, Error> {
+    let mut gz = GzDecoder::new(LIDERCATSTRZ);
+    let mut dbstring = String::new();
+    gz.read_to_string(&mut dbstring)?;
+    Ok(Data::new(&dbstring)?.db)
 }
 
 /// Lee estructura de datos desde cadena con formato de archivo .ctehexml
@@ -192,7 +207,7 @@ pub fn parse(data: &str) -> Result<CtehexmlData, Error> {
     let sistemas = match definicion_sistemas {
         Some(sis_def_node) => sis_def_node
             .descendants()
-            .find(|n| n.has_tag_name("Sistemas"))
+            .find(|sis_node| sis_node.has_tag_name("Sistemas"))
             .map(|n| {
                 n.children()
                     .map(|c| {
@@ -215,41 +230,26 @@ pub fn parse(data: &str) -> Result<CtehexmlData, Error> {
     })
 }
 
-/// Lee estructura de datos desde patch de archivo .ctehexml
-pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
-    let utf8data = read_file(path.as_ref())?;
-    parse(&utf8data)
+/// Devuelve contenido de la etiqueta como texto
+fn get_tag_as_str<'a>(parent: &'a roxmltree::Node, tag: &str) -> &'a str {
+    parent
+        .descendants()
+        .find(|n| n.has_tag_name(tag))
+        .and_then(|e| e.text())
+        .unwrap_or("")
+        .trim()
 }
 
-static LIDERCATSTRZ: &[u8] = include_bytes!("BDCatalogo.bdc.utf8.gz");
-
-/// Carga datos del catálogo comprimido de LIDER
-pub fn load_lider_catalog() -> Result<crate::bdl::DB, Error> {
-    let mut gz = GzDecoder::new(LIDERCATSTRZ);
-    let mut dbstring = String::new();
-    gz.read_to_string(&mut dbstring)?;
-    Ok(Data::new(&dbstring)?.db)
+/// Devuelve contenido de la etiqueta como f32
+fn get_tag_as_f32(parent: &roxmltree::Node, tag: &str) -> Result<f32, Error> {
+    get_tag_as_str(parent, tag)
+        .parse::<f32>()
+        .map_err(|_e| format_err!("Error al convertir número"))
 }
 
-/// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
-pub fn parse_with_catalog(data: &str) -> Result<CtehexmlData, Error> {
-    // Carga datos del .ctehexml
-    let mut ctehexmldata = parse(data)?;
-    let mut db = ctehexmldata.bdldata.db;
-    // Carga datos del catálogo comprimido
-    let catdb = load_lider_catalog()?;
-    db.materials.extend(catdb.materials);
-    db.wallcons.extend(catdb.wallcons);
-    db.wincons.extend(catdb.wincons);
-    db.glasses.extend(catdb.glasses);
-    db.frames.extend(catdb.frames);
-    ctehexmldata.bdldata.db = db;
-    Ok(ctehexmldata)
-}
-
-/// Carga archivo .ctehexml y extiende con BBDD por defecto de HULC
-pub fn parse_with_catalog_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
-    // Carga archivo .ctehexml
-    let data = read_file(path.as_ref())?;
-    parse_with_catalog(&data)
+/// Devuelve contenido de la etiqueta como i32
+fn get_tag_as_i32(parent: &roxmltree::Node, tag: &str) -> Result<i32, Error> {
+    get_tag_as_str(parent, tag)
+        .parse::<i32>()
+        .map_err(|_e| format_err!("Error al convertir número"))
 }
