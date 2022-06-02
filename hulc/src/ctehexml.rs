@@ -20,8 +20,10 @@ pub struct CtehexmlData {
     pub datos_generales: DatosGenerales,
     /// Datos del BDL
     pub bdldata: Data,
-    /// Bloque de definición de sistemas
-    pub definicion_sistemas: String,
+    /// Definiciones de factores de corrección de sistemas
+    pub factores_correccion_sistemas: Vec<String>,
+    /// Bloques de definición de sistemas
+    pub sistemas: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -95,7 +97,7 @@ pub fn find_ctehexml<T: AsRef<str>>(basedir: T) -> Result<Option<PathBuf>, Error
 fn get_tag_as_str<'a>(parent: &'a roxmltree::Node, tag: &str) -> &'a str {
     parent
         .descendants()
-        .find(|n| n.tag_name().name() == tag)
+        .find(|n| n.has_tag_name(tag))
         .and_then(|e| e.text())
         .unwrap_or("")
         .trim()
@@ -164,7 +166,7 @@ pub fn parse(data: &str) -> Result<CtehexmlData, Error> {
     // BDL Lider
     let entrada_grafica_lider = doc
         .descendants()
-        .find(|n| n.tag_name().name() == "EntradaGraficaLIDER")
+        .find(|n| n.has_tag_name("EntradaGraficaLIDER"))
         .and_then(|e| e.text())
         .unwrap_or("")
         .trim()
@@ -174,16 +176,42 @@ pub fn parse(data: &str) -> Result<CtehexmlData, Error> {
     // Definición de sistemas - Solución temporal sin descender en elementos
     let definicion_sistemas = doc
         .descendants()
-        .find(|n| n.tag_name().name() == "Definicion_Sistema")
-        .and_then(|e| e.text())
-        .unwrap_or("")
-        .trim()
-        .to_string();
+        .find(|n| n.has_tag_name("Definicion_Sistema"));
+
+    let factores_correccion_sistemas = match definicion_sistemas {
+        Some(sis_node) => sis_node
+            .descendants()
+            .filter(|n| n.has_tag_name("CurvaComportamiento"))
+            .filter_map(|n| n.attribute("nombre").map(str::to_string))
+            .collect(),
+        None => vec![],
+    };
+
+    // println!("Factores:\n{:#?}\n\n", factores_correccion_sistemas);
+
+    let sistemas = match definicion_sistemas {
+        Some(sis_def_node) => sis_def_node
+            .descendants()
+            .find(|n| n.has_tag_name("Sistemas"))
+            .map(|n| {
+                n.children()
+                    .map(|c| {
+                        let val = &data[c.range()];
+                        val.to_owned()
+                    })
+                    .collect()
+            })
+            .unwrap_or_default(),
+        None => vec![],
+    };
+
+    println!("Sistemas:\n{:#?}", sistemas);
 
     Ok(CtehexmlData {
         datos_generales,
         bdldata,
-        definicion_sistemas,
+        factores_correccion_sistemas,
+        sistemas,
     })
 }
 
@@ -196,7 +224,7 @@ pub fn parse_from_path<T: AsRef<Path>>(path: T) -> Result<CtehexmlData, Error> {
 static LIDERCATSTRZ: &[u8] = include_bytes!("BDCatalogo.bdc.utf8.gz");
 
 /// Carga datos del catálogo comprimido de LIDER
-pub fn load_lider_catalog() -> Result<crate::bdl::DB, Error>{
+pub fn load_lider_catalog() -> Result<crate::bdl::DB, Error> {
     let mut gz = GzDecoder::new(LIDERCATSTRZ);
     let mut dbstring = String::new();
     gz.read_to_string(&mut dbstring)?;
