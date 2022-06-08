@@ -1,0 +1,38 @@
+﻿#
+# Datos para CTEEPBD generados por la Herramienta Unificada LIDER-CALENER
+#
+#META CTE_AREAREF: 100.00
+#META CTE_LOCALIZACION: PENINSULA
+#META CTE_KEXP: 0
+#META CTE_RED1: 0.000, 1.000, 1.000
+#META CTE_RED2: 0.000, 1.000, 1.000
+#META CTE_COGEN: 0.000, 0.000, 0.000
+#META CTE_ACS_DEMANDA_ANUAL: 557.08
+#
+#
+#
+#
+#
+# __ CALDERA  SIS_EQ1_EQ_Caldera-ACS-Electrica-Defecto 
+ELECTRICIDAD,CONSUMO,EPB,ACS, 58.20, 52.57, 55.96, 52.00, 51.49, 46.58, 44.77, 45.89, 46.58, 52.60, 54.15, 58.20 # CALDERA  SIS_EQ1_EQ_Caldera-ACS-Electrica-Defecto 
+#
+# __ CALEFACTOR ELÉCTRICO  SIS1_EQ1_EQ_CalefaccionElectrica-Defecto 
+ELECTRICIDAD,CONSUMO,EPB,CAL, 3472.02, 2775.74, 2415.17, 1726.27, 969.14, 0.00, 0.00, 0.00, 0.00, 1203.51, 2580.90, 3526.58 # CALEFACTOR ELÉCTRICO  SIS1_EQ1_EQ_CalefaccionElectrica-Defecto 
+#
+# __ SISTEMA SUSTITUCION FICTICIO  Sistema_ideal_EQ1 
+ELECTRICIDAD,CONSUMO,EPB,REF, 0.00, 0.00, 0.00, 0.00, 0.00, 109.90, 262.75, 246.86, 105.05, 0.00, 0.00, 0.00 # EQUIPO IDEAL  Sistema_ideal_EQ1 
+#
+# __ SISTEMA SUSTITUCION GENERAL FICTICIO CAL
+GASNATURAL,CONSUMO,EPB,CAL, 36.83, 27.50, 15.66, 5.13, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 9.67, 36.34 # Consumo sistemas de complemento por potencia insuficiente (CAL)
+ 
+#
+# __ SISTEMA SUSTITUCION GENERAL FICTICIO ACS
+GASNATURAL,CONSUMO,EPB,ACS, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00 # Consumo sistemas de complemento por potencia insuficiente en edificios RES (ACS)
+ 
+#
+# __ VENTILADORES
+ELECTRICIDAD,CONSUMO,EPB,VEN, 66.96, 60.48, 66.96, 64.80, 66.96, 43.20, 44.64, 44.64, 43.20, 66.96, 64.80, 66.96 # Consumo ventiladores 
+ 
+#
+# Fin de fichero de datos para CTEEPBD generado por la HULC
+#
