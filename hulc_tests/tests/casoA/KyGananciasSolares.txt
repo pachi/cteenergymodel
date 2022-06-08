@@ -1,7 +1,7 @@
 ###;Datos para Factor de Pérdidas
 Muro;P01_E01_ME001;30.00;0.30;1.00;Fachada;E ;SATE
 Muro;P01_E01_Med001;30.00;0.80;0.00;ParticionInteriorVertical;O ;Placas de yeso
-Muro;P01_E01_MED002;15.00;0.30;0.00;Adiabático;N ;SATE
+Muro;P01_E01_MED002;15.00;0.30;0.00;Adiabatico;N ;SATE
 Muro;P01_E01_FTER001;50.00;0.49;1.00;Suelo;H ;Solera
 Muro;P01_E01_TER002;15.00;0.48;1.00;Fachada;S ;Solera
 Ventana;P02_E01_PE001_V;2.00;1.26;O ;10.00;0.79;-1.00;1.00;50.00;PVC 2
@@ -13,7 +13,7 @@ Ventana;P02_E01_PE003_V;2.00;1.26;E ;10.00;0.79;-1.00;1.00;50.00;PVC 2
 Muro;P02_E01_PE003;28.00;0.30;1.00;Fachada;E ;SATE
 Muro;P02_E01_ME001;50.00;0.34;1.00;Fachada;E ;Cubierta no transitable
 Muro;P02_E01_FI002;50.00;0.65;0.00;ParticionInteriorHorizontal;E ;Forjado interior
-Muro;P02_E01_MED001;45.00;0.30;0.00;Adiabático;N ;SATE
+Muro;P02_E01_MED001;45.00;0.30;0.00;Adiabatico;N ;SATE
 Ventana;P03_E01_PE006_V;2.00;1.26;O ;10.00;0.79;-1.00;1.00;50.00;PVC 2
 Muro;P03_E01_PE006;28.00;0.30;1.00;Fachada;O ;SATE
 Ventana;P03_E01_PE007_V;2.00;1.26;S ;10.00;0.79;-1.00;1.00;50.00;PVC 2
@@ -22,14 +22,14 @@ Muro;P03_E01_PE007;41.00;0.30;1.00;Fachada;S ;SATE
 Ventana;P03_E01_PE008_V;2.00;1.26;E ;10.00;0.79;-1.00;1.00;50.00;PVC 2
 Muro;P03_E01_PE008;28.00;0.30;1.00;Fachada;E ;SATE
 Muro;P03_E01_FE004;50.00;0.34;1.00;Cubierta;H ;Cubierta no transitable
-Muro;P03_E01_MED001;45.00;0.30;0.00;Adiabático;N ;SATE
+Muro;P03_E01_MED001;45.00;0.30;0.00;Adiabatico;N ;SATE
 Muro;P03_E01_FI001;50.00;0.75;0.00;ParticionInteriorHorizontal;H ;Forjado interior
 Ventana;P04_E01_PE001_V;1.00;1.26;S ;10.00;0.79;-1.00;1.00;50.00;PVC 2
 Muro;P04_E01_PE001;14.00;0.30;1.00;Fachada;S ;SATE
 Ventana;P04_E01_PE002_V;2.00;1.26;E ;10.00;0.79;-1.00;1.00;50.00;PVC 2
 Muro;P04_E01_PE002;28.00;0.30;1.00;Fachada;E ;SATE
 Muro;P04_E01_Med001;30.00;0.68;0.00;ParticionInteriorVertical;O ;Placas de yeso
-Muro;P04_E01_MED001;15.00;0.30;0.00;Adiabático;N ;SATE
+Muro;P04_E01_MED001;15.00;0.30;0.00;Adiabatico;N ;SATE
 Muro;P04_E01C003;25.00;0.30;1.00;Cubierta;H ;SATE
 Muro;P04_E01C004;25.00;0.30;1.00;Cubierta;H ;SATE
 PPTT;50,00;0,000;FRENTE_FORJADO;SDINT
