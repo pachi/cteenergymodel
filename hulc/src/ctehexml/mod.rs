@@ -22,10 +22,6 @@ pub struct CtehexmlData {
     pub datos_generales: DatosGenerales,
     /// Datos del BDL
     pub bdldata: Data,
-    /// Definiciones de factores de corrección de sistemas
-    pub factores_correccion_sistemas: Vec<String>,
-    /// Bloques de definición de sistemas
-    pub sistemas: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -187,57 +183,22 @@ pub fn parse(data: &str) -> Result<CtehexmlData, Error> {
         .trim()
         .to_string();
     let bdldata = Data::new(&entrada_grafica_lider)?;
-
-    // Definición de sistemas - Solución temporal sin descender en elementos
-    let definicion_sistemas = doc
-        .descendants()
-        .find(|n| n.has_tag_name("Definicion_Sistema"));
-
-    let factores_correccion_sistemas = match definicion_sistemas {
-        Some(sis_node) => sis_node
-            .descendants()
-            .filter(|n| n.has_tag_name("CurvaComportamiento"))
-            .filter_map(|n| n.attribute("nombre").map(str::to_string))
-            .collect(),
-        None => vec![],
-    };
-
-    // println!("Factores:\n{:#?}\n\n", factores_correccion_sistemas);
-
-    let sistemas = match definicion_sistemas {
-        Some(sis_def_node) => sis_def_node
-            .descendants()
-            .find(|sis_node| sis_node.has_tag_name("Sistemas"))
-            .map(|n| {
-                n.children()
-                    .map(|c| {
-                        let val = &data[c.range()];
-                        val.to_owned()
-                    })
-                    .collect()
-            })
-            .unwrap_or_default(),
-        None => vec![],
-    };
-
-    println!("Sistemas:\n{:#?}", sistemas);
-
     Ok(CtehexmlData {
         datos_generales,
         bdldata,
-        factores_correccion_sistemas,
-        sistemas,
     })
+}
+/// Devuelve contenido de la etiqueta como texto
+fn get_tag_text<'a>(parent: &'a roxmltree::Node, tag: &str) -> Option<&'a str> {
+    parent
+        .children()
+        .find(|n| n.has_tag_name(tag))
+        .and_then(|e| e.text())
 }
 
 /// Devuelve contenido de la etiqueta como texto
 fn get_tag_as_str<'a>(parent: &'a roxmltree::Node, tag: &str) -> &'a str {
-    parent
-        .descendants()
-        .find(|n| n.has_tag_name(tag))
-        .and_then(|e| e.text())
-        .unwrap_or("")
-        .trim()
+    get_tag_text(parent, tag).unwrap_or("").trim()
 }
 
 /// Devuelve contenido de la etiqueta como f32
@@ -247,9 +208,25 @@ fn get_tag_as_f32(parent: &roxmltree::Node, tag: &str) -> Result<f32, Error> {
         .map_err(|_e| format_err!("Error al convertir número"))
 }
 
+/// Devuelve contenido de la etiqueta como f32
+fn get_tag_as_f32_or_default(parent: &roxmltree::Node, tag: &str) -> f32 {
+    get_tag_as_str(parent, tag)
+        .parse::<f32>()
+        .unwrap_or_default()
+}
+
 /// Devuelve contenido de la etiqueta como i32
 fn get_tag_as_i32(parent: &roxmltree::Node, tag: &str) -> Result<i32, Error> {
     get_tag_as_str(parent, tag)
         .parse::<i32>()
         .map_err(|_e| format_err!("Error al convertir número"))
+}
+
+fn get_tag_as_u32_or(parent: &roxmltree::Node, tag: &str, default: u32) -> u32 {
+    parent
+        .children()
+        .find(|n| n.has_tag_name(tag))
+        .and_then(|n| n.text())
+        .map(|v| v.parse::<u32>().unwrap_or(1))
+        .unwrap_or(default)
 }
