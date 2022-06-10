@@ -264,6 +264,25 @@ pub enum Equipment {
         /// Curvas de rendimiento
         curves: Vec<(String, String)>,
     },
+    /// Ideal constant efficiency heating and/or cooling system
+    IdealGenerator {
+        /// Nombre
+        name: String,
+        /// Vector energético para calor
+        heating_fuel: Option<String>,
+        /// Vector energético para frío
+        cooling_fuel: Option<String>,
+        /// Tipo
+        /// EQ_RendimientoCte
+        kind: String,
+        /// Eficiencia para suministrar calor
+        heating_efficiency: Option<f32>,
+        /// Eficieincia (sensible?) para suministrar frío
+        cooling_efficiency: Option<f32>,
+        /// Multiplicador
+        multiplier: u32,
+    },
+
     HotWaterStorageTank {
         /// Nombre
         name: String,
@@ -733,13 +752,43 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
 
             Equipment::HeatingAndCoolingGenerator {
                 name,
-                fuel,
+                fuel: "Electricidad".to_string(),
                 kind,
                 heating_sizing,
                 cooling_sizing,
                 supply_air_flow,
                 multiplier,
                 curves,
+            }
+        }
+        "EQ_RendimientoCte" => {
+            let da_cal = get_tag_as_str(&node, "daCal") == "true";
+            let da_ref = get_tag_as_str(&node, "daRef") == "true";
+            let (heating_fuel, heating_efficiency) = if da_cal {
+                (
+                    Some(get_tag_as_str(&node, "tipoEnergiaCal").to_string()),
+                    Some(get_tag_as_f32(&node, "renCal").unwrap_or_default()),
+                )
+            } else {
+                (None, None)
+            };
+            let (cooling_fuel, cooling_efficiency) = if da_ref {
+                (
+                    Some(get_tag_as_str(&node, "tipoEnergiaRef").to_string()),
+                    Some(get_tag_as_f32(&node, "renRef").unwrap_or_default()),
+                )
+            } else {
+                (None, None)
+            };
+
+            Equipment::IdealGenerator {
+                name,
+                heating_fuel,
+                cooling_fuel,
+                kind,
+                heating_efficiency,
+                cooling_efficiency,
+                multiplier,
             }
         }
         "EQ_Acumulador_AC" => {
