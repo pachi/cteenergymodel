@@ -9,6 +9,8 @@
 // TODO: Revisar otros tipos de equipos (PV, bombas, ventiladores, etc)
 // TODO: Pensar otros componentes como circuitos y distribución
 // TODO: Traer sistemas GT
+// TODO: Importar sistema exclusivo de ventilación de VyP
+// <DatosGenerales><datosVentilacion>1;1882.800;1858.73;0;0.00;0.00;0.000;0.00;1;4000;3200;8000;4800;12000;5600;16000;6100;0;0;0;0;0;0.0000;0.00;1882.800;0.00;0.00;0.0000</datosVentilacion>
 
 
 use roxmltree::Node;
