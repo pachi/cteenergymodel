@@ -595,12 +595,15 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
     let multiplier = get_tag_as_u32_or(&node, "multiplicador", 1);
 
     match kind {
-        "UT_AguaCaliente" => ZoneEquipment::HotWaterCoil {
-            name,
-            zone,
-            capacity_rated: get_tag_as_f32_or_default(&node, "capNom"),
-            multiplier,
-        },
+        "UT_AguaCaliente" => {
+            let name = node.attribute("nombre").unwrap().to_string();
+            ZoneEquipment::HotWaterCoil {
+                name,
+                zone,
+                capacity_rated: get_tag_as_f32_or_default(&node, "capNom"),
+                multiplier,
+            }
+        }
         "UT_ED_UnidadInterior" => ZoneEquipment::DirectExpansion {
             name,
             zone,
