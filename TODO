@@ -1,5 +1,6 @@
 # TAREAS PENDIENTES
 
+- Añadir a hulc_tests otros edificios con sistemas que no tenemos por ahora, y casos GT
 - Admitir cons, wall, y otros UUID con valor Uuid::default() y eliminar serialización
 - Añadir en props area de sombras
 - Usar overrides de U para elementos especiales de la ET o para cuando se definan lamas en huecos?
@@ -149,3 +150,18 @@ Documentar hipótesis:
 - Suponemos que la altura de los espacios es igual a la altura suelo-suelo de las plantas y descontamos el grosor de forjado superior.
 - Avisar de incoherencias entre altura de espacios y plantas (pensar cómo, p.e. altura de planta < altura de espacio?)
 - Solamente se contempla la obstrucción de la radiación solar directa. Para la radiación difusa se toman valores fijos de los factores de visibilidad del cielo y del suelo (0.5) sin contemplar obstrucciones remotas. Esto tiende a sobreestimar el valor de Fshobst.
+
+- XML
+
+  ```Rust
+    macro_rules! writeln_indented {
+      ($depth:expr, $f:expr, $fmt:expr) => {
+        for _ in 0..$depth { write!($f, "    ")?; }
+        writeln!($f, $fmt)?;
+      };
+      ($depth:expr, $f:expr, $fmt:expr, $($arg:tt)*) => {
+        for _ in 0..$depth { write!($f, "    ")?; }
+        writeln!($f, $fmt, $($arg)*)?;
+      };
+    }
+  ```
