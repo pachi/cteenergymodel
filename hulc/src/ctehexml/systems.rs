@@ -666,9 +666,11 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
         "EQ_Caldera" => {
             // Calderas: Convencional, Electrica, BajaTemperatura, Condensación,
             // Biomasa, ACS-Electrica, ACS-Convencional
-            // TODO: tipoCaldera no se usa para el tipo y está vacío se puede deducir del nombre
-            let kind = get_tag_as_str(&node, "tipoCaldera")
-                .trim_matches('"')
+            // <tipoCaldera> no se usa para el tipo y está vacío se puede deducir del nombre
+            let kind = name
+                .split_once('-')
+                .and_then(|s| s.1.rsplit_once('-').map(|s| s.0))
+                .unwrap_or("")
                 .to_string();
             let heating_sizing = HeatingSizing {
                 capacity: get_tag_as_f32(&node, "capNom").unwrap_or_default(),
