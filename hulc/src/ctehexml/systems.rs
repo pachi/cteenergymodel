@@ -4,6 +4,13 @@
 
 // Interpretación de la información de sistemas del .ctehexml
 
+// TODO: Convertir en Equipment kind a enum y, tal vez unificar generadores (¿salvo equipos ideales?)
+// TODO: Separar acumuladores de generadores en equipos... llevándolo a otro atributo de los sistemas
+// TODO: Revisar otros tipos de equipos (PV, bombas, ventiladores, etc)
+// TODO: Pensar otros componentes como circuitos y distribución
+// TODO: Traer sistemas GT
+
+
 use roxmltree::Node;
 
 use super::xmlhelpers::{
@@ -59,7 +66,8 @@ pub enum System {
         /// Zona atendida
         zone: String,
         // Caudal ventilación (m³/h)
-        // XXX: Parece que solo se usa en sistemas multizona por conductos y se pone a cero
+        // Solo se usa en sistemas multizona por conductos y se pone a cero
+        // Ponemos un assert en la importación
         // ventilation: f32,
         /// Lista de equipos
         equipment: Vec<Equipment>,
@@ -627,7 +635,6 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
 
 /// Equipos de generación a partir del nodo XML
 fn build_equipment(node: roxmltree::Node) -> Equipment {
-    // TODO: convertir kind y/o tipoCaldera a enumeración
     let kind = node.tag_name().name().to_string();
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
     let multiplier = get_tag_as_u32_or(&node, "multiplicador", 1);
@@ -662,7 +669,6 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
         .collect();
 
     match kind.as_str() {
-        // TODO: Unificar generadores
         "EQ_Caldera" => {
             // Calderas: Convencional, Electrica, BajaTemperatura, Condensación,
             // Biomasa, ACS-Electrica, ACS-Convencional
