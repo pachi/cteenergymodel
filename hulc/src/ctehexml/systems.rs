@@ -493,12 +493,15 @@ fn build_system(node: roxmltree::Node) -> System {
                 zone_equipment: zone_equipment.unwrap(),
             }
         }
-        "SIS_ClimatizacionUnizona" => System::SingleZone {
-            name,
-            multiplier,
-            zone: get_tag_text(&node, "zona").map(str::to_string).unwrap(),
-            equipment,
-        },
+        "SIS_ClimatizacionUnizona" => {
+            assert!(get_tag_as_f32_or_default(&node, "vVentilacion") == 0.0);
+            System::SingleZone {
+                name,
+                multiplier,
+                zone: get_tag_text(&node, "zona").map(str::to_string).unwrap(),
+                equipment,
+            }
+        }
         "SIS_Conductos" | "SIS_Conductos2" | "SIS_Autonomo" | "SIS_Autonomo2" => {
             // Conductos 2 y Autonomo2
             let has_heat_recovery = ["Sí tiene", "Si", "Sí"].contains(
