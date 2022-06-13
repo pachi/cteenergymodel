@@ -478,8 +478,10 @@ fn build_system(node: roxmltree::Node) -> System {
         },
         "SIS_Mixto" | "SIS_CalefaccionPorAgua" => {
             // Ignoramos el dato tImpulsionACS porque es redundante con el de la demanda de ACS
-            // if let Ok(dhw_supply_temp) = get_tag_as_f32(&node, "tImpulsionACS") ...
-            let heating_supply_temp = get_tag_as_f32(&node, "tImpulsionCal").unwrap();
+            let heating_supply_temp =
+            // Es sistema mixto, con tImpulsionCal + tImpulsionACS
+            // O es un sistema de calefacción por agua, con tImpulsion
+            get_tag_as_f32(&node, "tImpulsionCal").or_else(|_| get_tag_as_f32(&node, "tImpulsion")).unwrap_or_default();
 
             System::MultizoneHotWater {
                 name,
