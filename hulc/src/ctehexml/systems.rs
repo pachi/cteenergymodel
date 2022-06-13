@@ -84,7 +84,7 @@ pub enum System {
         control_zone: Option<String>,
         /// Caudal ventilación (m³/h)
         /// En sistemas con autónomos es 0
-        oa_flow: f32,
+        outdoor_air_flow: f32,
         /// Caudal de aire retornado desde las zonas acondicionadas (m³/h)
         /// En sistemas con autónomos lo ponemos a 0
         return_air_flow: f32,
@@ -94,7 +94,7 @@ pub enum System {
         /// En autónomos no se indica, y lo ponemos a 0
         heat_recovery_eff: f32,
         /// Freecooling
-        freecooling: Option<String>,
+        economizer: Option<String>,
         /// Lista de unidades terminales
         /// ZoneEquipment::AirDiffuser | DirectExpansion
         zone_equipment: Vec<ZoneEquipment>,
@@ -523,11 +523,11 @@ fn build_system(node: roxmltree::Node) -> System {
                 name,
                 multiplier,
                 control_zone,
-                oa_flow,
+                outdoor_air_flow: oa_flow,
                 return_air_flow,
                 has_heat_recovery,
                 heat_recovery_eff,
-                freecooling,
+                economizer: freecooling,
                 equipment,
                 zone_equipment: zone_equipment.unwrap(),
             }
