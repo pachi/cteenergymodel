@@ -43,6 +43,8 @@ pub enum System {
     MultizoneHotWater {
         /// Nombre
         name: String,
+        /// Lista de equipos
+        equipment: Vec<Equipment>,
         /// Multiplicador
         multiplier: u32,
         /// Temperatura de impulsión calefacción (ºC)
@@ -51,8 +53,6 @@ pub enum System {
         dhw_supply_temp: Option<f32>,
         /// Demanda de ACS
         dhw_demand: Option<Vec<DhwDemand>>,
-        /// Lista de equipos
-        equipment: Vec<Equipment>,
         /// Lista de unidades terminales
         /// ZoneEquipment::HotWaterCoil
         zone_equipment: Vec<ZoneEquipment>,
@@ -63,16 +63,16 @@ pub enum System {
     SingleZone {
         /// Nombre
         name: String,
+        /// Lista de equipos
+        equipment: Vec<Equipment>,
         /// Multiplicador
         multiplier: u32,
-        /// Zona atendida
-        zone: String,
         // Caudal ventilación (m³/h)
         // Solo se usa en sistemas multizona por conductos y se pone a cero
         // Ponemos un assert en la importación
         // ventilation: f32,
-        /// Lista de equipos
-        equipment: Vec<Equipment>,
+        /// Zona atendida
+        zone: String,
     },
 
     /// Sistema multizona por conductos o expansión directa
@@ -80,6 +80,8 @@ pub enum System {
     MultizoneAir {
         /// Nombre
         name: String,
+        /// Lista de equipos
+        equipment: Vec<Equipment>,
         /// Multiplicador
         multiplier: u32,
         /// Zona de control
@@ -98,8 +100,6 @@ pub enum System {
         heat_recovery_eff: f32,
         /// Freecooling
         freecooling: Option<String>,
-        /// Lista de equipos
-        equipment: Vec<Equipment>,
         /// Lista de unidades terminales
         /// ZoneEquipment::AirDiffuser | DirectExpansion
         zone_equipment: Vec<ZoneEquipment>,
@@ -266,7 +266,7 @@ pub enum Equipment {
         heating_sizing: Option<HeatingSizing>,
         /// Dimensionado para suministrar frío
         cooling_sizing: Option<CoolingSizing>,
-        /// Caudal aire impulsión nominal (m³/h)
+        /// Caudal de aire de impulsión nominal (m³/h)
         /// Solo en equipos aire-aire
         supply_air_flow: Option<f32>,
         /// Multiplicador
@@ -330,21 +330,21 @@ pub struct DhwDemand {
 #[derive(Debug, Clone, PartialEq)]
 pub enum ZoneEquipment {
     /// Direct Expansion Equipment (heating, cooling, ventilation)
-    DirectExpansion {
+    AirTerminalUnit {
         /// Nombre
         name: String,
         /// Zona abastecida
         zone: String,
+        /// Caudal de impulsión (de aire) nominal de la unidad interior (m³/h) (vImpulsionNom),
+        supply_flow_rated: f32,
+        /// Caudal de aire exterior impulsado por la unidad interior (m³/h) (vVentilacion = 0 en vivienda),
+        outdoor_air_flow: f32,
         /// Capacidad total máxima de refrigeración nominal (kW) (capTotRefNom),
         cooling_cap_rated: f32,
         /// Capacidad sensible máxima de refrigeración nominal (kW) (capSenRefNom),
         cooling_sh_cap_rated: f32,
         /// Capacidad calorífica máxima nominal (kW) (capCalNom),
         heating_cap_rated: f32,
-        /// Caudal de impulsión (de aire) nominal de la unidad interior (m³/h) (vImpulsionNom),
-        supply_flow_rated: f32,
-        /// Caudal de aire exterior impulsado por la unidad interior (m³/h) (vVentilacion = 0 en vivienda),
-        oa_flow: f32,
         /// Multiplicador
         multiplier: u32,
     },
@@ -360,15 +360,13 @@ pub enum ZoneEquipment {
         multiplier: u32,
     },
     /// Air diffuser (only ventilation)
-    AirTerminal {
+    AirDiffuser {
         /// Nombre
         name: String,
         /// Zona abastecida
         zone: String,
         /// Caudal de impulsión (de aire) nominal de la unidad interior (m³/h) (vImpulsionNom),
         supply_flow_rated: f32,
-        /// Fracción de aire exterior, -
-        oa_fraction: Option<f32>,
         /// Multiplicador
         multiplier: u32,
     },
@@ -441,6 +439,7 @@ fn build_system(node: roxmltree::Node) -> System {
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
     let multiplier = get_tag_as_u32_or(&node, "multiplicador", 1);
 
+    // Equipos primarios o de almacenamiento
     let equipment = node
         .children()
         .find(|n| n.has_tag_name("equipos"))
@@ -452,7 +451,7 @@ fn build_system(node: roxmltree::Node) -> System {
         })
         .unwrap_or_default();
 
-    // Solo en sistemas que no sean unizona
+    // Secundarios, en sistemas que no son unizona
     let zone_equipment = node
         .children()
         .find(|n| n.has_tag_name("unidades_terminales"))
@@ -574,7 +573,7 @@ fn build_dhwdemand(node: roxmltree::Node) -> DhwDemand {
     }
 }
 
-/// Genera equipos de zona (unidades terminales) a partir de su nodo XML
+/// Secundarios - equipos de zona (unidades terminales) genera a partir de nodo XML
 ///
 /// UT_AGUACALIENTE (UT_RADIADOR?) - "U.T. De Agua Caliente" (Calefacción) ✔
 ///    - Nombre,
@@ -614,28 +613,27 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
                 multiplier,
             }
         }
-        "UT_ED_UnidadInterior" => ZoneEquipment::DirectExpansion {
+        "UT_ED_UnidadInterior" => ZoneEquipment::AirTerminalUnit {
             name,
             zone,
+            supply_flow_rated: get_tag_as_f32_or_default(&node, "vImpulsionNom"),
+            outdoor_air_flow: get_tag_as_f32_or_default(&node, "vVentilacion"),
             cooling_cap_rated: get_tag_as_f32_or_default(&node, "capTotRefNom"),
             cooling_sh_cap_rated: get_tag_as_f32_or_default(&node, "capSenRefNom"),
             heating_cap_rated: get_tag_as_f32_or_default(&node, "capCalNom"),
-            supply_flow_rated: get_tag_as_f32_or_default(&node, "vImpulsionNom"),
-            oa_flow: get_tag_as_f32_or_default(&node, "vVentilacion"),
             multiplier,
         },
-        "UT_ImpulsionAire" => ZoneEquipment::AirTerminal {
+        "UT_ImpulsionAire" => ZoneEquipment::AirDiffuser {
             name,
             zone,
             supply_flow_rated: get_tag_as_f32_or_default(&node, "vImpulsionNom"),
-            oa_fraction: get_tag_as_f32(&node, "proporcionvVentilacion").ok(),
             multiplier,
         },
         _ => panic!("Equipo de zona desconocido: {}", kind),
     }
 }
 
-/// Equipos de generación a partir del nodo XML
+/// Primarios + acumulación - equipos de generación a partir del nodo XML
 fn build_equipment(node: roxmltree::Node) -> Equipment {
     let kind = node.tag_name().name().to_string();
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
