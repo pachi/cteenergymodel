@@ -99,6 +99,27 @@ pub enum System {
         /// ZoneEquipment::AirDiffuser | DirectExpansion
         zone_equipment: Vec<ZoneEquipment>,
     },
+
+    /// Sistema exclusivo de ventilación
+    Doas {
+        /// Nombre
+        name: String,
+        /// Tipo: "DOAS"
+        kind: String,
+        /// Caudal requerido, m³/h
+        required_air_flow: f32,
+        /// Caudal máximo, m³/h
+        capacity: f32,
+        /// Consumo específico
+        spf: f32,
+        /// Eficiencia del sistema de recuperación, -
+        /// Cero si no tiene recuperador
+        heat_recovery_efficiency: f32,
+        /// Tiene bypass térmico?
+        economizer: bool,
+        /// Multiplicador
+        multiplier: u32,
+    },
 }
 
 // Equipos ------------------------------------------------------------
@@ -386,7 +407,7 @@ pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<System>) {
     // println!("Factores:\n{:#?}\n\n", factores_correccion_sistemas);
 
     // Definición de sistemas
-    let sistemas = match systems {
+    let mut sistemas = match systems {
         Some(sis_def_node) => sis_def_node
             .descendants()
             .find(|sis_node| sis_node.has_tag_name("Sistemas"))
@@ -398,6 +419,11 @@ pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<System>) {
             })
             .unwrap_or_default(),
         None => vec![],
+    };
+
+    // Sistema exclusivo de ventilación
+    if let Some(doas) = build_doas(doc) {
+        sistemas.push(doas)
     };
 
     // TODO: Faltan sistemas GT
@@ -815,4 +841,67 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
         }
         _ => panic!("Equipo de zona desconocido: {}", kind),
     }
+}
+
+/// Genera el sistema exclusivo de ventilación, si existe
+fn build_doas(doc: &roxmltree::Document) -> Option<System> {
+    doc.descendants()
+        .find(|n| n.has_tag_name("datosVentilacion"))
+        .and_then(|n| {
+            n.text()
+                .unwrap_or_default()
+                .split(';')
+                .map(str::parse::<f32>)
+                .collect::<Result<Vec<_>, _>>()
+                .ok()
+        })
+        .and_then(|data| {
+            // Si no están todos los datos o el primero es 0 (no hay ventilador) no devolvemos nada
+            if data.len() != 28 || data[0] < 0.1 {
+                return None;
+            };
+            let required_air_flow = data[1];
+
+            let capacity = if data[8] < 0.1 {
+                // Si data[8] es 0 se usa una curva característica
+                // Cogemos el máximo caudal de la curva o el caudal de cálculo
+                let max = [data[9], data[11], data[13], data[15], data[17], data[19]]
+                    .iter()
+                    .fold(data[1], |a, b| a.max(*b));
+                max
+            } else {
+                data[4]
+            };
+
+            // SPF W/(m³/h)
+            let spf = if required_air_flow < f32::EPSILON {
+                0.0
+            } else {
+                // Potencia consumida W / Caudal de cálculo m³/h
+                (10000.0 * data[2] / required_air_flow).round() / 10000.0
+            };
+
+            // sin recuperación = 0, con recuperación y bypass térmico = 10, con recuperación sin bypass térmico = 11
+            let options = data[21];
+            let has_heat_recovery = options > 9.0;
+            // options = 10 es recuperación con bypass
+            let economizer = has_heat_recovery && options < 10.5;
+            let heat_recovery_efficiency = if economizer {
+                (10000.0 * data[27]).round() / 10000.0
+            } else {
+                0.0
+            };
+
+            let fan = System::Doas {
+                name: "Sistema exclusivo de ventilación".to_string(),
+                kind: "DOAS".to_string(),
+                required_air_flow,
+                capacity,
+                spf,
+                heat_recovery_efficiency,
+                economizer,
+                multiplier: 1,
+            };
+            Some(fan)
+        })
 }
