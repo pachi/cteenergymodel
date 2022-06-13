@@ -12,7 +12,6 @@
 // TODO: Importar sistema exclusivo de ventilación de VyP
 // <DatosGenerales><datosVentilacion>1;1882.800;1858.73;0;0.00;0.00;0.000;0.00;1;4000;3200;8000;4800;12000;5600;16000;6100;0;0;0;0;0;0.0000;0.00;1882.800;0.00;0.00;0.0000</datosVentilacion>
 
-
 use roxmltree::Node;
 
 use super::xmlhelpers::{
@@ -31,8 +30,6 @@ pub enum System {
         equipment: Vec<Equipment>,
         /// Multiplicador
         multiplier: u32,
-        /// Temperatura de impulsión ACS (ºC)
-        dhw_supply_temp: f32,
         /// Demanda de ACS
         dhw_demand: Vec<DhwDemand>,
     },
@@ -49,8 +46,6 @@ pub enum System {
         multiplier: u32,
         /// Temperatura de impulsión calefacción (ºC)
         heating_supply_temp: f32,
-        /// Temperatura de impulsión ACS (ºC)
-        dhw_supply_temp: Option<f32>,
         /// Demanda de ACS
         dhw_demand: Option<Vec<DhwDemand>>,
         /// Lista de unidades terminales
@@ -476,27 +471,20 @@ fn build_system(node: roxmltree::Node) -> System {
         "SIS_Acs" => System::Dhw {
             name,
             multiplier,
-            dhw_supply_temp: get_tag_as_f32(&node, "tImpulsion").unwrap(),
+            // ignoramos este dato ya que es redundante con el de la demanda
+            // dhw_supply_temp: get_tag_as_f32(&node, "tImpulsion").unwrap(),
             dhw_demand: dhw_demand.unwrap(),
             equipment,
         },
         "SIS_Mixto" | "SIS_CalefaccionPorAgua" => {
-            let (heating_supply_temp, dhw_supply_temp) =
-                if let Ok(dhw_supply_temp) = get_tag_as_f32(&node, "tImpulsionACS") {
-                    // Es sistema mixto, con tImpulsionCal + tImpulsionACS
-                    let heating_supply_temp = get_tag_as_f32(&node, "tImpulsionCal").unwrap();
-                    (heating_supply_temp, Some(dhw_supply_temp))
-                } else {
-                    // Es un sistema de calefacción por agua, con tImpulsion
-                    let heating_supply_temp = get_tag_as_f32(&node, "tImpulsion").unwrap();
-                    (heating_supply_temp, None)
-                };
+            // Ignoramos el dato tImpulsionACS porque es redundante con el de la demanda de ACS
+            // if let Ok(dhw_supply_temp) = get_tag_as_f32(&node, "tImpulsionACS") ...
+            let heating_supply_temp = get_tag_as_f32(&node, "tImpulsionCal").unwrap();
 
             System::MultizoneHotWater {
                 name,
                 multiplier,
                 heating_supply_temp,
-                dhw_supply_temp,
                 dhw_demand,
                 equipment,
                 zone_equipment: zone_equipment.unwrap(),
