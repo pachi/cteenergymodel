@@ -14,6 +14,7 @@
 
 use roxmltree::Node;
 
+use super::systems_gt::GtSystems;
 use super::xmlhelpers::{
     get_tag_as_f32, get_tag_as_f32_or_default, get_tag_as_str, get_tag_as_u32_or, get_tag_text,
 };
@@ -101,12 +102,13 @@ pub enum System {
     },
 
     /// Sistema exclusivo de ventilación
-    Doas {
+    WholeBuildingDoas {
         /// Nombre
         name: String,
         /// Tipo: "DOAS"
         kind: String,
         /// Caudal requerido, m³/h
+        /// TODO: Eliminar y dejar solo capacidad y consumo específico?
         required_air_flow: f32,
         /// Caudal máximo, m³/h
         capacity: f32,
@@ -426,31 +428,22 @@ pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<System>) {
         sistemas.push(doas)
     };
 
-    // TODO: Faltan sistemas GT
-    // <Definicion_Sistema_GT>
-    //    <Definicion_Sistema_CALENER_GT>
-    //      [!CDATA[$ ** Performance Curves.... ]]
-    //    </Definicion_Sistema_CALENER_GT>
-    //    <Keywords_Iluminacion_Natural_CALENER_GT>
-    //      <![CDATA[$
-    //      $ archivo para preservación de los keywords para iluminación natural
-    //      $
-    //      "P01_E01" = SPACE
-    //      ..
-    //      "P01_E02" = SPACE
-    //      ..
-    //      "P01_E03" = SPACE
-    //      ..
-    //      "P01_E04" = SPACE
-    //      ..
-    //      "P01_E05" = SPACE
-    //      ..
-    //      ]]>
-    //    </Keywords_Iluminacion_Natural_CALENER_GT>
-    // </Definicion_Sistema_GT>
+    // Sistemas GT
+    let gt_systems_str = doc
+        .descendants()
+        .find(|n| n.has_tag_name("Definicion_Sistema_CALENER_GT"))
+        .and_then(|e| e.text())
+        .unwrap_or("")
+        .trim();
+    let gt_systems = GtSystems::new(&gt_systems_str).unwrap();
 
-    println!("Sistemas:\n{:#?}", sistemas);
+    // TODO: eliminar
+    println!("Sistemas:\n{:#?}", gt_systems);
 
+    // TODO: eliminar
+    //println!("Sistemas VyP:\n{:#?}", sistemas);
+
+    // TODO: completar sistemas GT
     (factores_correccion_sistemas, sistemas)
 }
 
@@ -892,7 +885,7 @@ fn build_doas(doc: &roxmltree::Document) -> Option<System> {
                 0.0
             };
 
-            let fan = System::Doas {
+            let fan = System::WholeBuildingDoas {
                 name: "Sistema exclusivo de ventilación".to_string(),
                 kind: "DOAS".to_string(),
                 required_air_flow,

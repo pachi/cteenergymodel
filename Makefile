@@ -4,11 +4,13 @@ run:
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/e4h_medianeras/e4h_medianeras.ctehexml -o e4h_medianeras.json -r e4h_medianeras_results.json
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/casoA/casoa.ctehexml -o caso_a.json -r caso_a_results.json
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/ejemploviv_unif/ejemploviv_unif.ctehexml -o ejemploviv_unif.json -r ejemploviv_unif_results.json
-	$(info [INFO]: Actualizando ejemplos en bemodel/tests/e4h_medianeras)
+	cargo run --bin thor hulc_tests/tests/ejemplo_gt_aerotermia/ejemplo_gt_aerotermia.ctehexml -o ejemplo_gt_aerotermia.json -r ejemplo_gt_erotermia_results.json
+	$(info [INFO]: Actualizando ejemplos en bemodel/tests/data)
 	mv e4h_medianeras.json e4h_medianeras_results.json bemodel/tests/data/
 	mv caso_a.json caso_a_results.json bemodel/tests/data/
 	mv cubo.json cubo_results.json bemodel/tests/data/
 	mv ejemploviv_unif.json ejemploviv_unif_results.json bemodel/tests/data/
+	mv ejemplo_gt_aerotermia.json ejemplo_gt_aerotermia_results.json bemodel/tests/data/
 runskip:
 	cargo run -- --skip-extra hulc_tests/tests/e4h_medianeras/ > e4h_medianeras.json.skip
 	cargo run -- --skip-extra hulc_tests/tests/casoA/ > salida_a.json.skip
