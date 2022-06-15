@@ -56,6 +56,8 @@ impl std::str::FromStr for BdlBlock {
             .collect::<Vec<_>>();
         let [name, btype] = if let [name, btype] = headlineparts.as_slice() {
             [*name, *btype]
+        } else if !headlineparts.is_empty() && headlineparts[0].ends_with("-REPORT") {
+            [headlineparts[0], headlineparts[0]]
         } else {
             bail!(
                 "Error al parsear el encabezado '{}'\ndel bloque:\n{:?}",
@@ -80,7 +82,7 @@ impl std::str::FromStr for BdlBlock {
 fn clean_lines(input: &str) -> String {
     input
         .replace("\r\n", "\n") // Normalizar saltos de línea
-        .replace("ÿ", "") // Marcador de LIDER (antiguo)
+        .replace('ÿ', "") // Marcador de LIDER (antiguo)
         .lines()
         .map(str::trim)
         .filter(|l| {
@@ -141,7 +143,12 @@ pub fn build_blocks<T: AsRef<str>>(input: T) -> Result<Vec<BdlBlock>, Error> {
 
     for block in blockstrs {
         // Ignoramos bloques SET-DEFAULT del antiguo LIDER
-        if block.starts_with("SET-DEFAULT") {
+        // Ignora bloques "END", "COMPUTE", "STOP"
+        if block.starts_with("SET-DEFAULT")
+            || block.starts_with("END")
+            || block.starts_with("COMPUTE")
+            || block.starts_with("STOP")
+        {
             continue;
         };
         let mut bdlblock: BdlBlock = block.parse()?;
