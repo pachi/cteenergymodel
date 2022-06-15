@@ -48,6 +48,7 @@ impl GtSystems {
                 // Elementos generales =========================
                 // Valores por defecto, Datos generales, espacio de trabajo y edificio
                 "SYSTEM" => {
+                    // systems.insert(block.name.clone(), GtSystem::try_from(block)?);
                     systems.insert(block.btype.clone(), block);
                 }
                 // Horarios ----------
