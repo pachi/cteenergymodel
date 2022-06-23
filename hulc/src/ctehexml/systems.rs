@@ -9,8 +9,8 @@
 // TODO: Revisar otros tipos de equipos (PV, bombas, ventiladores, etc)
 // TODO: Pensar otros componentes como circuitos y distribución
 // TODO: Traer sistemas GT
-// TODO: Importar sistema exclusivo de ventilación de VyP
-// <DatosGenerales><datosVentilacion>1;1882.800;1858.73;0;0.00;0.00;0.000;0.00;1;4000;3200;8000;4800;12000;5600;16000;6100;0;0;0;0;0;0.0000;0.00;1882.800;0.00;0.00;0.0000</datosVentilacion>
+// Ver: https://energyplus.net/assets/nrel_custom/pdfs/pdfs_v9.5.0/EnergyPlusEssentials.pdf
+// y esquema de E+ https://energyplus.readthedocs.io/en/latest/schema.html
 
 use roxmltree::Node;
 
@@ -126,127 +126,28 @@ pub enum System {
 
 // Equipos ------------------------------------------------------------
 //
-// Equipo exclusivo ventilación
-//    - en <DatosGenerales><datosVentilacion>1;1882.800;1858.73;0;0.00;0.00;0.000;0.00;1;4000;3200;8000;4800;12000;5600;16000;6100;0;0;0;0;0;0.0000;0.00;1882.800;0.00;0.00;0.0000</datosVentilacion>
-//
-// EQ_ACUMULADOR_AC - "Acumulador Agua Caliente" - ✔
-//    - Nombre (nombre + nombre usuario)
-//      Volumen del depósito en litros (volumen),
-//      Coeficiente de pérdidas global del depósito, UA (W/ºC) (UA),
-//      Temperatura de consigna baja del depósito (ºC=80) (tConsignaBaja),
-//      Temperatura de consigna alta del depósito (ºC=60) (tConsignaAlta),
-//      // ¿Temperatura de entrada del agua de red (temperaturaEntrada = según climas)?,
-//      // ¿Temperatura del ambiente exterior (temperaturaAmbiente = 25ºC)?, multiplicador
-// EQ_CALDERA - "Caldera eléctrica o de combustible" - ✔
-//    - Nombre,
-//      Capacidad total nominal (kW) (capNom),
-//      Rendimiento Nominal (basado en PCI) (renNom),
-//      Tipo de energía (tipoEnergia),
-//      // multiplicador=1
-//    - Capacidad en función de la temperatura de impulsión (cap_T),
-//      Rendimiento nominal en función de la temperatura de impulsión (ren_T),
-//      Rendimiento en funcion de la carga parcial en términos de potencia (ren_FCP_Potencia),
-//      Rendimiento en funcion de la carga parcial en términos de tiempo (ren_FCP_Tiempo)
-// EQ_CALEFACCIONELECTRICA - "Calefacción eléctrica unizona" - "Electricidad" - ✔
-//    - Nombre (nombre + nombre usuario)
-//      Tipo de energía (tipoEnergia="Electricidad"),
-//      Capacidad nominal (kW) (capNom),
-//      Consumo nominal (kW) (conNom),
-//      // ¿Dif. temperatura del termostato (ºC) (dtTermostato = 1)?,
-//      // multiplicador
-//    - Consumo a carga parcial (con_FCP)
-// EQ_ED_AIREAIRE_SF - "Expansión directa aire-aire sólo frio" - "Electricidad" - ✔
-//    - Nombre,
-//      Tipo de energía (tipoEnergia="Electricidad"),
-//      Capacidad total refrigeración nomminal (kW) (capTotRefNom),
-//      Capacidad sensible refrigeración nominal (kW) (capSenRefNom),
-//      Consumo refrigeración nominal (kW) (conRefNom),
-//      Caudal de aire impulsión nominal (m³/h) (vImpulsionNom),
-//      Tipo energía (tipoEnergia="Electricidad"),
-//      // Dif. temperatura termostato (dtTermostato),
-//      // multiplicador=1
-//    - Capacidad total refrigeración en función de la tempratura (capTotRef_T),
-//      Capacidad total de refrigeración en función de la carga parcial (capTotRef_FCP),
-//      Carga sensible refrigeración en función de temperaturas (capSenRef_T),
-//      Consumo de refrigeración en función de la temperatura (conRef_T),
-//      Consumo de refrigeración en función de la carga parcial (conRef_FCP)
-// EQ_ED_AIREAIRE_BDC - "Expansión directa aire-aire bomba de calor" - "Electricidad" - ✔
-//    - Nombre (nombre + nombre usuario),
-//      Tipo energía (tipoEnergia ="Electricidad"),
-//      Capacidad total refrigeración nominales (kW) (capTotRefNom),
-//      Capacidad sensible refrigeración nominal (kW) (capSenRefNom),
-//      Consumo refrigeración nominal (kW) (conRefNom),
-//      Capacidad calefacción nominal (kW) (capCalNom),
-//      Consumo calefacción nominal (kW) (conCalNom),
-//      Caudal aire impulsión nominal (m³/h) (vImpulsionNom),
-//      // ¿Volumen de ventilación? (vVentilacion=0),
-//      // Dif. temperatura termostato (dtTermostato=1),
-//      // multiplicador
-//    - Capacidad total refrigeración en función temperaturas (capTotRef_T),
-//      Capacidad total de refrigeración en función de la carga parcial (capTotRef_FCP),
-//      Carga sensible refrigeración en función de temperaturas (capSenRef_T),
-//      Capacidad de calefacción en función de la temperatura (capCal_T),
-//      Consumo de refrigeración en función de la temperatura (conRef_T),
-//      Consumo de refrigeración en función de la carga parcial (conRef_FCP),
-//      Consumo calefacción en función de la temperatura (conCal_T),
-//      Consumo de calefacción en función de la carga parcial (conCal_FCP),
-// EQ_ED_AIREAGUA_BDC - "Expansión directa bomba de calor aire-agua" - "Electricidad" - ✔
-//    - Nombre (nombre + nombre usuario)
-//      Tipo energía (tipoEnergia ="Electricidad"),
-//      Capacidad nominal (kW) (capNom),
-//      Consumo nominal (kW) (conNom),
-//      // ¿Temperatura de impulsión nominal? (tImpulsionNom),
-//      // multiplicador = 1
-//    - Capacidad en función de la T (cap_T),
-//      Consumo en función de la T (con_T),
-//      Consumo en función de la carga parcial (con_FCP)
-// EQ_ED_UNIDADEXTERIOR - "Unidad exterior en expansión directa" - "Electricidad" - ✔
-//    - Nombre (nombre + nombre usuario),
-//      Tipo energía (tipoEnergia ="Electricidad"),
-//      Capacidad total refrigeración en condiciones nominales (kW) (capTotRefNom),
-//      // Capacidad sensible refrigeración nominal (capSenRefNom),
-//      Consumo refrigeración nominal (kW) (conRefNom),
-//      Capacidad calefacción nominal (kW) (capCalNom),
-//      Consumo calefacción nominal (kW) (conCalNom),
-//      // multiplicador
-//    - Capacidad total refrigeración en función temperaturas (capTotRef_T),
-//      Capacidad total de refrigeración en función de la carga parcial (capTotRef_FCP),
-//      Carga sensible refrigeración en función de temperaturas (capSenRef_T),
-//      Consumo de refrigeración en función de la temperatura (conRef_T),
-//      Consumo de refrigeración en función de la carga parcial (conRef_FCP),
-//      Capacidad de calefacción en función de la temperatura (capCal_T),
-//      Consumo calefacción en función de la temperatura (conCal_T),
-//      Consumo de calefacción en función de la carga parcial (conCal_FCP),
-// EQ_RENDIMIENTOCTE - "Rendimiento Constante" - ✔
-//    - Nombre (nombre + nombre usuario)
-//      Suministra Calefacción ? (daCal),
-//      Tipo energía de calefacción (tipoEnergiaCal, "Gasoleo")
-//      Rendimiento de calefacción (basado en PCI, para combustibles) (renCal, 0.9),
-//      Tipo energía de refrigeración (tipoEnergiaRef, "Electricidad")
-//      Suministra Refrigeración ? (daRef),
-//      Rendimiento de refrigeración (renRef, 2.52),
-//      // ¿Volumen ventilación? (vVentilacion),
-//      // multiplicador
 
 /// Parámetros de rendimiento de calefacción
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct HeatingSizing {
-    /// Capacidad calorífica máxima nominal (kW) (capNom),
+    /// Capacidad calorífica máxima nominal (kW)
     capacity: f32,
-    /// Rendimiento nominal (-) (renNom, capNom/conNom),
+    /// Rendimiento nominal (-)
+    /// Relación entre la capacidad nominal y el consumo nominal
     efficiency: f32,
 }
 
 /// Parámetros de rendimiento de refrigeración
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct CoolingSizing {
-    /// Capacidad total refrigeración nomminal (kW) (capTotRefNom),
+    /// Capacidad total refrigeración nomminal (kW)
     capacity: f32,
-    /// Fracción de capacidad sensible de refrigeración respecto a total (-) (capSenRefNom/capTotRefNom),
-    /// En unidades aire-agua o aire-refrigerante ponemos esto a 1.0
-    shr: f32,
-    /// Rendimiento nominal (kW) (capRefNom/conRefNom)
+    /// Rendimiento nominal (kW)
+    /// Relación entre la capacidad nominal y el consumo nominal
     efficiency: f32,
+    /// Fracción de capacidad sensible de refrigeración respecto a la capacidad total (-)
+    /// En unidades aire-agua o aire-refrigerante toma valor 1.0
+    shr: f32,
 }
 
 /// Equipos de zona con refrigerante, agua o aire
@@ -270,7 +171,7 @@ pub enum Equipment {
         curves: Vec<(String, String)>,
     },
 
-    /// Ideal, air to air, air to refrigerant or air to water heat pump or dx system
+    /// Air to air, air to refrigerant or air to water heat pump or dx system
     HeatingAndCoolingGenerator {
         /// Nombre
         name: String,
@@ -558,15 +459,14 @@ fn build_system(node: roxmltree::Node) -> System {
 }
 
 /// Genera demanda de ACS a partir de su nodo XML
-///
-/// DEMANDAACS - "Demanda ACS" - ✔
-/// - Nombre equipo (Nombre)
-///   Consumo total de ACS diario (l/dia) (conACSDiario),
-///   Temperatura de uso (ºC) (TUso=45),
-///   Temperatura (media) del agua de red (ºC) (Tred, según zona climática),
-///   Perfil diario (perfilDiario="1/24"|"Demanda_Hor"),
-///   // multiplicador (viene del sistema)
 fn build_dhwdemand(node: roxmltree::Node) -> DhwDemand {
+    // DEMANDAACS - "Demanda ACS" - ✔
+    // - Nombre equipo (Nombre)
+    //   Consumo total de ACS diario (l/dia) (conACSDiario),
+    //   Temperatura de uso (ºC) (TUso=45),
+    //   Temperatura (media) del agua de red (ºC) (Tred, según zona climática),
+    //   Perfil diario (perfilDiario="1/24"|"Demanda_Hor"),
+    //   // multiplicador (viene del sistema)
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
     let demand = get_tag_as_f32_or_default(&node, "conACSDiario");
     let dhw_temp = get_tag_as_f32_or_default(&node, "TUso");
@@ -583,29 +483,6 @@ fn build_dhwdemand(node: roxmltree::Node) -> DhwDemand {
 }
 
 /// Secundarios - equipos de zona (unidades terminales) genera a partir de nodo XML
-///
-/// UT_AGUACALIENTE (UT_RADIADOR?) - "U.T. De Agua Caliente" (Calefacción) ✔
-///    - Nombre,
-///      Zona abastecida (Zona),
-///      Capacidad nominal o potencia máxima (kW) (capNom),
-///      // Ancho de banda del termostato (ºC) (fijo, dtTermostato = 50.0)
-/// UT_ED_UNIDADINTERIOR - "U.T. Unidad Interior" (Climatiza aire y ventila) - ✔
-///    - Nombre (nombre + nombre usuario),
-///      Zona abastecida (Zona),
-///      Capacidad total máxima de refrigeración nominal (kW) (capTotRefNom),
-///      Capacidad sensible máxima de refrigeración nominal (kW) (capSenRefNom),
-///      Capacidad calorífica máxima nominal (kW) (capCalNom),
-///      Caudal nominal de aire impulsado por la unidad interior (m³/h) (vImpulsionNom),
-///      Caudal de aire exterior impulsado por la unidad interior (m³/h) (vVentilacion = 0 en vivienda),
-///      // ¿Ancho de banda del termostato (ºC) (dtTermostato=1)?,
-///      // multiplicador (multiEspacio * multiPlanta)
-/// UT_IMPULSIONAIRE - "U.T. De impulsión de aire" (Solo impulsa aire, sin vent ni clima) - ✔
-///    - Nombre (nombre + nombre usuario)
-///      Caudal nominal de aire impulsado por la unidad interior (m³/h) (vImpulsionNom),
-///      Zona abastecida (Zona),
-///      // ¿Proporcion ventilación (proporcionvVentilacion=0)?,
-///      // ¿Ancho de banda del termostato (ºC) (dtTermostato=0)?,
-///      // multiplicador
 fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
     let kind = node.tag_name().name();
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
@@ -614,6 +491,11 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
 
     match kind {
         "UT_AguaCaliente" => {
+            // UT_AGUACALIENTE (UT_RADIADOR?) - "U.T. De Agua Caliente" (Calefacción) ✔
+            //    - Nombre,
+            //      Zona abastecida (Zona),
+            //      Capacidad nominal o potencia máxima (kW) (capNom),
+            //      // Ancho de banda del termostato (ºC) (fijo, dtTermostato = 50.0)
             let name = node.attribute("nombre").unwrap().to_string();
             ZoneEquipment::HotWaterCoil {
                 name,
@@ -622,22 +504,43 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
                 multiplier,
             }
         }
-        "UT_ED_UnidadInterior" => ZoneEquipment::AirTerminalUnit {
-            name,
-            zone,
-            supply_flow_rated: get_tag_as_f32_or_default(&node, "vImpulsionNom"),
-            outdoor_air_flow: get_tag_as_f32_or_default(&node, "vVentilacion"),
-            cooling_cap_rated: get_tag_as_f32_or_default(&node, "capTotRefNom"),
-            cooling_sh_cap_rated: get_tag_as_f32_or_default(&node, "capSenRefNom"),
-            heating_cap_rated: get_tag_as_f32_or_default(&node, "capCalNom"),
-            multiplier,
-        },
-        "UT_ImpulsionAire" => ZoneEquipment::AirDiffuser {
-            name,
-            zone,
-            supply_flow_rated: get_tag_as_f32_or_default(&node, "vImpulsionNom"),
-            multiplier,
-        },
+        "UT_ED_UnidadInterior" => {
+            // UT_ED_UNIDADINTERIOR - "U.T. Unidad Interior" (Climatiza aire y ventila) - ✔
+            //    - Nombre (nombre + nombre usuario),
+            //      Zona abastecida (Zona),
+            //      Capacidad total máxima de refrigeración nominal (kW) (capTotRefNom),
+            //      Capacidad sensible máxima de refrigeración nominal (kW) (capSenRefNom),
+            //      Capacidad calorífica máxima nominal (kW) (capCalNom),
+            //      Caudal nominal de aire impulsado por la unidad interior (m³/h) (vImpulsionNom),
+            //      Caudal de aire exterior impulsado por la unidad interior (m³/h) (vVentilacion = 0 en vivienda),
+            //      // ¿Ancho de banda del termostato (ºC) (dtTermostato=1)?,
+            //      // multiplicador (multiEspacio * multiPlanta)
+            ZoneEquipment::AirTerminalUnit {
+                name,
+                zone,
+                supply_flow_rated: get_tag_as_f32_or_default(&node, "vImpulsionNom"),
+                outdoor_air_flow: get_tag_as_f32_or_default(&node, "vVentilacion"),
+                cooling_cap_rated: get_tag_as_f32_or_default(&node, "capTotRefNom"),
+                cooling_sh_cap_rated: get_tag_as_f32_or_default(&node, "capSenRefNom"),
+                heating_cap_rated: get_tag_as_f32_or_default(&node, "capCalNom"),
+                multiplier,
+            }
+        }
+        "UT_ImpulsionAire" => {
+            // UT_IMPULSIONAIRE - "U.T. De impulsión de aire" (Solo impulsa aire, sin vent ni clima) - ✔
+            //    - Nombre (nombre + nombre usuario)
+            //      Caudal nominal de aire impulsado por la unidad interior (m³/h) (vImpulsionNom),
+            //      Zona abastecida (Zona),
+            //      // ¿Proporcion ventilación (proporcionvVentilacion=0)?,
+            //      // ¿Ancho de banda del termostato (ºC) (dtTermostato=0)?,
+            //      // multiplicador
+            ZoneEquipment::AirDiffuser {
+                name,
+                zone,
+                supply_flow_rated: get_tag_as_f32_or_default(&node, "vImpulsionNom"),
+                multiplier,
+            }
+        }
         _ => panic!("Equipo de zona desconocido: {}", kind),
     }
 }
@@ -682,6 +585,18 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             // Calderas: Convencional, Electrica, BajaTemperatura, Condensación,
             // Biomasa, ACS-Electrica, ACS-Convencional
             // <tipoCaldera> no se usa para el tipo y está vacío se puede deducir del nombre
+
+            // EQ_CALDERA - "Caldera eléctrica o de combustible" - ✔
+            //    - Nombre,
+            //      Capacidad total nominal (kW) (capNom),
+            //      Rendimiento Nominal (basado en PCI) (renNom),
+            //      Tipo de energía (tipoEnergia),
+            //      // multiplicador=1
+            //    - Capacidad en función de la temperatura de impulsión (cap_T),
+            //      Rendimiento nominal en función de la temperatura de impulsión (ren_T),
+            //      Rendimiento en funcion de la carga parcial en términos de potencia (ren_FCP_Potencia),
+            //      Rendimiento en funcion de la carga parcial en términos de tiempo (ren_FCP_Tiempo)
+
             let kind = name
                 .split_once('-')
                 .and_then(|s| s.1.rsplit_once('-').map(|s| s.0))
@@ -701,6 +616,14 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             }
         }
         "EQ_CalefaccionElectrica" => {
+            // EQ_CALEFACCIONELECTRICA - "Calefacción eléctrica unizona" - "Electricidad" - ✔
+            //    - Nombre (nombre + nombre usuario)
+            //      Tipo de energía (tipoEnergia="Electricidad"),
+            //      Capacidad nominal (kW) (capNom),
+            //      Consumo nominal (kW) (conNom),
+            //      // ¿Dif. temperatura del termostato (ºC) (dtTermostato = 1)?,
+            //      // multiplicador
+            //    - Consumo a carga parcial (con_FCP)
             let capacity = get_tag_as_f32(&node, "capNom").unwrap_or_default();
             let consumption = get_tag_as_f32(&node, "conNom").unwrap_or(capacity);
             let heating_sizing = if consumption > 0.0 {
@@ -729,6 +652,70 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
         | "EQ_ED_UnidadExterior" => {
             // Aire-aire: EQ_ED_AireAire_SF, EQ_ED_AireAire_BDC,
             // Aire-fluido: EQ_ED_AireAgua_BDC, EQ_ED_UnidadExterior
+
+            // EQ_ED_AIREAIRE_SF - "Expansión directa aire-aire sólo frio" - "Electricidad" - ✔
+            //    - Nombre,
+            //      Tipo de energía (tipoEnergia="Electricidad"),
+            //      Capacidad total refrigeración nomminal (kW) (capTotRefNom),
+            //      Capacidad sensible refrigeración nominal (kW) (capSenRefNom),
+            //      Consumo refrigeración nominal (kW) (conRefNom),
+            //      Caudal de aire impulsión nominal (m³/h) (vImpulsionNom),
+            //      Tipo energía (tipoEnergia="Electricidad"),
+            //      // Dif. temperatura termostato (dtTermostato),
+            //      // multiplicador=1
+            //    - Capacidad total refrigeración en función de la tempratura (capTotRef_T),
+            //      Capacidad total de refrigeración en función de la carga parcial (capTotRef_FCP),
+            //      Carga sensible refrigeración en función de temperaturas (capSenRef_T),
+            //      Consumo de refrigeración en función de la temperatura (conRef_T),
+            //      Consumo de refrigeración en función de la carga parcial (conRef_FCP)
+            // EQ_ED_AIREAIRE_BDC - "Expansión directa aire-aire bomba de calor" - "Electricidad" - ✔
+            //    - Nombre (nombre + nombre usuario),
+            //      Tipo energía (tipoEnergia ="Electricidad"),
+            //      Capacidad total refrigeración nominales (kW) (capTotRefNom),
+            //      Capacidad sensible refrigeración nominal (kW) (capSenRefNom),
+            //      Consumo refrigeración nominal (kW) (conRefNom),
+            //      Capacidad calefacción nominal (kW) (capCalNom),
+            //      Consumo calefacción nominal (kW) (conCalNom),
+            //      Caudal aire impulsión nominal (m³/h) (vImpulsionNom),
+            //      // ¿Volumen de ventilación? (vVentilacion=0),
+            //      // Dif. temperatura termostato (dtTermostato=1),
+            //      // multiplicador
+            //    - Capacidad total refrigeración en función temperaturas (capTotRef_T),
+            //      Capacidad total de refrigeración en función de la carga parcial (capTotRef_FCP),
+            //      Carga sensible refrigeración en función de temperaturas (capSenRef_T),
+            //      Capacidad de calefacción en función de la temperatura (capCal_T),
+            //      Consumo de refrigeración en función de la temperatura (conRef_T),
+            //      Consumo de refrigeración en función de la carga parcial (conRef_FCP),
+            //      Consumo calefacción en función de la temperatura (conCal_T),
+            //      Consumo de calefacción en función de la carga parcial (conCal_FCP),
+            // EQ_ED_AIREAGUA_BDC - "Expansión directa bomba de calor aire-agua" - "Electricidad" - ✔
+            //    - Nombre (nombre + nombre usuario)
+            //      Tipo energía (tipoEnergia ="Electricidad"),
+            //      Capacidad nominal (kW) (capNom),
+            //      Consumo nominal (kW) (conNom),
+            //      // ¿Temperatura de impulsión nominal? (tImpulsionNom),
+            //      // multiplicador = 1
+            //    - Capacidad en función de la T (cap_T),
+            //      Consumo en función de la T (con_T),
+            //      Consumo en función de la carga parcial (con_FCP)
+            // EQ_ED_UNIDADEXTERIOR - "Unidad exterior en expansión directa" - "Electricidad" - ✔
+            //    - Nombre (nombre + nombre usuario),
+            //      Tipo energía (tipoEnergia ="Electricidad"),
+            //      Capacidad total refrigeración en condiciones nominales (kW) (capTotRefNom),
+            //      // Capacidad sensible refrigeración nominal (capSenRefNom),
+            //      Consumo refrigeración nominal (kW) (conRefNom),
+            //      Capacidad calefacción nominal (kW) (capCalNom),
+            //      Consumo calefacción nominal (kW) (conCalNom),
+            //      // multiplicador
+            //    - Capacidad total refrigeración en función temperaturas (capTotRef_T),
+            //      Capacidad total de refrigeración en función de la carga parcial (capTotRef_FCP),
+            //      Carga sensible refrigeración en función de temperaturas (capSenRef_T),
+            //      Consumo de refrigeración en función de la temperatura (conRef_T),
+            //      Consumo de refrigeración en función de la carga parcial (conRef_FCP),
+            //      Capacidad de calefacción en función de la temperatura (capCal_T),
+            //      Consumo calefacción en función de la temperatura (conCal_T),
+            //      Consumo de calefacción en función de la carga parcial (conCal_FCP),
+
             let heating_sizing = if kind.as_str() == "EQ_ED_AireAire_SF" {
                 None
             } else {
@@ -785,6 +772,16 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             }
         }
         "EQ_RendimientoCte" => {
+            // EQ_RENDIMIENTOCTE - "Rendimiento Constante" - ✔
+            //    - Nombre (nombre + nombre usuario)
+            //      Suministra Calefacción ? (daCal),
+            //      Tipo energía de calefacción (tipoEnergiaCal, "Gasoleo")
+            //      Rendimiento de calefacción (basado en PCI, para combustibles) (renCal, 0.9),
+            //      Tipo energía de refrigeración (tipoEnergiaRef, "Electricidad")
+            //      Suministra Refrigeración ? (daRef),
+            //      Rendimiento de refrigeración (renRef, 2.52),
+            //      // ¿Volumen ventilación? (vVentilacion),
+            //      // multiplicador
             let da_cal = get_tag_as_str(&node, "daCal") == "true";
             let da_ref = get_tag_as_str(&node, "daRef") == "true";
             let (heating_fuel, heating_efficiency) = if da_cal {
@@ -815,6 +812,15 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             }
         }
         "EQ_Acumulador_AC" => {
+            // EQ_ACUMULADOR_AC - "Acumulador Agua Caliente" - ✔
+            //    - Nombre (nombre + nombre usuario)
+            //      Volumen del depósito en litros (volumen),
+            //      Coeficiente de pérdidas global del depósito, UA (W/ºC) (UA),
+            //      Temperatura de consigna baja del depósito (ºC=80) (tConsignaBaja),
+            //      Temperatura de consigna alta del depósito (ºC=60) (tConsignaAlta),
+            //      Temperatura de entrada del agua de red (temperaturaEntrada = según climas),
+            //      Temperatura del ambiente exterior (temperaturaAmbiente = 25ºC)?
+            //      multiplicador
             let volume = get_tag_as_f32(&node, "Volumen").unwrap_or_default();
             let ua = get_tag_as_f32(&node, "UA").unwrap_or_default();
             let temp_low = get_tag_as_f32(&node, "tConsignaBaja").unwrap_or_default();
@@ -838,6 +844,9 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
 
 /// Genera el sistema exclusivo de ventilación, si existe
 fn build_doas(doc: &roxmltree::Document) -> Option<System> {
+    // Equipo exclusivo ventilación
+    //    - en <DatosGenerales><datosVentilacion>1;1882.800;1858.73;0;0.00;0.00;0.000;0.00;1;4000;3200;8000;4800;12000;5600;16000;6100;0;0;0;0;0;0.0000;0.00;1882.800;0.00;0.00;0.0000</datosVentilacion>
+    //
     doc.descendants()
         .find(|n| n.has_tag_name("datosVentilacion"))
         .and_then(|n| {
