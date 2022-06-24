@@ -12,9 +12,8 @@
 //! Curioso: https://github.com/protodave/bdl_viz
 
 use std::collections::BTreeMap;
-use std::convert::TryFrom;
 
-use anyhow::{bail, format_err, Error};
+use anyhow::Error;
 use log::warn;
 
 pub use crate::bdl::{build_blocks, BdlBlock};
