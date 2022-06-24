@@ -11,7 +11,11 @@
 // TODO: Traer sistemas GT
 // Ver: https://energyplus.net/assets/nrel_custom/pdfs/pdfs_v9.5.0/EnergyPlusEssentials.pdf
 // y esquema de E+ https://energyplus.readthedocs.io/en/latest/schema.html
+// Ver: https://www.gbxml.org/schema_doc/6.01/GreenBuildingXML_Ver6.01.html#Link105
 
+use std::convert::TryFrom;
+
+use anyhow::{format_err, Error};
 use roxmltree::Node;
 
 use super::systems_gt::GtSystems;
@@ -150,6 +154,55 @@ pub struct CoolingSizing {
     shr: f32,
 }
 
+/// Tipos de equipos
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum EquipmentType {
+    CalderaConvencional,
+    CalderaElectrica,
+    CalderaBajaTemperatura,
+    CalderaCondensacion,
+    CalderaBiomasa,
+    CalderaAcsElectrica,
+    CalderaAcsConvencional,
+    CalefaccionElectrica,
+    ExpansionDirectaAireAireSf,
+    ExpansionDirectaAireAireBdc,
+    ExpansionDirectaAireAguaBdc,
+    ExpansionDirectaUnidadExterior,
+    RendimientoConstante,
+    AcumuladorAguaCaliente,
+}
+
+impl Default for EquipmentType {
+    fn default() -> Self {
+        Self::CalderaConvencional
+    }
+}
+
+impl TryFrom<&str> for EquipmentType {
+    type Error = Error;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        match value {
+            "Convencional" => Ok(Self::CalderaConvencional),
+            "Electrica" => Ok(Self::CalderaElectrica),
+            "BajaTemperatura" => Ok(Self::CalderaBajaTemperatura),
+            "Condensacion" => Ok(Self::CalderaCondensacion),
+            "Biomasa" => Ok(Self::CalderaBiomasa),
+            "ACS-Electrica" => Ok(Self::CalderaAcsElectrica),
+            "ACS-Convencional" => Ok(Self::CalderaAcsConvencional),
+            "EQ_CalefaccionElectrica" => Ok(Self::CalefaccionElectrica),
+            "EQ_ED_AireAire_SF" => Ok(Self::ExpansionDirectaAireAireSf),
+            "EQ_ED_AireAire_BDC" => Ok(Self::ExpansionDirectaAireAireBdc),
+            "EQ_ED_AireAgua_BDC" => Ok(Self::ExpansionDirectaAireAguaBdc),
+            "EQ_ED_UnidadExterior" => Ok(Self::ExpansionDirectaUnidadExterior),
+            "EQ_RendimientoCte" => Ok(Self::RendimientoConstante),
+            "EQ_Acumulador_AC" => Ok(Self::AcumuladorAguaCaliente),
+            _ => Err(format_err!("Tipo de equipo desconocido {}", value)),
+        }
+    }
+}
+
 /// Equipos de zona con refrigerante, agua o aire
 #[derive(Debug, Clone, PartialEq)]
 pub enum Equipment {
@@ -161,8 +214,8 @@ pub enum Equipment {
         fuel: String,
         /// Tipo
         /// Calderas: Convencional, Electrica, BajaTemperatura, Condensación, Biomasa, ACS-Electrica, ACS-Convencional
-        /// EQ_CalefaccionElectrica
-        kind: String,
+        /// + CalefaccionElectrica
+        kind: EquipmentType,
         /// Dimensionado para suministrar calor
         heating_sizing: HeatingSizing,
         /// Multiplicador
@@ -178,9 +231,9 @@ pub enum Equipment {
         /// Vector energético
         fuel: String,
         /// Tipo
-        /// Aire-aire: EQ_ED_AireAire_SF, EQ_ED_AireAire_BDC,
+        /// Aire-aire: ExpansionDirectaAireAireSf, ExpansionDirectaAireAireBdc,
         /// Aire-fluido: EQ_ED_AireAgua_BDC, EQ_ED_UnidadExterior
-        kind: String,
+        kind: EquipmentType,
         /// Dimensionado para suministrar calor
         heating_sizing: Option<HeatingSizing>,
         /// Dimensionado para suministrar frío
@@ -203,7 +256,7 @@ pub enum Equipment {
         cooling_fuel: Option<String>,
         /// Tipo
         /// EQ_RendimientoCte
-        kind: String,
+        kind: EquipmentType,
         /// Eficiencia para suministrar calor
         heating_efficiency: Option<f32>,
         /// Eficieincia (sensible?) para suministrar frío
@@ -245,7 +298,7 @@ pub struct DhwDemand {
     pub schedule: String,
 }
 
-/// Equipos de zona con refrigerante, agua o aire
+/// Equipos terminales (de zona) con refrigerante, agua o aire
 #[derive(Debug, Clone, PartialEq)]
 pub enum ZoneEquipment {
     /// Direct Expansion Equipment (heating, cooling, ventilation)
@@ -342,13 +395,18 @@ pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<System>) {
     println!("Sistemas:\n{:#?}", gt_systems);
 
     // TODO: eliminar
-    //println!("Sistemas VyP:\n{:#?}", sistemas);
+    println!("Sistemas VyP:\n{:#?}", sistemas);
 
     // TODO: completar sistemas GT
     (factores_correccion_sistemas, sistemas)
 }
 
 /// Genera sistema a partir de su nodo XML
+/// Podrían equivaler en E+ a:
+/// https://bigladdersoftware.com/epx/docs/9-6/input-output-reference/group-hvac-templates.html#group----hvac-templates
+/// - HVACTemplate:System:UnitarySystem (el unizona y multizona de aire)
+/// - HVACTemplate:System:DualDuct (el multizona de conductos)
+/// - ¿para ACS?
 fn build_system(node: roxmltree::Node) -> System {
     let kind = node.tag_name().name().to_string();
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
@@ -469,6 +527,7 @@ fn build_dhwdemand(node: roxmltree::Node) -> DhwDemand {
     //   // multiplicador (viene del sistema)
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
     let demand = get_tag_as_f32_or_default(&node, "conACSDiario");
+    // XXX: Llevamos esto al sistema y lo dejamos fuera de aquí?
     let dhw_temp = get_tag_as_f32_or_default(&node, "TUso");
     let input_temp = get_tag_as_f32_or_default(&node, "TRed");
     let schedule = get_tag_as_str(&node, "perfilDiario").to_string();
@@ -547,8 +606,22 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
 
 /// Primarios + acumulación - equipos de generación a partir del nodo XML
 fn build_equipment(node: roxmltree::Node) -> Equipment {
-    let kind = node.tag_name().name().to_string();
+    use EquipmentType::*;
+
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
+    let kind = {
+        let kind_str = node.tag_name().name();
+        if kind_str == "EQ_Caldera" {
+            name.split_once('-')
+                .and_then(|s| s.1.rsplit_once('-').map(|s| s.0))
+                .unwrap_or("")
+        } else {
+            kind_str
+        }
+        .try_into()
+        .unwrap_or_else(|e| panic!("ERROR: {:?}", e))
+    };
+
     let multiplier = get_tag_as_u32_or(&node, "multiplicador", 1);
     let fuel = get_tag_as_str(&node, "tipoEnergia")
         .trim_matches('"')
@@ -580,8 +653,14 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
         })
         .collect();
 
-    match kind.as_str() {
-        "EQ_Caldera" => {
+    match kind {
+        CalderaConvencional
+        | CalderaElectrica
+        | CalderaBajaTemperatura
+        | CalderaCondensacion
+        | CalderaBiomasa
+        | CalderaAcsElectrica
+        | CalderaAcsConvencional => {
             // Calderas: Convencional, Electrica, BajaTemperatura, Condensación,
             // Biomasa, ACS-Electrica, ACS-Convencional
             // <tipoCaldera> no se usa para el tipo y está vacío se puede deducir del nombre
@@ -597,11 +676,6 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             //      Rendimiento en funcion de la carga parcial en términos de potencia (ren_FCP_Potencia),
             //      Rendimiento en funcion de la carga parcial en términos de tiempo (ren_FCP_Tiempo)
 
-            let kind = name
-                .split_once('-')
-                .and_then(|s| s.1.rsplit_once('-').map(|s| s.0))
-                .unwrap_or("")
-                .to_string();
             let heating_sizing = HeatingSizing {
                 capacity: get_tag_as_f32(&node, "capNom").unwrap_or_default(),
                 efficiency: get_tag_as_f32(&node, "renNom").unwrap_or_default(),
@@ -615,7 +689,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 curves,
             }
         }
-        "EQ_CalefaccionElectrica" => {
+        CalefaccionElectrica => {
             // EQ_CALEFACCIONELECTRICA - "Calefacción eléctrica unizona" - "Electricidad" - ✔
             //    - Nombre (nombre + nombre usuario)
             //      Tipo de energía (tipoEnergia="Electricidad"),
@@ -646,10 +720,10 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 curves,
             }
         }
-        "EQ_ED_AireAire_SF"
-        | "EQ_ED_AireAire_BDC"
-        | "EQ_ED_AireAgua_BDC"
-        | "EQ_ED_UnidadExterior" => {
+        ExpansionDirectaAireAireSf
+        | ExpansionDirectaAireAireBdc
+        | ExpansionDirectaAireAguaBdc
+        | ExpansionDirectaUnidadExterior => {
             // Aire-aire: EQ_ED_AireAire_SF, EQ_ED_AireAire_BDC,
             // Aire-fluido: EQ_ED_AireAgua_BDC, EQ_ED_UnidadExterior
 
@@ -716,7 +790,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             //      Consumo calefacción en función de la temperatura (conCal_T),
             //      Consumo de calefacción en función de la carga parcial (conCal_FCP),
 
-            let heating_sizing = if kind.as_str() == "EQ_ED_AireAire_SF" {
+            let heating_sizing = if kind == ExpansionDirectaAireAireSf {
                 None
             } else {
                 let capacity = get_tag_as_f32(&node, "capCalNom").unwrap_or_default();
@@ -753,8 +827,8 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                     efficiency,
                 })
             };
-            let supply_air_flow = match kind.as_str() {
-                "EQ_ED_AireAire_SF" | "EQ_ED_AireAire_BDC" => {
+            let supply_air_flow = match kind {
+                ExpansionDirectaAireAireSf | ExpansionDirectaAireAireBdc => {
                     Some(get_tag_as_f32(&node, "vImpulsionNom").unwrap_or_default())
                 }
                 _ => None,
@@ -771,7 +845,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 curves,
             }
         }
-        "EQ_RendimientoCte" => {
+        RendimientoConstante => {
             // EQ_RENDIMIENTOCTE - "Rendimiento Constante" - ✔
             //    - Nombre (nombre + nombre usuario)
             //      Suministra Calefacción ? (daCal),
@@ -811,7 +885,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 multiplier,
             }
         }
-        "EQ_Acumulador_AC" => {
+        AcumuladorAguaCaliente => {
             // EQ_ACUMULADOR_AC - "Acumulador Agua Caliente" - ✔
             //    - Nombre (nombre + nombre usuario)
             //      Volumen del depósito en litros (volumen),
@@ -838,7 +912,6 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 space_temp,
             }
         }
-        _ => panic!("Equipo de zona desconocido: {}", kind),
     }
 }
 
