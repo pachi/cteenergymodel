@@ -133,10 +133,10 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
                     let (nombre, a, u, orienta, ff) = (vv[1], vv[2], vv[3], vv[4], vv[5]);
                     let (ggln, unknown1, unknown2, infcoeff_100, cons) = if vv.len() > 10 {
                         (
-                            Some(vv[6].replace(",", ".").parse()?),
-                            Some(vv[7].replace(",", ".").parse()?),
-                            Some(vv[8].replace(",", ".").parse()?),
-                            Some(vv[9].replace(",", ".").parse()?),
+                            Some(vv[6].replace(',', ".").parse()?),
+                            Some(vv[7].replace(',', ".").parse()?),
+                            Some(vv[8].replace(',', ".").parse()?),
+                            Some(vv[9].replace(',', ".").parse()?),
                             Some(vv[10].to_string()),
                         )
                     } else {
@@ -146,12 +146,12 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
                         nombre.to_string(),
                         Window {
                             name: nombre.to_string(),
-                            orientation: orienta.replace("O", "W").to_string(),
+                            orientation: orienta.replace('O', "W").to_string(),
                             azimuth_n: 0.0, // Valor temporal, se completa más abajo
                             wall: Default::default(),
-                            a: a.replace(",", ".").parse()?,
-                            u: u.replace(",", ".").parse()?,
-                            ff: ff.replace(",", ".").parse::<f32>()? / 100.0_f32,
+                            a: a.replace(',', ".").parse()?,
+                            u: u.replace(',', ".").parse()?,
+                            ff: ff.replace(',', ".").parse::<f32>()? / 100.0_f32,
                             fshobst: 0.0, // Valor temporal, se completa más abajo
                             ggln,
                             unknown1,
@@ -182,9 +182,9 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
                         nombre.to_string(),
                         Wall {
                             name: nombre.to_string(),
-                            a: a.replace(",", ".").parse()?,
-                            u: u.replace(",", ".").parse()?,
-                            btrx: btrx.replace(",", ".").parse()?,
+                            a: a.replace(',', ".").parse()?,
+                            u: u.replace(',', ".").parse()?,
+                            btrx: btrx.replace(',', ".").parse()?,
                             wtype,
                             orientation,
                             cons,
@@ -202,8 +202,8 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
                         nombre.to_string(),
                         ThermalBridge {
                             name: nombre.to_string(),
-                            l: l.replace(",", ".").parse()?,
-                            psi: psi.replace(",", ".").parse()?,
+                            l: l.replace(',', ".").parse()?,
+                            psi: psi.replace(',', ".").parse()?,
                             sisdim,
                         },
                     );
@@ -237,7 +237,7 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
                 .nth(1)
                 .ok_or_else(|| format_err!("No se encuentra la definición de K global"))?
                 .trim()
-                .replace(",", ".")
+                .replace(',', ".")
                 .parse()?;
             kyg.k = kval;
         }
@@ -253,7 +253,7 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
                     )
                 })?
                 .trim()
-                .replace(",", ".")
+                .replace(',', ".")
                 .parse()?;
             kyg.hfactors.push(val);
         }
