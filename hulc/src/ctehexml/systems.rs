@@ -67,12 +67,13 @@ pub enum System {
         equipment: Vec<Equipment>,
         /// Multiplicador
         multiplier: u32,
+        /// Zona atendida
+        /// En SingleZone siempre es Some<Zona>
+        control_zone: Option<String>,
         // Caudal ventilación (m³/h)
         // Solo se usa en sistemas multizona por conductos y se pone a cero
         // Ponemos un assert en la importación
         // ventilation: f32,
-        /// Zona atendida
-        zone: String,
     },
 
     /// Sistema multizona por conductos o expansión directa
@@ -85,7 +86,7 @@ pub enum System {
         /// Multiplicador
         multiplier: u32,
         /// Zona de control
-        /// Solo conductos
+        /// En equipos de conductos tiene una zona pero no en DX
         control_zone: Option<String>,
         /// Caudal ventilación (m³/h)
         /// En sistemas con autónomos es 0
@@ -500,7 +501,7 @@ fn build_system(node: roxmltree::Node) -> System {
             System::SingleZone {
                 name,
                 multiplier,
-                zone: get_tag_text(&node, "zona").map(str::to_string).unwrap(),
+                control_zone: get_tag_text(&node, "zona").map(str::to_string),
                 equipment,
             }
         }
