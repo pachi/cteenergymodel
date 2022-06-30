@@ -75,3 +75,15 @@ impl GtSystems {
         })
     }
 }
+
+pub fn parse_systems(doc: &roxmltree::Document) -> GtSystems {
+    // Sistemas GT
+    let gt_systems_str = doc
+        .descendants()
+        .find(|n| n.has_tag_name("Definicion_Sistema_CALENER_GT"))
+        .and_then(|e| e.text())
+        .unwrap_or("")
+        .trim();
+    GtSystems::new(&gt_systems_str).unwrap()
+}
+
