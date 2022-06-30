@@ -158,6 +158,7 @@ pub enum EconomizerControl {
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct HeatingSizing {
     /// Capacidad calorífica máxima nominal (kW)
+    /// En equipos ideales se recomienda 9_999_999_999.99 (1.0e11 - 0.01 > 1e10)
     capacity: f32,
     /// Rendimiento nominal (-)
     /// Relación entre la capacidad nominal y el consumo nominal
@@ -167,7 +168,8 @@ pub struct HeatingSizing {
 /// Parámetros de rendimiento de refrigeración
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub struct CoolingSizing {
-    /// Capacidad total refrigeración nomminal (kW)
+    /// Capacidad total refrigeración nominal (kW)
+    /// En equipos ideales se recomienda 9_999_999_999.99 (1.0e11 - 0.01 > 1e10)
     capacity: f32,
     /// Rendimiento nominal (kW)
     /// Relación entre la capacidad nominal y el consumo nominal
@@ -280,10 +282,10 @@ pub enum Equipment {
         /// Tipo
         /// EQ_RendimientoCte
         kind: EquipmentType,
-        /// Eficiencia para suministrar calor
-        heating_efficiency: Option<f32>,
-        /// Eficieincia (sensible?) para suministrar frío
-        cooling_efficiency: Option<f32>,
+        /// Dimensionado para suministrar calor
+        heating_sizing: Option<HeatingSizing>,
+        /// Dimensionado para suministrar frío
+        cooling_sizing: Option<CoolingSizing>,
         /// Multiplicador
         multiplier: u32,
     },
@@ -913,13 +915,25 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 (None, None)
             };
 
+            let heating_sizing = heating_efficiency.map(|efficiency| HeatingSizing {
+                    capacity: 1.0e10 - 0.01,
+                    efficiency,
+                });
+
+            let cooling_sizing = cooling_efficiency.map(|efficiency| CoolingSizing {
+                    capacity: 1.0e11 - 0.01,
+                    /// Suponemos fracción sensible = 1.0 (¿sería mejor 0.7?)
+                    shr: 1.0,
+                    efficiency,
+                });
+
             Equipment::IdealGenerator {
                 name,
                 heating_fuel,
                 cooling_fuel,
                 kind,
-                heating_efficiency,
-                cooling_efficiency,
+                heating_sizing,
+                cooling_sizing,
                 multiplier,
             }
         }
