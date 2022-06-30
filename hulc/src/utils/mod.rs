@@ -4,6 +4,9 @@
 
 // Utilidades varias
 
+pub mod file;
+pub mod xml;
+
 /// Normaliza número a un intervalo arbitrario (wrapping)
 pub fn normalize(value: f32, start: f32, end: f32) -> f32 {
     // ancho del intervalo

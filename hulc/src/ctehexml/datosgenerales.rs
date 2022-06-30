@@ -6,7 +6,7 @@
 
 use anyhow::{format_err, Error};
 
-use super::xmlhelpers::{get_tag_as_f32, get_tag_as_i32, get_tag_as_str};
+use crate::utils::xml::{get_tag_as_f32, get_tag_as_i32, get_tag_as_str};
 
 #[derive(Debug, Clone)]
 /// Datos del bloque DatosGenerales

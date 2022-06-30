@@ -9,5 +9,4 @@ pub mod ctehexml;
 pub mod kyg;
 pub mod tbl;
 
-mod fileutils;
 mod utils;

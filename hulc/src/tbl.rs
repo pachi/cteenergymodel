@@ -29,7 +29,7 @@ use std::{
 
 use anyhow::{bail, format_err, Context, Error};
 
-use crate::fileutils::{find_file_in_basedir, read_latin1_file};
+use crate::utils::file::{find_file_in_basedir, read_latin1_file};
 
 /// Localiza archivo NewBDL_O.txt en el directorio de proyecto basedir
 pub fn find_tbl<T: AsRef<str>>(basedir: T) -> Result<Option<PathBuf>, Error> {

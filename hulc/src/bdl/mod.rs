@@ -60,7 +60,7 @@ pub struct Data {
 impl Data {
     /// Nuevo modelo a partir de path
     pub fn new_from_path<T: AsRef<Path>>(path: T) -> Result<Self, Error> {
-        Self::new(super::fileutils::read_latin1_file(path)?)
+        Self::new(crate::utils::file::read_latin1_file(path)?)
     }
 
     /// Nuevo modelo a partir de str

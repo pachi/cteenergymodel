@@ -6,7 +6,6 @@
 
 mod datosgenerales;
 mod systems;
-mod xmlhelpers;
 
 use std::io::Read;
 use std::path::{Path, PathBuf};
@@ -15,7 +14,7 @@ use anyhow::Error;
 use flate2::read::GzDecoder;
 
 use crate::bdl::Data;
-use crate::fileutils::{find_file_in_basedir, read_file};
+use crate::utils::file::{find_file_in_basedir, read_file};
 
 use datosgenerales::{parse_datos_generales, DatosGenerales};
 use systems::{parse_systems, System};

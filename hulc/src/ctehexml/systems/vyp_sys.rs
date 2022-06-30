@@ -9,7 +9,7 @@ use std::convert::TryFrom;
 use anyhow::{format_err, Error};
 use roxmltree::Node;
 
-use super::super::xmlhelpers::{
+use crate::utils::xml::{
     get_tag_as_f32, get_tag_as_f32_or_default, get_tag_as_str, get_tag_as_u32_or, get_tag_text,
 };
 
