@@ -157,8 +157,10 @@ pub enum EconomizerControl {
 //
 
 /// Parámetros de rendimiento de calefacción
-#[derive(Debug, Copy, Clone, PartialEq)]
-pub struct HeatingSizing {
+#[derive(Debug, Clone, PartialEq)]
+pub struct HeatingParams {
+    /// Vector energético para generar calor
+    fuel: String,
     /// Capacidad calorífica máxima nominal (kW)
     /// En equipos ideales se recomienda 9_999_999_999.99 (1.0e11 - 0.01 > 1e10)
     capacity: f32,
@@ -168,8 +170,10 @@ pub struct HeatingSizing {
 }
 
 /// Parámetros de rendimiento de refrigeración
-#[derive(Debug, Copy, Clone, PartialEq)]
-pub struct CoolingSizing {
+#[derive(Debug, Clone, PartialEq)]
+pub struct CoolingParams {
+    /// Vector energético para generar frío
+    fuel: String,
     /// Capacidad total refrigeración nominal (kW)
     /// En equipos ideales se recomienda 9_999_999_999.99 (1.0e11 - 0.01 > 1e10)
     capacity: f32,
@@ -237,14 +241,12 @@ pub enum Equipment {
     HeatingGenerator {
         /// Nombre
         name: String,
-        /// Vector energético
-        fuel: String,
         /// Tipo
         /// Calderas: Convencional, Electrica, BajaTemperatura, Condensación, Biomasa, ACS-Electrica, ACS-Convencional
         /// + CalefaccionElectrica
         kind: EquipmentType,
-        /// Dimensionado para suministrar calor
-        heating_sizing: HeatingSizing,
+        /// Parámetros de la generación de calor
+        heating: Option<HeatingParams>,
         /// Multiplicador
         multiplier: u32,
         /// Curvas de rendimiento
@@ -255,16 +257,14 @@ pub enum Equipment {
     HeatingAndCoolingGenerator {
         /// Nombre
         name: String,
-        /// Vector energético
-        fuel: String,
         /// Tipo
         /// Aire-aire: ExpansionDirectaAireAireSf, ExpansionDirectaAireAireBdc,
         /// Aire-fluido: EQ_ED_AireAgua_BDC, EQ_ED_UnidadExterior
         kind: EquipmentType,
-        /// Dimensionado para suministrar calor
-        heating_sizing: Option<HeatingSizing>,
-        /// Dimensionado para suministrar frío
-        cooling_sizing: Option<CoolingSizing>,
+        /// Parámetros de la generación de calor
+        heating: Option<HeatingParams>,
+        /// Parámetros de la generación de frío
+        cooling: Option<CoolingParams>,
         /// Caudal de aire de impulsión nominal (m³/h)
         /// Solo en equipos aire-aire
         supply_air_flow: Option<f32>,
@@ -277,17 +277,13 @@ pub enum Equipment {
     IdealGenerator {
         /// Nombre
         name: String,
-        /// Vector energético para calor
-        heating_fuel: Option<String>,
-        /// Vector energético para frío
-        cooling_fuel: Option<String>,
         /// Tipo
         /// EQ_RendimientoCte
         kind: EquipmentType,
-        /// Dimensionado para suministrar calor
-        heating_sizing: Option<HeatingSizing>,
-        /// Dimensionado para suministrar frío
-        cooling_sizing: Option<CoolingSizing>,
+        /// Parámetros de la generación de calor
+        heating: Option<HeatingParams>,
+        /// Parámetros de la generación de frío
+        cooling: Option<CoolingParams>,
         /// Multiplicador
         multiplier: u32,
     },
@@ -721,16 +717,16 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             //      Rendimiento nominal en función de la temperatura de impulsión (ren_T),
             //      Rendimiento en funcion de la carga parcial en términos de potencia (ren_FCP_Potencia),
             //      Rendimiento en funcion de la carga parcial en términos de tiempo (ren_FCP_Tiempo)
-
-            let heating_sizing = HeatingSizing {
+            let heating = Some(HeatingParams {
+                fuel,
                 capacity: get_tag_as_f32(&node, "capNom").unwrap_or_default(),
                 efficiency: get_tag_as_f32(&node, "renNom").unwrap_or_default(),
-            };
+            });
+
             Equipment::HeatingGenerator {
                 name,
-                fuel,
                 kind,
-                heating_sizing,
+                heating,
                 multiplier,
                 curves,
             }
@@ -746,22 +742,23 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             //    - Consumo a carga parcial (con_FCP)
             let capacity = get_tag_as_f32(&node, "capNom").unwrap_or_default();
             let consumption = get_tag_as_f32(&node, "conNom").unwrap_or(capacity);
-            let heating_sizing = if consumption > 0.0 {
-                HeatingSizing {
+            let heating = if consumption > 0.0 {
+                Some(HeatingParams {
+                    fuel,
                     capacity,
                     efficiency: capacity / consumption,
-                }
+                })
             } else {
-                HeatingSizing {
+                Some(HeatingParams {
+                    fuel,
                     capacity,
                     efficiency: 0.0,
-                }
+                })
             };
             Equipment::HeatingGenerator {
                 name,
-                fuel,
                 kind,
-                heating_sizing,
+                heating,
                 multiplier,
                 curves,
             }
@@ -836,7 +833,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             //      Consumo calefacción en función de la temperatura (conCal_T),
             //      Consumo de calefacción en función de la carga parcial (conCal_FCP),
 
-            let heating_sizing = if kind == ExpansionDirectaAireAireSf {
+            let heating = if kind == ExpansionDirectaAireAireSf {
                 None
             } else {
                 let capacity = get_tag_as_f32(&node, "capCalNom").unwrap_or_default();
@@ -846,13 +843,14 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 } else {
                     0.0
                 };
-                Some(HeatingSizing {
+                Some(HeatingParams {
+                    fuel: "Electricidad".to_string(),
                     capacity,
                     efficiency,
                 })
             };
 
-            let cooling_sizing = {
+            let cooling = {
                 let capacity = get_tag_as_f32(&node, "capTotRefNom").unwrap_or_default();
                 let capacity_sensible_heat =
                     get_tag_as_f32(&node, "capSenRefNom").unwrap_or_default();
@@ -867,7 +865,8 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 } else {
                     0.0
                 };
-                Some(CoolingSizing {
+                Some(CoolingParams {
+                    fuel: "Electricidad".to_string(),
                     capacity,
                     shr,
                     efficiency,
@@ -882,10 +881,9 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
 
             Equipment::HeatingAndCoolingGenerator {
                 name,
-                fuel: "Electricidad".to_string(),
                 kind,
-                heating_sizing,
-                cooling_sizing,
+                heating,
+                cooling,
                 supply_air_flow,
                 multiplier,
                 curves,
@@ -904,42 +902,38 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             //      // multiplicador
             let da_cal = get_tag_as_str(&node, "daCal") == "true";
             let da_ref = get_tag_as_str(&node, "daRef") == "true";
-            let (heating_fuel, heating_efficiency) = if da_cal {
-                (
-                    Some(get_tag_as_str(&node, "tipoEnergiaCal").to_string()),
-                    Some(get_tag_as_f32(&node, "renCal").unwrap_or_default()),
-                )
-            } else {
-                (None, None)
-            };
-            let (cooling_fuel, cooling_efficiency) = if da_ref {
-                (
-                    Some(get_tag_as_str(&node, "tipoEnergiaRef").to_string()),
-                    Some(get_tag_as_f32(&node, "renRef").unwrap_or_default()),
-                )
-            } else {
-                (None, None)
-            };
 
-            let heating_sizing = heating_efficiency.map(|efficiency| HeatingSizing {
+            let heating = if da_cal {
+                let fuel = get_tag_as_str(&node, "tipoEnergiaCal").to_string();
+                let efficiency = get_tag_as_f32(&node, "renCal").unwrap_or_default();
+                Some(HeatingParams {
+                    fuel,
                     capacity: 1.0e10 - 0.01,
                     efficiency,
-                });
+                })
+            } else {
+                None
+            };
 
-            let cooling_sizing = cooling_efficiency.map(|efficiency| CoolingSizing {
+            let cooling = if da_ref {
+                let fuel = get_tag_as_str(&node, "tipoEnergiaRef").to_string();
+                let efficiency = get_tag_as_f32(&node, "renRef").unwrap_or_default();
+                Some(CoolingParams {
+                    fuel,
                     capacity: 1.0e11 - 0.01,
                     /// Suponemos fracción sensible = 1.0 (¿sería mejor 0.7?)
                     shr: 1.0,
                     efficiency,
-                });
+                })
+            } else {
+                None
+            };
 
             Equipment::IdealGenerator {
                 name,
-                heating_fuel,
-                cooling_fuel,
                 kind,
-                heating_sizing,
-                cooling_sizing,
+                heating,
+                cooling,
                 multiplier,
             }
         }
