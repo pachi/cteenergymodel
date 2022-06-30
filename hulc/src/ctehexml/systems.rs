@@ -313,6 +313,8 @@ pub enum Equipment {
     },
 }
 
+/// Demanda de ACS
+/// XXX: Esto es más bien un perfil/carga y no tanto un sistema
 #[derive(Debug, Clone, PartialEq)]
 pub struct DhwDemand {
     /// Nombre
@@ -322,7 +324,8 @@ pub struct DhwDemand {
     /// Temperatura de utilización, ºC
     pub dhw_temp: f32,
     /// Temperatura del agua de red, ºC
-    /// Se puede calcular, ver E+ reference "Water Mains Temperatures"
+    /// Se puede calcular
+    /// Ver también E+ reference "Water Mains Temperatures"
     pub water_mains_temp: f32,
     /// Horario para consumo diario
     pub schedule: String,
@@ -486,6 +489,7 @@ fn build_system(node: roxmltree::Node) -> System {
         },
         "SIS_Mixto" | "SIS_CalefaccionPorAgua" => {
             // Ignoramos el dato tImpulsionACS porque es redundante con el de la demanda de ACS
+            // Temperatura de impulsión de calefacción
             let heating_supply_temp =
             // Es sistema mixto, con tImpulsionCal + tImpulsionACS
             // O es un sistema de calefacción por agua, con tImpulsion
