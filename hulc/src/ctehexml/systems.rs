@@ -575,14 +575,14 @@ fn build_dhwdemand(node: roxmltree::Node) -> DhwDemand {
     let demand = get_tag_as_f32_or_default(&node, "conACSDiario");
     // XXX: Llevamos esto al sistema y lo dejamos fuera de aquí?
     let dhw_temp = get_tag_as_f32_or_default(&node, "TUso");
-    let input_temp = get_tag_as_f32_or_default(&node, "TRed");
+    let water_mains_temp = get_tag_as_f32_or_default(&node, "TRed");
     let schedule = get_tag_as_str(&node, "perfilDiario").to_string();
 
     DhwDemand {
         name,
         demand,
         dhw_temp,
-        water_mains_temp: input_temp,
+        water_mains_temp,
         schedule,
     }
 }
