@@ -4,8 +4,8 @@
 
 // Interpretación de la información de sistemas del .ctehexml
 
-// TODO: Convertir en Equipment kind a enum y, tal vez unificar generadores (¿salvo equipos ideales?)
-// TODO: Separar acumuladores de generadores en equipos... llevándolo a otro atributo de los sistemas
+// TODO: unificar generadores de calor y/o frío, salvo equipos ideales (o generar dos con ellos)
+// TODO: ¿Separar acumuladores de generadores en equipos... llevándolo a otro atributo de los sistemas?
 // TODO: Revisar otros tipos de equipos (PV, bombas, ventiladores, etc)
 // TODO: Pensar otros componentes como circuitos y distribución
 // TODO: Traer sistemas GT
@@ -93,24 +93,22 @@ pub enum System {
         /// Caudal de aire retornado desde las zonas acondicionadas (m³/h)
         /// En sistemas con autónomos lo ponemos a 0
         return_air_flow: f32,
-        /// Tiene recuperación de calor?
-        has_heat_recovery: bool,
-        /// Eficiencia de la recuperación de calor
-        /// En autónomos no se indica, y lo ponemos a 0
-        heat_recovery_eff: f32,
-        /// Freecooling
-        economizer: Option<String>,
+        /// Opciones
+        /// Recuperación de calor y/o economizador de aire (freecooling)
+        options: Vec<SystemOptions>,
         /// Lista de unidades terminales
         /// ZoneEquipment::AirDiffuser | DirectExpansion
         zone_equipment: Vec<ZoneEquipment>,
     },
 
     /// Sistema exclusivo de ventilación
+    /// XXX: Podríamos tener un Option<Zone> y que None sea global del edificio?
+    /// ¿Esto podría ser un equipo de zona y no un sistema? ¿en qué sistema iría?
+    /// O podría ser un https://bigladdersoftware.com/epx/docs/9-6/input-output-reference/group-hvac-templates.html#hvactemplatesystemdedicatedoutdoorair
+    /// y pensar sus opciones
     WholeBuildingDoas {
         /// Nombre
         name: String,
-        /// Tipo: "DOAS"
-        kind: String,
         /// Caudal requerido, m³/h
         /// TODO: Eliminar y dejar solo capacidad y consumo específico?
         required_air_flow: f32,
@@ -118,14 +116,38 @@ pub enum System {
         capacity: f32,
         /// Consumo específico
         spf: f32,
-        /// Eficiencia del sistema de recuperación, -
-        /// Cero si no tiene recuperador
-        heat_recovery_efficiency: f32,
-        /// Tiene bypass térmico?
-        economizer: bool,
+        /// Opciones
+        /// Recuperación de calor y/o economizador de aire (freecooling)
+        options: Vec<SystemOptions>,
         /// Multiplicador
         multiplier: u32,
     },
+}
+
+/// Opciones en equipos / sistemas
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum SystemOptions {
+    /// Recuperador de calor
+    HeatRecovery {
+        /// Eficiencia del sistema de recuperación de calor, -
+        efficiency: f32,
+    },
+    /// Freecooling
+    /// No diferenciamos entre tipos de economizadores o si son de agua o aire, etc
+    Economizer { control: EconomizerControl },
+}
+
+/// Tipo de control en economizador de aire
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum EconomizerControl {
+    /// Temperatura
+    Temperature,
+    /// Entalpía
+    Enthalpy,
+    /// Temperatura y entalpía
+    TemperatureEnthalpy,
+    /// Desconocido
+    Unknown,
 }
 
 // Equipos ------------------------------------------------------------
@@ -203,7 +225,7 @@ impl TryFrom<&str> for EquipmentType {
     }
 }
 
-/// Equipos de zona con refrigerante, agua o aire
+/// Equipos primarios y de generación
 #[derive(Debug, Clone, PartialEq)]
 pub enum Equipment {
     /// Boiler, Hot water or electric baseboard heating system
@@ -268,6 +290,9 @@ pub enum Equipment {
     HotWaterStorageTank {
         /// Nombre
         name: String,
+        /// Tipo
+        /// EQ_RendimientoCte
+        kind: EquipmentType,
         /// Volumen, m³
         volume: f32,
         /// Coeficiente de pérdidas global del depósito, UA (W/ºC)
@@ -490,14 +515,28 @@ fn build_system(node: roxmltree::Node) -> System {
             let heat_recovery_eff = get_tag_as_f32_or_default(&node, "eficienciaRecuperador");
             // Solo conductos 2
             // Control por temperatura | Control por entalpía
-            let freecooling = get_tag_text(&node, "enfriamientoGratuito")
-                .map(|s| s.trim().trim_matches('"').to_string());
+            let freecooling = get_tag_text(&node, "enfriamientoGratuito").map(|s| {
+                match s.trim().trim_matches('"') {
+                    "Control por temperatura" => EconomizerControl::Temperature,
+                    "Control por entalpía" => EconomizerControl::Enthalpy,
+                    _ => EconomizerControl::Unknown,
+                }
+            });
             // Solo conductos
             let oa_flow = get_tag_as_f32_or_default(&node, "vVentilacion");
             // Solo conductos
             let return_air_flow = get_tag_as_f32_or_default(&node, "vRetorno");
             let control_zone =
                 get_tag_text(&node, "zonaControl").map(|s| s.trim().trim_matches('"').to_string());
+            let mut options = vec![];
+            if has_heat_recovery {
+                options.push(SystemOptions::HeatRecovery {
+                    efficiency: heat_recovery_eff,
+                });
+            }
+            if let Some(control) = freecooling {
+                options.push(SystemOptions::Economizer { control });
+            }
 
             System::MultizoneAir {
                 name,
@@ -505,9 +544,7 @@ fn build_system(node: roxmltree::Node) -> System {
                 control_zone,
                 outdoor_air_flow: oa_flow,
                 return_air_flow,
-                has_heat_recovery,
-                heat_recovery_eff,
-                economizer: freecooling,
+                options,
                 equipment,
                 zone_equipment: zone_equipment.unwrap(),
             }
@@ -904,6 +941,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
 
             Equipment::HotWaterStorageTank {
                 name,
+                kind,
                 volume,
                 ua,
                 temp_low,
@@ -916,6 +954,8 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
 }
 
 /// Genera el sistema exclusivo de ventilación, si existe
+/// Podría ser algo similar a https://bigladdersoftware.com/epx/docs/9-6/input-output-reference/group-hvac-templates.html#hvactemplatesystemdedicatedoutdoorair
+/// y pensar sus opciones.
 fn build_doas(doc: &roxmltree::Document) -> Option<System> {
     // Equipo exclusivo ventilación
     //    - en <DatosGenerales><datosVentilacion>1;1882.800;1858.73;0;0.00;0.00;0.000;0.00;1;4000;3200;8000;4800;12000;5600;16000;6100;0;0;0;0;0;0.0000;0.00;1882.800;0.00;0.00;0.0000</datosVentilacion>
@@ -957,24 +997,34 @@ fn build_doas(doc: &roxmltree::Document) -> Option<System> {
             };
 
             // sin recuperación = 0, con recuperación y bypass térmico = 10, con recuperación sin bypass térmico = 11
-            let options = data[21];
-            let has_heat_recovery = options > 9.0;
+            let opts = data[21];
+            let has_heat_recovery = opts > 9.0;
             // options = 10 es recuperación con bypass
-            let economizer = has_heat_recovery && options < 10.5;
+            let economizer = has_heat_recovery && opts < 10.5;
             let heat_recovery_efficiency = if economizer {
                 (10000.0 * data[27]).round() / 10000.0
             } else {
                 0.0
             };
 
+            let mut options = vec![];
+            if has_heat_recovery {
+                options.push(SystemOptions::HeatRecovery {
+                    efficiency: heat_recovery_efficiency,
+                });
+            }
+            if economizer {
+                options.push(SystemOptions::Economizer {
+                    control: EconomizerControl::Unknown,
+                });
+            }
+
             let fan = System::WholeBuildingDoas {
                 name: "Sistema exclusivo de ventilación".to_string(),
-                kind: "DOAS".to_string(),
                 required_air_flow,
                 capacity,
                 spf,
-                heat_recovery_efficiency,
-                economizer,
+                options,
                 multiplier: 1,
             };
             Some(fan)
