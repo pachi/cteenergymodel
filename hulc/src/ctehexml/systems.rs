@@ -136,6 +136,8 @@ pub enum SystemOptions {
     /// Freecooling
     /// No diferenciamos entre tipos de economizadores o si son de agua o aire, etc
     Economizer { control: EconomizerControl },
+    // Humidification { control }
+    // Dehumidification { control }
 }
 
 /// Tipo de control en economizador de aire
