@@ -238,26 +238,16 @@ impl TryFrom<&str> for EquipmentType {
 #[derive(Debug, Clone, PartialEq)]
 pub enum Equipment {
     /// Boiler, Hot water or electric baseboard heating system
-    HeatingGenerator {
+    /// Air to air, air to refrigerant or air to water heat pump or dx system
+    /// Ideal (constant efficiency) heating and/or cooling system
+    Generator {
         /// Nombre
         name: String,
         /// Tipo
         /// Calderas: Convencional, Electrica, BajaTemperatura, Condensación, Biomasa, ACS-Electrica, ACS-Convencional
-        /// + CalefaccionElectrica
-        kind: EquipmentType,
-        /// Parámetros de la generación de calor
-        heating: Option<HeatingParams>,
-        /// Multiplicador
-        multiplier: u32,
-        /// Curvas de rendimiento
-        curves: Vec<(String, String)>,
-    },
-
-    /// Air to air, air to refrigerant or air to water heat pump or dx system
-    HeatingAndCoolingGenerator {
-        /// Nombre
-        name: String,
-        /// Tipo
+        /// Calefacción eléctrica: CalefaccionElectrica
+        /// Sistema ideal de rendimiento constante: EQ_RendimientoCte
+        /// Sistemas aire-aire, aire-refrigerante, aire-agua o expansión directa
         /// Aire-aire: ExpansionDirectaAireAireSf, ExpansionDirectaAireAireBdc,
         /// Aire-fluido: EQ_ED_AireAgua_BDC, EQ_ED_UnidadExterior
         kind: EquipmentType,
@@ -272,20 +262,6 @@ pub enum Equipment {
         multiplier: u32,
         /// Curvas de rendimiento
         curves: Vec<(String, String)>,
-    },
-    /// Ideal constant efficiency heating and/or cooling system
-    IdealGenerator {
-        /// Nombre
-        name: String,
-        /// Tipo
-        /// EQ_RendimientoCte
-        kind: EquipmentType,
-        /// Parámetros de la generación de calor
-        heating: Option<HeatingParams>,
-        /// Parámetros de la generación de frío
-        cooling: Option<CoolingParams>,
-        /// Multiplicador
-        multiplier: u32,
     },
 
     HotWaterStorageTank {
@@ -723,10 +699,12 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 efficiency: get_tag_as_f32(&node, "renNom").unwrap_or_default(),
             });
 
-            Equipment::HeatingGenerator {
+            Equipment::Generator {
                 name,
                 kind,
                 heating,
+                cooling: None,
+                supply_air_flow: None,
                 multiplier,
                 curves,
             }
@@ -755,10 +733,12 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                     efficiency: 0.0,
                 })
             };
-            Equipment::HeatingGenerator {
+            Equipment::Generator {
                 name,
                 kind,
                 heating,
+                cooling: None,
+                supply_air_flow: None,
                 multiplier,
                 curves,
             }
@@ -879,7 +859,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 _ => None,
             };
 
-            Equipment::HeatingAndCoolingGenerator {
+            Equipment::Generator {
                 name,
                 kind,
                 heating,
@@ -929,12 +909,14 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 None
             };
 
-            Equipment::IdealGenerator {
+            Equipment::Generator {
                 name,
                 kind,
                 heating,
                 cooling,
+                supply_air_flow: None,
                 multiplier,
+                curves: vec![],
             }
         }
         AcumuladorAguaCaliente => {
