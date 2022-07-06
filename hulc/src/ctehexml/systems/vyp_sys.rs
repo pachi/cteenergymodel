@@ -14,8 +14,9 @@ use crate::utils::xml::{
 };
 
 use super::{
-    CoolingParams, DhwDemand, EconomizerControl, Equipment, EquipmentType, HeatingParams, System,
-    SystemOptions, ZoneEquipment,
+    CoolingParams, DhwDemand, EconomizerControl, EquipmentType, GenerationEquipment, HeatingParams,
+    HotWaterStorageTank, PhotovoltaicGenerator, WindGenerator, CHPGenerator, SolarThermalGenerator, System, SystemOptions,
+    ThermalGenerator, ZoneEquipment,
 };
 
 impl TryFrom<&str> for EquipmentType {
@@ -80,6 +81,11 @@ pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<System>) {
         sistemas.push(doas)
     };
 
+    let mut onsiteprod = build_onsite_prod(doc);
+    if !onsiteprod.is_empty() {
+        sistemas.append(&mut onsiteprod)
+    }
+
     (factores_correccion_sistemas, sistemas)
 }
 
@@ -101,7 +107,7 @@ fn build_system(node: roxmltree::Node) -> System {
         .map(|n| {
             n.children()
                 .filter(Node::is_element)
-                .map(build_equipment)
+                .filter_map(build_generation_equipment)
                 .collect()
         })
         .unwrap_or_default();
@@ -300,7 +306,7 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
 }
 
 /// Primarios + acumulación - equipos de generación a partir del nodo XML
-fn build_equipment(node: roxmltree::Node) -> Equipment {
+fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipment> {
     use EquipmentType::*;
 
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
@@ -376,7 +382,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 efficiency: get_tag_as_f32(&node, "renNom").unwrap_or_default(),
             });
 
-            Equipment::Generator {
+            Some(GenerationEquipment::ThermalGenerator(ThermalGenerator {
                 name,
                 kind,
                 heating,
@@ -384,7 +390,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 supply_air_flow: None,
                 multiplier,
                 curves,
-            }
+            }))
         }
         CalefaccionElectrica => {
             // EQ_CALEFACCIONELECTRICA - "Calefacción eléctrica unizona" - "Electricidad" - ✔
@@ -410,7 +416,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                     efficiency: 0.0,
                 })
             };
-            Equipment::Generator {
+            Some(GenerationEquipment::ThermalGenerator(ThermalGenerator {
                 name,
                 kind,
                 heating,
@@ -418,7 +424,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 supply_air_flow: None,
                 multiplier,
                 curves,
-            }
+            }))
         }
         ExpansionDirectaAireAireSf
         | ExpansionDirectaAireAireBdc
@@ -536,7 +542,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 _ => None,
             };
 
-            Equipment::Generator {
+            Some(GenerationEquipment::ThermalGenerator(ThermalGenerator {
                 name,
                 kind,
                 heating,
@@ -544,7 +550,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 supply_air_flow,
                 multiplier,
                 curves,
-            }
+            }))
         }
         RendimientoConstante => {
             // EQ_RENDIMIENTOCTE - "Rendimiento Constante" - ✔
@@ -586,7 +592,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 None
             };
 
-            Equipment::Generator {
+            Some(GenerationEquipment::ThermalGenerator(ThermalGenerator {
                 name,
                 kind,
                 heating,
@@ -594,7 +600,7 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
                 supply_air_flow: None,
                 multiplier,
                 curves: vec![],
-            }
+            }))
         }
         AcumuladorAguaCaliente => {
             // EQ_ACUMULADOR_AC - "Acumulador Agua Caliente" - ✔
@@ -613,16 +619,18 @@ fn build_equipment(node: roxmltree::Node) -> Equipment {
             let input_temp = get_tag_as_f32(&node, "temperaturaEntrada").unwrap_or_default();
             let space_temp = get_tag_as_f32(&node, "temperaturaAmbiente").unwrap_or_default();
 
-            Equipment::HotWaterStorageTank {
-                name,
-                kind,
-                volume,
-                ua,
-                temp_low,
-                temp_high,
-                input_temp,
-                space_temp,
-            }
+            Some(GenerationEquipment::HotWaterStorageTank(
+                HotWaterStorageTank {
+                    name,
+                    kind,
+                    volume,
+                    ua,
+                    temp_low,
+                    temp_high,
+                    input_temp,
+                    space_temp,
+                },
+            ))
         }
     }
 }
@@ -703,4 +711,105 @@ fn build_doas(doc: &roxmltree::Document) -> Option<System> {
             };
             Some(fan)
         })
+}
+
+/// Producción eléctrica y térmica insitu
+/// En <DatosGenerales>:
+///     <valMenELE>NO</valMenELE>
+///     <valMenACS>SI</valMenACS>
+///     <valoresMensualesELE>Fotovoltaica insitu;30 UNIDADES HT72-340W, 10,20 Kwp;1139.0;1249.0;1684.0;1719.0;1833.0;1978.0;2165.0;2071.0;1809.0;1429.0;1111.0;954.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0</valoresMensualesELE>
+///     <valoresMensualesACS>Solar Térmica ACS;FOTOTERMIA;1139.0;1249.0;1684.0;1719.0;1833.0;1978.0;2165.0;2071.0;1809.0;1429.0;1111.0;954.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0</valoresMensualesACS>
+///     <potenciaFVInstalada>10</potenciaFVInstalada>
+// TODO: HULC no tiene datos suficientes de estas instalaciones para completar todos los datos
+fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<System> {
+    fn parse_ele_prod(data: &str) -> Vec<System> {
+        let mut systems = vec![];
+        for sysdata in data.split(';').collect::<Vec<_>>().as_slice().chunks(14) {
+            let kind = sysdata[0];
+            let name = sysdata[1];
+            // let values = sysdata
+            //     .iter()
+            //     .skip(2)
+            //     .map(|s| s.parse::<f32>().unwrap())
+            //     .collect::<Vec<_>>();
+            match kind {
+                "Ninguno" => continue,
+                "Fotovoltaica insitu" => {
+                    // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
+                    systems.push(System::PhotovoltaicGenerator(PhotovoltaicGenerator {
+                        name: name.to_string(),
+                        ..Default::default()
+                    }))
+                }
+                "Eólica insitu" => {
+                    // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
+                    systems.push(System::WindGenerator(WindGenerator {
+                        name: name.to_string(),
+                        ..Default::default()
+                    }))
+                }
+                "Cogeneración" => {
+                    // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
+                    systems.push(System::CHPGenerator(CHPGenerator {
+                        name: name.to_string(),
+                        // ..Default::default()
+                    }))
+                }
+                _ => {
+                    panic!("XXX: Tipo desconocido: {}", kind);
+                }
+            }
+        }
+        systems
+    }
+
+    fn parse_thermal_prod(data: &str) -> Vec<System> {
+        let mut systems = vec![];
+        for sysdata in data.split(';').collect::<Vec<_>>().as_slice().chunks(14) {
+            let kind = sysdata[0];
+            let name = sysdata[1];
+            // let values = sysdata
+            //     .iter()
+            //     .skip(2)
+            //     .map(|s| s.parse::<f32>().unwrap())
+            //     .collect::<Vec<_>>();
+            match kind {
+                "Ninguno" => continue,
+                "Solar Térmica ACS" => {
+                    // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
+                    systems.push(System::SolarThermalGenerator(SolarThermalGenerator {
+                        name: name.to_string(),
+                        ..Default::default()
+                    }))
+                }
+                _ => {
+                    panic!("XXX: Tipo desconocido: {}", kind);
+                }
+            }
+        }
+        systems
+    }
+
+    let mut gen_systems = vec![];
+    if let Some(n) = doc.descendants().find(|n| n.has_tag_name("valMenELE")) {
+        if let Some("SI") = n.text() {
+            if let Some(n) = doc
+                .descendants()
+                .find(|n| n.has_tag_name("valoresMensualesELE"))
+            {
+                gen_systems.append(&mut parse_ele_prod(n.text().unwrap_or_default()))
+            }
+        };
+    }
+    if let Some(n) = doc.descendants().find(|n| n.has_tag_name("valMenACS")) {
+        if let Some("SI") = n.text() {
+            if let Some(n) = doc
+                .descendants()
+                .find(|n| n.has_tag_name("valoresMensualesACS"))
+            {
+                gen_systems.append(&mut parse_thermal_prod(n.text().unwrap_or_default()))
+            }
+        };
+    }
+    gen_systems
 }

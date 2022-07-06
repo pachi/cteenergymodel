@@ -21,7 +21,7 @@ pub enum System {
         /// Nombre
         name: String,
         /// Lista de equipos
-        equipment: Vec<Equipment>,
+        equipment: Vec<GenerationEquipment>,
         /// Multiplicador
         multiplier: u32,
         /// Demanda de ACS
@@ -35,7 +35,7 @@ pub enum System {
         /// Nombre
         name: String,
         /// Lista de equipos
-        equipment: Vec<Equipment>,
+        equipment: Vec<GenerationEquipment>,
         /// Multiplicador
         multiplier: u32,
         /// Temperatura de impulsión calefacción (ºC)
@@ -53,7 +53,7 @@ pub enum System {
         /// Nombre
         name: String,
         /// Lista de equipos
-        equipment: Vec<Equipment>,
+        equipment: Vec<GenerationEquipment>,
         /// Multiplicador
         multiplier: u32,
         /// Zona atendida
@@ -71,7 +71,7 @@ pub enum System {
         /// Nombre
         name: String,
         /// Lista de equipos
-        equipment: Vec<Equipment>,
+        equipment: Vec<GenerationEquipment>,
         /// Multiplicador
         multiplier: u32,
         /// Zona de control
@@ -112,6 +112,14 @@ pub enum System {
         /// Multiplicador
         multiplier: u32,
     },
+    /// Sistema de generación solar térmica
+    SolarThermalGenerator(SolarThermalGenerator),
+    /// Sistema de generación solar fotovoltaica
+    PhotovoltaicGenerator(PhotovoltaicGenerator),
+    /// Sistema de generación solar térmica
+    WindGenerator(WindGenerator),
+    /// Sistema de generación solar térmica
+    CHPGenerator(CHPGenerator),
 }
 
 /// Opciones en equipos / sistemas
@@ -140,6 +148,105 @@ pub enum EconomizerControl {
     TemperatureEnthalpy,
     /// Desconocido
     Unknown,
+}
+
+/// Tipos de sistemas de generación solar térmica
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum SolarThermalType {
+    ///PlanoSelectivo
+    FlatPlateSelective,
+    /// PlanoNoSelectivo
+    FlatPlateNonSelective,
+    /// TubosDeVacio, ETC
+    EvacuatedTube,
+    /// Termodinámico
+    Thermodynamic,
+    /// Colector de aire
+    AirCollector,
+    /// Otro
+    Other,
+}
+
+impl Default for SolarThermalType {
+    fn default() -> Self {
+        Self::FlatPlateSelective
+    }
+}
+
+/// Sistema de generación solar térmica
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SolarThermalGenerator {
+    /// Nombre / descripción
+    pub name: String,
+    /// Tipo de colector usado
+    pub kind: SolarThermalType,
+    // (PotenciaNominal(0,7kW/m² guía IDAE)?),
+    // potencia_nominal: f32,
+    /// RendimientoOptico [-]
+    pub optical_performance: f32,
+    /// CoeficientePerdidas [W/K·m²]
+    pub losses_coeff: f32,
+    /// SuperficieApertura, [m²]
+    pub surface: f32,
+    /// Orientacion (...)
+    pub orientation: f32,
+    /// Inclinacion (....)
+    pub tilt: f32,
+    /// Volumen de acumulación (l)
+    pub storage_capacity: f32,
+    /// PerdidasPct (%, por sombras)
+    pub losses_pct: f32,
+}
+
+/// Sistema de generación solar fotovoltaica
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct PhotovoltaicGenerator {
+    /// Nombre / descripción
+    pub name: String,
+    /// PotenciaNominal (kW, pico)
+    pub capacity: f32,
+    /// Superficie, m²
+    pub suface: f32,
+    /// Orientacion
+    pub orientation: f32,
+    /// Inclinacion
+    pub tilt: f32,
+    /// Capacidad nominal de acumulación, C_20 (Ah)
+    pub storage_capacity: f32,
+    /// Pérdidas (%)
+    pub losses_pct: f32,
+}
+
+/// Sistema de generación eólica
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct WindGenerator {
+    /// Nombre / descripción
+    pub name: String,
+    /// Potencia máxima, kW
+    pub capacity: f32,
+    /// Velocidad de viento de arranque, m/s
+    pub wind_speed_start: f32,
+    /// Velocidad de viento de parada, m/s
+    pub wind_speed_stop: f32,
+}
+
+/// Sistema de cogeneración
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct CHPGenerator {
+    /// Nombre / descripción
+    pub name: String,
+    // TODO: Ver qué parámetros necesitamos
+    // Tipo de cogenerador: CogenDiesel, CogenFuelCell, CogenGasTurbine
+    // kind: String
+    // Combustible
+    // fuel: String,
+    // Potencia eléctrica máxima, kW
+    // capacity: f32,
+    // Eficiencia térmica, -
+    // efficiency_th: f32,
+    // Eficiencia eléctrica, -
+    // efficiency_el: f32,
+    // curves: xxx
 }
 
 // Equipos ------------------------------------------------------------
@@ -201,58 +308,69 @@ impl Default for EquipmentType {
 
 /// Equipos primarios y de generación
 #[derive(Debug, Clone, PartialEq)]
-pub enum Equipment {
+pub enum GenerationEquipment {
     /// Boiler, Hot water or electric baseboard heating system
     /// Air to air, air to refrigerant or air to water heat pump or dx system
     /// Ideal (constant efficiency) heating and/or cooling system
-    Generator {
-        /// Nombre
-        name: String,
-        /// Tipo
-        /// Calderas: Convencional, Electrica, BajaTemperatura, Condensación, Biomasa, ACS-Electrica, ACS-Convencional
-        /// Calefacción eléctrica: CalefaccionElectrica
-        /// Sistema ideal de rendimiento constante: EQ_RendimientoCte
-        /// Sistemas aire-aire, aire-refrigerante, aire-agua o expansión directa
-        /// Aire-aire: ExpansionDirectaAireAireSf, ExpansionDirectaAireAireBdc,
-        /// Aire-fluido: EQ_ED_AireAgua_BDC, EQ_ED_UnidadExterior
-        kind: EquipmentType,
-        /// Parámetros de la generación de calor
-        heating: Option<HeatingParams>,
-        /// Parámetros de la generación de frío
-        cooling: Option<CoolingParams>,
-        /// Caudal de aire de impulsión nominal (m³/h)
-        /// Solo en equipos aire-aire
-        supply_air_flow: Option<f32>,
-        /// Multiplicador
-        multiplier: u32,
-        /// Curvas de rendimiento
-        curves: Vec<(String, String)>,
-    },
+    ThermalGenerator(ThermalGenerator),
+    /// Hot Water Generation
+    /// TODO: Debería esto estar en otro lado?
+    HotWaterStorageTank(HotWaterStorageTank),
+}
 
-    HotWaterStorageTank {
-        /// Nombre
-        name: String,
-        /// Tipo
-        /// EQ_RendimientoCte
-        kind: EquipmentType,
-        /// Volumen, m³
-        volume: f32,
-        /// Coeficiente de pérdidas global del depósito, UA (W/ºC)
-        ua: f32,
-        /// Temperatura de consigna baja del depósito (ºC=80) (tConsignaBaja)
-        temp_low: f32,
-        /// Temperatura de consigna alta del depósito (ºC=60) (tConsignaAlta)
-        temp_high: f32,
-        /// Temperatura de entrada del agua de red (temperaturaEntrada = según climas)
-        input_temp: f32,
-        /// Temperatura del ambiente exterior (temperaturaAmbiente = 25ºC)
-        space_temp: f32,
-    },
+/// Boiler, Hot water or electric baseboard heating system
+/// Air to air, air to refrigerant or air to water heat pump or dx system
+/// Ideal (constant efficiency) heating and/or cooling system
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct ThermalGenerator {
+    /// Nombre / descripción
+    pub name: String,
+    /// Tipo
+    /// Calderas: Convencional, Electrica, BajaTemperatura, Condensación, Biomasa, ACS-Electrica, ACS-Convencional
+    /// Calefacción eléctrica: CalefaccionElectrica
+    /// Sistema ideal de rendimiento constante: EQ_RendimientoCte
+    /// Sistemas aire-aire, aire-refrigerante, aire-agua o expansión directa
+    /// Aire-aire: ExpansionDirectaAireAireSf, ExpansionDirectaAireAireBdc,
+    /// Aire-fluido: EQ_ED_AireAgua_BDC, EQ_ED_UnidadExterior
+    pub kind: EquipmentType,
+    /// Parámetros de la generación de calor
+    pub heating: Option<HeatingParams>,
+    /// Parámetros de la generación de frío
+    pub cooling: Option<CoolingParams>,
+    /// Caudal de aire de impulsión nominal (m³/h)
+    /// Solo en equipos aire-aire
+    pub supply_air_flow: Option<f32>,
+    /// Multiplicador
+    pub multiplier: u32,
+    /// Curvas de rendimiento
+    pub curves: Vec<(String, String)>,
+}
+
+/// Hot Water Generation
+/// TODO: Debería esto estar en otro lado?
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct HotWaterStorageTank {
+    /// Nombre
+    pub name: String,
+    /// Tipo: AcumuladorAguaCaliente
+    pub kind: EquipmentType,
+    /// Volumen, m³
+    pub volume: f32,
+    /// Coeficiente de pérdidas global del depósito, UA (W/ºC)
+    pub ua: f32,
+    /// Temperatura de consigna baja del depósito (ºC=80) (tConsignaBaja)
+    pub temp_low: f32,
+    /// Temperatura de consigna alta del depósito (ºC=60) (tConsignaAlta)
+    pub temp_high: f32,
+    /// Temperatura de entrada del agua de red (temperaturaEntrada = según climas)
+    pub input_temp: f32,
+    /// Temperatura del ambiente exterior (temperaturaAmbiente = 25ºC)
+    pub space_temp: f32,
 }
 
 /// Demanda de ACS
 /// XXX: Esto es más bien un perfil/carga y no tanto un sistema
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq)]
 pub struct DhwDemand {
     /// Nombre
     pub name: String,
