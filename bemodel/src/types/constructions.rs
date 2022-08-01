@@ -105,7 +105,7 @@ pub struct WallCons {
     /// Capas que forman la construcción de opaco, como lista de tuplas (material, espesor)
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub layers: Vec<Layer>,
-    /// Coeficiente de absortividad solar del elemento opaco (alpha) [0-1]
+    /// Absortividad del elemento opaco (alpha) [0-1]
     pub absorptance: f32,
 }
 
@@ -247,7 +247,7 @@ pub struct Glass {
     /// Nombre
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    /// Conductividad W/m²K
+    /// Transmitancia térmica del vidrio W/m²K
     pub u_value: f32,
     /// Factor solar del vidrio a incidencia normal
     pub g_gln: f32,
