@@ -19,6 +19,8 @@ use log::warn;
 pub use crate::bdl::{build_blocks, BdlBlock};
 pub use crate::bdl::{extract_f32vec, extract_namesvec, AttrMap};
 
+use super::GtSystem;
+
 // ------------------------- BDL ----------------------------
 
 /// Datos del archivo BDL
