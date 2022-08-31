@@ -420,6 +420,7 @@ pub enum ZoneEquipment {
         multiplier: u32,
     },
     /// Air diffuser (only ventilation)
+    /// XXX: Se podría unificar con AirTerminalUnit usando valores nulos de capacidad?
     AirDiffuser {
         /// Nombre
         name: String,
