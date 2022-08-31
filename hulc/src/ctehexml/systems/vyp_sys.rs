@@ -310,14 +310,20 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
     use EquipmentType::*;
 
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
+    let kind_str = if name.is_empty() {
+        node.attribute("nombre").unwrap_or_default()
+    } else {
+        name.as_str()
+    };
     let kind = {
-        let kind_str = node.tag_name().name();
-        if kind_str == "EQ_Caldera" {
-            name.split_once('-')
+        let tag_name = node.tag_name().name();
+        if tag_name == "EQ_Caldera" {
+            kind_str
+                .split_once('-')
                 .and_then(|s| s.1.rsplit_once('-').map(|s| s.0))
                 .unwrap_or("")
         } else {
-            kind_str
+            tag_name
         }
         .try_into()
         .unwrap_or_else(|e| panic!("ERROR: {:?}", e))
