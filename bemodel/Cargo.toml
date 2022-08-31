@@ -15,6 +15,7 @@ hulc = { path = "../hulc" }
 climate = { path = "../climate" }
 anyhow = "1.0"
 clap = "2.34"
+env_logger= "0.9"
 exitcode = "1.1"
 log = "0.4"
 md5 = "0.7"
@@ -25,7 +26,6 @@ serde_json = "1.0"
 uuid = { version="1.0", features=["serde","v4", "js"]}
 
 [dev-dependencies]
-env_logger= "0.9"
 criterion = { version="0.3", features=["html_reports"] }
 
 [[bench]]

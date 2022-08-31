@@ -123,6 +123,8 @@ fn start_app_and_get_matches() -> clap::ArgMatches<'static> {
 // Función principal ------------------------------------------------------------------------------
 
 fn main() {
+    env_logger::init();
+
     let matches = start_app_and_get_matches();
 
     if matches.is_present("showlicense") {
