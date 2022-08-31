@@ -14,9 +14,9 @@ use crate::utils::xml::{
 };
 
 use super::{
-    CoolingParams, DhwDemand, EconomizerControl, EquipmentType, GenerationEquipment, HeatingParams,
-    HotWaterStorageTank, PhotovoltaicGenerator, WindGenerator, CHPGenerator, SolarThermalGenerator, System, SystemOptions,
-    ThermalGenerator, ZoneEquipment,
+    CHPGenerator, CoolingParams, DhwDemand, EconomizerControl, EquipmentType, GenerationEquipment,
+    HeatingParams, HotWaterStorageTank, PhotovoltaicGenerator, SolarThermalGenerator, System,
+    SystemOptions, ThermalGenerator, WindGenerator, ZoneEquipment,
 };
 
 impl TryFrom<&str> for EquipmentType {
