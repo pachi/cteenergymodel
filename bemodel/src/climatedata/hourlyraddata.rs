@@ -1,6 +1,6 @@
 // Copyright (c) 2018-2022 Rafael Villar Burke <pachi@ietcc.csic.es>
 // Distributed under the MIT License
-// (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
+// (See accompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 //! Datos de radiación horaria por zona climática para el 1 de julio
 //! Criterios de orientación UNE-EN ISO 52016-1, (S=0, E=+90, W=-90)

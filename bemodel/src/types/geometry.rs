@@ -1,6 +1,6 @@
 // Copyright (c) 2018-2022 Rafael Villar Burke <pachi@ietcc.csic.es>
 // Distributed under the MIT License
-// (See acoompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
+// (See accompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
 //! Tipos y traits de elementos geométricos: HasSurface, Point2, Point3, Vector2, Vector3 y Polygon
 
