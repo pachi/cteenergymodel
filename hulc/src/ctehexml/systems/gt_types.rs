@@ -10,7 +10,8 @@
 // https://doe2.com/Download/DOE-23/DOE23Vol2-Dictionary_50h.pdf
 
 
-/// Sistema de GT
+/// Sistema (subsistema secundario) de GT
+/// (SYSTEM)
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct GtSystem {
     /// Nombre / descripción
@@ -119,9 +120,46 @@ pub struct GtSystem {
     // ...
 }
 
-/// Planta enfriadora de GT
+/// Zona de GT
+/// (ZONE)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct Chiller {
+pub struct GtZone {
+    /// Nombre / descripción
+    pub name: String,
+    /// Tipo
+    /// (TYPE)
+    /// - CONDITIONED: acondicionada
+    /// - PLENUM: plenum
+    /// - UNCONDITIONED: no acondicionada
+    pub kind: String,
+    /// Espacio asociado
+    /// (SPACE)
+    pub space: String,
+
+    // -- Aire impulsión --
+    /// Caudal de impulsión de la zona, m³/h
+    /// (C-C-ASSIG-FLOW)
+    pub assigned_flow: f32,
+    
+    // -- Ventilador de extracción
+    // Caudal
+    // Potencia
+
+    // -- Aire exterior --
+    // Método para asignar caudal (C-C-OA-MET-DEF): 0 ==por persona, 1=total
+    /// Caudal de aire primario mínimo por persona con máxima ocupación, m³/h
+    /// (C-C-OA-FLOW/PER)
+    pub oa_flow_per: f32,
+    /// Caudal de aire primario total, m³/h
+    /// (C-C-OA-FLOW)
+    pub oa_flow: f32,
+}
+
+/// Planta enfriadora de GT
+/// Puede incluir plantas enfriadoras reversibles tipo BdC y de otros tipos
+/// (CHILLER)
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct GtChiller {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema
@@ -138,12 +176,13 @@ pub struct Chiller {
 
     /// Capacidad nominal de refrigeración (C-C-CAPACITY), kW
     pub capacity_ref: f32,
-    /// Capacidad nominal de calefacción (C-DESIGN-KW), kW
-    pub capacity_cal: f32,
-    /// Rendimiento en calefacción, COP (C-COP)
-    pub cop: f32,
     // Rendimiento en refrigeración, ERR (C-NUM-OF-UNITS)
     pub eer: f32,
+    /// Capacidad nominal de calefacción en enfriadoras reversibles tipo BdC
+    /// (C-DESIGN-KW), kW
+    pub capacity_cal: f32,
+    /// Rendimiento en calefacción para enfriadoras reversibles, COP (C-COP)
+    pub cop: f32,
 
     /// Tipo de condensación para BdC y compresión eléctrica
     /// - AIR-COOLED: Por aire
@@ -163,8 +202,9 @@ pub struct Chiller {
 
 
 /// Caldera de GT
+/// (BOILER)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct Boiler {
+pub struct GtBoiler {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema
@@ -174,7 +214,7 @@ pub struct Boiler {
     pub kind: String,
     /// Subtipo
     /// (C-C-SUBTYPE)
-    /// 1 - convencional
+    /// 1 - Convencional
     /// 2 - Baja temperatura
     /// 3 - Condensación
     /// 4 - Biomasa
@@ -182,8 +222,14 @@ pub struct Boiler {
 
     /// Potencia nominal (C-C-CAPACITY), kW
     pub capacity: f32,
-    /// Rendimiento térmico, ratio (C-THERM-EFF-MAX || 0.85)
+    /// Rendimiento térmico, ratio
+    /// En calderas de combustible
+    /// (C-THERM-EFF-MAX || 0.85)
     pub eff: f32,
+    /// Eficiencia eléctrica, nu
+    /// En calderas eléctricas
+    /// (C-AFUE)
+    pub elec_eff: f32,
 
     // -- Conexiones a circuitos --
     // Circuito agua caliente ---
@@ -208,8 +254,9 @@ pub struct Boiler {
 }
 
 /// Calderas de ACS de GT
+/// (DW-HEATER)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct DwHeater {
+pub struct GtDwHeater {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema
@@ -231,11 +278,16 @@ pub struct DwHeater {
     /// C-C-CAPACITY
     pub capacity: f32,
     /// Rendimiento eléctrico, COP
+    /// en BdC y calderas eléctricas
     /// (C-STBY-LOSS-FRAC)
     pub cop: f32,
+    /// Eficiencia térmica, nu
+    /// En calderas de combustible
+    /// (C-ENERGY-FACTOR)
+    pub thermal_eff: f32,
     /// Presencia de depósito
     /// (C-CATEGORY)
-    /// 0 - nada
+    /// 0 - nada*
     /// 1 - con
     /// 2 - sin
     // Solo con depósito si es == 1
@@ -252,8 +304,9 @@ pub struct DwHeater {
 }
 
 /// Torre de refrigeración de GT
+/// (HEAT-REJECTION)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct HeatRejection {
+pub struct GtHeatRejection {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema
@@ -282,8 +335,9 @@ pub struct HeatRejection {
 
 
 /// Equipos cogeneración de GT
+/// (ELEC-GENERATOR)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct ElectricGenerator {
+pub struct GtElectricGenerator {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema
@@ -309,8 +363,9 @@ pub struct ElectricGenerator {
 
 
 /// Intercambiado de calor con el terreno (alimentación de agua bruta) de GT
+/// (GROUND-LOOP-HX)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct GroundLoopHx {
+pub struct GtGroundLoopHx {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema
@@ -327,8 +382,9 @@ pub struct GroundLoopHx {
 }
 
 /// Circuitos hidráulicos de GT
+/// (CIRCULATION-LOOP)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct CirculationLoop {
+pub struct GtCirculationLoop {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema
@@ -370,8 +426,9 @@ pub struct CirculationLoop {
 }
 
 /// Bomba de GT. En circuitos o equipos (como enfriadoras)
+/// (PUMP)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct Pump {
+pub struct GtPump {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de control
@@ -387,38 +444,4 @@ pub struct Pump {
     /// (HEAD)
     pub head: f32,
     // Otros parámetros menos habituales y curvas de comportamiento
-}
-
-/// Zona de GT
-#[derive(Debug, Default, Clone, PartialEq)]
-pub struct Zone {
-    /// Nombre / descripción
-    pub name: String,
-    /// Tipo
-    /// (TYPE)
-    /// - CONDITIONED: acondicionada
-    /// - PLENUM: plenum
-    /// - UNCONDITIONED: no acondicionada
-    pub kind: String,
-    /// Espacio asociado
-    /// (SPACE)
-    pub space: String,
-
-    // -- Aire impulsión --
-    /// Caudal de impulsión de la zona, m³/h
-    /// (C-C-ASSIG-FLOW)
-    pub assigned_flow: f32,
-    
-    // -- Ventilador de extracción
-    // Caudal
-    // Potencia
-
-    // -- Aire exterior --
-    // Método para asignar caudal (C-C-OA-MET-DEF): 0 ==por persona, 1=total
-    /// Caudal de aire primario mínimo por persona con máxima ocupación, m³/h
-    /// (C-C-OA-FLOW/PER)
-    pub oa_flow_per: f32,
-    /// Caudal de aire primario total, m³/h
-    /// (C-C-OA-FLOW)
-    pub oa_flow: f32,
 }

@@ -57,7 +57,8 @@ impl GtSystems {
                     zones.insert(block.name.clone(), block);
                 }
                 // Condiciones de uso y ocupación ----------
-                "PUMP" | "CIRCULATION-LOOP" | "CHILLER" | "DW-HEATER" => {
+                "PUMP" | "CIRCULATION-LOOP" | "CHILLER" | "DW-HEATER" | "BOILER"
+                | "HEAT-REJECTION" | "ELEC-GENERATOR" | "GROUND-LOOP-HX" => {
                     equipment.insert(block.name.clone(), block);
                 }
                 // Elemento desconocido -------------------------
@@ -88,4 +89,3 @@ pub fn parse_systems(doc: &roxmltree::Document) -> GtSystems {
         .trim();
     GtSystems::new(&gt_systems_str).unwrap()
 }
-
