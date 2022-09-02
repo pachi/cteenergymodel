@@ -62,6 +62,7 @@ impl GtSystems {
                     equipment.insert(block.name.clone(), block);
                 }
                 // Elemento desconocido -------------------------
+                // THERMAL-STORAGE, PV-MODULE, CONDENSING-UNIT
                 _ => {
                     warn!(
                         "Tipo desconocido. bname: {}, btype: {}",
