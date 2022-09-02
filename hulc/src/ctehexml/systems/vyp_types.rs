@@ -205,7 +205,7 @@ pub struct PhotovoltaicGenerator {
     /// PotenciaNominal (kW, pico)
     pub capacity: f32,
     /// Superficie, m²
-    pub suface: f32,
+    pub surface: f32,
     /// Orientación
     pub orientation: f32,
     /// Inclinación
