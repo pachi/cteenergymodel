@@ -7,14 +7,13 @@
 // TODO: ¿Separar acumuladores de generadores en equipos... llevándolo a otro atributo de los sistemas?
 // TODO: Revisar otros tipos de equipos (PV, bombas, ventiladores, etc)
 // TODO: Pensar otros componentes como circuitos y distribución
-// TODO: Traer sistemas GT
 // Ver: https://energyplus.net/assets/nrel_custom/pdfs/pdfs_v9.5.0/EnergyPlusEssentials.pdf
 // y esquema de E+ https://energyplus.readthedocs.io/en/latest/schema.html
 // Ver: https://www.gbxml.org/schema_doc/6.01/GreenBuildingXML_Ver6.01.html#Link105
 
 /// Sistemas técnicos de climatización, ACS y ventilación
 #[derive(Debug, Clone, PartialEq)]
-pub enum System {
+pub enum VypSystem {
     /// Sistema sólo de ACS
     /// (sin calefacción, sin refrigeración, sin ventilación)
     Dhw {
@@ -152,7 +151,7 @@ pub enum EconomizerControl {
 
 /// Tipos de sistemas de generación solar térmica
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub enum SolarThermalType {
+pub enum SolarThermalKind {
     ///PlanoSelectivo
     FlatPlateSelective,
     /// PlanoNoSelectivo
@@ -167,7 +166,7 @@ pub enum SolarThermalType {
     Other,
 }
 
-impl Default for SolarThermalType {
+impl Default for SolarThermalKind {
     fn default() -> Self {
         Self::FlatPlateSelective
     }
@@ -179,7 +178,7 @@ pub struct SolarThermalGenerator {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de colector usado
-    pub kind: SolarThermalType,
+    pub kind: SolarThermalKind,
     // (PotenciaNominal(0,7kW/m² guía IDAE)?),
     // potencia_nominal: f32,
     /// RendimientoOptico [-]
@@ -188,9 +187,9 @@ pub struct SolarThermalGenerator {
     pub losses_coeff: f32,
     /// SuperficieApertura, [m²]
     pub surface: f32,
-    /// Orientacion (...)
+    /// Orientación (...)
     pub orientation: f32,
-    /// Inclinacion (....)
+    /// Inclinación (....)
     pub tilt: f32,
     /// Volumen de acumulación (l)
     pub storage_capacity: f32,
@@ -207,9 +206,9 @@ pub struct PhotovoltaicGenerator {
     pub capacity: f32,
     /// Superficie, m²
     pub suface: f32,
-    /// Orientacion
+    /// Orientación
     pub orientation: f32,
-    /// Inclinacion
+    /// Inclinación
     pub tilt: f32,
     /// Capacidad nominal de acumulación, C_20 (Ah)
     pub storage_capacity: f32,
@@ -283,7 +282,7 @@ pub struct CoolingParams {
 
 /// Tipos de equipos
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub enum EquipmentType {
+pub enum EquipmentKind {
     CalderaConvencional,
     CalderaElectrica,
     CalderaBajaTemperatura,
@@ -300,7 +299,7 @@ pub enum EquipmentType {
     AcumuladorAguaCaliente,
 }
 
-impl Default for EquipmentType {
+impl Default for EquipmentKind {
     fn default() -> Self {
         Self::CalderaConvencional
     }
@@ -332,7 +331,7 @@ pub struct ThermalGenerator {
     /// Sistemas aire-aire, aire-refrigerante, aire-agua o expansión directa
     /// Aire-aire: ExpansionDirectaAireAireSf, ExpansionDirectaAireAireBdc,
     /// Aire-fluido: EQ_ED_AireAgua_BDC, EQ_ED_UnidadExterior
-    pub kind: EquipmentType,
+    pub kind: EquipmentKind,
     /// Parámetros de la generación de calor
     pub heating: Option<HeatingParams>,
     /// Parámetros de la generación de frío
@@ -353,7 +352,7 @@ pub struct HotWaterStorageTank {
     /// Nombre
     pub name: String,
     /// Tipo: AcumuladorAguaCaliente
-    pub kind: EquipmentType,
+    pub kind: EquipmentKind,
     /// Volumen, m³
     pub volume: f32,
     /// Coeficiente de pérdidas global del depósito, UA (W/ºC)

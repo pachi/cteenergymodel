@@ -14,12 +14,12 @@ use crate::utils::xml::{
 };
 
 use super::{
-    CHPGenerator, CoolingParams, DhwDemand, EconomizerControl, EquipmentType, GenerationEquipment,
-    HeatingParams, HotWaterStorageTank, PhotovoltaicGenerator, SolarThermalGenerator, System,
+    CHPGenerator, CoolingParams, DhwDemand, EconomizerControl, EquipmentKind, GenerationEquipment,
+    HeatingParams, HotWaterStorageTank, PhotovoltaicGenerator, SolarThermalGenerator, VypSystem,
     SystemOptions, ThermalGenerator, WindGenerator, ZoneEquipment,
 };
 
-impl TryFrom<&str> for EquipmentType {
+impl TryFrom<&str> for EquipmentKind {
     type Error = Error;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
@@ -43,7 +43,7 @@ impl TryFrom<&str> for EquipmentType {
     }
 }
 
-pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<System>) {
+pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<VypSystem>) {
     // Definición de sistemas en VyP - Solución temporal sin descender en elementos
     let systems = doc
         .descendants()
@@ -95,7 +95,7 @@ pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<System>) {
 /// - HVACTemplate:System:UnitarySystem (el unizona y multizona de aire)
 /// - HVACTemplate:System:DualDuct (el multizona de conductos)
 /// - ¿para ACS?
-fn build_system(node: roxmltree::Node) -> System {
+fn build_system(node: roxmltree::Node) -> VypSystem {
     let kind = node.tag_name().name().to_string();
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
     let multiplier = get_tag_as_u32_or(&node, "multiplicador", 1);
@@ -134,7 +134,7 @@ fn build_system(node: roxmltree::Node) -> System {
         });
 
     match kind.as_str() {
-        "SIS_Acs" => System::Dhw {
+        "SIS_Acs" => VypSystem::Dhw {
             name,
             multiplier,
             // ignoramos este dato ya que es redundante con el de la demanda
@@ -150,7 +150,7 @@ fn build_system(node: roxmltree::Node) -> System {
             // O es un sistema de calefacción por agua, con tImpulsion
             get_tag_as_f32(&node, "tImpulsionCal").or_else(|_| get_tag_as_f32(&node, "tImpulsion")).unwrap_or_default();
 
-            System::MultizoneHotWater {
+            VypSystem::MultizoneHotWater {
                 name,
                 multiplier,
                 heating_supply_temp,
@@ -161,7 +161,7 @@ fn build_system(node: roxmltree::Node) -> System {
         }
         "SIS_ClimatizacionUnizona" => {
             assert!(get_tag_as_f32_or_default(&node, "vVentilacion") == 0.0);
-            System::SingleZone {
+            VypSystem::SingleZone {
                 name,
                 multiplier,
                 control_zone: get_tag_text(&node, "zona").map(str::to_string),
@@ -202,7 +202,7 @@ fn build_system(node: roxmltree::Node) -> System {
                 options.push(SystemOptions::Economizer { control });
             }
 
-            System::MultizoneAir {
+            VypSystem::MultizoneAir {
                 name,
                 multiplier,
                 control_zone,
@@ -307,7 +307,7 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
 
 /// Primarios + acumulación - equipos de generación a partir del nodo XML
 fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipment> {
-    use EquipmentType::*;
+    use EquipmentKind::*;
 
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
     let kind_str = if name.is_empty() {
@@ -644,7 +644,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
 /// Genera el sistema exclusivo de ventilación, si existe
 /// Podría ser algo similar a https://bigladdersoftware.com/epx/docs/9-6/input-output-reference/group-hvac-templates.html#hvactemplatesystemdedicatedoutdoorair
 /// y pensar sus opciones.
-fn build_doas(doc: &roxmltree::Document) -> Option<System> {
+fn build_doas(doc: &roxmltree::Document) -> Option<VypSystem> {
     // Equipo exclusivo ventilación
     //    - en <DatosGenerales><datosVentilacion>1;1882.800;1858.73;0;0.00;0.00;0.000;0.00;1;4000;3200;8000;4800;12000;5600;16000;6100;0;0;0;0;0;0.0000;0.00;1882.800;0.00;0.00;0.0000</datosVentilacion>
     //
@@ -707,7 +707,7 @@ fn build_doas(doc: &roxmltree::Document) -> Option<System> {
                 });
             }
 
-            let fan = System::WholeBuildingDoas {
+            let fan = VypSystem::WholeBuildingDoas {
                 name: "Sistema exclusivo de ventilación".to_string(),
                 required_air_flow,
                 capacity,
@@ -727,8 +727,8 @@ fn build_doas(doc: &roxmltree::Document) -> Option<System> {
 ///     <valoresMensualesACS>Solar Térmica ACS;FOTOTERMIA;1139.0;1249.0;1684.0;1719.0;1833.0;1978.0;2165.0;2071.0;1809.0;1429.0;1111.0;954.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;Ninguno;Ninguno;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0</valoresMensualesACS>
 ///     <potenciaFVInstalada>10</potenciaFVInstalada>
 // TODO: HULC no tiene datos suficientes de estas instalaciones para completar todos los datos
-fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<System> {
-    fn parse_ele_prod(data: &str) -> Vec<System> {
+fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<VypSystem> {
+    fn parse_ele_prod(data: &str) -> Vec<VypSystem> {
         let mut systems = vec![];
         for sysdata in data.split(';').collect::<Vec<_>>().as_slice().chunks(14) {
             let kind = sysdata[0];
@@ -742,21 +742,21 @@ fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<System> {
                 "Ninguno" => continue,
                 "Fotovoltaica insitu" => {
                     // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
-                    systems.push(System::PhotovoltaicGenerator(PhotovoltaicGenerator {
+                    systems.push(VypSystem::PhotovoltaicGenerator(PhotovoltaicGenerator {
                         name: name.to_string(),
                         ..Default::default()
                     }))
                 }
                 "Eólica insitu" => {
                     // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
-                    systems.push(System::WindGenerator(WindGenerator {
+                    systems.push(VypSystem::WindGenerator(WindGenerator {
                         name: name.to_string(),
                         ..Default::default()
                     }))
                 }
                 "Cogeneración" => {
                     // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
-                    systems.push(System::CHPGenerator(CHPGenerator {
+                    systems.push(VypSystem::CHPGenerator(CHPGenerator {
                         name: name.to_string(),
                         // ..Default::default()
                     }))
@@ -769,7 +769,7 @@ fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<System> {
         systems
     }
 
-    fn parse_thermal_prod(data: &str) -> Vec<System> {
+    fn parse_thermal_prod(data: &str) -> Vec<VypSystem> {
         let mut systems = vec![];
         for sysdata in data.split(';').collect::<Vec<_>>().as_slice().chunks(14) {
             let kind = sysdata[0];
@@ -783,7 +783,7 @@ fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<System> {
                 "Ninguno" => continue,
                 "Solar Térmica ACS" => {
                     // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
-                    systems.push(System::SolarThermalGenerator(SolarThermalGenerator {
+                    systems.push(VypSystem::SolarThermalGenerator(SolarThermalGenerator {
                         name: name.to_string(),
                         ..Default::default()
                     }))

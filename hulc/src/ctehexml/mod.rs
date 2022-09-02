@@ -17,7 +17,7 @@ use crate::bdl::Data;
 use crate::utils::file::{find_file_in_basedir, read_file};
 
 use datosgenerales::{parse_datos_generales, DatosGenerales};
-use systems::{parse_systems, System};
+use systems::{parse_systems, VypSystem};
 
 static LIDERCATSTRZ: &[u8] = include_bytes!("BDCatalogo.bdc.utf8.gz");
 
@@ -31,7 +31,7 @@ pub struct CtehexmlData {
     /// Definiciones de factores de corrección de sistemas
     pub factores_correccion_sistemas: Vec<String>,
     /// Bloques de definición de sistemas
-    pub sistemas: Vec<System>,
+    pub sistemas: Vec<VypSystem>,
 }
 
 /// Localiza archivo .ctehexml en el directorio de proyecto basedir
