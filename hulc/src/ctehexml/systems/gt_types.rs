@@ -9,8 +9,40 @@
 // Ver: https://www.gbxml.org/schema_doc/6.01/GreenBuildingXML_Ver6.01.html#Link105
 // https://doe2.com/Download/DOE-23/DOE23Vol2-Dictionary_50h.pdf
 
+use std::str::FromStr;
+
+use anyhow::{bail, Error};
+
+pub use crate::bdl::BdlBlock;
+
+/// Tipo de bomba hidráulica
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum PumpKind {
+    /// Bomba de caudal constante
+    #[default]
+    CaudalConstante,
+    /// Bomba de dos velocidades
+    DosVelocidades,
+    /// Bomba de caudal variable
+    CaudalVariable,
+}
+
+impl FromStr for PumpKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "ONE_SPEED-PUMP" => Ok(Self::CaudalConstante),
+            "TWO-SPEED-PUMP" => Ok(Self::DosVelocidades),
+            "VAR-SPEED-PUMP" => Ok(Self::CaudalVariable),
+            _ => bail!("Tipo de bomba hidráulica desconocido"),
+        }
+    }
+}
+
 /// Bomba de GT. En circuitos o equipos (como enfriadoras)
 /// (PUMP)
+/// Potencia de la bomba: P = rho ·  g · Q · H / n
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct GtPump {
     /// Nombre / descripción
@@ -18,16 +50,38 @@ pub struct GtPump {
     /// Tipo de control
     /// (CAP-CTRL)
     /// - ONE-SPEED-PUMP: velocidad constante*
-    /// - ONE-SPEED-PUMP: dos velocidades
+    /// - TWO-SPEED-PUMP: dos velocidades
     /// - VAR-SPEED-PUMP : velocidad variable
-    pub kind: String,
-    /// Caudal, l/h
+    pub kind: PumpKind,
+    /// Caudal Q, l/h
     /// (C-C-FLOW)
     pub flow: f32,
-    /// Altura manométrica, m
+    /// Altura manométrica H, m
     /// (HEAD)
     pub head: f32,
+    /// Rendimiento total de la bomba n, -
+    /// Producto del rendimiento hidráulico, mecánico y eléctrico
+    pub eff: f32,
     // Otros parámetros menos habituales y curvas de comportamiento
+}
+
+impl From<BdlBlock> for GtPump {
+    fn from(block: BdlBlock) -> Self {
+        let eff = block.attrs.get_f32("MECH-EFF").unwrap_or(0.77)
+            * block.attrs.get_f32("MOTOR-EFF").unwrap_or(0.80);
+        Self {
+            name: block.name.clone(),
+            kind: block
+                .attrs
+                .get_str("CAP-CTRL")
+                .unwrap_or_default()
+                .parse()
+                .unwrap_or_default(),
+            flow: block.attrs.get_f32("C-C-FLOW").unwrap_or_default(),
+            head: block.attrs.get_f32("HEAD").unwrap_or_default(),
+            eff,
+        }
+    }
 }
 
 /// Circuitos hidráulicos de GT

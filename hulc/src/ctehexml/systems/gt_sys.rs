@@ -19,7 +19,7 @@ use log::warn;
 pub use crate::bdl::{build_blocks, BdlBlock};
 pub use crate::bdl::{extract_f32vec, extract_namesvec, AttrMap};
 
-use super::GtSystem;
+use super::gt_types::*;
 
 // ------------------------- BDL ----------------------------
 
@@ -31,7 +31,14 @@ pub struct GtSystems {
     /// Zonas térmicas
     pub zones: BTreeMap<String, BdlBlock>,
     /// Equipos
-    pub equipment: BTreeMap<String, BdlBlock>,
+    pub equipment: BTreeMap<String, TempEquipment>,
+}
+
+/// Datos del archivo BDL
+#[derive(Debug, Clone)]
+pub enum TempEquipment {
+    Block(BdlBlock),
+    GtPump(GtPump),
 }
 
 impl GtSystems {
@@ -42,7 +49,7 @@ impl GtSystems {
         // Resto de elementos
         let mut systems: BTreeMap<String, BdlBlock> = BTreeMap::new();
         let mut zones: BTreeMap<String, BdlBlock> = BTreeMap::new();
-        let mut equipment: BTreeMap<String, BdlBlock> = BTreeMap::new();
+        let mut equipment: BTreeMap<String, TempEquipment> = BTreeMap::new();
 
         for block in blocks {
             match block.btype.as_str() {
@@ -57,9 +64,13 @@ impl GtSystems {
                     zones.insert(block.name.clone(), block);
                 }
                 // Condiciones de uso y ocupación ----------
-                "PUMP" | "CIRCULATION-LOOP" | "CHILLER" | "DW-HEATER" | "BOILER"
-                | "HEAT-REJECTION" | "ELEC-GENERATOR" | "GROUND-LOOP-HX" => {
-                    equipment.insert(block.name.clone(), block);
+                "PUMP" => {
+                    equipment.insert(block.name.clone(), TempEquipment::GtPump(block.into()));
+                }
+
+                "CIRCULATION-LOOP" | "CHILLER" | "DW-HEATER" | "BOILER" | "HEAT-REJECTION"
+                | "ELEC-GENERATOR" | "GROUND-LOOP-HX" => {
+                    equipment.insert(block.name.clone(), TempEquipment::Block(block));
                 }
                 // Elemento desconocido -------------------------
                 // THERMAL-STORAGE, PV-MODULE, CONDENSING-UNIT
