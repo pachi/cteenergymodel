@@ -39,6 +39,7 @@ pub struct GtSystems {
 pub enum TempEquipment {
     Block(BdlBlock),
     GtPump(GtPump),
+    GtCirculationLoop(GtCirculationLoop),
 }
 
 impl GtSystems {
@@ -67,9 +68,14 @@ impl GtSystems {
                 "PUMP" => {
                     equipment.insert(block.name.clone(), TempEquipment::GtPump(block.into()));
                 }
-
-                "CIRCULATION-LOOP" | "CHILLER" | "DW-HEATER" | "BOILER" | "HEAT-REJECTION"
-                | "ELEC-GENERATOR" | "GROUND-LOOP-HX" => {
+                "CIRCULATION-LOOP" => {
+                    equipment.insert(
+                        block.name.clone(),
+                        TempEquipment::GtCirculationLoop(block.into()),
+                    );
+                }
+                "CHILLER" | "DW-HEATER" | "BOILER" | "HEAT-REJECTION" | "ELEC-GENERATOR"
+                | "GROUND-LOOP-HX" => {
                     equipment.insert(block.name.clone(), TempEquipment::Block(block));
                 }
                 // Elemento desconocido -------------------------

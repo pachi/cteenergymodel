@@ -84,13 +84,76 @@ impl From<BdlBlock> for GtPump {
     }
 }
 
+/// Tipo de circuito hidráulico
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum CirculationLoopKind {
+    /// Dos tubos (agua fría o agua caliente pero no simultáneamente)
+    /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
+    /// Temperatura de cambio estacional (SNAP-T) o Disponibilidad en función de horario ()
+    /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 5ºC)
+    /// consigna para calor (defecto 80ºC)
+    /// caudal máximo (C-C-PROCESS-FLOW)
+    /// consigna para frío (defecto 7ºC)
+    /// Control AF y AC
+    #[default]
+    Pipe2,
+    /// ACS
+    /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
+    /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 35ºC)
+    /// consigna para calor (defecto 50ºC)
+    /// caudal máximo (C-C-PROCESS-FLOW)
+    /// temperatura de agua de red (DHW-INLET-T)
+    /// horario ACS (PROCESS-SCH)
+    Dhw,
+    /// Agua fría
+    /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
+    /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 5ºC)
+    /// consigna para frío (defecto 7ºC)
+    Chw,
+    /// Agua bruta (intercambio con el terreno)
+    /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
+    /// salto de temperatura (LOOP-DESIGN-DT) (defecto 5ºC)
+    /// consigna para frío (defecto 30ºC) y calor (defecto 20ºC)
+    LakeWell,
+    /// Agua caliente
+    /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
+    /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 20ºC)
+    /// consigna para calor (defecto 80ºC)
+    Hw,
+    /// Bomba de calor circuito cerrado
+    /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
+    /// salto de temperatura (LOOP-DESIGN-DT) (defecto 5ºC)
+    /// consigna para frío (defecto 30ºC) y calor (defecto 20ºC)
+    Whlp,
+    /// Circuito de agua de condensación
+    /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 5ºC)
+    /// consigna para frío (defecto 30ºC)
+    Cw,
+}
+
+impl FromStr for CirculationLoopKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "PIPE2" => Ok(Self::Pipe2),
+            "DHW" => Ok(Self::Dhw),
+            "CHW" => Ok(Self::Chw),
+            "LAKE / WELL" => Ok(Self::LakeWell),
+            "HW" => Ok(Self::Hw),
+            "WLHP" => Ok(Self::Whlp),
+            "CW" => Ok(Self::Cw),
+            _ => bail!("Tipo de circuito hidráulico desconocido"),
+        }
+    }
+}
 /// Circuitos hidráulicos de GT
 /// (CIRCULATION-LOOP)
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct GtCirculationLoop {
     /// Nombre / descripción
     pub name: String,
-    /// Tipo de sistema
+    /// Tipo de circuito
     /// (TYPE)
     /// - PIPE2: Dos tubos (agua fría o agua caliente pero no simultáneamente)
     /// - DHW: ACS
@@ -99,33 +162,74 @@ pub struct GtCirculationLoop {
     /// - HW : Agua caliente
     /// - WLHP : Bomba de calor circuito cerrado
     /// - CW : Circuito de agua de condensación
-    pub kind: String,
-    /// Temperatura de diseño para ACS
-    /// Se supone igual al del horario de temperaturas del circuito
-    /// Si es menor que este se hace mezcla con agua fría
-    pub process_temperature: f32,
-    /// Consigna de cal, ºC (por defecto 80)
-    /// (HEAT-SETPT-T)
-    pub heat_setpoint_temp: f32,
-    /// Consigna de ref, ºC (por defecto 7)
-    /// (COOL-SETPT-T)
-    pub cool_setpoint_temp: f32,
-    /// Temperatura del agua de red, ºC
-    /// (DHW-INLET-T)
-    pub dhw_inlet_temp: f32,
-    /// Caudal máximo de ACS (a la temperatura de salida), l/h
-    /// (C-C-PROCESS-FLOW)
-    pub process_flow: f32,
+    pub kind: CirculationLoopKind,
     /// Bomba asociada a este circuito
     /// (LOOP-PUMP)
-    pub loop_pump: String,
-    // Horario de cal/ACS HEATING-SCHEDULE
+    pub loop_pump: Option<String>,
+    // Subtipo: (SUBTYPE) primario, secundario (se conecta a uno primario)
+    // Otros datos: salto temperatura de diseño, caudal recirculado, circuito primario, porcentaje caudal primario
+
+    // --- Cal / ACS
+    /// Consigna de calefacción/ACS, ºC
+    /// (HEAT-SETPT-T)
+    /// Por defecto:
+    /// - 80ºC en PIPE2, HW
+    /// - 50ºC en DHW
+    /// - 20ºC en WHLP, LAKEWELL
+    pub heat_setpoint_temp: Option<f32>,
+    /// Caudal máximo de calefacción/ACS (a la temperatura de salida), l/h
+    /// (C-C-PROCESS-FLOW)
+    pub dhw_flow: Option<f32>,
+    /// Temperatura del agua de red en Cal/ACS, ºC
+    /// (DHW-INLET-T)
+    pub dhw_inlet_temp: Option<f32>,
+    // Horario de calefacción/ACS (HEATING-SCHEDULE)
     // pub heating_schedule: String,
-    // Horario de ref COOLING-SCHEDULE
+
+    // --- Refrigeración/Condensación
+    /// Consigna de refrigeración, ºC (por defecto 7)
+    /// (COOL-SETPT-T)
+    /// Por defecto:
+    /// - 7ºC en PIPE2, CHW
+    /// - 30ºC en LAKEWELL, WHLP, CW
+    pub cool_setpoint_temp: Option<f32>,
+    // Horario de ref (COOLING-SCHEDULE)
     // pub cooling_schedule: String,
     // Tipo de control T agua
-    // C-C-LOOP-OPER-AF ==4 (Disponibilidad en función de horario), ==3 (Cambio estacional por temperatura + SNAP-T, Temperatura cambio estacional)
-    // Subtipo: SUBTYPE primario, secundario
+    // (C-C-LOOP-OPER-AF) ==4 (Disponibilidad en función de horario), ==3 (Cambio estacional por temperatura + SNAP-T, Temperatura cambio estacional)
+}
+
+impl From<BdlBlock> for GtCirculationLoop {
+    fn from(block: BdlBlock) -> Self {
+        use CirculationLoopKind::*;
+
+        let kind = block
+            .attrs
+            .get_str("TYPE")
+            .unwrap_or_default()
+            .parse()
+            .unwrap_or_default();
+        let heat_setpoint_temp = block.attrs.get_f32("HEAT-SETPT-T").ok().or(match kind {
+            Pipe2 | Hw => Some(80.0),
+            Dhw => Some(50.0),
+            Whlp | LakeWell => Some(20.0),
+            _ => None,
+        });
+        let cool_setpoint_temp = block.attrs.get_f32("COOL-SETPT-T").ok().or(match kind {
+            Pipe2 | Chw => Some(7.0),
+            Dhw | Whlp | LakeWell => Some(30.0),
+            _ => None,
+        });
+        Self {
+            name: block.name.clone(),
+            kind,
+            dhw_flow: block.attrs.get_f32("C-C-FLOW").ok(),
+            dhw_inlet_temp: block.attrs.get_f32("DHW-INLET-T").ok(),
+            loop_pump: block.attrs.get_str("LOOP-PUMP").ok(),
+            heat_setpoint_temp,
+            cool_setpoint_temp,
+        }
+    }
 }
 
 /// Planta enfriadora de GT
