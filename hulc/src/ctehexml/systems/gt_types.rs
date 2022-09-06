@@ -16,6 +16,7 @@ use anyhow::{bail, Error};
 pub use crate::bdl::BdlBlock;
 
 /// Tipo de bomba hidráulica
+/// (CAP-CTRL)
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum PumpKind {
     /// Bomba de caudal constante
@@ -49,9 +50,6 @@ pub struct GtPump {
     pub name: String,
     /// Tipo de control
     /// (CAP-CTRL)
-    /// - ONE-SPEED-PUMP: velocidad constante*
-    /// - TWO-SPEED-PUMP: dos velocidades
-    /// - VAR-SPEED-PUMP : velocidad variable
     pub kind: PumpKind,
     /// Caudal Q, l/h
     /// (C-C-FLOW)
@@ -85,6 +83,7 @@ impl From<BdlBlock> for GtPump {
 }
 
 /// Tipo de circuito hidráulico
+/// (TYPE)
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum CirculationLoopKind {
     /// Dos tubos (agua fría o agua caliente pero no simultáneamente)
@@ -147,6 +146,7 @@ impl FromStr for CirculationLoopKind {
         }
     }
 }
+
 /// Circuitos hidráulicos de GT
 /// (CIRCULATION-LOOP)
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -155,13 +155,6 @@ pub struct GtCirculationLoop {
     pub name: String,
     /// Tipo de circuito
     /// (TYPE)
-    /// - PIPE2: Dos tubos (agua fría o agua caliente pero no simultáneamente)
-    /// - DHW: ACS
-    /// - CHW : Agua fría
-    /// - LAKE / WELL? : Agua bruta (intercambio con el terreno)
-    /// - HW : Agua caliente
-    /// - WLHP : Bomba de calor circuito cerrado
-    /// - CW : Circuito de agua de condensación
     pub kind: CirculationLoopKind,
     /// Bomba asociada a este circuito
     /// (LOOP-PUMP)
@@ -434,7 +427,7 @@ pub struct GtElectricGenerator {
 
 /// Intercambiado de calor con el terreno (alimentación de agua bruta) de GT
 /// (GROUND-LOOP-HX)
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
 pub struct GtGroundLoopHx {
     /// Nombre / descripción
     pub name: String,
