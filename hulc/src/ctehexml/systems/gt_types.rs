@@ -225,6 +225,83 @@ impl From<BdlBlock> for GtCirculationLoop {
     }
 }
 
+/// Tipo de enfriadora
+/// (TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum ChillerKind {
+    /// Compresor eléctrico
+    #[default]
+    ElecHermRec,
+    /// Compresor eléctrico con recuperación de calor
+    ElecHeatRec,
+    /// Absorción de simple etapa
+    Absor1,
+    /// Absorción de doble etapa
+    Absor2,
+    /// Absorción por llama directa
+    GasAbsor,
+    /// Motor de combustión interna
+    Engine,
+    /// Bomba de calor 2T
+    HeatPump,
+    /// Bomba de calor 4T
+    LoopToLoopHeatPump,
+}
+
+impl FromStr for ChillerKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use ChillerKind::*;
+
+        match s {
+            "ELEC-HERM-REC" => Ok(ElecHermRec),
+            "ELEC-HTREC" => Ok(ElecHeatRec),
+            "ABSOR-1" => Ok(Absor1),
+            "ABSOR-2" => Ok(Absor2),
+            "GAS-ABSOR" => Ok(GasAbsor),
+            "ENGINE" => Ok(Engine),
+            "HEAT-PUMP" => Ok(HeatPump),
+            "LOOP-TO-LOOP-HP" => Ok(LoopToLoopHeatPump),
+            // No usados en GT
+            // ELEC-OPEN-CENT y WATER-ECONOMIZER
+            _ => bail!("Tipo de enfriadora desconocido"),
+        }
+    }
+}
+
+/// Tipo de condensación
+/// (CONDENSER-TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum CondenserKind {
+    /// Condensación por aire
+    #[default]
+    Air,
+    /// Condensación por agua
+    Water,
+    /// Condensación remota por aire
+    RemoteAir,
+    /// Condensación remota por evaporación
+    RemoteEvap,
+}
+
+impl FromStr for CondenserKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use CondenserKind::*;
+
+        match s {
+            "AIR-COOLED" => Ok(Air),
+            "WATER-COOLED" => Ok(Water),
+            // No usados en GT?
+            "REMOTE-AIR-COOLED" => Ok(RemoteAir),
+            "REMOTE-EVAP-COOLED" => Ok(RemoteEvap),
+            _ => bail!("Tipo de condensadora desconocido"),
+        }
+    }
+}
+
 /// Planta enfriadora de GT
 /// Puede incluir plantas enfriadoras reversibles tipo BdC y de otros tipos
 /// (CHILLER)
@@ -233,40 +310,66 @@ pub struct GtChiller {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema
-    /// - ELEC-HERM-REC: compresor eléctrico
-    /// - ELEC-HTREC: eléctrico con recuperación de calor
-    /// - ABSOR-1: absorción simple etapa
-    /// - ABSOR-2: absorción doble etapa
-    /// - GAS-ABSOR: absorción por llama directa
-    /// - ENGINE: motor combustión interna
-    /// - HEAT-PUMP: bomba de calor 2T
-    /// - LOOP-TO-LOOP-HP: bomba de calor 4T
-    /// - otros de compresor eléctrico (ELEC-OPEN-CENT) y agua (WATER-ECONOMIZER)...
-    pub kind: String,
+    /// (TYPE)
+    pub kind: ChillerKind,
 
-    /// Capacidad nominal de refrigeración (C-C-CAPACITY), kW
-    pub capacity_ref: f32,
-    // Rendimiento en refrigeración, ERR (C-NUM-OF-UNITS)
+    /// Capacidad nominal de refrigeración, kW
+    /// (C-C-CAPACITY)
+    pub cool_capacity: f32,
+    /// Rendimiento en refrigeración, ERR, -
+    /// (C-NUM-OF-UNITS)
     pub eer: f32,
     /// Capacidad nominal de calefacción en enfriadoras reversibles tipo BdC
     /// (C-DESIGN-KW), kW
-    pub capacity_cal: f32,
-    /// Rendimiento en calefacción para enfriadoras reversibles, COP (C-COP)
+    /// TODO: Esto debería ser Option?
+    pub heat_capacity: f32,
+    /// Rendimiento en calefacción para enfriadoras reversibles, COP, -
+    /// (C-COP)
+    /// TODO: Esto debería ser Option?
     pub cop: f32,
 
     /// Tipo de condensación para BdC y compresión eléctrica
-    /// - AIR-COOLED: Por aire
-    /// - WATER-COOLED: por agua
-    /// - otros? REMOTE-AIR-COOLED, REMOTE-EVAP-COOLED
-    pub condenser_type: String,
+    /// (CONDENSER-TYPE)???
+    pub condenser_kind: CondenserKind,
 
     // -- Conexiones a circuitos --
     // Circuito agua fría ---
     /// Circuito de agua enfriada que alimenta
+    /// (CHW-LOOP)???
     pub chw_loop: String,
-    // Salto de temperatura, ºC (CHW-DT)
-    pub chw_dt: f32,
+    // Salto de temperatura, ºC
+    // (CHW-DT)
+    // pub chw_dt: f32,
     // -- Curvas comportamiento --
+
+    // TODO: ver combustible para casos no eléctricos
+}
+
+impl From<BdlBlock> for GtChiller {
+    fn from(block: BdlBlock) -> Self {
+        let kind = block
+            .attrs
+            .get_str("TYPE")
+            .unwrap_or_default()
+            .parse()
+            .unwrap_or_default();
+        let condenser_kind = block
+            .attrs
+            .get_str("CONDENSER-TYPE")
+            .unwrap_or_default()
+            .parse()
+            .unwrap_or_default();
+        Self {
+            name: block.name.clone(),
+            kind,
+            condenser_kind,
+            cool_capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
+            eer: block.attrs.get_f32("C-NUM-OF-UNITS").unwrap_or_default(),
+            heat_capacity: block.attrs.get_f32("C-DESIGN-KW").unwrap_or_default(),
+            cop: block.attrs.get_f32("C-COP").unwrap_or_default(),
+            chw_loop: block.attrs.get_str("CHW-LOOP").unwrap_or_default(),
+        }
+    }
 }
 
 /// Caldera de GT

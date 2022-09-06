@@ -40,6 +40,7 @@ pub enum TempEquipment {
     Block(BdlBlock),
     GtPump(GtPump),
     GtCirculationLoop(GtCirculationLoop),
+    GtChiller(GtChiller),
 }
 
 impl GtSystems {
@@ -74,8 +75,10 @@ impl GtSystems {
                         TempEquipment::GtCirculationLoop(block.into()),
                     );
                 }
-                "CHILLER" | "DW-HEATER" | "BOILER" | "HEAT-REJECTION" | "ELEC-GENERATOR"
-                | "GROUND-LOOP-HX" => {
+                "CHILLER" => {
+                    equipment.insert(block.name.clone(), TempEquipment::GtChiller(block.into()));
+                }
+                "DW-HEATER" | "BOILER" | "HEAT-REJECTION" | "ELEC-GENERATOR" | "GROUND-LOOP-HX" => {
                     equipment.insert(block.name.clone(), TempEquipment::Block(block));
                 }
                 // Elemento desconocido -------------------------
