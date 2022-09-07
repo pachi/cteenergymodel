@@ -313,30 +313,50 @@ pub struct GtChiller {
     /// (TYPE)
     pub kind: ChillerKind,
 
-    /// Capacidad nominal de refrigeración, kW
-    /// (C-C-CAPACITY)
-    pub cool_capacity: f32,
-    /// Rendimiento en refrigeración, ERR, -
-    /// (C-NUM-OF-UNITS)
-    pub eer: f32,
-    /// Capacidad nominal de calefacción en enfriadoras reversibles tipo BdC
-    /// (C-DESIGN-KW), kW
-    /// TODO: Esto debería ser Option?
-    pub heat_capacity: f32,
-    /// Rendimiento en calefacción para enfriadoras reversibles, COP, -
-    /// (C-COP)
-    /// TODO: Esto debería ser Option?
-    pub cop: f32,
-
     /// Tipo de condensación para BdC y compresión eléctrica
     /// (CONDENSER-TYPE)???
     pub condenser_kind: CondenserKind,
 
+    /// Capacidad nominal de refrigeración, kW
+    /// (C-C-CAPACITY)
+    pub cool_capacity: f32,
+    /// Rendimiento (eléctrico) en refrigeración, ERR, -
+    /// (C-NUM-OF-UNITS)
+    pub eer: f32,
+    /// Rendimiento térmico en refrigeración, EER, -
+    /// (C-IPLV)
+    /// En equipos que consumen electricidad y otro combustible, como absorción con llama directa
+    pub eer_th: Option<f32>,
+    /// Capacidad nominal de calefacción en enfriadoras reversibles tipo BdC
+    /// (C-DESIGN-KW), kW
+    pub heat_capacity: Option<f32>,
+    /// Rendimiento en calefacción para enfriadoras reversibles, COP, -
+    /// (C-COP)
+    pub cop: Option<f32>,
+    /// Combustible (adicional a electricidad)
+    /// (FUEL-METER)
+    pub carrier: Option<String>,
+
     // -- Conexiones a circuitos --
     // Circuito agua fría ---
     /// Circuito de agua enfriada que alimenta
-    /// (CHW-LOOP)???
+    /// (CHW-LOOP)
     pub chw_loop: String,
+
+    // Circuito condensación ---
+    /// Circuito de agua condensada (en casos que lo usen, absorción y motor combustión)
+    /// (CW-LOOP)
+    pub cw_loop: Option<String>,
+
+    // Circuito agua caliente ---
+    /// Circuito de agua caliente (en casos que lo usen)
+    /// (HW-LOOP)
+    pub hw_loop: Option<String>,
+
+    // Circuito recuperación calor ---
+    /// Circuito recuperación calor (en casos que lo usen)
+    /// (HTREC-LOOP)
+    pub htrec_loop: Option<String>,
     // Salto de temperatura, ºC
     // (CHW-DT)
     // pub chw_dt: f32,
@@ -365,9 +385,14 @@ impl From<BdlBlock> for GtChiller {
             condenser_kind,
             cool_capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
             eer: block.attrs.get_f32("C-NUM-OF-UNITS").unwrap_or_default(),
-            heat_capacity: block.attrs.get_f32("C-DESIGN-KW").unwrap_or_default(),
-            cop: block.attrs.get_f32("C-COP").unwrap_or_default(),
+            eer_th: block.attrs.get_f32("C-IPLV").ok(),
+            heat_capacity: block.attrs.get_f32("C-DESIGN-KW").ok(),
+            carrier: block.attrs.get_str("FUEL-METER").ok(),
+            cop: block.attrs.get_f32("C-COP").ok(),
             chw_loop: block.attrs.get_str("CHW-LOOP").unwrap_or_default(),
+            cw_loop: block.attrs.get_str("CW-LOOP").ok(),
+            hw_loop: block.attrs.get_str("HW-LOOP").ok(),
+            htrec_loop: block.attrs.get_str("HTREC-LOOP").ok(),
         }
     }
 }
