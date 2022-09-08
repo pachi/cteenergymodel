@@ -45,6 +45,7 @@ pub enum TempEquipment {
     GtDwHeater(GtDwHeater),
     GtHeatRejection(GtHeatRejection),
     GtElectricGenerator(GtElectricGenerator),
+    GtGroundLoopHx(GtGroundLoopHx),
 }
 
 impl GtSystems {
@@ -99,7 +100,10 @@ impl GtSystems {
                     );
                 }
                 "GROUND-LOOP-HX" => {
-                    equipment.insert(block.name.clone(), TempEquipment::Block(block));
+                    equipment.insert(
+                        block.name.clone(),
+                        TempEquipment::GtGroundLoopHx(block.into()),
+                    );
                 }
                 // Elemento desconocido -------------------------
                 // THERMAL-STORAGE, PV-MODULE, CONDENSING-UNIT

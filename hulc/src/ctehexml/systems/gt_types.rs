@@ -824,7 +824,29 @@ impl From<BdlBlock> for GtElectricGenerator {
     }
 }
 
+/// Tipos de intercambiadores con agua bruta o el terreno
+/// (TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum GroundLoopHxKind {
+    /// Intercambiador con agua bruta
+    #[default]
+    LakeWell,
+    Ground,
+}
 
+impl FromStr for GroundLoopHxKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use GroundLoopHxKind::*;
+
+        match s {
+            "LAKE/WELL" => Ok(LakeWell),
+            "VERT-WELL-NEW" | "HORIZ-STRAIGHT-LOOP" | "HORIZ-SLINKY-LOOP" => Ok(Ground),
+            _ => bail!("Tipo de condensación desconocido"),
+        }
+    }
+}
 
 /// Intercambiado de calor de agua con el terreno/agua/lago/pozo (alimentación de agua bruta) de GT
 /// (GROUND-LOOP-HX)
@@ -836,7 +858,7 @@ pub struct GtGroundLoopHx {
     /// (TYPE)
     /// - LAKE/WELL: intercambio con agua subterránea
     /// - otros tipos no usados en GT para suelo horizontal o vert., etc
-    pub kind: String,
+    pub kind: GroundLoopHxKind,
     /// Circuito de agua bruta (condensados)
     /// (CIRCULATION-LOOP)
     pub circ_loop: String,
@@ -845,7 +867,24 @@ pub struct GtGroundLoopHx {
     pub loop_temp_sch: String,
 }
 
+impl From<BdlBlock> for GtGroundLoopHx {
+    fn from(block: BdlBlock) -> Self {
+        let name = block.name.clone();
+        let kind = block
+            .attrs
+            .get_str("TYPE")
+            .unwrap_or_default()
+            .parse()
+            .unwrap_or_default();
 
+        Self {
+            name,
+            kind,
+            circ_loop: block.attrs.get_str("CIRCULATION-LOOP").unwrap_or_default(),
+            loop_temp_sch: block.attrs.get_str("LOOP-TEMP-SCH").unwrap_or_default(),
+        }
+    }
+}
 
 /// Sistema (subsistema secundario) de GT
 /// (SYSTEM)
