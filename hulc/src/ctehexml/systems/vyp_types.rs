@@ -65,7 +65,7 @@ pub enum VypSystem {
     },
 
     /// Sistema multizona por conductos o expansión directa
-    /// (sin ACS, recuperacción de calor / freecooling opcionales)
+    /// (sin ACS, recuperación de calor / freecooling opcionales)
     MultizoneAir {
         /// Nombre
         name: String,
@@ -137,7 +137,7 @@ pub enum SystemOptions {
 }
 
 /// Tipo de control en economizador de aire
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum EconomizerControl {
     /// Temperatura
     Temperature,
@@ -230,7 +230,7 @@ pub struct WindGenerator {
 }
 
 /// Sistema de cogeneración
-#[derive(Debug, Default, Clone, PartialEq)]
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
 pub struct CHPGenerator {
     /// Nombre / descripción
     pub name: String,
