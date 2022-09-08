@@ -29,7 +29,7 @@ pub struct GtSystems {
     /// Sistemas
     pub systems: BTreeMap<String, BdlBlock>,
     /// Zonas térmicas
-    pub zones: BTreeMap<String, BdlBlock>,
+    pub zones: BTreeMap<String, GtZone>,
     /// Equipos
     pub equipment: BTreeMap<String, TempEquipment>,
 }
@@ -54,21 +54,22 @@ impl GtSystems {
         let blocks = build_blocks(input.as_ref())?;
 
         // Resto de elementos
+        let mut zones: BTreeMap<String, GtZone> = BTreeMap::new();
         let mut systems: BTreeMap<String, BdlBlock> = BTreeMap::new();
-        let mut zones: BTreeMap<String, BdlBlock> = BTreeMap::new();
         let mut equipment: BTreeMap<String, TempEquipment> = BTreeMap::new();
 
         for block in blocks {
             match block.btype.as_str() {
+                // Zonas
+                "ZONE" => {
+                    zones.insert(block.name.clone(), block.into());
+                }
+                // Secundarios
                 "SYSTEM" => {
                     // systems.insert(block.name.clone(), GtSystem::try_from(block)?);
                     systems.insert(block.btype.clone(), block);
                 }
-
-                "ZONE" => {
-                    zones.insert(block.name.clone(), block);
-                }
-
+                // Equipos
                 "PUMP" => {
                     equipment.insert(block.name.clone(), TempEquipment::GtPump(block.into()));
                 }

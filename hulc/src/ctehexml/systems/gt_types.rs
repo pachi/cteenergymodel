@@ -995,6 +995,32 @@ pub struct GtSystem {
     // ...
 }
 
+/// Tipos de zonas
+/// (TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum ZoneKind {
+    /// Acondicionada
+    #[default]
+    Conditioned,
+    Plenum,
+    Unconditioned,
+}
+
+impl FromStr for ZoneKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use ZoneKind::*;
+
+        match s {
+            "CONDITIONED" => Ok(Conditioned),
+            "PLENUM" => Ok(Plenum),
+            "UNCONDITIONED" => Ok(Unconditioned),
+            _ => bail!("Tipo de zona desconocido"),
+        }
+    }
+}
+
 /// Zona de GT
 /// (ZONE)
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -1006,26 +1032,96 @@ pub struct GtZone {
     /// - CONDITIONED: acondicionada
     /// - PLENUM: plenum
     /// - UNCONDITIONED: no acondicionada
-    pub kind: String,
+    pub kind: ZoneKind,
     /// Espacio asociado
     /// (SPACE)
     pub space: String,
 
-    // -- Aire impulsión --
-    /// Caudal de impulsión de la zona, m³/h
+    // --- Caudales
+    // -- Aire impulsión de diseño --
+    /// Caudal de impulsión de diseño de la zona, m³/h
     /// (C-C-ASSIG-FLOW)
-    pub assigned_flow: f32,
+    pub design_flow: Option<f32>,
 
     // -- Ventilador de extracción
-    // Caudal
-    // Potencia
+    /// Caudal de extracción, m³/h
+    /// (C-C-EXH-FLOW)
+    pub exh_flow: Option<f32>,
+    /// Potencia de extracción, kW
+    /// (C-C-EXHAUST-KW)
+    pub exh_kw: Option<f32>,
 
     // -- Aire exterior --
     // Método para asignar caudal (C-C-OA-MET-DEF): 0 ==por persona, 1=total
     /// Caudal de aire primario mínimo por persona con máxima ocupación, m³/h
     /// (C-C-OA-FLOW/PER)
-    pub oa_flow_per: f32,
+    pub oa_flow_per: Option<f32>,
     /// Caudal de aire primario total, m³/h
     /// (C-C-OA-FLOW)
-    pub oa_flow: f32,
+    pub oa_flow: Option<f32>,
+    // --- Unidades terminales
+    // -- Refrigeración --
+    /// Potencia nominal total de refrigeración (sensible + latente) de la unidad terminal, kW
+    /// (C-C-COOL-CAP)
+    pub cool_cap: Option<f32>,
+    /// Potencia nominal sensible de refrigeración de la unidad terminal, kW
+    /// (C-C-COOL-SH-CAP)
+    pub cool_sh_cap: Option<f32>,
+
+    // -- Calefacción --
+    /// Potencia nominal de calefacción de la unidad terminal, kW
+    /// (C-C-HEAT-CAP)
+    pub heat_cap: Option<f32>,
+    // -- Calefacción auxiliar --
+    // ?? No he localizado ejemplo
+}
+
+impl From<BdlBlock> for GtZone {
+    fn from(block: BdlBlock) -> Self {
+        let name = block.name.clone();
+        let kind = block
+            .attrs
+            .get_str("TYPE")
+            .unwrap_or_default()
+            .parse()
+            .unwrap_or_default();
+
+        let has_exhaust_fan = block.attrs.get_str("C-C-PROP-ZR-1").unwrap_or_default() == "1";
+        let exh_flow = if has_exhaust_fan {
+            block.attrs.get_f32("C-C-EXH-FLOW").ok()
+        } else {
+            None
+        };
+        let exh_kw = if has_exhaust_fan {
+            block.attrs.get_f32("C-C-EXH-KW").ok()
+        } else {
+            None
+        };
+
+        let (oa_flow_per, oa_flow) = match block
+            .attrs
+            .get_str("C-C-OA-MET-DEF")
+            .unwrap_or_default()
+            .as_str()
+        {
+            // Caudal total
+            "1" => (None, block.attrs.get_f32("C-C-OA-FLOW").ok()),
+            // Caudal por persona
+            _ => (block.attrs.get_f32("C-C-OA-FLOW/PER").ok(), None),
+        };
+
+        Self {
+            name,
+            kind,
+            space: block.attrs.get_str("SPACE").unwrap_or_default(),
+            design_flow: block.attrs.get_f32("C-C-ASSIG-FLOW").ok(),
+            exh_flow,
+            exh_kw,
+            oa_flow_per,
+            oa_flow,
+            cool_cap: block.attrs.get_f32("C-C-COOL-CAP").ok(),
+            cool_sh_cap: block.attrs.get_f32("C-C-COOL-SH-CAP").ok(),
+            heat_cap: block.attrs.get_f32("C-C-HEAT-CAP").ok(),
+        }
+    }
 }
