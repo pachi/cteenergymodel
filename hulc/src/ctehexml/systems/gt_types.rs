@@ -1042,6 +1042,7 @@ pub struct GtZone {
     // --- Caudales
     // -- Aire impulsión de diseño --
     /// Caudal de impulsión de diseño de la zona, m³/h
+    /// Si no se define usa la disponible por el sistema
     /// (C-C-ASSIG-FLOW)
     pub design_flow: Option<f32>,
 
@@ -1064,18 +1065,21 @@ pub struct GtZone {
     // --- Unidades terminales
     // -- Refrigeración --
     /// Potencia nominal total de refrigeración (sensible + latente) de la unidad terminal, kW
+    /// Si no se define usa la disponible por el sistema
     /// (C-C-COOL-CAP)
     pub cool_cap: Option<f32>,
     /// Potencia nominal sensible de refrigeración de la unidad terminal, kW
+    /// Si no se define usa la disponible por el sistema
     /// (C-C-COOL-SH-CAP)
     pub cool_sh_cap: Option<f32>,
 
     // -- Calefacción --
     /// Potencia nominal de calefacción de la unidad terminal, kW
+    /// Si no se define usa la disponible por el sistema
     /// (C-C-HEAT-CAP)
     pub heat_cap: Option<f32>,
     // -- Calefacción auxiliar --
-    // ?? No he localizado ejemplo
+    // TODO: ?? Generar ejemplo para ver variables usadas
 }
 
 impl From<BdlBlock> for GtZone {
