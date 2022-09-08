@@ -666,6 +666,31 @@ impl From<BdlBlock> for GtDwHeater {
     }
 }
 
+/// Tipo de torres de refrigeración
+/// (TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum HeatRejectionKind {
+    /// Torre de refrigeración de circuito abierto
+    #[default]
+    OpenTower,
+    /// Torre de refrigeración de circuito cerrado
+    ClosedTower,
+}
+
+impl FromStr for HeatRejectionKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use HeatRejectionKind::*;
+
+        match s {
+            "OPEN-TWR" => Ok(OpenTower),
+            "FLUID-COOLER" => Ok(ClosedTower),
+            _ => bail!("Tipo de condensación desconocido"),
+        }
+    }
+}
+
 /// Torre de refrigeración de GT
 /// (HEAT-REJECTION)
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -674,10 +699,16 @@ pub struct GtHeatRejection {
     pub name: String,
     /// Tipo de sistema
     /// - OPEN-TWR: Torre de refrigeración circuito abierto
-    /// - OPEN-TWR&HX:
     /// - FLUID-COOLER: Torre de refrigeración circuito cerrado
+    /// No usados en GT:
+    /// - OPEN-TWR&HX:
     /// - DRYCOOLER:
-    pub kind: String,
+    pub kind: HeatRejectionKind,
+    /// Vector energético
+    /// Siempre electricidad
+    pub carrier: String,
+
+    // --- General
     /// Capacidad nominal de refrigeración en condiciones CTI, kW
     /// (C-C-CAPACITY)
     pub capacity: f32,
@@ -687,13 +718,43 @@ pub struct GtHeatRejection {
     /// Número de celdas
     /// (NUMBER-OF-CELLS)
     pub number_of_cells: f32,
+
+    // --- Conexiones a circuitos
     /// Circuito de condensados
     /// (CW-LOOP)
     pub cw_loop: String,
+    /// Bomba del circuito de condensados
+    /// (CW-PUMP)
+    pub cw_pump: Option<String>,
     /// Potencia de bombas de recirculación, kW
-    /// Solo en circuito cerrado
+    /// En torres de circuito cerrado
     /// (SPRAY-KW/CELL)
-    pub spray_kw_cell: f32,
+    pub spray_kw_cell: Option<f32>,
+}
+
+impl From<BdlBlock> for GtHeatRejection {
+    fn from(block: BdlBlock) -> Self {
+        let name = block.name.clone();
+        let kind = block
+            .attrs
+            .get_str("TYPE")
+            .unwrap_or_default()
+            .parse()
+            .unwrap_or_default();
+        let carrier = "Electricidad".into();
+
+        Self {
+            name,
+            kind,
+            carrier,
+            capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
+            fan_kw: block.attrs.get_f32("FAN-KW/CELL").unwrap_or_default(),
+            number_of_cells: block.attrs.get_f32("NUMBER-OF-CELLS").unwrap_or(1.0),
+            cw_loop: block.attrs.get_str("CW-LOOP").unwrap_or_default(),
+            cw_pump: block.attrs.get_str("CW-PUMP").ok(),
+            spray_kw_cell: block.attrs.get_f32("SPRAY-KW/CELL").ok(),
+        }
+    }
 }
 
 /// Equipos cogeneración de GT

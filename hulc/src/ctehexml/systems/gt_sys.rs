@@ -43,6 +43,7 @@ pub enum TempEquipment {
     GtChiller(GtChiller),
     GtBoiler(GtBoiler),
     GtDwHeater(GtDwHeater),
+    GtHeatRejection(GtHeatRejection),
 }
 
 impl GtSystems {
@@ -84,7 +85,10 @@ impl GtSystems {
                 "DW-HEATER" => {
                     equipment.insert(block.name.clone(), TempEquipment::GtDwHeater(block.into()));
                 }
-                "HEAT-REJECTION" | "ELEC-GENERATOR" | "GROUND-LOOP-HX" => {
+                "HEAT-REJECTION" => {
+                    equipment.insert(block.name.clone(), TempEquipment::GtHeatRejection(block.into()));
+                }
+                "ELEC-GENERATOR" | "GROUND-LOOP-HX" => {
                     equipment.insert(block.name.clone(), TempEquipment::Block(block));
                 }
                 // Elemento desconocido -------------------------
