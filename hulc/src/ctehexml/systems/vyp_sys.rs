@@ -291,7 +291,7 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
             //    - Nombre (nombre + nombre usuario)
             //      Caudal nominal de aire impulsado por la unidad interior (m³/h) (vImpulsionNom),
             //      Zona abastecida (Zona),
-            //      // ¿Proporcion ventilación (proporcionvVentilacion=0)?,
+            //      // ¿Proporción ventilación (proporcionvVentilacion=0)?,
             //      // ¿Ancho de banda del termostato (ºC) (dtTermostato=0)?,
             //      // multiplicador
             ZoneEquipment::AirDiffuser {
@@ -380,8 +380,8 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
             //      // multiplicador=1
             //    - Capacidad en función de la temperatura de impulsión (cap_T),
             //      Rendimiento nominal en función de la temperatura de impulsión (ren_T),
-            //      Rendimiento en funcion de la carga parcial en términos de potencia (ren_FCP_Potencia),
-            //      Rendimiento en funcion de la carga parcial en términos de tiempo (ren_FCP_Tiempo)
+            //      Rendimiento en función de la carga parcial en términos de potencia (ren_FCP_Potencia),
+            //      Rendimiento en función de la carga parcial en términos de tiempo (ren_FCP_Tiempo)
             let heating = Some(HeatingParams {
                 fuel,
                 capacity: get_tag_as_f32(&node, "capNom").unwrap_or_default(),
@@ -442,14 +442,14 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
             // EQ_ED_AIREAIRE_SF - "Expansión directa aire-aire sólo frio" - "Electricidad" - ✔
             //    - Nombre,
             //      Tipo de energía (tipoEnergia="Electricidad"),
-            //      Capacidad total refrigeración nomminal (kW) (capTotRefNom),
+            //      Capacidad total refrigeración nominal (kW) (capTotRefNom),
             //      Capacidad sensible refrigeración nominal (kW) (capSenRefNom),
             //      Consumo refrigeración nominal (kW) (conRefNom),
             //      Caudal de aire impulsión nominal (m³/h) (vImpulsionNom),
             //      Tipo energía (tipoEnergia="Electricidad"),
             //      // Dif. temperatura termostato (dtTermostato),
             //      // multiplicador=1
-            //    - Capacidad total refrigeración en función de la tempratura (capTotRef_T),
+            //    - Capacidad total refrigeración en función de la temperatura (capTotRef_T),
             //      Capacidad total de refrigeración en función de la carga parcial (capTotRef_FCP),
             //      Carga sensible refrigeración en función de temperaturas (capSenRef_T),
             //      Consumo de refrigeración en función de la temperatura (conRef_T),
