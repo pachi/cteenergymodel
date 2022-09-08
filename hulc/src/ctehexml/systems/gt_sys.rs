@@ -57,17 +57,15 @@ impl GtSystems {
 
         for block in blocks {
             match block.btype.as_str() {
-                // Elementos generales =========================
-                // Valores por defecto, Datos generales, espacio de trabajo y edificio
                 "SYSTEM" => {
                     // systems.insert(block.name.clone(), GtSystem::try_from(block)?);
                     systems.insert(block.btype.clone(), block);
                 }
-                // Horarios ----------
+
                 "ZONE" => {
                     zones.insert(block.name.clone(), block);
                 }
-                // Condiciones de uso y ocupación ----------
+
                 "PUMP" => {
                     equipment.insert(block.name.clone(), TempEquipment::GtPump(block.into()));
                 }
