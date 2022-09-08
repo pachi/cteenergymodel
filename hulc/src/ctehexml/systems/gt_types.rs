@@ -432,7 +432,7 @@ pub struct GtBoiler {
     /// 4 - Biomasa
     /// 5 - Eléctrica
     pub kind: BoilerKind,
-    
+
     /// Potencia nominal (C-C-CAPACITY), kW
     pub capacity: f32,
     /// Rendimiento, -
@@ -455,7 +455,6 @@ pub struct GtBoiler {
     /// Bomba agua caliente
     /// (HW-PUMP)
     pub hw_pump: Option<String>,
-
     // Temperatura de consigna, ºC (45ºC)
     // La toma del circuito?
     // Salto de temperatura, ºC
@@ -496,6 +495,7 @@ impl From<BdlBlock> for GtBoiler {
 
         let eff = match kind {
             Electric => block.attrs.get_f32("C-AFUE").unwrap_or(0.98),
+            // TODO: ver si los subtipos tienen rendimientos por defecto diferentes
             _ => block.attrs.get_f32("C-THERM-EFF-MAX").unwrap_or(0.85),
         };
 
@@ -511,6 +511,34 @@ impl From<BdlBlock> for GtBoiler {
     }
 }
 
+/// Tipo de calentador de ACS
+/// (TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum DwHeaterKind {
+    /// Caldera de combustible
+    #[default]
+    Conventional,
+    /// Caldera eléctrica
+    Electric,
+    /// Bomba de calor
+    HeatPump,
+}
+
+impl FromStr for DwHeaterKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use DwHeaterKind::*;
+
+        match s {
+            "HEAT-PUMP" => Ok(HeatPump),
+            "GAS" => Ok(Conventional),
+            "ELEC" => Ok(Electric),
+            _ => bail!("Tipo de calentador de ACS desconocido"),
+        }
+    }
+}
+
 /// Calderas de ACS de GT
 /// (DW-HEATER)
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -522,28 +550,33 @@ pub struct GtDwHeater {
     /// - HEAT-PUMP: bomba de calor
     /// - GAS: caldera de combustible
     /// - ELEC: caldera eléctrica
-    pub kind: String,
+    pub kind: DwHeaterKind,
+
+    /// Capacidad nominal, kW
+    /// C-C-CAPACITY
+    pub capacity: f32,
+    /// Rendimiento
+    /// Rendimiento eléctrico, COP
+    /// en BdC y calderas eléctricas
+    /// (C-STBY-LOSS-FRAC)
+    /// Eficiencia térmica, nu
+    /// En calderas de combustible
+    /// (C-ENERGY-FACTOR)
+    pub eff: f32,
     /// Combustible
     /// - GasNatural
     /// - Gasóleo
     /// - ...
     /// (FUEL-METER)
     pub carrier: String,
+
     /// Circuito de ACS que alimenta
     /// (DHW-LOOP)
-    pub dwh_loop: String,
+    pub dhw_loop: String,
+    /// Bomba agua caliente sanitaria
+    /// (DHW-PUMP)
+    pub dhw_pump: Option<String>,
 
-    /// Capacidad nominal, kW
-    /// C-C-CAPACITY
-    pub capacity: f32,
-    /// Rendimiento eléctrico, COP
-    /// en BdC y calderas eléctricas
-    /// (C-STBY-LOSS-FRAC)
-    pub eff: f32,
-    /// Eficiencia térmica, nu
-    /// En calderas de combustible
-    /// (C-ENERGY-FACTOR)
-    pub thermal_eff: f32,
     /// Presencia de depósito
     /// (C-CATEGORY)
     /// 0 - nada*
@@ -556,10 +589,56 @@ pub struct GtDwHeater {
     /// Pérdidas térmicas del depósito de acumulación, W/K
     /// (TANK-UA)
     pub tank_ua: f32,
-    // TODO: HP-SUPP-CAPACITY=0 - capacidad del sistema de respaldo en BdC, por defecto es igual que capacity
+    // TODO: HP-SUPP-CAPACITY=0 - capacidad del sistema de respaldo (resistencia elec.) en BdC, por defecto es igual que capacity
     // C-C-SUBTYPE -> 2 = Tiene panel solar,
     // C-C-AREA-PS      = 10 superficie de paneles solares, m²
     // C-C-PORC-PS      = 30 % de demanda cubierta, %
+}
+
+impl From<BdlBlock> for GtDwHeater {
+    fn from(block: BdlBlock) -> Self {
+        use DwHeaterKind::*;
+
+        let kind = block
+            .attrs
+            .get_str("TYPE")
+            .unwrap_or_default()
+            .parse()
+            .unwrap_or_default();
+
+        let carrier = block.attrs.get_str("FUEL-METER").unwrap_or(match kind {
+            Electric | HeatPump => "Electricidad".into(),
+            _ => "Gas Natural".into(),
+        });
+
+        let eff = match kind {
+            Electric => block.attrs.get_f32("C-STBY-LOSS-FRAC").unwrap_or(1.00),
+            HeatPump => block.attrs.get_f32("C-STBY-LOSS-FRAC").unwrap_or(2.70),
+            _ => block.attrs.get_f32("C-ENERGY-FACTOR").unwrap_or(0.80),
+        };
+
+        let has_tank = &block.attrs.get_str("C-CATEGORY").unwrap_or_default() == "1";
+
+        Self {
+            name: block.name.clone(),
+            kind,
+            capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
+            eff,
+            carrier,
+            dhw_loop: block.attrs.get_str("DHW-LOOP").unwrap_or_default(),
+            dhw_pump: block.attrs.get_str("DHW-PUMP").ok(),
+            tank_volume: if has_tank {
+                block.attrs.get_f32("TANK-VOLUME").unwrap_or_default()
+            } else {
+                0.0
+            },
+            tank_ua: if has_tank {
+                block.attrs.get_f32("TANK-UA").unwrap_or_default()
+            } else {
+                0.0
+            },
+        }
+    }
 }
 
 /// Torre de refrigeración de GT
