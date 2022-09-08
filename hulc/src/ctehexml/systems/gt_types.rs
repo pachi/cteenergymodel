@@ -297,7 +297,7 @@ impl FromStr for CondenserKind {
             // No usados en GT?
             "REMOTE-AIR-COOLED" => Ok(RemoteAir),
             "REMOTE-EVAP-COOLED" => Ok(RemoteEvap),
-            _ => bail!("Tipo de condensadora desconocido"),
+            _ => bail!("Tipo de condensación desconocido"),
         }
     }
 }
@@ -333,9 +333,10 @@ pub struct GtChiller {
     /// Rendimiento en calefacción para enfriadoras reversibles, COP, -
     /// (C-COP)
     pub cop: Option<f32>,
-    /// Combustible (adicional a electricidad)
+    /// Combustible
+    /// En el caso de enfriadoras por absorción de llama directa o motor de combustión es distinto a electricidad y está en
     /// (FUEL-METER)
-    pub carrier: Option<String>,
+    pub carrier: String,
 
     // -- Conexiones a circuitos --
     // Circuito agua fría ---
@@ -379,6 +380,13 @@ impl From<BdlBlock> for GtChiller {
             .unwrap_or_default()
             .parse()
             .unwrap_or_default();
+        let carrier = match kind {
+            ChillerKind::GasAbsor | ChillerKind::Engine => {
+                block.attrs.get_str("FUEL-METER").unwrap_or_default()
+            }
+            _ => "Electricidad".into(),
+        };
+
         Self {
             name: block.name.clone(),
             kind,
@@ -387,7 +395,7 @@ impl From<BdlBlock> for GtChiller {
             eer: block.attrs.get_f32("C-NUM-OF-UNITS").unwrap_or_default(),
             eer_th: block.attrs.get_f32("C-IPLV").ok(),
             heat_capacity: block.attrs.get_f32("C-DESIGN-KW").ok(),
-            carrier: block.attrs.get_str("FUEL-METER").ok(),
+            carrier,
             cop: block.attrs.get_f32("C-COP").ok(),
             chw_loop: block.attrs.get_str("CHW-LOOP").unwrap_or_default(),
             cw_loop: block.attrs.get_str("CW-LOOP").ok(),
