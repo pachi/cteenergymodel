@@ -432,7 +432,7 @@ pub struct GtBoiler {
     /// 4 - Biomasa
     /// 5 - Eléctrica
     pub kind: BoilerKind,
-
+    
     /// Potencia nominal (C-C-CAPACITY), kW
     pub capacity: f32,
     /// Rendimiento, -
@@ -441,13 +441,17 @@ pub struct GtBoiler {
     /// En calderas eléctricas, Eficiencia eléctrica, nu
     /// (C-AFUE || 0.98)
     pub eff: f32,
+    /// Tipo de combustible
+    /// - Gas Natural*
+    /// - Gasóleo
+    /// - ...
+    pub carrier: String,
 
     // -- Conexiones a circuitos --
     // Circuito agua caliente ---
     /// Circuito de agua caliente que alimenta
     /// (HW-LOOP)
     pub hw_loop: String,
-
     /// Bomba agua caliente
     /// (HW-PUMP)
     pub hw_pump: Option<String>,
@@ -457,11 +461,6 @@ pub struct GtBoiler {
     // Salto de temperatura, ºC
     // (HW-DT || 5ºC)
     // pub hw_dt: f32,
-    /// Tipo de combustible
-    /// - Gas Natural*
-    /// - Gasóleo
-    /// - ...
-    pub carrier: String,
     // Consumo nominal / consumo eléctrico, ratio (400)
     // (C-C-KN)
     // pub kn: f32,
