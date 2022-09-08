@@ -397,6 +397,23 @@ impl From<BdlBlock> for GtChiller {
     }
 }
 
+/// Tipo de caldera
+/// (TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum BoilerKind {
+    /// Caldera convencional
+    #[default]
+    Conventional,
+    /// Caldera de baja temperatura
+    LowTemp,
+    /// Caldera de condensación
+    Condensing,
+    /// Biomasa
+    Biomass,
+    /// Caldera eléctrica
+    Electric,
+}
+
 /// Caldera de GT
 /// (BOILER)
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -407,44 +424,92 @@ pub struct GtBoiler {
     /// (TYPE)
     /// - HW-BOILER-W/DRAFT: caldera de combustible (con ventilador)
     /// - ELEC-HW-BOILER: caldera eléctrica
-    pub kind: String,
     /// Subtipo
     /// (C-C-SUBTYPE)
     /// 1 - Convencional
     /// 2 - Baja temperatura
     /// 3 - Condensación
     /// 4 - Biomasa
-    pub subkind: String,
+    /// 5 - Eléctrica
+    pub kind: BoilerKind,
 
     /// Potencia nominal (C-C-CAPACITY), kW
     pub capacity: f32,
-    /// Rendimiento térmico, ratio
-    /// En calderas de combustible
+    /// Rendimiento, -
+    /// En calderas de combustible, Rendimiento térmico, ratio
     /// (C-THERM-EFF-MAX || 0.85)
+    /// En calderas eléctricas, Eficiencia eléctrica, nu
+    /// (C-AFUE || 0.98)
     pub eff: f32,
-    /// Eficiencia eléctrica, nu
-    /// En calderas eléctricas
-    /// (C-AFUE)
-    pub elec_eff: f32,
 
     // -- Conexiones a circuitos --
     // Circuito agua caliente ---
     /// Circuito de agua caliente que alimenta
+    /// (HW-LOOP)
     pub hw_loop: String,
-    // Temperatura de consigna, ºC (45ºC)
-    // ?
-    // Salto de temperatura, ºC (HW-DT) (5ºC)
-    pub hw_dt: f32,
 
+    /// Bomba agua caliente
+    /// (HW-PUMP)
+    pub hw_pump: Option<String>,
+
+    // Temperatura de consigna, ºC (45ºC)
+    // La toma del circuito?
+    // Salto de temperatura, ºC
+    // (HW-DT || 5ºC)
+    // pub hw_dt: f32,
     /// Tipo de combustible
     /// - Gas Natural*
     /// - Gasóleo
     /// - ...
-    pub fuel_meter: String,
+    pub carrier: String,
+    // Consumo nominal / consumo eléctrico, ratio (400)
+    // (C-C-KN)
+    // pub kn: f32,
+    // -- Curvas comportamiento --
+}
 
-    /// Consumo nominal / consumo eléctrico, ratio (400)
-    /// (C-C-KN)
-    pub kn: f32, // -- Curvas comportamiento --
+impl From<BdlBlock> for GtBoiler {
+    fn from(block: BdlBlock) -> Self {
+        use BoilerKind::*;
+
+        let kind = match block.attrs.get_str("TYPE").unwrap_or_default().as_str() {
+            "ELEC-HW-BOILER" => Electric,
+            _ => match block
+                .attrs
+                .get_str("C-C-SUBTYPE")
+                .unwrap_or_default()
+                .as_str()
+            {
+                "2" => LowTemp,
+                "3" => Condensing,
+                "4" => Biomass,
+                "5" => Electric,
+                // "1" => Conventional,
+                _ => Default::default(),
+            },
+        };
+
+        let carrier = block.attrs.get_str("FUEL-METER").unwrap_or(match kind {
+            Electric => "Electricidad".into(),
+            Biomass => "Biomasa".into(),
+            _ => "Gas Natural".into(),
+        });
+
+        let eff = match kind {
+            Electric => block.attrs.get_f32("C-AFUE").unwrap_or(0.98),
+            _ => block.attrs.get_f32("C-THERM-EFF-MAX").unwrap_or(0.85),
+        };
+
+        Self {
+            name: block.name.clone(),
+            kind,
+            capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
+            eff,
+            carrier,
+            hw_loop: block.attrs.get_str("HW-LOOP").unwrap_or_default(),
+            hw_pump: block.attrs.get_str("HW-PUMP").ok(),
+        }
+    }
 }
 
 /// Calderas de ACS de GT
@@ -460,7 +525,7 @@ pub struct GtDwHeater {
     /// - ELEC: caldera eléctrica
     pub kind: String,
     /// Combustible
-    /// - GasNatural*
+    /// - GasNatural
     /// - Gasóleo
     /// - ...
     /// (FUEL-METER)
@@ -468,13 +533,14 @@ pub struct GtDwHeater {
     /// Circuito de ACS que alimenta
     /// (DHW-LOOP)
     pub dwh_loop: String,
+
     /// Capacidad nominal, kW
     /// C-C-CAPACITY
     pub capacity: f32,
     /// Rendimiento eléctrico, COP
     /// en BdC y calderas eléctricas
     /// (C-STBY-LOSS-FRAC)
-    pub cop: f32,
+    pub eff: f32,
     /// Eficiencia térmica, nu
     /// En calderas de combustible
     /// (C-ENERGY-FACTOR)
