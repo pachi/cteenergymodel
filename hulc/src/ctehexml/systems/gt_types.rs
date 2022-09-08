@@ -336,7 +336,7 @@ pub struct GtChiller {
     /// Combustible
     /// En el caso de enfriadoras por absorción de llama directa o motor de combustión es distinto a electricidad y está en
     /// (FUEL-METER)
-    pub carrier: String,
+    pub fuel: String,
 
     // -- Conexiones a circuitos --
     // Circuito agua fría ---
@@ -380,7 +380,7 @@ impl From<BdlBlock> for GtChiller {
             .unwrap_or_default()
             .parse()
             .unwrap_or_default();
-        let carrier = match kind {
+        let fuel = match kind {
             ChillerKind::GasAbsor | ChillerKind::Engine => {
                 block.attrs.get_str("FUEL-METER").unwrap_or_default()
             }
@@ -395,7 +395,7 @@ impl From<BdlBlock> for GtChiller {
             eer: block.attrs.get_f32("C-NUM-OF-UNITS").unwrap_or_default(),
             eer_th: block.attrs.get_f32("C-IPLV").ok(),
             heat_capacity: block.attrs.get_f32("C-DESIGN-KW").ok(),
-            carrier,
+            fuel,
             cop: block.attrs.get_f32("C-COP").ok(),
             chw_loop: block.attrs.get_str("CHW-LOOP").unwrap_or_default(),
             cw_loop: block.attrs.get_str("CW-LOOP").ok(),
@@ -453,7 +453,7 @@ pub struct GtBoiler {
     /// - Gas Natural*
     /// - Gasóleo
     /// - ...
-    pub carrier: String,
+    pub fuel: String,
 
     // -- Conexiones a circuitos --
     // Circuito agua caliente ---
@@ -495,7 +495,7 @@ impl From<BdlBlock> for GtBoiler {
             },
         };
 
-        let carrier = block.attrs.get_str("FUEL-METER").unwrap_or(match kind {
+        let fuel = block.attrs.get_str("FUEL-METER").unwrap_or(match kind {
             Electric => "Electricidad".into(),
             Biomass => "Biomasa".into(),
             _ => "Gas Natural".into(),
@@ -512,7 +512,7 @@ impl From<BdlBlock> for GtBoiler {
             kind,
             capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
             eff,
-            carrier,
+            fuel,
             hw_loop: block.attrs.get_str("HW-LOOP").unwrap_or_default(),
             hw_pump: block.attrs.get_str("HW-PUMP").ok(),
         }
@@ -587,7 +587,7 @@ pub struct GtDwHeater {
     /// - Gasóleo
     /// - ...
     /// (FUEL-METER)
-    pub carrier: String,
+    pub fuel: String,
 
     /// Circuito de ACS que alimenta
     /// (DHW-LOOP)
@@ -627,7 +627,7 @@ impl From<BdlBlock> for GtDwHeater {
             .unwrap_or_default();
         let capacity = block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default();
 
-        let carrier = block.attrs.get_str("FUEL-METER").unwrap_or(match kind {
+        let fuel = block.attrs.get_str("FUEL-METER").unwrap_or(match kind {
             Electric | HeatPump => "Electricidad".into(),
             _ => "Gas Natural".into(),
         });
@@ -658,7 +658,7 @@ impl From<BdlBlock> for GtDwHeater {
             kind,
             capacity,
             eff,
-            carrier,
+            fuel,
             dhw_loop: block.attrs.get_str("DHW-LOOP").unwrap_or_default(),
             dhw_pump: block.attrs.get_str("DHW-PUMP").ok(),
             dhw_tank,
@@ -706,7 +706,7 @@ pub struct GtHeatRejection {
     pub kind: HeatRejectionKind,
     /// Vector energético
     /// Siempre electricidad
-    pub carrier: String,
+    pub fuel: String,
 
     // --- General
     /// Capacidad nominal de refrigeración en condiciones CTI, kW
@@ -741,12 +741,12 @@ impl From<BdlBlock> for GtHeatRejection {
             .unwrap_or_default()
             .parse()
             .unwrap_or_default();
-        let carrier = "Electricidad".into();
+        let fuel = "Electricidad".into();
 
         Self {
             name,
             kind,
-            carrier,
+            fuel,
             capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
             fan_kw: block.attrs.get_f32("FAN-KW/CELL").unwrap_or_default(),
             number_of_cells: block.attrs.get_f32("NUMBER-OF-CELLS").unwrap_or(1.0),
@@ -784,7 +784,7 @@ pub struct GtElectricGenerator {
     // pub kind: String,
     /// Combustible usado
     /// (FUEL-METER) | "Gas Natural"
-    pub carrier: String,
+    pub fuel: String,
     /// Potencia nominal, kW
     /// (CAPACITY)
     pub capacity: f32,
@@ -807,14 +807,14 @@ pub struct GtElectricGenerator {
 impl From<BdlBlock> for GtElectricGenerator {
     fn from(block: BdlBlock) -> Self {
         let name = block.name.clone();
-        let carrier = block
+        let fuel = block
             .attrs
             .get_str("FUEL-METER")
             .unwrap_or_else(|_| "Gas Natural".into());
 
         Self {
             name,
-            carrier,
+            fuel,
             capacity: block.attrs.get_f32("CAPACITY").unwrap_or_default(),
             eff: block.attrs.get_f32("C-C-HIR").unwrap_or(0.35),
             cw_loop: block.attrs.get_str("CW-LOOP").ok(),
@@ -1036,6 +1036,8 @@ pub struct GtZone {
     /// Espacio asociado
     /// (SPACE)
     pub space: String,
+    /// Sistema secundario asignado a la zona
+    pub system: Option<String>,
 
     // --- Caudales
     // -- Aire impulsión de diseño --
@@ -1114,6 +1116,8 @@ impl From<BdlBlock> for GtZone {
             name,
             kind,
             space: block.attrs.get_str("SPACE").unwrap_or_default(),
+            // El sistema se asigna tras la construcción
+            system: None,
             design_flow: block.attrs.get_f32("C-C-ASSIG-FLOW").ok(),
             exh_flow,
             exh_kw,

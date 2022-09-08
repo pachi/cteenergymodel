@@ -58,16 +58,23 @@ impl GtSystems {
         let mut systems: BTreeMap<String, BdlBlock> = BTreeMap::new();
         let mut equipment: BTreeMap<String, TempEquipment> = BTreeMap::new();
 
+        // Para asignar a cada zona el último sistema visto
+        let mut last_seen_system: Option<String> = None;
+
         for block in blocks {
             match block.btype.as_str() {
                 // Zonas
                 "ZONE" => {
-                    zones.insert(block.name.clone(), block.into());
+                    let mut zone: GtZone = block.into();
+                    zone.system = last_seen_system.clone();
+                    zones.insert(zone.name.clone(), zone);
                 }
                 // Secundarios
                 "SYSTEM" => {
                     // systems.insert(block.name.clone(), GtSystem::try_from(block)?);
-                    systems.insert(block.btype.clone(), block);
+                    let system = block;
+                    last_seen_system = Some(system.name.clone());
+                    systems.insert(system.name.clone(), system);
                 }
                 // Equipos
                 "PUMP" => {
