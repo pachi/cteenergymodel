@@ -539,6 +539,17 @@ impl FromStr for DwHeaterKind {
     }
 }
 
+/// Hot Water Storage
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct GtHotWaterStorageTank {
+    /// Nombre
+    pub name: String,
+    /// Volumen, m³
+    pub volume: f32,
+    /// Coeficiente de pérdidas global del depósito, UA (W/ºC)
+    pub ua: f32,
+}
+
 /// Calderas de ACS de GT
 /// (DW-HEATER)
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -577,6 +588,7 @@ pub struct GtDwHeater {
     /// (DHW-PUMP)
     pub dhw_pump: Option<String>,
 
+    /// Depósito de agua caliente
     /// Presencia de depósito
     /// (C-CATEGORY)
     /// 0 - nada*
@@ -585,10 +597,9 @@ pub struct GtDwHeater {
     // Solo con depósito si es == 1
     /// Volumen del depósito de acumulación, l
     /// (TANK-VOLUME)
-    pub tank_volume: f32,
     /// Pérdidas térmicas del depósito de acumulación, W/K
     /// (TANK-UA)
-    pub tank_ua: f32,
+    pub dhw_tank: Option<GtHotWaterStorageTank>,
     // TODO: HP-SUPP-CAPACITY=0 - capacidad del sistema de respaldo (resistencia elec.) en BdC, por defecto es igual que capacity
     // C-C-SUBTYPE -> 2 = Tiene panel solar,
     // C-C-AREA-PS      = 10 superficie de paneles solares, m²
@@ -599,12 +610,14 @@ impl From<BdlBlock> for GtDwHeater {
     fn from(block: BdlBlock) -> Self {
         use DwHeaterKind::*;
 
+        let name = block.name.clone();
         let kind = block
             .attrs
             .get_str("TYPE")
             .unwrap_or_default()
             .parse()
             .unwrap_or_default();
+        let capacity = block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default();
 
         let carrier = block.attrs.get_str("FUEL-METER").unwrap_or(match kind {
             Electric | HeatPump => "Electricidad".into(),
@@ -618,25 +631,29 @@ impl From<BdlBlock> for GtDwHeater {
         };
 
         let has_tank = &block.attrs.get_str("C-CATEGORY").unwrap_or_default() == "1";
+        let dhw_tank = if has_tank {
+            let volume = block
+                .attrs
+                .get_f32("TANK-VOLUME")
+                .unwrap_or(65.0 * capacity);
+            Some(GtHotWaterStorageTank {
+                name: format!("Deposito - {}", name),
+                volume,
+                ua: block.attrs.get_f32("TANK-UA").unwrap_or(0.042 * volume),
+            })
+        } else {
+            None
+        };
 
         Self {
-            name: block.name.clone(),
+            name,
             kind,
-            capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
+            capacity,
             eff,
             carrier,
             dhw_loop: block.attrs.get_str("DHW-LOOP").unwrap_or_default(),
             dhw_pump: block.attrs.get_str("DHW-PUMP").ok(),
-            tank_volume: if has_tank {
-                block.attrs.get_f32("TANK-VOLUME").unwrap_or_default()
-            } else {
-                0.0
-            },
-            tank_ua: if has_tank {
-                block.attrs.get_f32("TANK-UA").unwrap_or_default()
-            } else {
-                0.0
-            },
+            dhw_tank,
         }
     }
 }
