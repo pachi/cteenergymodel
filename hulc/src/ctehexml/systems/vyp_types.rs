@@ -345,8 +345,7 @@ pub struct ThermalGenerator {
     pub curves: Vec<(String, String)>,
 }
 
-/// Hot Water Generation
-/// TODO: Debería esto estar en otro lado?
+/// Hot Water Storage
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct HotWaterStorageTank {
     /// Nombre
