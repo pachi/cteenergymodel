@@ -757,33 +757,76 @@ impl From<BdlBlock> for GtHeatRejection {
     }
 }
 
-/// Equipos cogeneración de GT
+/// Equipos de cogeneración de GT
 /// (ELEC-GENERATOR)
+///
+/// "Equipo de cogeneración 1" = ELEC-GENERATOR  
+///    TYPE             = ENGINE-GENERATOR
+///    CAPACITY         = 123
+///    FUEL-METER       = "Gasóleo"
+///    EXH-LOOP         = "CIRCUITO ACS"
+///    JAC-LOOP         = "CIRCUITO ACS"
+///    CW-LOOP          = "Circuito hidraúlico 4"
+///    CW-DT            = 20
+///    C-C-HIR          = 0.35
+///    ..
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct GtElectricGenerator {
     /// Nombre / descripción
     pub name: String,
-    /// Tipo de sistema
-    /// (TYPE)
-    /// - ENGINE-GENERATOR: Motor de combustión
-    /// - GAS-TURBINE-GENERATOR (no usado en GT)
-    /// - STEAM-TURBINE-GENERATOR (no usado en GT)
-    /// - PV-ARRAY (no usado en GT)
-    pub kind: String,
+    // Tipo de sistema
+    // (TYPE)
+    // - ENGINE-GENERATOR: Motor de combustión
+    // No usados por GT
+    // - GAS-TURBINE-GENERATOR (no usado en GT)
+    // - STEAM-TURBINE-GENERATOR (no usado en GT)
+    // - PV-ARRAY (no usado en GT)
+    // pub kind: String,
+    /// Combustible usado
+    /// (FUEL-METER) | "Gas Natural"
+    pub carrier: String,
     /// Potencia nominal, kW
     /// (CAPACITY)
     pub capacity: f32,
-    /// Rendimiento nominal, ratio
-    /// Consumo de combustible para la producción eléctrica, ambas en iguales unidades
+    /// Rendimiento térmico nominal, ratio
+    /// Relación entre electricidad producida y el consumo de combustible en condiciones nominales
     /// Usa poder calorífico superior (las tablas suelen venir en PCI)
-    /// (C-C-HIR) - Heat input ratio
-    pub hir: f32,
-    /// Combustible usado
-    /// (FUEL-METER)
-    pub carrier: String,
+    /// (C-C-HIR) || 0.35
+    pub eff: f32,
+    /// Circuito de energía térmica sobrante de las camisas del motor
+    /// (CW-LOOP)
+    pub cw_loop: Option<String>,
+    /// Circuito para recuperación de calor de los gases
+    /// (EXH-LOOP)
+    pub exh_loop: Option<String>,
+    /// Circuito para recuperación de calor de la camisa
+    /// (JAC-LOOP)
+    pub jac_loop: Option<String>,
 }
 
-/// Intercambiado de calor con el terreno (alimentación de agua bruta) de GT
+impl From<BdlBlock> for GtElectricGenerator {
+    fn from(block: BdlBlock) -> Self {
+        let name = block.name.clone();
+        let carrier = block
+            .attrs
+            .get_str("FUEL-METER")
+            .unwrap_or_else(|_| "Gas Natural".into());
+
+        Self {
+            name,
+            carrier,
+            capacity: block.attrs.get_f32("CAPACITY").unwrap_or_default(),
+            eff: block.attrs.get_f32("C-C-HIR").unwrap_or(0.35),
+            cw_loop: block.attrs.get_str("CW-LOOP").ok(),
+            exh_loop: block.attrs.get_str("EXH-LOOP").ok(),
+            jac_loop: block.attrs.get_str("JAC-LOOP").ok(),
+        }
+    }
+}
+
+
+
+/// Intercambiado de calor de agua con el terreno/agua/lago/pozo (alimentación de agua bruta) de GT
 /// (GROUND-LOOP-HX)
 #[derive(Debug, Default, Clone, PartialEq, Eq)]
 pub struct GtGroundLoopHx {
@@ -791,16 +834,18 @@ pub struct GtGroundLoopHx {
     pub name: String,
     /// Tipo de sistema
     /// (TYPE)
-    /// - LAKE/WELL: temperatura del circuito dada por horario
+    /// - LAKE/WELL: intercambio con agua subterránea
     /// - otros tipos no usados en GT para suelo horizontal o vert., etc
     pub kind: String,
-    /// Circuito de agua bruta
+    /// Circuito de agua bruta (condensados)
     /// (CIRCULATION-LOOP)
-    pub circulation_loop: String,
+    pub circ_loop: String,
     /// Horario de temperatura del circuito
     /// (LOOP-TEMP-SCH)
     pub loop_temp_sch: String,
 }
+
+
 
 /// Sistema (subsistema secundario) de GT
 /// (SYSTEM)
