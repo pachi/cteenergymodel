@@ -892,28 +892,30 @@ impl From<BdlBlock> for GtGroundLoopHx {
 pub struct GtSystem {
     /// Nombre / descripción
     pub name: String,
-    /// Tipo de sistema
+    /// Tipo de sistema (lado del aire)
     /// (TYPE)
     /// Tratamiento de aire
     /// - PSZ: Autónomo caudal constante (packaged single zone, simple conducto)
     /// - PMZS: Solo ventilación (¿no es multizona?) (packaged multizone, doble conducto)
-    /// - PVAVS: Autónomo caudal variable (packaged/parallel? variable-air volume, simple conducto)
-    /// - PVVT: Autónomo caudal variable temperatura variable (packaged/parallel? variable volume variable temperature, simple conducto)
+    /// - PVAVS: Autónomo caudal variable (packaged variable-air volume, simple conducto)
+    /// - PVVT: Autónomo caudal variable temperatura variable (packaged variable volume variable temperature, simple conducto)
     /// - SZRH: Todo aire caudal constante unizona (variable temperature (single zone reheat?, simple conducto)
     /// - VAVS: Todo aire caudal variable (variable volume fan, simple conducto)
     /// - RHFS: Todo aire caudal constante (constant-volume reheat fan)
     /// - DDS: Todo aire doble conducto (dual-duct fan)
     /// 
     /// Sistemas unitarios
+    /// * Terminales
     /// - PTAC: Autónomo mediante unidades terminales (packaged terminal aire conditioner)
     /// - HP: Autónomo BdC en circuito cerrado (¿water loop? heat pump)
+    /// 
     /// - FC: Fancoil (ventiloconvector) (fan coil)
     /// - UVT: Termoventilación (unit ventilator)
     /// - UHT: Solo calefacción por efecto Joule (unit heater)
     /// 
     /// - EVAP-COOL: Enfriamiento evaporativo (evaporative cooling)
     /// - CBVAV: Climatizadora de aire primario (ceiling bypass)
-    /// - FPW: Solo calefacción por agua (floor panel ???)
+    /// - FPW: Solo calefacción por agua (floor panel heating FPH???)
     pub kind: String,
     /// Zona de control
     /// (CONTROL-ZONE)
