@@ -894,22 +894,22 @@ pub struct GtSystem {
     pub name: String,
     /// Tipo de sistema
     /// (TYPE)
-    /// - PSZ: Autónomo caudal constante
-    /// - PMZS: Solo ventilación
-    /// - PVAVS: Autónomo caudal variable
-    /// - PVVT: Autónomo caudal variable temperatura variable
-    /// - PTAC: Autónomo mediante unidades terminales
-    /// - HP: Autónomo BdC en circuito cerrado
-    /// - SZRH: Todo aire caudal constante unizona
-    /// - VAVS: Todo aire caudal variable
-    /// - RHFS: Todo aire caudal constante
-    /// - DDS: Todo aire doble conducto
-    /// - FC: Fancoil (ventiloconvector)
-    /// - UVT: Termoventilación
-    /// - UHT: Solo calefacción por efecto Joule
-    /// - EVAP-COOL: Enfriamiento evaporativo
-    /// - CBVAV: Climatizadora de aire primario
-    /// - FPW: Solo calefacción por agua
+    /// - PSZ: Autónomo caudal constante (packaged single zone, simple conducto)
+    /// - PMZS: Solo ventilación (¿no es multizona?) (packaged multizone, doble conducto)
+    /// - PVAVS: Autónomo caudal variable (packaged variable-air volume, simple conducto)
+    /// - PVVT: Autónomo caudal variable temperatura variable (packaged variable volume variable temperature, simple conducto)
+    /// - PTAC: Autónomo mediante unidades terminales (packaged terminal aire conditioner)
+    /// - HP: Autónomo BdC en circuito cerrado (¿water loop? heat pump)
+    /// - SZRH: Todo aire caudal constante unizona (variable temperature (single zone reheat?, simple conducto)
+    /// - VAVS: Todo aire caudal variable (variable volume fan, simple conducto)
+    /// - RHFS: Todo aire caudal constante (constant-volume reheat fan)
+    /// - DDS: Todo aire doble conducto (dual-duct fan)
+    /// - FC: Fancoil (ventiloconvector) (fan coil)
+    /// - UVT: Termoventilación (unit ventilator)
+    /// - UHT: Solo calefacción por efecto Joule (unit heater)
+    /// - EVAP-COOL: Enfriamiento evaporativo (evaporative cooling)
+    /// - CBVAV: Climatizadora de aire primario (ceiling bypass)
+    /// - FPW: Solo calefacción por agua (floor panel ???)
     pub kind: String,
     /// Zona de control
     /// (CONTROL-ZONE)
