@@ -893,6 +893,7 @@ pub struct GtSystem {
     /// Nombre / descripción
     pub name: String,
     /// Tipo de sistema (lado del aire)
+    /// p.339 https://doe2.com/Download/DOE-22/DOE22Vol2-Dictionary.pdf
     /// (TYPE)
     /// Tratamiento de aire
     /// - PSZ: Autónomo caudal constante (packaged single zone, simple conducto)
