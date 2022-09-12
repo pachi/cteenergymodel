@@ -1,0 +1,59 @@
+Proj   "cajazapatos_bombacaloracs"  
+   BDBaseVersion = 8
+   CreateDate = 1662989516
+   ModDate = 1662989540
+   LibraryFile = "UsrLibM.dat"
+   InputModule = 3
+   ComplianceRules = "CALENER Beta, Marzo 2001 - Ver. 1.2 (CALENER_Beta_1_2.bin)"
+   InterfaceMode = 1
+   AllowWizard = 0
+   InputUnitsType = "Metric"
+   OutputUnitsType = "Metric"
+   ..
+
+FacetColor   "By Wall Type"  
+   FacetType = "Walls"
+   ColorOption = "By Wall Type"
+   ..
+
+FacetColor   "By Construction"  
+   FacetType = "Walls"
+   ColorOption = "By Construction"
+   ..
+
+FacetColor   "Uniform"  
+   FacetType = "Windows"
+   ColorOption = "Uniform"
+   ..
+
+FacetColor   "By Glass Type"  
+   FacetType = "Windows"
+   ColorOption = "By Glass Type"
+   ..
+
+Light3D   "Light3D - Default"  
+   Type = "Default"
+   ..
+
+Light3D   "Light3D - User1"  
+   Type = "User Defined 1"
+   ..
+
+Light3D   "Light3D - User2"  
+   Type = "User Defined 2"
+   ..
+
+Light3D   "Light3D - User3"  
+   Type = "User Defined 3"
+   ..
+
+Light3D   "Light3D - User4"  
+   Type = "User Defined 4"
+   ..
+
+Light3D   "Light3D - User5"  
+   Type = "User Defined 5"
+   ..
+
+
+END_OF_FILE
