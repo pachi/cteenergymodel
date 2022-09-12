@@ -1015,23 +1015,22 @@ pub struct GtSystem {
     /// Potencia del ventilador de impulsión, kW
     /// (C-C_SUPPLY-KW)
     pub supply_kw: f32,
-    // Factor transporte -> (C-C-SUP-KW/FLOW)
     // Tipo de control
     // (C-C-FAN-CONTROL)
     // Posición del ventilador
     // (C-C-FAN-PLACEMENT)
 
     // Ventilador de retorno ---
-    /// Existe ventilador retorno?
+    /// ¿Existe ventilador retorno?
     /// (C-C-RETURN-FAN)
     /// Caudal de retorno, m³/h
     /// (RETURN-FLOW)
-    pub return_flow: f32,
+    pub return_flow: Option<f32>,
     /// Potencia de ventilador de retorno, kW
     /// (C-C-RETURN-KW)
-    pub return_kw: f32,
+    pub return_kw: Option<f32>,
     
-    // Caja de caudal variable ---
+    // Caja de caudal variable  o caja de mezcla en doble conducto DDS ---
     // Caudal mínimo
     // (C-C-MIN-FLOW-RAT)
 
