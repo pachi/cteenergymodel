@@ -8,6 +8,8 @@
 // y esquema de E+ https://energyplus.readthedocs.io/en/latest/schema.html
 // Ver: https://www.gbxml.org/schema_doc/6.01/GreenBuildingXML_Ver6.01.html#Link105
 // https://doe2.com/Download/DOE-23/DOE23Vol2-Dictionary_50h.pdf
+//
+// Archivo BDLDialogsCALENER-GT_3_4.txt para referencias de variables por tipos de objeto
 
 use std::str::FromStr;
 
@@ -886,6 +888,79 @@ impl From<BdlBlock> for GtGroundLoopHx {
     }
 }
 
+/// Tipos de sistemas secundarios de GT
+/// (TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum GtSystemKind {
+    // -- SISTEMA VENTILACIÓN
+    /// Solo ventilación (packaged multizone, doble conducto)
+    Pmzs,
+    // -- SISTEMAS TODO AIRE
+    /// Autónomo caudal constante (packaged single zone, simple conducto, 1 termostato)
+    #[default]
+    Psz,
+    /// Autónomo caudal variable (packaged variable-air volume, simple conducto)
+    Pvavs,
+    /// Autónomo caudal variable temperatura variable (packaged variable volume variable temperature, simple conducto)
+    Pvvt,
+    /// Todo aire caudal constante unizona (variable temperature (single zone reheat?, simple conducto)
+    Szrh,
+    /// Todo aire caudal variable (variable volume fan, simple conducto)
+    Vavs,
+    /// Todo aire caudal constante (constant-volume reheat fan)
+    Rhfs,
+    // SISTEMA TODO AIRE
+    /// Enfriamiento evaporativo (evaporative cooling)
+    EvapCool,
+    // SISTEMA DE DOBLE CONDUCTO
+    /// Todo aire doble conducto (dual-duct fan)
+    Dds,
+    // -- SISTEMAS ZONALES
+    /// Autónomo mediante unidades terminales (packaged terminal aire conditioner)
+    Ptac,
+    /// Autónomo BdC en circuito cerrado (¿water loop? heat pump)
+    Hp,
+    /// Fancoil (ventiloconvector) (fan coil)
+    Fc,
+    /// Termoventilación (unit ventilator)
+    Uvt,
+    /// Solo calefacción por efecto Joule (unit heater)
+    Uht,
+    /// Solo calefacción por agua (floor panel heating)
+    Fph,
+    // -- SISTEMA AIRE PRIMARIO
+    /// Climatizadora de aire primario (ceiling bypass)
+    Cbvav,
+}
+
+impl FromStr for GtSystemKind {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use GtSystemKind::*;
+
+        match s {
+            "PSZ" => Ok(Psz),
+            "PMZS" => Ok(Pmzs),
+            "PVAVS" => Ok(Pvavs),
+            "PVVT" => Ok(Pvvt),
+            "SZRH" => Ok(Szrh),
+            "VAVS" => Ok(Vavs),
+            "RHFS" => Ok(Rhfs),
+            "DDS" => Ok(Dds),
+            "PTAC" => Ok(Ptac),
+            "HP" => Ok(Hp),
+            "FC" => Ok(Fc),
+            "UVT" => Ok(Uvt),
+            "UHT" => Ok(Uht),
+            "FPH" => Ok(Fph),
+            "EVAP-COOL" => Ok(EvapCool),
+            "CBVAV" => Ok(Cbvav),
+            _ => bail!("Tipo de sistema secundario desconocido"),
+        }
+    }
+}
+
 /// Sistema (subsistema secundario) de GT
 /// (SYSTEM)
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -897,7 +972,7 @@ pub struct GtSystem {
     /// (TYPE)
     /// Tratamiento de aire
     /// - PSZ: Autónomo caudal constante (packaged single zone, simple conducto)
-    /// - PMZS: Solo ventilación (¿no es multizona?) (packaged multizone, doble conducto)
+    /// - PMZS: Solo ventilación (packaged multizone, doble conducto)
     /// - PVAVS: Autónomo caudal variable (packaged variable-air volume, simple conducto)
     /// - PVVT: Autónomo caudal variable temperatura variable (packaged variable volume variable temperature, simple conducto)
     /// - SZRH: Todo aire caudal constante unizona (variable temperature (single zone reheat?, simple conducto)
@@ -906,21 +981,28 @@ pub struct GtSystem {
     /// - DDS: Todo aire doble conducto (dual-duct fan)
     /// 
     /// Sistemas unitarios
-    /// * Terminales
+    /// * Sistemas zonales
     /// - PTAC: Autónomo mediante unidades terminales (packaged terminal aire conditioner)
     /// - HP: Autónomo BdC en circuito cerrado (¿water loop? heat pump)
-    /// 
     /// - FC: Fancoil (ventiloconvector) (fan coil)
     /// - UVT: Termoventilación (unit ventilator)
     /// - UHT: Solo calefacción por efecto Joule (unit heater)
+    /// - FPH: Solo calefacción por agua (floor panel heating)
     /// 
     /// - EVAP-COOL: Enfriamiento evaporativo (evaporative cooling)
     /// - CBVAV: Climatizadora de aire primario (ceiling bypass)
-    /// - FPW: Solo calefacción por agua (floor panel heating FPH???)
-    pub kind: String,
+    /// 
+    pub kind: GtSystemKind,
+    /// Tipo de retorno
+    /// (RETURN-AIR-PATH)
+    /// DIRECT | PLENUM-ZONES | DUCT
+    pub return_air_path: String,
     /// Zona de control
     /// (CONTROL-ZONE)
     pub control_zone: String,
+    // Tipo Control de Humedad (C-C-HUM-CONTROL)
+    // Humedad máxima (C-C-HUM-MAX)
+    // Humedad mínima (C-C-HUM-MIN)
 
     // -- Ventiladores --
     // Ventilador de impulsión ---
@@ -931,38 +1013,89 @@ pub struct GtSystem {
     /// (C-C-SUPPLY-FLOW)
     pub supply_flow: f32,
     /// Potencia del ventilador de impulsión, kW
-    /// (??)
+    /// (C-C_SUPPLY-KW)
     pub supply_kw: f32,
+    // Factor transporte -> (C-C-SUP-KW/FLOW)
     // Tipo de control
-    // ??
+    // (C-C-FAN-CONTROL)
+    // Posición del ventilador
+    // (C-C-FAN-PLACEMENT)
+
     // Ventilador de retorno ---
-    // Caudal
-    // Potencia
+    /// Existe ventilador retorno?
+    /// (C-C-RETURN-FAN)
+    /// Caudal de retorno, m³/h
+    /// (RETURN-FLOW)
+    pub return_flow: f32,
+    /// Potencia de ventilador de retorno, kW
+    /// (C-C-RETURN-KW)
+    pub return_kw: f32,
+    
     // Caja de caudal variable ---
     // Caudal mínimo
+    // (C-C-MIN-FLOW-RAT)
 
     // -- Refrigeración --
     // Baterías ---
-    /// Circuito de agua enfriada que alimenta el sistema
+    /// Potencia total batería, kW
+    /// (C-C-COOL-CAP)
+    pub cool_cap: f32,
+    /// Potencia sensible batería, kW
+    /// (C-C-COOL-SH-CAP)
+    pub cool_sh_cap: f32,
+
+    /// Circuito de agua fría que alimenta el sistema
     /// Es el circuito por defecto para zonas salvo que se indique
     /// (CHW-LOOP)
     pub chw_loop: Option<String>,
+    /// Caudal agua fría, l/h
+    /// (C-C-CHW-COIL-Q)
+    pub chw_coil_q: Option<f32>,
     /// Circuito de agua enfriada que alimenta las unidades de zona
-    /// (??)
+    /// (ZONE-CHW-LOOP)
     pub zone_chw_loop: Option<String>,
-    /// Potencia total batería zonal, kW
-    /// (C-C-COOL-CAP)
-    pub cool_cap: f32,
-    /// Potencia sensible batería zonal, kW
-    /// (C-C-COOL-SH-CAP)
-    pub cool_sh_cap: f32,
-    // Salto térmico, tipo de válvula...
+    // Salto térmico agua (CHW-COIL-DT), tipo de válvula (C-C-CHW-VALVE)...
 
     // Autónomos ---
 
+    /// Tipo de condensación
+    /// (C-C-COND-TYPE)
+    /// Default autónomos: por aire
+    pub tipo_condensacion: Option<String>,
+    /// Rendimiento, EER
+    /// (C-C-EER)
+    /// Default: Autónomos 2.80
+    pub eer: Option<f32>,
+    /// Rendimiento, COP
+    /// (C-C-COP)
+    /// Default: ??
+    pub cop: Option<f32>,
+    // Varios preenfriamiento evaporativo:
+    // Efectividad kWh/kWh (EVAP-PCC-EFF)
+    // Horario (EVAP-PCC-SCH)
+    // Consumo W/W (EVAP-PCC-ELEC)
+    // Circuito condensación
+    // (CW-LOOP)
+    pub cw_loop: Option<String>,
+    // Salto térmico condensación, ºC
+    // (CW-COIL-DT)
+    // Generador de aire:
+    // Rendimiento térmico generador de aire
+    // (C-C-FURNACE-HIR)
+    // Consumo auxiliar generador de aire, kW
+    // (C-C-FURNACE-AUX)
+
     // Enfriamiento evaporativo ---
+    // Tipo (C-C-PROP-SR-2)
+    // Consumo/Caudal (EVAP-CL-KW/FLOW)
+    // Fracción aire impulsión (EVAP-CL-AIR)
+    // Efectividad enfriamiento directo (DIRECT-EFF)
+    // Efectividad enfriamiento indirecto (INDIR-EFF)
 
     // Economizador agua ---
+    // Existe? (WS-ECONO)
+    // Nombre circuito agua (WSE-LOOP)
+    // Salto térmico agua (WSE-COIL-DT)
 
     // -- Calefacción --
     // Fuentes de calor ---
@@ -972,31 +1105,117 @@ pub struct GtSystem {
     // Fuente de calor a nivel de sistema
     // (C-C-HEAT-SOURCE)
     // 0 = n/a, 1=electrica, 2=agua caliente, 3= circuito ACS, 4=BdC elec, 5=BdC gas, 6=generador aire, 7=ninguna
+    // Combustible
+    // (MSTR-FUEL-METER)
+    pub heat_fuel: Option<String>,
+
     // Baterías ---
-    /// Circuito de agua caliente que alimenta el sistema
+    /// Potencia total batería, kW
+    /// (C-C-HEAT-CAP)
+    pub heat_cap: f32,
+    /// Caudal batería, l/h
+    pub hw_coil_q: Option<f32>,
+    // Potencia batería recalentamiento
+    // (C-C-REHEAT)
+    // pub reheat_cap: Option<f32>,
+    /// Circuito de agua caliente que alimenta la UTA
     /// Es el circuito por defecto para zonas salvo que se indique
     pub hw_loop: Option<String>,
     /// Circuito de agua caliente que alimenta las unidades de zona
     /// (ZONE-HW-LOOP)
     pub zone_hw_loop: Option<String>,
-    /// Potencia total batería zonal, kW
-    /// (C-C-HEAT-CAP)
-    pub heat_cap: f32,
-    // Salto térmico, tipo de válvula...
-    // Precalentamiento/Calef. auxiliar ---
-    // Autónomos ---
+    // Circuito de ACS
+    // (DHW-LOOP)
+    // pub dhw_loop: Option<String>,
+    
+    // Salto térmico agua (HW-COIL-DT), tipo de válvula (C-C-HW-VALVE)...
+
+    // Precalentamiento ---
+    /// Fuente de calor
+    /// (C-C-PREHEAT-SOURCE)
+    pub preheat_source: Option<String>,
+    /// Potencia batería, kW
+    /// (C-C-PREHEAT-CAP)
+    pub preheat_cap: Option<String>,
+    // Min temperatura salida (PREHEAT-T)
+
+
+    /// Circuito batería precalentamiento
+    /// (PHW-LOOP)
+    pub preheat_loop: Option<String>,
+    /// Caudal batería precalentamiento, l/h
+    /// (C-C-PHW-COIL-Q)
+    pub preheat_coil_q: Option<f32>,
+    // Salto térmico batería precalentamiento, ºC
+    // (PHW-COIL-DT)
+    // pub preheat_coil_dt: Option<f32>,
+    // Tipo válvula batería precalentamiento
+    // (PHW-VALVE-TYPE)
+    // pub preheating_valve_type: Option<String>
+
+    // Calef. auxiliar ---
+    /// Fuente de calor calefacción auxiliar
+    /// (C-C-BBRD-SOUR)
+    pub aux_heat_source: Option<String>,
+    // Tipo de control de calefacción auxiliar
+    // (C-C-BBRD-CONTROL)
+    // pub aux_heat_control: Option<String>,
+    // Circuito unidad terminal
+    // (BBRD-LOOP)
+    // pub aux_heat_loop: Option<String>,
+    // Salto térmico unidad terminal, ºC
+    // (BBRD-COIL-DT)
+    // pub aux_heat_dt: Option<f32>
+
     // Bomba de calor ---
-    /// Circuito de condensación
-    /// (CW-LOOP)
-    pub cw_loop: String,
+    /// Fuente de calor
+    /// (C-C-HP-SUPP-SOUR)
+    pub hp_heat_source: Option<String>,
+    /// Potencia apoyo, kW
+    /// (C-C-HP-SUPP-CAP)
+    pub hp_supp_capacity: Option<f32>,
+    // Tipo de desescarche (DEFROST-TYPE)
+    // Control desescarche (DEFROST-CTRL)
+    // Temperatura desescarche (DEFROST-T)
+    // Pot. resist. / Pot. BdC, (RESIST-CAP-RATIO)
+
     // -- Control --
-    // Temperatura de impulsión min, max
+    /// Temperatura de impulsión min
+    /// (MIN-SUPPLY-T)
+    /// Default: autónomos, 15ºC
+    pub min_supply_t: Option<f32>,
+    /// Temperatura de impulsión max
+    /// (MAX-SUPPLY-T)
+    pub max_supply_t: Option<f32>,
     // Horarios de disponibilidad
-    // Control UTA
+    // calefacción (HEATING-SCHEDULE) y refrigeración (COOLING-SCHEDULE)
+    // Control UTA (C-C-COOL-CONTROL)
+    // Consigna del termostato (COOL-SET-T)
+    // Horario de temperatura (COOL-SET-SCH)
+    // Ley de correspondencia (COOL-RESET-SCH)
+
 
     // -- Técnicas de recuperación --
-    // Enfriamiento gratuito + control
-    // Recuperación de calor + efectividad
+    // Enfriamiento gratuito
+    /// ¿Existe enfriamiento gratuito?
+    /// (C-C-ENF-GRAT)
+    pub free_cooling: bool,
+    /// Tipo de control de enfriamiento gratuito
+    /// (C-C-OA-CONTROL)
+    pub oa_control: Option<String>,
+
+    // Recuperación de calor
+    /// ¿Existe recuperación de calor?
+    /// (RECOVER-EXHAUST)
+    pub exhaust_recovery: bool,
+    /// Tipo de recuperación de calor
+    /// (ERV-RECOVER-TYPE)
+    pub exhaust_recovery_type: Option<String>,
+    // Potencia recuperador de calor, kW
+    // (ERV-HX-KW)
+    /// Efectividad recuperación de calor (sensible)
+    /// (ERV-SENSIBLE-EFF)
+    pub exhaust_recovery_eff: Option<f32>,
 
     // -- Curvas de comportamiento
     // ...
@@ -1044,6 +1263,7 @@ pub struct GtZone {
     /// (SPACE)
     pub space: String,
     /// Sistema secundario asignado a la zona
+    /// (PARENT)
     pub system: Option<String>,
 
     // --- Caudales
