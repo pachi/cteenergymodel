@@ -27,7 +27,7 @@ use super::gt_types::*;
 #[derive(Debug, Clone, Default)]
 pub struct GtSystems {
     /// Sistemas
-    pub systems: BTreeMap<String, BdlBlock>,
+    pub systems: BTreeMap<String, GtSystem>,
     /// Zonas térmicas
     pub zones: BTreeMap<String, GtZone>,
     /// Equipos
@@ -37,15 +37,15 @@ pub struct GtSystems {
 /// Datos del archivo BDL
 #[derive(Debug, Clone)]
 pub enum TempEquipment {
-    Block(BdlBlock),
-    GtPump(GtPump),
-    GtCirculationLoop(GtCirculationLoop),
-    GtChiller(GtChiller),
-    GtBoiler(GtBoiler),
-    GtDwHeater(GtDwHeater),
-    GtHeatRejection(GtHeatRejection),
-    GtElectricGenerator(GtElectricGenerator),
-    GtGroundLoopHx(GtGroundLoopHx),
+    // Block(BdlBlock),
+    Pump(GtPump),
+    CirculationLoop(GtCirculationLoop),
+    Chiller(GtChiller),
+    Boiler(GtBoiler),
+    DwHeater(GtDwHeater),
+    HeatRejection(GtHeatRejection),
+    ElectricGenerator(GtElectricGenerator),
+    GroundLoopHx(GtGroundLoopHx),
 }
 
 impl GtSystems {
@@ -55,7 +55,7 @@ impl GtSystems {
 
         // Resto de elementos
         let mut zones: BTreeMap<String, GtZone> = BTreeMap::new();
-        let mut systems: BTreeMap<String, BdlBlock> = BTreeMap::new();
+        let mut systems: BTreeMap<String, GtSystem> = BTreeMap::new();
         let mut equipment: BTreeMap<String, TempEquipment> = BTreeMap::new();
 
         // Para asignar a cada zona el último sistema visto
@@ -72,45 +72,45 @@ impl GtSystems {
                 // Secundarios
                 "SYSTEM" => {
                     // systems.insert(block.name.clone(), GtSystem::try_from(block)?);
-                    let system = block;
+                    let system: GtSystem = block.into();
                     last_seen_system = Some(system.name.clone());
                     systems.insert(system.name.clone(), system);
                 }
                 // Equipos
                 "PUMP" => {
-                    equipment.insert(block.name.clone(), TempEquipment::GtPump(block.into()));
+                    equipment.insert(block.name.clone(), TempEquipment::Pump(block.into()));
                 }
                 "CIRCULATION-LOOP" => {
                     equipment.insert(
                         block.name.clone(),
-                        TempEquipment::GtCirculationLoop(block.into()),
+                        TempEquipment::CirculationLoop(block.into()),
                     );
                 }
                 "CHILLER" => {
-                    equipment.insert(block.name.clone(), TempEquipment::GtChiller(block.into()));
+                    equipment.insert(block.name.clone(), TempEquipment::Chiller(block.into()));
                 }
                 "BOILER" => {
-                    equipment.insert(block.name.clone(), TempEquipment::GtBoiler(block.into()));
+                    equipment.insert(block.name.clone(), TempEquipment::Boiler(block.into()));
                 }
                 "DW-HEATER" => {
-                    equipment.insert(block.name.clone(), TempEquipment::GtDwHeater(block.into()));
+                    equipment.insert(block.name.clone(), TempEquipment::DwHeater(block.into()));
                 }
                 "HEAT-REJECTION" => {
                     equipment.insert(
                         block.name.clone(),
-                        TempEquipment::GtHeatRejection(block.into()),
+                        TempEquipment::HeatRejection(block.into()),
                     );
                 }
                 "ELEC-GENERATOR" => {
                     equipment.insert(
                         block.name.clone(),
-                        TempEquipment::GtElectricGenerator(block.into()),
+                        TempEquipment::ElectricGenerator(block.into()),
                     );
                 }
                 "GROUND-LOOP-HX" => {
                     equipment.insert(
                         block.name.clone(),
-                        TempEquipment::GtGroundLoopHx(block.into()),
+                        TempEquipment::GroundLoopHx(block.into()),
                     );
                 }
                 // Elemento desconocido -------------------------

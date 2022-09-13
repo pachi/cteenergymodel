@@ -1018,12 +1018,35 @@ pub struct GtSystem {
     pub heating: Option<SysHeating>,
 
     /// Control
-    pub system: Option<SysControl>,
+    pub control: Option<SysControl>,
 
     /// Técnicas de recuperación
     pub recovery: Option<SysRecovery>,
     // -- Curvas de comportamiento
     // ...
+}
+
+impl From<BdlBlock> for GtSystem {
+    fn from(block: BdlBlock) -> Self {
+        let name = block.name.clone();
+        let kind = block
+            .attrs
+            .get_str("TYPE")
+            .unwrap_or_default()
+            .parse()
+            .unwrap_or_default();
+
+        Self {
+            name,
+            kind,
+            control_zone: block.attrs.get_str("CONTROL-ZONE").ok(),
+            fans: None,
+            cooling: None,
+            heating: None,
+            control: None,
+            recovery: None,
+        }
+    }
 }
 
 /// Ventiladores de un subsistema secundario de GT
