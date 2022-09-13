@@ -979,7 +979,7 @@ pub struct GtSystem {
     /// - VAVS: Todo aire caudal variable (variable volume fan, simple conducto)
     /// - RHFS: Todo aire caudal constante (constant-volume reheat fan)
     /// - DDS: Todo aire doble conducto (dual-duct fan)
-    /// 
+    ///
     /// Sistemas unitarios
     /// * Sistemas zonales
     /// - PTAC: Autónomo mediante unidades terminales (packaged terminal aire conditioner)
@@ -988,37 +988,62 @@ pub struct GtSystem {
     /// - UVT: Termoventilación (unit ventilator)
     /// - UHT: Solo calefacción por efecto Joule (unit heater)
     /// - FPH: Solo calefacción por agua (floor panel heating)
-    /// 
+    ///
     /// - EVAP-COOL: Enfriamiento evaporativo (evaporative cooling)
     /// - CBVAV: Climatizadora de aire primario (ceiling bypass)
-    /// 
+    ///
+    /// Subtipo:
+    /// (C-C-SUBTYPE-E1) ¿y otros?
     pub kind: GtSystemKind,
-    /// Tipo de retorno
-    /// (RETURN-AIR-PATH)
-    /// DIRECT | PLENUM-ZONES | DUCT
-    pub return_air_path: String,
+    // Parámetros generales ---
     /// Zona de control
     /// (CONTROL-ZONE)
-    pub control_zone: String,
+    pub control_zone: Option<String>,
+
+    // Tipo de retorno
+    // (RETURN-AIR-PATH)
+    // DIRECT | PLENUM-ZONES | DUCT | None
+    // pub return_air_path: Option<String>,
+    // Control de humedad ---
     // Tipo Control de Humedad (C-C-HUM-CONTROL)
     // Humedad máxima (C-C-HUM-MAX)
     // Humedad mínima (C-C-HUM-MIN)
+    /// Ventiladores
+    pub fans: Option<SysFans>,
 
-    // -- Ventiladores --
-    // Ventilador de impulsión ---
+    /// Refrigeración
+    pub cooling: Option<SysCooling>,
+
+    /// Calefacción
+    pub heating: Option<SysHeating>,
+
+    /// Control
+    pub system: Option<SysControl>,
+
+    /// Técnicas de recuperación
+    pub recovery: Option<SysRecovery>,
+    // -- Curvas de comportamiento
+    // ...
+}
+
+/// Ventiladores de un subsistema secundario de GT
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysFans {
     /// Horario de funcionamiento de los ventiladores de impulsión
     /// (FAN-SCHEDULE)
     pub fan_schedule: String,
+    // Tipo de control
+    // (C-C-FAN-CONTROL)
+    // Posición del ventilador
+    // (C-C-FAN-PLACEMENT)
+
+    // Ventilador de impulsión ---
     /// Caudal del ventilador de impulsión, m³/h
     /// (C-C-SUPPLY-FLOW)
     pub supply_flow: f32,
     /// Potencia del ventilador de impulsión, kW
     /// (C-C_SUPPLY-KW)
     pub supply_kw: f32,
-    // Tipo de control
-    // (C-C-FAN-CONTROL)
-    // Posición del ventilador
-    // (C-C-FAN-PLACEMENT)
 
     // Ventilador de retorno ---
     /// ¿Existe ventilador retorno?
@@ -1029,12 +1054,14 @@ pub struct GtSystem {
     /// Potencia de ventilador de retorno, kW
     /// (C-C-RETURN-KW)
     pub return_kw: Option<f32>,
-    
     // Caja de caudal variable  o caja de mezcla en doble conducto DDS ---
     // Caudal mínimo
     // (C-C-MIN-FLOW-RAT)
+}
 
-    // -- Refrigeración --
+/// Refrigeración de un subsistema secundario de GT
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysCooling {
     // Baterías ---
     /// Potencia total batería, kW
     /// (C-C-COOL-CAP)
@@ -1056,7 +1083,6 @@ pub struct GtSystem {
     // Salto térmico agua (CHW-COIL-DT), tipo de válvula (C-C-CHW-VALVE)...
 
     // Autónomos ---
-
     /// Tipo de condensación
     /// (C-C-COND-TYPE)
     /// Default autónomos: por aire
@@ -1095,15 +1121,19 @@ pub struct GtSystem {
     // Existe? (WS-ECONO)
     // Nombre circuito agua (WSE-LOOP)
     // Salto térmico agua (WSE-COIL-DT)
+}
 
+/// Calefacción de un subsistema secundario de GT
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysHeating {
     // -- Calefacción --
     // Fuentes de calor ---
     // Fuente de calor a nivel de zona
     // (C-C-ZONE-H-SOUR)
-    // 0=n/a, 1=1=electrica, 2=agua caliente, 3= circuito ACS, 4=Recuperaci ón BdC gas, 5=Ninguna
+    // 0=n/a, 1=1=eléctrica, 2=agua caliente, 3= circuito ACS, 4=Recuperación BdC gas, 5=Ninguna
     // Fuente de calor a nivel de sistema
     // (C-C-HEAT-SOURCE)
-    // 0 = n/a, 1=electrica, 2=agua caliente, 3= circuito ACS, 4=BdC elec, 5=BdC gas, 6=generador aire, 7=ninguna
+    // 0 = n/a, 1=eléctrica, 2=agua caliente, 3= circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
     // Combustible
     // (MSTR-FUEL-METER)
     pub heat_fuel: Option<String>,
@@ -1126,7 +1156,7 @@ pub struct GtSystem {
     // Circuito de ACS
     // (DHW-LOOP)
     // pub dhw_loop: Option<String>,
-    
+
     // Salto térmico agua (HW-COIL-DT), tipo de válvula (C-C-HW-VALVE)...
 
     // Precalentamiento ---
@@ -1137,8 +1167,6 @@ pub struct GtSystem {
     /// (C-C-PREHEAT-CAP)
     pub preheat_cap: Option<String>,
     // Min temperatura salida (PREHEAT-T)
-
-
     /// Circuito batería precalentamiento
     /// (PHW-LOOP)
     pub preheat_loop: Option<String>,
@@ -1177,8 +1205,11 @@ pub struct GtSystem {
     // Control desescarche (DEFROST-CTRL)
     // Temperatura desescarche (DEFROST-T)
     // Pot. resist. / Pot. BdC, (RESIST-CAP-RATIO)
+}
 
-    // -- Control --
+/// Control de un subsistema secundario de GT
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysControl {
     /// Temperatura de impulsión min
     /// (MIN-SUPPLY-T)
     /// Default: autónomos, 15ºC
@@ -1192,10 +1223,12 @@ pub struct GtSystem {
     // Consigna del termostato (COOL-SET-T)
     // Horario de temperatura (COOL-SET-SCH)
     // Ley de correspondencia (COOL-RESET-SCH)
+}
 
-
-    // -- Técnicas de recuperación --
-    // Enfriamiento gratuito
+/// Técnicas de recuperación de un subsistema secundario de GT
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysRecovery {
+    // Enfriamiento gratuito ---
     /// ¿Existe enfriamiento gratuito?
     /// (C-C-ENF-GRAT)
     pub free_cooling: bool,
@@ -1203,7 +1236,7 @@ pub struct GtSystem {
     /// (C-C-OA-CONTROL)
     pub oa_control: Option<String>,
 
-    // Recuperación de calor
+    // Recuperación de calor ---
     /// ¿Existe recuperación de calor?
     /// (RECOVER-EXHAUST)
     pub exhaust_recovery: bool,
@@ -1215,9 +1248,6 @@ pub struct GtSystem {
     /// Efectividad recuperación de calor (sensible)
     /// (ERV-SENSIBLE-EFF)
     pub exhaust_recovery_eff: Option<f32>,
-
-    // -- Curvas de comportamiento
-    // ...
 }
 
 /// Tipos de zonas
