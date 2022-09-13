@@ -10,6 +10,7 @@
 // https://doe2.com/Download/DOE-23/DOE23Vol2-Dictionary_50h.pdf
 //
 // Archivo BDLDialogsCALENER-GT_3_4.txt para referencias de variables por tipos de objeto
+// Ver Manual Técnico GT
 
 use std::str::FromStr;
 
@@ -892,44 +893,63 @@ impl From<BdlBlock> for GtGroundLoopHx {
 /// (TYPE)
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum GtSystemKind {
-    // -- SISTEMA VENTILACIÓN
+    // -- SISTEMA VENTILACIÓN, CENTRALIZADO
     /// Solo ventilación (packaged multizone, doble conducto)
+    /// Sin producción de frío/calor y tratamiento del aire centralizado
     Pmzs,
-    // -- SISTEMAS TODO AIRE
+    // -- SISTEMAS TODO AIRE, CENTRALIZADO
     /// Autónomo caudal constante (packaged single zone, simple conducto, 1 termostato)
+    /// Producción de frío con autónomo y tratamiento del aire centralizado
     #[default]
     Psz,
     /// Autónomo caudal variable (packaged variable-air volume, simple conducto)
+    /// Producción de frío con autónomo y tratamiento del aire centralizado
     Pvavs,
     /// Autónomo caudal variable temperatura variable (packaged variable volume variable temperature, simple conducto)
+    /// Producción de frío con autónomo y tratamiento del aire centralizado
     Pvvt,
     /// Todo aire caudal constante unizona (variable temperature (single zone reheat?, simple conducto)
+    /// Producción de frío con agua fría y tratamiento del aire centralizado
     Szrh,
     /// Todo aire caudal variable (variable volume fan, simple conducto)
+    /// Producción de frío con agua fría y tratamiento del aire centralizado
     Vavs,
     /// Todo aire caudal constante (constant-volume reheat fan)
+    /// Producción de frío con agua fría y tratamiento del aire centralizado
     Rhfs,
     // SISTEMA TODO AIRE
     /// Enfriamiento evaporativo (evaporative cooling)
+    /// Producción de frío con enfriamiento evaporativo y tratamiento del aire centralizado
     EvapCool,
-    // SISTEMA DE DOBLE CONDUCTO
+    // SISTEMA DE DOBLE CONDUCTO, CENTRALIZADO
     /// Todo aire doble conducto (dual-duct fan)
+    /// Producción de frío con agua fría y tratamiento del aire centralizado
     Dds,
     // -- SISTEMAS ZONALES
     /// Autónomo mediante unidades terminales (packaged terminal aire conditioner)
+    /// Producción de frío con autónomos y tratamiento del aire zonal
+    /// Subtipos: Convencional / Caudal de refrigerante variable
     Ptac,
     /// Autónomo BdC en circuito cerrado (¿water loop? heat pump)
+    /// Producción de frío con autónomos y tratamiento del aire zonal
     Hp,
     /// Fancoil (ventiloconvector) (fan coil)
+    /// Producción de frío con agua fría y tratamiento del aire zonal
     Fc,
     /// Termoventilación (unit ventilator)
+    /// Solo calefacción y tratamiento del aire zonal
     Uvt,
     /// Solo calefacción por efecto Joule (unit heater)
+    /// Solo calefacción y tratamiento del aire zonal
+    /// Subtipos: Con aire de impulsión / Sin aire de impulsión
     Uht,
     /// Solo calefacción por agua (floor panel heating)
+    /// Solo calefacción y tratamiento del aire zonal
+    /// Subitpos: Paneles radiantes / radiadores
     Fph,
-    // -- SISTEMA AIRE PRIMARIO
+    // -- SISTEMA AIRE PRIMARIO, CENTRALIZADO
     /// Climatizadora de aire primario (ceiling bypass)
+    /// Producción de frío con agua fría y tratamiento del aire zonal
     Cbvav,
 }
 
@@ -962,6 +982,22 @@ impl FromStr for GtSystemKind {
 }
 
 /// Sistema (subsistema secundario) de GT
+///
+/// Son los equipos y dispositivos encargados del tratamiento y distribución del
+/// aire a los locales.
+///
+/// Incluye las UTA (sección de baterías (frío y calor), sección de humidificación,
+/// de los ventiladores, las zonas térmicas, los termostatos, las unidades
+/// terminales, etc.
+///
+/// Las instalaciones que no utilicen el agua como fluido caloportador solo está
+/// formada por sistemas secundarios, sin necesidad de circuitos, como,
+/// por ejemplo, es el caso de todos los equipos autónomos que enfrían aire con
+/// expansión directa de un refrigerante.
+///
+/// En general, los subsistemas secundarios se dividen a nivel de sistema (o de UTA)
+/// y de zona.
+///
 /// (SYSTEM)
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct GtSystem {
@@ -1008,14 +1044,11 @@ pub struct GtSystem {
     // Tipo Control de Humedad (C-C-HUM-CONTROL)
     // Humedad máxima (C-C-HUM-MAX)
     // Humedad mínima (C-C-HUM-MIN)
-    /// Ventiladores
+    /// Ventiladores de impulsión y retorno
     pub fans: Option<SysFans>,
 
-    /// Refrigeración
-    pub cooling: Option<SysCooling>,
-
-    /// Calefacción
-    pub heating: Option<SysHeating>,
+    /// Calefacción y Refrigeración
+    pub heating_cooling: Option<SysHeatingCooling>,
 
     /// Control
     pub control: Option<SysControl>,
@@ -1041,8 +1074,7 @@ impl From<BdlBlock> for GtSystem {
             kind,
             control_zone: block.attrs.get_str("CONTROL-ZONE").ok(),
             fans: None,
-            cooling: None,
-            heating: None,
+            heating_cooling: None,
             control: None,
             recovery: None,
         }
@@ -1082,14 +1114,16 @@ pub struct SysFans {
     // (C-C-MIN-FLOW-RAT)
 }
 
-/// Refrigeración de un subsistema secundario de GT
+/// Calefacción y refrigeración de un subsistema secundario de GT
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysCooling {
+pub struct SysHeatingCooling {
+    // -- Refrigeración --
+
     // Baterías ---
-    /// Potencia total batería, kW
+    /// Potencia total batería frío, kW
     /// (C-C-COOL-CAP)
     pub cool_cap: f32,
-    /// Potencia sensible batería, kW
+    /// Potencia sensible batería frío, kW
     /// (C-C-COOL-SH-CAP)
     pub cool_sh_cap: f32,
 
@@ -1100,73 +1134,35 @@ pub struct SysCooling {
     /// Caudal agua fría, l/h
     /// (C-C-CHW-COIL-Q)
     pub chw_coil_q: Option<f32>,
-    /// Circuito de agua enfriada que alimenta las unidades de zona
+    /// Circuito de agua fría que alimenta las unidades de zona
     /// (ZONE-CHW-LOOP)
     pub zone_chw_loop: Option<String>,
-    // Salto térmico agua (CHW-COIL-DT), tipo de válvula (C-C-CHW-VALVE)...
+    // Salto térmico batería de agua fría (CHW-COIL-DT)
+    // Tipo de válvula batería de agua fría (C-C-CHW-VALVE)...
 
-    // Autónomos ---
-    /// Tipo de condensación
-    /// (C-C-COND-TYPE)
-    /// Default autónomos: por aire
-    pub tipo_condensacion: Option<String>,
-    /// Rendimiento, EER
-    /// (C-C-EER)
-    /// Default: Autónomos 2.80
-    pub eer: Option<f32>,
-    /// Rendimiento, COP
-    /// (C-C-COP)
-    /// Default: ??
-    pub cop: Option<f32>,
-    // Varios preenfriamiento evaporativo:
-    // Efectividad kWh/kWh (EVAP-PCC-EFF)
-    // Horario (EVAP-PCC-SCH)
-    // Consumo W/W (EVAP-PCC-ELEC)
-    // Circuito condensación
-    // (CW-LOOP)
-    pub cw_loop: Option<String>,
-    // Salto térmico condensación, ºC
-    // (CW-COIL-DT)
-    // Generador de aire:
-    // Rendimiento térmico generador de aire
-    // (C-C-FURNACE-HIR)
-    // Consumo auxiliar generador de aire, kW
-    // (C-C-FURNACE-AUX)
-
-    // Enfriamiento evaporativo ---
-    // Tipo (C-C-PROP-SR-2)
-    // Consumo/Caudal (EVAP-CL-KW/FLOW)
-    // Fracción aire impulsión (EVAP-CL-AIR)
-    // Efectividad enfriamiento directo (DIRECT-EFF)
-    // Efectividad enfriamiento indirecto (INDIR-EFF)
-
-    // Economizador agua ---
-    // Existe? (WS-ECONO)
-    // Nombre circuito agua (WSE-LOOP)
-    // Salto térmico agua (WSE-COIL-DT)
-}
-
-/// Calefacción de un subsistema secundario de GT
-#[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysHeating {
     // -- Calefacción --
-    // Fuentes de calor ---
-    // Fuente de calor a nivel de zona
-    // (C-C-ZONE-H-SOUR)
-    // 0=n/a, 1=1=eléctrica, 2=agua caliente, 3= circuito ACS, 4=Recuperación BdC gas, 5=Ninguna
+
+    // Fuentes de calor --- Generación de calor (circuitos)
     // Fuente de calor a nivel de sistema
     // (C-C-HEAT-SOURCE)
+    pub heat_source: Option<String>,
     // 0 = n/a, 1=eléctrica, 2=agua caliente, 3= circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
+    // Fuente de calor a nivel de zona
+    // (C-C-ZONE-H-SOUR)
+    pub zone_heat_source: Option<String>,
+    // 0=n/a, 1=1=eléctrica, 2=agua caliente, 3= circuito ACS, 4=Recuperación BdC gas, 5=Ninguna
     // Combustible
     // (MSTR-FUEL-METER)
     pub heat_fuel: Option<String>,
 
     // Baterías ---
+    /// Calefacción
     /// Potencia total batería, kW
     /// (C-C-HEAT-CAP)
     pub heat_cap: f32,
     /// Caudal batería, l/h
     pub hw_coil_q: Option<f32>,
+    // Recalentamiento
     // Potencia batería recalentamiento
     // (C-C-REHEAT)
     // pub reheat_cap: Option<f32>,
@@ -1180,7 +1176,8 @@ pub struct SysHeating {
     // (DHW-LOOP)
     // pub dhw_loop: Option<String>,
 
-    // Salto térmico agua (HW-COIL-DT), tipo de válvula (C-C-HW-VALVE)...
+    // Salto térmico agua batería calefacción (HW-COIL-DT)
+    // Tipo de válvula batería calefacción (C-C-HW-VALVE)...
 
     // Precalentamiento ---
     /// Fuente de calor
@@ -1217,13 +1214,44 @@ pub struct SysHeating {
     // (BBRD-COIL-DT)
     // pub aux_heat_dt: Option<f32>
 
+    // -- Autónomos calor / frío ---
+    /// Tipo de condensación
+    /// (C-C-COND-TYPE)
+    /// Default autónomos: por aire
+    pub cond_type: Option<String>,
+    /// Rendimiento, EER
+    /// (C-C-EER)
+    /// Default: Autónomos 2.80
+    pub eer: Option<f32>,
+    /// Rendimiento, COP
+    /// (C-C-COP)
+    /// Default: ??
+    pub cop: Option<f32>,
+    // Condensación por agua:
+    // Circuito condensación
+    // (CW-LOOP)
+    pub cw_loop: Option<String>,
+    // Salto térmico condensación, ºC
+    // (CW-COIL-DT)
+    // Varios preenfriamiento evaporativo (frío):
+    // Efectividad kWh/kWh (EVAP-PCC-EFF)
+    // Horario (EVAP-PCC-SCH)
+    // Consumo W/W (EVAP-PCC-ELEC)
+    // Generador de aire (calor):
+    // Rendimiento térmico generador de aire
+    // (C-C-FURNACE-HIR)
+    // Consumo auxiliar generador de aire, kW
+    // (C-C-FURNACE-AUX)
+
     // Bomba de calor ---
+    /// Apoyo de calefacción:
     /// Fuente de calor
     /// (C-C-HP-SUPP-SOUR)
     pub hp_heat_source: Option<String>,
     /// Potencia apoyo, kW
     /// (C-C-HP-SUPP-CAP)
     pub hp_supp_capacity: Option<f32>,
+    // Desescarche:
     // Tipo de desescarche (DEFROST-TYPE)
     // Control desescarche (DEFROST-CTRL)
     // Temperatura desescarche (DEFROST-T)
@@ -1251,6 +1279,20 @@ pub struct SysControl {
 /// Técnicas de recuperación de un subsistema secundario de GT
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysRecovery {
+    // Enfriamiento evaporativo (batería frío)---
+    // Tipo (C-C-PROP-SR-2)
+    // Consumo/Caudal (EVAP-CL-KW/FLOW)
+    // Fracción aire impulsión (EVAP-CL-AIR)
+    // Efectividad enfriamiento directo (DIRECT-EFF)
+    // Efectividad enfriamiento indirecto (INDIR-EFF)
+
+    // Economizador agua (batería frío) ---
+    // Existe? (WS-ECONO)
+    // Nombre circuito agua (WSE-LOOP)
+    // pub wse_loop: Option<String>,
+    // Salto térmico agua (WSE-COIL-DT)
+    // pub wse_coil_dt: Option<f32>,
+
     // Enfriamiento gratuito ---
     /// ¿Existe enfriamiento gratuito?
     /// (C-C-ENF-GRAT)
@@ -1300,6 +1342,14 @@ impl FromStr for ZoneKind {
 }
 
 /// Zona de GT
+///
+/// Datos de la instalación relativos a las zonas térmicas que abastecen los sistemas.
+///
+/// Datos de:
+/// - Termostato (consignas, tipo, etc)
+/// - Caudales de zona (impulsión, ventilación y extracción)
+/// - Unidades terminales (potencias, caudales de agua, etc)
+///
 /// (ZONE)
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct GtZone {
