@@ -1104,14 +1104,61 @@ impl From<BdlBlock> for GtSystem {
             }
         };
 
+        let recovery = {
+            // Free cooling
+            let free_cooling = if block
+                .attrs
+                .get_str("C-C-ENF-GRAT")
+                .map(|v| v.trim() == "1")
+                .unwrap_or_default()
+            {
+                if block
+                    .attrs
+                    .get_str("C-C-OA-CONTROL")
+                    .unwrap_or_default()
+                    .trim()
+                    == "1"
+                {
+                    Some("Por entalpía".to_string())
+                } else {
+                    Some("Por temperatura".to_string())
+                }
+            } else {
+                None
+            };
+
+            // Exhaust recovery
+            let exhaust_recovery_eff = if block
+                .attrs
+                .get_str("RECOVER-EXHAUST")
+                .map(|v| v.trim() == "YES")
+                .unwrap_or_default()
+            {
+                Some(block.attrs.get_f32("ERV-SENSIBLE-EFF").unwrap_or(0.76))
+            } else {
+                None
+            };
+
+            if free_cooling.is_none() && exhaust_recovery_eff.is_none() {
+                None
+            } else {
+                Some(SysRecovery {
+                    free_cooling,
+                    exhaust_recovery_eff,
+                })
+            }
+        };
+
+        let heating_cooling = { None };
+
         Self {
             name,
             kind,
             control_zone: block.attrs.get_str("CONTROL-ZONE").ok(),
             fans,
-            heating_cooling: None,
+            heating_cooling,
             control,
-            recovery: None,
+            recovery,
         }
     }
 }
@@ -1321,14 +1368,14 @@ pub struct SysControl {
 /// Técnicas de recuperación de un subsistema secundario de GT
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysRecovery {
-    // Enfriamiento evaporativo (batería frío)---
+    // TODO: Enfriamiento evaporativo (batería frío)---
     // Tipo (C-C-PROP-SR-2)
     // Consumo/Caudal (EVAP-CL-KW/FLOW)
     // Fracción aire impulsión (EVAP-CL-AIR)
     // Efectividad enfriamiento directo (DIRECT-EFF)
     // Efectividad enfriamiento indirecto (INDIR-EFF)
 
-    // Economizador agua (batería frío) ---
+    // TODO: Economizador agua (batería frío) ---
     // Existe? (WS-ECONO)
     // Nombre circuito agua (WSE-LOOP)
     // pub wse_loop: Option<String>,
@@ -1338,22 +1385,25 @@ pub struct SysRecovery {
     // Enfriamiento gratuito ---
     /// ¿Existe enfriamiento gratuito?
     /// (C-C-ENF-GRAT)
-    pub free_cooling: bool,
     /// Tipo de control de enfriamiento gratuito
     /// (C-C-OA-CONTROL)
-    pub oa_control: Option<String>,
+    /// 0 (default): "Por temperatura"
+    /// 1: "Por entalpía"
+    pub free_cooling: Option<String>,
 
     // Recuperación de calor ---
-    /// ¿Existe recuperación de calor?
-    /// (RECOVER-EXHAUST)
-    pub exhaust_recovery: bool,
-    /// Tipo de recuperación de calor
-    /// (ERV-RECOVER-TYPE)
-    pub exhaust_recovery_type: Option<String>,
+    // ¿Existe recuperación de calor?
+    // (RECOVER-EXHAUST)
+    // YES
+    // NO
+    // Tipo de recuperación de calor (no usado en GT?)
+    // (ERV-RECOVER-TYPE)
+    // pub exhaust_recovery_type: Option<String>,
     // Potencia recuperador de calor, kW
     // (ERV-HX-KW)
     /// Efectividad recuperación de calor (sensible)
     /// (ERV-SENSIBLE-EFF)
+    /// Si hay, valor por defecto = 0.76
     pub exhaust_recovery_eff: Option<f32>,
 }
 
