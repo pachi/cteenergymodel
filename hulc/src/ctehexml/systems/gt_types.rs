@@ -1198,6 +1198,23 @@ pub struct SysFans {
     // (C-C-MIN-FLOW-RAT)
 }
 
+
+/// Tipos de sistemas secundarios de GT
+/// (TYPE)
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum GtHeatSourceKind {
+    #[default]
+    // 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
+    Elec,
+    HotWater,
+    Dhw,
+    ElecHp,
+    GasHp,
+    Furnace,
+}
+
+
+
 /// Calefacción y refrigeración de un subsistema secundario de GT
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysHeatingCooling {
@@ -1226,15 +1243,16 @@ pub struct SysHeatingCooling {
 
     // -- Calefacción --
 
-    // Fuentes de calor --- Generación de calor (circuitos)
+    // Fuentes de calor ---
+    // Indica si el sistema puede suministrar calor
     // Fuente de calor a nivel de sistema
+    /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
     // (C-C-HEAT-SOURCE)
-    pub heat_source: Option<String>,
-    // 0 = n/a, 1=eléctrica, 2=agua caliente, 3= circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
-    // Fuente de calor a nivel de zona
-    // (C-C-ZONE-H-SOUR)
-    pub zone_heat_source: Option<String>,
-    // 0=n/a, 1=1=eléctrica, 2=agua caliente, 3= circuito ACS, 4=Recuperación BdC gas, 5=Ninguna
+    pub heat_source: Option<GtHeatSourceKind>,
+    /// Fuente de calor a nivel de zona
+    /// (C-C-ZONE-H-SOUR)
+    /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
+    pub zone_heat_source: Option<GtHeatSourceKind>,
     // Combustible
     // (MSTR-FUEL-METER)
     pub heat_fuel: Option<String>,
