@@ -1069,11 +1069,23 @@ impl From<BdlBlock> for GtSystem {
             .parse()
             .unwrap_or_default();
 
+        let fans = block
+            .attrs
+            .get_str("FAN-SCHEDULE")
+            .ok()
+            .map(|schedule| SysFans {
+                schedule,
+                supply_flow: block.attrs.get_f32("C-C-SUPPLY-FLOW").unwrap_or_default(),
+                supply_kw: block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or_default(),
+                return_flow: block.attrs.get_f32("RETURN-FLOW").ok(),
+                return_kw: block.attrs.get_f32("C-C-RETURN-KW").ok(),
+            });
+
         Self {
             name,
             kind,
             control_zone: block.attrs.get_str("CONTROL-ZONE").ok(),
-            fans: None,
+            fans,
             heating_cooling: None,
             control: None,
             recovery: None,
@@ -1082,11 +1094,13 @@ impl From<BdlBlock> for GtSystem {
 }
 
 /// Ventiladores de un subsistema secundario de GT
+///
+/// Suponemos que si no hay horario de ventiladores no hay ventiladores de impulsión
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysFans {
     /// Horario de funcionamiento de los ventiladores de impulsión
     /// (FAN-SCHEDULE)
-    pub fan_schedule: String,
+    pub schedule: String,
     // Tipo de control
     // (C-C-FAN-CONTROL)
     // Posición del ventilador
@@ -1097,7 +1111,7 @@ pub struct SysFans {
     /// (C-C-SUPPLY-FLOW)
     pub supply_flow: f32,
     /// Potencia del ventilador de impulsión, kW
-    /// (C-C_SUPPLY-KW)
+    /// (C-C-SUPPLY-KW)
     pub supply_kw: f32,
 
     // Ventilador de retorno ---
