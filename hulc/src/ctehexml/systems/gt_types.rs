@@ -1081,13 +1081,36 @@ impl From<BdlBlock> for GtSystem {
                 return_kw: block.attrs.get_f32("C-C-RETURN-KW").ok(),
             });
 
+        let control = {
+            // TODO: hay temperaturas por defecto según el tipo de secundario
+            let min_supply_t = block.attrs.get_f32("MIN-SUPPLY-T").ok();
+            let max_supply_t = block.attrs.get_f32("MAX-SUPPLY-T").ok();
+            let heating_schedule = block.attrs.get_str("HEATING-SCHEDULE").ok();
+            let cooling_schedule = block.attrs.get_str("COOLING-SCHEDULE").ok();
+
+            if min_supply_t.is_none()
+                && max_supply_t.is_none()
+                && heating_schedule.is_none()
+                && cooling_schedule.is_none()
+            {
+                None
+            } else {
+                Some(SysControl {
+                    min_supply_t,
+                    max_supply_t,
+                    heating_schedule,
+                    cooling_schedule,
+                })
+            }
+        };
+
         Self {
             name,
             kind,
             control_zone: block.attrs.get_str("CONTROL-ZONE").ok(),
             fans,
             heating_cooling: None,
-            control: None,
+            control,
             recovery: None,
         }
     }
@@ -1282,8 +1305,13 @@ pub struct SysControl {
     /// Temperatura de impulsión max
     /// (MAX-SUPPLY-T)
     pub max_supply_t: Option<f32>,
-    // Horarios de disponibilidad
-    // calefacción (HEATING-SCHEDULE) y refrigeración (COOLING-SCHEDULE)
+    // Horarios de disponibilidad --
+    /// Horario de disponibilidad de calefacción
+    /// (HEATING-SCHEDULE)
+    pub heating_schedule: Option<String>,
+    /// Horario de disponibilidad de refrigeración
+    /// (COOLING-SCHEDULE)
+    pub cooling_schedule: Option<String>,
     // Control UTA (C-C-COOL-CONTROL)
     // Consigna del termostato (COOL-SET-T)
     // Horario de temperatura (COOL-SET-SCH)
