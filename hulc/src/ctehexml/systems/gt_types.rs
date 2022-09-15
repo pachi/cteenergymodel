@@ -1230,11 +1230,10 @@ pub enum GtHeatSourceKind {
     Furnace,
 }
 
-/// Calefacción y refrigeración de un subsistema secundario de GT
+/// Baterías de refrigeración de un subsistema secundario de GT
+/// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysHeatingCooling {
-    // -- Refrigeración --
-
+pub struct SysCoolingCoil {
     // Baterías ---
     /// Potencia total batería frío, kW
     /// (C-C-COOL-CAP)
@@ -1250,52 +1249,70 @@ pub struct SysHeatingCooling {
     /// Caudal agua fría, l/h
     /// (C-C-CHW-COIL-Q)
     pub chw_coil_q: Option<f32>,
-    /// Circuito de agua fría que alimenta las unidades de zona
-    /// (ZONE-CHW-LOOP)
-    pub zone_chw_loop: Option<String>,
     // Salto térmico batería de agua fría (CHW-COIL-DT)
-    // Tipo de válvula batería de agua fría (C-C-CHW-VALVE)...
+    // Tipo de válvula batería de agua fría (C-C-CHW-VALVE)
 
-    // -- Calefacción --
+    // Circuito de agua fría que alimenta las unidades de zona
+    // (ZONE-CHW-LOOP)
+    // pub zone_chw_loop: Option<String>,
+}
 
-    // Fuentes de calor ---
+/// Fuentes de calor a nivel de sistema y/o zona de un subsistema secundario de GT
+/// No existe en sistemas solo ventilación (PMZS)
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
+pub struct SysHeatingSource {
     // Indica si el sistema puede suministrar calor
-    // Fuente de calor a nivel de sistema
+    // 1) Fuente de calor a nivel de sistema
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
     // (C-C-HEAT-SOURCE)
     pub heat_source: Option<GtHeatSourceKind>,
-    /// Fuente de calor a nivel de zona
+    /// 2) Fuente de calor a nivel de zona
     /// (C-C-ZONE-H-SOUR)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
     pub zone_heat_source: Option<GtHeatSourceKind>,
     // Combustible
     // (MSTR-FUEL-METER)
     pub heat_fuel: Option<String>,
+}
 
-    // Baterías ---
+/// Baterías de calefacción de un subsistema secundario de GT
+/// No existen en sistemas de solo ventilación PMZS
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysHeatingCoil {
     /// Calefacción
-    /// Potencia total batería, kW
+    /// Potencia total batería zonal, kW
     /// (C-C-HEAT-CAP)
     pub heat_cap: f32,
     /// Caudal batería, l/h
+    /// (C-C-HW-COIL-Q)
     pub hw_coil_q: Option<f32>,
     // Recalentamiento
     // Potencia batería recalentamiento
     // (C-C-REHEAT)
-    // pub reheat_cap: Option<f32>,
+    // pub reheat_cap: bool,
     /// Circuito de agua caliente que alimenta la UTA
+    /// Existe en sistema todo aire: PSZ, PVAVS, PVVT, SZRH, VAVS, RHFS, EVAP-COOL
+    /// y doble conducto DDS
+    /// No existe en sistemas zonales (PTAC, HP, FC, UVT, UHT, FPH)
     /// Es el circuito por defecto para zonas salvo que se indique
+    /// (HW-LOOP)
     pub hw_loop: Option<String>,
     /// Circuito de agua caliente que alimenta las unidades de zona
+    /// No existe en sistema de doble conducto DDS
     /// (ZONE-HW-LOOP)
     pub zone_hw_loop: Option<String>,
-    // Circuito de ACS
-    // (DHW-LOOP)
-    // pub dhw_loop: Option<String>,
-
-    // Salto térmico agua batería calefacción (HW-COIL-DT)
+    /// Circuito de agua caliente ¿para algunos equipos de zona?
+    /// (DHW-LOOP)
+    pub dhw_loop: Option<String>,
+    // Salto térmico agua batería calefacción, ºC (HW-COIL-DT)
     // Tipo de válvula batería calefacción (C-C-HW-VALVE)...
+    // Tipo de control en sistemas zonales (C-C-CONDENSER-TYPE)
+}
 
+/// Precalentamiento o calefacción auxiliar de un subsistema secundario de GT
+/// No existen en sistemas de solo ventilación PMZS
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysPreAndAuxHeating {
     // Precalentamiento ---
     /// Fuente de calor
     /// (C-C-PREHEAT-SOURCE)
@@ -1304,6 +1321,8 @@ pub struct SysHeatingCooling {
     /// (C-C-PREHEAT-CAP)
     pub preheat_cap: Option<String>,
     // Min temperatura salida (PREHEAT-T)
+
+    /// Batería de precalentamiento ---
     /// Circuito batería precalentamiento
     /// (PHW-LOOP)
     pub preheat_loop: Option<String>,
@@ -1317,24 +1336,56 @@ pub struct SysHeatingCooling {
     // (PHW-VALVE-TYPE)
     // pub preheating_valve_type: Option<String>
 
-    // Calef. auxiliar ---
+    // Calefacción auxiliar ---
     /// Fuente de calor calefacción auxiliar
     /// (C-C-BBRD-SOUR)
     pub aux_heat_source: Option<String>,
     // Tipo de control de calefacción auxiliar
     // (C-C-BBRD-CONTROL)
     // pub aux_heat_control: Option<String>,
+
+    // Unidad terminal ---
     // Circuito unidad terminal
     // (BBRD-LOOP)
     // pub aux_heat_loop: Option<String>,
     // Salto térmico unidad terminal, ºC
     // (BBRD-COIL-DT)
     // pub aux_heat_dt: Option<f32>
+}
+
+/// Calefacción y refrigeración de un subsistema secundario de GT
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysHeatingCooling {
+    // -- Refrigeración
+
+    // Baterías de refrigeración --
+    cooling_coil: Option<SysCoolingCoil>,
+
+    // -- Calefacción --
+
+    // Fuentes de calor ---
+    heating_source: Option<SysHeatingSource>,
+
+    // Baterías ---
+    heating_coil: Option<SysHeatingCoil>,
+
+    // Precalentamiento / calef. aux ---
+    pre_and_aux_heating: Option<SysPreAndAuxHeating>,
 
     // -- Autónomos calor / frío ---
+
+    // // No se usan en solo ventilación PMZS
+    // heating_furnace: Option<SysFurnace>,
+
+    // // No se usan en solo ventilación PMZS
+    // heating_hp: Option<SysHp>,
+
+
     /// Tipo de condensación
     /// (C-C-COND-TYPE)
-    /// Default autónomos: por aire
+    /// Solo en sistemas zonales
+    /// No existe en sistemas todo aire o doble conducto
+    /// Default: por aire
     pub cond_type: Option<String>,
     /// Rendimiento, EER
     /// (C-C-EER)
