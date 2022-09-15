@@ -945,7 +945,7 @@ pub enum GtSystemKind {
     Uht,
     /// Solo calefacción por agua (floor panel heating)
     /// Solo calefacción y tratamiento del aire zonal
-    /// Subitpos: Paneles radiantes / radiadores
+    /// Subtipos: Paneles radiantes / radiadores
     Fph,
     // -- SISTEMA AIRE PRIMARIO, CENTRALIZADO
     /// Climatizadora de aire primario (ceiling bypass)
@@ -978,6 +978,13 @@ impl FromStr for GtSystemKind {
             "CBVAV" => Ok(Cbvav),
             _ => bail!("Tipo de sistema secundario desconocido"),
         }
+    }
+}
+
+impl GtSystemKind {
+    fn is_zone_system(&self) -> bool {
+        use GtSystemKind::*;
+        self == &Ptac || self == &Hp || self == &Fc || self == &Uvt || self == &Fph
     }
 }
 
@@ -1062,24 +1069,30 @@ pub struct GtSystem {
 impl From<BdlBlock> for GtSystem {
     fn from(block: BdlBlock) -> Self {
         let name = block.name.clone();
-        let kind = block
+        let kind: GtSystemKind = block
             .attrs
             .get_str("TYPE")
             .unwrap_or_default()
             .parse()
             .unwrap_or_default();
 
-        let fans = block
-            .attrs
-            .get_str("FAN-SCHEDULE")
-            .ok()
-            .map(|schedule| SysFans {
+        let fans = block.attrs.get_str("FAN-SCHEDULE").ok().map(|schedule| {
+            let supply_flow = block.attrs.get_f32("C-C-SUPPLY-FLOW").unwrap_or_default();
+            // Los sistemas de zona se definen por factor de transporte y no potencia
+            let supply_kw = if kind.is_zone_system() {
+                block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or(0.1) * supply_flow
+            } else {
+                block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or_default()
+            };
+
+            SysFans {
                 schedule,
-                supply_flow: block.attrs.get_f32("C-C-SUPPLY-FLOW").unwrap_or_default(),
-                supply_kw: block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or_default(),
+                supply_flow,
+                supply_kw,
                 return_flow: block.attrs.get_f32("RETURN-FLOW").ok(),
                 return_kw: block.attrs.get_f32("C-C-RETURN-KW").ok(),
-            });
+            }
+        });
 
         let control = {
             // TODO: hay temperaturas por defecto según el tipo de secundario
@@ -1182,6 +1195,10 @@ pub struct SysFans {
     pub supply_flow: f32,
     /// Potencia del ventilador de impulsión, kW
     /// (C-C-SUPPLY-KW)
+    /// En sistemas zonales, factor de transporte W/(m³/h)
+    /// Sistemas zonales: PTAC, HP, FC, UVT, UHT, FPH
+    /// (C-C-SUP-KW/FLOW)
+    /// default: 0.10
     pub supply_kw: f32,
 
     // Ventilador de retorno ---
@@ -1194,10 +1211,10 @@ pub struct SysFans {
     /// (C-C-RETURN-KW)
     pub return_kw: Option<f32>,
     // Caja de caudal variable  o caja de mezcla en doble conducto DDS ---
-    // Caudal mínimo
+    // Caudal mínimo para caja de mezcla (en caudal variable), -
     // (C-C-MIN-FLOW-RAT)
+    // pub min_flow_ratio: Option<f32>,
 }
-
 
 /// Tipos de sistemas secundarios de GT
 /// (TYPE)
@@ -1212,8 +1229,6 @@ pub enum GtHeatSourceKind {
     GasHp,
     Furnace,
 }
-
-
 
 /// Calefacción y refrigeración de un subsistema secundario de GT
 #[derive(Debug, Default, Clone, PartialEq)]
