@@ -1040,6 +1040,9 @@ pub struct GtSystem {
     pub kind: GtSystemKind,
     // Parámetros generales ---
     /// Zona de control
+    /// Solo en sistemas:
+    /// - Todo aire caudal constante unizona (SZRH)
+    /// - Autónomo caudal constante (PSZ)
     /// (CONTROL-ZONE)
     pub control_zone: Option<String>,
 
@@ -1262,16 +1265,19 @@ pub struct SysCoolingCoil {
 #[derive(Debug, Default, Clone, PartialEq, Eq)]
 pub struct SysHeatingSource {
     // Indica si el sistema puede suministrar calor
-    // 1) Fuente de calor a nivel de sistema
+    /// Fuente de calor a nivel de sistema
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
-    // (C-C-HEAT-SOURCE)
+    /// (C-C-HEAT-SOURCE)
+    /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
+    /// y en EVAP-COOL y CBVAV
     pub heat_source: Option<GtHeatSourceKind>,
-    /// 2) Fuente de calor a nivel de zona
+    /// Fuente de calor a nivel de zona
     /// (C-C-ZONE-H-SOUR)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
+    /// No existe en todo aire doble conducto DDS, Climatizadora aire primario, CBVAV, y Solo ventilación PMZS
     pub zone_heat_source: Option<GtHeatSourceKind>,
-    // Combustible
-    // (MSTR-FUEL-METER)
+    /// Combustible
+    /// (MSTR-FUEL-METER)
     pub heat_fuel: Option<String>,
 }
 
@@ -1321,7 +1327,6 @@ pub struct SysPreAndAuxHeating {
     /// (C-C-PREHEAT-CAP)
     pub preheat_cap: Option<String>,
     // Min temperatura salida (PREHEAT-T)
-
     /// Batería de precalentamiento ---
     /// Circuito batería precalentamiento
     /// (PHW-LOOP)
@@ -1339,6 +1344,7 @@ pub struct SysPreAndAuxHeating {
     // Calefacción auxiliar ---
     /// Fuente de calor calefacción auxiliar
     /// (C-C-BBRD-SOUR)
+    /// Solo en sistemas todo aire caudal variable VAVS
     pub aux_heat_source: Option<String>,
     // Tipo de control de calefacción auxiliar
     // (C-C-BBRD-CONTROL)
@@ -1351,6 +1357,67 @@ pub struct SysPreAndAuxHeating {
     // Salto térmico unidad terminal, ºC
     // (BBRD-COIL-DT)
     // pub aux_heat_dt: Option<f32>
+}
+
+/// Autónomos: calefacción (dx o generador de aire) de un subsistema secundario de GT
+/// No existen en sistemas de solo ventilación PMZS
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysHeatingLocal {
+    /// Rendimiento, COP
+    /// (C-C-COP)
+    pub cop: Option<f32>,
+    // Datos adicionales para generador de aire (calor) ---
+    // Rendimiento térmico del generador de aire
+    // (C-C-FURNACE-HIR)
+    // Consumo auxiliar del generador de aire, kW
+    // (C-C-FURNACE-AUX)
+
+    // Opciones de BdC ---
+    // Fuente de calor
+    // (C-C-HP-SUPP-SOUR)
+    // Eléctrica, Agua caliente, Recuperación BdC gas, Ninguna
+    // pub heat_source: Option<String>,
+    // Potencia apoyo, kW
+    // (C-C-HP-SUPP-CAP)
+    // pub aux_capacity: Option<f32>,
+
+    // Desescarche BdC ---
+    // Tipo de desescarche (DEFROST-TYPE)
+    // Control desescarche (DEFROST-CTRL)
+    // Temperatura desescarche (DEFROST-T)
+    // Pot. resist. / Pot. BdC, (RESIST-CAP-RATIO)
+}
+
+/// Autónomos: refrigeración con dx, bomba de calor, condensación por agua, enf. evaporativo, etc
+/// de un subsistema secundario de GT
+/// No existen en sistemas de solo ventilación PMZS
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysCoolingLocal {
+    // Frío ---
+    /// Rendimiento, EER
+    /// (C-C-EER)
+    /// Default: Autónomos 2.80
+    pub eer: Option<f32>,
+    // Tipo de condensación
+    // (C-C-COND-TYPE)
+    // Solo en sistemas zonales
+    // No existe en sistemas todo aire o doble conducto
+    // Por aire (0), por agua (1), preenfriamiento evaporativo (2)
+    // Default: por aire
+    // pub cond_type: Option<String>,
+
+    // Refrigeración autónomos, condensación por agua ---
+    // Circuito condensación
+    // (CW-LOOP)
+    // pub cw_loop: Option<String>,
+    // Salto térmico condensación, ºC
+    // (CW-COIL-DT)
+
+    // Refrigeración autónomos, preenfriamiento evaporativo ---
+    // Varios preenfriamiento evaporativo (frío):
+    // Efectividad kWh/kWh (EVAP-PCC-EFF)
+    // Horario (EVAP-PCC-SCH)
+    // Consumo W/W (EVAP-PCC-ELEC)
 }
 
 /// Calefacción y refrigeración de un subsistema secundario de GT
@@ -1373,62 +1440,18 @@ pub struct SysHeatingCooling {
     pre_and_aux_heating: Option<SysPreAndAuxHeating>,
 
     // -- Autónomos calor / frío ---
-
-    // // No se usan en solo ventilación PMZS
-    // heating_furnace: Option<SysFurnace>,
-
-    // // No se usan en solo ventilación PMZS
-    // heating_hp: Option<SysHp>,
-
-
-    /// Tipo de condensación
-    /// (C-C-COND-TYPE)
-    /// Solo en sistemas zonales
-    /// No existe en sistemas todo aire o doble conducto
-    /// Default: por aire
-    pub cond_type: Option<String>,
-    /// Rendimiento, EER
-    /// (C-C-EER)
-    /// Default: Autónomos 2.80
-    pub eer: Option<f32>,
-    /// Rendimiento, COP
-    /// (C-C-COP)
-    /// Default: ??
-    pub cop: Option<f32>,
-    // Condensación por agua:
-    // Circuito condensación
-    // (CW-LOOP)
-    pub cw_loop: Option<String>,
-    // Salto térmico condensación, ºC
-    // (CW-COIL-DT)
-    // Varios preenfriamiento evaporativo (frío):
-    // Efectividad kWh/kWh (EVAP-PCC-EFF)
-    // Horario (EVAP-PCC-SCH)
-    // Consumo W/W (EVAP-PCC-ELEC)
-    // Generador de aire (calor):
-    // Rendimiento térmico generador de aire
-    // (C-C-FURNACE-HIR)
-    // Consumo auxiliar generador de aire, kW
-    // (C-C-FURNACE-AUX)
-
-    // Bomba de calor ---
-    /// Apoyo de calefacción:
-    /// Fuente de calor
-    /// (C-C-HP-SUPP-SOUR)
-    pub hp_heat_source: Option<String>,
-    /// Potencia apoyo, kW
-    /// (C-C-HP-SUPP-CAP)
-    pub hp_supp_capacity: Option<f32>,
-    // Desescarche:
-    // Tipo de desescarche (DEFROST-TYPE)
-    // Control desescarche (DEFROST-CTRL)
-    // Temperatura desescarche (DEFROST-T)
-    // Pot. resist. / Pot. BdC, (RESIST-CAP-RATIO)
+    // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
+    // centralizado o zonal
+    // No se usan en solo ventilación PMZS
+    heating_local: Option<SysHeatingLocal>,
+    cooling_local: Option<SysCoolingLocal>,
 }
 
 /// Control de un subsistema secundario de GT
+/// No aplicable a sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysControl {
+    // Temperaturas de impulsión ---
     /// Temperatura de impulsión min
     /// (MIN-SUPPLY-T)
     /// Default: autónomos, 15ºC
@@ -1436,20 +1459,28 @@ pub struct SysControl {
     /// Temperatura de impulsión max
     /// (MAX-SUPPLY-T)
     pub max_supply_t: Option<f32>,
-    // Horarios de disponibilidad --
+    // Horarios de disponibilidad ---
     /// Horario de disponibilidad de calefacción
     /// (HEATING-SCHEDULE)
     pub heating_schedule: Option<String>,
     /// Horario de disponibilidad de refrigeración
     /// (COOLING-SCHEDULE)
     pub cooling_schedule: Option<String>,
+    // Control de la UTA ---
+    // Conducto frío:
     // Control UTA (C-C-COOL-CONTROL)
     // Consigna del termostato (COOL-SET-T)
     // Horario de temperatura (COOL-SET-SCH)
     // Ley de correspondencia (COOL-RESET-SCH)
+    // Conducto caliente (solo en sistemas doble conducto DDS):
+    // Control UTA (HEAT-CONTROL)
+    // Consigna del termostato (HEAT-SET-T)
+    // Horario de temperatura (HEAT-SET-SCH)
+    // Ley de correspondencia (HEAT-RESET-SCH)
 }
 
 /// Técnicas de recuperación de un subsistema secundario de GT
+/// No aplicable a sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysRecovery {
     // TODO: Enfriamiento evaporativo (batería frío)---
@@ -1485,7 +1516,7 @@ pub struct SysRecovery {
     // pub exhaust_recovery_type: Option<String>,
     // Potencia recuperador de calor, kW
     // (ERV-HX-KW)
-    /// Efectividad recuperación de calor (sensible)
+    /// Efectividad de la recuperación de calor (calor sensible)
     /// (ERV-SENSIBLE-EFF)
     /// Si hay, valor por defecto = 0.76
     pub exhaust_recovery_eff: Option<f32>,
