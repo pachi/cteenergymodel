@@ -1165,7 +1165,83 @@ impl From<BdlBlock> for GtSystem {
             }
         };
 
-        let heating_cooling = { None };
+        let heating_cooling = {
+            let cooling_coil = if let Ok(cool_cap) = block.attrs.get_f32("C-C-COOL-CAP") {
+                Some(SysCoolingCoil {
+                    cool_cap,
+                    cool_sh_cap: block.attrs.get_f32("C-C-COOL-SH-CAP").unwrap_or_default(),
+                    chw_loop: block.attrs.get_str("CHW-LOOP").ok(),
+                    chw_coil_q: block.attrs.get_f32("C-C-CHW-COIL-Q").ok(),
+                })
+            } else {
+                None
+            };
+
+            let heating_source = {
+                let heat_source = block
+                    .attrs
+                    .get_str("C-C-HEAT-SOURCE")
+                    .unwrap_or_default()
+                    .parse()
+                    .ok();
+                let zone_heat_source = block
+                    .attrs
+                    .get_str("C-C-ZONE-H-SOUR")
+                    .unwrap_or_default()
+                    .parse()
+                    .ok();
+                if heat_source.is_none() || zone_heat_source.is_none() {
+                    None
+                } else {
+                    Some(SysHeatingSource {
+                        heat_source,
+                        zone_heat_source,
+                        heat_fuel: block.attrs.get_str("MSTR-FUEL-METER").ok(),
+                    })
+                }
+            };
+
+            let heating_coil = if let Ok(heat_cap) = block.attrs.get_f32("C-C-HEAT-CAP") {
+                Some(SysHeatingCoil {
+                    heat_cap,
+                    hw_coil_q: block.attrs.get_f32("C-C-HW-COIL-Q").ok(),
+                    hw_loop: block.attrs.get_str("HW-LOOP").ok(),
+                    zone_hw_loop: block.attrs.get_str("ZONE-HW-LOOP").ok(),
+                    dhw_loop: block.attrs.get_str("DHW-LOOP").ok(),
+                })
+            } else {
+                None
+            };
+
+            // TODO: usar None si no hay ninguna fuente
+            let pre_and_aux_heating = Some(SysPreAndAuxHeating {
+                preheat_source: block.attrs.get_str("C-C-PREHEAT-SOURCE").ok(),
+                preheat_cap: block.attrs.get_f32("C-C-PREHEAT-CAP").ok(),
+                preheat_loop: block.attrs.get_str("PHW-LOOP").ok(),
+                aux_heat_source: block.attrs.get_str("C-C-BBRD-SOUR").ok(),
+                aux_heat_loop: block.attrs.get_str("BBRD-LOOP").ok(),
+            });
+
+            let heating_local = if let Ok(cop) = block.attrs.get_f32("C-C-COP") {
+                Some(SysHeatingLocal { cop })
+            } else {
+                None
+            };
+            let cooling_local = if let Ok(eer) = block.attrs.get_f32("C-C-EER") {
+                Some(SysCoolingLocal { eer })
+            } else {
+                None
+            };
+
+            Some(SysHeatingCooling {
+                cooling_coil,
+                heating_source,
+                heating_coil,
+                pre_and_aux_heating,
+                heating_local,
+                cooling_local,
+            })
+        };
 
         Self {
             name,
@@ -1231,6 +1307,24 @@ pub enum GtHeatSourceKind {
     ElecHp,
     GasHp,
     Furnace,
+}
+
+impl FromStr for GtHeatSourceKind {
+    type Err = anyhow::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use GtHeatSourceKind::*;
+
+        match s.trim() {
+            "1" => Ok(Elec),
+            "2" => Ok(HotWater),
+            "3" => Ok(Dhw),
+            "4" => Ok(ElecHp),
+            "5" => Ok(GasHp),
+            "6" => Ok(Furnace),
+            _ => bail!("Fuente de calor desconocida!"),
+        }
+    }
 }
 
 /// Baterías de refrigeración de un subsistema secundario de GT
@@ -1316,6 +1410,8 @@ pub struct SysHeatingCoil {
 }
 
 /// Precalentamiento o calefacción auxiliar de un subsistema secundario de GT
+/// Puede proceder de una fuente de calor, una batería de precalentamiento, un
+/// sistema auxiliar o una unidad terminal
 /// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysPreAndAuxHeating {
@@ -1325,15 +1421,15 @@ pub struct SysPreAndAuxHeating {
     pub preheat_source: Option<String>,
     /// Potencia batería, kW
     /// (C-C-PREHEAT-CAP)
-    pub preheat_cap: Option<String>,
+    pub preheat_cap: Option<f32>,
     // Min temperatura salida (PREHEAT-T)
     /// Batería de precalentamiento ---
     /// Circuito batería precalentamiento
     /// (PHW-LOOP)
     pub preheat_loop: Option<String>,
-    /// Caudal batería precalentamiento, l/h
-    /// (C-C-PHW-COIL-Q)
-    pub preheat_coil_q: Option<f32>,
+    // Caudal batería precalentamiento, l/h
+    // (C-C-PHW-COIL-Q)
+    // pub preheat_coil_q: Option<f32>,
     // Salto térmico batería precalentamiento, ºC
     // (PHW-COIL-DT)
     // pub preheat_coil_dt: Option<f32>,
@@ -1349,11 +1445,10 @@ pub struct SysPreAndAuxHeating {
     // Tipo de control de calefacción auxiliar
     // (C-C-BBRD-CONTROL)
     // pub aux_heat_control: Option<String>,
-
-    // Unidad terminal ---
-    // Circuito unidad terminal
-    // (BBRD-LOOP)
-    // pub aux_heat_loop: Option<String>,
+    /// Unidad terminal ---
+    /// Circuito unidad terminal
+    /// (BBRD-LOOP)
+    pub aux_heat_loop: Option<String>,
     // Salto térmico unidad terminal, ºC
     // (BBRD-COIL-DT)
     // pub aux_heat_dt: Option<f32>
@@ -1365,7 +1460,7 @@ pub struct SysPreAndAuxHeating {
 pub struct SysHeatingLocal {
     /// Rendimiento, COP
     /// (C-C-COP)
-    pub cop: Option<f32>,
+    pub cop: f32,
     // Datos adicionales para generador de aire (calor) ---
     // Rendimiento térmico del generador de aire
     // (C-C-FURNACE-HIR)
@@ -1397,7 +1492,7 @@ pub struct SysCoolingLocal {
     /// Rendimiento, EER
     /// (C-C-EER)
     /// Default: Autónomos 2.80
-    pub eer: Option<f32>,
+    pub eer: f32,
     // Tipo de condensación
     // (C-C-COND-TYPE)
     // Solo en sistemas zonales
