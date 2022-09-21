@@ -137,9 +137,10 @@ pub enum SystemOptions {
 }
 
 /// Tipo de control en economizador de aire
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum EconomizerControl {
     /// Temperatura
+    #[default]
     Temperature,
     /// Entalpía
     Enthalpy,
@@ -150,9 +151,10 @@ pub enum EconomizerControl {
 }
 
 /// Tipos de sistemas de generación solar térmica
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum SolarThermalKind {
     ///PlanoSelectivo
+    #[default]
     FlatPlateSelective,
     /// PlanoNoSelectivo
     FlatPlateNonSelective,
@@ -164,12 +166,6 @@ pub enum SolarThermalKind {
     AirCollector,
     /// Otro
     Other,
-}
-
-impl Default for SolarThermalKind {
-    fn default() -> Self {
-        Self::FlatPlateSelective
-    }
 }
 
 /// Sistema de generación solar térmica
@@ -281,8 +277,9 @@ pub struct CoolingParams {
 }
 
 /// Tipos de equipos
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum EquipmentKind {
+    #[default]
     CalderaConvencional,
     CalderaElectrica,
     CalderaBajaTemperatura,
@@ -297,12 +294,6 @@ pub enum EquipmentKind {
     ExpansionDirectaUnidadExterior,
     RendimientoConstante,
     AcumuladorAguaCaliente,
-}
-
-impl Default for EquipmentKind {
-    fn default() -> Self {
-        Self::CalderaConvencional
-    }
 }
 
 /// Equipos primarios y de generación
