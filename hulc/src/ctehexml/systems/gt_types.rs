@@ -788,7 +788,8 @@ pub struct SysHeatingCoil {
     /// Es el circuito por defecto para zonas salvo que se indique
     /// (HW-LOOP)
     pub hw_loop: Option<String>,
-    /// Circuito de agua caliente que alimenta las unidades de zona
+    /// Circuito de agua caliente que alimenta las unidades de zona en sistemas
+    /// de tratamiento de aire centralizado
     /// No existe en sistema de doble conducto DDS
     /// (ZONE-HW-LOOP)
     pub zone_hw_loop: Option<String>,
@@ -806,7 +807,8 @@ pub struct SysHeatingCoil {
 /// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysPreAndAuxHeating {
-    // Precalentamiento ---
+    // Precalentamiento (si no es con batería) ---
+    // Calienta el aire cuando está por debajo de la temperatura de congelación
     /// Fuente de calor
     /// (C-C-PREHEAT-SOURCE)
     pub preheat_source: Option<String>,
@@ -814,7 +816,9 @@ pub struct SysPreAndAuxHeating {
     /// (C-C-PREHEAT-CAP)
     pub preheat_cap: Option<f32>,
     // Min temperatura salida (PREHEAT-T)
-    /// Batería de precalentamiento ---
+
+    // Batería de precalentamiento ---
+    // Calienta el aire cuando está por debajo de la temperatura de congelación
     /// Circuito batería precalentamiento
     /// (PHW-LOOP)
     pub preheat_loop: Option<String>,
@@ -832,6 +836,7 @@ pub struct SysPreAndAuxHeating {
     /// Fuente de calor calefacción auxiliar
     /// (C-C-BBRD-SOUR)
     /// Solo en sistemas todo aire caudal variable VAVS
+    /// Si es de tipo furnace (generador de aire) se rellenan los datos de rendimiento y consumo auxiliar
     pub aux_heat_source: Option<String>,
     // Tipo de control de calefacción auxiliar
     // (C-C-BBRD-CONTROL)
@@ -849,21 +854,23 @@ pub struct SysPreAndAuxHeating {
 /// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysHeatingLocal {
-    /// Rendimiento, COP
-    /// (C-C-COP)
-    pub cop: f32,
-    // Datos adicionales para generador de aire (calor) ---
+    // Opciones cuando HeatSource es Generador de aire / furnace (calor) ---
+    // Combustible usado (MSTR-FUEL-METER)
     // Rendimiento térmico del generador de aire
     // (C-C-FURNACE-HIR)
     // Consumo auxiliar del generador de aire, kW
     // (C-C-FURNACE-AUX)
-
-    // Opciones de BdC ---
-    // Fuente de calor
+    
+    // Opciones cuando el HeatSource es BdC ---
+    /// Rendimiento, COP
+    /// (C-C-COP)
+    pub cop: f32,
+    // Datos adicionales cuando la fuente de calor es una bomba de calor
+    // Fuente de calor de apoyo de la BdC
     // (C-C-HP-SUPP-SOUR)
-    // Eléctrica, Agua caliente, Recuperación BdC gas, Ninguna
+    // Eléctrica, Agua caliente, Recuperación BdC gas, Ninguna?
     // pub heat_source: Option<String>,
-    // Potencia apoyo, kW
+    // Potencia de apoyo, kW
     // (C-C-HP-SUPP-CAP)
     // pub aux_capacity: Option<f32>,
 
