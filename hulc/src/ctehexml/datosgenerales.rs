@@ -88,7 +88,7 @@ pub fn parse_datos_generales(doc: &roxmltree::Document) -> Result<DatosGenerales
             .split(".bin")
             .take(1)
             .collect::<Vec<_>>()
-            .get(0)
+            .first()
             .map(|s| {
                 s.split("zona")
                     .take(2)
