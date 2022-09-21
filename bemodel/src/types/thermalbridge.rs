@@ -49,7 +49,7 @@ impl Default for ThermalBridge {
 ///     cubiertas, balcones, fachadas, soleras / cámaras sanitarias,
 ///     pilares, huecos, particiones interiores, forjados (suelos interiores)
 /// Usamos abreviaturas similares a las de la norma UNE-EN ISO 14683
-#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum ThermalBridgeKind {
     /// Cubierta-fachada (R)
     ROOF,
