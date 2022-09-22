@@ -22,6 +22,7 @@ mod reporting;
 mod space;
 mod thermalbridge;
 mod window;
+mod systems;
 
 use crate::utils::{fround2, uuid_from_str};
 
@@ -37,3 +38,4 @@ pub use reporting::{Warning, WarningLevel};
 pub use space::{Space, SpaceType};
 pub use thermalbridge::{ThermalBridge, ThermalBridgeKind};
 pub use window::{WinGeom, Window};
+pub use systems::{Zone, OutdoorAirFlow};
