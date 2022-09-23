@@ -1072,10 +1072,9 @@ pub struct GtZone {
     // Método para asignar caudal (C-C-OA-MET-DEF): 0 ==por persona, 1=total
     /// Caudal de aire primario mínimo por persona con máxima ocupación, m³/h
     /// (C-C-OA-FLOW/PER)
-    pub oa_flow_per: Option<f32>,
     /// Caudal de aire primario total, m³/h
     /// (C-C-OA-FLOW)
-    pub oa_flow: Option<f32>,
+    pub oa_flow: Option<OutdoorAirFlow>,
     // --- Unidades terminales
     // -- Refrigeración --
     /// Potencia nominal total de refrigeración (sensible + latente) de la unidad terminal, kW
@@ -1094,4 +1093,21 @@ pub struct GtZone {
     pub heat_cap: Option<f32>,
     // -- Calefacción auxiliar --
     // TODO: ?? Generar ejemplo para ver variables usadas
+}
+
+
+/// Definición del flujo de aire primario
+#[derive(Debug, Clone, PartialEq)]
+pub enum OutdoorAirFlow {
+    /// Caudal de aire primario mínimo por persona con máxima ocupación, m³/h
+    PerPerson(f32),
+    /// Caudal de aire primario total, m³/h
+    /// TODO: confirmar si es constante o con máxima ocupación
+    Total(f32),
+}
+
+impl Default for OutdoorAirFlow {
+    fn default() -> Self {
+        OutdoorAirFlow::Total(0.0)
+    }
 }

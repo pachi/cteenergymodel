@@ -660,16 +660,24 @@ impl From<BdlBlock> for GtZone {
             None
         };
 
-        let (oa_flow_per, oa_flow) = match block
+        let oa_flow = match block
             .attrs
             .get_str("C-C-OA-MET-DEF")
             .unwrap_or_default()
             .as_str()
         {
             // Caudal total
-            "1" => (None, block.attrs.get_f32("C-C-OA-FLOW").ok()),
+            "1" => block
+                .attrs
+                .get_f32("C-C-OA-FLOW")
+                .ok()
+                .map(OutdoorAirFlow::Total),
             // Caudal por persona
-            _ => (block.attrs.get_f32("C-C-OA-FLOW/PER").ok(), None),
+            _ => block
+                .attrs
+                .get_f32("C-C-OA-FLOW/PER")
+                .ok()
+                .map(OutdoorAirFlow::PerPerson),
         };
 
         Self {
@@ -681,7 +689,6 @@ impl From<BdlBlock> for GtZone {
             design_flow: block.attrs.get_f32("C-C-ASSIG-FLOW").ok(),
             exh_flow,
             exh_kw,
-            oa_flow_per,
             oa_flow,
             cool_cap: block.attrs.get_f32("C-C-COOL-CAP").ok(),
             cool_sh_cap: block.attrs.get_f32("C-C-COOL-SH-CAP").ok(),
