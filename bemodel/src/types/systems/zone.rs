@@ -17,6 +17,11 @@ use super::super::Uuid;
 // Elementos -----------------------------------------------
 
 /// Zona
+/// 
+/// Datos de las zonas térmicas abastecidas por los sistemas:
+/// - Termostato (consignas, tipo, etc)
+/// - Caudales de zona (impulsión, ventilación y extracción)
+/// - Unidades terminales (potencias, caudales de agua, etc)
 ///
 /// TODO:
 /// - aclarar relación con multiplicadores de espacio
