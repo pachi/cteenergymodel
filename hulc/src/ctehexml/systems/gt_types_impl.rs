@@ -642,7 +642,7 @@ impl FromStr for ZoneKind {
     }
 }
 
-impl From<BdlBlock> for GtZone {
+impl From<BdlBlock> for GtZoneSystem {
     fn from(block: BdlBlock) -> Self {
         let name = block.name.clone();
         let kind = block

@@ -1027,18 +1027,16 @@ pub enum ZoneKind {
     Unconditioned,
 }
 
-/// Zona de GT
+/// Sistemas secundarios de distribución específicos de una zona térmica
 ///
-/// Datos de la instalación relativos a las zonas térmicas que abastecen los sistemas.
-///
-/// Datos de:
-/// - Termostato (consignas, tipo, etc)
+/// Datos de las zonas térmicas abastecidas por los sistemas:
+/// - Termostato (consignas, tipo, etc) de zona
 /// - Caudales de zona (impulsión, ventilación y extracción)
-/// - Unidades terminales (potencias, caudales de agua, etc)
+/// - Capacidades de calefacción / refrigeración
 ///
 /// (ZONE)
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct GtZone {
+pub struct GtZoneSystem {
     /// Nombre / descripción
     pub name: String,
     /// Tipo
