@@ -1057,10 +1057,14 @@ pub struct GtZone {
     // --- Termostatos
     /// Consigna de calefacción
     /// Si no se define se supone que no hay control de temperatura activado por la zona
+    /// En este caso se debe mirar el bloque SYSTEM-CONDITIONS y SPACE-CONDITIONS
+    /// del SPACE, con (HEAT-TEMP-SCH) y (COOL-TEMP-SCH) para definir las consignas
     /// (HEAT-TEMP-SCH)
     pub heat_temp_sch: Option<String>,
     /// Consigna de refrigeración
     /// Si no se define se supone que no hay control de temperatura activado por la zona
+    /// En este caso se debe mirar el bloque SYSTEM-CONDITIONS y SPACE-CONDITIONS
+    /// del SPACE, con (HEAT-TEMP-SCH) y (COOL-TEMP-SCH) para definir las consignas
     /// (COOL-TEMP-SCH)
     pub cool_temp_sch: Option<String>,
     // Tipo de termostato

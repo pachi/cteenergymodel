@@ -27,6 +27,8 @@ use super::super::Uuid;
 /// - aclarar relación con multiplicadores de espacio (es igual si no se define?)
 /// - aclarar relación con tipos de espacios
 /// - aclarar relación con n_v de espacios
+/// - los espacios definen sus cargas / perfil de uso (SPACE-CONDITIONS) según su tipo
+///   y las condiciones operacionales / termostatos (SYSTEM-CONDITIONS)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Zone {
     /// ID de la zona (en formato UUID)
@@ -37,13 +39,14 @@ pub struct Zone {
     pub name: String,
 
     /// Espacio(s) asociado(s)
-    /// Debería ser uno o más
-    pub space: Vec<Uuid>,
+    /// A través del espacio se definen las condiciones operacionales y las cargas
+    pub space: Option<Uuid>,
 
     /// Sistema(s) secundario(s) asignado(s) a la(s) zona(s)
     pub system: Option<Vec<Uuid>>,
 
     // --- Termostatos
+    // Estos datos podrían estar en los espacios a través de cargas y condiciones operacionales
     /// Consigna de calefacción
     /// TODO: si no hay, la temperatura no es controlada por la zona
     pub heat_temp_sch: Option<Uuid>,
@@ -90,7 +93,7 @@ impl Default for Zone {
         Zone {
             id: Uuid::new_v4(),
             name: "Zona".to_string(),
-            space: vec![],
+            space: None,
             system: None,
             heat_temp_sch: None,
             cool_temp_sch: None,
