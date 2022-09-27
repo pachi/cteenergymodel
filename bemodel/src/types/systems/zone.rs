@@ -112,7 +112,6 @@ pub enum AirFlow {
     /// Caudal de aire por persona con ocupación máxima, m³/h
     PerPerson(f32),
     /// Caudal de aire total, m³/h
-    /// TODO: confirmar si es constante o con máxima ocupación
     Total(f32),
     /// Caudal de aire en renovaciones por hora, 1/h
     Changes(f32),
