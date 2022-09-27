@@ -44,6 +44,10 @@ pub struct Space {
     /// Cota del espacio respecto al suelo (m)
     #[serde(default, skip_serializing_if = "is_default")]
     pub z: f32,
+    /// Perfil de uso del espacio
+    pub space_conds: Option<String>,
+    /// Condiciones operacionales del espacio
+    pub system_conds: Option<String>,
 }
 
 impl Space {
@@ -99,6 +103,8 @@ impl Default for Space {
             height: 3.0,
             n_v: None,
             z: 0.0,
+            system_conds: None,
+            space_conds: None,
         }
     }
 }

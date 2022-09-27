@@ -138,6 +138,8 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
                     _ => SpaceType::UNCONDITIONED,
                 },
                 n_v: s.airchanges_h,
+                space_conds: Some(s.spaceconds.clone()),
+                system_conds: Some(s.systemconds.clone()),
             })
         })
         .collect::<Result<Vec<Space>, Error>>()

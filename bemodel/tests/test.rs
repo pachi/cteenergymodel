@@ -54,13 +54,17 @@ fn parse() {
         height: 2.7,
         n_v: None,
         z: 0.0,
+        space_conds: Some("Residencial".into()),
+        system_conds: Some("Residencial".into()),
     };
     let space_str = r#"{
         "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
         "name": "P01_E01",
         "kind": "CONDITIONED",
         "inside_tenv": true,
-        "height": 2.7
+        "height": 2.7,
+        "space_conds": "Residencial",
+        "system_conds": "Residencial"
       }"#;
     let sp: bemodel::Space = serde_json::from_str(space_str).unwrap();
 
@@ -203,7 +207,11 @@ fn model_json_ejemploviv_unif() {
 
     // Ventanas
     let winid = model.get_window_by_name("P02_E01_PE001_V").unwrap().id;
-    assert_almost_eq!(ind.props.windows.get(&winid).unwrap().f_shobst.unwrap(), 0.76, 0.01);
+    assert_almost_eq!(
+        ind.props.windows.get(&winid).unwrap().f_shobst.unwrap(),
+        0.76,
+        0.01
+    );
 }
 
 #[test]
