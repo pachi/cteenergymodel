@@ -46,32 +46,22 @@ pub struct ZoneSystem {
     /// Sistema(s) secundario(s) asignado(s) a la(s) zona(s)
     pub system: Option<Vec<Uuid>>,
 
-    // --- Termostatos
-    // Estos datos podrían estar en los espacios a través de cargas y condiciones operacionales
-    /// Consigna de calefacción
-    /// TODO: si no hay, la temperatura no es controlada por la zona
-    pub heat_temp_sch: Option<Uuid>,
-    /// Consigna de refrigeración
-    /// TODO: si no hay, la temperatura no es controlada por la zona
-    pub cool_temp_sch: Option<Uuid>,
-
     // --- Caudales
     /// Caudal de impulsión de diseño de la zona, m³/h
     /// Si no se define usa la disponible por el sistema
     pub design_flow: Option<f32>,
 
     // -- Ventilador de extracción
+    // TODO: ¿debería ser esto una referencia a un ventilador (zone equipment)?
     /// Caudal de extracción, m³/h
     pub exh_flow: Option<f32>,
     /// Potencia de extracción, kW
-    /// TODO: ¿debería ser esto una referencia a un ventilador (zone equipment)?
     pub exh_kw: Option<f32>,
 
     // -- Aire exterior --
     /// Caudal de aire primario:
     /// - mínimo por persona con máxima ocupación, m³/h
     /// - total, m³/h
-    /// TODO: confirmar si el caudal total es constante o con máxima ocupación
     pub oa_flow: Option<AirFlow>,
 
     // --- Unidades terminales
@@ -79,13 +69,11 @@ pub struct ZoneSystem {
     /// La potencia nominal sensible de refrigeración de la unidad terminal se
     /// supone igual al 75% de la total
     /// Si no se define usa la disponible por el sistema
-    /// TODO: ¿debería esto ir a zone equipment?
     pub cool_cap: Option<f32>,
 
     // -- Calefacción --
     /// Potencia nominal de calefacción de las unidades terminales, kW
     /// Si no se define usa la disponible por el sistema
-    /// TODO: ¿debería ir esto a zone equipment?
     pub heat_cap: Option<f32>,
 }
 
@@ -96,8 +84,6 @@ impl Default for ZoneSystem {
             name: "Zona".to_string(),
             space: None,
             system: None,
-            heat_temp_sch: None,
-            cool_temp_sch: None,
             design_flow: None,
             exh_flow: None,
             exh_kw: None,
