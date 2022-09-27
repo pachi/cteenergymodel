@@ -861,7 +861,7 @@ pub struct SysHeatingLocal {
     // (C-C-FURNACE-HIR)
     // Consumo auxiliar del generador de aire, kW
     // (C-C-FURNACE-AUX)
-    
+
     // Opciones cuando el HeatSource es BdC ---
     /// Rendimiento, COP
     /// (C-C-COP)
@@ -1054,6 +1054,18 @@ pub struct GtZone {
     /// (PARENT)
     pub system: Option<String>,
 
+    // --- Termostatos
+    /// Consigna de calefacción
+    /// Si no se define se supone que no hay control de temperatura activado por la zona
+    /// (HEAT-TEMP-SCH)
+    pub heat_temp_sch: Option<String>,
+    /// Consigna de refrigeración
+    /// Si no se define se supone que no hay control de temperatura activado por la zona
+    /// (COOL-TEMP-SCH)
+    pub cool_temp_sch: Option<String>,
+    // Tipo de termostato
+    // (C-C-THERM-TYPE)
+
     // --- Caudales
     // -- Aire impulsión de diseño --
     /// Caudal de impulsión de diseño de la zona, m³/h
@@ -1076,10 +1088,12 @@ pub struct GtZone {
     /// Caudal de aire primario total, m³/h
     /// (C-C-OA-FLOW)
     pub oa_flow: Option<OutdoorAirFlow>,
+
     // --- Unidades terminales
     // -- Refrigeración --
     /// Potencia nominal total de refrigeración (sensible + latente) de la unidad terminal, kW
     /// Si no se define usa la disponible por el sistema
+    /// Solo en sistemas zonales (UHT, UVT, FC, IU, HP, and PTAC)
     /// (C-C-COOL-CAP)
     pub cool_cap: Option<f32>,
     /// Potencia nominal sensible de refrigeración de la unidad terminal, kW
@@ -1090,12 +1104,12 @@ pub struct GtZone {
     // -- Calefacción --
     /// Potencia nominal de calefacción de la unidad terminal, kW
     /// Si no se define usa la disponible por el sistema
+    /// Solo en sistemas zonales (UHT, UVT, FC, IU, HP, and PTAC)
     /// (C-C-HEAT-CAP)
     pub heat_cap: Option<f32>,
     // -- Calefacción auxiliar --
     // TODO: ?? Generar ejemplo para ver variables usadas
 }
-
 
 /// Definición del flujo de aire primario
 #[derive(Debug, Clone, PartialEq)]

@@ -38,4 +38,4 @@ pub use reporting::{Warning, WarningLevel};
 pub use space::{Space, SpaceType};
 pub use thermalbridge::{ThermalBridge, ThermalBridgeKind};
 pub use window::{WinGeom, Window};
-pub use systems::{Zone, OutdoorAirFlow};
+pub use systems::{Zone, AirFlow};

@@ -17,17 +17,16 @@ use super::super::Uuid;
 // Elementos -----------------------------------------------
 
 /// Zona
-/// 
+///
 /// Datos de las zonas térmicas abastecidas por los sistemas:
 /// - Termostato (consignas, tipo, etc)
 /// - Caudales de zona (impulsión, ventilación y extracción)
 /// - Unidades terminales (potencias, caudales de agua, etc)
 ///
 /// TODO:
-/// - aclarar relación con multiplicadores de espacio
+/// - aclarar relación con multiplicadores de espacio (es igual si no se define?)
 /// - aclarar relación con tipos de espacios
 /// - aclarar relación con n_v de espacios
-/// - aclarar dónde van los horarios y consignas
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Zone {
     /// ID de la zona (en formato UUID)
@@ -44,6 +43,14 @@ pub struct Zone {
     /// Sistema(s) secundario(s) asignado(s) a la(s) zona(s)
     pub system: Option<Vec<Uuid>>,
 
+    // --- Termostatos
+    /// Consigna de calefacción
+    /// TODO: si no hay, la temperatura no es controlada por la zona
+    pub heat_temp_sch: Option<Uuid>,
+    /// Consigna de refrigeración
+    /// TODO: si no hay, la temperatura no es controlada por la zona
+    pub cool_temp_sch: Option<Uuid>,
+
     // --- Caudales
     /// Caudal de impulsión de diseño de la zona, m³/h
     /// Si no se define usa la disponible por el sistema
@@ -53,6 +60,7 @@ pub struct Zone {
     /// Caudal de extracción, m³/h
     pub exh_flow: Option<f32>,
     /// Potencia de extracción, kW
+    /// TODO: ¿debería ser esto una referencia a un ventilador (zone equipment)?
     pub exh_kw: Option<f32>,
 
     // -- Aire exterior --
@@ -60,18 +68,20 @@ pub struct Zone {
     /// - mínimo por persona con máxima ocupación, m³/h
     /// - total, m³/h
     /// TODO: confirmar si el caudal total es constante o con máxima ocupación
-    pub oa_flow: Option<OutdoorAirFlow>,
+    pub oa_flow: Option<AirFlow>,
 
     // --- Unidades terminales
     /// Potencia nominal total de refrigeración (sensible + latente) de las unidades terminales, kW
     /// La potencia nominal sensible de refrigeración de la unidad terminal se
     /// supone igual al 75% de la total
     /// Si no se define usa la disponible por el sistema
+    /// TODO: ¿debería esto ir a zone equipment?
     pub cool_cap: Option<f32>,
 
     // -- Calefacción --
     /// Potencia nominal de calefacción de las unidades terminales, kW
     /// Si no se define usa la disponible por el sistema
+    /// TODO: ¿debería ir esto a zone equipment?
     pub heat_cap: Option<f32>,
 }
 
@@ -82,6 +92,8 @@ impl Default for Zone {
             name: "Zona".to_string(),
             space: vec![],
             system: None,
+            heat_temp_sch: None,
+            cool_temp_sch: None,
             design_flow: None,
             exh_flow: None,
             exh_kw: None,
@@ -94,16 +106,20 @@ impl Default for Zone {
 
 /// Definición del flujo de aire primario
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum OutdoorAirFlow {
-    /// Caudal de aire primario mínimo por persona con máxima ocupación, m³/h
+pub enum AirFlow {
+    // Caudal de aire por superficie, m³/h·m²
+    // PerArea(f32)
+    /// Caudal de aire por persona con ocupación máxima, m³/h
     PerPerson(f32),
-    /// Caudal de aire primario total, m³/h
+    /// Caudal de aire total, m³/h
     /// TODO: confirmar si es constante o con máxima ocupación
     Total(f32),
+    /// Caudal de aire en renovaciones por hora, 1/h
+    Changes(f32),
 }
 
-impl Default for OutdoorAirFlow {
+impl Default for AirFlow {
     fn default() -> Self {
-        OutdoorAirFlow::Total(0.0)
+        AirFlow::Total(0.0)
     }
 }

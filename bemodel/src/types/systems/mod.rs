@@ -10,4 +10,4 @@ mod zone;
 
 pub use carrier::*;
 pub use system::*;
-pub use zone::{OutdoorAirFlow, Zone};
+pub use zone::{AirFlow, Zone};
