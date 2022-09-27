@@ -323,7 +323,7 @@ impl From<BdlBlock> for GtHeatRejection {
             fuel,
             capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
             fan_kw: block.attrs.get_f32("FAN-KW/CELL").unwrap_or_default(),
-            number_of_cells: block.attrs.get_f32("NUMBER-OF-CELLS").unwrap_or(1.0),
+            number_of_cells: block.attrs.get_f32("NUMBER-OF-CELLS").map(|v| v as u32).unwrap_or(1),
             cw_loop: block.attrs.get_str("CW-LOOP").unwrap_or_default(),
             cw_pump: block.attrs.get_str("CW-PUMP").ok(),
             spray_kw_cell: block.attrs.get_f32("SPRAY-KW/CELL").ok(),

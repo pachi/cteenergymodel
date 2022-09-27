@@ -428,7 +428,7 @@ pub struct GtHeatRejection {
     pub fan_kw: f32,
     /// Número de celdas
     /// (NUMBER-OF-CELLS)
-    pub number_of_cells: f32,
+    pub number_of_cells: u32,
 
     // --- Conexiones a circuitos
     /// Circuito de condensados
@@ -646,6 +646,7 @@ pub struct GtSystem {
     // DIRECT | PLENUM-ZONES | DUCT | None
     // pub return_air_path: Option<String>,
     // Control de humedad ---
+    // TODO:
     // Tipo Control de Humedad (C-C-HUM-CONTROL)
     // Humedad máxima (C-C-HUM-MAX)
     // Humedad mínima (C-C-HUM-MIN)
