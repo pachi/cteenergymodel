@@ -6,8 +6,8 @@
 
 mod carrier;
 mod system;
-mod zone;
+mod zonesystem;
 
 pub use carrier::*;
 pub use system::*;
-pub use zone::{AirFlow, Zone};
+pub use zonesystem::{AirFlow, ZoneSystem};

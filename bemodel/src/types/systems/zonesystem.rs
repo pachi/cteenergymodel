@@ -2,12 +2,13 @@
 // Distributed under the MIT License
 // (See accompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Zona térmica : Zone
+//! Sistemas de zona : ZoneSystem
 //!
-//! Se relaciona con los espacios
-//! TODO: algunas propiedades actualmente en los espacios pertenecen a las zonas:
+//! Se relaciona con los espacios y los sistemas secundarios de distribución generales
+//! 
+//! TODO: algunas propiedades de los espacios podrían calcularse con datos de los sistemas:
 //! - nivel de acondicionamiento, a partir de datos de zona (si pertenece o no a una zona y si tiene asignadas consignas, etc)
-//! - nivel de ventilación (n_v), a partir de oa_flow en m³/h
+//! - nivel de ventilación (n_v), ¿a partir de oa_flow de zona en m³/h?
 
 use serde::{Deserialize, Serialize};
 
@@ -16,21 +17,21 @@ use super::super::Uuid;
 
 // Elementos -----------------------------------------------
 
-/// Zona
+/// Sistemas secundarios de distribución específicos de una zona térmica
 ///
 /// Datos de las zonas térmicas abastecidas por los sistemas:
-/// - Termostato (consignas, tipo, etc)
+/// - Termostato (consignas, tipo, etc) de zona
 /// - Caudales de zona (impulsión, ventilación y extracción)
-/// - Unidades terminales (potencias, caudales de agua, etc)
-///
-/// TODO:
+/// - Capacidades de calefacción / refrigeración
+/// 
+/// TODO::
 /// - aclarar relación con multiplicadores de espacio (es igual si no se define?)
 /// - aclarar relación con tipos de espacios
 /// - aclarar relación con n_v de espacios
 /// - los espacios definen sus cargas / perfil de uso (SPACE-CONDITIONS) según su tipo
 ///   y las condiciones operacionales / termostatos (SYSTEM-CONDITIONS)
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Zone {
+pub struct ZoneSystem {
     /// ID de la zona (en formato UUID)
     pub id: Uuid,
 
@@ -88,9 +89,9 @@ pub struct Zone {
     pub heat_cap: Option<f32>,
 }
 
-impl Default for Zone {
+impl Default for ZoneSystem {
     fn default() -> Self {
-        Zone {
+        ZoneSystem {
             id: Uuid::new_v4(),
             name: "Zona".to_string(),
             space: None,
