@@ -13,58 +13,78 @@
     {
       "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "name": "P01_E01",
-      "height": 2.7
+      "height": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "8fb42929-3639-dcb3-13d7-071296960471",
       "name": "P01_E02",
-      "height": 2.7
+      "height": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "name": "P01_E03",
-      "height": 2.7
+      "height": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "name": "P01_E04",
-      "height": 2.7
+      "height": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
       "name": "P02_E01",
       "height": 3.0,
-      "z": 2.7
+      "z": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "name": "P02_E02",
       "height": 3.0,
-      "z": 2.7
+      "z": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "8e7b02af-007d-5337-7ec5-482065784e11",
       "name": "P02_E03",
       "height": 3.0,
-      "z": 2.7
+      "z": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "839f06f9-2a5f-3316-a889-92064087fee3",
       "name": "P02_E04",
       "height": 3.0,
-      "z": 2.7
+      "z": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "name": "P02_E05",
       "height": 3.0,
-      "z": 2.7
+      "z": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "name": "P02_E06",
       "height": 3.0,
-      "z": 2.7
+      "z": 2.7,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     }
   ],
   "walls": [

@@ -13,7 +13,9 @@
     {
       "id": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "name": "P01_E01",
-      "height": 3.0
+      "height": 3.0,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     }
   ],
   "walls": [

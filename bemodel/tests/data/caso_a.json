@@ -14,7 +14,9 @@
     {
       "id": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "name": "P01_E01",
-      "height": 3.0
+      "height": 3.0,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
@@ -22,25 +24,33 @@
       "kind": "UNINHABITED",
       "inside_tenv": false,
       "height": 3.0,
-      "n_v": 0.1
+      "n_v": 0.1,
+      "space_conds": "NIVEL_ESTANQUEIDAD_1",
+      "system_conds": "NIVEL_ESTANQUEIDAD_1"
     },
     {
       "id": "54239679-cf77-3097-b426-71c92a7e5e99",
       "name": "P02_E01",
       "height": 3.0,
-      "z": 3.0
+      "z": 3.0,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "name": "P03_E01",
       "height": 3.0,
-      "z": 6.0
+      "z": 6.0,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "name": "P04_E01",
       "height": 3.0,
-      "z": 9.0
+      "z": 9.0,
+      "space_conds": "Residencial",
+      "system_conds": "Residencial"
     },
     {
       "id": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
@@ -49,7 +59,9 @@
       "inside_tenv": false,
       "height": 3.0,
       "n_v": 0.1,
-      "z": 9.0
+      "z": 9.0,
+      "space_conds": "NIVEL_ESTANQUEIDAD_1",
+      "system_conds": "NIVEL_ESTANQUEIDAD_1"
     }
   ],
   "walls": [
