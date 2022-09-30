@@ -10,8 +10,8 @@ use anyhow::Error;
 use serde::{Deserialize, Serialize};
 
 use super::{
-    BoundaryType, ConsDb, Meta, PropsOverrides, Shade, Space, SpaceType, ThermalBridge, Tilt, Uuid,
-    Wall, Warning, Window,
+    BoundaryType, ConsDb, Meta, PropsOverrides, SchedulesDb, Shade, Space, SpaceType,
+    ThermalBridge, Tilt, Uuid, Wall, Warning, Window,
 };
 
 // ---------- Estructura general de datos --------------
@@ -40,6 +40,9 @@ pub struct Model {
     /// Construcciones
     #[serde(default, skip_serializing_if = "ConsDb::is_empty")]
     pub cons: ConsDb,
+    /// Horarios
+    #[serde(default, skip_serializing_if = "SchedulesDb::is_empty")]
+    pub schedules: SchedulesDb,
     /// Overrides de propiedades de elementos (opacos y huecos)
     #[serde(default, skip_serializing_if = "PropsOverrides::is_empty")]
     pub overrides: PropsOverrides,

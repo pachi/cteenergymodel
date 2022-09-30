@@ -19,10 +19,11 @@ mod model;
 mod opaques;
 mod overrides;
 mod reporting;
+mod schedules;
 mod space;
+mod systems;
 mod thermalbridge;
 mod window;
-mod systems;
 
 use crate::utils::{fround2, uuid_from_str};
 
@@ -35,7 +36,8 @@ pub use model::{ExtraData, Model};
 pub use opaques::{Shade, Wall, WallGeom};
 pub use overrides::{PropsOverrides, WallPropsOverrides, WinPropsOverrides};
 pub use reporting::{Warning, WarningLevel};
+pub use schedules::{Schedule, ScheduleDay, ScheduleWeek, SchedulesDb};
 pub use space::{Space, SpaceType};
+pub use systems::{AirFlow, ZoneSystem};
 pub use thermalbridge::{ThermalBridge, ThermalBridgeKind};
 pub use window::{WinGeom, Window};
-pub use systems::{ZoneSystem, AirFlow};

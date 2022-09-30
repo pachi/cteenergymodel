@@ -13,11 +13,11 @@ pub mod energy;
 pub mod utils;
 
 pub use types::{
-    point, vector, BoundaryType, ConsDb, ConsDbGroups, ExtraData, Frame, Glass, Layer, Library,
-    MatProps, Material, Meta, Model, Orientation, Point2, Point3, Polygon, PropsOverrides, Shade,
-    Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Vector2, Vector3, Wall,
-    WallCons, WallGeom, WallPropsOverrides, Warning, WarningLevel, WinCons, WinGeom,
-    WinPropsOverrides, Window,
+    point, vector, BoundaryType, ConsDb, ConsDbGroups, ScheduleDay, ExtraData, Frame, Glass, Layer,
+    Library, MatProps, Material, Meta, Model, Orientation, Point2, Point3, Polygon, PropsOverrides,
+    Schedule, SchedulesDb, Shade, Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid,
+    Vector2, Vector3, Wall, WallCons, WallGeom, WallPropsOverrides, Warning, WarningLevel,
+    ScheduleWeek, WinCons, WinGeom, WinPropsOverrides, Window,
 };
 
 /// Versión del programa

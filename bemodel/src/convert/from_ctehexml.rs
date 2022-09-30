@@ -10,7 +10,7 @@ use std::{
     convert::TryInto,
 };
 
-use anyhow::{anyhow, format_err, Error};
+use anyhow::{anyhow, bail, format_err, Error};
 use nalgebra::{point, Point3, Rotation2, Rotation3, Translation3, Vector3};
 
 use crate::utils::{fround2, normalize, uuid_from_obj};
@@ -20,9 +20,9 @@ use hulc::{
 };
 
 pub use crate::{
-    BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, Meta, Model, Orientation, Shade,
-    Space, SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeom,
-    WinCons, WinGeom, Window,
+    BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, Meta, Model, Orientation,
+    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceType, ThermalBridge,
+    ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeom, WinCons, WinGeom, Window,
 };
 
 // Utilidades varias de conversión
@@ -104,6 +104,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             rn_perim_insulation,
         };
 
+        let schedules = schedules_from_bdl(bdl, &id_maps)?;
+
         let model = Model {
             meta,
             walls,
@@ -112,6 +114,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             shades,
             spaces,
             cons,
+            schedules,
             warnings: Default::default(),
             overrides: Default::default(),
             extra: Default::default(),
@@ -692,6 +695,88 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
         glasses,
         frames,
     })
+}
+
+/// Horarios a partir de datos BDL
+fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error> {
+    let mut year = Vec::new();
+    let mut week = Vec::new();
+    let mut day = Vec::new();
+
+    for sch in &bdl.schedules {
+        match sch {
+            bdl::Schedule::Day(sch) => {
+                let id = uuid_from_obj(sch);
+                let values = match sch.values.len() {
+                    1 => vec![*sch.values.first().unwrap(); 24],
+                    24 => sch.values.clone(),
+                    n => bail!("Longitud {} incorrecta de horario diario: {}", n, sch.name),
+                };
+                day.push(ScheduleDay {
+                    id,
+                    name: sch.name.clone(),
+                    values,
+                })
+            }
+            bdl::Schedule::Week(sch) => {
+                let id = uuid_from_obj(sch);
+                let values = match sch.days.len() {
+                    1 => vec![sch.days.first().unwrap().clone(); 7],
+                    7 => sch.days.clone(),
+                    n => bail!("Longitud {} incorrecta de horario semanal: {}", n, sch.name),
+                };
+                week.push(ScheduleWeek {
+                    id,
+                    name: sch.name.clone(),
+                    values,
+                })
+            }
+            bdl::Schedule::Year(sch) => {
+                let id = uuid_from_obj(sch);
+                let ndays: Vec<_> = std::iter::once(0u32)
+                    .chain(
+                        sch.days
+                            .iter()
+                            .zip(sch.months.iter())
+                            .map(|(day, month)| day_of_year(*day, *month)),
+                    )
+                    .collect();
+                let repetitions = ndays.windows(2).map(|t| t[1] - t[0]);
+
+                assert!(ndays.len() == sch.weeks.len() && ndays.len() == sch.months.len());
+
+                let values = sch
+                    .weeks
+                    .iter()
+                    .cloned()
+                    .zip(repetitions.into_iter())
+                    .collect();
+
+                year.push(Schedule {
+                    id,
+                    name: sch.name.clone(),
+                    values,
+                })
+            }
+        }
+    }
+
+    Ok(SchedulesDb { year, week, day })
+}
+
+/// Semana del año a partir del día y mes
+/// Basado en https://astronomy.stackexchange.com/questions/2407/calculate-day-of-the-year-for-a-given-date
+fn day_of_year(day: u32, month: u32) -> u32 {
+    let day = day as f32;
+    let month = month as f32;
+    let n1 = (275.0 * month / 9.0).floor();
+    let n2 = ((month + 9.0) / 12.0).floor();
+    // N3 = 2 si no es bisiesto o 1 si lo es
+    // let N3 = (1.0 + ((year - 4 * (year / 4).floor() + 2) / 3).floor());
+    let n3 = 2.0;
+    // Día del año
+    let n = n1 - (n2 * n3) + day - 30.0;
+    (n / 7.0).ceil() as u32
 }
 
 /// Mapping de nombres a ids
