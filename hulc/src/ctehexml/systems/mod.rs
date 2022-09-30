@@ -26,6 +26,7 @@ pub use gt_types_impl::*;
 pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<VypSystem>) {
     let (factores_correccion_sistemas, sistemas) = vyp_sys::parse_systems(doc);
     let gt_systems = gt_sys::parse_systems(doc);
+    // let horarios = todo!();
 
     // TODO: eliminar
     println!("Sistemas  GT:\n{:#?}", gt_systems);

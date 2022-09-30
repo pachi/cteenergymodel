@@ -16,19 +16,21 @@ use std::convert::TryFrom;
 use std::path::Path;
 
 use anyhow::{bail, format_err, Error};
-use log::warn;
+use log::{info, warn};
 
 mod blocks;
 mod common;
 mod db;
 mod envelope;
+mod systems;
 
 pub use blocks::{build_blocks, BdlBlock};
-pub use common::{extract_f32vec, extract_namesvec, AttrMap};
+pub use common::{extract_f32vec, extract_namesvec, extract_u32vec, AttrMap};
 pub use db::{Construction, Frame, Glass, Material, MaterialProperties, WallCons, WinCons, DB};
 pub use envelope::{
     BoundaryType, Floor, Polygon, Shading, Space, ThermalBridge, Tilt, Wall, Window,
 };
+pub use systems::{DaySchedule, Schedule, WeekSchedule, YearSchedule};
 
 // ------------------------- BDL ----------------------------
 
@@ -54,7 +56,7 @@ pub struct Data {
     /// Consignas de los sistemas
     pub systemconds: BTreeMap<String, BdlBlock>,
     /// Horarios
-    pub schedules: BTreeMap<String, BdlBlock>,
+    pub schedules: Vec<Schedule>,
 }
 
 impl Data {
@@ -72,6 +74,7 @@ impl Data {
         let mut floor_blocks = Vec::new();
         let mut env_blocks = Vec::new();
         let mut other_blocks = Vec::new();
+        let mut schedule_blocks = Vec::new();
 
         for block in blocks {
             match block.btype.as_str() {
@@ -82,6 +85,9 @@ impl Data {
                 "FLOOR" => floor_blocks.push(block),
                 "SPACE" | "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL"
                 | "THERMAL-BRIDGE" | "WINDOW" | "BUILDING-SHADE" => env_blocks.push(block),
+                "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
+                    schedule_blocks.push(block)
+                }
                 _ => other_blocks.push(block),
             }
         }
@@ -283,11 +289,32 @@ impl Data {
             }
         }
 
+        // Horarios --------------------------------------
+        let mut schedules: Vec<Schedule> = Vec::new();
+
+        for block in schedule_blocks {
+            match block.btype.as_str() {
+                "DAY-SCHEDULE-PD" => {
+                    schedules.push(Schedule::Day(DaySchedule::try_from(block)?));
+                }
+                "WEEK-SCHEDULE-PD" => {
+                    schedules.push(Schedule::Week(WeekSchedule::try_from(block)?));
+                }
+                "SCHEDULE-PD" => {
+                    schedules.push(Schedule::Year(YearSchedule::try_from(block)?));
+                }
+                "RUN-PERIOD-PD" => {
+                    info!("Ignorando bloque de periodo de cálculo: {}", block.name);
+                }
+                // Elemento desconocido -------------------------
+                _ => unreachable!(),
+            };
+        }
+
         // Resto de bloques ------------------------------
 
         // Resto de elementos
         let mut meta: BTreeMap<String, BdlBlock> = BTreeMap::new();
-        let mut schedules: BTreeMap<String, BdlBlock> = BTreeMap::new();
         let mut spaceconds: BTreeMap<String, BdlBlock> = BTreeMap::new();
         let mut systemconds: BTreeMap<String, BdlBlock> = BTreeMap::new();
 
@@ -297,10 +324,6 @@ impl Data {
                 // Valores por defecto, Datos generales, espacio de trabajo y edificio
                 "DEFECTOS" | "GENERAL-DATA" | "WORK-SPACE" | "BUILD-PARAMETERS" => {
                     meta.insert(block.btype.clone(), block);
-                }
-                // Horarios ----------
-                "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
-                    schedules.insert(block.name.clone(), block);
                 }
                 // Condiciones de uso y ocupación ----------
                 "SPACE-CONDITIONS" => {

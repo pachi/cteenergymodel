@@ -194,3 +194,18 @@ pub fn extract_f32vec<S: AsRef<str> + std::fmt::Debug>(input: S) -> Result<Vec<f
         .collect::<Result<Vec<f32>, _>>()
         .map_err(|_| format_err!("Error en la conversión numérica de {:?}", input))
 }
+
+/// Interpreta lista de valores con formato "(num1, num2, num3, ...)" como lista de u32
+pub fn extract_u32vec<S: AsRef<str> + std::fmt::Debug>(input: S) -> Result<Vec<u32>, Error> {
+    input
+        .as_ref()
+        .trim_matches(&[' ', '(', ')'] as &[_])
+        .split(',')
+        .map(|v| {
+            v.trim()
+                .parse::<u32>()
+                .map_err(|_| format_err!("Error al convertir {}", v))
+        })
+        .collect::<Result<Vec<u32>, _>>()
+        .map_err(|_| format_err!("Error en la conversión numérica de {:?}", input))
+}
