@@ -738,12 +738,16 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                         sch.days
                             .iter()
                             .zip(sch.months.iter())
-                            .map(|(day, month)| day_of_year(*day, *month)),
+                            .map(|(day, month)| week_of_year(*day, *month)),
                     )
                     .collect();
                 let repetitions = ndays.windows(2).map(|t| t[1] - t[0]);
 
-                assert!(ndays.len() == sch.weeks.len() && ndays.len() == sch.months.len());
+                assert!(
+                    repetitions.len() == sch.weeks.len()
+                        && repetitions.len() == sch.months.len()
+                        && repetitions.len() == sch.days.len()
+                );
 
                 let values = sch
                     .weeks
@@ -766,7 +770,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
 
 /// Semana del año a partir del día y mes
 /// Basado en https://astronomy.stackexchange.com/questions/2407/calculate-day-of-the-year-for-a-given-date
-fn day_of_year(day: u32, month: u32) -> u32 {
+fn week_of_year(day: u32, month: u32) -> u32 {
     let day = day as f32;
     let month = month as f32;
     let n1 = (275.0 * month / 9.0).floor();
@@ -776,7 +780,8 @@ fn day_of_year(day: u32, month: u32) -> u32 {
     let n3 = 2.0;
     // Día del año
     let n = n1 - (n2 * n3) + day - 30.0;
-    (n / 7.0).ceil() as u32
+    // TODO: comprobar esta lógica
+    (n / 7.0 + 0.1).floor() as u32
 }
 
 /// Mapping de nombres a ids
