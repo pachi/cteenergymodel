@@ -150,7 +150,7 @@ impl From<f32> for BdlValue {
 
 impl std::fmt::Display for BdlValue {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match &*self {
+        match self {
             BdlValue::String(val) => write!(f, "{}", val),
             BdlValue::Number(val) => write!(f, "{}", val),
         }
