@@ -105,6 +105,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         };
 
         let schedules = schedules_from_bdl(bdl, &id_maps)?;
+        let space_loads = todo!();
+        let space_conditions = todo!();
 
         let model = Model {
             meta,
@@ -115,6 +117,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             spaces,
             cons,
             schedules,
+            space_loads,
+            space_conditions,
             warnings: Default::default(),
             overrides: Default::default(),
             extra: Default::default(),
