@@ -45,8 +45,10 @@ pub struct Space {
     #[serde(default, skip_serializing_if = "is_default")]
     pub z: f32,
     /// Perfil de uso del espacio
+    /// TODO: esto será más adelante un UUID
     pub space_conds: Option<String>,
     /// Condiciones operacionales del espacio
+    /// TODO: esto será más adelante un UUID
     pub system_conds: Option<String>,
 }
 

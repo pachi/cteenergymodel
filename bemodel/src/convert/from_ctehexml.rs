@@ -706,7 +706,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
     for sch in &bdl.schedules {
         match sch {
             bdl::Schedule::Day(sch) => {
-                let id = uuid_from_obj(sch);
+                let id = id_maps.schedule_id(&sch.name)?;
                 let values = match sch.values.len() {
                     1 => vec![*sch.values.first().unwrap(); 24],
                     24 => sch.values.clone(),
@@ -719,7 +719,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                 })
             }
             bdl::Schedule::Week(sch) => {
-                let id = uuid_from_obj(sch);
+                let id = id_maps.schedule_id(&sch.name)?;
                 let values = match sch.days.len() {
                     1 => vec![sch.days.first().unwrap().clone(); 7],
                     7 => sch.days.clone(),
@@ -732,7 +732,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                 })
             }
             bdl::Schedule::Year(sch) => {
-                let id = uuid_from_obj(sch);
+                let id = id_maps.schedule_id(&sch.name)?;
                 let ndays: Vec<_> = std::iter::once(0u32)
                     .chain(
                         sch.days
@@ -790,6 +790,7 @@ struct IdMaps<'a> {
     wallcons: BTreeMap<&'a str, Uuid>,
     wincons: BTreeMap<&'a str, Uuid>,
     materials: BTreeMap<&'a str, Uuid>,
+    schedules: BTreeMap<&'a str, Uuid>,
 }
 
 impl<'a> IdMaps<'a> {
@@ -833,6 +834,14 @@ impl<'a> IdMaps<'a> {
             .ok_or_else(|| format_err!("Material de opaco {} no identificado", name.as_ref()))
     }
 
+    /// Localiza id de horario desde nombre
+    fn schedule_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
+        self.schedules
+            .get(name.as_ref())
+            .copied()
+            .ok_or_else(|| format_err!("Horario {} no identificado", name.as_ref()))
+    }
+
     fn new(bdl: &'a Data) -> Self {
         IdMaps {
             spaces: bdl
@@ -862,6 +871,15 @@ impl<'a> IdMaps<'a> {
                 .materials
                 .iter()
                 .map(|(name, s)| (name.as_str(), uuid_from_obj(&s)))
+                .collect::<BTreeMap<&str, Uuid>>(),
+            schedules: bdl
+                .schedules
+                .iter()
+                .map(|v| match v {
+                    bdl::Schedule::Year(sch) => (sch.name.as_str(), uuid_from_obj(&sch)),
+                    bdl::Schedule::Week(sch) => (sch.name.as_str(), uuid_from_obj(&sch)),
+                    bdl::Schedule::Day(sch) => (sch.name.as_str(), uuid_from_obj(&sch)),
+                })
                 .collect::<BTreeMap<&str, Uuid>>(),
         }
     }

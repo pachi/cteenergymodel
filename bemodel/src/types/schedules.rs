@@ -52,7 +52,8 @@ pub struct ScheduleWeek {
     pub id: Uuid,
     /// Nombre del horario
     pub name: String,
-    /// Secuencia de tuplas de nombre de horario diario y repeticiones
+    /// Secuencia de nombres de horarios diarios para formar una semana
+    /// TODO: convertir a tuplas de nombre de horario diario y repeticiones
     /// El total de repeticiones debe sumar 7 días
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub values: Vec<String>,
