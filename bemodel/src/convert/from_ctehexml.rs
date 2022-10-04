@@ -768,7 +768,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
     Ok(SchedulesDb { year, week, day })
 }
 
-/// Semana del año a partir del día y mes
+/// Semana del año (de 0 a 52) a partir del día (1 a 31) y mes (1 a 12)
 /// Basado en https://astronomy.stackexchange.com/questions/2407/calculate-day-of-the-year-for-a-given-date
 fn week_of_year(day: u32, month: u32) -> u32 {
     let day = day as f32;
@@ -780,7 +780,6 @@ fn week_of_year(day: u32, month: u32) -> u32 {
     let n3 = 2.0;
     // Día del año
     let n = n1 - (n2 * n3) + day - 30.0;
-    // TODO: comprobar esta lógica
     (n / 7.0 + 0.1).floor() as u32
 }
 
