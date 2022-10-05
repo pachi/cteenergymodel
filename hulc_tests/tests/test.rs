@@ -209,10 +209,10 @@ fn test_bdl_parse() {
         spaces,
         walls,
         windows,
-        tbridges,
+        thermal_bridges,
         shadings,
-        spaceconds,
-        systemconds,
+        space_conditions,
+        system_conditions,
         schedules,
     } = bdldb;
     // println!("{:#?}", db);

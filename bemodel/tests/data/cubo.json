@@ -14,8 +14,8 @@
       "id": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "name": "P01_E01",
       "height": 3.0,
-      "space_conds": "Residencial",
-      "system_conds": "Residencial"
+      "loads": "3e76c509-e643-7b26-48bd-00ca503f40ac",
+      "sys_settings": "0b9d6aa2-4490-f87d-d948-daca0b019e0b"
     }
   ],
   "walls": [
@@ -3155,5 +3155,28 @@
         ]
       }
     ]
-  }
+  },
+  "loads": [
+    {
+      "id": "3e76c509-e643-7b26-48bd-00ca503f40ac",
+      "name": "Residencial",
+      "people_schedule": "cfa597dc-7da8-02a8-9475-a6ea9bbda8bb",
+      "people_sensible": 2.15,
+      "people_latent": 1.36,
+      "equipment": 4.4,
+      "equipment_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
+      "lighting": 4.4,
+      "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
+      "illuminance": 0.0,
+      "area_per_person": 33.33
+    }
+  ],
+  "sys_settings": [
+    {
+      "id": "0b9d6aa2-4490-f87d-d948-daca0b019e0b",
+      "name": "Residencial",
+      "temp_max": "d02b9100-8895-0f1a-4f70-0bb216479f55",
+      "temp_min": "026bc569-dc14-ade8-f130-e5da31fc74b8"
+    }
+  ]
 }

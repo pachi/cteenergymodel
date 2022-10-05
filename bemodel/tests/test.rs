@@ -54,8 +54,8 @@ fn parse() {
         height: 2.7,
         n_v: None,
         z: 0.0,
-        space_conds: Some("Residencial".into()),
-        system_conds: Some("Residencial".into()),
+        loads: Some(uuid::Uuid::parse_str("be9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap()),
+        sys_settings: Some(uuid::Uuid::parse_str("af9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap()),
     };
     let space_str = r#"{
         "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
@@ -63,8 +63,8 @@ fn parse() {
         "kind": "CONDITIONED",
         "inside_tenv": true,
         "height": 2.7,
-        "space_conds": "Residencial",
-        "system_conds": "Residencial"
+        "space_conds": "be9422f0-9693-6c17-d5ea-d3783d9c0b74",
+        "system_conds": "af9422f0-9693-6c17-d5ea-d3783d9c0b74"
       }"#;
     let sp: bemodel::Space = serde_json::from_str(space_str).unwrap();
 

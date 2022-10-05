@@ -45,11 +45,9 @@ pub struct Space {
     #[serde(default, skip_serializing_if = "is_default")]
     pub z: f32,
     /// Perfil de uso del espacio
-    /// TODO: esto será más adelante un UUID
-    pub space_conds: Option<String>,
+    pub loads: Option<Uuid>,
     /// Condiciones operacionales del espacio
-    /// TODO: esto será más adelante un UUID
-    pub system_conds: Option<String>,
+    pub sys_settings: Option<Uuid>,
 }
 
 impl Space {
@@ -105,8 +103,8 @@ impl Default for Space {
             height: 3.0,
             n_v: None,
             z: 0.0,
-            system_conds: None,
-            space_conds: None,
+            sys_settings: None,
+            loads: None,
         }
     }
 }

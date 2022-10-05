@@ -1,5 +1,11 @@
 # TAREAS PENDIENTES
 
+- Introducir perfiles de uso y operacionales:
+  - Introducir en model.loads las infiltraciones para espacios no habitables (ver NIVEL_ESTANQUEIDAD_1 en casoa.ctehexml)
+  - quitar de Space `{n_v, SpaceKind }`?
+  - Identificar habitable / habitable acondicionado / no habitable según perfil del espacio
+- Introducir sistemas
+  - `model.systems`
 - Añadir a hulc_tests otros edificios con sistemas que no tenemos por ahora, y casos GT
 - Admitir cons, wall, y otros UUID con valor Uuid::default() y eliminar serialización
 - Añadir en props area de sombras
@@ -15,16 +21,6 @@
   - Usar Model.warnings
 - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
 - Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
-- Introducir perfiles de uso y operacionales:
-  - `SYSTEM-CONDITIONS`
-  - `SPACE-CONDITIONS`
-  - `model.loads`
-  - quitar de Space `{n_v, SpaceKind }`
-  - nuevos elementos `{ id, occupation, ilumination, equipment, ventilation, heating_sch, cooling_sch, ilum_sch, equipment_sch, ventilation_sch }` en `model.loads`
-  - `Space.loads`
-  - Identificar habitable / habitable acondicionado / no habitable según perfil del espacio
-- Introducir sistemas
-  - `model.systems`
 - Informe de mediciones:
   - por superficies, agrupando por orientaciones, construcciones, etc
   - por pesos o volumen? Ver si la definición de materiales es suficiente

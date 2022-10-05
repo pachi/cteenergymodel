@@ -6,7 +6,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::{Uuid, Wall, Window};
+use super::Uuid;
 use crate::utils::fround3;
 
 // Elementos -----------------------------------------------

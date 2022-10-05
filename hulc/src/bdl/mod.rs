@@ -48,13 +48,13 @@ pub struct Data {
     /// Elementos semitransparentes de la envolvente
     pub windows: Vec<Window>,
     /// Puentes térmicos
-    pub tbridges: Vec<ThermalBridge>,
+    pub thermal_bridges: Vec<ThermalBridge>,
     /// Sombras exteriores del edificio
     pub shadings: Vec<Shading>,
     /// Condiciones de uso de los espacios
-    pub spaceconds: BTreeMap<String, BdlBlock>,
+    pub space_conditions: BTreeMap<String, BdlBlock>,
     /// Consignas de los sistemas
-    pub systemconds: BTreeMap<String, BdlBlock>,
+    pub system_conditions: BTreeMap<String, BdlBlock>,
     /// Horarios
     pub schedules: Vec<Schedule>,
 }
@@ -220,7 +220,7 @@ impl Data {
         let mut spaces: Vec<Space> = Vec::new();
         let mut walls: Vec<Wall> = Vec::new();
         let mut windows: Vec<Window> = Vec::new();
-        let mut tbridges: Vec<ThermalBridge> = Vec::new();
+        let mut thermal_bridges: Vec<ThermalBridge> = Vec::new();
         let mut shadings: Vec<Shading> = Vec::new();
         for block in env_blocks {
             match block.btype.as_str() {
@@ -300,7 +300,7 @@ impl Data {
 
                 // Puentes térmicos ----------
                 "THERMAL-BRIDGE" => {
-                    tbridges.push(ThermalBridge::try_from(block)?);
+                    thermal_bridges.push(ThermalBridge::try_from(block)?);
                 }
 
                 // Sombras --------------------------------------
@@ -316,8 +316,8 @@ impl Data {
 
         // Resto de elementos
         let mut meta: BTreeMap<String, BdlBlock> = BTreeMap::new();
-        let mut spaceconds: BTreeMap<String, BdlBlock> = BTreeMap::new();
-        let mut systemconds: BTreeMap<String, BdlBlock> = BTreeMap::new();
+        let mut space_conditions: BTreeMap<String, BdlBlock> = BTreeMap::new();
+        let mut system_conditions: BTreeMap<String, BdlBlock> = BTreeMap::new();
 
         for block in other_blocks {
             match block.btype.as_str() {
@@ -328,11 +328,11 @@ impl Data {
                 }
                 // Condiciones de uso y ocupación ----------
                 "SPACE-CONDITIONS" => {
-                    spaceconds.insert(block.name.clone(), block);
+                    space_conditions.insert(block.name.clone(), block);
                 }
                 // Consignas y horarios de sistemas ----------
                 "SYSTEM-CONDITIONS" => {
-                    systemconds.insert(block.name.clone(), block);
+                    system_conditions.insert(block.name.clone(), block);
                 }
 
                 // Elemento desconocido -------------------------
@@ -351,13 +351,13 @@ impl Data {
             spaces,
             walls,
             windows,
-            tbridges,
+            thermal_bridges,
             shadings,
             db,
             meta,
             schedules,
-            spaceconds,
-            systemconds,
+            space_conditions,
+            system_conditions,
         })
     }
 

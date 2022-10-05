@@ -21,8 +21,9 @@ use hulc::{
 
 pub use crate::{
     BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, Meta, Model, Orientation,
-    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceType, ThermalBridge,
-    ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeom, WinCons, WinGeom, Window,
+    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceConditions, SpaceLoads,
+    SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeom, WinCons,
+    WinGeom, Window,
 };
 
 // Utilidades varias de conversión
@@ -105,8 +106,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         };
 
         let schedules = schedules_from_bdl(bdl, &id_maps)?;
-        let space_loads = todo!();
-        let space_conditions = todo!();
+        let loads = loads_from_bdl(bdl, &id_maps)?;
+        let sys_settings = sys_settings_from_bdl(bdl, &id_maps)?;
 
         let model = Model {
             meta,
@@ -117,8 +118,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             spaces,
             cons,
             schedules,
-            space_loads,
-            space_conditions,
+            loads,
+            sys_settings,
             warnings: Default::default(),
             overrides: Default::default(),
             extra: Default::default(),
@@ -132,6 +133,8 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
     bdl.spaces
         .iter()
         .map(|s| {
+            let space_conds = id_maps.loads_id(&s.spaceconds).ok();
+            let system_conds = id_maps.sys_settings_id(&s.systemconds).ok();
             Ok(Space {
                 id: id_maps.space_id(&s.name)?,
                 name: s.name.clone(),
@@ -145,8 +148,8 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
                     _ => SpaceType::UNCONDITIONED,
                 },
                 n_v: s.airchanges_h,
-                space_conds: Some(s.spaceconds.clone()),
-                system_conds: Some(s.systemconds.clone()),
+                loads: space_conds,
+                sys_settings: system_conds,
             })
         })
         .collect::<Result<Vec<Space>, Error>>()
@@ -403,7 +406,7 @@ fn windows_and_shades_from_bdl(
 
 /// Construye puentes térmicos de la envolvente a partir de datos BDL
 fn thermal_bridges_from_bdl(bdl: &Data) -> Vec<ThermalBridge> {
-    bdl.tbridges
+    bdl.thermal_bridges
         .iter()
         .filter(|tb| tb.name != "LONGITUDES_CALCULADAS")
         .map(|tb| {
@@ -787,6 +790,65 @@ fn week_of_year(day: u32, month: u32) -> u32 {
     (n / 7.0 + 0.1).floor() as u32
 }
 
+/// Cargas de espacios a partir de datos BDL
+fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error> {
+    let mut space_loads = Vec::new();
+
+    for (name, space_cond) in &bdl.space_conditions {
+        let id = id_maps.loads_id(&name)?;
+        let area_per_person = space_cond.attrs.get_f32("AREA/PERSON")?;
+        let people_sensible = if area_per_person != 0.0 {
+            fround2(space_cond.attrs.get_f32("PEOPLE-HG-SENS")? / area_per_person)
+        } else {
+            0.0
+        };
+        let people_latent = if area_per_person != 0.0 {
+            fround2(space_cond.attrs.get_f32("PEOPLE-HG-LAT")? / area_per_person)
+        } else {
+            0.0
+        };
+
+        space_loads.push(SpaceLoads {
+            id,
+            name: space_cond.name.clone(),
+            people_schedule: Some(
+                id_maps.schedule_id(space_cond.attrs.get_str("PEOPLE-SCHEDULE")?)?,
+            ),
+            people_sensible,
+            people_latent,
+            equipment: space_cond.attrs.get_f32("EQUIPMENT-W/AREA")?,
+            equipment_schedule: Some(
+                id_maps.schedule_id(space_cond.attrs.get_str("EQUIP-SCHEDULE")?)?,
+            ),
+            lighting: space_cond.attrs.get_f32("LIGHTING-W/AREA")?,
+            lighting_schedule: Some(
+                id_maps.schedule_id(space_cond.attrs.get_str("LIGHTING-SCHEDULE")?)?,
+            ),
+            // TODO: queda por calcular...
+            illuminance: 0.0,
+            area_per_person,
+        })
+    }
+    Ok(space_loads)
+}
+
+/// Condiciones operacionales de espacios a partir de datos BDL
+fn sys_settings_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceConditions>, Error> {
+    let mut space_conds = Vec::new();
+
+    for (name, space_cond) in &bdl.system_conditions {
+        let id = id_maps.sys_settings_id(&name)?;
+        space_conds.push(SpaceConditions {
+            id,
+            name: space_cond.name.clone(),
+            temp_max: Some(id_maps.schedule_id(space_cond.attrs.get_str("COOL-TEMP-SCH")?)?),
+            temp_min: Some(id_maps.schedule_id(space_cond.attrs.get_str("HEAT-TEMP-SCH")?)?),
+        })
+    }
+
+    Ok(space_conds)
+}
+
 /// Mapping de nombres a ids
 struct IdMaps<'a> {
     spaces: BTreeMap<&'a str, Uuid>,
@@ -795,6 +857,8 @@ struct IdMaps<'a> {
     wincons: BTreeMap<&'a str, Uuid>,
     materials: BTreeMap<&'a str, Uuid>,
     schedules: BTreeMap<&'a str, Uuid>,
+    loads: BTreeMap<&'a str, Uuid>,
+    sys_settings: BTreeMap<&'a str, Uuid>,
 }
 
 impl<'a> IdMaps<'a> {
@@ -846,6 +910,22 @@ impl<'a> IdMaps<'a> {
             .ok_or_else(|| format_err!("Horario {} no identificado", name.as_ref()))
     }
 
+    /// Localiza id de cargas de espacio desde nombre
+    fn loads_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
+        self.loads
+            .get(name.as_ref())
+            .copied()
+            .ok_or_else(|| format_err!("Cargas de espacio {} no identificado", name.as_ref()))
+    }
+
+    /// Localiza id de consignas de espacio desde nombre
+    fn sys_settings_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
+        self.sys_settings
+            .get(name.as_ref())
+            .copied()
+            .ok_or_else(|| format_err!("Consignas de espacio {} no identificado", name.as_ref()))
+    }
+
     fn new(bdl: &'a Data) -> Self {
         IdMaps {
             spaces: bdl
@@ -884,6 +964,16 @@ impl<'a> IdMaps<'a> {
                     bdl::Schedule::Week(sch) => (sch.name.as_str(), uuid_from_obj(&sch)),
                     bdl::Schedule::Day(sch) => (sch.name.as_str(), uuid_from_obj(&sch)),
                 })
+                .collect::<BTreeMap<&str, Uuid>>(),
+            loads: bdl
+                .space_conditions
+                .iter()
+                .map(|(name, s)| (name.as_str(), uuid_from_obj(&s)))
+                .collect::<BTreeMap<&str, Uuid>>(),
+            sys_settings: bdl
+                .system_conditions
+                .iter()
+                .map(|(name, s)| (name.as_str(), uuid_from_obj(&s)))
                 .collect::<BTreeMap<&str, Uuid>>(),
         }
     }

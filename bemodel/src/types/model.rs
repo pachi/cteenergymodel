@@ -45,10 +45,10 @@ pub struct Model {
     pub schedules: SchedulesDb,
     /// Definición de cargas de los espacios
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub space_loads: Vec<SpaceLoads>,
+    pub loads: Vec<SpaceLoads>,
     /// Definición de consignas de los espacios
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub space_conditions: Vec<SpaceConditions>,
+    pub sys_settings: Vec<SpaceConditions>,
     /// Overrides de propiedades de elementos (opacos y huecos)
     #[serde(default, skip_serializing_if = "PropsOverrides::is_empty")]
     pub overrides: PropsOverrides,

@@ -15,8 +15,8 @@
       "id": "9c53e644-371e-cf19-36f4-44338dfdea57",
       "name": "P01_E01",
       "height": 3.0,
-      "space_conds": "Residencial",
-      "system_conds": "Residencial"
+      "loads": "0de40df5-bc8f-2fc8-9091-18e33f9c311b",
+      "sys_settings": "f8f75f90-c3a6-a74e-41e1-dbebab6c0cdf"
     },
     {
       "id": "eed3a110-ed3b-0230-d091-a70e7b4319d7",
@@ -25,32 +25,32 @@
       "inside_tenv": false,
       "height": 3.0,
       "n_v": 0.1,
-      "space_conds": "NIVEL_ESTANQUEIDAD_1",
-      "system_conds": "NIVEL_ESTANQUEIDAD_1"
+      "loads": "8af9b76c-ba97-4146-8d2b-98bba2c68aba",
+      "sys_settings": "9bc69b8a-dc27-7185-d932-d1d323541e12"
     },
     {
       "id": "54239679-cf77-3097-b426-71c92a7e5e99",
       "name": "P02_E01",
       "height": 3.0,
       "z": 3.0,
-      "space_conds": "Residencial",
-      "system_conds": "Residencial"
+      "loads": "0de40df5-bc8f-2fc8-9091-18e33f9c311b",
+      "sys_settings": "f8f75f90-c3a6-a74e-41e1-dbebab6c0cdf"
     },
     {
       "id": "83bc29ca-9680-3aa9-e272-135c0a2ceb2e",
       "name": "P03_E01",
       "height": 3.0,
       "z": 6.0,
-      "space_conds": "Residencial",
-      "system_conds": "Residencial"
+      "loads": "0de40df5-bc8f-2fc8-9091-18e33f9c311b",
+      "sys_settings": "f8f75f90-c3a6-a74e-41e1-dbebab6c0cdf"
     },
     {
       "id": "99261dd6-cff9-27e7-4012-6ee8a41eb952",
       "name": "P04_E01",
       "height": 3.0,
       "z": 9.0,
-      "space_conds": "Residencial",
-      "system_conds": "Residencial"
+      "loads": "0de40df5-bc8f-2fc8-9091-18e33f9c311b",
+      "sys_settings": "f8f75f90-c3a6-a74e-41e1-dbebab6c0cdf"
     },
     {
       "id": "12d3644a-c101-82f9-fcd4-ca8dc7661d49",
@@ -60,8 +60,8 @@
       "height": 3.0,
       "n_v": 0.1,
       "z": 9.0,
-      "space_conds": "NIVEL_ESTANQUEIDAD_1",
-      "system_conds": "NIVEL_ESTANQUEIDAD_1"
+      "loads": "8af9b76c-ba97-4146-8d2b-98bba2c68aba",
+      "sys_settings": "9bc69b8a-dc27-7185-d932-d1d323541e12"
     }
   ],
   "walls": [
@@ -4449,5 +4449,47 @@
         ]
       }
     ]
-  }
+  },
+  "loads": [
+    {
+      "id": "8af9b76c-ba97-4146-8d2b-98bba2c68aba",
+      "name": "NIVEL_ESTANQUEIDAD_1",
+      "people_schedule": "5c051b49-ccd9-9e69-d522-e7f20d8d8730",
+      "people_sensible": 0.0,
+      "people_latent": 0.0,
+      "equipment": 0.0,
+      "equipment_schedule": "5c051b49-ccd9-9e69-d522-e7f20d8d8730",
+      "lighting": 0.0,
+      "lighting_schedule": "5c051b49-ccd9-9e69-d522-e7f20d8d8730",
+      "illuminance": 0.0,
+      "area_per_person": 0.0
+    },
+    {
+      "id": "0de40df5-bc8f-2fc8-9091-18e33f9c311b",
+      "name": "Residencial",
+      "people_schedule": "cfa597dc-7da8-02a8-9475-a6ea9bbda8bb",
+      "people_sensible": 2.15,
+      "people_latent": 1.36,
+      "equipment": 4.4,
+      "equipment_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
+      "lighting": 4.4,
+      "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
+      "illuminance": 0.0,
+      "area_per_person": 33.33
+    }
+  ],
+  "sys_settings": [
+    {
+      "id": "9bc69b8a-dc27-7185-d932-d1d323541e12",
+      "name": "NIVEL_ESTANQUEIDAD_1",
+      "temp_max": "d02b9100-8895-0f1a-4f70-0bb216479f55",
+      "temp_min": "026bc569-dc14-ade8-f130-e5da31fc74b8"
+    },
+    {
+      "id": "f8f75f90-c3a6-a74e-41e1-dbebab6c0cdf",
+      "name": "Residencial",
+      "temp_max": "d02b9100-8895-0f1a-4f70-0bb216479f55",
+      "temp_min": "026bc569-dc14-ade8-f130-e5da31fc74b8"
+    }
+  ]
 }
