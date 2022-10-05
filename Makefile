@@ -8,17 +8,17 @@ run:
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cajazapatos_bombacaloracs/cajazapatos_bombacaloracs.ctehexml -o cajazapatos_bombacaloracs.json -r cajazapatos_bombacaloracs_results.json
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo_gt_caldera_radiadores/cubo_gt_caldera_radiadores.ctehexml -o cubo_gt_caldera_radiadores.json -r cubo_gt_caldera_radiadores_results.json
 	$(info [INFO]: Actualizando ejemplos en bemodel/tests/data)
+	mv cubo.json cubo_results.json bemodel/tests/data/
 	mv e4h_medianeras.json e4h_medianeras_results.json bemodel/tests/data/
 	mv caso_a.json caso_a_results.json bemodel/tests/data/
-	mv cubo.json cubo_results.json bemodel/tests/data/
 	mv ejemploviv_unif.json ejemploviv_unif_results.json bemodel/tests/data/
 	mv ejemplo_gt_aerotermia.json ejemplo_gt_aerotermia_results.json bemodel/tests/data/
 	mv cajazapatos_bombacaloracs.json cajazapatos_bombacaloracs_results.json bemodel/tests/data/
 	mv cubo_gt_caldera_radiadores.json cubo_gt_caldera_radiadores_results.json bemodel/tests/data/
 runskip:
+	cargo run -- --skip-extra hulc_tests/tests/e4h_medianeras/cubo.json > cubo.json.skip
 	cargo run -- --skip-extra hulc_tests/tests/e4h_medianeras/ > e4h_medianeras.json.skip
 	cargo run -- --skip-extra hulc_tests/tests/casoA/ > salida_a.json.skip
-	cargo run -- --skip-extra hulc_tests/tests/e4h_medianeras/cubo.json > cubo.json.skip
 compare: run runskip
 	(meld bemodel/tests/e4h_medianeras/e4h_medianeras.json e4h_medianeras.json.skip&) && (meld -n bemodel/tests/e4h_medianeras/caso_a.json salida_a.json.skip&) && (meld -n bemodel/tests/e4h_medianeras/cubo.json cubo.json.skip&)
 climatedata:
