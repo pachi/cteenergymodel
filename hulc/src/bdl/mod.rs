@@ -175,7 +175,7 @@ impl Data {
             wincons,
         };
 
-        // Plantas y polígnos -----------------------------------------------------
+        // Plantas y polígonos -----------------------------------------------------
 
         // Separa polígonos (POLYGON) -----------
         // luego los sustituiremos en los objetos de opacos y SPACE que los usan
@@ -192,8 +192,31 @@ impl Data {
             floors.insert(block.name.clone(), Floor::try_from(block)?);
         }
 
+        // Horarios --------------------------------------
+        let mut schedules: Vec<Schedule> = Vec::new();
+
+        for block in schedule_blocks {
+            match block.btype.as_str() {
+                "DAY-SCHEDULE-PD" => {
+                    schedules.push(Schedule::Day(DaySchedule::try_from(block)?));
+                }
+                "WEEK-SCHEDULE-PD" => {
+                    schedules.push(Schedule::Week(WeekSchedule::try_from(block)?));
+                }
+                "SCHEDULE-PD" => {
+                    schedules.push(Schedule::Year(YearSchedule::try_from(block)?));
+                }
+                "RUN-PERIOD-PD" => {
+                    info!("Ignorando bloque de periodo de cálculo: {}", block.name);
+                }
+                // Elemento desconocido -------------------------
+                _ => unreachable!(),
+            };
+        }
+
         // Componentes de la envolvente ===============
         // Necesita tener los constructions, floors y polygons ya resueltos
+        // También necesita resueltas las cargas (spaces_conditions) y consignas (system_conditions)
         let mut spaces: Vec<Space> = Vec::new();
         let mut walls: Vec<Wall> = Vec::new();
         let mut windows: Vec<Window> = Vec::new();
@@ -287,28 +310,6 @@ impl Data {
 
                 _ => unreachable!(),
             }
-        }
-
-        // Horarios --------------------------------------
-        let mut schedules: Vec<Schedule> = Vec::new();
-
-        for block in schedule_blocks {
-            match block.btype.as_str() {
-                "DAY-SCHEDULE-PD" => {
-                    schedules.push(Schedule::Day(DaySchedule::try_from(block)?));
-                }
-                "WEEK-SCHEDULE-PD" => {
-                    schedules.push(Schedule::Week(WeekSchedule::try_from(block)?));
-                }
-                "SCHEDULE-PD" => {
-                    schedules.push(Schedule::Year(YearSchedule::try_from(block)?));
-                }
-                "RUN-PERIOD-PD" => {
-                    info!("Ignorando bloque de periodo de cálculo: {}", block.name);
-                }
-                // Elemento desconocido -------------------------
-                _ => unreachable!(),
-            };
         }
 
         // Resto de bloques ------------------------------
