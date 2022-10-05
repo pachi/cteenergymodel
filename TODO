@@ -2,6 +2,7 @@
 
 - Introducir perfiles de uso y operacionales:
   - Introducir en model.loads las infiltraciones para espacios no habitables (ver NIVEL_ESTANQUEIDAD_1 en casoa.ctehexml)
+  - Importar correctamente iluminancia en cargas de espacios (o en sys_settings?)
   - quitar de Space `{n_v, SpaceKind }`?
   - Identificar habitable / habitable acondicionado / no habitable según perfil del espacio
 - Introducir sistemas
