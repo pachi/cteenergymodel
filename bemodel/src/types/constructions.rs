@@ -66,32 +66,32 @@ impl ConsDb {
             && self.frames.is_empty()
     }
 
-    /// Limpia elementos no usados de la base de datos
-    pub(crate) fn purge_unused(&mut self, walls: &[Wall], windows: &[Window]) {
-        // Elimina construcciones de opacos no usadas
-        self.wallcons
-            .retain(|cons| walls.iter().any(|wall| wall.cons == cons.id));
-        // Elimina construcciones de huecos no usadas
-        self.wincons
-            .retain(|cons| windows.iter().any(|win| win.cons == cons.id));
+    // /// Limpia elementos no usados de la base de datos
+    // pub(crate) fn purge_unused(&mut self, walls: &[Wall], windows: &[Window]) {
+    //     // Elimina construcciones de opacos no usadas
+    //     self.wallcons
+    //         .retain(|cons| walls.iter().any(|wall| wall.cons == cons.id));
+    //     // Elimina construcciones de huecos no usadas
+    //     self.wincons
+    //         .retain(|cons| windows.iter().any(|win| win.cons == cons.id));
 
-        // Elimina materiales no usados
-        let used_mats_ids: Vec<Uuid> = self
-            .wallcons
-            .iter()
-            .flat_map(|cons| cons.layers.iter().map(|l| l.material).collect::<Vec<Uuid>>())
-            .collect();
-        self.materials
-            .retain(|mat| used_mats_ids.iter().any(|used_id| *used_id == mat.id));
-        // Elimina vidrios no usados
-        let used_glasses_ids: Vec<Uuid> = self.wincons.iter().map(|cons| cons.glass).collect();
-        self.glasses
-            .retain(|gl| used_glasses_ids.iter().any(|used_id| *used_id == gl.id));
-        // Elimina marcos no usados
-        let used_frames_ids: Vec<Uuid> = self.wincons.iter().map(|cons| cons.frame).collect();
-        self.frames
-            .retain(|w| used_frames_ids.iter().any(|used_id| *used_id == w.id));
-    }
+    //     // Elimina materiales no usados
+    //     let used_mats_ids: Vec<Uuid> = self
+    //         .wallcons
+    //         .iter()
+    //         .flat_map(|cons| cons.layers.iter().map(|l| l.material).collect::<Vec<Uuid>>())
+    //         .collect();
+    //     self.materials
+    //         .retain(|mat| used_mats_ids.iter().any(|used_id| *used_id == mat.id));
+    //     // Elimina vidrios no usados
+    //     let used_glasses_ids: Vec<Uuid> = self.wincons.iter().map(|cons| cons.glass).collect();
+    //     self.glasses
+    //         .retain(|gl| used_glasses_ids.iter().any(|used_id| *used_id == gl.id));
+    //     // Elimina marcos no usados
+    //     let used_frames_ids: Vec<Uuid> = self.wincons.iter().map(|cons| cons.frame).collect();
+    //     self.frames
+    //         .retain(|w| used_frames_ids.iter().any(|used_id| *used_id == w.id));
+    // }
 }
 
 /// Definición de construcción de elemento opaco
