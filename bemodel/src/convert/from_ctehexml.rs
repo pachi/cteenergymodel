@@ -21,7 +21,7 @@ use hulc::{
 
 pub use crate::{
     BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, Meta, Model, Orientation,
-    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceConditions, SpaceLoads,
+    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads, SpaceSysConditions,
     SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeom, WinCons,
     WinGeom, Window,
 };
@@ -824,8 +824,9 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
             lighting_schedule: Some(
                 id_maps.schedule_id(space_cond.attrs.get_str("LIGHTING-SCHEDULE")?)?,
             ),
-            // TODO: queda por calcular...
-            illuminance: 0.0,
+            // TODO: En HULC está asociado al espacio y no a las cargas
+            // TODO: pero esto no tiene demasiado sentido
+            illuminance: None,
             area_per_person,
         })
     }
@@ -833,12 +834,12 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
 }
 
 /// Condiciones operacionales de espacios a partir de datos BDL
-fn sys_settings_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceConditions>, Error> {
+fn sys_settings_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceSysConditions>, Error> {
     let mut space_conds = Vec::new();
 
     for (name, space_cond) in &bdl.system_conditions {
         let id = id_maps.sys_settings_id(&name)?;
-        space_conds.push(SpaceConditions {
+        space_conds.push(SpaceSysConditions {
             id,
             name: space_cond.name.clone(),
             temp_max: Some(id_maps.schedule_id(space_cond.attrs.get_str("COOL-TEMP-SCH")?)?),

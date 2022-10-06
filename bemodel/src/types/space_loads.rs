@@ -34,7 +34,7 @@ pub struct SpaceLoads {
     /// Si no se define se suponen todos los valores == 0
     pub lighting_schedule: Option<Uuid>,
     /// Iluminancia media en el plano de trabajo, lux
-    pub illuminance: f32,
+    pub illuminance: Option<f32>,
     /// Superficie por ocupante, m²/pers
     pub area_per_person: f32
     // TODO: nivel de infiltraciones?
