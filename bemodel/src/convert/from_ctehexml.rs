@@ -825,7 +825,10 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
                 id_maps.schedule_id(space_cond.attrs.get_str("LIGHTING-SCHEDULE")?)?,
             ),
             // TODO: En HULC está asociado al espacio y no a las cargas
-            // TODO: pero esto no tiene demasiado sentido
+            // TODO: pero esto no tiene demasiado sentido en general
+            // TODO: usa POWER, VEEI-OBJ y VEEI-REF
+            // TODO: en vivienda es 4.4W/m², 7W/m²·100lux y 10W/m²·100lux
+            // TODO: en terciario se introduce en la interfaz
             illuminance: None,
             area_per_person,
         })
