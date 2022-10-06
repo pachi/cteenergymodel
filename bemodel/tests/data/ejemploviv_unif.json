@@ -14,77 +14,77 @@
       "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",
       "name": "P01_E01",
       "height": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "8fb42929-3639-dcb3-13d7-071296960471",
       "name": "P01_E02",
       "height": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "f2273aac-97f0-e9d1-51db-b35e9417ad43",
       "name": "P01_E03",
       "height": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "4e812179-793e-8bc5-307b-b0b052c01efe",
       "name": "P01_E04",
       "height": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "ee6ef6ea-125d-638d-f1fc-cf958f330870",
       "name": "P02_E01",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "907860d4-70ba-8d41-4b5c-20605e71d821",
       "name": "P02_E02",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "8e7b02af-007d-5337-7ec5-482065784e11",
       "name": "P02_E03",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "839f06f9-2a5f-3316-a889-92064087fee3",
       "name": "P02_E04",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "7d4df3c6-7dac-7b07-f036-22936e11d9f4",
       "name": "P02_E05",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     },
     {
       "id": "5b52d360-fa0d-ce9e-838d-b92b8842e9eb",
       "name": "P02_E06",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
-      "sys_settings": "7cf0f414-78a0-9db4-c807-5de29f564709"
+      "loads": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
+      "sys_settings": "fee54878-2afd-5d7b-70a6-2531303fc982"
     }
   ],
   "walls": [
@@ -5665,7 +5665,7 @@
   },
   "loads": [
     {
-      "id": "a799c6f0-9ae2-c066-9b18-4e0ef91b77d4",
+      "id": "779a965a-8e05-298e-f7e2-0c80c6c1477a",
       "name": "Residencial",
       "people_schedule": "cfa597dc-7da8-02a8-9475-a6ea9bbda8bb",
       "people_sensible": 2.15,
@@ -5674,13 +5674,13 @@
       "equipment_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
       "lighting": 4.4,
       "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
-      "illuminance": 0.0,
+      "illuminance": null,
       "area_per_person": 33.33
     }
   ],
   "sys_settings": [
     {
-      "id": "7cf0f414-78a0-9db4-c807-5de29f564709",
+      "id": "fee54878-2afd-5d7b-70a6-2531303fc982",
       "name": "Residencial",
       "temp_max": "d02b9100-8895-0f1a-4f70-0bb216479f55",
       "temp_min": "026bc569-dc14-ade8-f130-e5da31fc74b8"

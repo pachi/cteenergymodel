@@ -839,11 +839,20 @@ fn sys_settings_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceSysCon
 
     for (name, space_cond) in &bdl.system_conditions {
         let id = id_maps.sys_settings_id(&name)?;
+        let (temp_max, temp_min) =
+            if let Ok("CONDITIONED") = space_cond.attrs.get_str("TYPE").as_deref() {
+                (
+                    Some(id_maps.schedule_id(space_cond.attrs.get_str("COOL-TEMP-SCH")?)?),
+                    Some(id_maps.schedule_id(space_cond.attrs.get_str("HEAT-TEMP-SCH")?)?),
+                )
+            } else {
+                (None, None)
+            };
         space_conds.push(SpaceSysConditions {
             id,
             name: space_cond.name.clone(),
-            temp_max: Some(id_maps.schedule_id(space_cond.attrs.get_str("COOL-TEMP-SCH")?)?),
-            temp_min: Some(id_maps.schedule_id(space_cond.attrs.get_str("HEAT-TEMP-SCH")?)?),
+            temp_max,
+            temp_min,
         })
     }
 
