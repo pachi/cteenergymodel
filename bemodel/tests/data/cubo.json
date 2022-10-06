@@ -14,8 +14,8 @@
       "id": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
       "name": "P01_E01",
       "height": 3.0,
-      "loads": "f954c92a-49d3-c0a1-e80e-941da647276a",
-      "sys_settings": "95cdf2e0-8b11-e607-7357-3e12e8f65646"
+      "loads": "1540b686-e44d-f25e-5f48-2c435a7904a8",
+      "sys_settings": "6b0a7d6c-9541-1160-593f-3c32ee4bd257"
     }
   ],
   "walls": [
@@ -3158,7 +3158,7 @@
   },
   "loads": [
     {
-      "id": "f954c92a-49d3-c0a1-e80e-941da647276a",
+      "id": "1540b686-e44d-f25e-5f48-2c435a7904a8",
       "name": "Residencial",
       "people_schedule": "cfa597dc-7da8-02a8-9475-a6ea9bbda8bb",
       "people_sensible": 2.15,
@@ -3167,13 +3167,12 @@
       "equipment_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
       "lighting": 4.4,
       "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
-      "illuminance": null,
       "area_per_person": 33.33
     }
   ],
   "sys_settings": [
     {
-      "id": "95cdf2e0-8b11-e607-7357-3e12e8f65646",
+      "id": "6b0a7d6c-9541-1160-593f-3c32ee4bd257",
       "name": "Residencial",
       "temp_max": "d02b9100-8895-0f1a-4f70-0bb216479f55",
       "temp_min": "026bc569-dc14-ade8-f130-e5da31fc74b8"

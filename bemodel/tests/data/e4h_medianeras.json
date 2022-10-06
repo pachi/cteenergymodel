@@ -12,163 +12,163 @@
       "id": "d37876c2-a6df-79ee-0fe2-1362ff8ee1cf",
       "name": "P01_E01",
       "height": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "718d546b-6e26-9693-6f1d-2d3df6a41c96",
       "name": "P01_E02",
       "height": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "9b819691-7ca1-fe58-1db2-2be0051b1a1b",
       "name": "P01_E03",
       "height": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "f27e5c13-523f-d73e-7f86-9c9fb1d8ac2c",
       "name": "P01_E04",
       "height": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "0ea2bc6a-0fc5-1091-922e-3a48d6b7eeb1",
       "name": "P01_E05",
       "height": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "0e14f305-ae0f-c770-ac55-ef09fb85b284",
       "name": "P01_E06",
       "height": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "e2293b57-9a55-9b40-d8cd-0cbc971c892a",
       "name": "P02_E01",
       "height": 3.0,
       "z": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "0aaf4217-6da2-fa47-0e92-02acd1ea3bd0",
       "name": "P02_E02",
       "height": 3.0,
       "z": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "be65044c-9404-f1db-b961-0d25ed3f87d9",
       "name": "P02_E03",
       "height": 3.0,
       "z": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "9c123d73-221f-1132-227b-1cc29312fa74",
       "name": "P02_E04",
       "height": 3.0,
       "z": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "97146638-ea1f-57c8-bf98-6921c92575ac",
       "name": "P02_E05",
       "height": 3.0,
       "z": 3.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "b293153e-71a3-c32f-ee77-c4c064d95812",
       "name": "P03_E01",
       "height": 3.0,
       "z": 6.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "c20e74c0-39b3-4d23-7733-26456a6d927c",
       "name": "P03_E02",
       "height": 3.0,
       "z": 6.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "f45f6108-a38f-e401-5d08-8427489d337d",
       "name": "P03_E03",
       "height": 3.0,
       "z": 6.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "3f80985c-8936-44c9-09c7-68364bd2251a",
       "name": "P03_E04",
       "height": 3.0,
       "z": 6.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "cb7b7744-ff05-cd5d-81f1-b741bbf632b7",
       "name": "P03_E05",
       "height": 3.0,
       "z": 6.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "db6873d9-dce7-2f02-9c56-7d5d9c538383",
       "name": "P04_E01",
       "height": 3.0,
       "z": 9.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "79d3b00f-ae5a-45c1-bfa1-147aab251316",
       "name": "P04_E02",
       "height": 3.0,
       "z": 9.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "6d6186a1-826b-8c9a-4860-5fa6001d0a37",
       "name": "P04_E03",
       "height": 3.0,
       "z": 9.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "d5bbe19f-9508-4463-9387-c299b6a7e2d7",
       "name": "P04_E04",
       "height": 3.0,
       "z": 9.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     },
     {
       "id": "3b883139-ac45-3eff-f6d0-4426be697579",
       "name": "P04_E05",
       "height": 3.0,
       "z": 9.5,
-      "loads": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
-      "sys_settings": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3"
+      "loads": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
+      "sys_settings": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e"
     }
   ],
   "walls": [
@@ -9802,7 +9802,7 @@
   },
   "loads": [
     {
-      "id": "3dd05c6b-ba5e-1fff-123d-05c2d5f5a2da",
+      "id": "bcded0b5-5864-4638-4d7f-24d7d5da99e4",
       "name": "Residencial",
       "people_schedule": "cfa597dc-7da8-02a8-9475-a6ea9bbda8bb",
       "people_sensible": 2.15,
@@ -9811,13 +9811,12 @@
       "equipment_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
       "lighting": 4.4,
       "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
-      "illuminance": null,
       "area_per_person": 33.33
     }
   ],
   "sys_settings": [
     {
-      "id": "9cf547a6-b2d5-f928-2950-0a7a7872cfa3",
+      "id": "2c7c691b-af33-66da-ec4b-eb51ad42ce3e",
       "name": "Residencial",
       "temp_max": "d02b9100-8895-0f1a-4f70-0bb216479f55",
       "temp_min": "026bc569-dc14-ade8-f130-e5da31fc74b8"

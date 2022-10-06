@@ -19,9 +19,11 @@ pub struct SpaceSysConditions {
     /// Horario anual de temperaturas de consigna de refrigeración, ºC
     /// Para oscilación libre se usa un valor elevado > 100ºC, como 999.00
     /// Si no se define se suponen todos los valores == 999.00
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub temp_max: Option<Uuid>,
     /// Horario anual de temperaturas de consigna de calefacción, ºC
     /// Para oscilación libre usar un valor bajo < -100ºC, como -999.00
     /// Si no se define se suponen todos los valores == -999.00
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub temp_min: Option<Uuid>,
 }
