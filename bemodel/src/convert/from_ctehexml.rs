@@ -728,8 +728,22 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
             bdl::Schedule::Week(sch) => {
                 let id = id_maps.schedule_id(&sch.name)?;
                 let values = match sch.days.len() {
-                    1 => vec![sch.days.first().unwrap().clone(); 7],
-                    7 => sch.days.clone(),
+                    1 => vec![(sch.days.first().unwrap().clone(), 7)],
+                    7 => {
+                        let mut res = vec![];
+                        let mut current_day_sch = (sch.days.first().unwrap().clone(), 1);
+                        for day_sch in sch.days.iter().skip(1) {
+                            if *day_sch == current_day_sch.0 {
+                                current_day_sch.1 += 1;
+                                continue;
+                            } else {
+                                res.push(current_day_sch.clone());
+                                current_day_sch = (day_sch.clone(), 1);
+                            }
+                        }
+                        res.push(current_day_sch.clone());
+                        res
+                    },
                     n => bail!("Longitud {} incorrecta de horario semanal: {}", n, sch.name),
                 };
                 week.push(ScheduleWeek {
