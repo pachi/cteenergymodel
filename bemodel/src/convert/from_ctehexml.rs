@@ -780,7 +780,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                 let values = sch
                     .weeks
                     .iter()
-                    .cloned()
+                    .map(|name| id_maps.schedule_week_id(name).unwrap())
                     .zip(repetitions.into_iter())
                     .collect();
 
