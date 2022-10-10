@@ -713,7 +713,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
     for sch in &bdl.schedules {
         match sch {
             bdl::Schedule::Day(sch) => {
-                let id = id_maps.schedule_id(&sch.name)?;
+                let id = id_maps.schedule_day_id(&sch.name)?;
                 let values = match sch.values.len() {
                     1 => vec![*sch.values.first().unwrap(); 24],
                     24 => sch.values.clone(),
@@ -726,24 +726,31 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                 })
             }
             bdl::Schedule::Week(sch) => {
-                let id = id_maps.schedule_id(&sch.name)?;
+                let id = id_maps.schedule_week_id(&sch.name)?;
                 let values = match sch.days.len() {
-                    1 => vec![(sch.days.first().unwrap().clone(), 7)],
+                    1 => vec![(
+                        id_maps.schedule_day_id(sch.days.first().unwrap()).unwrap(),
+                        7,
+                    )],
                     7 => {
                         let mut res = vec![];
-                        let mut current_day_sch = (sch.days.first().unwrap().clone(), 1);
-                        for day_sch in sch.days.iter().skip(1) {
-                            if *day_sch == current_day_sch.0 {
+                        let mut current_day_name = sch.days.first().unwrap();
+                        let mut current_day_id = id_maps.schedule_day_id(current_day_name)?;
+                        let mut current_day_sch = (current_day_id, 1);
+                        for day_sch_name in sch.days.iter().skip(1) {
+                            if day_sch_name == current_day_name {
                                 current_day_sch.1 += 1;
                                 continue;
                             } else {
-                                res.push(current_day_sch.clone());
-                                current_day_sch = (day_sch.clone(), 1);
+                                res.push(current_day_sch);
+                                current_day_name = day_sch_name;
+                                current_day_id = id_maps.schedule_day_id(current_day_name)?;
+                                current_day_sch = (current_day_id, 1);
                             }
                         }
-                        res.push(current_day_sch.clone());
+                        res.push(current_day_sch);
                         res
-                    },
+                    }
                     n => bail!("Longitud {} incorrecta de horario semanal: {}", n, sch.name),
                 };
                 week.push(ScheduleWeek {
@@ -753,7 +760,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                 })
             }
             bdl::Schedule::Year(sch) => {
-                let id = id_maps.schedule_id(&sch.name)?;
+                let id = id_maps.schedule_year_id(&sch.name)?;
                 let ndays: Vec<_> = std::iter::once(0u32)
                     .chain(
                         sch.days
@@ -826,17 +833,17 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
             id,
             name: space_cond.name.clone(),
             people_schedule: Some(
-                id_maps.schedule_id(space_cond.attrs.get_str("PEOPLE-SCHEDULE")?)?,
+                id_maps.schedule_year_id(space_cond.attrs.get_str("PEOPLE-SCHEDULE")?)?,
             ),
             people_sensible,
             people_latent,
             equipment: space_cond.attrs.get_f32("EQUIPMENT-W/AREA")?,
             equipment_schedule: Some(
-                id_maps.schedule_id(space_cond.attrs.get_str("EQUIP-SCHEDULE")?)?,
+                id_maps.schedule_year_id(space_cond.attrs.get_str("EQUIP-SCHEDULE")?)?,
             ),
             lighting: space_cond.attrs.get_f32("LIGHTING-W/AREA")?,
             lighting_schedule: Some(
-                id_maps.schedule_id(space_cond.attrs.get_str("LIGHTING-SCHEDULE")?)?,
+                id_maps.schedule_year_id(space_cond.attrs.get_str("LIGHTING-SCHEDULE")?)?,
             ),
             // TODO: En HULC está asociado al espacio y no a las cargas
             // TODO: pero esto no tiene demasiado sentido en general
@@ -859,8 +866,8 @@ fn sys_settings_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceSysCon
         let (temp_max, temp_min) =
             if let Ok("CONDITIONED") = space_cond.attrs.get_str("TYPE").as_deref() {
                 (
-                    Some(id_maps.schedule_id(space_cond.attrs.get_str("COOL-TEMP-SCH")?)?),
-                    Some(id_maps.schedule_id(space_cond.attrs.get_str("HEAT-TEMP-SCH")?)?),
+                    Some(id_maps.schedule_year_id(space_cond.attrs.get_str("COOL-TEMP-SCH")?)?),
+                    Some(id_maps.schedule_year_id(space_cond.attrs.get_str("HEAT-TEMP-SCH")?)?),
                 )
             } else {
                 (None, None)
@@ -883,7 +890,9 @@ struct IdMaps<'a> {
     wallcons: BTreeMap<&'a str, Uuid>,
     wincons: BTreeMap<&'a str, Uuid>,
     materials: BTreeMap<&'a str, Uuid>,
-    schedules: BTreeMap<&'a str, Uuid>,
+    schedules_year: BTreeMap<&'a str, Uuid>,
+    schedules_week: BTreeMap<&'a str, Uuid>,
+    schedules_day: BTreeMap<&'a str, Uuid>,
     loads: BTreeMap<&'a str, Uuid>,
     sys_settings: BTreeMap<&'a str, Uuid>,
 }
@@ -929,9 +938,25 @@ impl<'a> IdMaps<'a> {
             .ok_or_else(|| format_err!("Material de opaco {} no identificado", name.as_ref()))
     }
 
-    /// Localiza id de horario desde nombre
-    fn schedule_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
-        self.schedules
+    /// Localiza id de horario anual desde nombre
+    fn schedule_year_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
+        self.schedules_year
+            .get(name.as_ref())
+            .copied()
+            .ok_or_else(|| format_err!("Horario {} no identificado", name.as_ref()))
+    }
+
+    /// Localiza id de horario semanal desde nombre
+    fn schedule_week_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
+        self.schedules_week
+            .get(name.as_ref())
+            .copied()
+            .ok_or_else(|| format_err!("Horario {} no identificado", name.as_ref()))
+    }
+
+    /// Localiza id de horario diario desde nombre
+    fn schedule_day_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
+        self.schedules_day
             .get(name.as_ref())
             .copied()
             .ok_or_else(|| format_err!("Horario {} no identificado", name.as_ref()))
@@ -983,13 +1008,28 @@ impl<'a> IdMaps<'a> {
                 .iter()
                 .map(|(name, s)| (name.as_str(), uuid_from_obj(&s)))
                 .collect::<BTreeMap<&str, Uuid>>(),
-            schedules: bdl
+            schedules_year: bdl
                 .schedules
                 .iter()
-                .map(|v| match v {
-                    bdl::Schedule::Year(sch) => (sch.name.as_str(), uuid_from_obj(&sch)),
-                    bdl::Schedule::Week(sch) => (sch.name.as_str(), uuid_from_obj(&sch)),
-                    bdl::Schedule::Day(sch) => (sch.name.as_str(), uuid_from_obj(&sch)),
+                .filter_map(|v| match v {
+                    bdl::Schedule::Year(sch) => Some((sch.name.as_str(), uuid_from_obj(&sch))),
+                    _ => None,
+                })
+                .collect::<BTreeMap<&str, Uuid>>(),
+            schedules_week: bdl
+                .schedules
+                .iter()
+                .filter_map(|v| match v {
+                    bdl::Schedule::Week(sch) => Some((sch.name.as_str(), uuid_from_obj(&sch))),
+                    _ => None,
+                })
+                .collect::<BTreeMap<&str, Uuid>>(),
+            schedules_day: bdl
+                .schedules
+                .iter()
+                .filter_map(|v| match v {
+                    bdl::Schedule::Day(sch) => Some((sch.name.as_str(), uuid_from_obj(&sch))),
+                    _ => None,
                 })
                 .collect::<BTreeMap<&str, Uuid>>(),
             loads: bdl
