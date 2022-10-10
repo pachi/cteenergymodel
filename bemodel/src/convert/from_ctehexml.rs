@@ -1012,7 +1012,16 @@ impl<'a> IdMaps<'a> {
                 .schedules
                 .iter()
                 .filter_map(|v| match v {
-                    bdl::Schedule::Year(sch) => Some((sch.name.as_str(), uuid_from_obj(&sch))),
+                    bdl::Schedule::Year(sch) => Some((
+                        sch.name.as_str(),
+                        uuid_from_obj(&format!(
+                            "YearSchedule-{}-{:?}-{:?}-{:?}",
+                            sch.name.as_str(),
+                            sch.months,
+                            sch.days,
+                            sch.weeks
+                        )),
+                    )),
                     _ => None,
                 })
                 .collect::<BTreeMap<&str, Uuid>>(),
@@ -1020,7 +1029,14 @@ impl<'a> IdMaps<'a> {
                 .schedules
                 .iter()
                 .filter_map(|v| match v {
-                    bdl::Schedule::Week(sch) => Some((sch.name.as_str(), uuid_from_obj(&sch))),
+                    bdl::Schedule::Week(sch) => Some((
+                        sch.name.as_str(),
+                        uuid_from_obj(&format!(
+                            "WeekSchedule-{}-{:?}",
+                            sch.name.as_str(),
+                            sch.days
+                        )),
+                    )),
                     _ => None,
                 })
                 .collect::<BTreeMap<&str, Uuid>>(),
@@ -1028,19 +1044,36 @@ impl<'a> IdMaps<'a> {
                 .schedules
                 .iter()
                 .filter_map(|v| match v {
-                    bdl::Schedule::Day(sch) => Some((sch.name.as_str(), uuid_from_obj(&sch))),
+                    bdl::Schedule::Day(sch) => Some((
+                        sch.name.as_str(),
+                        uuid_from_obj(&format!(
+                            "DaySchedule-{}-{:?}",
+                            sch.name.as_str(),
+                            sch.values
+                        )),
+                    )),
                     _ => None,
                 })
                 .collect::<BTreeMap<&str, Uuid>>(),
             loads: bdl
                 .space_conditions
                 .iter()
-                .map(|(name, s)| (name.as_str(), uuid_from_obj(&s)))
+                .map(|(name, _s)| {
+                    (
+                        name.as_str(),
+                        uuid_from_obj(&format!("Loads-{}", name.as_str())),
+                    )
+                })
                 .collect::<BTreeMap<&str, Uuid>>(),
             sys_settings: bdl
                 .system_conditions
                 .iter()
-                .map(|(name, s)| (name.as_str(), uuid_from_obj(&s)))
+                .map(|(name, _s)| {
+                    (
+                        name.as_str(),
+                        uuid_from_obj(&format!("SystemConditions-{}", name.as_str())),
+                    )
+                })
                 .collect::<BTreeMap<&str, Uuid>>(),
         }
     }

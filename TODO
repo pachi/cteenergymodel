@@ -1,5 +1,6 @@
 # TAREAS PENDIENTES
 
+- Mejorar hashing de definición de cargas y condiciones operacionales (usar no solo el nombre)
 - Introducir perfiles de uso y operacionales:
   - Introducir en model.loads las infiltraciones para espacios no habitables (ver NIVEL_ESTANQUEIDAD_1 en casoa.ctehexml)
   - Importar correctamente iluminancia en cargas de espacios (o en sys_settings?)
