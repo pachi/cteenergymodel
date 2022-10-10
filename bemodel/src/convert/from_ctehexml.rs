@@ -344,7 +344,7 @@ fn windows_and_shades_from_bdl(
                     ],
                 };
                 shades.push(Shade {
-                    id: uuid_from_obj(overhang),
+                    id: uuid_from_obj(&format!("{:?}-{:?}-{:?}", win.name, overhang, geometry)),
                     name: format!("{}_overhang", win.name),
                     geometry,
                 })
@@ -366,7 +366,7 @@ fn windows_and_shades_from_bdl(
                     ],
                 };
                 shades.push(Shade {
-                    id: uuid_from_obj(lfin),
+                    id: uuid_from_obj(&format!("{:?}-{:?}-{:?}", win.name, lfin, geometry)),
                     name: format!("{}_left_fin", win.name),
                     geometry,
                 })
@@ -389,7 +389,7 @@ fn windows_and_shades_from_bdl(
                     ],
                 };
                 shades.push(Shade {
-                    id: uuid_from_obj(rfin),
+                    id: uuid_from_obj(&format!("{:?}-{:?}-{:?}", win.name, rfin, geometry)),
                     name: format!("{}_right_fin", win.name),
                     geometry,
                 })
