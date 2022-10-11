@@ -28,7 +28,7 @@ pub use crate::{
 
 // Utilidades varias de conversión
 
-/// Normaliza aziimuth [-180, 180]
+/// Normaliza azimuth [-180, 180]
 #[inline]
 pub fn normalize_azimuth(azimuth: f32) -> f32 {
     normalize(azimuth, -180.0, 180.0)
@@ -277,7 +277,7 @@ fn walls_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Wall>, Error> {
         .collect::<Result<Vec<Wall>, _>>()
 }
 
-/// Desviacion global del edificio respecto al norte
+/// Desviación global del edificio respecto al norte
 /// Sigue la misma referencia al Norte que el azimuth, pero un criterio de signos distinto: N=0, E = -90, O=90.
 fn global_deviation_from_north(bdl: &Data) -> f32 {
     bdl.meta
