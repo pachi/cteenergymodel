@@ -15,6 +15,7 @@ pub struct SpaceSysConditions {
     /// Id
     pub id: Uuid,
     /// Nombre del horario
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Horario anual de temperaturas de consigna de refrigeración, ºC
     /// Para oscilación libre se usa un valor elevado > 100ºC, como 999.00

@@ -15,6 +15,7 @@ pub struct SpaceLoads {
     /// Id
     pub id: Uuid,
     /// Nombre del horario
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Horario anual de fracciones de carga de ocupación
     /// Si no se define se supone que no existe ocupación (carga = 0)

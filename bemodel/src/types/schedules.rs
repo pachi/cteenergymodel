@@ -40,6 +40,7 @@ pub struct Schedule {
     /// Id
     pub id: Uuid,
     /// Nombre del horario
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Secuencia de tuplas de UUID de horario semanal y repeticiones
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -54,6 +55,7 @@ pub struct ScheduleWeek {
     /// Id
     pub id: Uuid,
     /// Nombre del horario
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Secuencia de tuplas de UUID de horarios diarios y repeticiones
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -67,6 +69,7 @@ pub struct ScheduleDay {
     /// Id
     pub id: Uuid,
     /// Nombre del horario
+    #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
     /// Secuencia de valores horarios
     /// Debe tener 24 valores
