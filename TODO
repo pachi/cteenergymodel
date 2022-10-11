@@ -1,11 +1,17 @@
 # TAREAS PENDIENTES
 
-- Mejorar hashing de definición de cargas y condiciones operacionales (usar no solo el nombre)
-- Introducir perfiles de uso y operacionales:
-  - Introducir en model.loads las infiltraciones para espacios no habitables (ver NIVEL_ESTANQUEIDAD_1 en casoa.ctehexml)
-  - Importar correctamente iluminancia en cargas de espacios (o en sys_settings?)
-  - quitar de Space `{n_v, SpaceKind }`?
-  - Identificar habitable / habitable acondicionado / no habitable según perfil del espacio
+- Trasladar valor de infiltraciones para espacios no habitables (`Space.n_v`):
+  - ver NIVEL_ESTANQUEIDAD_1 en casoa.ctehexml
+  - Añadir en carga de espacio `n_v: Option(f32)`?
+  - Eliminar de Space el atributo n_v
+- iluminancia de espacios:
+  - añadir illuminance en cargas de espacio `Loads.illuminance` (o en sys_settings)?
+  - eliminar de Space el atributo `n_v`
+- Identificar habitable / habitable acondicionado / no habitable según perfil del espacio:
+  - no habitable -> Sin carga de ocupación durante el año?
+  - habitable -> Con carga de ocupación no nula durante el año?
+  - acondicionado -> Con consigna de cal o ref (sin oscilación libre) durante el año?
+  - eliminar de Space el atributo `SpaceKind`
 - Introducir sistemas
   - `model.systems`
 - Añadir a hulc_tests otros edificios con sistemas que no tenemos por ahora, y casos GT
