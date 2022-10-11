@@ -11,17 +11,17 @@
 //!
 //! Curioso: https://github.com/protodave/bdl_viz
 
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use anyhow::{bail, format_err, Error};
 
 #[derive(Debug, Clone, Default)]
-pub struct AttrMap(pub HashMap<String, BdlValue>);
+pub struct AttrMap(pub BTreeMap<String, BdlValue>);
 
 impl AttrMap {
     /// Constructor
     pub fn new() -> Self {
-        Self(HashMap::new())
+        Self(BTreeMap::new())
     }
 
     /// Inserta valor v en la clave k y devuelve el valor existente o None
