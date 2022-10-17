@@ -482,6 +482,7 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                 let normal = (vertices[1] - vertices[0]).cross(&(vertices[2] - vertices[1]));
                 if normal.magnitude() < 10.0 * f32::EPSILON {
                     // XXX: Esto se podría evitar iterando hasta encontrar dos segmentos que no sean colineales
+                    // Basta con ir probando los siguientes tres puntos
                     // https://community.khronos.org/t/how-to-calculate-polygon-normal/49265/3
                     panic!("Polígono con puntos colineales");
                 };
