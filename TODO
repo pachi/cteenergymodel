@@ -93,6 +93,7 @@ Marcar elementos especiales de la ET para hacer override de esos elementos para 
 
 ### Importación / Exportación
 
+- exportación de geometría a [GlTF](https://github.com/KhronosGroup/glTF)
 - importación de OpenStudio
   - Usa EpJSON, ver OpenStudio/src/epjson/epJSONTranslator.{hpp, cpp}
   - <https://github.com/NREL/OpenStudio/blob/develop/src/epjson/epJSONTranslator.hpp>
