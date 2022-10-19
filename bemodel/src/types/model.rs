@@ -4,6 +4,8 @@
 
 //! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
 
+use std::collections::HashSet;
+
 pub use nalgebra::{point, vector};
 
 use anyhow::Error;
@@ -105,6 +107,97 @@ impl Model {
     /// Localiza hueco por nombre
     pub fn get_window_by_name<'a>(&'a self, name: &'a str) -> Option<&'a Window> {
         self.windows.iter().find(|w| w.name == name)
+    }
+
+    /// Limpia modelo de elementos no usados
+    /// - definiciones de cargas no usadas en los espacios
+    /// - definiciones de consignas no usadas en los espacios
+    /// - horarios no usados en definición de cargas o consignas
+    /// TODO: completar purga de elementos
+    pub fn purge_unused(&mut self) {
+        self.purge_unused_loads();
+        self.purge_unused_sys_settings();
+        self.purge_unused_schedules();
+    }
+
+    /// Elimina definiciones de consignas no usadas en los espacios
+    fn purge_unused_sys_settings(&mut self) {
+        let sys_settings_used_ids: HashSet<_> =
+            self.spaces.iter().flat_map(|v| v.sys_settings).collect();
+        self.sys_settings = self
+            .sys_settings
+            .iter()
+            .cloned()
+            .filter(|v| sys_settings_used_ids.contains(&v.id))
+            .collect();
+    }
+
+    /// Elimina definiciones de cargas no usadas en los espacios
+    fn purge_unused_loads(&mut self) {
+        let loads_used_ids: HashSet<_> = self.spaces.iter().flat_map(|v| v.loads).collect();
+        self.loads = self
+            .loads
+            .iter()
+            .cloned()
+            .filter(|v| loads_used_ids.contains(&v.id))
+            .collect();
+    }
+
+    /// Elimina definiciones de horarios no usadas en las definiciones de cargas o consignas
+    fn purge_unused_schedules(&mut self) {
+        // Eliminar perfiles no usados en cargas o consignas
+        let loads_ids = self
+            .loads
+            .iter()
+            .flat_map(|v| [v.people_schedule, v.equipment_schedule, v.lighting_schedule])
+            .flatten();
+        let sys_settings_ids = self
+            .sys_settings
+            .iter()
+            .flat_map(|v| [v.temp_max, v.temp_min])
+            .flatten();
+        // Horarios anuales - elimina no usados
+        let year_used_ids: HashSet<_> = loads_ids.chain(sys_settings_ids).collect();
+        // Elimina horarios anuales no usados
+        self.schedules.year = self
+            .schedules
+            .year
+            .iter()
+            .cloned()
+            .filter(|v| year_used_ids.contains(&v.id))
+            .collect();
+        // Horarios semanales
+        // Horarios semanales usados en horarios anuales
+        let week_used_ids: HashSet<_> = self
+            .schedules
+            .year
+            .iter()
+            .flat_map(|v| v.values.iter().map(|e| e.0))
+            .collect();
+        // Filtrar no usados
+        self.schedules.week = self
+            .schedules
+            .week
+            .iter()
+            .cloned()
+            .filter(|v| week_used_ids.contains(&v.id))
+            .collect();
+        // Horarios diarios
+        // Horarios diarios usados en horarios semanales
+        let day_used_ids: HashSet<_> = self
+            .schedules
+            .week
+            .iter()
+            .flat_map(|v| v.values.iter().map(|e| e.0))
+            .collect();
+        // Filtrar no usados
+        self.schedules.day = self
+            .schedules
+            .day
+            .iter()
+            .cloned()
+            .filter(|v| day_used_ids.contains(&v.id))
+            .collect();
     }
 }
 
