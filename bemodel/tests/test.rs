@@ -101,7 +101,7 @@ fn model_json_e4h_medianeras() {
     assert_almost_eq!(ind.vol_env_gross, 5229.93, 0.1);
 
     let json = model.as_json().unwrap();
-    let model = Model::from_json(&json).unwrap();
+    let mut model = Model::from_json(&json).unwrap();
     let json2 = model.as_json().unwrap();
     assert_eq!(&json, &json2);
 
@@ -134,6 +134,24 @@ fn model_json_e4h_medianeras() {
         model.sunlit_fraction(window, &ray_origins, &ray_dir, &occluders),
         0.8
     );
+
+    // Purga de elementos
+    assert_eq!(model.loads.len(), 1);
+    model.purge_unused_loads();
+    assert_eq!(model.loads.len(), 1);
+
+    assert_eq!(model.sys_settings.len(), 1);
+    model.purge_unused_sys_settings();
+    assert_eq!(model.sys_settings.len(), 1);
+
+    assert_eq!(model.schedules.year.len(), 26);
+    assert_eq!(model.schedules.week.len(), 29);
+    assert_eq!(model.schedules.day.len(), 66);
+    model.purge_unused_schedules();
+    assert_eq!(model.schedules.year.len(), 4);
+    assert_eq!(model.schedules.week.len(), 4);
+    assert_eq!(model.schedules.day.len(), 12);
+
 }
 
 #[test]
