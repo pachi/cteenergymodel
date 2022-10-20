@@ -5,6 +5,7 @@
 //! Datos climáticos, modelo del edificio y rutinas para cálculo energético
 
 mod checks;
+mod purge;
 mod types;
 
 pub mod climatedata;
