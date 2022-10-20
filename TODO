@@ -1,39 +1,50 @@
 # TAREAS PENDIENTES
 
-- Trasladar valor de infiltraciones para espacios no habitables (`Space.n_v`):
-  - ver NIVEL_ESTANQUEIDAD_1 en casoa.ctehexml
-  - Añadir en carga de espacio `n_v: Option(f32)`?
-  - Eliminar de Space el atributo n_v
-- iluminancia de espacios:
-  - añadir illuminance en cargas de espacio `Loads.illuminance` (o en sys_settings)?
-  - eliminar de Space el atributo `n_v`
-- Identificar habitable / habitable acondicionado / no habitable según perfil del espacio:
-  - no habitable -> Sin carga de ocupación durante el año?
-  - habitable -> Con carga de ocupación no nula durante el año?
-  - acondicionado -> Con consigna de cal o ref (sin oscilación libre) durante el año?
-  - eliminar de Space el atributo `SpaceKind`
-- Introducir sistemas
-  - `model.systems`
-- Añadir a hulc_tests otros edificios con sistemas que no tenemos por ahora, y casos GT
-- Admitir cons, wall, y otros UUID con valor Uuid::default() y eliminar serialización
-- Añadir en props area de sombras
-- Usar overrides de U para elementos especiales de la ET o para cuando se definan lamas en huecos?
-- Optimizar recálculo de propiedades
-  - Guardar hash de geometrías (opacos, sombras y huecos) y solo recalcular si han cambiado
-    - update_geometry, update_cons, update_meta??
-  - Hacer profiling y benchmarks con tracing
-- Cambiar gestión de grupos de materiales y construcciones
-  - Ver dónde se guarda esa biblioteca (¿la tenemos en el wasm y la usamos para la importación o es solo del lado del cliente?
-- Separar check de cálculo energético
-- Trasladar avisos en la conversión de modelos BDL
-  - Usar Model.warnings
-- En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
-- Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
+- Modelo
+  - Admitir cons, wall, y otros UUID con valor Uuid::default() y eliminar serialización
+  - Elementos especiales de la ET:
+    - Usar overrides de U para elementos especiales de la ET o para cuando se definan lamas en huecos?
+    - ¿Qué es un elemento especial? ¿Es el que usa overrides? ¿Se identifica de otra forma?
+    - Marcar elementos especiales de la ET para hacer override de esos elementos para el cálculo de la K.
+  - Introducir sistemas
+    - `model.systems`
+    - Añadir tests en `hulc_tests` casos con sistemas que no tenemos y más casos GT
+  - Cargas y condiciones de uso:
+    - Trasladar valor de infiltraciones para espacios no habitables (`Space.n_v`):
+      - ver NIVEL_ESTANQUEIDAD_1 en casoa.ctehexml
+      - Añadir en carga de espacio `n_v: Option(f32)`?
+      - Eliminar de Space el atributo n_v
+    - iluminancia de espacios:
+      - añadir illuminance en cargas de espacio `Loads.illuminance` (o en sys_settings)?
+      - eliminar de Space el atributo `n_v`
+    - Usar perfiles para identificar habitable / habitable acondicionado / no habitable:
+      - ver si es posible
+      - no habitable -> Sin carga de ocupación durante el año?
+      - habitable -> Con carga de ocupación no nula durante el año?
+      - acondicionado -> Con consigna de cal o ref (sin oscilación libre) durante el año?
+      - eliminar de Space el atributo `SpaceKind`
+- Informe de propiedades:
+  - Añadir en props area de sombras
+  - Optimizar recálculo de propiedades
+    - Guardar hash de geometrías (opacos, sombras y huecos) y solo recalcular si han cambiado
+      - update_geometry, update_cons, update_meta??
+    - Hacer profiling y benchmarks con tracing
 - Informe de mediciones:
+  - nuevo informe con mediciones del modelo
   - por superficies, agrupando por orientaciones, construcciones, etc
   - por pesos o volumen? Ver si la definición de materiales es suficiente
-
-Marcar elementos especiales de la ET para hacer override de esos elementos para el cálculo de la K.
+  - pensar integración futura con aspectos de sostenibilidad
+- Comprobación del modelo:
+  - Separar check del modelo del cálculo energético
+  - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
+- Bibliotecas
+  - Cambiar gestión de grupos de materiales y construcciones
+    - Ver dónde se guarda esa biblioteca (¿la tenemos en el wasm y la usamos para la importación o es solo del lado del cliente?
+- Conversión:
+  - Trasladar avisos en la conversión de modelos BDL
+    - Usar Model.warnings
+- Formato de salida:
+  - Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
 
 ## Comprobaciones
 
@@ -53,11 +64,6 @@ Marcar elementos especiales de la ET para hacer override de esos elementos para 
     - alto = 1m
     - ancho = superficie / alto
 - U_w;sht: transmitancia de huecos con contraventanas activadas (en construcción de hueco) - Ver UNE-EN ISO 52016-1, G.2.2.2.2 Window with movable shutter or solar shading device
-- condiciones de uso:
-  - nivel de ventilación (n_v: Option<f32> [1/h])
-  - consignas (cal, cal_red, ref, ref_red, horas_cal, horas_cal_red, horas_sin, horas_ref, horas_ref_red)
-  - ocupación (horas_ocupación)
-  - pensar nivel de agregación (semana tipo con día entre semana y fin de semana?, ver normas)
 
 ### bemodel
 
@@ -143,9 +149,6 @@ Marcar elementos especiales de la ET para hacer override de esos elementos para 
 - Comprobar qué se cambia en las plantas o en el edificio cuando se indica una cota base distinta a la 0.0 (ver si se pone la Z de la planta P01 distinta a "")
 - Seguir eliminando bloques genéricos convirtiendo a estructuras los elementos BDL:
   - metadatos
-  - horarios
-  - condiciones operacionales
-  - consignas
 
 ## docs
 
@@ -158,7 +161,7 @@ Documentar hipótesis:
 - Avisar de incoherencias entre altura de espacios y plantas (pensar cómo, p.e. altura de planta < altura de espacio?)
 - Solamente se contempla la obstrucción de la radiación solar directa. Para la radiación difusa se toman valores fijos de los factores de visibilidad del cielo y del suelo (0.5) sin contemplar obstrucciones remotas. Esto tiende a sobreestimar el valor de Fshobst.
 
-- XML
+- Generar XML con indentado correcto:
 
   ```Rust
     macro_rules! writeln_indented {
