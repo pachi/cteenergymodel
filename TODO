@@ -42,7 +42,6 @@
     - Ver dónde se guarda esa biblioteca (¿la tenemos en el wasm y la usamos para la importación o es solo del lado del cliente?
 - Conversión:
   - Trasladar avisos en la conversión de modelos BDL
-    - Usar Model.warnings
 - Formato de salida:
   - Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
 

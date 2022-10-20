@@ -120,7 +120,6 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             schedules,
             loads,
             sys_settings,
-            warnings: Default::default(),
             overrides: Default::default(),
             extra: Default::default(),
         };
