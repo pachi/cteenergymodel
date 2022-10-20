@@ -1,8 +1,8 @@
 [package]
 name = "convertdb"
-version = "22.5.0"
-authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
-edition = "2021"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
 description = "Convert HULC Database to BeModel data"
 repository = "https://github.com/pachi/cteenergymodel"
 readme = "README.md"

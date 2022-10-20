@@ -1,8 +1,8 @@
 [package]
 name = "hulc"
-version = "22.5.0"
-authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
-edition = "2021"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
 description = "Data model for the HULC energy modelling application formats"
 repository = "https://github.com/pachi/cteenergymodel"
 readme = "README.md"

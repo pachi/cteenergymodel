@@ -4,6 +4,11 @@ members = [
     "bemodel", "climate", "hulc", "hulc2model", "hulc_tests", "convertdb"
 ]
 
+[workspace.package]
+version = "22.10.0"
+authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+edition = "2021"
+
 [profile.release]
 panic = "abort"
 lto = true

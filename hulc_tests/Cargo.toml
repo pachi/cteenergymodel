@@ -1,8 +1,8 @@
 [package]
 name = "hulc_tests"
-version = "22.5.0"
-authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
-edition = "2018"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
 description = "Tests for hulc and hulc2model"
 repository = "https://github.com/pachi/cteenergymodel"
 readme = "README.md"

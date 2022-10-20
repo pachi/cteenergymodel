@@ -1,8 +1,8 @@
 [package]
 name = "bemodel"
-version = "22.5.1"
-authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
-edition = "2018"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
 description = "Basic data model for energy modelling of buildings"
 repository = "https://github.com/pachi/cteenergymodel"
 readme = "README.md"

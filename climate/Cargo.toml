@@ -1,9 +1,9 @@
 [package]
 name = "climate"
-version = "22.5.0"
-authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
 repository = "https://github.com/pachi/cteenergymodel"
-edition = "2018"
 
 [dependencies]
 chrono = "0.4"
@@ -15,5 +15,5 @@ serde = { version="1", features=["derive"] }
 serde_json = "1"
 bincode = "1"
 
-[[bin]]         
+[[bin]]
 name = "metconvert"    
