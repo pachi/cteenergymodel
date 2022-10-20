@@ -13,6 +13,8 @@ pub mod convert;
 pub mod energy;
 pub mod utils;
 
+pub use checks::check;
+pub use purge::purge_unused;
 pub use types::{
     point, vector, BoundaryType, ConsDb, ConsDbGroups, ExtraData, Frame, Glass, Layer, Library,
     MatProps, Material, Meta, Model, Orientation, Point2, Point3, Polygon, PropsOverrides,

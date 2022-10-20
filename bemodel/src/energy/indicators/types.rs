@@ -14,7 +14,7 @@ use super::N50Data;
 use super::QSolJulData;
 
 use crate::energy::EnergyProps;
-use crate::{climatedata, Model, Warning};
+use crate::{check, climatedata, Model, Warning};
 
 /// Estructura que contiene los resultados del cálculo de indicadores y parámetros energéticos
 #[allow(non_snake_case)]
@@ -59,7 +59,7 @@ impl EnergyIndicators {
 
             props,
             // TODO: estos avisos deberían ser resultado de los cálculos, no del check general
-            warnings: model.check(),
+            warnings: check(model),
         }
     }
 }

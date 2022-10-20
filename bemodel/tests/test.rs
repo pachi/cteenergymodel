@@ -147,7 +147,7 @@ fn model_json_e4h_medianeras() {
     assert_eq!(model.schedules.year.len(), 26);
     assert_eq!(model.schedules.week.len(), 29);
     assert_eq!(model.schedules.day.len(), 66);
-    model.purge_unused();
+    let _warnings = bemodel::purge_unused(&mut model);
     assert_eq!(model.spaces.len(), 21);
     assert_eq!(model.cons.wallcons.len(), 7);
     assert_eq!(model.cons.wincons.len(), 2);
