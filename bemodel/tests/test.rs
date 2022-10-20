@@ -137,41 +137,25 @@ fn model_json_e4h_medianeras() {
 
     // Purga de elementos
     assert_eq!(model.spaces.len(), 21);
-    model.purge_unused_spaces();
-    assert_eq!(model.spaces.len(), 21);
-
     assert_eq!(model.cons.wallcons.len(), 7);
-    model.purge_unused_wallcons();
-    assert_eq!(model.cons.wallcons.len(), 7);
-
     assert_eq!(model.cons.wincons.len(), 2);
-    model.purge_unused_wincons();
-    assert_eq!(model.cons.wincons.len(), 2);
-
     assert_eq!(model.cons.materials.len(), 10);
-    model.purge_unused_materials();
-    assert_eq!(model.cons.materials.len(), 10);
-
     assert_eq!(model.cons.glasses.len(), 2);
-    model.purge_unused_glasses();
-    assert_eq!(model.cons.glasses.len(), 2);
-
     assert_eq!(model.cons.frames.len(), 2);
-    model.purge_unused_frames();
-    assert_eq!(model.cons.frames.len(), 2);
-
     assert_eq!(model.loads.len(), 1);
-    model.purge_unused_loads();
-    assert_eq!(model.loads.len(), 1);
-
     assert_eq!(model.sys_settings.len(), 1);
-    model.purge_unused_sys_settings();
-    assert_eq!(model.sys_settings.len(), 1);
-
     assert_eq!(model.schedules.year.len(), 26);
     assert_eq!(model.schedules.week.len(), 29);
     assert_eq!(model.schedules.day.len(), 66);
-    model.purge_unused_schedules();
+    model.purge_unused();
+    assert_eq!(model.spaces.len(), 21);
+    assert_eq!(model.cons.wallcons.len(), 7);
+    assert_eq!(model.cons.wincons.len(), 2);
+    assert_eq!(model.cons.materials.len(), 10);
+    assert_eq!(model.cons.glasses.len(), 2);
+    assert_eq!(model.cons.frames.len(), 2);
+    assert_eq!(model.loads.len(), 1);
+    assert_eq!(model.sys_settings.len(), 1);
     assert_eq!(model.schedules.year.len(), 4);
     assert_eq!(model.schedules.week.len(), 4);
     assert_eq!(model.schedules.day.len(), 12);

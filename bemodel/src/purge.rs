@@ -87,7 +87,7 @@ impl Model {
     }
 
     /// Elimina espacios no usados en los opacos
-    pub fn purge_unused_spaces(&mut self) {
+    pub(crate) fn purge_unused_spaces(&mut self) {
         let spaces_used_ids: HashSet<_> = self
             .walls
             .iter()
@@ -103,7 +103,7 @@ impl Model {
     }
 
     /// Elimina puentes térmicos con longitud nula
-    pub fn purge_unused_pts(&mut self) {
+    pub(crate) fn purge_unused_pts(&mut self) {
         self.thermal_bridges = self
             .thermal_bridges
             .iter()
@@ -113,7 +113,7 @@ impl Model {
     }
 
     /// Elimina construcciones de opacos no usadas en los opacos
-    pub fn purge_unused_wallcons(&mut self) {
+    pub(crate) fn purge_unused_wallcons(&mut self) {
         let wallcons_used_ids: HashSet<_> = self.walls.iter().map(|v| v.cons).collect();
         self.cons.wallcons = self
             .cons
@@ -125,7 +125,7 @@ impl Model {
     }
 
     /// Elimina construcciones de huecos no usadas en los huecos
-    pub fn purge_unused_wincons(&mut self) {
+    pub(crate) fn purge_unused_wincons(&mut self) {
         let wincons_used_ids: HashSet<_> = self.windows.iter().map(|v| v.cons).collect();
         self.cons.wincons = self
             .cons
@@ -137,7 +137,7 @@ impl Model {
     }
 
     /// Elimina materiales no usados en las construcciones de opacos
-    pub fn purge_unused_materials(&mut self) {
+    pub(crate) fn purge_unused_materials(&mut self) {
         let materials_used_ids: HashSet<_> = self
             .cons
             .wallcons
@@ -154,7 +154,7 @@ impl Model {
     }
 
     /// Elimina vidrios no usados en las construcciones de huecos
-    pub fn purge_unused_glasses(&mut self) {
+    pub(crate) fn purge_unused_glasses(&mut self) {
         let glasses_used_ids: HashSet<_> = self.cons.wincons.iter().map(|v| v.glass).collect();
         self.cons.glasses = self
             .cons
@@ -166,7 +166,7 @@ impl Model {
     }
 
     /// Elimina marcos no usados en las construcciones de huecos
-    pub fn purge_unused_frames(&mut self) {
+    pub(crate) fn purge_unused_frames(&mut self) {
         let frames_used_ids: HashSet<_> = self.cons.wincons.iter().map(|v| v.frame).collect();
         self.cons.frames = self
             .cons
@@ -178,7 +178,7 @@ impl Model {
     }
 
     /// Elimina definiciones de cargas no usadas en los espacios
-    pub fn purge_unused_loads(&mut self) {
+    pub(crate) fn purge_unused_loads(&mut self) {
         let loads_used_ids: HashSet<_> = self.spaces.iter().flat_map(|v| v.loads).collect();
         self.loads = self
             .loads
@@ -189,7 +189,7 @@ impl Model {
     }
 
     /// Elimina definiciones de consignas no usadas en los espacios
-    pub fn purge_unused_sys_settings(&mut self) {
+    pub(crate) fn purge_unused_sys_settings(&mut self) {
         let sys_settings_used_ids: HashSet<_> =
             self.spaces.iter().flat_map(|v| v.sys_settings).collect();
         self.sys_settings = self
@@ -201,7 +201,7 @@ impl Model {
     }
 
     /// Elimina definiciones de horarios no usadas en las definiciones de cargas o consignas
-    pub fn purge_unused_schedules(&mut self) {
+    pub(crate) fn purge_unused_schedules(&mut self) {
         // Eliminar perfiles no usados en cargas o consignas
         let loads_ids = self
             .loads
