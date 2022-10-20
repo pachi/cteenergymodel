@@ -43,6 +43,8 @@ impl EnergyIndicators {
         let climatezone = model.meta.climate;
         let totradjul = climatedata::total_radiation_in_july_by_orientation(&climatezone);
 
+        // TODO: Esto debería devolver su propia lista de comprobaciones (distinta de model.check)
+        // que se entregarían al final
         let props = EnergyProps::from(model);
 
         Self {
@@ -56,7 +58,7 @@ impl EnergyIndicators {
             n50_data: N50Data::from(&props),
 
             props,
-
+            // TODO: estos avisos deberían ser resultado de los cálculos, no del check general
             warnings: model.check(),
         }
     }
