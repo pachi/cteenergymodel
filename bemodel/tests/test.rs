@@ -140,14 +140,6 @@ fn model_json_e4h_medianeras() {
     model.purge_unused_spaces();
     assert_eq!(model.spaces.len(), 21);
 
-    assert_eq!(model.walls.len(), 127);
-    model.purge_unused_walls();
-    assert_eq!(model.walls.len(), 127);
-
-    assert_eq!(model.windows.len(), 92);
-    model.purge_unused_windows();
-    assert_eq!(model.windows.len(), 92);
-
     assert_eq!(model.cons.wallcons.len(), 7);
     model.purge_unused_wallcons();
     assert_eq!(model.cons.wallcons.len(), 7);

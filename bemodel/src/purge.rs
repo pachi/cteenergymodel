@@ -12,8 +12,6 @@ impl Model {
     /// Limpia modelo de elementos no utilizados
     /// Elementos:
     /// - espacios sin opacos asignados
-    /// - opacos sin espacio asignado
-    /// - huecos sin opaco asignado
     /// - puentes térmicos con longitud nula
     /// Construcción:
     /// - construcciones de opacos sin opacos que las usen
@@ -25,11 +23,23 @@ impl Model {
     /// - definiciones de cargas no usadas en los espacios
     /// - definiciones de consignas no usadas en los espacios
     /// - horarios no usados en definición de cargas o consignas
-    pub fn purge_unused(&mut self) {
+    pub fn purge_unused(&mut self) -> Vec<Warning> {
+        let mut warnings = vec![];
+        let start_n_spaces = self.spaces.len();
+        let start_n_pts = self.thermal_bridges.len();
+        let start_n_wallcons = self.cons.wallcons.len();
+        let start_n_wincons = self.cons.wincons.len();
+        let start_n_materials = self.cons.materials.len();
+        let start_n_glasses = self.cons.glasses.len();
+        let start_n_frames = self.cons.frames.len();
+        let start_n_loads = self.loads.len();
+        let start_n_sys_settings = self.sys_settings.len();
+        let start_n_schedules_year = self.schedules.year.len();
+        let start_n_schedules_week = self.schedules.week.len();
+        let start_n_schedules_day = self.schedules.day.len();
+
         // Elementos
         self.purge_unused_spaces();
-        self.purge_unused_walls();
-        self.purge_unused_windows();
         self.purge_unused_pts();
         // Construcción
         self.purge_unused_wallcons();
@@ -41,6 +51,39 @@ impl Model {
         self.purge_unused_loads();
         self.purge_unused_sys_settings();
         self.purge_unused_schedules();
+
+        warnings.push(Warning {
+            level: WarningLevel::SUCCESS,
+            id: None,
+            msg: format!(
+                "Eliminación de elementos no usados: {} espacios, \
+                {} puentes térmicos, \
+                {} construcciones de muro, \
+                {} construcciones de hueco, \
+                {} materiales, \
+                {} vidrios, \
+                {} marcos, \
+                {} definiciones de cargas, \
+                {} definiciones de consignas, \
+                {} horarios anuales, \
+                {} horarios semanales, \
+                {} horarios diarios",
+                start_n_spaces - self.spaces.len(),
+                start_n_pts - self.thermal_bridges.len(),
+                start_n_wallcons - self.cons.wallcons.len(),
+                start_n_wincons - self.cons.wincons.len(),
+                start_n_materials - self.cons.materials.len(),
+                start_n_glasses - self.cons.glasses.len(),
+                start_n_frames - self.cons.frames.len(),
+                start_n_loads - self.loads.len(),
+                start_n_sys_settings - self.sys_settings.len(),
+                start_n_schedules_year - self.schedules.year.len(),
+                start_n_schedules_week - self.schedules.week.len(),
+                start_n_schedules_day - self.schedules.day.len(),
+            ),
+        });
+
+        warnings
     }
 
     /// Elimina espacios no usados en los opacos
@@ -56,30 +99,6 @@ impl Model {
             .iter()
             .cloned()
             .filter(|v| spaces_used_ids.contains(&v.id))
-            .collect();
-    }
-
-    /// Elimina muros no usados en los espacios
-    /// /// NOTE: esto en realidad es un chequeo de que las ids de espacio son correctas
-    pub fn purge_unused_walls(&mut self) {
-        let spaces_ids: HashSet<_> = self.spaces.iter().map(|v| v.id).collect();
-        self.walls = self
-            .walls
-            .iter()
-            .cloned()
-            .filter(|v| spaces_ids.contains(&v.space))
-            .collect();
-    }
-
-    /// Elimina huecos no usados en los opacos
-    /// NOTE: esto en realidad es un chequeo de que las ids de muro son correctas
-    pub fn purge_unused_windows(&mut self) {
-        let walls_ids: HashSet<_> = self.walls.iter().map(|v| v.id).collect();
-        self.windows = self
-            .windows
-            .iter()
-            .cloned()
-            .filter(|v| walls_ids.contains(&v.wall))
             .collect();
     }
 
