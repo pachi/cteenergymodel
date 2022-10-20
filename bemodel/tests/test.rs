@@ -136,6 +136,38 @@ fn model_json_e4h_medianeras() {
     );
 
     // Purga de elementos
+    assert_eq!(model.spaces.len(), 21);
+    model.purge_unused_spaces();
+    assert_eq!(model.spaces.len(), 21);
+
+    assert_eq!(model.walls.len(), 127);
+    model.purge_unused_walls();
+    assert_eq!(model.walls.len(), 127);
+
+    assert_eq!(model.windows.len(), 92);
+    model.purge_unused_windows();
+    assert_eq!(model.windows.len(), 92);
+
+    assert_eq!(model.cons.wallcons.len(), 7);
+    model.purge_unused_wallcons();
+    assert_eq!(model.cons.wallcons.len(), 7);
+
+    assert_eq!(model.cons.wincons.len(), 2);
+    model.purge_unused_wincons();
+    assert_eq!(model.cons.wincons.len(), 2);
+
+    assert_eq!(model.cons.materials.len(), 10);
+    model.purge_unused_materials();
+    assert_eq!(model.cons.materials.len(), 10);
+
+    assert_eq!(model.cons.glasses.len(), 2);
+    model.purge_unused_glasses();
+    assert_eq!(model.cons.glasses.len(), 2);
+
+    assert_eq!(model.cons.frames.len(), 2);
+    model.purge_unused_frames();
+    assert_eq!(model.cons.frames.len(), 2);
+
     assert_eq!(model.loads.len(), 1);
     model.purge_unused_loads();
     assert_eq!(model.loads.len(), 1);
@@ -151,10 +183,6 @@ fn model_json_e4h_medianeras() {
     assert_eq!(model.schedules.year.len(), 4);
     assert_eq!(model.schedules.week.len(), 4);
     assert_eq!(model.schedules.day.len(), 12);
-
-    assert_eq!(model.spaces.len(), 21);
-    model.purge_unused_spaces();
-    assert_eq!(model.spaces.len(), 21);
 }
 
 #[test]

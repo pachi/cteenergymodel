@@ -125,26 +125,25 @@ impl Model {
     /// - definiciones de cargas no usadas en los espacios
     /// - definiciones de consignas no usadas en los espacios
     /// - horarios no usados en definición de cargas o consignas
-    /// TODO: completar purga de elementos y construcciones
     pub fn purge_unused(&mut self) {
         // Elementos
         self.purge_unused_spaces();
-        // self.purge_unused_walls();
-        // self.purge_unused_windows();
-        // self.purge_unused_pts();
+        self.purge_unused_walls();
+        self.purge_unused_windows();
+        self.purge_unused_pts();
         // Construcción
-        // self.purge_unused_wallcons();
-        // self.purge_unused_wincons();
-        // self.purge_unused_materials();
-        // self.purge_unused_glasses();
-        // self.purge_unused_frames();
+        self.purge_unused_wallcons();
+        self.purge_unused_wincons();
+        self.purge_unused_materials();
+        self.purge_unused_glasses();
+        self.purge_unused_frames();
         // Uso
         self.purge_unused_loads();
         self.purge_unused_sys_settings();
         self.purge_unused_schedules();
     }
 
-    /// Elimina definiciones de espacios no usados en los opacos
+    /// Elimina espacios no usados en los opacos
     pub fn purge_unused_spaces(&mut self) {
         let spaces_used_ids: HashSet<_> = self
             .walls
@@ -157,6 +156,105 @@ impl Model {
             .iter()
             .cloned()
             .filter(|v| spaces_used_ids.contains(&v.id))
+            .collect();
+    }
+
+    /// Elimina muros no usados en los espacios
+    /// /// NOTE: esto en realidad es un chequeo de que las ids de espacio son correctas
+    pub fn purge_unused_walls(&mut self) {
+        let spaces_ids: HashSet<_> = self.spaces.iter().map(|v| v.id).collect();
+        self.walls = self
+            .walls
+            .iter()
+            .cloned()
+            .filter(|v| spaces_ids.contains(&v.space))
+            .collect();
+    }
+
+    /// Elimina huecos no usados en los opacos
+    /// NOTE: esto en realidad es un chequeo de que las ids de muro son correctas
+    pub fn purge_unused_windows(&mut self) {
+        let walls_ids: HashSet<_> = self.walls.iter().map(|v| v.id).collect();
+        self.windows = self
+            .windows
+            .iter()
+            .cloned()
+            .filter(|v| walls_ids.contains(&v.wall))
+            .collect();
+    }
+
+    /// Elimina puentes térmicos con longitud nula
+    pub fn purge_unused_pts(&mut self) {
+        self.thermal_bridges = self
+            .thermal_bridges
+            .iter()
+            .cloned()
+            .filter(|v| v.l.abs() > f32::EPSILON)
+            .collect();
+    }
+
+    /// Elimina construcciones de opacos no usadas en los opacos
+    pub fn purge_unused_wallcons(&mut self) {
+        let wallcons_used_ids: HashSet<_> = self.walls.iter().map(|v| v.cons).collect();
+        self.cons.wallcons = self
+            .cons
+            .wallcons
+            .iter()
+            .cloned()
+            .filter(|v| wallcons_used_ids.contains(&v.id))
+            .collect();
+    }
+
+    /// Elimina construcciones de huecos no usadas en los huecos
+    pub fn purge_unused_wincons(&mut self) {
+        let wincons_used_ids: HashSet<_> = self.windows.iter().map(|v| v.cons).collect();
+        self.cons.wincons = self
+            .cons
+            .wincons
+            .iter()
+            .cloned()
+            .filter(|v| wincons_used_ids.contains(&v.id))
+            .collect();
+    }
+
+    /// Elimina materiales no usados en las construcciones de opacos
+    pub fn purge_unused_materials(&mut self) {
+        let materials_used_ids: HashSet<_> = self
+            .cons
+            .wallcons
+            .iter()
+            .flat_map(|v| v.layers.iter().map(|layer| layer.material))
+            .collect();
+        self.cons.materials = self
+            .cons
+            .materials
+            .iter()
+            .cloned()
+            .filter(|v| materials_used_ids.contains(&v.id))
+            .collect();
+    }
+
+    /// Elimina vidrios no usados en las construcciones de huecos
+    pub fn purge_unused_glasses(&mut self) {
+        let glasses_used_ids: HashSet<_> = self.cons.wincons.iter().map(|v| v.glass).collect();
+        self.cons.glasses = self
+            .cons
+            .glasses
+            .iter()
+            .cloned()
+            .filter(|v| glasses_used_ids.contains(&v.id))
+            .collect();
+    }
+
+    /// Elimina marcos no usados en las construcciones de huecos
+    pub fn purge_unused_frames(&mut self) {
+        let frames_used_ids: HashSet<_> = self.cons.wincons.iter().map(|v| v.frame).collect();
+        self.cons.frames = self
+            .cons
+            .frames
+            .iter()
+            .cloned()
+            .filter(|v| frames_used_ids.contains(&v.id))
             .collect();
     }
 
