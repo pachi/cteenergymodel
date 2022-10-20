@@ -152,6 +152,9 @@ fn model_json_e4h_medianeras() {
     assert_eq!(model.schedules.week.len(), 4);
     assert_eq!(model.schedules.day.len(), 12);
 
+    assert_eq!(model.spaces.len(), 21);
+    model.purge_unused_spaces();
+    assert_eq!(model.spaces.len(), 21);
 }
 
 #[test]

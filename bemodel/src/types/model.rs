@@ -114,6 +114,7 @@ impl Model {
     /// - espacios sin opacos asignados
     /// - opacos sin espacio asignado
     /// - huecos sin opaco asignado
+    /// - puentes térmicos con longitud nula
     /// Construcción:
     /// - construcciones de opacos sin opacos que las usen
     /// - construcciones de huecos sin huecos que las usen
@@ -127,9 +128,10 @@ impl Model {
     /// TODO: completar purga de elementos y construcciones
     pub fn purge_unused(&mut self) {
         // Elementos
-        // self.purge_unused_spaces();
+        self.purge_unused_spaces();
         // self.purge_unused_walls();
         // self.purge_unused_windows();
+        // self.purge_unused_pts();
         // Construcción
         // self.purge_unused_wallcons();
         // self.purge_unused_wincons();
@@ -142,8 +144,24 @@ impl Model {
         self.purge_unused_schedules();
     }
 
+    /// Elimina definiciones de espacios no usados en los opacos
+    pub fn purge_unused_spaces(&mut self) {
+        let spaces_used_ids: HashSet<_> = self
+            .walls
+            .iter()
+            .flat_map(|v| [Some(v.space), v.next_to])
+            .flatten()
+            .collect();
+        self.spaces = self
+            .spaces
+            .iter()
+            .cloned()
+            .filter(|v| spaces_used_ids.contains(&v.id))
+            .collect();
+    }
+
     /// Elimina definiciones de cargas no usadas en los espacios
-    fn purge_unused_loads(&mut self) {
+    pub fn purge_unused_loads(&mut self) {
         let loads_used_ids: HashSet<_> = self.spaces.iter().flat_map(|v| v.loads).collect();
         self.loads = self
             .loads
@@ -154,7 +172,7 @@ impl Model {
     }
 
     /// Elimina definiciones de consignas no usadas en los espacios
-    fn purge_unused_sys_settings(&mut self) {
+    pub fn purge_unused_sys_settings(&mut self) {
         let sys_settings_used_ids: HashSet<_> =
             self.spaces.iter().flat_map(|v| v.sys_settings).collect();
         self.sys_settings = self
@@ -166,7 +184,7 @@ impl Model {
     }
 
     /// Elimina definiciones de horarios no usadas en las definiciones de cargas o consignas
-    fn purge_unused_schedules(&mut self) {
+    pub fn purge_unused_schedules(&mut self) {
         // Eliminar perfiles no usados en cargas o consignas
         let loads_ids = self
             .loads
