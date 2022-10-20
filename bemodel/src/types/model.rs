@@ -109,15 +109,48 @@ impl Model {
         self.windows.iter().find(|w| w.name == name)
     }
 
-    /// Limpia modelo de elementos no usados
+    /// Limpia modelo de elementos no utilizados
+    /// Elementos:
+    /// - espacios sin opacos asignados
+    /// - opacos sin espacio asignado
+    /// - huecos sin opaco asignado
+    /// Construcción:
+    /// - construcciones de opacos sin opacos que las usen
+    /// - construcciones de huecos sin huecos que las usen
+    /// - materiales no usados en construcciones de opacos
+    /// - vidrios no usados en construcciones de huecos
+    /// - marcos no usados en construcciones de huecos
+    /// Uso:
     /// - definiciones de cargas no usadas en los espacios
     /// - definiciones de consignas no usadas en los espacios
     /// - horarios no usados en definición de cargas o consignas
-    /// TODO: completar purga de elementos
+    /// TODO: completar purga de elementos y construcciones
     pub fn purge_unused(&mut self) {
+        // Elementos
+        // self.purge_unused_spaces();
+        // self.purge_unused_walls();
+        // self.purge_unused_windows();
+        // Construcción
+        // self.purge_unused_wallcons();
+        // self.purge_unused_wincons();
+        // self.purge_unused_materials();
+        // self.purge_unused_glasses();
+        // self.purge_unused_frames();
+        // Uso
         self.purge_unused_loads();
         self.purge_unused_sys_settings();
         self.purge_unused_schedules();
+    }
+
+    /// Elimina definiciones de cargas no usadas en los espacios
+    fn purge_unused_loads(&mut self) {
+        let loads_used_ids: HashSet<_> = self.spaces.iter().flat_map(|v| v.loads).collect();
+        self.loads = self
+            .loads
+            .iter()
+            .cloned()
+            .filter(|v| loads_used_ids.contains(&v.id))
+            .collect();
     }
 
     /// Elimina definiciones de consignas no usadas en los espacios
@@ -129,17 +162,6 @@ impl Model {
             .iter()
             .cloned()
             .filter(|v| sys_settings_used_ids.contains(&v.id))
-            .collect();
-    }
-
-    /// Elimina definiciones de cargas no usadas en los espacios
-    fn purge_unused_loads(&mut self) {
-        let loads_used_ids: HashSet<_> = self.spaces.iter().flat_map(|v| v.loads).collect();
-        self.loads = self
-            .loads
-            .iter()
-            .cloned()
-            .filter(|v| loads_used_ids.contains(&v.id))
             .collect();
     }
 
