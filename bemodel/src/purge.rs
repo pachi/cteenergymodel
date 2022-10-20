@@ -53,7 +53,7 @@ impl Model {
         self.purge_unused_schedules();
 
         warnings.push(Warning {
-            level: WarningLevel::SUCCESS,
+            level: WarningLevel::INFO,
             id: None,
             msg: format!(
                 "Eliminación de elementos no usados: {} espacios, \
