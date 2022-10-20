@@ -4,8 +4,6 @@
 
 //! Modelo del edificio que comprende los elementos de la envolvente térmica, espacios, construcciones y metadatos
 
-use std::collections::HashSet;
-
 pub use nalgebra::{point, vector};
 
 use anyhow::Error;

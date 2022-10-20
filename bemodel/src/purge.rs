@@ -6,7 +6,7 @@
 
 use std::collections::HashSet;
 
-use super::{Model, Uuid, Warning, WarningLevel};
+use super::{Model, Warning, WarningLevel};
 
 impl Model {
     /// Limpia modelo de elementos no utilizados
