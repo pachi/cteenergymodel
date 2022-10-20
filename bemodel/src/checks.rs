@@ -16,9 +16,9 @@ impl Model {
     ///     - Huecos sin referencias de muros válidas
     ///     - Muros sin referencias de espacios válidas
     ///     - Muros sin referencias de construcciones válidas
-    ///     - Muros INTERIOR con nextto con referencia no válida
+    ///     - Muros con next_to con referencia no válida
     /// TODO: Comprobaciones pendientes
-    ///     - Muros con boundarytype INTERIOR y nextto con referencia no válida
+    ///     - Muros con bounds INTERIOR y next_to sin Uuid
     ///     - Muros sin definición geométrica completa
     ///     - UUIDs nulos: "00000000-0000-0000-0000-000000000000"
     ///     - Construcciones de hueco sin marco o vidrio válidos o de opacos sin materiales válidos
@@ -97,9 +97,9 @@ impl Model {
                 })
             };
         });
-        // Huecos con referencias de muros o construcciones incorrectas
+        // Puentes térmicos con longitudes negativas
         self.thermal_bridges.iter().for_each(|tb| {
-            if tb.l < 0.0 {
+            if tb.l.is_sign_negative() {
                 warnings.push(Warning {
                     level: WARNING,
                     id: Some(tb.id),
