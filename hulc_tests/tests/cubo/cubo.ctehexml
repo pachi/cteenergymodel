@@ -1,5 +1,131 @@
 <?xml version="1.0"?>
-<CTE-HE-XML><DatosGenerales><refCatastral>ninguno</refCatastral><tipoVivienda>Unifamiliar</tipoVivienda><anio/><tipoDefinicion>Nuevo</tipoDefinicion><comunidad>Madrid</comunidad><provincia>Madrid</provincia><poblacion>Madrid</poblacion><zonaClimatica>D3</zonaClimatica><altitud>650</altitud><tipoUso>Residencial</tipoUso><claseHigrometria>3</claseHigrometria><numRenovacionesHS3>1</numRenovacionesHS3><ventilacionPorDefecto>NO</ventilacionPorDefecto><numViviendasBloque>1</numViviendasBloque><valorImpulsionAire>50.00</valorImpulsionAire><valorExtraccionAireCocina>1.00</valorExtraccionAireCocina><valorExtraccionAireBanos>1.00</valorExtraccionAireBanos><valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos><vent_p1>25.00</vent_p1><vent_p2>25.00</vent_p2><vent_p3>25.00</vent_p3><vent_p4>25.00</vent_p4><nomPro>Nombre del Proyecto</nomPro><usoPro>- Seleccione de la lista -</usoPro><usoProOtros/><comunidadPro>Madrid</comunidadPro><proPro>Madrid</proPro><locPro>Madrid</locPro><cpPro>C&#xF3;digo Postal</cpPro><tipoViaPro>Calle</tipoViaPro><viaPro>C/</viaPro><tipoNPro>Num</tipoNPro><nPro>-</nPro><blqPro>-</blqPro><portalPro>-</portalPro><escPro>-</escPro><pisoPro>-</pisoPro><puertaPro>-</puertaPro><datosAdicPro>-</datosAdicPro><normativaEdificacion>- Seleccione de la lista -</normativaEdificacion><normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones><normativaOtros>- Seleccione de la lista -</normativaOtros><normativaEdificacionOtros/><normativaInstalacionesOtros/><normativaOtrosOtros/><superficieConstruida>0.00</superficieConstruida><SupConsCubierta>0.00</SupConsCubierta><supOcupada>0.00</supOcupada><alturaTotal>0.00</alturaTotal><plantaSobreRasante>0</plantaSobreRasante><plantaBajoRasante>0</plantaBajoRasante><EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida><panelFotoVoltaicoAutoConsumido>0.00</panelFotoVoltaicoAutoConsumido><contribucionResACS>0.00</contribucionResACS><puertaPro>-</puertaPro><cifAut>CIF</cifAut><nomAut>Nombres</nomAut><apellido1Aut>Apellido1</apellido1Aut><apellido2Aut>Apellido2</apellido2Aut><razAut>Raz&#xF3;n Social</razAut><NIFEntidad/><comunidadAut>- Seleccione de la lista -</comunidadAut><proAut>- Seleccione de la lista -</proAut><locAut>Localidad</locAut><cpAut>Codigo postal</cpAut><tipoViaAut>Calle</tipoViaAut><viaAut>Nombre calle</viaAut><tipoNAut>Num</tipoNAut><nAut>-</nAut><blqAut>-</blqAut><portalAut>-</portalAut><escAut>-</escAut><pisoAut>-</pisoAut><puertaAut>-</puertaAut><datosAdicAut>-</datosAdicAut><correoAut>-</correoAut><telAut>-</telAut><titulacionAut>- Seleccione de la lista -</titulacionAut><titulacionOtrosAut>-</titulacionOtrosAut><colegioAut>- Seleccione de la lista -</colegioAut><colegioOtrosAut>-</colegioOtrosAut><numeroColegiadoAut>-</numeroColegiadoAut><fechaVisita>10/02/21</fechaVisita><extInfo>SI</extInfo><VentNoct>SI</VentNoct><SistSus>SI</SistSus><pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado><imgEdif>Especifique imagen para el edificio</imgEdif><imgPlano>Especifique imagen para el plano de situaci&#xF3;n del edificio</imgPlano><MesIniPerSom>Junio</MesIniPerSom><MesFinPerSom>Septiembre</MesFinPerSom><energiaGT>true</energiaGT><directoCALENERGT>NO</directoCALENERGT><valMenELE>NO</valMenELE><valMenACS>NO</valMenACS><valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE><valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS><fpECGaPT>0.000</fpECGaPT><fpECGaPNR>0.000</fpECGaPNR><fpECGaCO2>0.000</fpECGaCO2><datoGeneralNuevo>NO;29;10;1960</datoGeneralNuevo><fechaCertificado>NO;29;10;1960</fechaCertificado><potenciaFVInstalada>0</potenciaFVInstalada><IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu><estimacionConsumoACSGT>28.00</estimacionConsumoACSGT><bajaPermeabilidad>SI</bajaPermeabilidad><ensayoPermeabilidad>NO</ensayoPermeabilidad><ValorN50Medido>0</ValorN50Medido><datosVentilacion>1;180.000;90.00;1;300.00;150.00;0.020;0.50;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;180.000;0.00;0.00;0.0000</datosVentilacion><venPotEC>90.000</venPotEC><recEFC>-1.000</recEFC><cambios>NO</cambios><cambioscalener>NO</cambioscalener><RED1>RED1    <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED1><RED2>RED2    <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED2></DatosGenerales><EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
+<CTE-HE-XML>
+    <DatosGenerales>
+        <refCatastral>ninguno</refCatastral>
+        <tipoVivienda>Unifamiliar</tipoVivienda>
+        <anio/>
+        <tipoDefinicion>Nuevo</tipoDefinicion>
+        <comunidad>Madrid</comunidad>
+        <provincia>Madrid</provincia>
+        <poblacion>Madrid</poblacion>
+        <zonaClimatica>D3</zonaClimatica>
+        <altitud>650</altitud>
+        <tipoUso>Residencial</tipoUso>
+        <claseHigrometria>3</claseHigrometria>
+        <numRenovacionesHS3>1</numRenovacionesHS3>
+        <ventilacionPorDefecto>NO</ventilacionPorDefecto>
+        <numViviendasBloque>1</numViviendasBloque>
+        <valorImpulsionAire>50.00</valorImpulsionAire>
+        <valorExtraccionAireCocina>1.00</valorExtraccionAireCocina>
+        <valorExtraccionAireBanos>1.00</valorExtraccionAireBanos>
+        <valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos>
+        <vent_p1>25.00</vent_p1>
+        <vent_p2>25.00</vent_p2>
+        <vent_p3>25.00</vent_p3>
+        <vent_p4>25.00</vent_p4>
+        <nomPro>Nombre del Proyecto</nomPro>
+        <usoPro>- Seleccione de la lista -</usoPro>
+        <usoProOtros/>
+        <comunidadPro>Madrid</comunidadPro>
+        <proPro>Madrid</proPro>
+        <locPro>Madrid</locPro>
+        <cpPro>C&#xF3;digo Postal</cpPro>
+        <tipoViaPro>Calle</tipoViaPro>
+        <viaPro>C/</viaPro>
+        <tipoNPro>Num</tipoNPro>
+        <nPro>-</nPro>
+        <blqPro>-</blqPro>
+        <portalPro>-</portalPro>
+        <escPro>-</escPro>
+        <pisoPro>-</pisoPro>
+        <puertaPro>-</puertaPro>
+        <datosAdicPro>-</datosAdicPro>
+        <normativaEdificacion>- Seleccione de la lista -</normativaEdificacion>
+        <normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones>
+        <normativaOtros>- Seleccione de la lista -</normativaOtros>
+        <normativaEdificacionOtros/>
+        <normativaInstalacionesOtros/>
+        <normativaOtrosOtros/>
+        <superficieConstruida>0.00</superficieConstruida>
+        <SupConsCubierta>0.00</SupConsCubierta>
+        <supOcupada>0.00</supOcupada>
+        <alturaTotal>0.00</alturaTotal>
+        <plantaSobreRasante>0</plantaSobreRasante>
+        <plantaBajoRasante>0</plantaBajoRasante>
+        <EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida>
+        <panelFotoVoltaicoAutoConsumido>0.00</panelFotoVoltaicoAutoConsumido>
+        <contribucionResACS>0.00</contribucionResACS>
+        <puertaPro>-</puertaPro>
+        <cifAut>CIF</cifAut>
+        <nomAut>Nombres</nomAut>
+        <apellido1Aut>Apellido1</apellido1Aut>
+        <apellido2Aut>Apellido2</apellido2Aut>
+        <razAut>Raz&#xF3;n Social</razAut>
+        <NIFEntidad/>
+        <comunidadAut>- Seleccione de la lista -</comunidadAut>
+        <proAut>- Seleccione de la lista -</proAut>
+        <locAut>Localidad</locAut>
+        <cpAut>Codigo postal</cpAut>
+        <tipoViaAut>Calle</tipoViaAut>
+        <viaAut>Nombre calle</viaAut>
+        <tipoNAut>Num</tipoNAut>
+        <nAut>-</nAut>
+        <blqAut>-</blqAut>
+        <portalAut>-</portalAut>
+        <escAut>-</escAut>
+        <pisoAut>-</pisoAut>
+        <puertaAut>-</puertaAut>
+        <datosAdicAut>-</datosAdicAut>
+        <correoAut>-</correoAut>
+        <telAut>-</telAut>
+        <titulacionAut>- Seleccione de la lista -</titulacionAut>
+        <titulacionOtrosAut>-</titulacionOtrosAut>
+        <colegioAut>- Seleccione de la lista -</colegioAut>
+        <colegioOtrosAut>-</colegioOtrosAut>
+        <numeroColegiadoAut>-</numeroColegiadoAut>
+        <fechaVisita>10/02/21</fechaVisita>
+        <extInfo>SI</extInfo>
+        <VentNoct>SI</VentNoct>
+        <SistSus>SI</SistSus>
+        <pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaD3.bin</pathArchivoMeteorologicoSeleccionado>
+        <imgEdif>Especifique imagen para el edificio</imgEdif>
+        <imgPlano>Especifique imagen para el plano de situaci&#xF3;n del edificio</imgPlano>
+        <MesIniPerSom>Junio</MesIniPerSom>
+        <MesFinPerSom>Septiembre</MesFinPerSom>
+        <energiaGT>true</energiaGT>
+        <directoCALENERGT>NO</directoCALENERGT>
+        <valMenELE>NO</valMenELE>
+        <valMenACS>NO</valMenACS>
+        <valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE>
+        <valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS>
+        <fpECGaPT>0.000</fpECGaPT>
+        <fpECGaPNR>0.000</fpECGaPNR>
+        <fpECGaCO2>0.000</fpECGaCO2>
+        <datoGeneralNuevo>NO;29;10;1960</datoGeneralNuevo>
+        <fechaCertificado>NO;29;10;1960</fechaCertificado>
+        <potenciaFVInstalada>0</potenciaFVInstalada>
+        <IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu>
+        <estimacionConsumoACSGT>28.00</estimacionConsumoACSGT>
+        <bajaPermeabilidad>SI</bajaPermeabilidad>
+        <ensayoPermeabilidad>NO</ensayoPermeabilidad>
+        <ValorN50Medido>0</ValorN50Medido>
+        <datosVentilacion>1;180.000;90.00;1;300.00;150.00;0.020;0.50;0;0;0;0;0;0;0;0;0;0;0;0;0;00;0.0000;0.00;180.000;0.00;0.00;0.0000</datosVentilacion>
+        <venPotEC>90.000</venPotEC>
+        <recEFC>-1.000</recEFC>
+        <cambios>NO</cambios>
+        <cambioscalener>NO</cambioscalener>
+        <RED1>RED1    <precioEnergia>0.0</precioEnergia>
+            <conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria>
+            <conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable>
+            <conversionEmisionesCO2>1.000</conversionEmisionesCO2>
+        </RED1>
+        <RED2>RED2    <precioEnergia>0.0</precioEnergia>
+            <conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria>
+            <conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable>
+            <conversionEmisionesCO2>1.000</conversionEmisionesCO2>
+        </RED2>
+    </DatosGenerales>
+    <EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
 $ |         FICHERO GENERADO CON CTE-HE-2019           |
 $ +----------------------------------------------------+
 $
@@ -1795,4 +1921,112 @@ $
 $ +-----------------------------------------------------------------+
 $ |                        Final del fichero                        |
 $ +-----------------------------------------------------------------+
-]]></EntradaGraficaLIDER><Definicion_Sistema><elementos><FactoresDeCorreccion><CurvaComportamiento nombre="con_FCP-EQ_CalefaccionElectrica-Defecto"><nombre_usuario>con_FCP-EQ_CalefaccionElectrica-Defecto</nombre_usuario><tipoObjeto>EQ_CalefaccionElectrica</tipoObjeto><tipoPropiedad>con_FCP</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Factor carga parcial</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"0;1"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="cap_T-EQ_Caldera-unidad"><nombre_usuario>cap_T-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>cap_T</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Temperatura impulsion</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="ren_T-EQ_Caldera-unidad"><nombre_usuario>ren_T-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_T</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Temperatura impulsion</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="ren_FCP_Potencia-EQ_Caldera-unidad"><nombre_usuario>ren_FCP_Potencia-EQ_Caldera-unidad</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_FCP_Potencia</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Factor Carga Parcial</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento><CurvaComportamiento nombre="ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto"><nombre_usuario>ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto</nombre_usuario><tipoObjeto>EQ_Caldera</tipoObjeto><tipoPropiedad>ren_FCP_Tiempo</tipoPropiedad><numeroVariablesIndependientes>1</numeroVariablesIndependientes><nombreVI_1>Factor Carga Parcial</nombreVI_1><minVI_1>0</minVI_1><maxVI_1>1</maxVI_1><coeficientes>"1;0"</coeficientes><exponentes>"0;1"</exponentes></CurvaComportamiento></FactoresDeCorreccion><Sistemas><SIS_Acs nombre="SIS"><nombre_usuario>SIS_ACS</nombre_usuario><porcentajeES>0.00</porcentajeES><contribucionSolarMinima>0.00</contribucionSolarMinima><multiplicador>1</multiplicador><tImpulsion>60.00</tImpulsion><equipos><EQ_Caldera nombre="SIS_EQ1"><nombre_usuario>SIS_EQ1_EQ_Caldera-ACS-Electrica-Defecto</nombre_usuario><capNom>10.00</capNom><renNom>0.90</renNom><tipoEnergia>"Electricidad"</tipoEnergia><tipoCaldera>electrica</tipoCaldera><cap_T>"cap_T-EQ_Caldera-unidad"</cap_T><ren_T>"ren_T-EQ_Caldera-unidad"</ren_T><ren_FCP_Potencia>"ren_FCP_Potencia-EQ_Caldera-unidad"</ren_FCP_Potencia><ren_FCP_Tiempo>"ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto"</ren_FCP_Tiempo></EQ_Caldera></equipos><demandas><DemandaACS nombre="SIS_ACS1"><perfilDiario>Demanda_Hor</perfilDiario><conACSDiario>28</conACSDiario><TUso>60</TUso><TRed>13.0548658370972</TRed><nombre_usuario>SIS_ACS1_Demanda_de_ACS</nombre_usuario></DemandaACS></demandas></SIS_Acs><SIS_ClimatizacionUnizona nombre="SIS1"><nombre_usuario>SIS1_Climatizacion_unizona</nombre_usuario><zona>P01_E01</zona><equipos><EQ_CalefaccionElectrica nombre="SIS1_EQ1"><nombre_usuario>SIS1_EQ1_EQ_CalefaccionElectrica-Defecto</nombre_usuario><capNom>10.00</capNom><conNom>10.00</conNom><tipoEnergia>Electricidad</tipoEnergia><dtTermostato>1</dtTermostato><con_FCP>"con_FCP-EQ_CalefaccionElectrica-Defecto"</con_FCP></EQ_CalefaccionElectrica></equipos><vVentilacion>0</vVentilacion></SIS_ClimatizacionUnizona></Sistemas></elementos></Definicion_Sistema></CTE-HE-XML>
+]]>    </EntradaGraficaLIDER>
+    <Definicion_Sistema>
+        <elementos>
+            <FactoresDeCorreccion>
+                <CurvaComportamiento nombre="con_FCP-EQ_CalefaccionElectrica-Defecto">
+                    <nombre_usuario>con_FCP-EQ_CalefaccionElectrica-Defecto</nombre_usuario>
+                    <tipoObjeto>EQ_CalefaccionElectrica</tipoObjeto>
+                    <tipoPropiedad>con_FCP</tipoPropiedad>
+                    <numeroVariablesIndependientes>1</numeroVariablesIndependientes>
+                    <nombreVI_1>Factor carga parcial</nombreVI_1>
+                    <minVI_1>0</minVI_1>
+                    <maxVI_1>1</maxVI_1>
+                    <coeficientes>"0;1"</coeficientes>
+                    <exponentes>"0;1"</exponentes>
+                </CurvaComportamiento>
+                <CurvaComportamiento nombre="cap_T-EQ_Caldera-unidad">
+                    <nombre_usuario>cap_T-EQ_Caldera-unidad</nombre_usuario>
+                    <tipoObjeto>EQ_Caldera</tipoObjeto>
+                    <tipoPropiedad>cap_T</tipoPropiedad>
+                    <numeroVariablesIndependientes>1</numeroVariablesIndependientes>
+                    <nombreVI_1>Temperatura impulsion</nombreVI_1>
+                    <minVI_1>0</minVI_1>
+                    <maxVI_1>1</maxVI_1>
+                    <coeficientes>"1;0"</coeficientes>
+                    <exponentes>"0;1"</exponentes>
+                </CurvaComportamiento>
+                <CurvaComportamiento nombre="ren_T-EQ_Caldera-unidad">
+                    <nombre_usuario>ren_T-EQ_Caldera-unidad</nombre_usuario>
+                    <tipoObjeto>EQ_Caldera</tipoObjeto>
+                    <tipoPropiedad>ren_T</tipoPropiedad>
+                    <numeroVariablesIndependientes>1</numeroVariablesIndependientes>
+                    <nombreVI_1>Temperatura impulsion</nombreVI_1>
+                    <minVI_1>0</minVI_1>
+                    <maxVI_1>1</maxVI_1>
+                    <coeficientes>"1;0"</coeficientes>
+                    <exponentes>"0;1"</exponentes>
+                </CurvaComportamiento>
+                <CurvaComportamiento nombre="ren_FCP_Potencia-EQ_Caldera-unidad">
+                    <nombre_usuario>ren_FCP_Potencia-EQ_Caldera-unidad</nombre_usuario>
+                    <tipoObjeto>EQ_Caldera</tipoObjeto>
+                    <tipoPropiedad>ren_FCP_Potencia</tipoPropiedad>
+                    <numeroVariablesIndependientes>1</numeroVariablesIndependientes>
+                    <nombreVI_1>Factor Carga Parcial</nombreVI_1>
+                    <minVI_1>0</minVI_1>
+                    <maxVI_1>1</maxVI_1>
+                    <coeficientes>"1;0"</coeficientes>
+                    <exponentes>"0;1"</exponentes>
+                </CurvaComportamiento>
+                <CurvaComportamiento nombre="ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto">
+                    <nombre_usuario>ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto</nombre_usuario>
+                    <tipoObjeto>EQ_Caldera</tipoObjeto>
+                    <tipoPropiedad>ren_FCP_Tiempo</tipoPropiedad>
+                    <numeroVariablesIndependientes>1</numeroVariablesIndependientes>
+                    <nombreVI_1>Factor Carga Parcial</nombreVI_1>
+                    <minVI_1>0</minVI_1>
+                    <maxVI_1>1</maxVI_1>
+                    <coeficientes>"1;0"</coeficientes>
+                    <exponentes>"0;1"</exponentes>
+                </CurvaComportamiento>
+            </FactoresDeCorreccion>
+            <Sistemas>
+                <SIS_Acs nombre="SIS">
+                    <nombre_usuario>SIS_ACS</nombre_usuario>
+                    <porcentajeES>0.00</porcentajeES>
+                    <contribucionSolarMinima>0.00</contribucionSolarMinima>
+                    <multiplicador>1</multiplicador>
+                    <tImpulsion>60.00</tImpulsion>
+                    <equipos>
+                        <EQ_Caldera nombre="SIS_EQ1">
+                            <nombre_usuario>SIS_EQ1_EQ_Caldera-ACS-Electrica-Defecto</nombre_usuario>
+                            <capNom>10.00</capNom>
+                            <renNom>0.90</renNom>
+                            <tipoEnergia>"Electricidad"</tipoEnergia>
+                            <tipoCaldera>electrica</tipoCaldera>
+                            <cap_T>"cap_T-EQ_Caldera-unidad"</cap_T>
+                            <ren_T>"ren_T-EQ_Caldera-unidad"</ren_T>
+                            <ren_FCP_Potencia>"ren_FCP_Potencia-EQ_Caldera-unidad"</ren_FCP_Potencia>
+                            <ren_FCP_Tiempo>"ren_FCP_Tiempo-EQ_Caldera-ACS-Electrica-Defecto"</ren_FCP_Tiempo>
+                        </EQ_Caldera>
+                    </equipos>
+                    <demandas>
+                        <DemandaACS nombre="SIS_ACS1">
+                            <perfilDiario>Demanda_Hor</perfilDiario>
+                            <conACSDiario>28</conACSDiario>
+                            <TUso>60</TUso>
+                            <TRed>13.0548658370972</TRed>
+                            <nombre_usuario>SIS_ACS1_Demanda_de_ACS</nombre_usuario>
+                        </DemandaACS>
+                    </demandas>
+                </SIS_Acs>
+                <SIS_ClimatizacionUnizona nombre="SIS1">
+                    <nombre_usuario>SIS1_Climatizacion_unizona</nombre_usuario>
+                    <zona>P01_E01</zona>
+                    <equipos>
+                        <EQ_CalefaccionElectrica nombre="SIS1_EQ1">
+                            <nombre_usuario>SIS1_EQ1_EQ_CalefaccionElectrica-Defecto</nombre_usuario>
+                            <capNom>10.00</capNom>
+                            <conNom>10.00</conNom>
+                            <tipoEnergia>Electricidad</tipoEnergia>
+                            <dtTermostato>1</dtTermostato>
+                            <con_FCP>"con_FCP-EQ_CalefaccionElectrica-Defecto"</con_FCP>
+                        </EQ_CalefaccionElectrica>
+                    </equipos>
+                    <vVentilacion>0</vVentilacion>
+                </SIS_ClimatizacionUnizona>
+            </Sistemas>
+        </elementos>
+    </Definicion_Sistema>
+</CTE-HE-XML>
