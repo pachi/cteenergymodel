@@ -67,46 +67,34 @@ fn writefile<P: AsRef<Path>>(path: P, content: &[u8]) {
 }
 
 fn main() {
-    use clap::Arg;
+    use clap::arg;
 
-    let matches = clap::App::new(APP_TITLE)
+    let matches = clap::Command::new(APP_TITLE)
         .bin_name("cteepbd")
         .version(env!("CARGO_PKG_VERSION"))
         .author(APP_DESCRIPTION)
         .about(APP_ABOUT)
-        .setting(clap::AppSettings::NextLineHelp)
-        .arg(
-            Arg::with_name("climasdir")
-                .value_name("CLIMASDIR")
-                .help("Directorio con climas .met")
+        .next_line_help(true)
+        .args(&[
+            arg!(climasdir: <CLIMASDIR> "Directorio con climas .met")
                 .default_value(".")
                 .index(1),
-        )
-        .arg(
-            Arg::with_name("pretty")
-                .help("Salida en JSON embellecido")
-                .short('p')
-                .long("pretty"),
-        )
-        .arg(
-            Arg::with_name("showlicense")
-                .short('L')
-                .long("licencia")
-                .help("Muestra la licencia del programa (MIT)"),
-        )
+            arg!(pretty: -p --pretty "Salida en JSON embellecido"),
+            arg!(showlicense: -L --licencia "Muestra la licencia del programa (MIT)"),
+        ])
         .get_matches();
 
-    if matches.is_present("showlicense") {
+    if matches.get_flag("showlicense") {
         println!("{}", APP_LICENSE);
         exit(exitcode::OK);
     }
 
-    let climasdir = matches.value_of("climasdir").unwrap();
+    let climasdir = matches.get_one::<&str>("climasdir").unwrap();
     let metdata = read_metdata(climasdir);
 
     // Datos generales de cada clima
     let metgeneraldata: Vec<_> = metdata.values().map(|v| v.meta.clone()).collect();
-    let json = match matches.is_present("pretty") {
+    let json = match matches.get_flag("pretty") {
         true => serde_json::to_string_pretty(&metgeneraldata),
         _ => serde_json::to_string(&metgeneraldata),
     }
@@ -121,7 +109,7 @@ fn main() {
 
     // Datos mensuales de radiación
     let metmonthlydata = met_monthly_data(&metdata);
-    let json = match matches.is_present("pretty") {
+    let json = match matches.get_flag("pretty") {
         true => serde_json::to_string_pretty(&metmonthlydata),
         _ => serde_json::to_string(&metmonthlydata),
     }
@@ -136,7 +124,7 @@ fn main() {
 
     // Datos de radiación para el 21 de julio
     let metjulydata = met_july21st_radiation_data(&metdata);
-    let json = match matches.is_present("pretty") {
+    let json = match matches.get_flag("pretty") {
         true => serde_json::to_string_pretty(&metjulydata),
         _ => serde_json::to_string(&metjulydata),
     }

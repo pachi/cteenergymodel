@@ -45,26 +45,18 @@ Author(s): Rafael Villar Burke <pachi@ietcc.csic.es>
 
 /// Crea aplicación y detecta opciones seleccionadas
 fn start_app_and_get_matches() -> clap::ArgMatches {
-    use clap::Arg;
-    clap::App::new(APP_TITLE)
+    use clap::arg;
+    clap::Command::new(APP_TITLE)
         .bin_name("convertb")
         .version(env!("CARGO_PKG_VERSION"))
         .author(APP_DESCRIPTION)
         .about(APP_ABOUT)
-        .setting(clap::AppSettings::NextLineHelp)
-        .arg(
-            Arg::with_name("ARCHIVO_HULC")
-                .help("Archivo BDCatalogo.bdc.utf8.gz de HULC")
-                .required(true)
-                .index(1),
-        )
-        // Opciones estándar: licencia y nivel de detalle
-        .arg(
-            Arg::with_name("showlicense")
-                .short('L')
-                .long("licencia")
-                .help("Muestra la licencia del programa (MIT)"),
-        )
+        .next_line_help(true)
+        .args(&[
+            arg!(<ARCHIVO_HULC> "Archivo BDCatalogo.bdc.utf8.gz de HULC").index(1),
+            // Opciones estándar: licencia y nivel de detalle
+            arg!(showlicense: -L --licencia "Muestra la licencia del programa (MIT)"),
+        ])
         .get_matches()
 }
 
@@ -73,12 +65,12 @@ fn start_app_and_get_matches() -> clap::ArgMatches {
 fn main() {
     let matches = start_app_and_get_matches();
 
-    if matches.is_present("showlicense") {
+    if matches.get_flag("showlicense") {
         println!("{}", APP_LICENSE);
         exit(exitcode::OK);
     }
 
-    let file_in = matches.value_of("ARCHIVO_HULC").unwrap();
+    let file_in = matches.get_one::<String>("ARCHIVO_HULC").unwrap();
 
     let lib = convertdb::get_library(file_in);
 

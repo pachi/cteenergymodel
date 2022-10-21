@@ -12,7 +12,7 @@ edition = "2021"
 [workspace.dependencies]
 anyhow = "1.0"
 bincode = "1"
-clap = "3"
+clap = "4"
 chrono = "0.4"
 criterion = { version="0.4", features=["html_reports"] }
 encoding = "0.2"

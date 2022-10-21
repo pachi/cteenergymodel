@@ -74,52 +74,22 @@ fn writefile<P: AsRef<Path>>(path: P, content: &[u8]) {
 
 /// Crea aplicación y detecta opciones seleccionadas
 fn start_app_and_get_matches() -> clap::ArgMatches {
-    use clap::Arg;
-    clap::App::new(APP_TITLE)
+    use clap::arg;
+    clap::Command::new(APP_TITLE)
         .bin_name("frost")
         .version(env!("CARGO_PKG_VERSION"))
         .author(APP_DESCRIPTION)
         .about(APP_ABOUT)
-        .setting(clap::AppSettings::NextLineHelp)
-        .arg(
-            Arg::with_name("ARCHIVO_HULC")
-                .help("Archivo .ctehexml de HULC")
-                .required(true)
-                .index(1),
-        )
-        // Archivos de salida
-        .arg(
-            Arg::with_name("archivo_salida_json")
-                .short('o')
-                .long("output")
-                .value_name("ARCHIVO_SALIDA_JSON")
-                .help("Archivo de salida del modelo en formato JSON")
-                .takes_value(true),
-        )
-        .arg(
-            Arg::with_name("archivo_salida_indicadores")
-                .short('r')
-                .long("res_output")
-                .value_name("ARCHIVO_SALIDA_INDICADORES")
-                .help("Archivo de salida de indicadores energéticos en formato JSON")
-                .takes_value(true),
-        )
-        // Opciones estándar: licencia y nivel de detalle
-        .arg(
-            Arg::with_name("showlicense")
-                .short('L')
-                .long("licencia")
-                .help("Muestra la licencia del programa (MIT)"),
-        )
-        .arg(
-            Arg::with_name("v")
-                .short('v')
-                .multiple(true)
-                .help("Sets the level of verbosity"),
-        )
-        .get_matches()
+        .next_line_help(true)
+        .args(&[
+            arg!(<ARCHIVO_HULC> "Archivo .ctehexml de HULC").index(1),
+            arg!(archivo_salida_json: -o --output [ARCHIVO_SALIDA_JSON] "Archivo de salida del modelo en formato JSON"),
+            arg!(archivo_salida_indicadores: -r --res_output [ARCHIVO_SALIDA_INDICADORES] "Archivo de salida de indicadores energéticos en formato JSON"),
+            // Opciones estándar: licencia y nivel de detalle
+            arg!(showlicense: -L --licencia "Muestra la licencia del programa (MIT)"),
+            arg!(v: -v ... "Sets the level of verbosity"),
+        ]).get_matches()
 }
-
 // Función principal ------------------------------------------------------------------------------
 
 fn main() {
@@ -127,20 +97,20 @@ fn main() {
 
     let matches = start_app_and_get_matches();
 
-    if matches.is_present("showlicense") {
+    if matches.get_flag("showlicense") {
         println!("{}", APP_LICENSE);
         exit(exitcode::OK);
     }
 
-    let verbosity = matches.occurrences_of("v");
+    let verbosity = matches.get_count("v");
 
     // Componentes energéticos ---------------------------------------------------------------------
+    let input_file_path = matches.get_one::<String>("ARCHIVO_HULC").unwrap();
     let ctehexmldata =
-        ctehexml::parse_with_catalog_from_path(matches.value_of("ARCHIVO_HULC").unwrap())
-            .unwrap_or_else(|e| {
-                eprintln!("ERROR: formato incorrecto del archivo .ctehexml: {}", e);
-                exit(exitcode::DATAERR);
-            });
+        ctehexml::parse_with_catalog_from_path(input_file_path).unwrap_or_else(|e| {
+            eprintln!("ERROR: formato incorrecto del archivo .ctehexml: {}", e);
+            exit(exitcode::DATAERR);
+        });
     let model = Model::try_from(&ctehexmldata).unwrap_or_else(|e| {
         eprintln!("ERROR: conversión incorrecta del archivo .ctehexml: {}", e);
         exit(exitcode::DATAERR);
@@ -155,8 +125,8 @@ fn main() {
     });
 
     // Guardar modelo en disco
-    if matches.is_present("archivo_salida_json") {
-        let path = matches.value_of_os("archivo_salida_json").unwrap();
+    if matches.contains_id("archivo_salida_json") {
+        let path = matches.get_one::<String>("archivo_salida_json").unwrap();
         if verbosity > 1 {
             println!("Modelo en formato JSON: {:?}", path);
         }
@@ -170,8 +140,10 @@ fn main() {
     });
 
     // Guardar resultados en disco
-    if matches.is_present("archivo_salida_indicadores") {
-        let path = matches.value_of_os("archivo_salida_indicadores").unwrap();
+    if matches.contains_id("archivo_salida_indicadores") {
+        let path = matches
+            .get_one::<String>("archivo_salida_indicadores")
+            .unwrap();
         if verbosity > 1 {
             println!("Resultados de indicadores en formato JSON: {:?}", path);
         }
