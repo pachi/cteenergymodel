@@ -44,7 +44,7 @@ Author(s): Rafael Villar Burke <pachi@ietcc.csic.es>
             Marta Sorribes Gil <msorribes@ietcc.csic.es>"#;
 
 /// Crea aplicación y detecta opciones seleccionadas
-fn start_app_and_get_matches() -> clap::ArgMatches<'static> {
+fn start_app_and_get_matches() -> clap::ArgMatches {
     use clap::Arg;
     clap::App::new(APP_TITLE)
         .bin_name("convertb")
@@ -61,7 +61,7 @@ fn start_app_and_get_matches() -> clap::ArgMatches<'static> {
         // Opciones estándar: licencia y nivel de detalle
         .arg(
             Arg::with_name("showlicense")
-                .short("L")
+                .short('L')
                 .long("licencia")
                 .help("Muestra la licencia del programa (MIT)"),
         )

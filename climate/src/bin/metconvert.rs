@@ -85,12 +85,12 @@ fn main() {
         .arg(
             Arg::with_name("pretty")
                 .help("Salida en JSON embellecido")
-                .short("-p")
+                .short('p')
                 .long("pretty"),
         )
         .arg(
             Arg::with_name("showlicense")
-                .short("L")
+                .short('L')
                 .long("licencia")
                 .help("Muestra la licencia del programa (MIT)"),
         )

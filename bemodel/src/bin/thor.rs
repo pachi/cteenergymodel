@@ -73,7 +73,7 @@ fn writefile<P: AsRef<Path>>(path: P, content: &[u8]) {
 }
 
 /// Crea aplicación y detecta opciones seleccionadas
-fn start_app_and_get_matches() -> clap::ArgMatches<'static> {
+fn start_app_and_get_matches() -> clap::ArgMatches {
     use clap::Arg;
     clap::App::new(APP_TITLE)
         .bin_name("frost")
@@ -90,7 +90,7 @@ fn start_app_and_get_matches() -> clap::ArgMatches<'static> {
         // Archivos de salida
         .arg(
             Arg::with_name("archivo_salida_json")
-                .short("o")
+                .short('o')
                 .long("output")
                 .value_name("ARCHIVO_SALIDA_JSON")
                 .help("Archivo de salida del modelo en formato JSON")
@@ -98,7 +98,7 @@ fn start_app_and_get_matches() -> clap::ArgMatches<'static> {
         )
         .arg(
             Arg::with_name("archivo_salida_indicadores")
-                .short("r")
+                .short('r')
                 .long("res_output")
                 .value_name("ARCHIVO_SALIDA_INDICADORES")
                 .help("Archivo de salida de indicadores energéticos en formato JSON")
@@ -107,13 +107,13 @@ fn start_app_and_get_matches() -> clap::ArgMatches<'static> {
         // Opciones estándar: licencia y nivel de detalle
         .arg(
             Arg::with_name("showlicense")
-                .short("L")
+                .short('L')
                 .long("licencia")
                 .help("Muestra la licencia del programa (MIT)"),
         )
         .arg(
             Arg::with_name("v")
-                .short("v")
+                .short('v')
                 .multiple(true)
                 .help("Sets the level of verbosity"),
         )
