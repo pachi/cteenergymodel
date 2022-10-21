@@ -1,5 +1,131 @@
 <?xml version="1.0"?>
-<CTE-HE-XML><DatosGenerales><refCatastral>ninguno</refCatastral><tipoVivienda>Gran</tipoVivienda><anio>1960 - 1979</anio><tipoDefinicion>Certificacion</tipoDefinicion><comunidad>Andaluc&#xED;a</comunidad><provincia>Ja&#xE9;n</provincia><poblacion>Ja&#xE9;n</poblacion><zonaClimatica>C4</zonaClimatica><altitud>510</altitud><tipoUso>Residencial</tipoUso><claseHigrometria>3</claseHigrometria><numRenovacionesHS3>1</numRenovacionesHS3><ventilacionPorDefecto>NO</ventilacionPorDefecto><numViviendasBloque>1</numViviendasBloque><valorImpulsionAire>24.11</valorImpulsionAire><valorExtraccionAireCocina>1.00</valorExtraccionAireCocina><valorExtraccionAireBanos>1.00</valorExtraccionAireBanos><valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos><vent_p1>25.00</vent_p1><vent_p2>25.00</vent_p2><vent_p3>25.00</vent_p3><vent_p4>25.00</vent_p4><nomPro>EDIFICIO DE ENSAYOS</nomPro><usoPro>- Seleccione de la lista -</usoPro><usoProOtros/><comunidadPro>Andaluc&#xED;a</comunidadPro><proPro>Ja&#xE9;n</proPro><locPro>Ja&#xE9;n</locPro><cpPro/><tipoViaPro>Calle</tipoViaPro><viaPro/><tipoNPro>Num</tipoNPro><nPro/><blqPro/><portalPro>-</portalPro><escPro/><pisoPro/><puertaPro/><datosAdicPro>-</datosAdicPro><normativaEdificacion>- Seleccione de la lista -</normativaEdificacion><normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones><normativaOtros>- Seleccione de la lista -</normativaOtros><normativaEdificacionOtros/><normativaInstalacionesOtros/><normativaOtrosOtros/><superficieConstruida>0.00</superficieConstruida><SupConsCubierta>0.00</SupConsCubierta><supOcupada>0.00</supOcupada><alturaTotal>0.00</alturaTotal><plantaSobreRasante>0</plantaSobreRasante><plantaBajoRasante>0</plantaBajoRasante><EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida><panelFotoVoltaicoAutoConsumido>0.00</panelFotoVoltaicoAutoConsumido><contribucionResACS>0.00</contribucionResACS><puertaPro/><cifAut/><nomAut/><apellido1Aut>Apellido1</apellido1Aut><apellido2Aut>Apellido2</apellido2Aut><razAut>Raz&#xF3;n Social</razAut><NIFEntidad/><comunidadAut>- Seleccione de la lista -</comunidadAut><proAut>- Seleccione de la lista -</proAut><locAut/><cpAut/><tipoViaAut>Calle</tipoViaAut><viaAut>Nombre calle</viaAut><tipoNAut>Num</tipoNAut><nAut>-</nAut><blqAut>-</blqAut><portalAut>-</portalAut><escAut>-</escAut><pisoAut>-</pisoAut><puertaAut>-</puertaAut><datosAdicAut>-</datosAdicAut><correoAut>-</correoAut><telAut>(null)</telAut><titulacionAut>- Seleccione de la lista -</titulacionAut><titulacionOtrosAut>-</titulacionOtrosAut><colegioAut>- Seleccione de la lista -</colegioAut><colegioOtrosAut>-</colegioOtrosAut><numeroColegiadoAut>-</numeroColegiadoAut><fechaVisita>09/09/16</fechaVisita><extInfo>SI</extInfo><VentNoct>SI</VentNoct><SistSus>NO</SistSus><pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaC4.bin</pathArchivoMeteorologicoSeleccionado><imgEdif>image3_3a.bmp</imgEdif><imgPlano>image6_6a.bmp</imgPlano><MesIniPerSom>Junio</MesIniPerSom><MesFinPerSom>Septiembre</MesFinPerSom><energiaGT>true</energiaGT><directoCALENER-GT>NO</directoCALENER-GT><valMenELE>NO</valMenELE><valMenACS>NO</valMenACS><valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE><valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS><fpECGaPT>0.000</fpECGaPT><fpECGaPNR>0.000</fpECGaPNR><fpECGaCO2>0.000</fpECGaCO2><datoGeneralNuevo>0</datoGeneralNuevo><fechaCertificado>NO;29;10;1960</fechaCertificado><potenciaFVInstalada>0.00</potenciaFVInstalada><IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu><estimacionConsumoACSGT>0.00</estimacionConsumoACSGT><bajaPermeabilidad>SI</bajaPermeabilidad><ensayoPermeabilidad>NO</ensayoPermeabilidad><ValorN50Medido>0</ValorN50Medido><datosVentilacion>0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0</datosVentilacion><venPotEC>-1.000</venPotEC><recEFC>-1.000</recEFC><cambios>NO</cambios><cambioscalener>NO</cambioscalener><RED1>RED1  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED1><RED2>RED2  <precioEnergia>0.0</precioEnergia><conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria><conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable><conversionEmisionesCO2>1.000</conversionEmisionesCO2></RED2></DatosGenerales><EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
+<CTE-HE-XML>
+    <DatosGenerales>
+        <refCatastral>ninguno</refCatastral>
+        <tipoVivienda>Gran</tipoVivienda>
+        <anio>1960 - 1979</anio>
+        <tipoDefinicion>Certificacion</tipoDefinicion>
+        <comunidad>Andaluc&#xED;a</comunidad>
+        <provincia>Ja&#xE9;n</provincia>
+        <poblacion>Ja&#xE9;n</poblacion>
+        <zonaClimatica>C4</zonaClimatica>
+        <altitud>510</altitud>
+        <tipoUso>Residencial</tipoUso>
+        <claseHigrometria>3</claseHigrometria>
+        <numRenovacionesHS3>1</numRenovacionesHS3>
+        <ventilacionPorDefecto>NO</ventilacionPorDefecto>
+        <numViviendasBloque>1</numViviendasBloque>
+        <valorImpulsionAire>24.11</valorImpulsionAire>
+        <valorExtraccionAireCocina>1.00</valorExtraccionAireCocina>
+        <valorExtraccionAireBanos>1.00</valorExtraccionAireBanos>
+        <valorExtraccionAireCocinasBanos>2.00</valorExtraccionAireCocinasBanos>
+        <vent_p1>25.00</vent_p1>
+        <vent_p2>25.00</vent_p2>
+        <vent_p3>25.00</vent_p3>
+        <vent_p4>25.00</vent_p4>
+        <nomPro>cajazapatos bombacaloracs</nomPro>
+        <usoPro>- Seleccione de la lista -</usoPro>
+        <usoProOtros/>
+        <comunidadPro>Andaluc&#xED;a</comunidadPro>
+        <proPro>Ja&#xE9;n</proPro>
+        <locPro>Ja&#xE9;n</locPro>
+        <cpPro/>
+        <tipoViaPro>Calle</tipoViaPro>
+        <viaPro/>
+        <tipoNPro>Num</tipoNPro>
+        <nPro/>
+        <blqPro/>
+        <portalPro>-</portalPro>
+        <escPro/>
+        <pisoPro/>
+        <puertaPro/>
+        <datosAdicPro>-</datosAdicPro>
+        <normativaEdificacion>- Seleccione de la lista -</normativaEdificacion>
+        <normativaInstalaciones>- Seleccione de la lista -</normativaInstalaciones>
+        <normativaOtros>- Seleccione de la lista -</normativaOtros>
+        <normativaEdificacionOtros/>
+        <normativaInstalacionesOtros/>
+        <normativaOtrosOtros/>
+        <superficieConstruida>0.00</superficieConstruida>
+        <SupConsCubierta>0.00</SupConsCubierta>
+        <supOcupada>0.00</supOcupada>
+        <alturaTotal>0.00</alturaTotal>
+        <plantaSobreRasante>0</plantaSobreRasante>
+        <plantaBajoRasante>0</plantaBajoRasante>
+        <EEGeneradaAutoconsumida>0</EEGeneradaAutoconsumida>
+        <panelFotoVoltaicoAutoConsumido>0.00</panelFotoVoltaicoAutoConsumido>
+        <contribucionResACS>0.00</contribucionResACS>
+        <puertaPro/>
+        <cifAut/>
+        <nomAut/>
+        <apellido1Aut>Apellido1</apellido1Aut>
+        <apellido2Aut>Apellido2</apellido2Aut>
+        <razAut>Raz&#xF3;n Social</razAut>
+        <NIFEntidad/>
+        <comunidadAut>- Seleccione de la lista -</comunidadAut>
+        <proAut>- Seleccione de la lista -</proAut>
+        <locAut/>
+        <cpAut/>
+        <tipoViaAut>Calle</tipoViaAut>
+        <viaAut>Nombre calle</viaAut>
+        <tipoNAut>Num</tipoNAut>
+        <nAut>-</nAut>
+        <blqAut>-</blqAut>
+        <portalAut>-</portalAut>
+        <escAut>-</escAut>
+        <pisoAut>-</pisoAut>
+        <puertaAut>-</puertaAut>
+        <datosAdicAut>-</datosAdicAut>
+        <correoAut>-</correoAut>
+        <telAut>(null)</telAut>
+        <titulacionAut>- Seleccione de la lista -</titulacionAut>
+        <titulacionOtrosAut>-</titulacionOtrosAut>
+        <colegioAut>- Seleccione de la lista -</colegioAut>
+        <colegioOtrosAut>-</colegioOtrosAut>
+        <numeroColegiadoAut>-</numeroColegiadoAut>
+        <fechaVisita>09/09/16</fechaVisita>
+        <extInfo>SI</extInfo>
+        <VentNoct>SI</VentNoct>
+        <SistSus>NO</SistSus>
+        <pathArchivoMeteorologicoSeleccionado>C:\ProgramasCTEyCEE\DatosClimaticos\GENERICOS\zonaC4.bin</pathArchivoMeteorologicoSeleccionado>
+        <imgEdif>image3_3a.bmp</imgEdif>
+        <imgPlano>image6_6a.bmp</imgPlano>
+        <MesIniPerSom>Junio</MesIniPerSom>
+        <MesFinPerSom>Septiembre</MesFinPerSom>
+        <energiaGT>true</energiaGT>
+        <directoCALENER-GT>NO</directoCALENER-GT>
+        <valMenELE>NO</valMenELE>
+        <valMenACS>NO</valMenACS>
+        <valoresMensualesELE>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesELE>
+        <valoresMensualesACS>Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0;Ninguno;Ninguno;0;0;0;0;0;0;0;0;0;0;0;0</valoresMensualesACS>
+        <fpECGaPT>0.000</fpECGaPT>
+        <fpECGaPNR>0.000</fpECGaPNR>
+        <fpECGaCO2>0.000</fpECGaCO2>
+        <datoGeneralNuevo>0</datoGeneralNuevo>
+        <fechaCertificado>NO;29;10;1960</fechaCertificado>
+        <potenciaFVInstalada>0.00</potenciaFVInstalada>
+        <IrrSolDiariaMedAnu>0.00</IrrSolDiariaMedAnu>
+        <estimacionConsumoACSGT>0.00</estimacionConsumoACSGT>
+        <bajaPermeabilidad>SI</bajaPermeabilidad>
+        <ensayoPermeabilidad>NO</ensayoPermeabilidad>
+        <ValorN50Medido>0</ValorN50Medido>
+        <datosVentilacion>0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0</datosVentilacion>
+        <venPotEC>-1.000</venPotEC>
+        <recEFC>-1.000</recEFC>
+        <cambios>NO</cambios>
+        <cambioscalener>NO</cambioscalener>
+        <RED1>RED1  <precioEnergia>0.0</precioEnergia>
+            <conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria>
+            <conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable>
+            <conversionEmisionesCO2>1.000</conversionEmisionesCO2>
+        </RED1>
+        <RED2>RED2  <precioEnergia>0.0</precioEnergia>
+            <conversionEnergiaPrimaria>1.000</conversionEnergiaPrimaria>
+            <conversionEnergiaPrimariaNoRenovable>1.000</conversionEnergiaPrimariaNoRenovable>
+            <conversionEmisionesCO2>1.000</conversionEmisionesCO2>
+        </RED2>
+    </DatosGenerales>
+    <EntradaGraficaLIDER><![CDATA[$ +----------------------------------------------------+
 $ |         FICHERO GENERADO CON CTE-HE-2019           |
 $ +----------------------------------------------------+
 $
@@ -2363,7 +2489,15 @@ $
 $ +-----------------------------------------------------------------+
 $ |                        Final del fichero                        |
 $ +-----------------------------------------------------------------+
-]]></EntradaGraficaLIDER><Definicion_Sistema><elementos><FactoresDeCorreccion/><Sistemas/></elementos></Definicion_Sistema><Definicion_Sistema_GT><Definicion_Sistema_CALENER_GT><![CDATA[$ ** Performance Curves ** 
+]]>    </EntradaGraficaLIDER>
+    <Definicion_Sistema>
+        <elementos>
+            <FactoresDeCorreccion/>
+            <Sistemas/>
+        </elementos>
+    </Definicion_Sistema>
+    <Definicion_Sistema_GT>
+        <Definicion_Sistema_CALENER_GT><![CDATA[$ ** Performance Curves ** 
  $ ** ** 
  $ ********************************************************* 
   
@@ -2719,7 +2853,8 @@ $ +-----------------------------------------------------------------+
  COMPUTE ..  
  STOP ..  
   
- ]]></Definicion_Sistema_CALENER_GT><Keywords_Iluminacion_Natural_CALENER_GT><![CDATA[$  
+ ]]>        </Definicion_Sistema_CALENER_GT>
+        <Keywords_Iluminacion_Natural_CALENER_GT><![CDATA[$  
  $ archivo para preservación de los keywords para iluminación natural 
  $  
  "P01_E01" = SPACE  
@@ -2730,4 +2865,6 @@ $ +-----------------------------------------------------------------+
  .. 
  "P01_E04" = SPACE  
  .. 
- ]]></Keywords_Iluminacion_Natural_CALENER_GT></Definicion_Sistema_GT></CTE-HE-XML>
+ ]]>        </Keywords_Iluminacion_Natural_CALENER_GT>
+    </Definicion_Sistema_GT>
+</CTE-HE-XML>

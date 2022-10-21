@@ -23,7 +23,7 @@
         <vent_p2>25.00</vent_p2>
         <vent_p3>25.00</vent_p3>
         <vent_p4>25.00</vent_p4>
-        <nomPro>Oficinas B+3_CALENERGT</nomPro>
+        <nomPro>Oficinas B+3_CALENERGT (ejemplo aerotermia)</nomPro>
         <usoPro>oficinas</usoPro>
         <usoProOtros/>
         <comunidadPro>Andalucía</comunidadPro>
