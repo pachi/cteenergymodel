@@ -88,7 +88,7 @@
 - Caso de las lamas (blinds)
   - Vamos a tantear primero qué valores salen bloqueando solo la radiación directa, comparando con tablas DA DB-HE.
   - Se puede usar la referencia de EnergyPlus (más sencilla), la ISO 15099 (más precisa) o, mejor, la UNE-EN ISO 52022-3,
-    aunque esta última considera que no hay transmisión directa (que es fácil de añadir, incorporando la transmissión directa como se indica en E+ y cambiando los factores de visibilidad, que también se pueden calcular con el Hottel's crossed strings method).
+    aunque esta última considera que no hay transmisión directa (que es fácil de añadir, incorporando la transmisión directa como se indica en E+ y cambiando los factores de visibilidad, que también se pueden calcular con el Hottel's crossed strings method).
   - <http://www.ibpsa.org/proceedings/BS2001/BS01_0457_464.pdf>
   - <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#blinds>
     - Se calcula la radiación directa (directa-directa) <https://bigladdersoftware.com/epx/docs/9-5/engineering-reference/window-calculation-module.html#direct-to-direct-blind-transmittance>
@@ -99,13 +99,14 @@
 
 ### Importación / Exportación
 
-- exportación de geometría a [GlTF](https://github.com/KhronosGroup/glTF)
-- importación de OpenStudio
+- Exportación de geometría a [GlTF](https://github.com/KhronosGroup/glTF)
+- Importación de [gbXML](https://www.gbxml.org/)
+- Importación de OpenStudio
   - Usa EpJSON, ver OpenStudio/src/epjson/epJSONTranslator.{hpp, cpp}
   - <https://github.com/NREL/OpenStudio/blob/develop/src/epjson/epJSONTranslator.hpp>
   - <https://raw.githubusercontent.com/NREL/OpenStudio/develop/resources/model/OpenStudio.idd>
   - <https://openstudio-sdk-documentation.s3.amazonaws.com/cpp/OpenStudio-3.1.0-doc/model/html/index.html#object_implementation>
-- importación de epJSON: <https://bigladdersoftware.com/epx/docs/9-1/essentials/title.html#epjson>
+- Importación de epJSON: <https://bigladdersoftware.com/epx/docs/9-1/essentials/title.html#epjson>
   - <https://energyplus.readthedocs.io/en/latest/schema.html>
   - <https://energyplus.net/documentation>
   - GlobalGeometryRules
@@ -123,7 +124,7 @@
     - Door, GlazedDoor, Door:Interzone, GlazedDoor:Interzone
     - Shading:Site, Shading:Building, Shading:Overhang, Shading:Overhang:Projection, Shading:Fin, Shading:Fin:Projection
   - SurfaceProperty:ExposedFoundationPerimeter
-- importación de IFC:
+- Importación de IFC:
   - <https://github.com/tomvandig/web-ifc>
   - <https://github.com/opensourceBIM/IfcValidator>
 
@@ -142,6 +143,10 @@
   - propiedades de vidrios con protecciones móviles, etc
   - Fshobst de huecos según retranqueos, voladizos, aletas, etc s/ 52016-1
   - Generador de construcciones a partir de definición por capas
+- Cálculo simplificado de demandas / consumos (EN 52016):
+  - Referencia de [EN 13790](https://github.com/architecture-building-systems/RC_BuildingSimulator)
+  - Incluye cálculo de iluminación
+  - Implementación alternativa (C++) [ArgonneNL ISOmodel](https://github.com/Argonne-National-Laboratory/ISOmodel)
 
 ## BDL
 
