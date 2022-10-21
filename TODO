@@ -44,6 +44,7 @@
   - Trasladar avisos en la conversión de modelos BDL
 - Formato de salida:
   - Validación JSON? <https://www.npmjs.com/package/is-my-json-valid>
+- Convertir a [clap_derive](https://docs.rs/clap/4.0.18/clap/_derive/index.html#mixing-builder-and-derive-apis)
 
 ## Comprobaciones
 
