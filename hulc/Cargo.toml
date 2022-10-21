@@ -11,10 +11,10 @@ categories = ["science"]
 license = "MIT"
 
 [dependencies]
-encoding = "0.2"
-anyhow = "1.0"
-flate2 = "1"
-glob = "0.3"
-log = "0.4"
-nalgebra = "0.31"
-roxmltree = "0.14"
+encoding.workspace = true
+anyhow.workspace = true
+flate2.workspace = true
+glob.workspace = true
+log.workspace = true
+nalgebra.workspace = true
+roxmltree.workspace = true

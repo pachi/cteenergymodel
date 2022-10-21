@@ -1,6 +1,5 @@
 # TAREAS PENDIENTES
 
-- Compartir en [workspace las versiones de las dependencias](https://doc.rust-lang.org/cargo/reference/workspaces.html#the-dependencies-table)
 - Modelo
   - Admitir cons, wall, y otros UUID con valor Uuid::default() y eliminar serialización
   - Elementos especiales de la ET:

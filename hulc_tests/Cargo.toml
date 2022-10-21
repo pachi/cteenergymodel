@@ -16,7 +16,7 @@ hulc = { path = "../hulc" }
 hulc2model = { path = "../hulc2model" }
 
 [dev-dependencies]
-criterion = "0.3"
+criterion.workspace=true
 
 [[bench]]
 name = "benchmark_types"
