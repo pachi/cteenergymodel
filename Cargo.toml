@@ -14,7 +14,7 @@ anyhow = "1.0"
 bincode = "1"
 clap = "3"
 chrono = "0.4"
-criterion = "0.4"
+criterion = { version="0.4", features=["html_reports"] }
 encoding = "0.2"
 env_logger= "0.9"
 exitcode = "1.1"
