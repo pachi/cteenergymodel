@@ -1,6 +1,6 @@
 {
   "meta": {
-    "name": "Nombre del Proyecto",
+    "name": "Cubo",
     "is_new_building": true,
     "is_dwelling": true,
     "num_dwellings": 1,
@@ -11,11 +11,12 @@
   },
   "spaces": [
     {
-      "id": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
+      "id": "483bc2f1-a8ed-3802-dd7d-dc8e725e4da6",
       "name": "P01_E01",
       "height": 3.0,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b"
+      "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
+      "illuminance": 62.857143
     }
   ],
   "walls": [
@@ -24,7 +25,7 @@
       "name": "P01_E01_PE001",
       "bounds": "EXTERIOR",
       "cons": "b5b848e6-003c-579a-30b3-9144d755d482",
-      "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
+      "space": "483bc2f1-a8ed-3802-dd7d-dc8e725e4da6",
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.0,
@@ -58,7 +59,7 @@
       "name": "P01_E01_PE002",
       "bounds": "EXTERIOR",
       "cons": "b5b848e6-003c-579a-30b3-9144d755d482",
-      "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
+      "space": "483bc2f1-a8ed-3802-dd7d-dc8e725e4da6",
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.0,
@@ -92,7 +93,7 @@
       "name": "P01_E01_PE003",
       "bounds": "EXTERIOR",
       "cons": "b5b848e6-003c-579a-30b3-9144d755d482",
-      "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
+      "space": "483bc2f1-a8ed-3802-dd7d-dc8e725e4da6",
       "geometry": {
         "tilt": 90.0,
         "azimuth": -180.0,
@@ -126,7 +127,7 @@
       "name": "P01_E01_PE004",
       "bounds": "EXTERIOR",
       "cons": "b5b848e6-003c-579a-30b3-9144d755d482",
-      "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
+      "space": "483bc2f1-a8ed-3802-dd7d-dc8e725e4da6",
       "geometry": {
         "tilt": 90.0,
         "azimuth": -90.0,
@@ -160,7 +161,7 @@
       "name": "P01_E01_FTER001",
       "bounds": "GROUND",
       "cons": "e565f1dd-a339-2718-308a-72a9630f30a7",
-      "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
+      "space": "483bc2f1-a8ed-3802-dd7d-dc8e725e4da6",
       "geometry": {
         "tilt": 180.0,
         "azimuth": 0.0,
@@ -194,7 +195,7 @@
       "name": "P01_E01C001",
       "bounds": "EXTERIOR",
       "cons": "95feea57-ee61-a038-5c48-9f33a4bbcc10",
-      "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
+      "space": "483bc2f1-a8ed-3802-dd7d-dc8e725e4da6",
       "geometry": {
         "tilt": 0.0,
         "azimuth": -90.0,
@@ -224,7 +225,7 @@
       "name": "P01_E01C002",
       "bounds": "EXTERIOR",
       "cons": "95feea57-ee61-a038-5c48-9f33a4bbcc10",
-      "space": "0dc2681e-7d5b-a55e-09d6-f93276d02adc",
+      "space": "483bc2f1-a8ed-3802-dd7d-dc8e725e4da6",
       "geometry": {
         "tilt": 0.0,
         "azimuth": -45.0,
@@ -3229,14 +3230,14 @@
     {
       "id": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "name": "Residencial",
+      "area_per_person": 33.33,
       "people_schedule": "cfa597dc-7da8-02a8-9475-a6ea9bbda8bb",
       "people_sensible": 2.15,
       "people_latent": 1.36,
       "equipment": 4.4,
       "equipment_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
       "lighting": 4.4,
-      "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
-      "area_per_person": 33.33
+      "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6"
     }
   ],
   "sys_settings": [

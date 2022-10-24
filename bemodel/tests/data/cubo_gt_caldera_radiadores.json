@@ -1,6 +1,6 @@
 {
   "meta": {
-    "name": "cubo",
+    "name": "cubo gt caldera radiadores",
     "is_new_building": true,
     "is_dwelling": false,
     "num_dwellings": 1,
@@ -10,12 +10,13 @@
   },
   "spaces": [
     {
-      "id": "1e33744f-9306-3213-6cdb-8f9fc29704f6",
+      "id": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "name": "P01_E01",
       "height": 3.0,
-      "n_v": 1.0,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "sys_settings": "4262f6a3-93ea-d0f2-c3d7-2a377831a2d6"
+      "sys_settings": "4262f6a3-93ea-d0f2-c3d7-2a377831a2d6",
+      "n_v": 1.0,
+      "illuminance": 62.857143
     }
   ],
   "walls": [
@@ -24,7 +25,7 @@
       "name": "P01_E01_PE001",
       "bounds": "EXTERIOR",
       "cons": "793ab53e-4d74-9033-76f3-e56b72328dfd",
-      "space": "1e33744f-9306-3213-6cdb-8f9fc29704f6",
+      "space": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "geometry": {
         "tilt": 90.0,
         "azimuth": 0.0,
@@ -58,7 +59,7 @@
       "name": "P01_E01_PE003",
       "bounds": "EXTERIOR",
       "cons": "793ab53e-4d74-9033-76f3-e56b72328dfd",
-      "space": "1e33744f-9306-3213-6cdb-8f9fc29704f6",
+      "space": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "geometry": {
         "tilt": 90.0,
         "azimuth": -180.0,
@@ -92,7 +93,7 @@
       "name": "P01_E01_MED001",
       "bounds": "ADIABATIC",
       "cons": "49eda3a8-61c9-71c2-f9e8-7271657f6a32",
-      "space": "1e33744f-9306-3213-6cdb-8f9fc29704f6",
+      "space": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "geometry": {
         "tilt": 90.0,
         "azimuth": -90.0,
@@ -126,7 +127,7 @@
       "name": "P01_E01_MED002",
       "bounds": "ADIABATIC",
       "cons": "49eda3a8-61c9-71c2-f9e8-7271657f6a32",
-      "space": "1e33744f-9306-3213-6cdb-8f9fc29704f6",
+      "space": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "geometry": {
         "tilt": 90.0,
         "azimuth": 90.0,
@@ -160,7 +161,7 @@
       "name": "P01_E01_FTER001",
       "bounds": "GROUND",
       "cons": "716e0f61-be44-4da3-c365-a748e3c3e366",
-      "space": "1e33744f-9306-3213-6cdb-8f9fc29704f6",
+      "space": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "geometry": {
         "tilt": 180.0,
         "azimuth": 0.0,
@@ -194,7 +195,7 @@
       "name": "P01_E01C001",
       "bounds": "EXTERIOR",
       "cons": "fca560fe-e457-4331-b258-db852397dbc3",
-      "space": "1e33744f-9306-3213-6cdb-8f9fc29704f6",
+      "space": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "geometry": {
         "tilt": 0.0,
         "azimuth": -90.0,
@@ -224,7 +225,7 @@
       "name": "P01_E01C002",
       "bounds": "EXTERIOR",
       "cons": "fca560fe-e457-4331-b258-db852397dbc3",
-      "space": "1e33744f-9306-3213-6cdb-8f9fc29704f6",
+      "space": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "geometry": {
         "tilt": 0.0,
         "azimuth": -45.0,
@@ -3422,14 +3423,14 @@
     {
       "id": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "name": "Residencial",
+      "area_per_person": 33.33,
       "people_schedule": "cfa597dc-7da8-02a8-9475-a6ea9bbda8bb",
       "people_sensible": 2.15,
       "people_latent": 1.36,
       "equipment": 4.4,
       "equipment_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
       "lighting": 4.4,
-      "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
-      "area_per_person": 33.33
+      "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6"
     }
   ],
   "sys_settings": [

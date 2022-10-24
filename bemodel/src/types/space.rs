@@ -37,10 +37,6 @@ pub struct Space {
     pub inside_tenv: bool,
     /// Altura bruta (suelo a suelo) del espacio (m)
     pub height: f32,
-    /// Ventilación, en ren/h
-    /// TODO: en el futuro esto serían condiciones de uso del espacio?
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub n_v: Option<f32>,
     /// Cota del espacio respecto al suelo (m)
     #[serde(default, skip_serializing_if = "is_default")]
     pub z: f32,
@@ -48,6 +44,12 @@ pub struct Space {
     pub loads: Option<Uuid>,
     /// Condiciones operacionales del espacio
     pub sys_settings: Option<Uuid>,
+    /// Ventilación, en ren/h
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub n_v: Option<f32>,
+    /// Iluminancia media en el plano de trabajo, lux
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub illuminance: Option<f32>,
 }
 
 impl Space {
@@ -105,6 +107,7 @@ impl Default for Space {
             z: 0.0,
             sys_settings: None,
             loads: None,
+            illuminance: None,
         }
     }
 }

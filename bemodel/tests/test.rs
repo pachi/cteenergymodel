@@ -56,6 +56,7 @@ fn parse() {
         z: 0.0,
         loads: Some(uuid::Uuid::parse_str("be9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap()),
         sys_settings: Some(uuid::Uuid::parse_str("af9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap()),
+        illuminance: Some(100.0),
     };
     let space_str = r#"{
         "id": "df9422f0-9693-6c17-d5ea-d3783d9c0b74",

@@ -1,22 +1,16 @@
 # TAREAS PENDIENTES
 
 - Modelo
+  - Introducir sistemas
+    - `model.systems`
+    - Identificar caldera según nombre de curva de rendimiento parcial y si no es conocida usar "Genérica"
+    - Añadir tests en `hulc_tests` casos con sistemas que no tenemos y más casos GT
   - Admitir cons, wall, y otros UUID con valor Uuid::default() y eliminar serialización
   - Elementos especiales de la ET:
     - Usar overrides de U para elementos especiales de la ET o para cuando se definan lamas en huecos?
     - ¿Qué es un elemento especial? ¿Es el que usa overrides? ¿Se identifica de otra forma?
     - Marcar elementos especiales de la ET para hacer override de esos elementos para el cálculo de la K.
-  - Introducir sistemas
-    - `model.systems`
-    - Añadir tests en `hulc_tests` casos con sistemas que no tenemos y más casos GT
   - Cargas y condiciones de uso:
-    - Trasladar valor de infiltraciones para espacios no habitables (`Space.n_v`):
-      - ver NIVEL_ESTANQUEIDAD_1 en casoa.ctehexml
-      - Añadir en carga de espacio `n_v: Option(f32)`?
-      - Eliminar de Space el atributo n_v
-    - iluminancia de espacios:
-      - añadir illuminance en cargas de espacio `Loads.illuminance` (o en sys_settings)?
-      - eliminar de Space el atributo `n_v`
     - Usar perfiles para identificar habitable / habitable acondicionado / no habitable:
       - ver si es posible
       - no habitable -> Sin carga de ocupación durante el año?

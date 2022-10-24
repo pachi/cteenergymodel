@@ -134,6 +134,11 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
         .map(|s| {
             let space_conds = id_maps.loads_id(&s.spaceconds).ok();
             let system_conds = id_maps.sys_settings_id(&s.systemconds).ok();
+            let illuminance = if s.veei_obj > f32::EPSILON {
+                100.0 * s.power / s.veei_obj
+            } else {
+                0.0
+            };
             Ok(Space {
                 id: id_maps.space_id(&s.name)?,
                 name: s.name.clone(),
@@ -146,9 +151,14 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
                     "UNHABITED" => SpaceType::UNINHABITED,
                     _ => SpaceType::UNCONDITIONED,
                 },
-                n_v: s.airchanges_h,
                 loads: space_conds,
                 sys_settings: system_conds,
+                n_v: s.airchanges_h,
+                illuminance: if illuminance > f32::EPSILON {
+                    Some(illuminance)
+                } else {
+                    None
+                },
             })
         })
         .collect::<Result<Vec<Space>, Error>>()
@@ -845,12 +855,6 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
             lighting_schedule: Some(
                 id_maps.schedule_year_id(space_cond.attrs.get_str("LIGHTING-SCHEDULE")?)?,
             ),
-            // TODO: En HULC está asociado al espacio y no a las cargas
-            // TODO: pero esto no tiene demasiado sentido en general
-            // TODO: usa POWER, VEEI-OBJ y VEEI-REF
-            // TODO: en vivienda es 4.4W/m², 7W/m²·100lux y 10W/m²·100lux
-            // TODO: en terciario se introduce en la interfaz
-            illuminance: None,
             area_per_person,
         })
     }

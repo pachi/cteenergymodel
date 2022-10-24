@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See accompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Condiciones de carga de los espacios (ocupación, equipos, iluminación)
+//! Condiciones de carga de los espacios (ocupación, equipos, iluminación, infiltraciones)
 
 use serde::{Deserialize, Serialize};
 
@@ -17,6 +17,8 @@ pub struct SpaceLoads {
     /// Nombre del horario
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
+    /// Superficie por ocupante, m²/pers
+    pub area_per_person: f32,
     /// Horario anual de fracciones de carga de ocupación
     /// Si no se define se supone que no existe ocupación (carga = 0)
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -37,10 +39,4 @@ pub struct SpaceLoads {
     /// Si no se define se suponen todos los valores == 0
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub lighting_schedule: Option<Uuid>,
-    /// Iluminancia media en el plano de trabajo, lux
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub illuminance: Option<f32>,
-    /// Superficie por ocupante, m²/pers
-    pub area_per_person: f32
-    // TODO: nivel de infiltraciones?
 }
