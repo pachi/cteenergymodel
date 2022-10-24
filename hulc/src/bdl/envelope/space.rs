@@ -44,12 +44,18 @@ pub struct Space {
     pub insidete: bool,
     /// Planta a la que pertenece el espacio
     pub floor: String,
-    /// Potencia de iluminación (W/m2)
+    /// Potencia de iluminación (W/m²)
+    /// En vivienda es 4.4W/m²
+    /// En terciario se introduce en la interfaz
     pub power: f32,
-    /// VEEI del edificio objeto W/m2/100lux
-    pub veeiobj: f32,
-    /// VEEI del edificio de referencia W/m2/100lux
-    pub veeiref: f32,
+    /// VEEI del edificio objeto W/m²/100lux
+    /// En terciario se introduce en la interfaz
+    /// En vivienda es 7W/m²·100lux
+    pub veei_obj: f32,
+    /// VEEI del edificio de referencia W/m²/100lux
+    /// En vivienda es 10W/m²·100lux
+    /// En terciario se introduce en la interfaz
+    pub veei_ref: f32,
     /// Tipo de espacio
     pub spacetype: String,
     /// Condiciones de uso del espacio
@@ -164,8 +170,8 @@ impl TryFrom<BdlBlock> for Space {
         })?;
         // Potencia de iluminación
         let power = attrs.remove_f32("POWER")?;
-        let veeiobj = attrs.remove_f32("VEEI-OBJ")?;
-        let veeiref = attrs.remove_f32("VEEI-REF")?;
+        let veei_obj = attrs.remove_f32("VEEI-OBJ")?;
+        let veei_ref = attrs.remove_f32("VEEI-REF")?;
         // Condiciones operacionales Nombre o #n
         let spacetype = attrs.remove_str("SPACE-TYPE")?;
         // No existe en LIDER antiguo
@@ -181,13 +187,23 @@ impl TryFrom<BdlBlock> for Space {
         let multiplier = attrs.remove_f32("MULTIPLIER")?;
         // XXX: Es un booleano codificado como entero que se parse como número
         let ismultiplied = (attrs.remove_f32("MULTIPLIED")? - 1.0).abs() < 0.1;
+        // En espacios no habitables se usa en SPACE-CONDITIONS el método AIR-CHANGE que usa
+        // el parámetro INF-FLOW/AREA para indicar las infiltraciones (¡en renh!) del espacio.
+        // Se indican los no habitables según perfiles de nivel de estanqueidad que tienen los valores de AIR-CHANGES/HR en
+        // las SPACE-CONDITIONS que se señalan más abajo.
+        // En otros tipos de espacios se usa en sus SPACE-CONDTIONS el método CRACK-AIR-CHANGE que
+        // calcula las infiltraciones durante el tiempo de ventilación (con un valor de infiltraciones de m³/h·m² de espacio,
+        // con INF-FLOW/AREA del SPACE-CONDITIONS y que vamos a ignorar aquí, ya que tiene un valor fijo de 7.2m³/hm² en todos los perfiles tipo
+        // aunque es editable en GT, que da caudal=INF-FLOW/AREA/SPACE-HEIGHT) y un valor fijo de renovaciones hora del SPACE el resto del
+        // tiempo, que se obtiene de AIR-CHANGES/HR del SPACE (en renh)
+        // Para el método CRACK se calculan las infiltraciones a partir de los elementos de la envolvente y
+        // no se consideran infiltraciones constantes, así que usamos None
         let airchanges_h = match (stype.as_str(), spaceconds.as_str()) {
-            // Usamos la ventilación según niveles de estanqueidad de la UNE-EN ISO 13789:2017 (HULC usa 0 renh para nivel1)
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_1") => Some(0.1),
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_2") => Some(0.5),
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_3") => Some(1.0),
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_4") => Some(3.0),
-            ("UNHABITED", "NIVEL_ESTANQUEIDAD_5") => Some(10.0),
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_1") => Some(0.1), // 0 renh en GT y 13789:1999 y 0.1 renh en 13789:2017
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_2") => Some(0.5), // no cambia entre 13789:1999 y 2017
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_3") => Some(1.0), // no cambia entre 13789:1999 y 2017
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_4") => Some(3.0), // 5 renh en GT y 13789:1999 y 3 renh en 13789:2017
+            ("UNHABITED", "NIVEL_ESTANQUEIDAD_5") => Some(10.0), // no cambia entre 13789:1999 y 2017
             _ => attrs.remove_f32("AIR-CHANGES/HR").map(Some).unwrap_or(None),
         };
 
@@ -203,8 +219,8 @@ impl TryFrom<BdlBlock> for Space {
             insidete,
             floor,
             power,
-            veeiobj,
-            veeiref,
+            veei_obj,
+            veei_ref,
             spacetype,
             spaceconds,
             systemconds,

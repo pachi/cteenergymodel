@@ -394,8 +394,8 @@ fn bdl_space() {
     assert!(elem.insidete);
     assert_eq!(elem.floor, "P01");
     assert_almost_eq!(elem.power, 4.4, 0.1);
-    assert_almost_eq!(elem.veeiobj, 7.0, 0.1);
-    assert_almost_eq!(elem.veeiref, 10.0, 0.1);
+    assert_almost_eq!(elem.veei_obj, 7.0, 0.1);
+    assert_almost_eq!(elem.veei_ref, 10.0, 0.1);
     assert_eq!(elem.spacetype, "Residencial");
     assert_eq!(elem.spaceconds, "Residencial");
     assert_eq!(elem.systemconds, "Residencial");
