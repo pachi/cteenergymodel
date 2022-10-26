@@ -15,8 +15,8 @@ use crate::utils::xml::{
 
 use super::{
     CHPGenerator, CoolingParams, DhwDemand, EconomizerControl, EquipmentKind, GenerationEquipment,
-    HeatingParams, HotWaterStorageTank, PhotovoltaicGenerator, SolarThermalGenerator, VypSystem,
-    SystemOptions, ThermalGenerator, WindGenerator, ZoneEquipment,
+    HeatingParams, HotWaterStorageTank, PhotovoltaicGenerator, SolarThermalGenerator,
+    SystemOptions, ThermalGenerator, VypSystem, WindGenerator, ZoneEquipment,
 };
 
 impl TryFrom<&str> for EquipmentKind {
@@ -310,30 +310,12 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
     use EquipmentKind::*;
 
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
-    let kind_str = if name.is_empty() {
-        node.attribute("nombre").unwrap_or_default()
-    } else {
-        name.as_str()
-    };
-    let kind = {
-        let tag_name = node.tag_name().name();
-        if tag_name == "EQ_Caldera" {
-            kind_str
-                .split_once('-')
-                .and_then(|s| s.1.rsplit_once('-').map(|s| s.0))
-                .unwrap_or("")
-        } else {
-            tag_name
-        }
-        .try_into()
-        .unwrap_or_else(|e| panic!("ERROR: {:?}", e))
-    };
 
     let multiplier = get_tag_as_u32_or(&node, "multiplicador", 1);
     let fuel = get_tag_as_str(&node, "tipoEnergia")
         .trim_matches('"')
         .to_string();
-    let curves = node
+    let curves: Vec<_> = node
         .children()
         .filter(|n| {
             [
@@ -359,6 +341,26 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
             )
         })
         .collect();
+
+    let kind = {
+        let tag_name = node.tag_name().name();
+        if tag_name == "EQ_Caldera" {
+            const CALDERA_PREFIX: &str = "ren_FCP_Potencia-EQ_Caldera-";
+            curves
+                .iter()
+                .map(|(_kind, value)| value)
+                .find(|v| v.starts_with(CALDERA_PREFIX))
+                // Elimina prefijo de calderas
+                .and_then(|v| v.strip_prefix(CALDERA_PREFIX))
+                // Elimina sufijos 'Defecto' y 'unidad' separados por guión
+                .and_then(|s| s.rsplit_once('-').map(|s| s.0))
+                .unwrap_or("")
+        } else {
+            tag_name
+        }
+        .try_into()
+        .unwrap_or_else(|e| panic!("ERROR: {:?}", e))
+    };
 
     match kind {
         CalderaConvencional
