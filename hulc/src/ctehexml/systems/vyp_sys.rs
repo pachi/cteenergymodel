@@ -24,6 +24,8 @@ impl TryFrom<&str> for EquipmentKind {
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         match value {
+            // Caso que no existe en HULC pero nos vale para otras calderas
+            "CalderaGenerica" => Ok(Self::CalderaGenerica),
             "Convencional" => Ok(Self::CalderaConvencional),
             "Electrica" => Ok(Self::CalderaElectrica),
             "BajaTemperatura" => Ok(Self::CalderaBajaTemperatura),
@@ -354,7 +356,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                 .and_then(|v| v.strip_prefix(CALDERA_PREFIX))
                 // Elimina sufijos 'Defecto' y 'unidad' separados por guión
                 .and_then(|s| s.rsplit_once('-').map(|s| s.0))
-                .unwrap_or("")
+                .unwrap_or("CalderaGenerica")
         } else {
             tag_name
         }
@@ -369,7 +371,8 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
         | CalderaCondensacion
         | CalderaBiomasa
         | CalderaAcsElectrica
-        | CalderaAcsConvencional => {
+        | CalderaAcsConvencional
+        | CalderaGenerica => {
             // Calderas: Convencional, Electrica, BajaTemperatura, Condensación,
             // Biomasa, ACS-Electrica, ACS-Convencional
             // <tipoCaldera> no se usa para el tipo y está vacío se puede deducir del nombre

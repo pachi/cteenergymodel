@@ -287,6 +287,7 @@ pub enum EquipmentKind {
     CalderaBiomasa,
     CalderaAcsElectrica,
     CalderaAcsConvencional,
+    CalderaGenerica,
     CalefaccionElectrica,
     ExpansionDirectaAireAireSf,
     ExpansionDirectaAireAireBdc,
