@@ -3,7 +3,6 @@
 - Modelo
   - Introducir sistemas
     - `model.systems`
-    - Identificar caldera según nombre de curva de rendimiento parcial ren_FCP_Potencia y si no es conocida usar "Genérica"
     - Añadir tests en `hulc_tests` casos con sistemas que no tenemos y más casos GT
   - Admitir cons, wall, y otros UUID con valor Uuid::default() y eliminar serialización
   - Elementos especiales de la ET:
