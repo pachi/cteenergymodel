@@ -16,7 +16,7 @@
       "height": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "ab044e36-f785-b890-47ef-f73efe7ded3e",
@@ -24,7 +24,7 @@
       "height": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "6a4610e7-16bc-3c11-ec05-b51e7ca1daa4",
@@ -32,7 +32,7 @@
       "height": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "ec49606c-4c8f-9cef-52b0-c1352420161e",
@@ -40,7 +40,7 @@
       "height": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "6f241bc1-2643-4dde-36e1-d6e88911c51b",
@@ -49,7 +49,7 @@
       "z": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "e5c67787-e7bd-da2a-bff1-bad3da49d741",
@@ -58,7 +58,7 @@
       "z": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "c52c1e70-8772-b81b-7730-d36c8d89ff0e",
@@ -67,7 +67,7 @@
       "z": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "f8cf05e2-106e-3596-4080-ff5e5a0e5807",
@@ -76,7 +76,7 @@
       "z": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "e60744ba-c857-2778-9a38-a3aeba8781d0",
@@ -85,7 +85,7 @@
       "z": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     },
     {
       "id": "b8dfae8c-7529-b1e8-b6f1-cb2316161b65",
@@ -94,7 +94,7 @@
       "z": 2.7,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
       "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
-      "illuminance": 62.857143
+      "illuminance": 62.86
     }
   ],
   "walls": [

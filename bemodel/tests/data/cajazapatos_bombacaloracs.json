@@ -16,7 +16,7 @@
       "loads": "5bd4d5a2-d159-1de6-b8aa-bdcbdc822a35",
       "sys_settings": "964864cd-02c1-3130-1778-56a483b25b97",
       "n_v": 1.0,
-      "illuminance": 21.428572
+      "illuminance": 21.43
     },
     {
       "id": "15dbb699-fc16-6b54-d236-0fec029998be",
@@ -25,7 +25,7 @@
       "loads": "5bd4d5a2-d159-1de6-b8aa-bdcbdc822a35",
       "sys_settings": "964864cd-02c1-3130-1778-56a483b25b97",
       "n_v": 1.0,
-      "illuminance": 21.428572
+      "illuminance": 21.43
     },
     {
       "id": "9f0e5a16-b384-add3-171f-76d36c302753",
@@ -34,7 +34,7 @@
       "loads": "5bd4d5a2-d159-1de6-b8aa-bdcbdc822a35",
       "sys_settings": "964864cd-02c1-3130-1778-56a483b25b97",
       "n_v": 1.0,
-      "illuminance": 21.428572
+      "illuminance": 21.43
     },
     {
       "id": "48c78b68-89c7-22e8-0c7c-879e8247a2a8",
@@ -43,7 +43,7 @@
       "loads": "5bd4d5a2-d159-1de6-b8aa-bdcbdc822a35",
       "sys_settings": "964864cd-02c1-3130-1778-56a483b25b97",
       "n_v": 1.0,
-      "illuminance": 21.428572
+      "illuminance": 21.43
     }
   ],
   "walls": [

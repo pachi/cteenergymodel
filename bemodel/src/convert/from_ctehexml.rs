@@ -135,7 +135,7 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
             let space_conds = id_maps.loads_id(&s.spaceconds).ok();
             let system_conds = id_maps.sys_settings_id(&s.systemconds).ok();
             let illuminance = if s.veei_obj > f32::EPSILON {
-                100.0 * s.power / s.veei_obj
+                fround2(100.0 * s.power / s.veei_obj)
             } else {
                 0.0
             };
