@@ -27,7 +27,7 @@
   - por pesos o volumen? Ver si la definición de materiales es suficiente
   - pensar integración futura con aspectos de sostenibilidad
 - Comprobación del modelo:
-  - Separar check del modelo del cálculo energético
+  - Separar check del modelo del cálculo energético (`bemodel/energy/indicators/types.rs`)
   - En bemodel hacer las comprobaciones de los modelos en lugar de en hulc2model, que simplemente debería convertir los casos.
 - Bibliotecas
   - Cambiar gestión de grupos de materiales y construcciones
