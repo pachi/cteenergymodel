@@ -15,7 +15,7 @@
       "name": "P01_E01",
       "height": 3.0,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
+      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
       "illuminance": 62.86
     }
   ],
@@ -3240,7 +3240,7 @@
       "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6"
     }
   ],
-  "sys_settings": [
+  "thermostats": [
     {
       "id": "b5141449-932c-fe65-b437-992b94d0658b",
       "name": "Residencial",

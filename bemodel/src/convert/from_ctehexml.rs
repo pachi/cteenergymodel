@@ -21,7 +21,7 @@ use hulc::{
 
 pub use crate::{
     BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, Meta, Model, Orientation,
-    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads, SpaceSysConditions,
+    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads, Thermostat,
     SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeom, WinCons,
     WinGeom, Window,
 };
@@ -107,7 +107,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
 
         let schedules = schedules_from_bdl(bdl, &id_maps)?;
         let loads = loads_from_bdl(bdl, &id_maps)?;
-        let sys_settings = sys_settings_from_bdl(bdl, &id_maps)?;
+        let thermostats = thermostats_from_bdl(bdl, &id_maps)?;
 
         let model = Model {
             meta,
@@ -119,7 +119,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             cons,
             schedules,
             loads,
-            sys_settings,
+            thermostats,
             overrides: Default::default(),
             extra: Default::default(),
         };
@@ -133,7 +133,7 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
         .iter()
         .map(|s| {
             let space_conds = id_maps.loads_id(&s.spaceconds).ok();
-            let system_conds = id_maps.sys_settings_id(&s.systemconds).ok();
+            let system_conds = id_maps.thermostat_id(&s.systemconds).ok();
             let illuminance = if s.veei_obj > f32::EPSILON {
                 fround2(100.0 * s.power / s.veei_obj)
             } else {
@@ -152,7 +152,7 @@ fn spaces_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Space>, Error> {
                     _ => SpaceType::UNCONDITIONED,
                 },
                 loads: space_conds,
-                sys_settings: system_conds,
+                thermostat: system_conds,
                 n_v: s.airchanges_h,
                 illuminance: if illuminance > f32::EPSILON {
                     Some(illuminance)
@@ -862,11 +862,11 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
 }
 
 /// Condiciones operacionales de espacios a partir de datos BDL
-fn sys_settings_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceSysConditions>, Error> {
+fn thermostats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Thermostat>, Error> {
     let mut space_conds = Vec::new();
 
     for (name, space_cond) in &bdl.system_conditions {
-        let id = id_maps.sys_settings_id(&name)?;
+        let id = id_maps.thermostat_id(&name)?;
         let (temp_max, temp_min) =
             if let Ok("CONDITIONED") = space_cond.attrs.get_str("TYPE").as_deref() {
                 (
@@ -876,7 +876,7 @@ fn sys_settings_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceSysCon
             } else {
                 (None, None)
             };
-        space_conds.push(SpaceSysConditions {
+        space_conds.push(Thermostat {
             id,
             name: space_cond.name.clone(),
             temp_max,
@@ -898,7 +898,7 @@ struct IdMaps<'a> {
     schedules_week: BTreeMap<&'a str, Uuid>,
     schedules_day: BTreeMap<&'a str, Uuid>,
     loads: BTreeMap<&'a str, Uuid>,
-    sys_settings: BTreeMap<&'a str, Uuid>,
+    thermostats: BTreeMap<&'a str, Uuid>,
 }
 
 impl<'a> IdMaps<'a> {
@@ -975,8 +975,8 @@ impl<'a> IdMaps<'a> {
     }
 
     /// Localiza id de consignas de espacio desde nombre
-    fn sys_settings_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
-        self.sys_settings
+    fn thermostat_id<T: AsRef<str>>(&self, name: T) -> Result<Uuid, anyhow::Error> {
+        self.thermostats
             .get(name.as_ref())
             .copied()
             .ok_or_else(|| format_err!("Consignas de espacio {} no identificado", name.as_ref()))
@@ -1041,7 +1041,7 @@ impl<'a> IdMaps<'a> {
                 .iter()
                 .map(|(name, s)| (name.as_str(), uuid_from_obj(&s)))
                 .collect::<BTreeMap<&str, Uuid>>(),
-            sys_settings: bdl
+            thermostats: bdl
                 .system_conditions
                 .iter()
                 .map(|(name, s)| (name.as_str(), uuid_from_obj(&s)))

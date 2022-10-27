@@ -32,6 +32,12 @@ pub struct EnergyProps {
     pub wallcons: BTreeMap<Uuid, WallConsProps>,
     /// Propiedades de huecos
     pub wincons: BTreeMap<Uuid, WinConsProps>,
+    // Propiedades de horarios
+    // TODO:
+    // Propiedades de cargas de espacios
+    // TODO:
+    // Propiedades de consignas
+    // TODO:
 }
 
 impl From<&Model> for EnergyProps {

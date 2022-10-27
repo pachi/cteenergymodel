@@ -16,7 +16,7 @@
       "name": "P01_E01",
       "height": 3.0,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
+      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
       "illuminance": 62.86
     },
     {
@@ -26,7 +26,7 @@
       "inside_tenv": false,
       "height": 3.0,
       "loads": "a248b66f-701c-f7cf-52c5-5b71e0ec1c40",
-      "sys_settings": "b04a78f5-ee4f-211d-f189-1e14c26da7f2",
+      "thermostat": "b04a78f5-ee4f-211d-f189-1e14c26da7f2",
       "n_v": 0.1,
       "illuminance": 62.86
     },
@@ -36,7 +36,7 @@
       "height": 3.0,
       "z": 3.0,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
+      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
       "illuminance": 62.86
     },
     {
@@ -45,7 +45,7 @@
       "height": 3.0,
       "z": 6.0,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
+      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
       "illuminance": 62.86
     },
     {
@@ -54,7 +54,7 @@
       "height": 3.0,
       "z": 9.0,
       "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "sys_settings": "b5141449-932c-fe65-b437-992b94d0658b",
+      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
       "illuminance": 62.86
     },
     {
@@ -65,7 +65,7 @@
       "height": 3.0,
       "z": 9.0,
       "loads": "a248b66f-701c-f7cf-52c5-5b71e0ec1c40",
-      "sys_settings": "b04a78f5-ee4f-211d-f189-1e14c26da7f2",
+      "thermostat": "b04a78f5-ee4f-211d-f189-1e14c26da7f2",
       "n_v": 0.1,
       "illuminance": 62.86
     }
@@ -4551,7 +4551,7 @@
       "lighting_schedule": "fd3ce3be-0735-a26c-02d4-1f54df26cca6"
     }
   ],
-  "sys_settings": [
+  "thermostats": [
     {
       "id": "b04a78f5-ee4f-211d-f189-1e14c26da7f2",
       "name": "NIVEL_ESTANQUEIDAD_1"

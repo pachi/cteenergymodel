@@ -43,7 +43,7 @@ pub struct Space {
     /// Perfil de uso del espacio
     pub loads: Option<Uuid>,
     /// Condiciones operacionales del espacio
-    pub sys_settings: Option<Uuid>,
+    pub thermostat: Option<Uuid>,
     /// Ventilación, en ren/h
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub n_v: Option<f32>,
@@ -105,7 +105,7 @@ impl Default for Space {
             height: 3.0,
             n_v: None,
             z: 0.0,
-            sys_settings: None,
+            thermostat: None,
             loads: None,
             illuminance: None,
         }

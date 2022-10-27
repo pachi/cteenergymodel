@@ -10,7 +10,7 @@ use super::Uuid;
 
 /// Consignas de temperatura de los espacios
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
-pub struct SpaceSysConditions {
+pub struct Thermostat {
     /// Horarios anuales
     /// Id
     pub id: Uuid,

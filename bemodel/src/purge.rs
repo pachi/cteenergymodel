@@ -32,7 +32,7 @@ pub fn purge_unused(model: &mut Model) -> Vec<Warning> {
     let start_n_glasses = model.cons.glasses.len();
     let start_n_frames = model.cons.frames.len();
     let start_n_loads = model.loads.len();
-    let start_n_sys_settings = model.sys_settings.len();
+    let start_n_thermostats = model.thermostats.len();
     let start_n_schedules_year = model.schedules.year.len();
     let start_n_schedules_week = model.schedules.week.len();
     let start_n_schedules_day = model.schedules.day.len();
@@ -48,7 +48,7 @@ pub fn purge_unused(model: &mut Model) -> Vec<Warning> {
     purge_unused_frames(model);
     // Uso
     purge_unused_loads(model);
-    purge_unused_sys_settings(model);
+    purge_unused_thermostats(model);
     purge_unused_schedules(model);
 
     warnings.push(Warning {
@@ -75,7 +75,7 @@ pub fn purge_unused(model: &mut Model) -> Vec<Warning> {
             start_n_glasses - model.cons.glasses.len(),
             start_n_frames - model.cons.frames.len(),
             start_n_loads - model.loads.len(),
-            start_n_sys_settings - model.sys_settings.len(),
+            start_n_thermostats - model.thermostats.len(),
             start_n_schedules_year - model.schedules.year.len(),
             start_n_schedules_week - model.schedules.week.len(),
             start_n_schedules_day - model.schedules.day.len(),
@@ -188,14 +188,14 @@ pub(crate) fn purge_unused_loads(model: &mut Model) {
 }
 
 /// Elimina definiciones de consignas no usadas en los espacios
-pub(crate) fn purge_unused_sys_settings(model: &mut Model) {
-    let sys_settings_used_ids: HashSet<_> =
-        model.spaces.iter().flat_map(|v| v.sys_settings).collect();
-    model.sys_settings = model
-        .sys_settings
+pub(crate) fn purge_unused_thermostats(model: &mut Model) {
+    let thermostats_used_ids: HashSet<_> =
+        model.spaces.iter().flat_map(|v| v.thermostat).collect();
+    model.thermostats = model
+        .thermostats
         .iter()
         .cloned()
-        .filter(|v| sys_settings_used_ids.contains(&v.id))
+        .filter(|v| thermostats_used_ids.contains(&v.id))
         .collect();
 }
 
@@ -207,13 +207,13 @@ pub(crate) fn purge_unused_schedules(model: &mut Model) {
         .iter()
         .flat_map(|v| [v.people_schedule, v.equipment_schedule, v.lighting_schedule])
         .flatten();
-    let sys_settings_ids = model
-        .sys_settings
+    let thermostats_ids = model
+        .thermostats
         .iter()
         .flat_map(|v| [v.temp_max, v.temp_min])
         .flatten();
     // Horarios anuales - elimina no usados
-    let year_used_ids: HashSet<_> = loads_ids.chain(sys_settings_ids).collect();
+    let year_used_ids: HashSet<_> = loads_ids.chain(thermostats_ids).collect();
     // Elimina horarios anuales no usados
     model.schedules.year = model
         .schedules

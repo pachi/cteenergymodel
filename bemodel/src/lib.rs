@@ -18,7 +18,7 @@ pub use purge::purge_unused;
 pub use types::{
     point, vector, BoundaryType, ConsDb, ConsDbGroups, ExtraData, Frame, Glass, Layer, Library,
     MatProps, Material, Meta, Model, Orientation, Point2, Point3, Polygon, PropsOverrides,
-    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads, SpaceSysConditions,
+    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads, Thermostat,
     SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Vector2, Vector3, Wall, WallCons,
     WallGeom, WallPropsOverrides, Warning, WarningLevel, WinCons, WinGeom, WinPropsOverrides,
     Window,

@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     BoundaryType, ConsDb, Meta, PropsOverrides, SchedulesDb, Shade, Space, SpaceLoads,
-    SpaceSysConditions, SpaceType, ThermalBridge, Tilt, Uuid, Wall, Window,
+    Thermostat, SpaceType, ThermalBridge, Tilt, Uuid, Wall, Window,
 };
 
 // ---------- Estructura general de datos --------------
@@ -48,7 +48,7 @@ pub struct Model {
     pub loads: Vec<SpaceLoads>,
     /// Definición de consignas de los espacios
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub sys_settings: Vec<SpaceSysConditions>,
+    pub thermostats: Vec<Thermostat>,
     /// Overrides de propiedades de elementos (opacos y huecos)
     #[serde(default, skip_serializing_if = "PropsOverrides::is_empty")]
     pub overrides: PropsOverrides,

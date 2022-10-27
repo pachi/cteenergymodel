@@ -14,7 +14,7 @@
       "name": "P01_E01",
       "height": 3.0,
       "loads": "5bd4d5a2-d159-1de6-b8aa-bdcbdc822a35",
-      "sys_settings": "964864cd-02c1-3130-1778-56a483b25b97",
+      "thermostat": "964864cd-02c1-3130-1778-56a483b25b97",
       "n_v": 1.0,
       "illuminance": 21.43
     },
@@ -23,7 +23,7 @@
       "name": "P01_E02",
       "height": 3.0,
       "loads": "5bd4d5a2-d159-1de6-b8aa-bdcbdc822a35",
-      "sys_settings": "964864cd-02c1-3130-1778-56a483b25b97",
+      "thermostat": "964864cd-02c1-3130-1778-56a483b25b97",
       "n_v": 1.0,
       "illuminance": 21.43
     },
@@ -32,7 +32,7 @@
       "name": "P01_E03",
       "height": 3.0,
       "loads": "5bd4d5a2-d159-1de6-b8aa-bdcbdc822a35",
-      "sys_settings": "964864cd-02c1-3130-1778-56a483b25b97",
+      "thermostat": "964864cd-02c1-3130-1778-56a483b25b97",
       "n_v": 1.0,
       "illuminance": 21.43
     },
@@ -41,7 +41,7 @@
       "name": "P01_E04",
       "height": 3.0,
       "loads": "5bd4d5a2-d159-1de6-b8aa-bdcbdc822a35",
-      "sys_settings": "964864cd-02c1-3130-1778-56a483b25b97",
+      "thermostat": "964864cd-02c1-3130-1778-56a483b25b97",
       "n_v": 1.0,
       "illuminance": 21.43
     }
@@ -3865,7 +3865,7 @@
       "lighting_schedule": "e88dc9ac-0b28-d103-2daf-0e07b3db28e3"
     }
   ],
-  "sys_settings": [
+  "thermostats": [
     {
       "id": "964864cd-02c1-3130-1778-56a483b25b97",
       "name": "I_Baja-8h-Acondicionado",

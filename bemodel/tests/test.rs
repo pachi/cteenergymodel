@@ -55,7 +55,7 @@ fn parse() {
         n_v: None,
         z: 0.0,
         loads: Some(uuid::Uuid::parse_str("be9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap()),
-        sys_settings: Some(uuid::Uuid::parse_str("af9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap()),
+        thermostat: Some(uuid::Uuid::parse_str("af9422f0-9693-6c17-d5ea-d3783d9c0b74").unwrap()),
         illuminance: Some(100.0),
     };
     let space_str = r#"{
@@ -144,7 +144,7 @@ fn model_json_e4h_medianeras() {
     assert_eq!(model.cons.glasses.len(), 2);
     assert_eq!(model.cons.frames.len(), 2);
     assert_eq!(model.loads.len(), 1);
-    assert_eq!(model.sys_settings.len(), 1);
+    assert_eq!(model.thermostats.len(), 1);
     assert_eq!(model.schedules.year.len(), 26);
     assert_eq!(model.schedules.week.len(), 29);
     assert_eq!(model.schedules.day.len(), 66);
@@ -156,7 +156,7 @@ fn model_json_e4h_medianeras() {
     assert_eq!(model.cons.glasses.len(), 2);
     assert_eq!(model.cons.frames.len(), 2);
     assert_eq!(model.loads.len(), 1);
-    assert_eq!(model.sys_settings.len(), 1);
+    assert_eq!(model.thermostats.len(), 1);
     assert_eq!(model.schedules.year.len(), 4);
     assert_eq!(model.schedules.week.len(), 4);
     assert_eq!(model.schedules.day.len(), 12);
