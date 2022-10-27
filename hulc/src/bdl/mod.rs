@@ -334,10 +334,11 @@ impl Data {
                 "SYSTEM-CONDITIONS" => {
                     system_conditions.insert(block.name.clone(), block);
                 }
+                // Elementos no implementados -------------------
+                // Fakes: DESCRIPTION, PARTELIDER
+                "AUX-LINE" | "PARTELIDER" | "DESCRIPTION-CONDICTION" | "DESCRIPTION" => continue,
 
                 // Elemento desconocido -------------------------
-                // No implementados: AUX-LINE
-                // Fakes: DESCRIPTION, PARTELIDER
                 _ => {
                     warn!(
                         "Tipo desconocido. bname: {}, btype: {}",
