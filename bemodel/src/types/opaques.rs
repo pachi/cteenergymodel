@@ -124,6 +124,31 @@ impl Default for Shade {
     }
 }
 
+impl Shade {
+    /// Superficie bruta de la sombra, m²
+    #[inline]
+    pub fn area(&self) -> f32 {
+        self.geometry.polygon.area()
+    }
+}
+
+/// Convierte de opaco a enum Tilt
+impl From<&Shade> for Tilt {
+    fn from(shade: &Shade) -> Self {
+        Tilt::from(shade.geometry.tilt)
+    }
+}
+
+/// Convierte opaco a Orientation
+impl From<&Shade> for Orientation {
+    fn from(shade: &Shade) -> Self {
+        match Tilt::from(shade.geometry.tilt) {
+            Tilt::SIDE => shade.geometry.azimuth.into(),
+            _ => Orientation::HZ,
+        }
+    }
+}
+
 /// Geometría de opaco
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct WallGeom {

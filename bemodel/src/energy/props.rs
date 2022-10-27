@@ -2,7 +2,7 @@
 // Distributed under the MIT License
 // (See accompanying LICENSE file or a copy at http://opensource.org/licenses/MIT)
 
-//! Propiedades energéticas del modelo
+//! Propiedades geométricas y energéticas del modelo
 //!
 //! Permiten el cálculo de indicadores y la descripción de los elementos del modelo
 
@@ -26,6 +26,8 @@ pub struct EnergyProps {
     pub windows: BTreeMap<Uuid, WinProps>,
     /// Propiedades de puentes térmicos
     pub thermal_bridges: BTreeMap<Uuid, TbProps>,
+    /// Propiedades de sombras
+    pub shades: BTreeMap<Uuid, ShadeProps>,
     /// Propiedades de construcciones de opacos
     pub wallcons: BTreeMap<Uuid, WallConsProps>,
     /// Propiedades de huecos
@@ -159,6 +161,17 @@ impl From<&Model> for EnergyProps {
             thermal_bridges.insert(tb.id, tbp);
         }
 
+        // Propiedades de sombras
+        let mut shades: BTreeMap<Uuid, ShadeProps> = BTreeMap::new();
+        for s in &model.shades {
+            let sp = ShadeProps {
+                orientation: Orientation::from(s),
+                tilt: Tilt::from(s),
+                area: s.area(),
+            };
+            shades.insert(s.id, sp);
+        }
+
         // Propiedades globales
         let a_ref: f32 = fround2(
             spaces
@@ -255,6 +268,7 @@ impl From<&Model> for EnergyProps {
             walls,
             windows,
             thermal_bridges,
+            shades,
             wallcons,
             wincons,
         }
@@ -377,6 +391,17 @@ pub struct TbProps {
     pub l: f32,
     /// Transmitancia térmica lineal del puente térmico (W/mK)
     pub psi: f32,
+}
+
+/// Propiedades de sombras
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShadeProps {
+    /// Orientación de la sombra
+    pub orientation: Orientation,
+    /// Inclinación de la sombra
+    pub tilt: Tilt,
+    /// Superficie bruta de la sombra, [m²]
+    pub area: f32,
 }
 
 /// Propiedades de construcciones de opacos

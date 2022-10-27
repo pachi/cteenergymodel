@@ -17,7 +17,6 @@
       - acondicionado -> Con consigna de cal o ref (sin oscilación libre) durante el año?
       - eliminar de Space el atributo `SpaceKind`
 - Informe de propiedades:
-  - Añadir en props area de sombras
   - Optimizar recálculo de propiedades
     - Guardar hash de geometrías (opacos, sombras y huecos) y solo recalcular si han cambiado
       - update_geometry, update_cons, update_meta??
