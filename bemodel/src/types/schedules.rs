@@ -76,3 +76,24 @@ pub struct ScheduleDay {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub values: Vec<f32>,
 }
+
+impl ScheduleDay {
+    /// Lista si cada valor es mayor que (casi) cero
+    pub fn values_not_zero(&self) -> Vec<bool> {
+        // Aprox > 1 e-5
+        self.values
+            .iter()
+            .map(|v| v.abs() > 100.0 * f32::EPSILON)
+            .collect()
+    }
+
+    /// Número de elementos distintos de (casi) cero
+    pub fn count_not_zero(&self) -> usize {
+        self.values_not_zero().iter().filter(|v| **v).count()
+    }
+
+    /// Valor medio del horario
+    pub fn average(&self) -> f32 {
+        self.values.iter().sum::<f32>() / (self.values.len() as f32)
+    }
+}
