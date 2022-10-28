@@ -82,6 +82,10 @@ impl From<&Model> for EnergyProps {
                 height: s.height,
                 height_net,
                 volume_net: area * height_net,
+                loads: s.loads,
+                thermostat: s.thermostat,
+                n_v: s.n_v,
+                illuminance: s.illuminance,
             };
             spaces.insert(s.id, sp);
         }
@@ -327,6 +331,14 @@ pub struct SpaceProps {
     pub height_net: f32,
     /// Volumen neto del espacio, [m³]
     pub volume_net: f32,
+    /// Cargas del espacio, UUID
+    pub loads: Option<Uuid>,
+    /// Termostato del espacio, UUID
+    pub thermostat: Option<Uuid>,
+    /// Ventilación, en ren/h
+    pub n_v: Option<f32>,
+    /// Iluminancia media en el plano de trabajo, lux
+    pub illuminance: Option<f32>,
 }
 
 /// Propiedades de opacos
