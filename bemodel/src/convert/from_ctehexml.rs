@@ -21,8 +21,8 @@ use hulc::{
 
 pub use crate::{
     BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, Meta, Model, Orientation,
-    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads, Thermostat,
-    SpaceType, ThermalBridge, ThermalBridgeKind, Tilt, Uuid, Wall, WallCons, WallGeom, WinCons,
+    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads, SpaceType,
+    ThermalBridge, ThermalBridgeKind, Thermostat, Tilt, Uuid, Wall, WallCons, WallGeom, WinCons,
     WinGeom, Window,
 };
 
@@ -806,19 +806,28 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
     Ok(SchedulesDb { year, week, day })
 }
 
-/// Semana del año (de 0 a 52) a partir del día (1 a 31) y mes (1 a 12)
+/// Semana del año (de 0 a 53) a partir del día (1 a 31) y mes (1 a 12)
 /// Basado en https://astronomy.stackexchange.com/questions/2407/calculate-day-of-the-year-for-a-given-date
 fn week_of_year(day: u32, month: u32) -> u32 {
+    (day_of_year(day, month) as f32 / 7.0).ceil() as u32
+}
+
+/// Día del año (de 1 a 365) a partir del día (1 a 31) y mes (1 a 12)
+/// Basado en https://astronomy.stackexchange.com/questions/2407/calculate-day-of-the-year-for-a-given-date
+/// Modificado para usar siempre un año no bisiesto ya que en HULC se usa siempre
+/// el año 2001 como referencia (empieza en lunes y no es bisiesto)
+#[inline]
+fn day_of_year(day: u32, month: u32) -> u32 {
     let day = day as f32;
     let month = month as f32;
     let n1 = (275.0 * month / 9.0).floor();
     let n2 = ((month + 9.0) / 12.0).floor();
     // N3 = 2 si no es bisiesto o 1 si lo es
+    // En HULC se usa el año 2001 de referencia (empieza en lunes y no es bisiesto)
     // let N3 = (1.0 + ((year - 4 * (year / 4).floor() + 2) / 3).floor());
     let n3 = 2.0;
     // Día del año
-    let n = n1 - (n2 * n3) + day - 30.0;
-    (n / 7.0 + 0.1).floor() as u32
+    (n1 - (n2 * n3) + day - 30.0) as u32
 }
 
 /// Cargas de espacios a partir de datos BDL

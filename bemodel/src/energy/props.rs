@@ -298,8 +298,9 @@ pub struct GlobalProps {
     /// Descuenta los volúmenes de forjados y cubiertas del volumen bruto
     pub vol_env_inh_net: f32,
     /// Compacidad de la envolvente térmica del edificio V/A (m³/m²)
-    /// De acuerdo con la definición del DB-HE comprende el volumen interior de la envolvente térmica (V)
-    /// y la superficie de opacos y huecos con intercambio térmico con el aire exterior o el terreno (A)
+    /// De acuerdo con la definición del DB-HE comprende el volumen interior de
+    /// la envolvente térmica (V) y la superficie de opacos y huecos con intercambio
+    /// térmico con el aire exterior o el terreno (A)
     /// Tiene en cuenta los multiplicadores de espacios (en superficie y volumen)
     /// Se excluyen los huecos sin opaco definido y los opacos sin espacio definido
     /// Para area expuesta => compacidad = 0.0
@@ -310,7 +311,8 @@ pub struct GlobalProps {
     pub n_50_test_ach: Option<f32>,
     /// Permeabilidad al aire de opacos de referencia a 100 Pa [m³/hm²]
     /// Permeabilidad de opacos calculada según criterio de edad por defecto DB-HE2019 (1/h)
-    /// NOTE: usamos is_new_building pero igual merecería la pena una variable para permeabilidad mejorada
+    /// NOTE: usamos is_new_building pero igual merecería la pena una variable
+    /// para permeabilidad mejorada
     pub c_o_100: f32,
 }
 

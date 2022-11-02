@@ -12,7 +12,8 @@ use super::Uuid;
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SchedulesDb {
     /// Horarios anuales
-    /// El total de repeticiones (semanas) debe sumar 52
+    /// El total de repeticiones de días debe sumar 365
+    /// El año empieza en lunes (se toma de referencia el 2001)
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub year: Vec<Schedule>,
     /// Horarios semanales
@@ -78,8 +79,8 @@ pub struct ScheduleDay {
 }
 
 impl ScheduleDay {
-    /// Lista si cada valor es mayor que (casi) cero
-    pub fn values_not_zero(&self) -> Vec<bool> {
+    /// Vector de la condición de valor mayor que (casi) cero
+    pub fn values_is_not_zero(&self) -> Vec<bool> {
         // Aprox > 1 e-5
         self.values
             .iter()
