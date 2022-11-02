@@ -35,7 +35,7 @@ impl SchedulesDb {
 
 /// Horarios anuales
 /// Se forman como lista de tuplas de horario semanal y repeticiones
-/// El total de repeticiones debe sumar 52 semanas
+/// El total de repeticiones debe sumar 365 días semanas
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Schedule {
     /// Id
@@ -43,7 +43,7 @@ pub struct Schedule {
     /// Nombre del horario
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    /// Secuencia de tuplas de UUID de horario semanal y repeticiones
+    /// Secuencia de tuplas de UUID de horario semanal y número de días activo
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub values: Vec<(Uuid, u32)>,
 }

@@ -770,28 +770,31 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                 })
             }
             bdl::Schedule::Year(sch) => {
+                // Para cada horario semanal del horario anual calculamos:
+                // - el día final hasta el que se aplica
+                // - el número de días que está vigente
                 let id = id_maps.schedule_year_id(&sch.name)?;
-                let ndays: Vec<_> = std::iter::once(0u32)
+                let end_day: Vec<_> = std::iter::once(0u32)
                     .chain(
                         sch.days
                             .iter()
                             .zip(sch.months.iter())
-                            .map(|(day, month)| week_of_year(*day, *month)),
+                            .map(|(day, month)| day_of_year(*day, *month)),
                     )
                     .collect();
-                let repetitions = ndays.windows(2).map(|t| t[1] - t[0]);
+                let day_count = end_day.windows(2).map(|t| t[1] - t[0]);
 
                 assert!(
-                    repetitions.len() == sch.weeks.len()
-                        && repetitions.len() == sch.months.len()
-                        && repetitions.len() == sch.days.len()
+                    day_count.len() == sch.weeks.len()
+                        && day_count.len() == sch.months.len()
+                        && day_count.len() == sch.days.len()
                 );
 
                 let values = sch
                     .weeks
                     .iter()
                     .map(|name| id_maps.schedule_week_id(name).unwrap())
-                    .zip(repetitions.into_iter())
+                    .zip(day_count.into_iter())
                     .collect();
 
                 year.push(Schedule {
@@ -804,12 +807,6 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
     }
 
     Ok(SchedulesDb { year, week, day })
-}
-
-/// Semana del año (de 0 a 53) a partir del día (1 a 31) y mes (1 a 12)
-/// Basado en https://astronomy.stackexchange.com/questions/2407/calculate-day-of-the-year-for-a-given-date
-fn week_of_year(day: u32, month: u32) -> u32 {
-    (day_of_year(day, month) as f32 / 7.0).ceil() as u32
 }
 
 /// Día del año (de 1 a 365) a partir del día (1 a 31) y mes (1 a 12)
