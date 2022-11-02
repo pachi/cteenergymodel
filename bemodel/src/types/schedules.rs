@@ -31,6 +31,68 @@ impl SchedulesDb {
     pub(crate) fn is_empty(&self) -> bool {
         self.year.is_empty() && self.week.is_empty() && self.day.is_empty()
     }
+
+    /// Localiza horario de año según id
+    pub fn get_year(&self, id: Uuid) -> Option<&Schedule> {
+        self.year.iter().find(|s| s.id == id)
+    }
+
+    /// Localiza horario de semana según id
+    pub fn get_week(&self, id: Uuid) -> Option<&ScheduleWeek> {
+        self.week.iter().find(|s| s.id == id)
+    }
+
+    /// Localiza horario diario según id
+    pub fn get_day(&self, id: Uuid) -> Option<&ScheduleDay> {
+        self.day.iter().find(|s| s.id == id)
+    }
+
+    /// Devuelve el año como lista de 365 horarios diarios
+    pub fn get_year_as_days(&self, id: Uuid) -> Vec<Uuid> {
+        let mut current_count = 0;
+        self.get_year(id)
+            .map(|s| {
+                s.values
+                    .iter()
+                    .flat_map(|(week_id, count)| {
+                        let skip_count = current_count % 7;
+                        current_count += *count as usize;
+                        self.get_week(*week_id)
+                            .map(|ws| ws.to_vec())
+                            .unwrap_or_default()
+                            .into_iter()
+                            .cycle()
+                            .skip(skip_count)
+                            .take(*count as usize)
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .unwrap_or_default()
+    }
+
+    /// Lista de valores anuales para el horario anual con uuid dado
+    pub fn year_values(&self, id: Uuid) -> Vec<f32> {
+        self.get_year_as_days(id)
+            .iter()
+            .flat_map(|day_id| {
+                self.get_day(*day_id)
+                    .map(|ds| ds.values.clone())
+                    .unwrap_or_default()
+            })
+            .collect::<Vec<_>>()
+    }
+
+    /// Lista de condiciones de valor distinto de (casi) cero para el horario anual con uuid dado
+    pub fn year_values_is_not_zero(&self, id: Uuid) -> Vec<bool> {
+        self.get_year_as_days(id)
+            .iter()
+            .flat_map(|day_id| {
+                self.get_day(*day_id)
+                    .map(|ds| ds.values_is_not_zero())
+                    .unwrap_or_default()
+            })
+            .collect::<Vec<_>>()
+    }
 }
 
 /// Horarios anuales
@@ -58,9 +120,19 @@ pub struct ScheduleWeek {
     /// Nombre del horario
     #[serde(default, skip_serializing_if = "String::is_empty")]
     pub name: String,
-    /// Secuencia de tuplas de UUID de horarios diarios y repeticiones
+    /// Secuencia de tuplas de UUID de horarios diarios y repeticiones del día
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub values: Vec<(Uuid, u32)>,
+}
+
+impl ScheduleWeek {
+    /// Devuelve semana como lista de 7 valores diarios
+    pub fn to_vec(&self) -> Vec<Uuid> {
+        self.values
+            .iter()
+            .flat_map(|(id, count)| vec![*id; *count as usize])
+            .collect()
+    }
 }
 
 /// Horarios diarios
@@ -86,15 +158,5 @@ impl ScheduleDay {
             .iter()
             .map(|v| v.abs() > 100.0 * f32::EPSILON)
             .collect()
-    }
-
-    /// Número de elementos distintos de (casi) cero
-    pub fn count_not_zero(&self) -> usize {
-        self.values_not_zero().iter().filter(|v| **v).count()
-    }
-
-    /// Valor medio del horario
-    pub fn average(&self) -> f32 {
-        self.values.iter().sum::<f32>() / (self.values.len() as f32)
     }
 }

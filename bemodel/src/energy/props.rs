@@ -6,6 +6,7 @@
 //!
 //! Permiten el cálculo de indicadores y la descripción de los elementos del modelo
 
+use log::{error, warn};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
@@ -32,12 +33,16 @@ pub struct EnergyProps {
     pub wallcons: BTreeMap<Uuid, WallConsProps>,
     /// Propiedades de huecos
     pub wincons: BTreeMap<Uuid, WinConsProps>,
-    // Propiedades de horarios
-    // TODO:
-    // Propiedades de cargas de espacios
-    // TODO:
-    // Propiedades de consignas
-    // TODO:
+    /// Propiedades de horarios anuales
+    pub sch_year: BTreeMap<Uuid, SchYearProps>,
+    /// Propiedades de horarios semanales
+    pub sch_week: BTreeMap<Uuid, SchWeekProps>,
+    /// Propiedades de horarios diarios
+    pub sch_day: BTreeMap<Uuid, SchDayProps>,
+    // TODO: Propiedades de cargas de espacios
+    // pub loads: BTreeMap<Uuid, LoadsProps>
+    // TODO: Propiedades de consignas
+    // pub thermostats: BTreeMap<Uuid, ThermostatsProps>
 }
 
 impl From<&Model> for EnergyProps {
@@ -182,6 +187,59 @@ impl From<&Model> for EnergyProps {
             shades.insert(s.id, sp);
         }
 
+        // Propiedades de horarios
+
+        // Diarios
+        let mut sch_day: BTreeMap<Uuid, SchDayProps> = BTreeMap::new();
+        for s in &model.schedules.day {
+            let values = s.values.clone();
+            let values_is_not_zero = values
+                .iter()
+                .map(|v| v.abs() > 100.0 * f32::EPSILON) // Aprox > 1 e-5
+                .collect();
+            let average = values.iter().sum::<f32>() / (values.len() as f32);
+            let e = SchDayProps {
+                values,
+                values_is_not_zero,
+                average,
+            };
+            sch_day.insert(s.id, e);
+        }
+
+        // Semanales
+        let mut sch_week: BTreeMap<Uuid, SchWeekProps> = BTreeMap::new();
+        for s in &model.schedules.week {
+            let e = SchWeekProps {
+                values: s.values.clone(),
+            };
+            sch_week.insert(s.id, e);
+        }
+
+        // Anuales
+        let mut sch_year: BTreeMap<Uuid, SchYearProps> = BTreeMap::new();
+        for s in &model.schedules.year {
+            let e = SchYearProps {
+                values: s.values.clone(),
+            };
+            sch_year.insert(s.id, e);
+        }
+
+        // Propiedades de cargas
+        let mut loads: BTreeMap<Uuid, LoadsProps> = BTreeMap::new();
+        for s in &model.loads {
+            let e = LoadsProps {
+                area_per_person: s.area_per_person,
+                people_schedule: s.people_schedule,
+                people_sensible: s.people_sensible,
+                people_latent: s.people_latent,
+                equipment: s.equipment,
+                equipment_schedule: s.equipment_schedule,
+                lighting: s.lighting,
+                lighting_schedule: s.lighting_schedule,
+            };
+            loads.insert(s.id, e);
+        }
+
         // Propiedades globales
         let a_ref: f32 = fround2(
             spaces
@@ -261,6 +319,60 @@ impl From<&Model> for EnergyProps {
             29.0
         };
 
+        // Tiempo anual de ocupación
+        // 1. Horarios anuales de ocupación diferentes de espacios habitables en la ET
+        let sch_occ_spaces = spaces.values().filter_map(|s| {
+            if s.kind != SpaceType::UNINHABITED && s.inside_tenv && s.loads.is_some() {
+                loads.get(&s.loads.unwrap()).and_then(|l| l.people_schedule)
+            } else {
+                None
+            }
+        });
+        // 2. Convierte calendario anual a lista de 365 horarios diarios
+        let sch_as_days: Vec<Vec<Uuid>> = sch_occ_spaces
+            .map(|year_id| model.schedules.get_year_as_days(year_id))
+            .collect();
+        // 3. Comprobación de que todos los horarios tienen la misma duración en días
+        let year_len = sch_as_days.first().map(|s| s.len()).unwrap_or_default();
+        if !sch_as_days
+            .iter()
+            .map(|s| s.len())
+            .all(|item| item == year_len)
+        {
+            error!("Horarios anuales con distinta duración en días")
+        };
+        if year_len != 365 {
+            warn!("Duración de horarios anuales distinta a 365 días")
+        };
+        // 4. Para cada día localiza los horarios diarios diferentes
+        let year_distinct_day_sch_by_day = (0..year_len)
+            .map(|day_idx| sch_as_days.iter().map(|s| s[day_idx]).collect::<Vec<_>>())
+            .map(|mut dv| {
+                dv.sort_unstable();
+                dv.dedup();
+                dv.iter()
+                    .map(|id| sch_day.get(id).unwrap())
+                    .collect::<Vec<_>>()
+            });
+        // 5. Acumula las horas ocupadas en cada día para todos los horarios diarios
+        let year_num_occ_hours = year_distinct_day_sch_by_day
+            .map(|day_scheds| {
+                day_scheds
+                    .iter()
+                    .fold(vec![false; 24], |ac, sch| {
+                        ac.iter()
+                            .zip(&sch.values_is_not_zero)
+                            .map(|(a, b)| *a || *b)
+                            .collect()
+                    })
+                    .iter()
+                    .filter(|v| **v)
+                    .count()
+            })
+            .sum::<usize>() as u32;
+
+        // TODO: carga interna media
+
         let global = GlobalProps {
             a_ref,
             vol_env_gross,
@@ -270,6 +382,7 @@ impl From<&Model> for EnergyProps {
             global_ventilation_rate,
             n_50_test_ach: model.meta.n50_test_ach,
             c_o_100,
+            year_num_occ_hours,
         };
 
         Self {
@@ -281,6 +394,9 @@ impl From<&Model> for EnergyProps {
             shades,
             wallcons,
             wincons,
+            sch_year,
+            sch_week,
+            sch_day,
         }
     }
 }
@@ -314,6 +430,9 @@ pub struct GlobalProps {
     /// NOTE: usamos is_new_building pero igual merecería la pena una variable
     /// para permeabilidad mejorada
     pub c_o_100: f32,
+    /// Número de horas con ocupación distinta de (casi cero) en los espacios habitables
+    /// de la envolvente térmica
+    pub year_num_occ_hours: u32,
 }
 
 /// Propiedades de espacios
@@ -448,4 +567,63 @@ pub struct WinConsProps {
     pub c_100: f32,
     /// Fracción de marco del hueco, [-]
     pub f_f: f32,
+}
+
+// TODO: Revisar duplicación de métodos con bemodel::ScheduleDB
+// TODO: probablemente deberían ir aquí y no en el modelo?
+
+/// Propiedades de horarios diarios
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SchDayProps {
+    /// Valores
+    pub values: Vec<f32>,
+    /// Valores distintos de cero
+    pub values_is_not_zero: Vec<bool>,
+    /// Valor medio
+    pub average: f32,
+}
+
+/// Propiedades de horarios mensuales
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SchWeekProps {
+    /// Lista de elementos (id_sch_dia, repeticiones)
+    pub values: Vec<(Uuid, u32)>,
+}
+
+impl SchWeekProps {
+    /// Devuelve semana como lista de 7 valores diarios
+    pub fn to_vec(&self) -> Vec<Uuid> {
+        self.values
+            .iter()
+            .flat_map(|(id, count)| vec![*id; *count as usize])
+            .collect()
+    }
+}
+
+/// Propiedades de horarios mensuales
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SchYearProps {
+    /// Lista de elementos (id_sch_semana, repeticiones en días)
+    pub values: Vec<(Uuid, u32)>,
+}
+
+/// Propiedades de cargas
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LoadsProps {
+    /// Superficie por ocupante, m²/pers
+    pub area_per_person: f32,
+    /// Horario anual de fracciones de carga de ocupación
+    pub people_schedule: Option<Uuid>,
+    /// Carga máxima sensible de ocupación, W/m²
+    pub people_sensible: f32,
+    /// Carga máxima latente de ocupación, W/m²
+    pub people_latent: f32,
+    /// Carga total debida a los equipos, W/m²
+    pub equipment: f32,
+    /// Horario anual de fracciones de carga de equipos
+    pub equipment_schedule: Option<Uuid>,
+    /// Carga total debida a la iluminación, W/m²
+    pub lighting: f32,
+    /// Horario anual de fracciones de carga de iluminación
+    pub lighting_schedule: Option<Uuid>,
 }
