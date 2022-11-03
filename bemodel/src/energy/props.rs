@@ -339,7 +339,7 @@ impl From<&Model> for EnergyProps {
 
         // Tiempo anual de ocupación
         // 1. Horarios anuales de ocupación diferentes de espacios habitables en la ET
-        let occ_spaces_people_schedules = spaces.values().filter_map(|s| {
+        let occupied_spaces_people_schedules = spaces.values().filter_map(|s| {
             if s.kind != SpaceType::UNINHABITED && s.inside_tenv && s.loads.is_some() {
                 loads.get(&s.loads.unwrap()).and_then(|l| l.people_schedule)
             } else {
@@ -347,15 +347,18 @@ impl From<&Model> for EnergyProps {
             }
         });
         // 2. Convierte calendario anual a lista de 365 horarios diarios
-        let sch_as_days: Vec<Vec<Uuid>> = occ_spaces_people_schedules
+        let schedules_as_days: Vec<Vec<Uuid>> = occupied_spaces_people_schedules
             .map(|people_schedule_id| model.schedules.get_year_as_day_sch(people_schedule_id))
             .collect();
         // 3. Comprobación de que todos los horarios tienen la misma duración en días
-        let year_len = sch_as_days.first().map(|s| s.len()).unwrap_or_default();
+        let year_len = schedules_as_days
+            .first()
+            .map(|s| s.len())
+            .unwrap_or_default();
         if year_len != 365 {
             warn!("Duración de horarios anuales distinta a 365 días")
         };
-        if !sch_as_days
+        if !schedules_as_days
             .iter()
             .map(|s| s.len())
             .all(|item| item == year_len)
@@ -364,7 +367,12 @@ impl From<&Model> for EnergyProps {
         };
         // 4. Para cada día localiza los horarios diarios diferentes
         let year_distinct_day_sch_by_day = (0..year_len)
-            .map(|day_idx| sch_as_days.iter().map(|s| s[day_idx]).collect::<Vec<_>>())
+            .map(|day_idx| {
+                schedules_as_days
+                    .iter()
+                    .map(|s| s[day_idx])
+                    .collect::<Vec<_>>()
+            })
             .map(|mut dv| {
                 dv.sort_unstable();
                 dv.dedup();
@@ -389,14 +397,11 @@ impl From<&Model> for EnergyProps {
             })
             .sum::<usize>() as u32;
 
-        // TODO: carga interna media
-        // Calculamos para cada tipo de carga:
-        // - C_oc = el valor medio del horario de ocupación * carga sensible de ocupación
-        // - C_il = el valor medio del horario de iluminación * carga de iluminación
-        // - C_eq = el valor medio del horario de equipos * carga de equipos
-        // - C_FI = C_oc + C_il + C_eq
-        // Para cada espacio habitable de la ET:
-        // - ponderamos el valor de C_FI según la superficie
+        // Carga interna media: valor de la carga interna media de los espacios habitables de la ET
+        // ponderada por superficie
+        // let occupied_spaces = spaces
+        //     .values()
+        //     .filter(|s| s.kind != SpaceType::UNINHABITED && s.inside_tenv && s.loads.is_some());
 
         let global = GlobalProps {
             a_ref,
