@@ -381,7 +381,7 @@ impl From<&Model> for EnergyProps {
                     .collect::<Vec<_>>()
             });
         // 5. Acumula las horas ocupadas en cada día para todos los horarios diarios
-        let year_num_occ_hours = year_distinct_day_sch_by_day
+        let occ_spaces_hours_in_use = year_distinct_day_sch_by_day
             .map(|day_scheds| {
                 day_scheds
                     .iter()
@@ -399,9 +399,28 @@ impl From<&Model> for EnergyProps {
 
         // Carga interna media: valor de la carga interna media de los espacios habitables de la ET
         // ponderada por superficie
-        // let occupied_spaces = spaces
-        //     .values()
-        //     .filter(|s| s.kind != SpaceType::UNINHABITED && s.inside_tenv && s.loads.is_some());
+        let occupied_spaces = spaces
+            .values()
+            .filter(|s| s.kind != SpaceType::UNINHABITED && s.inside_tenv && s.loads.is_some());
+        let (total_load, total_area) =
+            occupied_spaces.fold((0.0, 0.0), |(acc_load, acc_area), s| {
+                (
+                    acc_load
+                        + s.loads
+                            .map(|loads_id| {
+                                loads.get(&loads_id).map(|l| l.loads_avg).unwrap_or(0.0)
+                            })
+                            .unwrap_or(0.0)
+                            * s.area
+                            * s.multiplier,
+                    acc_area + s.area * s.multiplier,
+                )
+            });
+        let occ_spaces_average_load = if total_area > f32::EPSILON {
+            total_load / total_area
+        } else {
+            0.0
+        };
 
         let global = GlobalProps {
             a_ref,
@@ -412,7 +431,8 @@ impl From<&Model> for EnergyProps {
             global_ventilation_rate,
             n_50_test_ach: model.meta.n50_test_ach,
             c_o_100,
-            year_num_occ_hours,
+            occ_spaces_hours_in_use,
+            occ_spaces_average_load,
         };
 
         Self {
@@ -461,9 +481,14 @@ pub struct GlobalProps {
     /// NOTE: usamos is_new_building pero igual merecería la pena una variable
     /// para permeabilidad mejorada
     pub c_o_100: f32,
-    /// Número de horas con ocupación distinta de (casi cero) en los espacios habitables
-    /// de la envolvente térmica
-    pub year_num_occ_hours: u32,
+    /// Tiempo total de ocupación de los espacios habitables en el interior de
+    /// la envolvente térmica, h
+    /// Se computa la ocupación de cualquier espacio a cada hora, de modo que el máximo
+    /// valor para el edificio es 8760h
+    pub occ_spaces_hours_in_use: u32,
+    /// Carga media de las fuentes internas (ocupación sensible, iluminación, equipos)
+    /// de los espacios habitables dentro de la envolvente térmica, W/m²
+    pub occ_spaces_average_load: f32,
 }
 
 /// Propiedades de espacios
