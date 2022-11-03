@@ -87,7 +87,7 @@ fn model_json_e4h_medianeras() {
 
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 1673.56, 0.1);
-    assert_almost_eq!(ind.compacity, 3.17, 0.01);
+    assert_almost_eq!(ind.compactness, 3.17, 0.01);
     assert_almost_eq!(ind.K_data.K, 0.37, 0.01);
     // En HULC es q_solul = 0.43
     // con compute_fshobst = 0.47
@@ -222,7 +222,7 @@ fn model_json_ejemploviv_unif() {
 
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 102.33, 0.1);
-    assert_almost_eq!(ind.compacity, 1.36, 0.01);
+    assert_almost_eq!(ind.compactness, 1.36, 0.01);
     assert_almost_eq!(ind.K_data.K, 0.62, 0.01);
     assert_almost_eq!(ind.q_soljul_data.q_soljul, 0.55, 0.01); // HULC 0.54
 

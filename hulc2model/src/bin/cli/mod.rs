@@ -80,7 +80,7 @@ pub fn cli_main() -> Result<()> {
         "ZC: {}, A_ref={:.2} m², V/A={:.2} m³/m², K={:.2} W/m²a, q_sol;jul={:.2} kWh/m².mes, n50_ref={:.2} 1/h, C_o_ref={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
         climatezone,
         ind.area_ref,
-        ind.compacity,
+        ind.compactness,
         ind.K_data.K,
         ind.q_soljul_data.q_soljul,
         n50data.n50_ref,

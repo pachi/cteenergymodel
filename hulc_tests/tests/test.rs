@@ -90,7 +90,7 @@ fn test_caso_a() {
     // Cálculo de indicadores
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 400.0, 0.1);
-    assert_almost_eq!(ind.compacity, 2.40, 0.01); // HULC 2.40
+    assert_almost_eq!(ind.compactness, 2.40, 0.01); // HULC 2.40
     assert_almost_eq!(ind.K_data.K, 0.47, 0.01); // HULC 0.46
     assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.63, 0.01); // HULC 4.33
     assert_almost_eq!(ind.n50_data.n50_ref, 4.58, 0.01); // HULC 4.33
@@ -111,7 +111,7 @@ fn test_caso_c() {
     // Cálculo de indicadores
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 400.0, 0.1);
-    assert_almost_eq!(ind.compacity, 1.58, 0.01); // HULC 1.76
+    assert_almost_eq!(ind.compactness, 1.58, 0.01); // HULC 1.76
     assert_almost_eq!(ind.K_data.K, 0.42, 0.01); // HULC 0.43
     assert_almost_eq!(ind.q_soljul_data.q_soljul, 4.43, 0.01); // HULC 4.24
     assert_almost_eq!(ind.n50_data.n50, 5.32, 0.01);
@@ -139,7 +139,7 @@ fn parse_test_e4h_medianeras() {
     // Cálculo de indicadores
     let ind = model.energy_indicators();
     assert_almost_eq!(ind.area_ref, 1673.56, 0.1);
-    assert_almost_eq!(ind.compacity, 3.16, 0.01); // HULC ?
+    assert_almost_eq!(ind.compactness, 3.16, 0.01); // HULC ?
     assert_almost_eq!(ind.K_data.K, 0.36, 0.01); // HULC ?
     assert_almost_eq!(ind.q_soljul_data.q_soljul, 0.47, 0.01); // HULC ?
     assert_almost_eq!(ind.n50_data.n50, 2.95, 0.01); // HULC ?

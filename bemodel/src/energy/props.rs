@@ -289,7 +289,7 @@ impl From<&Model> for EnergyProps {
                 })
                 .sum(),
         );
-        let compacity = {
+        let compactness = {
             let exposed_area: f32 = walls
                 .values()
                 .filter(|w| {
@@ -372,13 +372,18 @@ impl From<&Model> for EnergyProps {
             .sum::<usize>() as u32;
 
         // TODO: carga interna media
+        // Para cada espacio habitable de la ET calculamos:
+        // - C_oc = el valor medio del horario de ocupación * carga sensible de ocupación
+        // - C_il = el valor medio del horario de iluminación * carga de iluminación
+        // - C_eq = el valor medio del horario de equipos * carga de equipos
+        // - C_FI = C_oc + C_il + C_eq
 
         let global = GlobalProps {
             a_ref,
             vol_env_gross,
             vol_env_net,
             vol_env_inh_net,
-            compacity,
+            compactness,
             global_ventilation_rate,
             n_50_test_ach: model.meta.n50_test_ach,
             c_o_100,
@@ -421,7 +426,7 @@ pub struct GlobalProps {
     /// Tiene en cuenta los multiplicadores de espacios (en superficie y volumen)
     /// Se excluyen los huecos sin opaco definido y los opacos sin espacio definido
     /// Para area expuesta => compacidad = 0.0
-    pub compacity: f32,
+    pub compactness: f32,
     /// Tasa de ventilación global del edificio (1/h)
     pub global_ventilation_rate: f32,
     /// Tasa de renovación de aire a 50Pa obtenida mediante ensayo de puerta soplante (1/h)

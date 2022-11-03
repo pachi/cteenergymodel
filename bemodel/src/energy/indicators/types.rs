@@ -21,7 +21,7 @@ use crate::{check, climatedata, Model, Warning};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct EnergyIndicators {
     pub area_ref: f32,
-    pub compacity: f32,
+    pub compactness: f32,
     pub vol_env_net: f32,
     pub vol_env_gross: f32,
     pub props: EnergyProps,
@@ -49,7 +49,7 @@ impl EnergyIndicators {
 
         Self {
             area_ref: props.global.a_ref,
-            compacity: props.global.compacity,
+            compactness: props.global.compactness,
             vol_env_net: props.global.vol_env_net,
             vol_env_gross: props.global.vol_env_gross,
 

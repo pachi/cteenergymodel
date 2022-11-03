@@ -463,7 +463,7 @@ fn do_convert() {
             "\n\nDatos generales:\n\nZC: {}, A_ref={:.2} m², V/A={:.2} m³/m²\n- K={:.2} W/m²a\n- q_sol;jul={:.2} kWh/m².mes\n- n50_ref={:.2} 1/h, C_o_ref={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
             climatezone,
             envolvente_data.a_ref(),
-            envolvente_data.compacity(),
+            envolvente_data.compactness(),
             envolvente_data.K().K,
             envolvente_data.q_soljul(&totradjul),
             n50data.n50_ref,
