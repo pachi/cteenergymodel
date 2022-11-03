@@ -592,7 +592,7 @@ pub struct SchWeekProps {
 
 impl SchWeekProps {
     /// Devuelve semana como lista de 7 valores diarios
-    pub fn to_vec(&self) -> Vec<Uuid> {
+    pub fn to_day_sch(&self) -> Vec<Uuid> {
         self.values
             .iter()
             .flat_map(|(id, count)| vec![*id; *count as usize])
