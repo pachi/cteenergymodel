@@ -48,7 +48,7 @@ impl SchedulesDb {
     }
 
     /// Devuelve el año como lista de 365 horarios diarios
-    pub fn get_year_as_days(&self, id: Uuid) -> Vec<Uuid> {
+    pub fn get_year_as_day_sch(&self, id: Uuid) -> Vec<Uuid> {
         let mut current_count = 0;
         self.get_year(id)
             .map(|s| {
@@ -58,7 +58,7 @@ impl SchedulesDb {
                         let skip_count = current_count % 7;
                         current_count += *count as usize;
                         self.get_week(*week_id)
-                            .map(|ws| ws.to_vec())
+                            .map(|ws| ws.to_day_sch())
                             .unwrap_or_default()
                             .into_iter()
                             .cycle()
@@ -72,7 +72,7 @@ impl SchedulesDb {
 
     /// Lista de valores anuales para el horario anual con uuid dado
     pub fn year_values(&self, id: Uuid) -> Vec<f32> {
-        self.get_year_as_days(id)
+        self.get_year_as_day_sch(id)
             .iter()
             .flat_map(|day_id| {
                 self.get_day(*day_id)
@@ -84,7 +84,7 @@ impl SchedulesDb {
 
     /// Lista de condiciones de valor distinto de (casi) cero para el horario anual con uuid dado
     pub fn year_values_is_not_zero(&self, id: Uuid) -> Vec<bool> {
-        self.get_year_as_days(id)
+        self.get_year_as_day_sch(id)
             .iter()
             .flat_map(|day_id| {
                 self.get_day(*day_id)
@@ -127,7 +127,7 @@ pub struct ScheduleWeek {
 
 impl ScheduleWeek {
     /// Devuelve semana como lista de 7 valores diarios
-    pub fn to_vec(&self) -> Vec<Uuid> {
+    pub fn to_day_sch(&self) -> Vec<Uuid> {
         self.values
             .iter()
             .flat_map(|(id, count)| vec![*id; *count as usize])

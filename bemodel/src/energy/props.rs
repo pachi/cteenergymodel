@@ -330,7 +330,7 @@ impl From<&Model> for EnergyProps {
         });
         // 2. Convierte calendario anual a lista de 365 horarios diarios
         let sch_as_days: Vec<Vec<Uuid>> = sch_occ_spaces
-            .map(|year_id| model.schedules.get_year_as_days(year_id))
+            .map(|year_id| model.schedules.get_year_as_day_sch(year_id))
             .collect();
         // 3. Comprobación de que todos los horarios tienen la misma duración en días
         let year_len = sch_as_days.first().map(|s| s.len()).unwrap_or_default();
