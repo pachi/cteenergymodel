@@ -225,8 +225,25 @@ impl From<&Model> for EnergyProps {
         }
 
         // Propiedades de cargas
+
+        // Caché de valores medios y acceso a la misma
+        let mut avg_value_cache: BTreeMap<Uuid, f32> = BTreeMap::new();
+        let mut get_avg = |id: Uuid| -> f32 {
+            *avg_value_cache.entry(id).or_insert_with(|| {
+                let day_sch = model.schedules.get_year_as_day_sch(id);
+                day_sch.iter().map(|ds| sch_day[ds].average).sum::<f32>() / day_sch.len() as f32
+            })
+        };
+
         let mut loads: BTreeMap<Uuid, LoadsProps> = BTreeMap::new();
         for s in &model.loads {
+            let people_sch_avg = s.people_schedule.map(&mut get_avg).unwrap_or(0.0);
+            let lighting_sch_avg = s.lighting_schedule.map(&mut get_avg).unwrap_or(0.0);
+            let equipment_sch_avg = s.equipment_schedule.map(&mut get_avg).unwrap_or(0.0);
+            let loads_avg = people_sch_avg * s.people_sensible
+                + lighting_sch_avg * s.lighting
+                + equipment_sch_avg * s.equipment;
+
             let e = LoadsProps {
                 area_per_person: s.area_per_person,
                 people_schedule: s.people_schedule,
@@ -236,6 +253,7 @@ impl From<&Model> for EnergyProps {
                 equipment_schedule: s.equipment_schedule,
                 lighting: s.lighting,
                 lighting_schedule: s.lighting_schedule,
+                loads_avg,
             };
             loads.insert(s.id, e);
         }
@@ -330,7 +348,7 @@ impl From<&Model> for EnergyProps {
         });
         // 2. Convierte calendario anual a lista de 365 horarios diarios
         let sch_as_days: Vec<Vec<Uuid>> = occ_spaces_people_schedules
-            .map(|occ_schedule_id| model.schedules.get_year_as_day_sch(occ_schedule_id))
+            .map(|people_schedule_id| model.schedules.get_year_as_day_sch(people_schedule_id))
             .collect();
         // 3. Comprobación de que todos los horarios tienen la misma duración en días
         let year_len = sch_as_days.first().map(|s| s.len()).unwrap_or_default();
@@ -634,4 +652,6 @@ pub struct LoadsProps {
     pub lighting: f32,
     /// Horario anual de fracciones de carga de iluminación
     pub lighting_schedule: Option<Uuid>,
+    /// Carga interna media (ocupación sensible, iluminación, equipos), W/m²
+    pub loads_avg: f32,
 }
