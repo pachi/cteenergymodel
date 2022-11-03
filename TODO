@@ -22,8 +22,6 @@
       - update_geometry, update_cons, update_meta??
     - Hacer profiling y benchmarks con tracing
 - Informe de mediciones:
-  - nuevo informe con mediciones del modelo
-  - por superficies, agrupando por orientaciones, construcciones, etc
   - por pesos o volumen? Ver si la definición de materiales es suficiente
   - pensar integración futura con aspectos de sostenibilidad
 - Comprobación del modelo:
