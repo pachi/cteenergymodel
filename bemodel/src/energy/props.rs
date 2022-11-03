@@ -39,8 +39,8 @@ pub struct EnergyProps {
     pub sch_week: BTreeMap<Uuid, SchWeekProps>,
     /// Propiedades de horarios diarios
     pub sch_day: BTreeMap<Uuid, SchDayProps>,
-    // TODO: Propiedades de cargas de espacios
-    // pub loads: BTreeMap<Uuid, LoadsProps>
+    /// Propiedades de cargas de espacios
+    pub loads: BTreeMap<Uuid, LoadsProps>
     // TODO: Propiedades de consignas
     // pub thermostats: BTreeMap<Uuid, ThermostatsProps>
 }
@@ -397,6 +397,7 @@ impl From<&Model> for EnergyProps {
             sch_year,
             sch_week,
             sch_day,
+            loads
         }
     }
 }
