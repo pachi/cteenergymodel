@@ -46,9 +46,85 @@ pub struct EnergyProps {
 }
 
 impl From<&Model> for EnergyProps {
-    /// Completa datos de los elementos (espacios, opacos, huecos,...) por id
+    /// Calcula propiedades de horarios, cargas, consignas, elementos, construcciones y globales
     fn from(model: &Model) -> Self {
-        // Propiedades de construcciones
+        // Propiedades de horarios ---------------------------------------------
+
+        // Diarios
+        let mut sch_day: BTreeMap<Uuid, SchDayProps> = BTreeMap::new();
+        for s in &model.schedules.day {
+            let values = s.values.clone();
+            let values_is_not_zero = values
+                .iter()
+                .map(|v| v.abs() > 100.0 * f32::EPSILON) // Aprox > 1 e-5
+                .collect();
+            let average = values.iter().sum::<f32>() / (values.len() as f32);
+            let e = SchDayProps {
+                values,
+                values_is_not_zero,
+                average,
+            };
+            sch_day.insert(s.id, e);
+        }
+
+        // Semanales
+        let mut sch_week: BTreeMap<Uuid, SchWeekProps> = BTreeMap::new();
+        for s in &model.schedules.week {
+            let e = SchWeekProps {
+                values: s.values.clone(),
+            };
+            sch_week.insert(s.id, e);
+        }
+
+        // Anuales
+        let mut sch_year: BTreeMap<Uuid, SchYearProps> = BTreeMap::new();
+        for s in &model.schedules.year {
+            let e = SchYearProps {
+                values: s.values.clone(),
+            };
+            sch_year.insert(s.id, e);
+        }
+
+        // Propiedades de cargas -----------------------------------------------
+
+        // Caché de valores medios y acceso a la misma
+        let mut avg_value_cache: BTreeMap<Uuid, f32> = BTreeMap::new();
+        let mut get_avg = |id: Uuid| -> f32 {
+            *avg_value_cache.entry(id).or_insert_with(|| {
+                let day_sch = model.schedules.get_year_as_day_sch(id);
+                day_sch.iter().map(|ds| sch_day[ds].average).sum::<f32>() / day_sch.len() as f32
+            })
+        };
+
+        let mut loads: BTreeMap<Uuid, LoadsProps> = BTreeMap::new();
+        for s in &model.loads {
+            let people_sch_avg = s.people_schedule.map(&mut get_avg).unwrap_or(0.0);
+            let lighting_sch_avg = s.lighting_schedule.map(&mut get_avg).unwrap_or(0.0);
+            let equipment_sch_avg = s.equipment_schedule.map(&mut get_avg).unwrap_or(0.0);
+            let loads_avg = people_sch_avg * s.people_sensible
+                + lighting_sch_avg * s.lighting
+                + equipment_sch_avg * s.equipment;
+
+            let e = LoadsProps {
+                area_per_person: s.area_per_person,
+                people_schedule: s.people_schedule,
+                people_sensible: s.people_sensible,
+                people_latent: s.people_latent,
+                equipment: s.equipment,
+                equipment_schedule: s.equipment_schedule,
+                lighting: s.lighting,
+                lighting_schedule: s.lighting_schedule,
+                loads_avg,
+            };
+            loads.insert(s.id, e);
+        }
+
+        // Propiedades de consignas --------------------------------------------
+        // TODO:
+
+        // Propiedades de construcciones ---------------------------------------
+
+        // Propiedades de construcciones de opacos
         let mut wallcons: BTreeMap<Uuid, WallConsProps> = BTreeMap::new();
         for wc in &model.cons.wallcons {
             let wcp = WallConsProps {
@@ -58,6 +134,7 @@ impl From<&Model> for EnergyProps {
             wallcons.insert(wc.id, wcp);
         }
 
+        // Propiedades de construcciones de huecos
         let mut wincons: BTreeMap<Uuid, WinConsProps> = BTreeMap::new();
         for wc in &model.cons.wincons {
             // Valores por defecto para elementos sin vidrio definido
@@ -73,6 +150,8 @@ impl From<&Model> for EnergyProps {
             };
             wincons.insert(wc.id, wcp);
         }
+
+        // Propiedades de elementos --------------------------------------------
 
         // Propiedades de espacios
         let mut spaces: BTreeMap<Uuid, SpaceProps> = BTreeMap::new();
@@ -187,78 +266,8 @@ impl From<&Model> for EnergyProps {
             shades.insert(s.id, sp);
         }
 
-        // Propiedades de horarios
+        // Propiedades globales ------------------------------------------------
 
-        // Diarios
-        let mut sch_day: BTreeMap<Uuid, SchDayProps> = BTreeMap::new();
-        for s in &model.schedules.day {
-            let values = s.values.clone();
-            let values_is_not_zero = values
-                .iter()
-                .map(|v| v.abs() > 100.0 * f32::EPSILON) // Aprox > 1 e-5
-                .collect();
-            let average = values.iter().sum::<f32>() / (values.len() as f32);
-            let e = SchDayProps {
-                values,
-                values_is_not_zero,
-                average,
-            };
-            sch_day.insert(s.id, e);
-        }
-
-        // Semanales
-        let mut sch_week: BTreeMap<Uuid, SchWeekProps> = BTreeMap::new();
-        for s in &model.schedules.week {
-            let e = SchWeekProps {
-                values: s.values.clone(),
-            };
-            sch_week.insert(s.id, e);
-        }
-
-        // Anuales
-        let mut sch_year: BTreeMap<Uuid, SchYearProps> = BTreeMap::new();
-        for s in &model.schedules.year {
-            let e = SchYearProps {
-                values: s.values.clone(),
-            };
-            sch_year.insert(s.id, e);
-        }
-
-        // Propiedades de cargas
-
-        // Caché de valores medios y acceso a la misma
-        let mut avg_value_cache: BTreeMap<Uuid, f32> = BTreeMap::new();
-        let mut get_avg = |id: Uuid| -> f32 {
-            *avg_value_cache.entry(id).or_insert_with(|| {
-                let day_sch = model.schedules.get_year_as_day_sch(id);
-                day_sch.iter().map(|ds| sch_day[ds].average).sum::<f32>() / day_sch.len() as f32
-            })
-        };
-
-        let mut loads: BTreeMap<Uuid, LoadsProps> = BTreeMap::new();
-        for s in &model.loads {
-            let people_sch_avg = s.people_schedule.map(&mut get_avg).unwrap_or(0.0);
-            let lighting_sch_avg = s.lighting_schedule.map(&mut get_avg).unwrap_or(0.0);
-            let equipment_sch_avg = s.equipment_schedule.map(&mut get_avg).unwrap_or(0.0);
-            let loads_avg = people_sch_avg * s.people_sensible
-                + lighting_sch_avg * s.lighting
-                + equipment_sch_avg * s.equipment;
-
-            let e = LoadsProps {
-                area_per_person: s.area_per_person,
-                people_schedule: s.people_schedule,
-                people_sensible: s.people_sensible,
-                people_latent: s.people_latent,
-                equipment: s.equipment,
-                equipment_schedule: s.equipment_schedule,
-                lighting: s.lighting,
-                lighting_schedule: s.lighting_schedule,
-                loads_avg,
-            };
-            loads.insert(s.id, e);
-        }
-
-        // Propiedades globales
         let a_ref: f32 = fround2(
             spaces
                 .values()
@@ -336,6 +345,8 @@ impl From<&Model> for EnergyProps {
         } else {
             29.0
         };
+
+        // Indicadores de ocupación y cargas -----------------------------------
 
         // Tiempo anual de ocupación
         // 1. Horarios anuales de ocupación diferentes de espacios habitables en la ET
@@ -434,6 +445,8 @@ impl From<&Model> for EnergyProps {
             occ_spaces_hours_in_use,
             occ_spaces_average_load,
         };
+
+        // Resultado final -----------------------------------------------------
 
         Self {
             global,
