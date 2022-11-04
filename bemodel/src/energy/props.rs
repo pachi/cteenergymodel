@@ -158,6 +158,14 @@ impl From<&Model> for EnergyProps {
         for s in &model.spaces {
             let area = s.area(&model.walls);
             let height_net = s.height_net(&model.walls, &model.cons);
+            let veei = s.illuminance.and_then(|illuminance| {
+                if illuminance.abs() < f32::EPSILON {
+                    None
+                } else {
+                    s.loads
+                        .and_then(|ref l| loads.get(l).map(|l| 100.0 * l.lighting / illuminance))
+                }
+            });
             let sp = SpaceProps {
                 kind: s.kind,
                 inside_tenv: s.inside_tenv,
@@ -170,6 +178,7 @@ impl From<&Model> for EnergyProps {
                 thermostat: s.thermostat,
                 n_v: s.n_v,
                 illuminance: s.illuminance,
+                veei,
             };
             spaces.insert(s.id, sp);
         }
@@ -529,6 +538,8 @@ pub struct SpaceProps {
     pub n_v: Option<f32>,
     /// Iluminancia media en el plano de trabajo, lux
     pub illuminance: Option<f32>,
+    /// Eficiencia energética de la iluminación (VEEI), W/m²·100lux
+    pub veei: Option<f32>,
 }
 
 /// Propiedades de opacos
