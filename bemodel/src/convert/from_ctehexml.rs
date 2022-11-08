@@ -832,7 +832,7 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
     let mut space_loads = Vec::new();
 
     for (name, space_cond) in &bdl.space_conditions {
-        let id = id_maps.loads_id(&name)?;
+        let id = id_maps.loads_id(name)?;
         let area_per_person = space_cond.attrs.get_f32("AREA/PERSON")?;
         let people_sensible = if area_per_person != 0.0 {
             fround2(space_cond.attrs.get_f32("PEOPLE-HG-SENS")? / area_per_person)

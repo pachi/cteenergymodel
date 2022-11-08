@@ -140,5 +140,5 @@ pub fn parse_systems(doc: &roxmltree::Document) -> GtSystems {
         .and_then(|e| e.text())
         .unwrap_or("")
         .trim();
-    GtSystems::new(&gt_systems_str).unwrap()
+    GtSystems::new(gt_systems_str).unwrap()
 }
