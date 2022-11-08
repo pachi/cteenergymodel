@@ -654,7 +654,49 @@ pub struct GtSystem {
     pub fans: Option<SysFans>,
 
     /// Calefacción y Refrigeración
-    pub heating_cooling: Option<SysHeatingCooling>,
+    // -- Refrigeración
+
+    // Baterías de refrigeración --
+    pub cooling_coil: Option<SysCoolingCoil>,
+
+    // -- Calefacción --
+
+    // Ver cómo según heat_source y zone_heat_source se usan distintas cosas en los heating_coil, que es el que recibe la información
+    // https://doe2.com/Download/DOE-22/DOE22Vol2-Dictionary.pdf p.391
+    // Fuentes de calor ---
+    // Fuentes de calor a nivel de sistema y/o zona de un subsistema secundario de GT
+    // No existe en sistemas solo ventilación (PMZS)
+
+    // Indica si el sistema puede suministrar calor
+    /// Fuente de calor a nivel de sistema
+    /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
+    /// (C-C-HEAT-SOURCE)
+    /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
+    /// y en EVAP-COOL y CBVAV
+    pub heat_source: Option<GtHeatSourceKind>,
+    /// Fuente de calor a nivel de zona
+    /// (C-C-ZONE-H-SOUR)
+    /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
+    /// No existe en todo aire, doble conducto DDS, Climatizadora aire primario, CBVAV, y Solo ventilación PMZS
+    pub zone_heat_source: Option<GtHeatSourceKind>,
+
+    /// Combustible
+    /// (MSTR-FUEL-METER)
+    pub heat_fuel: Option<String>,
+
+    // Baterías ---
+    pub heating_coil: Option<SysHeatingCoil>,
+
+    // Precalentamiento / calef. aux ---
+    pub pre_and_aux_heating: Option<SysPreAndAuxHeating>,
+
+    // -- Autónomos calor / frío ---
+    // Sistemas de generación autónomos
+    // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
+    // centralizado o zonal
+    // No se usan en solo ventilación PMZS
+    pub heating_local: Option<SysHeatingLocal>,
+    pub cooling_local: Option<SysCoolingLocal>,
 
     /// Control
     pub control: Option<SysControl>,
@@ -728,6 +770,7 @@ pub struct SysCoolingCoil {
     /// (C-C-COOL-CAP)
     pub cool_cap: f32,
     /// Potencia sensible batería frío, kW
+    /// Para la mayor parte de equipos prefabricados es 0.8 * cool_cap
     /// (C-C-COOL-SH-CAP)
     pub cool_sh_cap: f32,
 
@@ -744,27 +787,6 @@ pub struct SysCoolingCoil {
     // Circuito de agua fría que alimenta las unidades de zona
     // (ZONE-CHW-LOOP)
     // pub zone_chw_loop: Option<String>,
-}
-
-/// Fuentes de calor a nivel de sistema y/o zona de un subsistema secundario de GT
-/// No existe en sistemas solo ventilación (PMZS)
-#[derive(Debug, Default, Clone, PartialEq, Eq)]
-pub struct SysHeatingSource {
-    // Indica si el sistema puede suministrar calor
-    /// Fuente de calor a nivel de sistema
-    /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
-    /// (C-C-HEAT-SOURCE)
-    /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
-    /// y en EVAP-COOL y CBVAV
-    pub heat_source: Option<GtHeatSourceKind>,
-    /// Fuente de calor a nivel de zona
-    /// (C-C-ZONE-H-SOUR)
-    /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
-    /// No existe en todo aire doble conducto DDS, Climatizadora aire primario, CBVAV, y Solo ventilación PMZS
-    pub zone_heat_source: Option<GtHeatSourceKind>,
-    /// Combustible
-    /// (MSTR-FUEL-METER)
-    pub heat_fuel: Option<String>,
 }
 
 /// Baterías de calefacción de un subsistema secundario de GT
@@ -820,7 +842,7 @@ pub struct SysPreAndAuxHeating {
 
     // Batería de precalentamiento ---
     // Calienta el aire cuando está por debajo de la temperatura de congelación
-    /// Circuito batería precalentamiento
+    /// Circuito batería precalentamiento, si el source es un circuito (y no eléctrico o de gas)
     /// (PHW-LOOP)
     pub preheat_loop: Option<String>,
     // Caudal batería precalentamiento, l/h
@@ -858,7 +880,7 @@ pub struct SysHeatingLocal {
     // Opciones cuando HeatSource es Generador de aire / furnace (calor) ---
     // Combustible usado (MSTR-FUEL-METER)
     // Rendimiento térmico del generador de aire
-    // (C-C-FURNACE-HIR)
+    // (C-C-FURNACE-HIR)ºº
     // Consumo auxiliar del generador de aire, kW
     // (C-C-FURNACE-AUX)
 
@@ -912,33 +934,6 @@ pub struct SysCoolingLocal {
     // Efectividad kWh/kWh (EVAP-PCC-EFF)
     // Horario (EVAP-PCC-SCH)
     // Consumo W/W (EVAP-PCC-ELEC)
-}
-
-/// Calefacción y refrigeración de un subsistema secundario de GT
-#[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysHeatingCooling {
-    // -- Refrigeración
-
-    // Baterías de refrigeración --
-    pub cooling_coil: Option<SysCoolingCoil>,
-
-    // -- Calefacción --
-
-    // Fuentes de calor ---
-    pub heating_source: Option<SysHeatingSource>,
-
-    // Baterías ---
-    pub heating_coil: Option<SysHeatingCoil>,
-
-    // Precalentamiento / calef. aux ---
-    pub pre_and_aux_heating: Option<SysPreAndAuxHeating>,
-
-    // -- Autónomos calor / frío ---
-    // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
-    // centralizado o zonal
-    // No se usan en solo ventilación PMZS
-    pub heating_local: Option<SysHeatingLocal>,
-    pub cooling_local: Option<SysCoolingLocal>,
 }
 
 /// Control de un subsistema secundario de GT

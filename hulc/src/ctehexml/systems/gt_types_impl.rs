@@ -433,6 +433,8 @@ impl From<BdlBlock> for GtSystem {
             .parse()
             .unwrap_or_default();
 
+        // Ventiladores
+
         let fans = block.attrs.get_str("FAN-SCHEDULE").ok().map(|schedule| {
             let supply_flow = block.attrs.get_f32("C-C-SUPPLY-FLOW").unwrap_or_default();
             // Los sistemas de zona se definen por factor de transporte y no potencia
@@ -450,6 +452,8 @@ impl From<BdlBlock> for GtSystem {
                 return_kw: block.attrs.get_f32("C-C-RETURN-KW").ok(),
             }
         });
+
+        // Control
 
         let control = {
             // TODO: hay temperaturas por defecto según el tipo de secundario
@@ -473,6 +477,8 @@ impl From<BdlBlock> for GtSystem {
                 })
             }
         };
+
+        // Sistemas de recuperación
 
         let recovery = {
             // Free cooling
@@ -519,82 +525,66 @@ impl From<BdlBlock> for GtSystem {
             }
         };
 
-        let heating_cooling = {
-            let cooling_coil = if let Ok(cool_cap) = block.attrs.get_f32("C-C-COOL-CAP") {
-                Some(SysCoolingCoil {
-                    cool_cap,
-                    cool_sh_cap: block.attrs.get_f32("C-C-COOL-SH-CAP").unwrap_or_default(),
-                    chw_loop: block.attrs.get_str("CHW-LOOP").ok(),
-                    chw_coil_q: block.attrs.get_f32("C-C-CHW-COIL-Q").ok(),
-                })
-            } else {
-                None
-            };
+        // Calefacción y refrigeración
 
-            let heating_source = {
-                let heat_source = block
-                    .attrs
-                    .get_str("C-C-HEAT-SOURCE")
-                    .unwrap_or_default()
-                    .parse()
-                    .ok();
-                let zone_heat_source = block
-                    .attrs
-                    .get_str("C-C-ZONE-H-SOUR")
-                    .unwrap_or_default()
-                    .parse()
-                    .ok();
-                if heat_source.is_none() || zone_heat_source.is_none() {
-                    None
-                } else {
-                    Some(SysHeatingSource {
-                        heat_source,
-                        zone_heat_source,
-                        heat_fuel: block.attrs.get_str("MSTR-FUEL-METER").ok(),
-                    })
-                }
-            };
-
-            let heating_coil = if let Ok(heat_cap) = block.attrs.get_f32("C-C-HEAT-CAP") {
-                Some(SysHeatingCoil {
-                    heat_cap,
-                    hw_coil_q: block.attrs.get_f32("C-C-HW-COIL-Q").ok(),
-                    hw_loop: block.attrs.get_str("HW-LOOP").ok(),
-                    zone_hw_loop: block.attrs.get_str("ZONE-HW-LOOP").ok(),
-                    dhw_loop: block.attrs.get_str("DHW-LOOP").ok(),
-                })
-            } else {
-                None
-            };
-
-            // TODO: usar None si no hay ninguna fuente
-            let pre_and_aux_heating = Some(SysPreAndAuxHeating {
-                preheat_source: block.attrs.get_str("C-C-PREHEAT-SOURCE").ok(),
-                preheat_cap: block.attrs.get_f32("C-C-PREHEAT-CAP").ok(),
-                preheat_loop: block.attrs.get_str("PHW-LOOP").ok(),
-                aux_heat_source: block.attrs.get_str("C-C-BBRD-SOUR").ok(),
-                aux_heat_loop: block.attrs.get_str("BBRD-LOOP").ok(),
-            });
-
-            let heating_local = if let Ok(cop) = block.attrs.get_f32("C-C-COP") {
-                Some(SysHeatingLocal { cop })
-            } else {
-                None
-            };
-            let cooling_local = if let Ok(eer) = block.attrs.get_f32("C-C-EER") {
-                Some(SysCoolingLocal { eer })
-            } else {
-                None
-            };
-
-            Some(SysHeatingCooling {
-                cooling_coil,
-                heating_source,
-                heating_coil,
-                pre_and_aux_heating,
-                heating_local,
-                cooling_local,
+        let cooling_coil = if let Ok(cool_cap) = block.attrs.get_f32("C-C-COOL-CAP") {
+            Some(SysCoolingCoil {
+                cool_cap,
+                cool_sh_cap: block.attrs.get_f32("C-C-COOL-SH-CAP").unwrap_or_default(),
+                chw_loop: block.attrs.get_str("CHW-LOOP").ok(),
+                chw_coil_q: block.attrs.get_f32("C-C-CHW-COIL-Q").ok(),
             })
+        } else {
+            None
+        };
+
+        // Fuente de calor a nivel de sistema
+        let heat_source = block
+            .attrs
+            .get_str("C-C-HEAT-SOURCE")
+            .unwrap_or_default()
+            .parse()
+            .ok();
+        // Fuente de calor a nivel de zona
+        let zone_heat_source = block
+            .attrs
+            .get_str("C-C-ZONE-H-SOUR")
+            .unwrap_or_default()
+            .parse()
+            .ok();
+        // Fuel
+        let heat_fuel = block.attrs.get_str("MSTR-FUEL-METER").ok();
+
+        let heating_coil = if let Ok(heat_cap) = block.attrs.get_f32("C-C-HEAT-CAP") {
+            Some(SysHeatingCoil {
+                heat_cap,
+                hw_coil_q: block.attrs.get_f32("C-C-HW-COIL-Q").ok(),
+                hw_loop: block.attrs.get_str("HW-LOOP").ok(),
+                zone_hw_loop: block.attrs.get_str("ZONE-HW-LOOP").ok(),
+                dhw_loop: block.attrs.get_str("DHW-LOOP").ok(),
+            })
+        } else {
+            None
+        };
+
+        // TODO: usar None si no hay ninguna fuente
+        let pre_and_aux_heating = Some(SysPreAndAuxHeating {
+            preheat_source: block.attrs.get_str("C-C-PREHEAT-SOURCE").ok(),
+            preheat_cap: block.attrs.get_f32("C-C-PREHEAT-CAP").ok(),
+            preheat_loop: block.attrs.get_str("PHW-LOOP").ok(),
+            aux_heat_source: block.attrs.get_str("C-C-BBRD-SOUR").ok(),
+            aux_heat_loop: block.attrs.get_str("BBRD-LOOP").ok(),
+        });
+
+        let heating_local = if let Ok(cop) = block.attrs.get_f32("C-C-COP") {
+            Some(SysHeatingLocal { cop })
+        } else {
+            None
+        };
+        let cooling_local = if let Ok(eer) = block.attrs.get_f32("C-C-EER") {
+            Some(SysCoolingLocal { eer })
+        } else {
+            None
         };
 
         Self {
@@ -602,7 +592,14 @@ impl From<BdlBlock> for GtSystem {
             kind,
             control_zone: block.attrs.get_str("CONTROL-ZONE").ok(),
             fans,
-            heating_cooling,
+            cooling_coil,
+            heat_source,
+            zone_heat_source,
+            heat_fuel,
+            heating_coil,
+            pre_and_aux_heating,
+            heating_local,
+            cooling_local,
             control,
             recovery,
         }
