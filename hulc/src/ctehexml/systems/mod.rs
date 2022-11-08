@@ -29,10 +29,10 @@ pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<VypSystem>)
     // let horarios = todo!();
 
     // TODO: eliminar
-    // println!("Sistemas  GT:\n{:#?}", gt_systems);
+    println!("Sistemas  GT:\n{:#?}", gt_systems);
 
     // TODO: eliminar
-    // println!("Sistemas VyP:\n{:#?}", sistemas);
+    println!("Sistemas VyP:\n{:#?}", sistemas);
 
     // TODO: completar sistemas GT
     (factores_correccion_sistemas, sistemas)
