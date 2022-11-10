@@ -173,7 +173,7 @@ impl Space {
                 .unwrap_or_default();
             e_tot += a * (W + LAMBDA_GND * (RSI_DESCENDENTE + resistance + RSE));
         }
-        let d_t = e_tot / a_total / ground_slabs.len() as f32;
+        let d_t = e_tot / a_total;
         Some(d_t)
     }
 
