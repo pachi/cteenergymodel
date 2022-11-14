@@ -620,7 +620,7 @@ pub struct GtSystem {
     ///
     /// Sistemas unitarios
     /// * Sistemas zonales
-    /// - PTAC: Autónomo mediante unidades terminales (packaged terminal aire conditioner)
+    /// - PTAC: Autónomo mediante unidades terminales (packaged terminal air conditioner)
     /// - HP: Autónomo BdC en circuito cerrado (¿water loop? heat pump)
     /// - FC: Fancoil (ventiloconvector) (fan coil)
     /// - UVT: Termoventilación (unit ventilator)
