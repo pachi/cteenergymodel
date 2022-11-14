@@ -651,6 +651,7 @@ pub struct GtSystem {
     // Humedad máxima (C-C-HUM-MAX)
     // Humedad mínima (C-C-HUM-MIN)
     /// Ventiladores de impulsión y retorno
+    /// TODO: separar en supply y return fans con Option<Fan>
     pub fans: Option<SysFans>,
 
     /// Calefacción y Refrigeración
