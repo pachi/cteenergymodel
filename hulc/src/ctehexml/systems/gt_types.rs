@@ -663,21 +663,23 @@ pub struct GtSystem {
 
     // Ver cómo según heat_source y zone_heat_source se usan distintas cosas en los heating_coil, que es el que recibe la información
     // https://doe2.com/Download/DOE-22/DOE22Vol2-Dictionary.pdf p.391
+
     // Fuentes de calor ---
     // Fuentes de calor a nivel de sistema y/o zona de un subsistema secundario de GT
     // No existe en sistemas solo ventilación (PMZS)
 
     // Indica si el sistema puede suministrar calor
-    /// Fuente de calor a nivel de sistema
+    /// Fuente de calor a nivel de sistema (baterías principales del sistema)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
     /// (C-C-HEAT-SOURCE)
     /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
     /// y en EVAP-COOL y CBVAV
     pub heat_source: Option<GtHeatSourceKind>,
-    /// Fuente de calor a nivel de zona (baterías de recalentamiento)
+    /// Fuente de calor a nivel de zona (baterías de recalentamiento en unidades terminales)
     /// (C-C-ZONE-H-SOUR)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
     /// No existe en todo aire, doble conducto DDS, Climatizadora aire primario, CBVAV, y Solo ventilación PMZS
+    /// La capacidad se define en la zona con (C-C-HEAT-CAP)
     pub zone_heat_source: Option<GtHeatSourceKind>,
 
     /// Combustible
