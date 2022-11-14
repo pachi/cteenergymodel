@@ -747,17 +747,19 @@ pub struct SysFans {
     // pub min_flow_ratio: Option<f32>,
 }
 
-/// Tipos de sistemas secundarios de GT
+/// Fuentes de calor - Tipos de sistemas secundarios de GT
 /// (TYPE)
+/// Fuente de calor a nivel de sistema o zona
+/// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum GtHeatSourceKind {
     #[default]
     // 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
-    Elec,
-    HotWater,
-    Dhw,
-    ElecHp,
-    GasHp,
+    Electric,
+    HotWaterLoop,
+    DhwLoop,
+    HeatPump,
+    GasHeatPump,
     Furnace,
 }
 

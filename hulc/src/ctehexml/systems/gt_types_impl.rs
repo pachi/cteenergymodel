@@ -613,11 +613,11 @@ impl FromStr for GtHeatSourceKind {
         use GtHeatSourceKind::*;
 
         match s.trim() {
-            "1" => Ok(Elec),
-            "2" => Ok(HotWater),
-            "3" => Ok(Dhw),
-            "4" => Ok(ElecHp),
-            "5" => Ok(GasHp),
+            "1" => Ok(Electric),
+            "2" => Ok(HotWaterLoop),
+            "3" => Ok(DhwLoop),
+            "4" => Ok(HeatPump),
+            "5" => Ok(GasHeatPump),
             "6" => Ok(Furnace),
             _ => bail!("Fuente de calor desconocida!"),
         }
