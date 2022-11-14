@@ -674,7 +674,7 @@ pub struct GtSystem {
     /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
     /// y en EVAP-COOL y CBVAV
     pub heat_source: Option<GtHeatSourceKind>,
-    /// Fuente de calor a nivel de zona
+    /// Fuente de calor a nivel de zona (baterías de recalentamiento)
     /// (C-C-ZONE-H-SOUR)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
     /// No existe en todo aire, doble conducto DDS, Climatizadora aire primario, CBVAV, y Solo ventilación PMZS
