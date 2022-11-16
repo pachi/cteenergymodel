@@ -702,8 +702,10 @@ pub struct GtSystem {
 
     // Ver cómo según heat_source y zone_heat_source se usan distintas cosas en los heating_coil, que es el que recibe la información
     // https://doe2.com/Download/DOE-22/DOE22Vol2-Dictionary.pdf p.391
+    // Ver fuentes de calor en Manual Técnico de Calener GT
 
     // Fuentes de calor ---
+    // Ver tablas de Manual Técnico de GT
     // Fuentes de calor a nivel de sistema y/o zona de un subsistema secundario de GT
     // No existe en sistemas solo ventilación (PMZS)
 
@@ -718,7 +720,8 @@ pub struct GtSystem {
     /// Fuente de calor para las baterías de zona (recalentamiento) en unidades terminales
     /// (C-C-ZONE-H-SOUR)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
-    /// No existe en todo aire, doble conducto DDS, Climatizadora aire primario, CBVAV, y Solo ventilación PMZS
+    /// No existe en todo aire doble conducto (DDS), Climatizadora aire primario (CBVAV), y Solo ventilación (PMZS)
+    /// La generación de aire solo está en sistemas autónomos (en zonales solo PTAC, no HP)
     /// La capacidad se define en la zona con (C-C-HEAT-CAP)
     pub zone_heat_source: Option<GtHeatSourceKind>,
 
@@ -742,12 +745,17 @@ pub struct GtSystem {
     pub cool_gen_params: Option<SysCoolingGenParams>,
     /// Combustible
     /// (MSTR-FUEL-METER)
+    /// Se usa para el fuel de furnace (generador aire) o para otros casos?
     pub heat_fuel: Option<String>,
 
     // Precalentamiento ---
+    // GT no exporta al XML la potencia del precalentamiento
+    // Opcional en Sistemas todo aire (SZRH, VAVS, RHFS, DDS) y
+    // autónomos caudal constante y variable (PSZ, PVAVS) (no en PVVT ni sistemas zonales)
     pub pre_heat: Option<SysPreHeating>,
 
     // Calefacción auxiliar ---
+    // Opcional en sistemas Todo aire caudal variable (VAVS)
     pub aux_heat: Option<SysAuxHeating>,
 
     // Fin calefacción -------
