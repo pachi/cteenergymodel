@@ -680,13 +680,25 @@ pub struct GtSystem {
     // Caudal mínimo para caja de mezcla (en caudal variable), -
     // (C-C-MIN-FLOW-RAT)
     // pub min_flow_ratio: Option<f32>,
-    /// Calefacción y Refrigeración
+
+    // Calefacción y Refrigeración
+
     // -- Refrigeración
 
     // Baterías de refrigeración --
-    pub cooling_coil: Option<SysCoolingCoil>,
+    pub cool_coil: Option<SysCoolingCoil>,
+
+    // Fin refrigeración -------
 
     // -- Calefacción --
+    // - Fuentes de  calor para el sistema
+    // - Fuente de calor para zonas
+
+    // - Baterías de agua caliente
+    // - Calentadores de aire (gas / oil)
+    // - Bomba de calor aire-aire
+    // - Precalentamiento
+    // - Calefacción auxiliar
 
     // Ver cómo según heat_source y zone_heat_source se usan distintas cosas en los heating_coil, que es el que recibe la información
     // https://doe2.com/Download/DOE-22/DOE22Vol2-Dictionary.pdf p.391
@@ -702,33 +714,43 @@ pub struct GtSystem {
     /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
     /// y en EVAP-COOL y CBVAV
     pub heat_source: Option<GtHeatSourceKind>,
-    /// Fuente de calor a nivel de zona (baterías de recalentamiento en unidades terminales)
+
+    /// Fuente de calor para las baterías de zona (recalentamiento) en unidades terminales
     /// (C-C-ZONE-H-SOUR)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
     /// No existe en todo aire, doble conducto DDS, Climatizadora aire primario, CBVAV, y Solo ventilación PMZS
     /// La capacidad se define en la zona con (C-C-HEAT-CAP)
     pub zone_heat_source: Option<GtHeatSourceKind>,
 
+
+    /// Potencia total de calefacción (baterias zonales o del sistema), kW
+    /// (C-C-HEAT-CAP)
+    /// En unidades terminales se definen en la zona
+    pub heat_cap: f32,
+
+    // TODO: generar un campo de parámetros de calefacción según la fuente de calor
+    // Baterías ---
+    // Parámetros para sistemas de agua caliente (fuente de calor agua caliente)
+    pub heat_coil: Option<SysHeatingCoil>,
+
+    // -- Autónomos calor / frío ---
+    // Parámetros para sistemas de generación autónomos
+    // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
+    // centralizado o zonal
+    // No se usan en solo ventilación PMZS
+    pub heat_gen_params: Option<SysHeatingGenParams>,
+    pub cool_gen_params: Option<SysCoolingGenParams>,
     /// Combustible
     /// (MSTR-FUEL-METER)
     pub heat_fuel: Option<String>,
 
-    // Baterías ---
-    pub heating_coil: Option<SysHeatingCoil>,
+    // Precalentamiento ---
+    pub pre_heat: Option<SysPreHeating>,
 
-    // Precalentamiento
-    pub pre_heating: Option<SysPreHeating>,
-    
     // Calefacción auxiliar ---
-    pub aux_heating: Option<SysAuxHeating>,
+    pub aux_heat: Option<SysAuxHeating>,
 
-    // -- Autónomos calor / frío ---
-    // Sistemas de generación autónomos
-    // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
-    // centralizado o zonal
-    // No se usan en solo ventilación PMZS
-    pub heating_local: Option<SysHeatingLocal>,
-    pub cooling_local: Option<SysCoolingLocal>,
+    // Fin calefacción -------
 
     /// Control
     pub control: Option<SysControl>,
@@ -755,12 +777,17 @@ pub struct Fan {
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub enum GtHeatSourceKind {
     #[default]
-    // 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
+    /// Electricidad
     Electric,
+    /// Circuito agua caliente
     HotWaterLoop,
+    /// Circuito ACS
     DhwLoop,
+    /// BdC eléctrica
     HeatPump,
+    /// BdC gas
     GasHeatPump,
+    /// Generador aire
     Furnace,
 }
 
@@ -796,10 +823,6 @@ pub struct SysCoolingCoil {
 /// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysHeatingCoil {
-    /// Calefacción
-    /// Potencia total batería zonal, kW
-    /// (C-C-HEAT-CAP)
-    pub heat_cap: f32,
     /// Caudal batería, l/h
     /// (C-C-HW-COIL-Q)
     pub hw_coil_q: Option<f32>,
@@ -858,7 +881,6 @@ pub struct SysPreHeating {
     // pub preheating_valve_type: Option<String>
 }
 
-
 /// Calefacción auxiliar de un subsistema secundario de GT
 /// Se puede definir según la fuente de calor
 /// No existen en sistemas de solo ventilación PMZS
@@ -873,23 +895,24 @@ pub struct SysAuxHeating {
     // Tipo de control de calefacción auxiliar
     // (C-C-BBRD-CONTROL)
     // pub aux_heat_control: Option<String>,
-    /// Unidad terminal ---
+    /// Unidad terminal para la calefacción auxiliar ---
     /// Circuito unidad terminal
     /// (BBRD-LOOP)
     pub loop_name: Option<String>,
     // Salto térmico unidad terminal, ºC
     // (BBRD-COIL-DT)
-    // pub aux_heat_dt: Option<f32>
+    pub dt: Option<f32>,
 }
 
 /// Autónomos: calefacción (dx o generador de aire) de un subsistema secundario de GT
 /// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysHeatingLocal {
+pub struct SysHeatingGenParams {
     // Opciones cuando HeatSource es Generador de aire / furnace (calor) ---
-    // Combustible usado (MSTR-FUEL-METER)
+    // Combustible usado
+    // (MSTR-FUEL-METER)
     // Rendimiento térmico del generador de aire
-    // (C-C-FURNACE-HIR)ºº
+    // (C-C-FURNACE-HIR)
     // Consumo auxiliar del generador de aire, kW
     // (C-C-FURNACE-AUX)
 
@@ -917,7 +940,7 @@ pub struct SysHeatingLocal {
 /// de un subsistema secundario de GT
 /// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysCoolingLocal {
+pub struct SysCoolingGenParams {
     // Frío ---
     /// Rendimiento, EER
     /// (C-C-EER)

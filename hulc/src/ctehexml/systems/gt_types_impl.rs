@@ -558,12 +558,16 @@ impl From<BdlBlock> for GtSystem {
             .unwrap_or_default()
             .parse()
             .ok();
+
+        // Potencia de calefacción
+        let heat_cap = block.attrs.get_f32("C-C-HEAT-CAP").unwrap_or_default();
+        
         // Fuel (cuando no es electricidad)
         let heat_fuel = block.attrs.get_str("MSTR-FUEL-METER").ok();
 
+        
         let heating_coil = if let Ok(heat_cap) = block.attrs.get_f32("C-C-HEAT-CAP") {
             Some(SysHeatingCoil {
-                heat_cap,
                 hw_coil_q: block.attrs.get_f32("C-C-HW-COIL-Q").ok(),
                 hw_loop: block.attrs.get_str("HW-LOOP").ok(),
                 zone_hw_loop: block.attrs.get_str("ZONE-HW-LOOP").ok(),
@@ -592,18 +596,19 @@ impl From<BdlBlock> for GtSystem {
                 Some(SysAuxHeating {
                     source,
                     loop_name: block.attrs.get_str("BBRD-LOOP").ok(),
+                    dt: block.attrs.get_f32("BBRD-COIL-DT").ok(),
                 })
             } else {
                 None
             };
 
         let heating_local = if let Ok(cop) = block.attrs.get_f32("C-C-COP") {
-            Some(SysHeatingLocal { cop })
+            Some(SysHeatingGenParams { cop })
         } else {
             None
         };
         let cooling_local = if let Ok(eer) = block.attrs.get_f32("C-C-EER") {
-            Some(SysCoolingLocal { eer })
+            Some(SysCoolingGenParams { eer })
         } else {
             None
         };
@@ -615,21 +620,25 @@ impl From<BdlBlock> for GtSystem {
             fans_schedule,
             supply_fan,
             return_fan,
-            cooling_coil,
+            cool_coil: cooling_coil,
             heat_source,
             zone_heat_source,
+            heat_cap,
             heat_fuel,
-            heating_coil,
-            pre_heating,
-            aux_heating,
-            heating_local,
-            cooling_local,
+            heat_coil: heating_coil,
+            pre_heat: pre_heating,
+            aux_heat: aux_heating,
+            heat_gen_params: heating_local,
+            cool_gen_params: cooling_local,
             control,
             recovery,
         }
     }
 }
 
+/// Conversión a fuente de calor desde cadena de opción de BDL/GT
+/// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica,
+/// 5=BdC gas, 6=generador aire, 7=ninguna
 impl FromStr for GtHeatSourceKind {
     type Err = anyhow::Error;
 
