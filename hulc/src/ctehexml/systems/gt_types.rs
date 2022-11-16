@@ -716,8 +716,11 @@ pub struct GtSystem {
     // Baterías ---
     pub heating_coil: Option<SysHeatingCoil>,
 
-    // Precalentamiento / calef. aux ---
-    pub pre_and_aux_heating: Option<SysPreAndAuxHeating>,
+    // Precalentamiento
+    pub pre_heating: Option<SysPreHeating>,
+    
+    // Calefacción auxiliar ---
+    pub aux_heating: Option<SysAuxHeating>,
 
     // -- Autónomos calor / frío ---
     // Sistemas de generación autónomos
@@ -824,27 +827,26 @@ pub struct SysHeatingCoil {
     // Tipo de control en sistemas zonales (C-C-CONDENSER-TYPE)
 }
 
-/// Precalentamiento o calefacción auxiliar de un subsistema secundario de GT
-/// Puede proceder de una fuente de calor, una batería de precalentamiento, un
-/// sistema auxiliar o una unidad terminal
+/// Precalentamiento de un subsistema secundario de GT
+/// Su definición depende de la fuente de calor
 /// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysPreAndAuxHeating {
+pub struct SysPreHeating {
     // Precalentamiento (si no es con batería) ---
     // Calienta el aire cuando está por debajo de la temperatura de congelación
     /// Fuente de calor
     /// (C-C-PREHEAT-SOURCE)
-    pub preheat_source: Option<String>,
+    pub source: GtHeatSourceKind,
     /// Potencia batería, kW
     /// (C-C-PREHEAT-CAP)
-    pub preheat_cap: Option<f32>,
+    pub capacity: f32,
     // Min temperatura salida (PREHEAT-T)
 
     // Batería de precalentamiento ---
     // Calienta el aire cuando está por debajo de la temperatura de congelación
     /// Circuito batería precalentamiento, si el source es un circuito (y no eléctrico o de gas)
     /// (PHW-LOOP)
-    pub preheat_loop: Option<String>,
+    pub loop_name: Option<String>,
     // Caudal batería precalentamiento, l/h
     // (C-C-PHW-COIL-Q)
     // pub preheat_coil_q: Option<f32>,
@@ -854,20 +856,27 @@ pub struct SysPreAndAuxHeating {
     // Tipo válvula batería precalentamiento
     // (PHW-VALVE-TYPE)
     // pub preheating_valve_type: Option<String>
+}
 
+
+/// Calefacción auxiliar de un subsistema secundario de GT
+/// Se puede definir según la fuente de calor
+/// No existen en sistemas de solo ventilación PMZS
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct SysAuxHeating {
     // Calefacción auxiliar ---
     /// Fuente de calor calefacción auxiliar
     /// (C-C-BBRD-SOUR)
     /// Solo en sistemas todo aire caudal variable VAVS
     /// Si es de tipo furnace (generador de aire) se rellenan los datos de rendimiento y consumo auxiliar
-    pub aux_heat_source: Option<String>,
+    pub source: GtHeatSourceKind,
     // Tipo de control de calefacción auxiliar
     // (C-C-BBRD-CONTROL)
     // pub aux_heat_control: Option<String>,
     /// Unidad terminal ---
     /// Circuito unidad terminal
     /// (BBRD-LOOP)
-    pub aux_heat_loop: Option<String>,
+    pub loop_name: Option<String>,
     // Salto térmico unidad terminal, ºC
     // (BBRD-COIL-DT)
     // pub aux_heat_dt: Option<f32>

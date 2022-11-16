@@ -558,7 +558,7 @@ impl From<BdlBlock> for GtSystem {
             .unwrap_or_default()
             .parse()
             .ok();
-        // Fuel
+        // Fuel (cuando no es electricidad)
         let heat_fuel = block.attrs.get_str("MSTR-FUEL-METER").ok();
 
         let heating_coil = if let Ok(heat_cap) = block.attrs.get_f32("C-C-HEAT-CAP") {
@@ -573,14 +573,29 @@ impl From<BdlBlock> for GtSystem {
             None
         };
 
-        // TODO: usar None si no hay ninguna fuente
-        let pre_and_aux_heating = Some(SysPreAndAuxHeating {
-            preheat_source: block.attrs.get_str("C-C-PREHEAT-SOURCE").ok(),
-            preheat_cap: block.attrs.get_f32("C-C-PREHEAT-CAP").ok(),
-            preheat_loop: block.attrs.get_str("PHW-LOOP").ok(),
-            aux_heat_source: block.attrs.get_str("C-C-BBRD-SOUR").ok(),
-            aux_heat_loop: block.attrs.get_str("BBRD-LOOP").ok(),
-        });
+        let pre_heating = if let Ok(source) = block
+            .attrs
+            .get_str("C-C-PREHEAT-SOURCE")
+            .and_then(|s| s.parse())
+        {
+            Some(SysPreHeating {
+                source,
+                capacity: block.attrs.get_f32("C-C-PREHEAT-CAP").unwrap_or_default(),
+                loop_name: block.attrs.get_str("PHW-LOOP").ok(),
+            })
+        } else {
+            None
+        };
+
+        let aux_heating =
+            if let Ok(source) = block.attrs.get_str("C-C-BBRD-SOUR").and_then(|s| s.parse()) {
+                Some(SysAuxHeating {
+                    source,
+                    loop_name: block.attrs.get_str("BBRD-LOOP").ok(),
+                })
+            } else {
+                None
+            };
 
         let heating_local = if let Ok(cop) = block.attrs.get_f32("C-C-COP") {
             Some(SysHeatingLocal { cop })
@@ -605,7 +620,8 @@ impl From<BdlBlock> for GtSystem {
             zone_heat_source,
             heat_fuel,
             heating_coil,
-            pre_and_aux_heating,
+            pre_heating,
+            aux_heating,
             heating_local,
             cooling_local,
             control,
