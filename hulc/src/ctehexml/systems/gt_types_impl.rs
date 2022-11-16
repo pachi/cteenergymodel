@@ -435,23 +435,29 @@ impl From<BdlBlock> for GtSystem {
 
         // Ventiladores
 
-        let fans = block.attrs.get_str("FAN-SCHEDULE").ok().map(|schedule| {
-            let supply_flow = block.attrs.get_f32("C-C-SUPPLY-FLOW").unwrap_or_default();
-            // Los sistemas de zona se definen por factor de transporte y no potencia
-            let supply_kw = if kind.is_zone_system() {
-                block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or(0.1) * supply_flow
-            } else {
-                block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or_default()
-            };
+        let fans_schedule = block.attrs.get_str("FAN-SCHEDULE").ok();
+        let supply_fan = if let Ok(supply_flow) = block.attrs.get_f32("C-C-SUPPLY-FLOW") {
+            Some(Fan {
+                flow: supply_flow,
+                kw: if kind.is_zone_system() {
+                    // Los sistemas de zona se definen por factor de transporte y no potencia
+                    block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or(0.1) * supply_flow
+                } else {
+                    block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or_default()
+                },
+            })
+        } else {
+            None
+        };
 
-            SysFans {
-                schedule,
-                supply_flow,
-                supply_kw,
-                return_flow: block.attrs.get_f32("RETURN-FLOW").ok(),
-                return_kw: block.attrs.get_f32("C-C-RETURN-KW").ok(),
-            }
-        });
+        let return_fan = if let Ok(return_flow) = block.attrs.get_f32("RETURN-FLOW") {
+            Some(Fan {
+                flow: return_flow,
+                kw: block.attrs.get_f32("C-C-RETURN-KW").unwrap_or_default(),
+            })
+        } else {
+            None
+        };
 
         // Control
 
@@ -591,7 +597,9 @@ impl From<BdlBlock> for GtSystem {
             name,
             kind,
             control_zone: block.attrs.get_str("CONTROL-ZONE").ok(),
-            fans,
+            fans_schedule,
+            supply_fan,
+            return_fan,
             cooling_coil,
             heat_source,
             zone_heat_source,
@@ -649,14 +657,11 @@ impl From<BdlBlock> for GtZoneSystem {
             .parse()
             .unwrap_or_default();
 
-        let has_exhaust_fan = block.attrs.get_str("C-C-PROP-ZR-1").unwrap_or_default() == "1";
-        let exh_flow = if has_exhaust_fan {
-            block.attrs.get_f32("C-C-EXH-FLOW").ok()
-        } else {
-            None
-        };
-        let exh_kw = if has_exhaust_fan {
-            block.attrs.get_f32("C-C-EXH-KW").ok()
+        let exhaust_fan = if block.attrs.get_str("C-C-PROP-ZR-1").unwrap_or_default() == "1" {
+            Some(Fan {
+                flow: block.attrs.get_f32("C-C-EXH-FLOW").unwrap_or_default(),
+                kw: block.attrs.get_f32("C-C-EXH-KW").unwrap_or_default(),
+            })
         } else {
             None
         };
@@ -685,14 +690,19 @@ impl From<BdlBlock> for GtZoneSystem {
             name,
             kind,
             space: block.attrs.get_str("SPACE").unwrap_or_default(),
+            // Sistema asignado a la zona
             // El sistema se asigna tras la construcción
             system: None,
+            // Termostatos
             heat_temp_sch: block.attrs.get_str("HEAT-TEMP-SCH").ok(),
             cool_temp_sch: block.attrs.get_str("COOL-TEMP-SCH").ok(),
+            // impulsión de zona
             design_flow: block.attrs.get_f32("C-C-ASSIG-FLOW").ok(),
-            exh_flow,
-            exh_kw,
+            // extracción de zona
+            exhaust_fan,
+            // aire exterior de zona
             oa_flow,
+            // Equipamiento de zona
             cool_cap: block.attrs.get_f32("C-C-COOL-CAP").ok(),
             cool_sh_cap: block.attrs.get_f32("C-C-COOL-SH-CAP").ok(),
             heat_cap: block.attrs.get_f32("C-C-HEAT-CAP").ok(),

@@ -650,10 +650,36 @@ pub struct GtSystem {
     // Tipo Control de Humedad (C-C-HUM-CONTROL)
     // Humedad máxima (C-C-HUM-MAX)
     // Humedad mínima (C-C-HUM-MIN)
-    /// Ventiladores de impulsión y retorno
-    /// TODO: separar en supply y return fans con Option<Fan>
-    pub fans: Option<SysFans>,
 
+    // -- Ventiladores --
+    /// Horario de funcionamiento de los ventiladores de impulsión
+    /// (FAN-SCHEDULE)
+    pub fans_schedule: Option<String>,
+    // Tipo de control
+    // (C-C-FAN-CONTROL)
+    // Posición del ventilador
+    // (C-C-FAN-PLACEMENT)
+
+    // Ventilador de impulsión ---
+    /// Caudal del ventilador de impulsión, m³/h
+    /// (C-C-SUPPLY-FLOW)
+    /// Potencia del ventilador de impulsión, kW (C-C-SUPPLY-KW)
+    /// En sistemas zonales (PTAC, HP, FC, UVT, UHT, FPH) se usa el factor de transporte W/(m³/h) (C-C-SUP-KW/FLOW)
+    /// default: 0.10
+    pub supply_fan: Option<Fan>,
+
+    // Ventilador de retorno ---
+    /// ¿Existe ventilador retorno?
+    /// (C-C-RETURN-FAN)
+    /// Caudal de retorno, m³/h
+    /// (RETURN-FLOW)
+    /// Potencia de ventilador de retorno, kW
+    /// (C-C-RETURN-KW)
+    pub return_fan: Option<Fan>,
+    // Caja de caudal variable  o caja de mezcla en doble conducto DDS ---
+    // Caudal mínimo para caja de mezcla (en caudal variable), -
+    // (C-C-MIN-FLOW-RAT)
+    // pub min_flow_ratio: Option<f32>,
     /// Calefacción y Refrigeración
     // -- Refrigeración
 
@@ -710,44 +736,13 @@ pub struct GtSystem {
     // ...
 }
 
-/// Ventiladores de un subsistema secundario de GT
-///
-/// Suponemos que si no hay horario de ventiladores no hay ventiladores de impulsión
+/// Ventiladores
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysFans {
-    /// Horario de funcionamiento de los ventiladores de impulsión
-    /// (FAN-SCHEDULE)
-    pub schedule: String,
-    // Tipo de control
-    // (C-C-FAN-CONTROL)
-    // Posición del ventilador
-    // (C-C-FAN-PLACEMENT)
-
-    // Ventilador de impulsión ---
-    /// Caudal del ventilador de impulsión, m³/h
-    /// (C-C-SUPPLY-FLOW)
-    pub supply_flow: f32,
-    /// Potencia del ventilador de impulsión, kW
-    /// (C-C-SUPPLY-KW)
-    /// En sistemas zonales, factor de transporte W/(m³/h)
-    /// Sistemas zonales: PTAC, HP, FC, UVT, UHT, FPH
-    /// (C-C-SUP-KW/FLOW)
-    /// default: 0.10
-    pub supply_kw: f32,
-
-    // Ventilador de retorno ---
-    /// ¿Existe ventilador retorno?
-    /// (C-C-RETURN-FAN)
-    /// Caudal de retorno, m³/h
-    /// (RETURN-FLOW)
-    pub return_flow: Option<f32>,
-    /// Potencia de ventilador de retorno, kW
-    /// (C-C-RETURN-KW)
-    pub return_kw: Option<f32>,
-    // Caja de caudal variable  o caja de mezcla en doble conducto DDS ---
-    // Caudal mínimo para caja de mezcla (en caudal variable), -
-    // (C-C-MIN-FLOW-RAT)
-    // pub min_flow_ratio: Option<f32>,
+pub struct Fan {
+    /// Caudal, m³/h
+    pub flow: f32,
+    /// Potencia de ventilador, kW
+    pub kw: f32,
 }
 
 /// Fuentes de calor - Tipos de sistemas secundarios de GT
@@ -1078,10 +1073,9 @@ pub struct GtZoneSystem {
     // -- Ventilador de extracción
     /// Caudal de extracción, m³/h
     /// (C-C-EXH-FLOW)
-    pub exh_flow: Option<f32>,
     /// Potencia de extracción, kW
     /// (C-C-EXHAUST-KW)
-    pub exh_kw: Option<f32>,
+    pub exhaust_fan: Option<Fan>,
 
     // -- Aire exterior --
     // Método para asignar caudal (C-C-OA-MET-DEF): 0 ==por persona, 1=total
