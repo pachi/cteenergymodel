@@ -684,9 +684,15 @@ pub struct GtSystem {
     // Calefacción y Refrigeración
 
     // -- Refrigeración
-
-    // Baterías de refrigeración --
-    pub cool_coil: Option<SysCoolingCoil>,
+    /// Potencia total batería frío, kW
+    /// (C-C-COOL-CAP)
+    pub cool_cap: f32,
+    /// Potencia sensible batería frío, kW
+    /// Para la mayor parte de equipos prefabricados es 0.8 * cool_cap
+    /// (C-C-COOL-SH-CAP)
+    pub cool_sh_cap: f32,
+    // Parámetros para refrigeración (circuito baterías, enf. evaporativo, etc)
+    pub cool_detail: Option<SysCoolingDetail>,
 
     // Fin refrigeración -------
 
@@ -725,28 +731,13 @@ pub struct GtSystem {
     /// La capacidad se define en la zona con (C-C-HEAT-CAP)
     pub zone_heat_source: Option<GtHeatSourceKind>,
 
-
     /// Potencia total de calefacción (baterias zonales o del sistema), kW
     /// (C-C-HEAT-CAP)
     /// En unidades terminales se definen en la zona
     pub heat_cap: f32,
 
-    // TODO: generar un campo de parámetros de calefacción según la fuente de calor
-    // Baterías ---
-    // Parámetros para sistemas de agua caliente (fuente de calor agua caliente)
-    pub heat_coil: Option<SysHeatingCoil>,
-
-    // -- Autónomos calor / frío ---
-    // Parámetros para sistemas de generación autónomos
-    // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
-    // centralizado o zonal
-    // No se usan en solo ventilación PMZS
-    pub heat_gen_params: Option<SysHeatingGenParams>,
-    pub cool_gen_params: Option<SysCoolingGenParams>,
-    /// Combustible
-    /// (MSTR-FUEL-METER)
-    /// Se usa para el fuel de furnace (generador aire) o para otros casos?
-    pub heat_fuel: Option<String>,
+    // Parámetros para sistemas de generación de calor
+    pub heat_detail: Option<SysHeatingDetail>,
 
     // Precalentamiento ---
     // GT no exporta al XML la potencia del precalentamiento
@@ -759,7 +750,6 @@ pub struct GtSystem {
     pub aux_heat: Option<SysAuxHeating>,
 
     // Fin calefacción -------
-
     /// Control
     pub control: Option<SysControl>,
 
@@ -799,19 +789,12 @@ pub enum GtHeatSourceKind {
     Furnace,
 }
 
-/// Baterías de refrigeración de un subsistema secundario de GT
+/// Datos específicos de refrigeración de un subsistema secundario de GT
 /// No existen en sistemas de solo ventilación PMZS
+/// TODO: reorganizar como enumeración según tipo...
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysCoolingCoil {
+pub struct SysCoolingDetail {
     // Baterías ---
-    /// Potencia total batería frío, kW
-    /// (C-C-COOL-CAP)
-    pub cool_cap: f32,
-    /// Potencia sensible batería frío, kW
-    /// Para la mayor parte de equipos prefabricados es 0.8 * cool_cap
-    /// (C-C-COOL-SH-CAP)
-    pub cool_sh_cap: f32,
-
     /// Circuito de agua fría que alimenta el sistema
     /// Es el circuito por defecto para zonas salvo que se indique
     /// (CHW-LOOP)
@@ -825,12 +808,45 @@ pub struct SysCoolingCoil {
     // Circuito de agua fría que alimenta las unidades de zona
     // (ZONE-CHW-LOOP)
     // pub zone_chw_loop: Option<String>,
+
+    // Autónomos ---
+    // Parámetros para sistemas de generación autónomos
+    // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
+    // centralizado o zonal
+    // refrigeración con dx, bomba de calor, condensación por agua, enf. evaporativo, etc
+
+    //
+    /// Rendimiento, EER
+    /// (C-C-EER)
+    /// Default: Autónomos 2.80
+    pub eer: Option<f32>,
+    // Tipo de condensación
+    // (C-C-COND-TYPE)
+    // Solo en sistemas zonales
+    // No existe en sistemas todo aire o doble conducto
+    // Por aire (0), por agua (1), preenfriamiento evaporativo (2)
+    // Default: por aire
+    // pub cond_type: Option<String>,
+
+    // Refrigeración autónomos, condensación por agua ---
+    // Circuito condensación
+    // (CW-LOOP)
+    // pub cw_loop: Option<String>,
+    // Salto térmico condensación, ºC
+    // (CW-COIL-DT)
+
+    // Refrigeración autónomos, preenfriamiento evaporativo ---
+    // Varios preenfriamiento evaporativo (frío):
+    // Efectividad kWh/kWh (EVAP-PCC-EFF)
+    // Horario (EVAP-PCC-SCH)
+    // Consumo W/W (EVAP-PCC-ELEC)
 }
 
-/// Baterías de calefacción de un subsistema secundario de GT
+/// Parámetros de sistemas de calefacción de un subsistema secundario de GT
 /// No existen en sistemas de solo ventilación PMZS
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysHeatingCoil {
+pub struct SysHeatingDetail {
+    // Baterías ----
     /// Caudal batería, l/h
     /// (C-C-HW-COIL-Q)
     pub hw_coil_q: Option<f32>,
@@ -856,6 +872,41 @@ pub struct SysHeatingCoil {
     // Salto térmico agua batería calefacción, ºC (HW-COIL-DT)
     // Tipo de válvula batería calefacción (C-C-HW-VALVE)...
     // Tipo de control en sistemas zonales (C-C-CONDENSER-TYPE)
+
+    // Autónomos ---
+    // Parámetros para sistemas de generación autónomos
+    // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
+    // centralizado o zonal
+
+    // calefacción (dx o generador de aire) de un subsistema secundario de GT
+
+    // Opciones cuando HeatSource es Generador de aire / furnace (calor) ---
+    // Combustible usado
+    // (MSTR-FUEL-METER)
+    pub heat_fuel: Option<String>,
+    // Rendimiento térmico del generador de aire
+    // (C-C-FURNACE-HIR)
+    // Consumo auxiliar del generador de aire, kW
+    // (C-C-FURNACE-AUX)
+
+    // Opciones cuando el HeatSource es BdC ---
+    /// Rendimiento, COP
+    /// (C-C-COP)
+    pub cop: Option<f32>,
+    // Datos adicionales cuando la fuente de calor es una bomba de calor
+    // Fuente de calor de apoyo de la BdC
+    // (C-C-HP-SUPP-SOUR)
+    // Eléctrica, Agua caliente, Recuperación BdC gas, Ninguna?
+    // pub heat_source: Option<String>,
+    // Potencia de apoyo, kW
+    // (C-C-HP-SUPP-CAP)
+    // pub aux_capacity: Option<f32>,
+
+    // Desescarche BdC ---
+    // Tipo de desescarche (DEFROST-TYPE)
+    // Control desescarche (DEFROST-CTRL)
+    // Temperatura desescarche (DEFROST-T)
+    // Pot. resist. / Pot. BdC, (RESIST-CAP-RATIO)
 }
 
 /// Precalentamiento de un subsistema secundario de GT
@@ -910,70 +961,6 @@ pub struct SysAuxHeating {
     // Salto térmico unidad terminal, ºC
     // (BBRD-COIL-DT)
     pub dt: Option<f32>,
-}
-
-/// Autónomos: calefacción (dx o generador de aire) de un subsistema secundario de GT
-/// No existen en sistemas de solo ventilación PMZS
-#[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysHeatingGenParams {
-    // Opciones cuando HeatSource es Generador de aire / furnace (calor) ---
-    // Combustible usado
-    // (MSTR-FUEL-METER)
-    // Rendimiento térmico del generador de aire
-    // (C-C-FURNACE-HIR)
-    // Consumo auxiliar del generador de aire, kW
-    // (C-C-FURNACE-AUX)
-
-    // Opciones cuando el HeatSource es BdC ---
-    /// Rendimiento, COP
-    /// (C-C-COP)
-    pub cop: f32,
-    // Datos adicionales cuando la fuente de calor es una bomba de calor
-    // Fuente de calor de apoyo de la BdC
-    // (C-C-HP-SUPP-SOUR)
-    // Eléctrica, Agua caliente, Recuperación BdC gas, Ninguna?
-    // pub heat_source: Option<String>,
-    // Potencia de apoyo, kW
-    // (C-C-HP-SUPP-CAP)
-    // pub aux_capacity: Option<f32>,
-
-    // Desescarche BdC ---
-    // Tipo de desescarche (DEFROST-TYPE)
-    // Control desescarche (DEFROST-CTRL)
-    // Temperatura desescarche (DEFROST-T)
-    // Pot. resist. / Pot. BdC, (RESIST-CAP-RATIO)
-}
-
-/// Autónomos: refrigeración con dx, bomba de calor, condensación por agua, enf. evaporativo, etc
-/// de un subsistema secundario de GT
-/// No existen en sistemas de solo ventilación PMZS
-#[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysCoolingGenParams {
-    // Frío ---
-    /// Rendimiento, EER
-    /// (C-C-EER)
-    /// Default: Autónomos 2.80
-    pub eer: f32,
-    // Tipo de condensación
-    // (C-C-COND-TYPE)
-    // Solo en sistemas zonales
-    // No existe en sistemas todo aire o doble conducto
-    // Por aire (0), por agua (1), preenfriamiento evaporativo (2)
-    // Default: por aire
-    // pub cond_type: Option<String>,
-
-    // Refrigeración autónomos, condensación por agua ---
-    // Circuito condensación
-    // (CW-LOOP)
-    // pub cw_loop: Option<String>,
-    // Salto térmico condensación, ºC
-    // (CW-COIL-DT)
-
-    // Refrigeración autónomos, preenfriamiento evaporativo ---
-    // Varios preenfriamiento evaporativo (frío):
-    // Efectividad kWh/kWh (EVAP-PCC-EFF)
-    // Horario (EVAP-PCC-SCH)
-    // Consumo W/W (EVAP-PCC-ELEC)
 }
 
 /// Control de un subsistema secundario de GT
