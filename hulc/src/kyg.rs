@@ -106,7 +106,7 @@ pub struct ThermalBridge {
 pub fn parse(data: &str) -> Result<KyGElements, Error> {
     let lines = data
         .lines()
-        .map(|e| e.trim())
+        .map(str::trim)
         .collect::<Vec<&str>>()
         .into_iter();
 
@@ -119,11 +119,8 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
             continue;
         }
         // Datos de elemento
-        else if line.starts_with("Muro")
-            || line.starts_with("Ventana")
-            || line.starts_with("PPTT")
-        {
-            let vv: Vec<&str> = line.split(';').map(|e| e.trim()).collect();
+        if line.starts_with("Muro") || line.starts_with("Ventana") || line.starts_with("PPTT") {
+            let vv: Vec<&str> = line.split(';').map(str::trim).collect();
             let tipo = vv[0];
             match tipo {
                 "Ventana" => {
@@ -148,7 +145,7 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
                             name: nombre.to_string(),
                             orientation: orienta.replace('O', "W").to_string(),
                             azimuth_n: 0.0, // Valor temporal, se completa más abajo
-                            wall: Default::default(),
+                            wall: String::default(),
                             a: a.replace(',', ".").parse()?,
                             u: u.replace(',', ".").parse()?,
                             ff: ff.replace(',', ".").parse::<f32>()? / 100.0_f32,
@@ -213,7 +210,7 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
         }
         // Ganancias solares de hueco
         else if line.starts_with('"') {
-            let vv: Vec<&str> = line.split(';').map(|e| e.trim()).collect();
+            let vv: Vec<&str> = line.split(';').map(str::trim).collect();
             if vv.len() < 8 {
                 bail!("Línea de datos de ganancias solares de hueco con formato desconocido")
             }

@@ -178,7 +178,7 @@ pub(crate) fn purge_unused_frames(model: &mut Model) {
 
 /// Elimina definiciones de cargas no usadas en los espacios
 pub(crate) fn purge_unused_loads(model: &mut Model) {
-    let loads_used_ids: HashSet<_> = model.spaces.iter().flat_map(|v| v.loads).collect();
+    let loads_used_ids: HashSet<_> = model.spaces.iter().filter_map(|v| v.loads).collect();
     model.loads = model
         .loads
         .iter()
@@ -190,7 +190,7 @@ pub(crate) fn purge_unused_loads(model: &mut Model) {
 /// Elimina definiciones de consignas no usadas en los espacios
 pub(crate) fn purge_unused_thermostats(model: &mut Model) {
     let thermostats_used_ids: HashSet<_> =
-        model.spaces.iter().flat_map(|v| v.thermostat).collect();
+        model.spaces.iter().filter_map(|v| v.thermostat).collect();
     model.thermostats = model
         .thermostats
         .iter()

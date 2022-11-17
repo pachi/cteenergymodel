@@ -15,7 +15,6 @@
 use std::str::FromStr;
 
 use anyhow::{bail, Error};
-use nalgebra::ComplexField;
 
 use crate::bdl::BdlBlock;
 
@@ -198,7 +197,7 @@ impl From<BdlBlock> for GtBoiler {
                 "4" => Biomass,
                 "5" => Electric,
                 // "1" => Conventional,
-                _ => Default::default(),
+                _ => BoilerKind::default(),
             },
         };
 
@@ -262,7 +261,7 @@ impl From<BdlBlock> for GtDwHeater {
         let eff = match kind {
             Electric => block.attrs.get_f32("C-STBY-LOSS-FRAC").unwrap_or(1.00),
             HeatPump => block.attrs.get_f32("C-STBY-LOSS-FRAC").unwrap_or(2.70),
-            _ => block.attrs.get_f32("C-ENERGY-FACTOR").unwrap_or(0.80),
+            Conventional => block.attrs.get_f32("C-ENERGY-FACTOR").unwrap_or(0.80),
         };
 
         let has_tank = &block.attrs.get_str("C-CATEGORY").unwrap_or_default() == "1";
@@ -418,9 +417,9 @@ impl FromStr for GtSystemKind {
 }
 
 impl GtSystemKind {
-    fn is_zone_system(&self) -> bool {
+    fn is_zone_system(self) -> bool {
         use GtSystemKind::*;
-        self == &Ptac || self == &Hp || self == &Fc || self == &Uvt || self == &Fph
+        self == Ptac || self == Hp || self == Fc || self == Uvt || self == Fph
     }
 }
 

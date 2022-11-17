@@ -90,30 +90,27 @@ impl TryFrom<BdlBlock> for Material {
         let group = attrs
             .remove_str("GROUP")
             .unwrap_or_else(|_| "Materiales".to_string());
-        let (properties, resistance) = match attrs.remove_str("TYPE")?.as_ref() {
-            "PROPERTIES" => {
-                // XXX: En LIDER antiguo no se define este valor
-                let thickness = attrs.remove_f32("THICKNESS").ok();
-                let conductivity = attrs.remove_f32("CONDUCTIVITY")?;
-                let density = attrs.remove_f32("DENSITY")?;
-                let specificheat = attrs.remove_f32("SPECIFIC-HEAT").unwrap_or(800.0);
-                // XXX: En LIDER antiguo no se define este valor
-                let vapourdiffusivity = attrs.remove_f32("VAPOUR-DIFFUSIVITY-FACTOR").ok();
-                (
-                    Some(MaterialProperties {
-                        thickness,
-                        conductivity,
-                        density,
-                        specificheat,
-                        vapourdiffusivity,
-                    }),
-                    None,
-                )
-            }
-            _ => {
-                let resistance = attrs.remove_f32("RESISTANCE")?;
-                (None, Some(resistance))
-            }
+        let (properties, resistance) = if &attrs.remove_str("TYPE")? == "PROPERTIES" {
+            // XXX: En LIDER antiguo no se define este valor
+            let thickness = attrs.remove_f32("THICKNESS").ok();
+            let conductivity = attrs.remove_f32("CONDUCTIVITY")?;
+            let density = attrs.remove_f32("DENSITY")?;
+            let specificheat = attrs.remove_f32("SPECIFIC-HEAT").unwrap_or(800.0);
+            // XXX: En LIDER antiguo no se define este valor
+            let vapourdiffusivity = attrs.remove_f32("VAPOUR-DIFFUSIVITY-FACTOR").ok();
+            (
+                Some(MaterialProperties {
+                    thickness,
+                    conductivity,
+                    density,
+                    specificheat,
+                    vapourdiffusivity,
+                }),
+                None,
+            )
+        } else {
+            let resistance = attrs.remove_f32("RESISTANCE")?;
+            (None, Some(resistance))
         };
         Ok(Self {
             name,

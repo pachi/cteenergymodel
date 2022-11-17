@@ -86,7 +86,7 @@ impl TryFrom<BdlBlock> for DaySchedule {
             Err(format_err!(
                 "Longitud de valores horarios incorrecta en DAY-SCHEDULE-PD: {}",
                 name
-            ))?
+            ))?;
         }
 
         Ok(Self { name, kind, values })
@@ -136,7 +136,7 @@ impl TryFrom<BdlBlock> for WeekSchedule {
             Err(format_err!(
                 "Longitud de valores semanales incorrecta en WEEK-SCHEDULE-PD: {}",
                 name
-            ))?
+            ))?;
         }
 
         Ok(Self { name, kind, days })
@@ -150,10 +150,10 @@ pub struct YearSchedule {
     pub name: String,
     /// Tipo de horario
     pub kind: ScheduleKind,
-    /// Lista de meses que en el que finalizan los horarios semanales
-    pub months: Vec<u32>,
     /// Lista de días en el que finalizan los horarios semanales
     pub days: Vec<u32>,
+    /// Lista de meses que en el que finalizan los horarios semanales
+    pub months: Vec<u32>,
     /// Horarios semanales que componen la semana
     pub weeks: Vec<String>,
 }

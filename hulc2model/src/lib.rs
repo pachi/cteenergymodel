@@ -56,11 +56,11 @@ pub fn collect_hulc_data<T: AsRef<str>>(
         format_err!("No se ha podido localizar el archivo .ctehexml del proyecto")
     })?;
     // Genera Model desde BDL
-    let ctehexmldata = ctehexml::parse_with_catalog_from_path(&ctehexmlpath)?;
+    let ctehexmldata = ctehexml::parse_with_catalog_from_path(ctehexmlpath)?;
 
     let mut ecdata = Model::try_from(&ctehexmldata)?;
     // Interpreta .kyg y añade datos que faltan con archivos adicionales
-    fix_ecdata_from_extra(&mut ecdata, kygpath, tblpath);
+    fix_ecdata_from_extra(&mut ecdata, &kygpath, &tblpath);
     // Devuelve datos ampliados y corregidos (U, Fshobst)
     Ok(ecdata)
 }
@@ -68,8 +68,8 @@ pub fn collect_hulc_data<T: AsRef<str>>(
 /// Incorpora datos que no se obtienen desde el xml y añade datos extra cuando el valor de U calculado y el obtenido no coinciden
 pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     model: &mut Model,
-    kygpath: Option<T>,
-    tblpath: Option<T>,
+    kygpath: &Option<T>,
+    tblpath: &Option<T>,
 ) {
     let ind = model.energy_indicators();
 
@@ -103,7 +103,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
     // Interpreta .kyg y añade datos que faltan
     // TODO: Los añadimos al overrides... podríamos eliminar el extra
     if let Some(kygpath) = &kygpath {
-        let kygdata = kyg::parse_from_path(&kygpath).unwrap();
+        let kygdata = kyg::parse_from_path(kygpath).unwrap();
 
         // Modifica U de muros con datos del .kyg
         // XXX: hay que tener cuidado porque estos valores tienen desviaciones con los que se muestran en
@@ -144,8 +144,9 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
                     .windows
                     .get(&win.id)
                     .and_then(|wp| wp.f_shobst)
-                    .map(|computed| f32::abs(computed - f_shobst_override) > 0.01)
-                    .unwrap_or(true);
+                    .map_or(true, |computed| {
+                        f32::abs(computed - f_shobst_override) > 0.01
+                    });
                 if !fshobst_diff_significant {
                     continue;
                 };
@@ -157,7 +158,7 @@ pub fn fix_ecdata_from_extra<T: AsRef<Path>>(
 
     // Actualizamos datos de U de particiones interiores desde el archivo .tbl
     if let Some(tblpath) = &tblpath {
-        let tbldata = tbl::parse(&tblpath).unwrap();
+        let tbldata = tbl::parse(tblpath).unwrap();
         for e in &mut extra {
             if e.bounds != BoundaryType::INTERIOR {
                 continue;

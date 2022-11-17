@@ -79,14 +79,14 @@ impl Data {
         for block in blocks {
             match block.btype.as_str() {
                 "CONSTRUCTION" | "MATERIAL" | "NAME-FRAME" | "GLASS-TYPE" | "LAYERS" | "GAP" => {
-                    db_blocks.push(block)
+                    db_blocks.push(block);
                 }
                 "POLYGON" => poly_blocks.push(block),
                 "FLOOR" => floor_blocks.push(block),
                 "SPACE" | "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL"
                 | "THERMAL-BRIDGE" | "WINDOW" | "BUILDING-SHADE" => env_blocks.push(block),
                 "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
-                    schedule_blocks.push(block)
+                    schedule_blocks.push(block);
                 }
                 _ => other_blocks.push(block),
             }
@@ -169,8 +169,8 @@ impl Data {
 
         let db = DB {
             materials,
-            frames,
             glasses,
+            frames,
             wallcons,
             wincons,
         };
@@ -179,7 +179,7 @@ impl Data {
 
         // Separa polígonos (POLYGON) -----------
         // luego los sustituiremos en los objetos de opacos y SPACE que los usan
-        let mut polygons: BTreeMap<String, Polygon> = Default::default();
+        let mut polygons: BTreeMap<String, Polygon> = BTreeMap::default();
         for block in poly_blocks {
             polygons.insert(block.name.clone(), Polygon::try_from(block)?);
         }
@@ -187,7 +187,7 @@ impl Data {
         // Separa plantas (FLOOR) --------------
         // Estos objetos los eliminamos finalmente del modelo, sumando sus X,Y,Z, Azimuth a los del espacio
         // luego los sustituiremos en los objetos SPACE que los usan
-        let mut floors: BTreeMap<String, Floor> = Default::default();
+        let mut floors: BTreeMap<String, Floor> = BTreeMap::default();
         for block in floor_blocks {
             floors.insert(block.name.clone(), Floor::try_from(block)?);
         }
@@ -349,16 +349,16 @@ impl Data {
         }
 
         Ok(Self {
+            meta,
+            db,
             spaces,
             walls,
             windows,
             thermal_bridges,
             shadings,
-            db,
-            meta,
-            schedules,
             space_conditions,
             system_conditions,
+            schedules,
         })
     }
 

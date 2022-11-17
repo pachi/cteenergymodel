@@ -292,7 +292,7 @@ impl TryFrom<BdlBlock> for Wall {
         // Detectamos si se define la geometría por polígono
         // Como guardaremos el polígono no por su nombre sino como objeto aquí usamos un default
         // y lo corregimos en el postproceso
-        let polygon = attrs.remove_str("POLYGON").ok().map(|_| Default::default());
+        let polygon = attrs.remove_str("POLYGON").ok().map(|_| Polygon::default());
 
         let bdl_azimuth = match location.as_deref() {
             Some("BOTTOM") => {

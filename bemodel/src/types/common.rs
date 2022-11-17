@@ -178,7 +178,6 @@ impl From<f32> for Orientation {
 impl From<&str> for Orientation {
     fn from(azimuth: &str) -> Self {
         match azimuth {
-            "S" => Self::S,
             "SE" => Self::SE,
             "E" => Self::E,
             "NE" => Self::NE,

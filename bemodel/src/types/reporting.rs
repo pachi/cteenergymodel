@@ -27,7 +27,7 @@ impl Display for WarningLevel {
             SUCCESS => "SUCCESS",
             DANGER => "DANGER",
             WARNING => "WARNING",
-            _ => "INFO",
+            INFO => "INFO",
         };
         write!(f, "{}", printable)
     }

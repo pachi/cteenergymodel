@@ -8,7 +8,7 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::process::exit;
 
-use bemodel::*;
+use bemodel::Model;
 use hulc::ctehexml;
 
 const APP_TITLE: &str = r#"Thor"#;
@@ -130,7 +130,7 @@ fn main() {
         if verbosity > 1 {
             println!("Modelo en formato JSON: {:?}", path);
         }
-        writefile(&path, model_json.as_bytes());
+        writefile(path, model_json.as_bytes());
     }
 
     // Indicadores en formato JSON
@@ -147,7 +147,7 @@ fn main() {
         if verbosity > 1 {
             println!("Resultados de indicadores en formato JSON: {:?}", path);
         }
-        writefile(&path, indicadores_json.as_bytes());
+        writefile(path, indicadores_json.as_bytes());
     }
 
     // Mostrar siempre en formato de texto plano

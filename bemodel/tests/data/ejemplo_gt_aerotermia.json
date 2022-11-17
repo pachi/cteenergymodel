@@ -1268,7 +1268,7 @@
   "schedules": {
     "year": [
       {
-        "id": "fa7e1d88-0fc9-5f85-77a8-efee23a76cd8",
+        "id": "f52d0cf7-e91f-d1ed-bf1c-84446ab8817d",
         "name": "SSHA",
         "values": [
           [
@@ -1286,7 +1286,7 @@
         ]
       },
       {
-        "id": "d02b9100-8895-0f1a-4f70-0bb216479f55",
+        "id": "3675a836-0996-50a6-7d78-cf271e542d82",
         "name": "Horario-Refrigeracion",
         "values": [
           [
@@ -1296,7 +1296,7 @@
         ]
       },
       {
-        "id": "026bc569-dc14-ade8-f130-e5da31fc74b8",
+        "id": "85f3131b-8336-1d44-ac46-34a24b75d3c0",
         "name": "Horario-Calefaccion",
         "values": [
           [
@@ -1306,7 +1306,7 @@
         ]
       },
       {
-        "id": "c5e2c730-10d0-2325-e7f6-e76e610629aa",
+        "id": "99c292f2-cd69-ecd9-3511-c1e3433199e4",
         "name": "Horario-Refrigeracion-t",
         "values": [
           [
@@ -1316,7 +1316,7 @@
         ]
       },
       {
-        "id": "5691bf5d-629e-3ccd-7bf8-fc815a46ca43",
+        "id": "c5db4c75-17af-14bf-552c-e3023749b714",
         "name": "Horario-Calefaccion-t",
         "values": [
           [
@@ -1326,7 +1326,7 @@
         ]
       },
       {
-        "id": "5bd1d6e1-f309-5cd8-31ab-9588e2790a0f",
+        "id": "dc0d2fac-dd83-1e39-aee2-ac7db236332f",
         "name": "Horario-Calefaccion-AP",
         "values": [
           [
@@ -1336,7 +1336,7 @@
         ]
       },
       {
-        "id": "c3d671c8-28f5-7d0a-cd14-5da270ccb26a",
+        "id": "98f02a1d-eabf-04d6-3ba0-9a112f8168c8",
         "name": "Horario-Refrigeracion-AP",
         "values": [
           [
@@ -1346,7 +1346,7 @@
         ]
       },
       {
-        "id": "e88dc9ac-0b28-d103-2daf-0e07b3db28e3",
+        "id": "528ffec8-5770-6f8b-2b60-cd194b045645",
         "name": "UsoEspacio-8h",
         "values": [
           [
@@ -1356,7 +1356,7 @@
         ]
       },
       {
-        "id": "ec32c8fd-764d-31f6-dc86-f7ea15c6f767",
+        "id": "4664e6fb-5b75-d29e-4aec-7cb2ca660666",
         "name": "UsoEspacio-8h_eq",
         "values": [
           [
@@ -1366,7 +1366,7 @@
         ]
       },
       {
-        "id": "cd65b842-e04c-b4ba-f7fc-d3a25dcedb7e",
+        "id": "959ecf3a-835b-b85a-a202-4e6502c13d82",
         "name": "UsoEspacio-8h_vent",
         "values": [
           [
@@ -1376,7 +1376,7 @@
         ]
       },
       {
-        "id": "1a18325a-3b88-4bcf-6ccd-c7d7af8cf14e",
+        "id": "2ef051ed-156a-e6f7-18f9-1870ea6b8f18",
         "name": "UsoEspacio-12h",
         "values": [
           [
@@ -1386,7 +1386,7 @@
         ]
       },
       {
-        "id": "0f6ec5ee-9754-98b0-bac1-62c24bc5710f",
+        "id": "b16dde3f-cbaf-7c97-06ee-607898dd150e",
         "name": "UsoEspacio-12h_eq",
         "values": [
           [
@@ -1396,7 +1396,7 @@
         ]
       },
       {
-        "id": "f436bdd1-6c6e-c87b-964c-35edd473abbb",
+        "id": "35723552-6ff5-8921-b4e5-2a5ddfb461d8",
         "name": "UsoEspacio-12h_vent",
         "values": [
           [
@@ -1406,7 +1406,7 @@
         ]
       },
       {
-        "id": "b6744a3f-6ae4-5020-5300-936ff89e24c9",
+        "id": "fdf02a88-b07f-6a28-0208-f5e7d604f3b1",
         "name": "UsoEspacio-16h",
         "values": [
           [
@@ -1416,7 +1416,7 @@
         ]
       },
       {
-        "id": "94bde1a5-eefb-8c10-4759-bc4781d93a2f",
+        "id": "03dd43f5-2032-27e9-e640-79592b166598",
         "name": "UsoEspacio-16h_eq",
         "values": [
           [
@@ -1426,7 +1426,7 @@
         ]
       },
       {
-        "id": "955f5474-2913-0e0d-6515-17cdd8cea3ef",
+        "id": "b63096df-6884-ec55-0f46-5c5e5a100d89",
         "name": "UsoEspacio-16h_vent",
         "values": [
           [
@@ -1436,7 +1436,7 @@
         ]
       },
       {
-        "id": "44758737-bcc1-ee79-b585-519003b17348",
+        "id": "c67fae52-5691-ff6d-e19c-96001b2e0043",
         "name": "UsoEspacio-24h",
         "values": [
           [
@@ -1446,7 +1446,7 @@
         ]
       },
       {
-        "id": "7855d75a-3979-d566-75dd-243dfc3b54ac",
+        "id": "6e14b2c1-5eac-89b6-20df-fc3b1b7e7ba7",
         "name": "UsoEspacio-24h_eq",
         "values": [
           [
@@ -1456,7 +1456,7 @@
         ]
       },
       {
-        "id": "06684236-6bd8-98a0-8dd9-7b9af77b783e",
+        "id": "00b4fa70-cb40-7f41-995e-8fabf712b563",
         "name": "UsoEspacio-24h_vent",
         "values": [
           [
@@ -1466,7 +1466,7 @@
         ]
       },
       {
-        "id": "cfa597dc-7da8-02a8-9475-a6ea9bbda8bb",
+        "id": "7319d4a9-7ca0-b029-ecc7-96228aa13b56",
         "name": "Ocupacion-Residencia",
         "values": [
           [
@@ -1476,7 +1476,7 @@
         ]
       },
       {
-        "id": "fd3ce3be-0735-a26c-02d4-1f54df26cca6",
+        "id": "d9bfa4c0-d9dc-b918-2993-9b8063900421",
         "name": "Iluminacion-Residencia",
         "values": [
           [
@@ -1486,7 +1486,7 @@
         ]
       },
       {
-        "id": "99ea4653-0af7-3d13-5c42-91a4572dbe16",
+        "id": "af11da76-7da4-aae9-a353-ba1449727e52",
         "name": "Funcionam-Residencia",
         "values": [
           [
@@ -1496,7 +1496,7 @@
         ]
       },
       {
-        "id": "9574a8e4-07df-3b5e-abd9-34fd5340bbf6",
+        "id": "3f4db9bf-ad95-5ba7-06fd-9c7a4389e0a5",
         "name": "Infiltracion-Residencia",
         "values": [
           [
@@ -1518,7 +1518,7 @@
         ]
       },
       {
-        "id": "5c051b49-ccd9-9e69-d522-e7f20d8d8730",
+        "id": "38c5d18f-1dfd-ba91-09a1-e23aab8cb13d",
         "name": "Anual-No-Habitable",
         "values": [
           [
@@ -1528,7 +1528,7 @@
         ]
       },
       {
-        "id": "22749573-105d-7704-0509-f12ba636f850",
+        "id": "e2d9ea63-1af4-0bcb-4ccc-a4cd46521945",
         "name": "Anual-No-habitable-Func",
         "values": [
           [
@@ -1538,7 +1538,7 @@
         ]
       },
       {
-        "id": "d143d399-edd4-918a-6256-935fbebe9da7",
+        "id": "6ffc2b33-1605-080b-4d13-15eab10987f5",
         "name": "Anual-No-habitable-Inf",
         "values": [
           [
@@ -1548,7 +1548,7 @@
         ]
       },
       {
-        "id": "69b5081a-afd8-a783-b848-f32a9020af57",
+        "id": "96fffae4-0d71-4b77-d362-2ab25a14cdb9",
         "name": "HA_OCU_8_A_16",
         "values": [
           [
@@ -1558,7 +1558,7 @@
         ]
       },
       {
-        "id": "d10e09da-c181-4f5f-2d12-c2c5720d32e7",
+        "id": "5c8fd164-bbde-89b4-2c53-5406ec9962e6",
         "name": "HA_INF_16_A_8",
         "values": [
           [
@@ -1568,7 +1568,7 @@
         ]
       },
       {
-        "id": "b2b6b479-ab22-118f-1f52-c7e055852cd1",
+        "id": "924b9f0f-1f23-fa00-2a7e-e7054f136b98",
         "name": "HA_FUN_8_16",
         "values": [
           [
@@ -1578,7 +1578,7 @@
         ]
       },
       {
-        "id": "8ecafec7-fec1-15a9-30ee-3beac81bd6bb",
+        "id": "2e5126df-910f-6fa4-0a64-413593713885",
         "name": "HA_CALOR",
         "values": [
           [
@@ -1596,7 +1596,7 @@
         ]
       },
       {
-        "id": "e8df059b-58ab-54a6-2b06-b9e9648ff133",
+        "id": "a55cfa20-9a88-220c-fc7e-ef99b0299bd1",
         "name": "HA_FRIO",
         "values": [
           [
@@ -1614,7 +1614,7 @@
         ]
       },
       {
-        "id": "f872cdcc-02eb-4d1d-fded-6b28cce14bdc",
+        "id": "b6da0767-f3e8-75ba-e504-fc465045c283",
         "name": "inf_16_18",
         "values": [
           [
@@ -4426,21 +4426,21 @@
       "id": "143627d9-e91c-2b62-5a07-a6c3cd76f79b",
       "name": "I_Baja-8h-Acondicionado",
       "area_per_person": 36.0,
-      "people_schedule": "69b5081a-afd8-a783-b848-f32a9020af57",
+      "people_schedule": "96fffae4-0d71-4b77-d362-2ab25a14cdb9",
       "people_sensible": 2.0,
       "people_latent": 1.26,
       "equipment": 1.5,
-      "equipment_schedule": "69b5081a-afd8-a783-b848-f32a9020af57",
+      "equipment_schedule": "96fffae4-0d71-4b77-d362-2ab25a14cdb9",
       "lighting": 1.5,
-      "lighting_schedule": "69b5081a-afd8-a783-b848-f32a9020af57"
+      "lighting_schedule": "96fffae4-0d71-4b77-d362-2ab25a14cdb9"
     }
   ],
   "thermostats": [
     {
       "id": "9775b1cd-ffb5-7e6c-a1d5-a301150ed662",
       "name": "I_Baja-8h-Acondicionado",
-      "temp_max": "c5e2c730-10d0-2325-e7f6-e76e610629aa",
-      "temp_min": "5691bf5d-629e-3ccd-7bf8-fc815a46ca43"
+      "temp_max": "99c292f2-cd69-ecd9-3511-c1e3433199e4",
+      "temp_min": "c5db4c75-17af-14bf-552c-e3023749b714"
     }
   ]
 }

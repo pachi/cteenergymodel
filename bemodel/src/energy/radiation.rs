@@ -94,16 +94,16 @@ impl Model {
                 windata.dif.push(rad_on_win.dif);
             }
         }
-        map.iter().for_each(|(id, d)| {
+        for (id, d) in map.iter() {
             let nvalues = d.fshdir.len();
             let mut fshobst_sum = 0.0;
             for i in 0..nvalues {
                 let fshobst_i = (d.fshdir[i] * d.dir[i] + d.dif[i]) / (d.dir[i] + d.dif[i]);
-                fshobst_sum += fshobst_i
+                fshobst_sum += fshobst_i;
             }
             fshobstmap.insert(*id, fround2(fshobst_sum / nvalues as f32));
             // d.fshobst = fshobst_sum / nvalues as f32;
-        });
+        }
         debug!("Fshobst map: {:#?}", fshobstmap);
         fshobstmap
     }
@@ -365,7 +365,7 @@ impl Bounded for WallGeom {
                 max: point![max_x, max_y, max_z],
             }
         } else {
-            Default::default()
+            AABB::default()
         }
     }
 }

@@ -50,7 +50,7 @@ fn consdb_and_groups_from_bdl(bdl: &Data) -> (ConsDb, ConsDbGroups) {
                     vapour_diff: None,
                 }
             },
-        })
+        });
     }
     let mut glasses = Vec::new();
     for (name, glass) in &bdl.db.glasses {
@@ -64,7 +64,7 @@ fn consdb_and_groups_from_bdl(bdl: &Data) -> (ConsDb, ConsDbGroups) {
             name: name.clone(),
             u_value: glass.conductivity,
             g_gln: glass.g_gln,
-        })
+        });
     }
     let mut frames = Vec::new();
     for (name, frame) in &bdl.db.frames {
@@ -78,7 +78,7 @@ fn consdb_and_groups_from_bdl(bdl: &Data) -> (ConsDb, ConsDbGroups) {
             name: name.clone(),
             u_value: frame.conductivity,
             absorptivity: frame.absorptivity,
-        })
+        });
     }
 
     // Mapas de nombre a id
@@ -114,8 +114,8 @@ fn consdb_and_groups_from_bdl(bdl: &Data) -> (ConsDb, ConsDbGroups) {
 
         let layers = ids
             .iter()
-            .cloned()
-            .zip(cons.thickness.iter().cloned())
+            .copied()
+            .zip(cons.thickness.iter().copied())
             .map(|(material, e)| Layer { material, e })
             .collect();
 

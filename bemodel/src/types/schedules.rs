@@ -58,7 +58,7 @@ impl SchedulesDb {
                         let skip_count = current_count % 7;
                         current_count += *count as usize;
                         self.get_week(*week_id)
-                            .map(|ws| ws.to_day_sch())
+                            .map(ScheduleWeek::to_day_sch)
                             .unwrap_or_default()
                             .into_iter()
                             .cycle()
@@ -88,7 +88,7 @@ impl SchedulesDb {
             .iter()
             .flat_map(|day_id| {
                 self.get_day(*day_id)
-                    .map(|ds| ds.values_is_not_zero())
+                    .map(ScheduleDay::values_is_not_zero)
                     .unwrap_or_default()
             })
             .collect::<Vec<_>>()

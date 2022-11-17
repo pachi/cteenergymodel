@@ -28,8 +28,7 @@ impl HasSurface for Polygon {
         // https://www.mathopenref.com/coordpolygonarea.html
         // 0.5 * ( \SUM( x_i * y_i+1 - y_i * x_i+1)_(i = de 1 a n) + (x_n * y_1 - y_n * x_1) )
         let area = match self.len() {
-            0 => 0.0,
-            1 => 0.0,
+            0 | 1 => 0.0,
             n => self
                 .iter()
                 .enumerate()
@@ -45,8 +44,7 @@ impl HasSurface for Polygon {
     /// Perímetro de un polígono (m)
     fn perimeter(&self) -> f32 {
         match self.len() {
-            0 => 0.0,
-            1 => 0.0,
+            0 | 1 => 0.0,
             n => self
                 .iter()
                 .enumerate()

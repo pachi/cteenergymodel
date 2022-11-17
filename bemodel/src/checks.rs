@@ -46,7 +46,7 @@ pub fn check(model: &Model) -> Vec<Warning> {
                     "Muro {} ({}) con referencia incorrecta de espacio {}",
                     w.id, w.name, w.space
                 ),
-            })
+            });
         };
         if !wallconsids.contains(&w.cons) {
             warnings.push(Warning {
@@ -56,7 +56,7 @@ pub fn check(model: &Model) -> Vec<Warning> {
                     "Muro {} ({}) con referencia incorrecta de construcción {}",
                     w.id, w.name, w.cons
                 ),
-            })
+            });
         };
         if w.next_to.is_some() && !spaceids.contains(&w.next_to.unwrap()) {
             warnings.push(Warning {
@@ -68,7 +68,7 @@ pub fn check(model: &Model) -> Vec<Warning> {
                     w.name,
                     w.next_to.unwrap()
                 ),
-            })
+            });
         };
         // TODO: avisar con elemento horizontal en contacto con el terreno y con p_ext == 0
     });
@@ -83,7 +83,7 @@ pub fn check(model: &Model) -> Vec<Warning> {
                     "Hueco {} ({}) con referencia incorrecta de opaco {}",
                     w.id, w.name, w.wall
                 ),
-            })
+            });
         };
         if !winconsids.contains(&w.cons) {
             warnings.push(Warning {
@@ -93,7 +93,7 @@ pub fn check(model: &Model) -> Vec<Warning> {
                     "Hueco {} ({}) con referencia incorrecta de construcción {}",
                     w.id, w.name, w.cons
                 ),
-            })
+            });
         };
     });
     // Puentes térmicos con longitudes negativas
@@ -106,7 +106,7 @@ pub fn check(model: &Model) -> Vec<Warning> {
                     "Puente térmico {} ({}) con longitud negativa ({}).",
                     tb.id, tb.name, tb.l
                 ),
-            })
+            });
         };
     });
 

@@ -65,7 +65,7 @@ impl Default for DatosGenerales {
             zona_climatica: "D3".into(),
             archivo_climatico: "D3".into(),
             valor_n50_medido: None,
-            bloque_raw: "".into(),
+            bloque_raw: String::new(),
         }
     }
 }
@@ -89,15 +89,14 @@ pub fn parse_datos_generales(doc: &roxmltree::Document) -> Result<DatosGenerales
             .take(1)
             .collect::<Vec<_>>()
             .first()
-            .map(|s| {
-                s.split("zona")
+            .map_or_else(String::new, |s| {
+                (*s.split("zona")
                     .take(2)
                     .collect::<Vec<_>>()
                     .get(1)
-                    .unwrap_or(&"")
-                    .to_string()
-            })
-            .unwrap_or_else(|| "".to_string());
+                    .unwrap_or(&""))
+                .to_string()
+            });
 
     Ok(DatosGenerales {
         nombre_proyecto: get_tag_as_str(&datos_generales, "nomPro").to_string(),

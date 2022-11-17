@@ -68,7 +68,7 @@ pub fn cli_main() -> Result<()> {
     // Localiza archivos
     eprintln!("Localizando archivos de datos en '{}'", dir);
     if opts.use_extra_files {
-        eprintln!("- Se usarán los datos de los archivos KyGananciasSolares.txt y NewBDL_O.tbl")
+        eprintln!("- Se usarán los datos de los archivos KyGananciasSolares.txt y NewBDL_O.tbl");
     };
     // Lee datos
     let model = collect_hulc_data(dir, opts.use_extra_files, opts.use_extra_files)?;
@@ -90,15 +90,12 @@ pub fn cli_main() -> Result<()> {
     );
 
     // Convierte a JSON
-    match model.as_json() {
-        Ok(json) => {
-            eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");
-            println!("{}", json);
-            Ok(())
-        }
-        _ => {
-            eprintln!("Error al guardar la información en formato JSON de EnvolventeCTE");
-            exit(1)
-        }
+    if let Ok(json) = model.as_json() {
+        eprintln!("Salida de resultados en formato JSON de EnvolventeCTE");
+        println!("{}", json);
+        Ok(())
+    } else {
+        eprintln!("Error al guardar la información en formato JSON de EnvolventeCTE");
+        exit(1)
     }
 }

@@ -101,7 +101,7 @@ impl QSolJulData {
                     "qsoljul de {}: A {:.2}, orient {}, ff {:.2}, gglshwi {:.2}, fshobst {:.2}, H_sol;jul {:.2}",
                     win_id, area, orientation, f_f, g_glshwi, f_shobst, radjul
                 );
-            Q_soljul += Q_soljul_orient
+            Q_soljul += Q_soljul_orient;
         }
 
         let a_ref = props.global.a_ref;

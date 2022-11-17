@@ -116,19 +116,19 @@ impl<T: Bounded> BVH<T> {
                         c_side,
                         c_maybe_parent_id,
                         Some(c_elems),
-                    ))
+                    ));
                 }
             }
         } else {
-            node_list.push(TreeElement(0, Leaf, L, None, Some(elements)))
+            node_list.push(TreeElement(0, Leaf, L, None, Some(elements)));
         }
         node_list
     }
 
     /// Reconstruye árbol a partir de lista de nodos intermedios y terminales
     fn build_from_node_list(mut node_list: Vec<TreeElement<T>>) -> Self {
-        use NodeType::*;
-        use Side::*;
+        use NodeType::{Leaf, Node};
+        use Side::{L, R};
 
         // Diccionario de elementos pendientes de acabar (sin dos nodos hijos), indexados por padre
         let mut pending: BTreeMap<NodeId, BVHNode<T>> = BTreeMap::new();
@@ -151,20 +151,20 @@ impl<T: Bounded> BVH<T> {
                 (L, Leaf) => {
                     let elements = elems.unwrap();
                     let aabb = elements.aabb();
-                    parent_node.set_left(BVHNode::Leaf { aabb, elements })
+                    parent_node.set_left(BVHNode::Leaf { aabb, elements });
                 }
                 (L, Node) => {
                     let left = completed.remove(&id).unwrap();
-                    parent_node.set_left(left)
+                    parent_node.set_left(left);
                 }
                 (R, Leaf) => {
                     let elements = elems.unwrap();
                     let aabb = elements.aabb();
-                    parent_node.set_right(BVHNode::Leaf { aabb, elements })
+                    parent_node.set_right(BVHNode::Leaf { aabb, elements });
                 }
                 (R, Node) => {
                     let right = completed.remove(&id).unwrap();
-                    parent_node.set_right(right)
+                    parent_node.set_right(right);
                 }
             };
             // Está completo y disponible para insertar en otro nodo
@@ -274,7 +274,7 @@ impl<T: Bounded> BVHNode<T> {
     pub fn take_left(self) -> Option<Box<BVHNode<T>>> {
         match self {
             BVHNode::Node { left, .. } => left,
-            _ => None,
+            BVHNode::Leaf { .. } => None,
         }
     }
 
@@ -283,7 +283,7 @@ impl<T: Bounded> BVHNode<T> {
     pub fn set_left(&mut self, node: BVHNode<T>) {
         match self {
             BVHNode::Node { left, .. } => *left = Some(Box::new(node)),
-            _ => panic!(),
+            BVHNode::Leaf { .. } => panic!(),
         }
     }
 
@@ -291,7 +291,7 @@ impl<T: Bounded> BVHNode<T> {
     pub fn take_right(self) -> Option<Box<BVHNode<T>>> {
         match self {
             BVHNode::Node { right, .. } => right,
-            _ => None,
+            BVHNode::Leaf { .. } => None,
         }
     }
 
@@ -300,7 +300,7 @@ impl<T: Bounded> BVHNode<T> {
     pub fn set_right(&mut self, node: BVHNode<T>) {
         match self {
             BVHNode::Node { right, .. } => *right = Some(Box::new(node)),
-            _ => panic!(),
+            BVHNode::Leaf { .. } => panic!(),
         }
     }
 
@@ -321,7 +321,7 @@ impl<T: Bounded> BVHNode<T> {
     pub fn elements(&self) -> Option<&Vec<T>> {
         match self {
             BVHNode::Leaf { elements, .. } => Some(elements),
-            _ => None,
+            BVHNode::Node { .. } => None,
         }
     }
 }
@@ -329,8 +329,7 @@ impl<T: Bounded> BVHNode<T> {
 impl<T> Bounded for BVHNode<T> {
     fn aabb(&self) -> AABB {
         match *self {
-            BVHNode::Leaf { aabb, .. } => aabb,
-            BVHNode::Node { aabb, .. } => aabb,
+            BVHNode::Leaf { aabb, .. } | BVHNode::Node { aabb, .. } => aabb,
         }
     }
 }
@@ -370,10 +369,10 @@ impl<'a, T: Bounded> Iterator for PreorderIter<'a, T> {
             if node.aabb().intersects(&self.ray).is_some() {
                 if let BVHNode::Node { right, left, .. } = node {
                     if let Some(r_node) = &right {
-                        self.stack.push(r_node.deref())
+                        self.stack.push(r_node.deref());
                     }
                     if let Some(l_node) = &left {
-                        self.stack.push(l_node.deref())
+                        self.stack.push(l_node.deref());
                     };
                 };
                 return Some(node);

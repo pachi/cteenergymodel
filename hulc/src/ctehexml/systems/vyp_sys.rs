@@ -80,12 +80,12 @@ pub fn parse_systems(doc: &roxmltree::Document) -> (Vec<String>, Vec<VypSystem>)
 
     // Sistema exclusivo de ventilación
     if let Some(doas) = build_doas(doc) {
-        sistemas.push(doas)
+        sistemas.push(doas);
     };
 
     let mut onsiteprod = build_onsite_prod(doc);
     if !onsiteprod.is_empty() {
-        sistemas.append(&mut onsiteprod)
+        sistemas.append(&mut onsiteprod);
     }
 
     (factores_correccion_sistemas, sistemas)
@@ -109,7 +109,7 @@ fn build_system(node: roxmltree::Node) -> VypSystem {
         .map(|n| {
             n.children()
                 .filter(Node::is_element)
-                .filter_map(build_generation_equipment)
+                .map(build_generation_equipment)
                 .collect()
         })
         .unwrap_or_default();
@@ -120,7 +120,7 @@ fn build_system(node: roxmltree::Node) -> VypSystem {
         .find(|n| n.has_tag_name("unidades_terminales"))
         .map(|n| {
             n.children()
-                .filter(|n| n.is_element())
+                .filter(Node::is_element)
                 .map(build_zone_equipment)
                 .collect()
         });
@@ -308,7 +308,7 @@ fn build_zone_equipment(node: roxmltree::Node) -> ZoneEquipment {
 }
 
 /// Primarios + acumulación - equipos de generación a partir del nodo XML
-fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipment> {
+fn build_generation_equipment(node: roxmltree::Node) -> GenerationEquipment {
     use EquipmentKind::*;
 
     let name = get_tag_as_str(&node, "nombre_usuario").to_string();
@@ -393,7 +393,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                 efficiency: get_tag_as_f32(&node, "renNom").unwrap_or_default(),
             });
 
-            Some(GenerationEquipment::ThermalGenerator(ThermalGenerator {
+            GenerationEquipment::ThermalGenerator(ThermalGenerator {
                 name,
                 kind,
                 heating,
@@ -401,7 +401,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                 supply_air_flow: None,
                 multiplier,
                 curves,
-            }))
+            })
         }
         CalefaccionElectrica => {
             // EQ_CALEFACCIONELECTRICA - "Calefacción eléctrica unizona" - "Electricidad" - ✔
@@ -427,7 +427,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                     efficiency: 0.0,
                 })
             };
-            Some(GenerationEquipment::ThermalGenerator(ThermalGenerator {
+            GenerationEquipment::ThermalGenerator(ThermalGenerator {
                 name,
                 kind,
                 heating,
@@ -435,7 +435,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                 supply_air_flow: None,
                 multiplier,
                 curves,
-            }))
+            })
         }
         ExpansionDirectaAireAireSf
         | ExpansionDirectaAireAireBdc
@@ -553,7 +553,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                 _ => None,
             };
 
-            Some(GenerationEquipment::ThermalGenerator(ThermalGenerator {
+            GenerationEquipment::ThermalGenerator(ThermalGenerator {
                 name,
                 kind,
                 heating,
@@ -561,7 +561,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                 supply_air_flow,
                 multiplier,
                 curves,
-            }))
+            })
         }
         RendimientoConstante => {
             // EQ_RENDIMIENTOCTE - "Rendimiento Constante" - ✔
@@ -603,7 +603,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                 None
             };
 
-            Some(GenerationEquipment::ThermalGenerator(ThermalGenerator {
+            GenerationEquipment::ThermalGenerator(ThermalGenerator {
                 name,
                 kind,
                 heating,
@@ -611,7 +611,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
                 supply_air_flow: None,
                 multiplier,
                 curves: vec![],
-            }))
+            })
         }
         AcumuladorAguaCaliente => {
             // EQ_ACUMULADOR_AC - "Acumulador Agua Caliente" - ✔
@@ -630,18 +630,16 @@ fn build_generation_equipment(node: roxmltree::Node) -> Option<GenerationEquipme
             let input_temp = get_tag_as_f32(&node, "temperaturaEntrada").unwrap_or_default();
             let space_temp = get_tag_as_f32(&node, "temperaturaAmbiente").unwrap_or_default();
 
-            Some(GenerationEquipment::HotWaterStorageTank(
-                HotWaterStorageTank {
-                    name,
-                    kind,
-                    volume,
-                    ua,
-                    temp_low,
-                    temp_high,
-                    input_temp,
-                    space_temp,
-                },
-            ))
+            GenerationEquipment::HotWaterStorageTank(HotWaterStorageTank {
+                name,
+                kind,
+                volume,
+                ua,
+                temp_low,
+                temp_high,
+                input_temp,
+                space_temp,
+            })
         }
     }
 }
@@ -750,21 +748,21 @@ fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<VypSystem> {
                     systems.push(VypSystem::PhotovoltaicGenerator(PhotovoltaicGenerator {
                         name: name.to_string(),
                         ..Default::default()
-                    }))
+                    }));
                 }
                 "Eólica insitu" => {
                     // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
                     systems.push(VypSystem::WindGenerator(WindGenerator {
                         name: name.to_string(),
                         ..Default::default()
-                    }))
+                    }));
                 }
                 "Cogeneración" => {
                     // println!("XXX: kind: {}, name: {}, values: {:?}", kind, name, values);
                     systems.push(VypSystem::CHPGenerator(CHPGenerator {
                         name: name.to_string(),
                         // ..Default::default()
-                    }))
+                    }));
                 }
                 _ => {
                     panic!("XXX: Tipo desconocido: {}", kind);
@@ -791,7 +789,7 @@ fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<VypSystem> {
                     systems.push(VypSystem::SolarThermalGenerator(SolarThermalGenerator {
                         name: name.to_string(),
                         ..Default::default()
-                    }))
+                    }));
                 }
                 _ => {
                     panic!("XXX: Tipo desconocido: {}", kind);
@@ -808,7 +806,7 @@ fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<VypSystem> {
                 .descendants()
                 .find(|n| n.has_tag_name("valoresMensualesELE"))
             {
-                gen_systems.append(&mut parse_ele_prod(n.text().unwrap_or_default()))
+                gen_systems.append(&mut parse_ele_prod(n.text().unwrap_or_default()));
             }
         };
     }
@@ -818,7 +816,7 @@ fn build_onsite_prod(doc: &roxmltree::Document) -> Vec<VypSystem> {
                 .descendants()
                 .find(|n| n.has_tag_name("valoresMensualesACS"))
             {
-                gen_systems.append(&mut parse_thermal_prod(n.text().unwrap_or_default()))
+                gen_systems.append(&mut parse_thermal_prod(n.text().unwrap_or_default()));
             }
         };
     }

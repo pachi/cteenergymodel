@@ -152,6 +152,7 @@ pub struct MonthlySurfaceRadData {
 
 /// Redondea valor a 2 decimales
 #[inline]
+#[must_use]
 pub fn fround2(val: f32) -> f32 {
     (val * 100.0).round() / 100.0
 }
@@ -181,15 +182,14 @@ pub fn parsemet<S: AsRef<str>>(metstring: S) -> Result<MetData, Error> {
     let loc = datalines[1]
         .split(' ')
         .map(str::parse::<f32>)
-        .collect::<Result<Vec<f32>, _>>()
-        .unwrap();
+        .collect::<Result<Vec<f32>, _>>()?;
     if loc.len() != 4 {
         bail!("Datos de localización incorrectos: {}", &datalines[1])
     };
 
     let zc = metname.replace("zona", "").replace(".met", "");
     let meta = Meta {
-        metname: metname.to_string(),
+        metname: (*metname).to_string(),
         zc,
         latitude: loc[0],
         longitude: loc[1],
@@ -258,8 +258,8 @@ pub fn read_metdata(metdir: &str) -> HashMap<String, MetData> {
             continue;
         };
         println!("Leyendo archivo {}", metpath.display());
-        let metdata = parse_from_path(&metpath).unwrap();
-        met.insert(zona.to_string(), metdata);
+        let metdata = parse_from_path(metpath).unwrap();
+        met.insert((*zona).to_string(), metdata);
     }
     met
 }
@@ -279,7 +279,7 @@ pub fn met_monthly_data(metdata: &HashMap<String, MetData>) -> Vec<MonthlySurfac
                 fshwi500,
             } = monthly_radiation_for_surface(zonemetdata, tilt, azimuth, ALBEDO);
             data.push(MonthlySurfaceRadData {
-                zc: zona.to_string(),
+                zc: (*zona).to_string(),
                 name: name.to_string(),
                 tilt,
                 azimuth,
@@ -288,7 +288,7 @@ pub fn met_monthly_data(metdata: &HashMap<String, MetData>) -> Vec<MonthlySurfac
                 fshwi200,
                 fshwi300,
                 fshwi500,
-            })
+            });
         }
     }
     data
@@ -402,13 +402,13 @@ pub(crate) fn monthly_radiation_for_surface(
             t_dif += dif;
             t_tot += tot;
             if tot > 200.0 {
-                tot_over_200 += tot
+                tot_over_200 += tot;
             };
             if tot > 300.0 {
-                tot_over_300 += tot
+                tot_over_300 += tot;
             };
             if tot > 500.0 {
-                tot_over_500 += tot
+                tot_over_500 += tot;
             };
         }
         // Convertimos el total de W/m2 a kWh/m2
@@ -452,7 +452,7 @@ pub fn met_july21st_radiation_data(
                 dif: d.rdifhor,
             })
             .collect();
-        map.insert(zona.to_string(), zonerad);
+        map.insert((*zona).to_string(), zonerad);
     }
     map
 }

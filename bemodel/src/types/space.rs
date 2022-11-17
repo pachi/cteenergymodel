@@ -10,7 +10,7 @@ use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
 
-use super::{ConsDb, HasSurface, Tilt, Uuid, Wall};
+use super::{ConsDb, HasSurface, Tilt, Uuid, Wall, WallCons};
 use crate::utils::{default_1, default_true, is_default, is_true, multiplier_is_1};
 
 // Elementos -----------------------------------------------
@@ -64,14 +64,13 @@ impl Space {
                 // Muros exteriores o cubiertas sobre el espacio
                 Tilt::TOP => w.space == self.id,
                 // Es un cerramiento interior sobre este espacio
-                Tilt::BOTTOM => w.next_to.map(|s| s == self.id).unwrap_or(false),
-                _ => false,
+                Tilt::BOTTOM => w.next_to.map_or(false, |s| s == self.id),
+                Tilt::SIDE => false,
             }
         });
         let top_wall_thickness = top_wall_of_space
             .and_then(|w| cons.get_wallcons(w.cons))
-            .map(|cons| cons.thickness())
-            .unwrap_or(0.0);
+            .map_or(0.0, WallCons::thickness);
         self.height - top_wall_thickness
     }
 

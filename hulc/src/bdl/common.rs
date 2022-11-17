@@ -25,7 +25,7 @@ impl AttrMap {
     }
 
     /// Inserta valor v en la clave k y devuelve el valor existente o None
-    pub fn insert<K: ToString>(&mut self, k: K, v: &str) -> Option<BdlValue> {
+    pub fn insert<K: ToString>(&mut self, k: &K, v: &str) -> Option<BdlValue> {
         let val: BdlValue = match v.parse::<f32>() {
             Ok(num) => BdlValue::Number(num),
             _ => BdlValue::String(v.trim().to_string()),
@@ -35,7 +35,7 @@ impl AttrMap {
 
     /// Devuelve valor como BdlValue
     pub fn get(&self, attr: &str) -> Result<BdlValue, Error> {
-        self.0.get(attr).map(|v| v.to_owned()).ok_or_else(|| {
+        self.0.get(attr).cloned().ok_or_else(|| {
             format_err!(
                 "Atributo '{}' no encontrado en el bloque '{:#?}'",
                 attr,

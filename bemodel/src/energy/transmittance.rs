@@ -65,15 +65,13 @@ impl Space {
             );
         };
 
-        let gnd_floor = match spc_gnd_floors.get(0) {
-            Some(space) => space,
-            _ => {
-                warn!(
-                    "Petición de cálculo de dimensión característica de solera de espacio sin solera (espacio {}, {})",
-                    self.name, self.id
-                );
-                return None;
-            }
+        let gnd_floor = if let Some(space) = spc_gnd_floors.get(0) {
+            space
+        } else {
+            warn!("Petición de cálculo de dimensión característica de solera de espacio sin solera (espacio {}, {})",
+                self.name, self.id
+            );
+            return None;
         };
 
         let gnd_A = gnd_floor.area();
@@ -136,7 +134,7 @@ impl Space {
                 info!(
                     "Solera {} ({}) con perímetro expuesto nulo o casi nulo) en espacio {}, {}",
                     gnd_floor.name, gnd_floor.id, self.name, self.id
-                )
+                );
             };
             p.max(0.01)
         };
@@ -248,7 +246,7 @@ impl WallCons {
                     match mat.properties {
                         MatProps::Detailed{ conductivity, .. } if conductivity > 0.0 => total_resistance += e / conductivity,
                         MatProps::Resistance{ resistance, ..} => total_resistance += resistance,
-                        _ => return Err(format_err!(
+                        MatProps::Detailed { .. } => return Err(format_err!(
                             "Material \"{}\" de la composición de capas \"{}\" con conductividad nula o casi nula",
                             mat.name,
                             self.name
@@ -288,9 +286,9 @@ impl Wall {
     /// - los elementos mal definidos (muros sin construcción o sin espacio asignado) se reportan con valor 0.0
     /// - se usan resistencias superficiales de referencia (DB-HE)
     pub fn u_value(&self, model: &Model) -> Option<f32> {
-        use BoundaryType::*;
-        use SpaceType::*;
-        use Tilt::*;
+        use BoundaryType::{ADIABATIC, EXTERIOR, GROUND, INTERIOR};
+        use SpaceType::CONDITIONED;
+        use Tilt::{BOTTOM, SIDE, TOP};
 
         let resistance = model
             .cons
@@ -352,7 +350,7 @@ impl Wall {
                 match Tilt::from(self) {
                     TOP => Some(self.u_value_gnd_top(U_w)),
                     BOTTOM => Some(self.u_value_gnd_slab(z, d_t, char_dim, psi_gnd_ext)),
-                    SIDE => self.u_value_gnd_wall(z, U_w, d_t, space_height_net),
+                    SIDE => Some(self.u_value_gnd_wall(z, U_w, d_t, space_height_net)),
                 }
             }
             // Elementos en contacto con otros espacios ---------------------
@@ -601,14 +599,14 @@ impl Wall {
     /// `U_w` - transmitancia del elemento considerado en contacto con el exterior
     /// `d_t` - espesor equivalente total de solera (suelo del sótano), m (10)
     /// `space_height_net` - altura neta del espacio, m
-    fn u_value_gnd_wall(&self, z: f32, U_w: f32, d_t: f32, space_height_net: f32) -> Option<f32> {
+    fn u_value_gnd_wall(&self, z: f32, U_w: f32, d_t: f32, space_height_net: f32) -> f32 {
         // Muros que realmente no son enterrados
         if z.abs() < 0.01 {
             warn!(
                 "{} (muro de sótano no enterrado z=0) U_w={:.2} (z={:.2})",
                 self.name, U_w, z,
             );
-            return Some(U_w);
+            return U_w;
         };
         // d_w: Espesor equivalente de los muros de sótano (13)
         let d_w = LAMBDA_GND / U_w;
@@ -645,7 +643,7 @@ impl Wall {
             "{} (muro enterrado) U={:.2} (z={:.2}, h={:.2}, U_w={:.2}, U_bw={:.2}, d_t={:.2}, d_w={:.2})",
             self.name, U, z, h, U_w, U_bw, d_t, d_w,
         );
-        Some(U)
+        U
     }
 }
 

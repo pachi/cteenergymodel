@@ -98,9 +98,9 @@ impl From<&Model> for EnergyProps {
 
         let mut loads: BTreeMap<Uuid, LoadsProps> = BTreeMap::new();
         for s in &model.loads {
-            let people_sch_avg = s.people_schedule.map(&mut get_avg).unwrap_or(0.0);
-            let lighting_sch_avg = s.lighting_schedule.map(&mut get_avg).unwrap_or(0.0);
-            let equipment_sch_avg = s.equipment_schedule.map(&mut get_avg).unwrap_or(0.0);
+            let people_sch_avg = s.people_schedule.map_or(0.0, &mut get_avg);
+            let lighting_sch_avg = s.lighting_schedule.map_or(0.0, &mut get_avg);
+            let equipment_sch_avg = s.equipment_schedule.map_or(0.0, &mut get_avg);
             let loads_avg = people_sch_avg * s.people_sensible
                 + lighting_sch_avg * s.lighting
                 + equipment_sch_avg * s.equipment;
@@ -189,15 +189,12 @@ impl From<&Model> for EnergyProps {
             .walls
             .iter()
             .filter(|w| {
-                let this_space_is_inside_tenv = model
-                    .get_space(w.space)
-                    .map(|s| s.inside_tenv)
-                    .unwrap_or(false);
+                let this_space_is_inside_tenv =
+                    model.get_space(w.space).map_or(false, |s| s.inside_tenv);
                 let next_space_is_inside_tenv = w
                     .next_to
                     .and_then(|next_to| model.get_space(next_to))
-                    .map(|s| s.inside_tenv)
-                    .unwrap_or(false);
+                    .map_or(false, |s| s.inside_tenv);
                 match w.bounds {
                     BoundaryType::EXTERIOR | BoundaryType::GROUND | BoundaryType::ADIABATIC => {
                         this_space_is_inside_tenv
@@ -222,7 +219,7 @@ impl From<&Model> for EnergyProps {
                 tilt: Tilt::from(w),
                 area_gross: w.area(),
                 area_net: w.area_net(&model.windows),
-                multiplier: spaces.get(&w.space).map(|sp| sp.multiplier).unwrap_or(1.0),
+                multiplier: spaces.get(&w.space).map_or(1.0, |sp| sp.multiplier),
                 is_tenv: tenv_wall_ids.contains(&w.id),
                 u_value: w.u_value(model),
                 u_value_override: wall_override.and_then(|o| o.u_value),
@@ -242,7 +239,7 @@ impl From<&Model> for EnergyProps {
                 orientation: wall.map(|w| w.orientation).unwrap_or_default(),
                 tilt: wall.map(|w| w.tilt).unwrap_or_default(),
                 area: w.area(),
-                multiplier: wall.map(|wp| wp.multiplier).unwrap_or(1.0),
+                multiplier: wall.map_or(1.0, |wp| wp.multiplier),
                 bounds: wall.map(|w| w.bounds).unwrap_or_default(),
                 is_tenv: tenv_wall_ids.contains(&w.wall),
                 u_value: wincons.get(&w.cons).and_then(|c| c.u_value),
@@ -371,19 +368,16 @@ impl From<&Model> for EnergyProps {
             .map(|people_schedule_id| model.schedules.get_year_as_day_sch(people_schedule_id))
             .collect();
         // 3. Comprobación de que todos los horarios tienen la misma duración en días
-        let year_len = schedules_as_days
-            .first()
-            .map(|s| s.len())
-            .unwrap_or_default();
+        let year_len = schedules_as_days.first().map(Vec::len).unwrap_or_default();
         if year_len != 365 {
-            warn!("Duración de horarios anuales distinta a 365 días")
+            warn!("Duración de horarios anuales distinta a 365 días");
         };
         if !schedules_as_days
             .iter()
-            .map(|s| s.len())
+            .map(Vec::len)
             .all(|item| item == year_len)
         {
-            error!("Horarios anuales con distinta duración en días")
+            error!("Horarios anuales con distinta duración en días");
         };
         // 4. Para cada día localiza los horarios diarios diferentes
         let year_distinct_day_sch_by_day = (0..year_len)
@@ -426,12 +420,9 @@ impl From<&Model> for EnergyProps {
             occupied_spaces.fold((0.0, 0.0), |(acc_load, acc_area), s| {
                 (
                     acc_load
-                        + s.loads
-                            .map(|loads_id| {
-                                loads.get(&loads_id).map(|l| l.loads_avg).unwrap_or(0.0)
-                            })
-                            .unwrap_or(0.0)
-                            * s.area
+                        + s.loads.map_or(0.0, |loads_id| {
+                            loads.get(&loads_id).map_or(0.0, |l| l.loads_avg)
+                        }) * s.area
                             * s.multiplier,
                     acc_area + s.area * s.multiplier,
                 )

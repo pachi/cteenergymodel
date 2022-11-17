@@ -45,6 +45,5 @@ pub fn get_tag_as_u32_or(parent: &roxmltree::Node, tag: &str, default: u32) -> u
         .children()
         .find(|n| n.has_tag_name(tag))
         .and_then(|n| n.text())
-        .map(|v| v.parse::<u32>().unwrap_or(1))
-        .unwrap_or(default)
+        .map_or(default, |v| v.parse::<u32>().unwrap_or(1))
 }

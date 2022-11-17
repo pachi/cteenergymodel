@@ -21,9 +21,9 @@ use hulc::{
 
 pub use crate::{
     BoundaryType, ConsDb, Frame, Glass, Layer, MatProps, Material, Meta, Model, Orientation,
-    Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads, SpaceType,
-    ThermalBridge, ThermalBridgeKind, Thermostat, Tilt, Uuid, Wall, WallCons, WallGeom, WinCons,
-    WinGeom, Window,
+    PropsOverrides, Schedule, ScheduleDay, ScheduleWeek, SchedulesDb, Shade, Space, SpaceLoads,
+    SpaceType, ThermalBridge, ThermalBridgeKind, Thermostat, Tilt, Uuid, Wall, WallCons, WallGeom,
+    WinCons, WinGeom, Window,
 };
 
 // Utilidades varias de conversión
@@ -120,8 +120,8 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
             schedules,
             loads,
             thermostats,
-            overrides: Default::default(),
-            extra: Default::default(),
+            overrides: PropsOverrides::default(),
+            extra: None,
         };
         Ok(model)
     }
@@ -209,9 +209,8 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
 
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         // 1. Elementos definidos por polígono
-        (None, Some(ref polygon)) => polygon.as_vec(),
         // 2. Elementos TOP definidos por polígono
-        (Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
+        (None | Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
         // 3. Elementos TOP definidos por la geometría de su espacio
         (Some("TOP"), None) => {
             // Giramos el polígono según la desviación respecto al norte del opaco y el espacio
@@ -356,7 +355,7 @@ fn windows_and_shades_from_bdl(
                     id: uuid_from_obj(&format!("{:?}-{:?}-{:?}", win.name, overhang, geometry)),
                     name: format!("{}_overhang", win.name),
                     geometry,
-                })
+                });
             };
 
             // Aleta izquierda
@@ -378,7 +377,7 @@ fn windows_and_shades_from_bdl(
                     id: uuid_from_obj(&format!("{:?}-{:?}-{:?}", win.name, lfin, geometry)),
                     name: format!("{}_left_fin", win.name),
                     geometry,
-                })
+                });
             }
 
             // Aleta derecha
@@ -401,7 +400,7 @@ fn windows_and_shades_from_bdl(
                     id: uuid_from_obj(&format!("{:?}-{:?}-{:?}", win.name, rfin, geometry)),
                     name: format!("{}_right_fin", win.name),
                     geometry,
-                })
+                });
             }
         }
     }
@@ -422,19 +421,15 @@ fn thermal_bridges_from_bdl(bdl: &Data) -> Vec<ThermalBridge> {
             use ThermalBridgeKind::*;
             let id = uuid_from_obj(tb);
             let kind = match tb.name.as_str() {
-                "UNION_CUBIERTA" => ROOF,
-                "ESQUINA_CONVEXA_FORJADO" => ROOF,
-                "ESQUINA_CONCAVA" => CORNER,
-                "ESQUINA_CONVEXA" => CORNER,
-                "ESQUINA_CONCAVA_CERRAMIENTO" => CORNER,
-                "ESQUINA_CONVEXA_CERRAMIENTO" => CORNER,
+                "UNION_CUBIERTA" | "ESQUINA_CONVEXA_FORJADO" => ROOF,
+                "ESQUINA_CONCAVA"
+                | "ESQUINA_CONVEXA"
+                | "ESQUINA_CONCAVA_CERRAMIENTO"
+                | "ESQUINA_CONVEXA_CERRAMIENTO" => CORNER,
                 "FRENTE_FORJADO" => INTERMEDIATEFLOOR,
                 "PILAR" => PILLAR,
                 "UNION_SOLERA_PAREDEXT" => GROUNDFLOOR,
-                "HUECO_VENTANA" => WINDOW,
-                "HUECO_ALFEIZAR" => WINDOW,
-                "HUECO_CAPIALZADO" => WINDOW,
-                "HUECO_JAMBA" => WINDOW,
+                "HUECO_VENTANA" | "HUECO_ALFEIZAR" | "HUECO_CAPIALZADO" | "HUECO_JAMBA" => WINDOW,
                 _ => GENERIC,
             };
             ThermalBridge {
@@ -489,12 +484,13 @@ fn shades_from_bdl(bdl: &Data) -> Vec<Shade> {
                 // 2. Sombras definidas por vértices
                 // Aquí tenemos que tener cuidado con las operaciones de giros ya que tienen criterios de medición distintos
                 let normal = (vertices[1] - vertices[0]).cross(&(vertices[2] - vertices[1]));
-                if normal.magnitude() < 10.0 * f32::EPSILON {
-                    // XXX: Esto se podría evitar iterando hasta encontrar dos segmentos que no sean colineales
-                    // Basta con ir probando los siguientes tres puntos
-                    // https://community.khronos.org/t/how-to-calculate-polygon-normal/49265/3
-                    panic!("Polígono con puntos colineales");
-                };
+                // XXX: Esto se podría evitar iterando hasta encontrar dos segmentos que no sean colineales
+                // Basta con ir probando los siguientes tres puntos
+                // https://community.khronos.org/t/how-to-calculate-polygon-normal/49265/3
+                assert!(
+                    normal.magnitude() > 10.0 * f32::EPSILON,
+                    "Polígono con puntos colineales"
+                );
                 let tilt = Vector3::z_axis().angle(&normal);
                 // Azimuth del elemento de sombra (¡Atención! Criterio EN S=0, E=+90, W=-90)
                 let shade_azimuth = if (tilt % std::f32::consts::PI).abs() > (10.0 * f32::EPSILON) {
@@ -572,7 +568,7 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
                     vapour_diff: None,
                 }
             },
-        })
+        });
     }
     let mut glasses = Vec::new();
     for (name, glass) in &bdl.db.glasses {
@@ -582,7 +578,7 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
             name: name.clone(),
             u_value: glass.conductivity,
             g_gln: glass.g_gln,
-        })
+        });
     }
     let mut frames = Vec::new();
     for (name, frame) in &bdl.db.frames {
@@ -592,7 +588,7 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
             name: name.clone(),
             u_value: frame.conductivity,
             absorptivity: frame.absorptivity,
-        })
+        });
     }
 
     let mut used_wallcons = bdl
@@ -617,8 +613,8 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
                 }
                 let layers = ids
                     .iter()
-                    .cloned()
-                    .zip(cons.thickness.iter().cloned())
+                    .copied()
+                    .zip(cons.thickness.iter().copied())
                     .map(|(material, e)| Layer { material, e })
                     .collect();
                 let wc = WallCons {
@@ -627,7 +623,7 @@ fn cons_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<ConsDb, Error> {
                     layers,
                     absorptance: cons.absorptance,
                 };
-                wallcons.push(wc)
+                wallcons.push(wc);
             }
             _ => {
                 return Err(format_err!(
@@ -733,7 +729,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                     id,
                     name: sch.name.clone(),
                     values,
-                })
+                });
             }
             bdl::Schedule::Week(sch) => {
                 let id = id_maps.schedule_week_id(&sch.name)?;
@@ -751,12 +747,11 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                             if day_sch_name == current_day_name {
                                 current_day_sch.1 += 1;
                                 continue;
-                            } else {
-                                res.push(current_day_sch);
-                                current_day_name = day_sch_name;
-                                current_day_id = id_maps.schedule_day_id(current_day_name)?;
-                                current_day_sch = (current_day_id, 1);
                             }
+                            res.push(current_day_sch);
+                            current_day_name = day_sch_name;
+                            current_day_id = id_maps.schedule_day_id(current_day_name)?;
+                            current_day_sch = (current_day_id, 1);
                         }
                         res.push(current_day_sch);
                         res
@@ -767,7 +762,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                     id,
                     name: sch.name.clone(),
                     values,
-                })
+                });
             }
             bdl::Schedule::Year(sch) => {
                 // Para cada horario semanal del horario anual calculamos:
@@ -801,7 +796,7 @@ fn schedules_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<SchedulesDb, Error
                     id,
                     name: sch.name.clone(),
                     values,
-                })
+                });
             }
         }
     }
@@ -839,10 +834,10 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
         } else {
             0.0
         };
-        let people_latent = if area_per_person != 0.0 {
-            fround2(space_cond.attrs.get_f32("PEOPLE-HG-LAT")? / area_per_person)
-        } else {
+        let people_latent = if area_per_person == 0.0 {
             0.0
+        } else {
+            fround2(space_cond.attrs.get_f32("PEOPLE-HG-LAT")? / area_per_person)
         };
 
         space_loads.push(SpaceLoads {
@@ -862,7 +857,7 @@ fn loads_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<SpaceLoads>, Error
                 id_maps.schedule_year_id(space_cond.attrs.get_str("LIGHTING-SCHEDULE")?)?,
             ),
             area_per_person,
-        })
+        });
     }
     Ok(space_loads)
 }
@@ -872,7 +867,7 @@ fn thermostats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Thermostat>,
     let mut space_conds = Vec::new();
 
     for (name, space_cond) in &bdl.system_conditions {
-        let id = id_maps.thermostat_id(&name)?;
+        let id = id_maps.thermostat_id(name)?;
         let (temp_max, temp_min) =
             if let Ok("CONDITIONED") = space_cond.attrs.get_str("TYPE").as_deref() {
                 (
@@ -887,7 +882,7 @@ fn thermostats_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Thermostat>,
             name: space_cond.name.clone(),
             temp_max,
             temp_min,
-        })
+        });
     }
 
     Ok(space_conds)

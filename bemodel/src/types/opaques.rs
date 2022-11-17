@@ -68,7 +68,7 @@ impl Wall {
         let windows_area = windows
             .iter()
             .filter(|w| w.wall == self.id)
-            .map(|w| w.area())
+            .map(Window::area)
             .sum::<f32>();
         fround2(wall_gross_area - windows_area)
     }

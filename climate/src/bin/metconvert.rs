@@ -94,9 +94,10 @@ fn main() {
 
     // Datos generales de cada clima
     let metgeneraldata: Vec<_> = metdata.values().map(|v| v.meta.clone()).collect();
-    let json = match matches.get_flag("pretty") {
-        true => serde_json::to_string_pretty(&metgeneraldata),
-        _ => serde_json::to_string(&metgeneraldata),
+    let json = if matches.get_flag("pretty") {
+        serde_json::to_string_pretty(&metgeneraldata)
+    } else {
+        serde_json::to_string(&metgeneraldata)
     }
     .unwrap_or_else(|e| {
         eprintln!(
@@ -109,9 +110,10 @@ fn main() {
 
     // Datos mensuales de radiación
     let metmonthlydata = met_monthly_data(&metdata);
-    let json = match matches.get_flag("pretty") {
-        true => serde_json::to_string_pretty(&metmonthlydata),
-        _ => serde_json::to_string(&metmonthlydata),
+    let json = if matches.get_flag("pretty") {
+        serde_json::to_string_pretty(&metmonthlydata)
+    } else {
+        serde_json::to_string(&metmonthlydata)
     }
     .unwrap_or_else(|e| {
         eprintln!(
@@ -124,9 +126,10 @@ fn main() {
 
     // Datos de radiación para el 21 de julio
     let metjulydata = met_july21st_radiation_data(&metdata);
-    let json = match matches.get_flag("pretty") {
-        true => serde_json::to_string_pretty(&metjulydata),
-        _ => serde_json::to_string(&metjulydata),
+    let json = if matches.get_flag("pretty") {
+        serde_json::to_string_pretty(&metjulydata)
+    } else {
+        serde_json::to_string(&metjulydata)
     }
     .unwrap_or_else(|e| {
         eprintln!(

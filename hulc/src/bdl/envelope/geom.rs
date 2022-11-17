@@ -14,9 +14,9 @@ use anyhow::{bail, Error};
 
 use nalgebra::{point, Matrix2, Rotation2};
 
+use super::{Point2, Point3, Vector2};
 use crate::bdl::BdlBlock;
 use crate::utils::normalize;
-use super::{Point2, Point3, Vector2};
 
 /// Polígono - conjunto de vértices 2D
 #[derive(Debug, Clone, Default)]
@@ -29,8 +29,7 @@ impl Polygon {
         // https://www.mathopenref.com/coordpolygonarea.html
         // 0.5 * ( \SUM( x_i * y_i+1 - y_i * x_i+1)_(i = de 1 a n) + (x_n * y_1 - y_n * x_1) )
         let area = match self.0.len() {
-            0 => 0.0,
-            1 => 0.0,
+            0 | 1 => 0.0,
             n => self
                 .0
                 .iter()
@@ -46,8 +45,7 @@ impl Polygon {
     /// Perímetro de un polígono (m)
     pub fn perimeter(&self) -> f32 {
         match self.0.len() {
-            0 => 0.0,
-            1 => 0.0,
+            0 | 1 => 0.0,
             n => self
                 .0
                 .iter()
@@ -60,8 +58,7 @@ impl Polygon {
     /// Longitud del lado que empieza en el vértice con el nombre indicado
     pub fn edge_length(&self, vertexname: &str) -> f32 {
         self.edge_vertices(vertexname)
-            .map(|[p_n, p_m]| (p_n - p_m).magnitude())
-            .unwrap_or(0.0)
+            .map_or(0.0, |[p_n, p_m]| (p_n - p_m).magnitude())
     }
 
     /// Vértices del lado que empieza en el vértice con el nombre indicdo (Vnn)
@@ -69,8 +66,10 @@ impl Polygon {
     pub fn edge_vertices(&self, vertexname: &str) -> Option<[&Point2; 2]> {
         let num_vertex: usize = vertexname
             .strip_prefix('V')
-            .map(str::parse::<usize>)
-            .unwrap_or_else(|| panic!("Vértice {} desconocido de polígono", vertexname))
+            .map_or_else(
+                || panic!("Vértice {} desconocido de polígono", vertexname),
+                str::parse::<usize>,
+            )
             .ok()?
             - 1;
         Some([
@@ -82,18 +81,16 @@ impl Polygon {
     /// Ángulo con el norte (Y+) de la normal del lado definido por el vértice
     /// Los ángulos se dan en grados sexagesimales, sentido horario desde Y+ (E+, W-)
     pub fn edge_normal_to_y(&self, vertexname: &str) -> f32 {
-        self.edge_vertices(vertexname)
-            .map(|[p_n, p_m]| {
-                // normal al vector director del lado (hay dos, (dy, -dx) y (-dy, dx) y cogemos (dy, -dx), un giro de -90º)
-                let n = Rotation2::new(-FRAC_PI_2) * (p_m - p_n);
-                // vector del sur (0, -1)
-                let s = Vector2::y();
-                // ángulo entre la normal y el sur
-                let angle = n.angle(&s);
-                // Para las normales en el semiplano nx <= 0 cogemos el ángulo largo
-                normalize(f32::signum(n.x) * angle.to_degrees(), 0.0, 360.0)
-            })
-            .unwrap_or(0.0)
+        self.edge_vertices(vertexname).map_or(0.0, |[p_n, p_m]| {
+            // normal al vector director del lado (hay dos, (dy, -dx) y (-dy, dx) y cogemos (dy, -dx), un giro de -90º)
+            let n = Rotation2::new(-FRAC_PI_2) * (p_m - p_n);
+            // vector del sur (0, -1)
+            let s = Vector2::y();
+            // ángulo entre la normal y el sur
+            let angle = n.angle(&s);
+            // Para las normales en el semiplano nx <= 0 cogemos el ángulo largo
+            normalize(f32::signum(n.x) * angle.to_degrees(), 0.0, 360.0)
+        })
     }
 
     /// Devuelve copia como Vec<Point2>

@@ -123,7 +123,7 @@ impl TryFrom<BdlBlock> for ThermalBridge {
         let defn = attrs.remove_f32("DEFINICION").map(|v| v as i32).ok(); // El LIDER antiguo no usa la definición del tipo
         let catalog = match defn {
             // Definido con valor por defecto o por el usuario
-            Some(1) | Some(2) | None => None,
+            Some(1 | 2) | None => None,
             // Definido por catálogo de PTs
             Some(3) => Some(TbByCatalog {
                 classes: extract_namesvec(attrs.remove_str("LISTA-N")?),
