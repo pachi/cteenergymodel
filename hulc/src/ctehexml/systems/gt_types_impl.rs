@@ -483,6 +483,7 @@ impl From<BdlBlock> for GtSystem {
             .unwrap_or_default()
             .parse()
             .ok();
+
         // Fuente de calor a nivel de zona
         let zone_heat_source = block
             .attrs

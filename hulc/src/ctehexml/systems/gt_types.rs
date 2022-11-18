@@ -700,12 +700,6 @@ pub struct GtSystem {
     // - Fuentes de  calor para el sistema
     // - Fuente de calor para zonas
 
-    // - Baterías de agua caliente
-    // - Calentadores de aire (gas / oil)
-    // - Bomba de calor aire-aire
-    // - Precalentamiento
-    // - Calefacción auxiliar
-
     // Ver cómo según heat_source y zone_heat_source se usan distintas cosas en los heating_coil, que es el que recibe la información
     // https://doe2.com/Download/DOE-22/DOE22Vol2-Dictionary.pdf p.391
     // Ver fuentes de calor en Manual Técnico de Calener GT
@@ -780,12 +774,16 @@ pub enum GtHeatSourceKind {
     /// Circuito agua caliente
     HotWaterLoop,
     /// Circuito ACS
+    /// En GT solo en calentamiento principal (sistema), y recalentamiento terminal (zona)
     DhwLoop,
     /// BdC eléctrica
+    /// En GT solo en calentamiento principal (sistema)
     HeatPump,
     /// BdC gas
+    /// En GT solo en calentamiento principal (sistema)
     GasHeatPump,
-    /// Generador aire
+    /// Generador aire (con combustible)
+    /// En GT solo en calentamiento principal (sistema)
     Furnace,
 }
 
@@ -794,7 +792,8 @@ pub enum GtHeatSourceKind {
 /// TODO: reorganizar como enumeración según tipo...
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysCoolingDetail {
-    // Baterías ---
+    // ## Chilled-Water Coils
+    // Baterías  de agua fría ---
     /// Circuito de agua fría que alimenta el sistema
     /// Es el circuito por defecto para zonas salvo que se indique
     /// (CHW-LOOP)
@@ -813,9 +812,9 @@ pub struct SysCoolingDetail {
     // Parámetros para sistemas de generación autónomos
     // No utilizan circuitos de agua, sean sistemas con tratamiento del aire
     // centralizado o zonal
-    // refrigeración con dx, bomba de calor, condensación por agua, enf. evaporativo, etc
+    // refrigeración con dx (bomba de calor), condensación por agua, enf. evaporativo, etc
 
-    //
+    // ## DX Cooling
     /// Rendimiento, EER
     /// (C-C-EER)
     /// Default: Autónomos 2.80
@@ -828,6 +827,7 @@ pub struct SysCoolingDetail {
     // Default: por aire
     // pub cond_type: Option<String>,
 
+    // ## Water-Cooled condensers
     // Refrigeración autónomos, condensación por agua ---
     // Circuito condensación
     // (CW-LOOP)
@@ -840,6 +840,9 @@ pub struct SysCoolingDetail {
     // Efectividad kWh/kWh (EVAP-PCC-EFF)
     // Horario (EVAP-PCC-SCH)
     // Consumo W/W (EVAP-PCC-ELEC)
+
+    // TODO: Enfriamiento evaporativo
+    // TODO: ## Waterside economizers (Economizador de agua)
 }
 
 /// Parámetros de sistemas de calefacción de un subsistema secundario de GT
@@ -862,7 +865,8 @@ pub struct SysHeatingDetail {
     /// (HW-LOOP)
     pub hw_loop: Option<String>,
     /// Circuito de agua caliente que alimenta las unidades de zona en sistemas
-    /// de tratamiento de aire centralizado
+    /// de tratamiento de aire centralizado cuando difiera del del sistema y no se especifique
+    /// en la zona
     /// No existe en sistema de doble conducto DDS
     /// (ZONE-HW-LOOP)
     pub zone_hw_loop: Option<String>,
@@ -918,6 +922,7 @@ pub struct SysPreHeating {
     // Calienta el aire cuando está por debajo de la temperatura de congelación
     /// Fuente de calor
     /// (C-C-PREHEAT-SOURCE)
+    /// Solamente admite fuentes: eléctrica, agua caliente y circuito de ACS
     pub source: GtHeatSourceKind,
     /// Potencia batería, kW
     /// (C-C-PREHEAT-CAP)
@@ -949,7 +954,7 @@ pub struct SysAuxHeating {
     /// Fuente de calor calefacción auxiliar
     /// (C-C-BBRD-SOUR)
     /// Solo en sistemas todo aire caudal variable VAVS
-    /// Si es de tipo furnace (generador de aire) se rellenan los datos de rendimiento y consumo auxiliar
+    /// Se admiten como fuentes solo eléctrica y agua caliente
     pub source: GtHeatSourceKind,
     // Tipo de control de calefacción auxiliar
     // (C-C-BBRD-CONTROL)
@@ -961,6 +966,7 @@ pub struct SysAuxHeating {
     // Salto térmico unidad terminal, ºC
     // (BBRD-COIL-DT)
     pub dt: Option<f32>,
+    // TODO: potencia cuando es eléctrica?
 }
 
 /// Control de un subsistema secundario de GT
