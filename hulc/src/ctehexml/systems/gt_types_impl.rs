@@ -466,6 +466,7 @@ impl From<BdlBlock> for GtSystem {
             .get_f32("C-C-COOL-SH-CAP")
             .unwrap_or(cool_cap * 0.80);
         let cooling_coil = if cool_cap.abs() > f32::EPSILON {
+            // TODO: convertir a coil / loop / autónomos
             Some(SysCoolingDetail {
                 chw_loop: block.attrs.get_str("CHW-LOOP").ok(),
                 chw_coil_q: block.attrs.get_f32("C-C-CHW-COIL-Q").ok(),
@@ -476,7 +477,10 @@ impl From<BdlBlock> for GtSystem {
             None
         };
 
-        // Fuente de calor a nivel de sistema
+        // Potencia de calefacción
+        let heat_cap = block.attrs.get_f32("C-C-HEAT-CAP").unwrap_or_default();
+
+        // Fuente de calor de las baterías principales a nivel de sistema
         let heat_source = block
             .attrs
             .get_str("C-C-HEAT-SOURCE")
@@ -484,7 +488,7 @@ impl From<BdlBlock> for GtSystem {
             .parse()
             .ok();
 
-        // Fuente de calor a nivel de zona
+        // Fuente de calor a nivel de zona (en sistemas de aire centralizados)
         let zone_heat_source = block
             .attrs
             .get_str("C-C-ZONE-H-SOUR")
@@ -492,8 +496,35 @@ impl From<BdlBlock> for GtSystem {
             .parse()
             .ok();
 
-        // Potencia de calefacción
-        let heat_cap = block.attrs.get_f32("C-C-HEAT-CAP").unwrap_or_default();
+        // // TODO: Reconvertir sources a elementos concretos:
+        // // 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica,
+        // // 5=BdC gas, 6=generador aire, 7=ninguna
+        // match zone_heat_source {
+        //     Some(GtHeatSourceKind::Electric) => todo!(),
+        //     Some(GtHeatSourceKind::HotWaterLoop) => {
+        //         let hw_loop = block.attrs.get_str("HW-LOOP").ok();
+        //         let hw_coil_q = block.attrs.get_f32("C-C-HW-COIL-Q").ok();
+        //         todo!()
+        //     }
+        //     Some(GtHeatSourceKind::DhwLoop) => {
+        //         let dhw_loop = block.attrs.get_str("DHW-LOOP").ok();
+        //         let hw_coil_q = block.attrs.get_f32("C-C-HW-COIL-Q").ok();
+        //         todo!()
+        //     }
+        //     Some(GtHeatSourceKind::HeatPump) => {
+        //         let cop = block.attrs.get_f32("C-C-COP").ok();
+        //         todo!()
+        //     }
+        //     Some(GtHeatSourceKind::GasHeatPump) => {
+        //         let cop = block.attrs.get_f32("C-C-COP").ok();
+        //         todo!()
+        //     }
+        //     Some(GtHeatSourceKind::Furnace) => {
+        //         // p. 393 FURNACE-HIR, FURNACE-AUX-KW
+        //         todo!()
+        //     }
+        //     _ => None,
+        // };
 
         let heating_coil = if heat_cap.abs() > f32::EPSILON {
             // Esto está mezclando datos de calentamiento de sistema y zonal para el caso de baterías
