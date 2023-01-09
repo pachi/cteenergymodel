@@ -708,6 +708,10 @@ pub struct GtSystem {
     // Ver tablas de Manual Técnico de GT
     // Fuentes de calor a nivel de sistema y/o zona de un subsistema secundario de GT
     // No existe en sistemas solo ventilación (PMZS)
+    /// Potencia total de calefacción (baterias zonales o del sistema), kW
+    /// (C-C-HEAT-CAP)
+    /// En unidades terminales se definen en la zona
+    pub heat_cap: f32,
 
     // Indica si el sistema puede suministrar calor
     /// Fuente de calor a nivel de sistema (baterías principales del sistema)
@@ -724,14 +728,6 @@ pub struct GtSystem {
     /// La generación de aire solo está en sistemas autónomos (en zonales solo PTAC, no HP)
     /// La capacidad se define en la zona con (C-C-HEAT-CAP)
     pub zone_heat_source: Option<GtHeatSourceKind>,
-
-    /// Potencia total de calefacción (baterias zonales o del sistema), kW
-    /// (C-C-HEAT-CAP)
-    /// En unidades terminales se definen en la zona
-    pub heat_cap: f32,
-
-    // Parámetros para sistemas de generación de calor
-    pub heat_detail: Option<SysHeatingDetail>,
 
     // Precalentamiento ---
     // GT no exporta al XML la potencia del precalentamiento
@@ -766,25 +762,25 @@ pub struct Fan {
 /// (TYPE)
 /// Fuente de calor a nivel de sistema o zona
 /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, PartialEq)]
 pub enum GtHeatSourceKind {
     #[default]
     /// Electricidad
     Electric,
     /// Circuito agua caliente
-    HotWaterLoop,
+    HotWaterLoop { w_loop: String },
     /// Circuito ACS
     /// En GT solo en calentamiento principal (sistema), y recalentamiento terminal (zona)
-    DhwLoop,
+    DhwLoop { w_loop: String },
     /// BdC eléctrica
     /// En GT solo en calentamiento principal (sistema)
-    HeatPump,
+    HeatPump { cop: f32 },
     /// BdC gas
     /// En GT solo en calentamiento principal (sistema)
-    GasHeatPump,
+    GasHeatPump { cop: f32 },
     /// Generador aire (con combustible)
     /// En GT solo en calentamiento principal (sistema)
-    Furnace,
+    Furnace { eff: f32, aux_kw: f32 },
 }
 
 /// Datos específicos de refrigeración de un subsistema secundario de GT
