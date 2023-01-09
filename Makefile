@@ -1,20 +1,28 @@
-run:
-	$(info [INFO]: Ejecutando ejemplo)
+run: run_vyp run_gt
+run_vyp:
+	$(info [INFO]: Ejecutando ejemplos VYP)
+	# Casos VyP
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo/cubo.ctehexml -o cubo.json -r cubo_results.json
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/e4h_medianeras/e4h_medianeras.ctehexml -o e4h_medianeras.json -r e4h_medianeras_results.json
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/casoA/casoa.ctehexml -o caso_a.json -r caso_a_results.json
 	RUST_LOG=info cargo run --bin thor hulc_tests/tests/ejemploviv_unif/ejemploviv_unif.ctehexml -o ejemploviv_unif.json -r ejemploviv_unif_results.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/ejemplo_gt_aerotermia/ejemplo_gt_aerotermia.ctehexml -o ejemplo_gt_aerotermia.json -r ejemplo_gt_aerotermia_results.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cajazapatos_bombacaloracs/cajazapatos_bombacaloracs.ctehexml -o cajazapatos_bombacaloracs.json -r cajazapatos_bombacaloracs_results.json
-	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo_gt_caldera_radiadores/cubo_gt_caldera_radiadores.ctehexml -o cubo_gt_caldera_radiadores.json -r cubo_gt_caldera_radiadores_results.json
 	$(info [INFO]: Actualizando ejemplos en bemodel/tests/data)
 	mv cubo.json cubo_results.json bemodel/tests/data/
 	mv e4h_medianeras.json e4h_medianeras_results.json bemodel/tests/data/
 	mv caso_a.json caso_a_results.json bemodel/tests/data/
 	mv ejemploviv_unif.json ejemploviv_unif_results.json bemodel/tests/data/
+run_gt:
+	$(info [INFO]: Ejecutando ejemplos GT)
+	# Casos GT
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/ejemplo_gt_aerotermia/ejemplo_gt_aerotermia.ctehexml -o ejemplo_gt_aerotermia.json -r ejemplo_gt_aerotermia_results.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cajazapatos_bombacaloracs/cajazapatos_bombacaloracs.ctehexml -o cajazapatos_bombacaloracs.json -r cajazapatos_bombacaloracs_results.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo_gt_caldera_radiadores/cubo_gt_caldera_radiadores.ctehexml -o cubo_gt_caldera_radiadores.json -r cubo_gt_caldera_radiadores_results.json
+	RUST_LOG=info cargo run --bin thor hulc_tests/tests/cubo_gt_furnace/cubo_gt_furnace.ctehexml -o cubo_gt_furnace.json -r cubo_gt_furnace_results.json
+	$(info [INFO]: Actualizando ejemplos en bemodel/tests/data)
 	mv ejemplo_gt_aerotermia.json ejemplo_gt_aerotermia_results.json bemodel/tests/data/
 	mv cajazapatos_bombacaloracs.json cajazapatos_bombacaloracs_results.json bemodel/tests/data/
 	mv cubo_gt_caldera_radiadores.json cubo_gt_caldera_radiadores_results.json bemodel/tests/data/
+	mv cubo_gt_furnace.json cubo_gt_furnace_results.json bemodel/tests/data/
 runskip:
 	cargo run -- --skip-extra hulc_tests/tests/e4h_medianeras/cubo.json > cubo.json.skip
 	cargo run -- --skip-extra hulc_tests/tests/e4h_medianeras/ > e4h_medianeras.json.skip
