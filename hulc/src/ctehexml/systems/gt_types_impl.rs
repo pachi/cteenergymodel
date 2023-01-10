@@ -490,6 +490,7 @@ impl From<BdlBlock> for GtSystem {
             Some(SysPreHeating {
                 source,
                 capacity: block.attrs.get_f32("C-C-PREHEAT-CAP").unwrap_or_default(),
+                // Esto debería ir en el loop del source?
                 loop_name: block.attrs.get_str("PHW-LOOP").ok(),
             })
         } else {
