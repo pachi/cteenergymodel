@@ -378,10 +378,9 @@ fn test_casos_gt() {
         .unwrap(),
     )
     .unwrap();
-    // XXX: Este modelo está mal - se ha definido una mezcla de bdc y dhw
     bemodel::Model::try_from(
         &ctehexml::parse_with_catalog_from_path(
-            "tests/cajazapatos_bombacaloracs/cajazapatos_bombacaloracs.ctehexml",
+            "tests/paracuellos_gim_05/paracuellos_gim_05.ctehexml",
         )
         .unwrap(),
     )

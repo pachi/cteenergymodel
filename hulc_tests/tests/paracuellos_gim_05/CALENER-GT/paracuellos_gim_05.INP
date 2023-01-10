@@ -30,13 +30,13 @@ $              Compliance Data
 $ ---------------------------------------------------------
 
 "Datos generales" = COMPLIANCE      
-   C-PROJ-NAME      = *EDIFICIO DE ENSAYOS*
-   C-PROJ-ADDRESS   = **
-   C-DOCU-AUTHOR    = **
-   C-DOCU-AUTHOR-PH = *(null)*
+   C-PROJ-NAME      = *Gimnasio ampliación colegio*
+   C-PROJ-ADDRESS   = *C/*
+   C-DOCU-AUTHOR    = *Nombres*
+   C-DOCU-AUTHOR-PH = *-*
    C-NR-DHW-INCL    = 40
    C-CODE-VERSION   = 348
-   C-C-AUTOR-PROY   = **
+   C-C-AUTOR-PROY   = *Nombres*
    C-C-AUTOR-E-MAIL = *-*
    C-C-EL-COEF-CO2  = 1
    C-C-PORC-AUTOG   = 1
@@ -49,13 +49,13 @@ $              Site and Building Data
 $ ---------------------------------------------------------
 
 "Localización" = SITE-PARAMETERS 
-   C-REGION         = 1
-   C-LOCATION       = 6
-   C-CLIMATE-ZONE   = 8
+   C-REGION         = 14
+   C-LOCATION       = 43
+   C-CLIMATE-ZONE   = 11
    ..
 
 "Datos Edificio" = BUILD-PARAMETERS
-   AZIMUTH          = 45
+   AZIMUTH          = 290
    ..
 
 
@@ -85,100 +85,12 @@ $ ---------------------------------------------------------
    DENSITY          = 50
    SPECIFIC-HEAT    = 800
    ..
-"Aluminio" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 230
-   DENSITY          = 2700
-   SPECIFIC-HEAT    = 880
-   ..
-"tireno Expandido [ 0.029 W/[mK" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.029
-   DENSITY          = 30
-   SPECIFIC-HEAT    = 1000
-   ..
-"amente ventilada horizontal 1" = MATERIAL        
-   TYPE             = RESISTANCE
-   RESISTANCE       = 0.075
-   ..
-"Betún fieltro o lámina" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.23
-   DENSITY          = 1100
-   SPECIFIC-HEAT    = 1000
-   ..
-"Hormigón armado d > 2500" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 2.5
-   DENSITY          = 2600
-   SPECIFIC-HEAT    = 1000
-   ..
-"Enlucido de yeso 1000 < d < 13" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.57
-   DENSITY          = 1150
-   SPECIFIC-HEAT    = 1000
-   ..
-"Plaqueta o baldosa cerámica" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 1
-   DENSITY          = 2000
-   SPECIFIC-HEAT    = 800
-   ..
-"s ligeros [vermiculita perlit" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.41
-   DENSITY          = 900
-   SPECIFIC-HEAT    = 1000
-   ..
-"Polipropileno [PP]" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.22
-   DENSITY          = 910
-   SPECIFIC-HEAT    = 1800
-   ..
-"dida como árido principal d 10" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.35
-   DENSITY          = 1000
-   SPECIFIC-HEAT    = 1000
-   ..
-"igado de hormigón -Canto 30" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.3
-   CONDUCTIVITY     = 1.947
-   DENSITY          = 1670
-   SPECIFIC-HEAT    = 1000
-   ..
 "Plaqueta o baldosa de gres" = MATERIAL        
    TYPE             = PROPERTIES
    THICKNESS        = 0.02
    CONDUCTIVITY     = 2.3
    DENSITY          = 2500
    SPECIFIC-HEAT    = 1000
-   ..
-"Arena y grava [1700 < d < 2200" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 2
-   DENSITY          = 1450
-   SPECIFIC-HEAT    = 1050
-   ..
-"Azulejo cerámico" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 1.3
-   DENSITY          = 2300
-   SPECIFIC-HEAT    = 840
    ..
 " revoco/enlucido 1000 < d < 12" = MATERIAL        
    TYPE             = PROPERTIES
@@ -187,25 +99,32 @@ $ ---------------------------------------------------------
    DENSITY          = 1125
    SPECIFIC-HEAT    = 1000
    ..
-"tireno Expandido [ 0.037 W/[mK" = MATERIAL        
+"o de carbono CO2 [ 0.034 W/[mK" = MATERIAL        
    TYPE             = PROPERTIES
    THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.0375
-   DENSITY          = 30
+   CONDUCTIVITY     = 0.034
+   DENSITY          = 37.5
    SPECIFIC-HEAT    = 1000
    ..
-"Hormigón armado 2300 < d < 250" = MATERIAL        
+"trevigado cerámico -Canto 300" = MATERIAL        
    TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 2.3
-   DENSITY          = 2400
+   THICKNESS        = 0.3
+   CONDUCTIVITY     = 0.846
+   DENSITY          = 1110
    SPECIFIC-HEAT    = 1000
    ..
-"rra comprimida [1770 < d < 200" = MATERIAL        
+"Aluminio" = MATERIAL        
    TYPE             = PROPERTIES
    THICKNESS        = 0.02
-   CONDUCTIVITY     = 1.1
-   DENSITY          = 1885
+   CONDUCTIVITY     = 230
+   DENSITY          = 2700
+   SPECIFIC-HEAT    = 880
+   ..
+"MW Lana mineral [0.04 W/[mK]]" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.02
+   CONDUCTIVITY     = 0.0405
+   DENSITY          = 40
    SPECIFIC-HEAT    = 1000
    ..
 "trio o catalán 40 mm< G < 60" = MATERIAL        
@@ -215,157 +134,118 @@ $ ---------------------------------------------------------
    DENSITY          = 1140
    SPECIFIC-HEAT    = 1000
    ..
-" aire sin ventilar vertical 5" = MATERIAL        
+"eramente ventilada vertical 5" = MATERIAL        
    TYPE             = RESISTANCE
-   RESISTANCE       = 0.18
+   RESISTANCE       = 0.09
    ..
-"de LH doble [60 mm < E < 90 m" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.06
-   CONDUCTIVITY     = 0.432
-   DENSITY          = 930
-   SPECIFIC-HEAT    = 1000
-   ..
-"Polietileno alta densidad [HDP" = MATERIAL        
+"Enlucido de yeso 1000 < d < 13" = MATERIAL        
    TYPE             = PROPERTIES
    THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.5
-   DENSITY          = 980
-   SPECIFIC-HEAT    = 1800
-   ..
-"ric o catalán 80 mm< G < 100" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.115
-   CONDUCTIVITY     = 0.512
-   DENSITY          = 900
-   SPECIFIC-HEAT    = 1000
-   ..
-"MW Lana mineral [0.031 W/[mK]]" = MATERIAL        
-   TYPE             = PROPERTIES
-   THICKNESS        = 0.02
-   CONDUCTIVITY     = 0.031
-   DENSITY          = 40
+   CONDUCTIVITY     = 0.57
+   DENSITY          = 1150
    SPECIFIC-HEAT    = 1000
    ..
 
-"Cubierta plana" = LAYERS          
-   MATERIAL         = ( "MTRLBS", "MTRLSLNT", "MTRLBS" )
-   THICKNESS        = ( 0.1, 0.073, 0.1 )
+"Suelo" = LAYERS          
+   MATERIAL         = ( "Plaqueta o baldosa de gres", 
+         " revoco/enlucido 1000 < d < 12", "o de carbono CO2 [ 0.034 W/[mK", 
+         "trevigado cerámico -Canto 300" )
+   THICKNESS        = ( 0.02, 0.04, 0.05, 0.3 )
    ..
-"I_Cubierta plana" = LAYERS          
-   MATERIAL         = ( "MTRLBS", "MTRLSLNT", "MTRLBS" )
-   THICKNESS        = ( 0.1, 0.073, 0.1 )
+"I_Suelo" = LAYERS          
+   MATERIAL         = ( "trevigado cerámico -Canto 300", 
+         "o de carbono CO2 [ 0.034 W/[mK", " revoco/enlucido 1000 < d < 12", 
+         "Plaqueta o baldosa de gres" )
+   THICKNESS        = ( 0.3, 0.05, 0.04, 0.02 )
    ..
-"T_Cubierta plana" = LAYERS          
-   MATERIAL         = ( "MTRLBS", "MTRLSLNT", "MTRLBS" )
-   THICKNESS        = ( 0.1, 0.073, 0.1 )
+"T_Suelo" = LAYERS          
+   MATERIAL         = ( "trevigado cerámico -Canto 300", 
+         "o de carbono CO2 [ 0.034 W/[mK", " revoco/enlucido 1000 < d < 12", 
+         "Plaqueta o baldosa de gres" )
+   THICKNESS        = ( 0.3, 0.05, 0.04, 0.02 )
    ..
-"LOSA CIMENTACION" = LAYERS          
-   MATERIAL         = ( "MTRLBS", "MTRLSLNT", "MTRLBS" )
-   THICKNESS        = ( 0.1, 0.035, 0.1 )
+"Cubierta" = LAYERS          
+   MATERIAL         = ( "Aluminio", "MW Lana mineral [0.04 W/[mK]]", 
+         "Aluminio" )
+   THICKNESS        = ( 0.005, 0.12, 0.005 )
    ..
-"I_LOSA CIMENTACION" = LAYERS          
-   MATERIAL         = ( "MTRLBS", "MTRLSLNT", "MTRLBS" )
-   THICKNESS        = ( 0.1, 0.035, 0.1 )
+"I_Cubierta" = LAYERS          
+   MATERIAL         = ( "Aluminio", "MW Lana mineral [0.04 W/[mK]]", 
+         "Aluminio" )
+   THICKNESS        = ( 0.005, 0.12, 0.005 )
    ..
-"T_LOSA CIMENTACION" = LAYERS          
-   MATERIAL         = ( "MTRLBS", "MTRLSLNT", "MTRLBS" )
-   THICKNESS        = ( 0.1, 0.035, 0.1 )
+"T_Cubierta" = LAYERS          
+   MATERIAL         = ( "MTRLDLTRRN", "Aluminio", 
+         "MW Lana mineral [0.04 W/[mK]]", "Aluminio" )
+   THICKNESS        = ( 0.3, 0.005, 0.12, 0.005 )
    ..
-"Muro exterior" = LAYERS          
-   MATERIAL         = ( "s ligeros [vermiculita perlit", 
-         "trio o catalán 40 mm< G < 60", "tireno Expandido [ 0.029 W/[mK", 
-         " aire sin ventilar vertical 5", "de LH doble [60 mm < E < 90 m", 
+"Fachada" = LAYERS          
+   MATERIAL         = ( "trio o catalán 40 mm< G < 60", 
+         " revoco/enlucido 1000 < d < 12", "o de carbono CO2 [ 0.034 W/[mK", 
+         "eramente ventilada vertical 5", "trio o catalán 40 mm< G < 60", 
          "Enlucido de yeso 1000 < d < 13" )
-   THICKNESS        = ( 0.02, 0.115, 0.04, 0.05, 0.09, 0.015 )
+   THICKNESS        = ( 0.115, 0.02, 0.08, 0.05, 0.115, 0.02 )
    ..
-"I_Muro exterior" = LAYERS          
+"I_Fachada" = LAYERS          
    MATERIAL         = ( "Enlucido de yeso 1000 < d < 13", 
-         "de LH doble [60 mm < E < 90 m", " aire sin ventilar vertical 5", 
-         "tireno Expandido [ 0.029 W/[mK", "trio o catalán 40 mm< G < 60", 
-         "s ligeros [vermiculita perlit" )
-   THICKNESS        = ( 0.015, 0.09, 0.05, 0.04, 0.115, 0.02 )
+         "trio o catalán 40 mm< G < 60", "eramente ventilada vertical 5", 
+         "o de carbono CO2 [ 0.034 W/[mK", " revoco/enlucido 1000 < d < 12", 
+         "trio o catalán 40 mm< G < 60" )
+   THICKNESS        = ( 0.02, 0.115, 0.05, 0.08, 0.02, 0.115 )
    ..
-"T_Muro exterior" = LAYERS          
+"T_Fachada" = LAYERS          
    MATERIAL         = ( "Enlucido de yeso 1000 < d < 13", 
-         "de LH doble [60 mm < E < 90 m", " aire sin ventilar vertical 5", 
-         "tireno Expandido [ 0.029 W/[mK", "trio o catalán 40 mm< G < 60", 
-         "s ligeros [vermiculita perlit" )
-   THICKNESS        = ( 0.015, 0.09, 0.05, 0.04, 0.115, 0.02 )
-   ..
-"TABIQUE DE 15" = LAYERS          
-   MATERIAL         = ( "Enlucido de yeso 1000 < d < 13", 
-         "ric o catalán 80 mm< G < 100", "Enlucido de yeso 1000 < d < 13" )
-   THICKNESS        = ( 0.02, 0.115, 0.02 )
-   ..
-"I_TABIQUE DE 15" = LAYERS          
-   MATERIAL         = ( "Enlucido de yeso 1000 < d < 13", 
-         "ric o catalán 80 mm< G < 100", "Enlucido de yeso 1000 < d < 13" )
-   THICKNESS        = ( 0.02, 0.115, 0.02 )
-   ..
-"T_TABIQUE DE 15" = LAYERS          
-   MATERIAL         = ( "MTRLDLTRRN", "Enlucido de yeso 1000 < d < 13", 
-         "ric o catalán 80 mm< G < 100", "Enlucido de yeso 1000 < d < 13" )
-   THICKNESS        = ( 0.3, 0.02, 0.115, 0.02 )
+         "trio o catalán 40 mm< G < 60", "eramente ventilada vertical 5", 
+         "o de carbono CO2 [ 0.034 W/[mK", " revoco/enlucido 1000 < d < 12", 
+         "trio o catalán 40 mm< G < 60" )
+   THICKNESS        = ( 0.02, 0.115, 0.05, 0.08, 0.02, 0.115 )
    ..
 
-"Cubierta plana-C" = CONSTRUCTION    
+"Suelo-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "Cubierta plana"
+   LAYERS           = "Suelo"
    ..
-"I_Cubierta plana-C" = CONSTRUCTION    
+"I_Suelo-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "I_Cubierta plana"
+   LAYERS           = "I_Suelo"
    ..
-"T_Cubierta plana-C" = CONSTRUCTION    
+"T_Suelo-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "T_Cubierta plana"
+   LAYERS           = "T_Suelo"
    ..
-"LOSA CIMENTACION-C" = CONSTRUCTION    
+"Cubierta-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "LOSA CIMENTACION"
+   LAYERS           = "Cubierta"
    ..
-"I_LOSA CIMENTACION-C" = CONSTRUCTION    
+"I_Cubierta-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "I_LOSA CIMENTACION"
+   LAYERS           = "I_Cubierta"
    ..
-"T_LOSA CIMENTACION-C" = CONSTRUCTION    
+"T_Cubierta-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "T_LOSA CIMENTACION"
+   LAYERS           = "T_Cubierta"
    ..
-"Muro exterior-C" = CONSTRUCTION    
+"Fachada-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "Muro exterior"
+   LAYERS           = "Fachada"
    ..
-"I_Muro exterior-C" = CONSTRUCTION    
+"I_Fachada-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "I_Muro exterior"
+   LAYERS           = "I_Fachada"
    ..
-"T_Muro exterior-C" = CONSTRUCTION    
+"T_Fachada-C" = CONSTRUCTION    
    TYPE             = LAYERS
-   LAYERS           = "T_Muro exterior"
+   LAYERS           = "T_Fachada"
    ..
-"TABIQUE DE 15-C" = CONSTRUCTION    
-   TYPE             = LAYERS
-   LAYERS           = "TABIQUE DE 15"
-   ..
-"I_TABIQUE DE 15-C" = CONSTRUCTION    
-   TYPE             = LAYERS
-   LAYERS           = "I_TABIQUE DE 15"
-   ..
-"T_TABIQUE DE 15-C" = CONSTRUCTION    
-   TYPE             = LAYERS
-   LAYERS           = "T_TABIQUE DE 15"
-   ..
-"Muro exterior0.60-C" = CONSTRUCTION    
+"Fachada0.60-C" = CONSTRUCTION    
    TYPE             = LAYERS
    ABSORPTANCE      = 0.6
-   LAYERS           = "Muro exterior"
+   LAYERS           = "Fachada"
    ..
-"Cubierta plana0.60-C" = CONSTRUCTION    
+"Cubierta0.60-C" = CONSTRUCTION    
    TYPE             = LAYERS
    ABSORPTANCE      = 0.6
-   LAYERS           = "Cubierta plana"
+   LAYERS           = "Cubierta"
    ..
 
 
@@ -373,10 +253,10 @@ $ ---------------------------------------------------------
 $              Glass Types
 $ ---------------------------------------------------------
 
-"VER_DC_4-12-441a" = GLASS-TYPE      
+"Doble baja emisividad argon" = GLASS-TYPE      
    TYPE             = SHADING-COEF
-   SHADING-COEF     = 0.7
-   GLASS-CONDUCT    = 2.8
+   SHADING-COEF     = 0.790698
+   GLASS-CONDUCT    = 1.2
    ..
 
 
@@ -400,7 +280,7 @@ $ ---------------------------------------------------------
 
 "HA0_D-Refrig-Temp-Lab" = DAY-SCHEDULE-PD
    TYPE             = TEMPERATURE
-   VALUES           = ( 27, 27, 27, 27, 27, 27, 27, 99, 99, 99, 99, 99, 99, 
+   VALUES           = ( 27, 27, 27, 27, 27, 27, 25, 99, 99, 99, 99, 99, 99, 
          99, 99, 25, 25, 25, 25, 25, 25, 25, 25, 27 )
    ..
 "HA0_D-Refrig-Temp-Sab" = DAY-SCHEDULE-PD
@@ -430,33 +310,33 @@ $ ---------------------------------------------------------
    ..
 "HA2_D-Refrig-Temp-Lab-t" = DAY-SCHEDULE-PD
    TYPE             = TEMPERATURE
-   VALUES           = ( 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 
-         25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25 )
+   VALUES           = ( 35, 35, 35, 35, 35, 35, 35, 35, 35, 25, 25, 25, 25, 
+         35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35 )
    ..
 "HA2_D-Refrig-Temp-Sab-t" = DAY-SCHEDULE-PD
    TYPE             = TEMPERATURE
-   VALUES           = ( 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 
-         25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25 )
+   VALUES           = ( 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 
+         35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35 )
    ..
 "HA2_D-Refrig-Temp-Fest-t" = DAY-SCHEDULE-PD
    TYPE             = TEMPERATURE
-   VALUES           = ( 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 
-         25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25 )
+   VALUES           = ( 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 
+         35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35 )
    ..
 "HA3_D-Calef-Temp-Lab-t" = DAY-SCHEDULE-PD
    TYPE             = TEMPERATURE
-   VALUES           = ( 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 
-         20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 20, 20, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0 )
    ..
 "HA3_D-Calef-Temp-Sab-t" = DAY-SCHEDULE-PD
    TYPE             = TEMPERATURE
-   VALUES           = ( 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 
-         20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0 )
    ..
 "HA3_D-Calef-Temp-Fest-t" = DAY-SCHEDULE-PD
    TYPE             = TEMPERATURE
-   VALUES           = ( 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 
-         20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0 )
    ..
 "HA4_D-Calef-Temp-Lab-AP" = DAY-SCHEDULE-PD
    TYPE             = TEMPERATURE
@@ -470,12 +350,12 @@ $ ---------------------------------------------------------
    ..
 "HA6_D-8h-Lab" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
 "HA6_D-8h-Sab" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
 "HA6_D-8h-Fest" = DAY-SCHEDULE-PD
@@ -483,29 +363,29 @@ $ ---------------------------------------------------------
    VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
-"HA7_eq" = DAY-SCHEDULE-PD
+"HA7_D-8h-Lab_eq" = DAY-SCHEDULE-PD
    TYPE             = ON/OFF
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
 "HA7_D-8h-Sab_eq" = DAY-SCHEDULE-PD
    TYPE             = ON/OFF
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
 "HA7_D-8h-Fest_eq" = DAY-SCHEDULE-PD
    TYPE             = ON/OFF
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
-"HA8_vent" = DAY-SCHEDULE-PD
+"HA8_D-8h-Lab_vent" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-         1, 1, 1, 1, 1, 1 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0 )
    ..
 "HA8_D-8h-Sab_vent" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
 "HA8_D-8h-Fest_vent" = DAY-SCHEDULE-PD
@@ -515,12 +395,12 @@ $ ---------------------------------------------------------
    ..
 "HA9_D-12h-Lab" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 
-         1, 1, 0, 0, 0, 0 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0.5, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0, 0 )
    ..
 "HA9_D-12h-Sab" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
 "HA9_D-12h-Fest" = DAY-SCHEDULE-PD
@@ -528,14 +408,14 @@ $ ---------------------------------------------------------
    VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
-"HA10_eq" = DAY-SCHEDULE-PD
+"HA10_D-12h-Lab_eq" = DAY-SCHEDULE-PD
    TYPE             = ON/OFF
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 
-         1, 1, 0, 0, 0, 0 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0 )
    ..
 "HA10_D-12h-Sab_eq" = DAY-SCHEDULE-PD
    TYPE             = ON/OFF
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
 "HA10_D-12h-Fest_eq" = DAY-SCHEDULE-PD
@@ -545,12 +425,12 @@ $ ---------------------------------------------------------
    ..
 "HA11_D-12h-Lab" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 
-         1, 1, 0, 0, 0, 0 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0 )
    ..
 "HA11_D-12h-Sab" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
 "HA11_D-12h-Fest" = DAY-SCHEDULE-PD
@@ -573,7 +453,7 @@ $ ---------------------------------------------------------
    VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
-"HA13_eq" = DAY-SCHEDULE-PD
+"HA13_D-16h-Lab_eq" = DAY-SCHEDULE-PD
    TYPE             = ON/OFF
    VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
          1, 1, 1, 1, 0, 0 )
@@ -588,7 +468,7 @@ $ ---------------------------------------------------------
    VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
-"HA14_vent" = DAY-SCHEDULE-PD
+"HA14_D-16h-Lab_vent" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
    VALUES           = ( 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
          1, 1, 1, 1, 0, 0 )
@@ -618,7 +498,7 @@ $ ---------------------------------------------------------
    VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
-"HA16_eq" = DAY-SCHEDULE-PD
+"HA16_D-24h-Lab_eq" = DAY-SCHEDULE-PD
    TYPE             = ON/OFF
    VALUES           = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
          1, 1, 1, 1, 1, 1 )
@@ -633,7 +513,7 @@ $ ---------------------------------------------------------
    VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
          0, 0, 0, 0, 0, 0 )
    ..
-"HA17_vent" = DAY-SCHEDULE-PD
+"HA17_D-24h-Lab_vent" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
    VALUES           = ( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
          1, 1, 1, 1, 1, 1 )
@@ -665,18 +545,18 @@ $ ---------------------------------------------------------
    ..
 "HA19_D-Resid-ilum-Lab" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3, 
-         0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.5, 1, 1, 1, 1, 0.5 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0.8, 0.8, 0.8, 0.8, 0.5, 0.5, 
+         0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
    ..
 "HA19_D-Resid-ilum-Sab" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3, 
-         0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.5, 1, 1, 1, 1, 0.5 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0 )
    ..
 "HA19_D-Resid-ilum-Fest" = DAY-SCHEDULE-PD
    TYPE             = FRACTION
-   VALUES           = ( 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3, 
-         0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.5, 1, 1, 1, 1, 0.5 )
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0, 0, 0 )
    ..
 "HA20_D-Resid-Func-Lab" = DAY-SCHEDULE-PD
    TYPE             = ON/OFF
@@ -750,11 +630,25 @@ $ ---------------------------------------------------------
          "HA2_D-Refrig-Temp-Lab-t", "HA2_D-Refrig-Temp-Sab-t", 
          "HA2_D-Refrig-Temp-Fest-t" )
    ..
+"HA2_HS1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "HA2_D-Refrig-Temp-Fest-t", 
+         "HA2_D-Refrig-Temp-Fest-t", "HA2_D-Refrig-Temp-Fest-t", 
+         "HA2_D-Refrig-Temp-Fest-t", "HA2_D-Refrig-Temp-Fest-t", 
+         "HA2_D-Refrig-Temp-Fest-t", "HA2_D-Refrig-Temp-Fest-t" )
+   ..
 "HA3_HS0" = WEEK-SCHEDULE-PD
    TYPE             = TEMPERATURE
    DAY-SCHEDULES    = ( "HA3_D-Calef-Temp-Lab-t", "HA3_D-Calef-Temp-Lab-t", 
          "HA3_D-Calef-Temp-Lab-t", "HA3_D-Calef-Temp-Lab-t", 
          "HA3_D-Calef-Temp-Lab-t", "HA3_D-Calef-Temp-Sab-t", 
+         "HA3_D-Calef-Temp-Fest-t" )
+   ..
+"HA3_HS1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "HA3_D-Calef-Temp-Fest-t", "HA3_D-Calef-Temp-Fest-t", 
+         "HA3_D-Calef-Temp-Fest-t", "HA3_D-Calef-Temp-Fest-t", 
+         "HA3_D-Calef-Temp-Fest-t", "HA3_D-Calef-Temp-Fest-t", 
          "HA3_D-Calef-Temp-Fest-t" )
    ..
 "HA4_HS0" = WEEK-SCHEDULE-PD
@@ -776,31 +670,57 @@ $ ---------------------------------------------------------
    DAY-SCHEDULES    = ( "HA6_D-8h-Lab", "HA6_D-8h-Lab", "HA6_D-8h-Lab", 
          "HA6_D-8h-Lab", "HA6_D-8h-Lab", "HA6_D-8h-Sab", "HA6_D-8h-Fest" )
    ..
+"HA6_HS1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "HA6_D-8h-Fest", "HA6_D-8h-Fest", "HA6_D-8h-Fest", 
+         "HA6_D-8h-Fest", "HA6_D-8h-Fest", "HA6_D-8h-Fest", "HA6_D-8h-Fest" )
+   ..
 "HA7_HS0" = WEEK-SCHEDULE-PD
    TYPE             = ON/OFF
-   DAY-SCHEDULES    = ( "HA7_eq", "HA7_eq", "HA7_eq", "HA7_eq", "HA7_eq", 
-         "HA7_eq", "HA7_eq" )
+   DAY-SCHEDULES    = ( "HA7_D-8h-Lab_eq", "HA7_D-8h-Lab_eq", 
+         "HA7_D-8h-Lab_eq", "HA7_D-8h-Lab_eq", "HA7_D-8h-Lab_eq", 
+         "HA7_D-8h-Sab_eq", "HA7_D-8h-Fest_eq" )
    ..
 "HA8_HS0" = WEEK-SCHEDULE-PD
    TYPE             = FRACTION
-   DAY-SCHEDULES    = ( "HA8_vent", "HA8_vent", "HA8_vent", "HA8_vent", 
-         "HA8_vent", "HA8_vent", "HA8_vent" )
+   DAY-SCHEDULES    = ( "HA8_D-8h-Lab_vent", "HA8_D-8h-Lab_vent", 
+         "HA8_D-8h-Lab_vent", "HA8_D-8h-Lab_vent", "HA8_D-8h-Lab_vent", 
+         "HA8_D-8h-Sab_vent", "HA8_D-8h-Fest_vent" )
    ..
 "HA9_HS0" = WEEK-SCHEDULE-PD
    TYPE             = FRACTION
    DAY-SCHEDULES    = ( "HA9_D-12h-Lab", "HA9_D-12h-Lab", "HA9_D-12h-Lab", 
          "HA9_D-12h-Lab", "HA9_D-12h-Lab", "HA9_D-12h-Sab", "HA9_D-12h-Fest" )
    ..
+"HA9_HS1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "HA9_D-12h-Fest", "HA9_D-12h-Fest", "HA9_D-12h-Fest", 
+         "HA9_D-12h-Fest", "HA9_D-12h-Fest", "HA9_D-12h-Fest", 
+         "HA9_D-12h-Fest" )
+   ..
 "HA10_HS0" = WEEK-SCHEDULE-PD
    TYPE             = ON/OFF
-   DAY-SCHEDULES    = ( "HA10_eq", "HA10_eq", "HA10_eq", "HA10_eq", "HA10_eq", 
-         "HA10_eq", "HA10_eq" )
+   DAY-SCHEDULES    = ( "HA10_D-12h-Lab_eq", "HA10_D-12h-Lab_eq", 
+         "HA10_D-12h-Lab_eq", "HA10_D-12h-Lab_eq", "HA10_D-12h-Lab_eq", 
+         "HA10_D-12h-Sab_eq", "HA10_D-12h-Fest_eq" )
+   ..
+"HA10_HS1" = WEEK-SCHEDULE-PD
+   TYPE             = ON/OFF
+   DAY-SCHEDULES    = ( "HA10_D-12h-Fest_eq", "HA10_D-12h-Fest_eq", 
+         "HA10_D-12h-Fest_eq", "HA10_D-12h-Fest_eq", "HA10_D-12h-Fest_eq", 
+         "HA10_D-12h-Fest_eq", "HA10_D-12h-Fest_eq" )
    ..
 "HA11_HS0" = WEEK-SCHEDULE-PD
    TYPE             = FRACTION
    DAY-SCHEDULES    = ( "HA11_D-12h-Lab", "HA11_D-12h-Lab", "HA11_D-12h-Lab", 
          "HA11_D-12h-Lab", "HA11_D-12h-Lab", "HA11_D-12h-Sab", 
          "HA11_D-12h-Fest" )
+   ..
+"HA11_HS1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "HA11_D-12h-Fest", "HA11_D-12h-Fest", 
+         "HA11_D-12h-Fest", "HA11_D-12h-Fest", "HA11_D-12h-Fest", 
+         "HA11_D-12h-Fest", "HA11_D-12h-Fest" )
    ..
 "HA12_HS0" = WEEK-SCHEDULE-PD
    TYPE             = FRACTION
@@ -810,13 +730,15 @@ $ ---------------------------------------------------------
    ..
 "HA13_HS0" = WEEK-SCHEDULE-PD
    TYPE             = ON/OFF
-   DAY-SCHEDULES    = ( "HA13_eq", "HA13_eq", "HA13_eq", "HA13_eq", "HA13_eq", 
-         "HA13_eq", "HA13_eq" )
+   DAY-SCHEDULES    = ( "HA13_D-16h-Lab_eq", "HA13_D-16h-Lab_eq", 
+         "HA13_D-16h-Lab_eq", "HA13_D-16h-Lab_eq", "HA13_D-16h-Lab_eq", 
+         "HA13_D-16h-Sab_eq", "HA13_D-16h-Fest_eq" )
    ..
 "HA14_HS0" = WEEK-SCHEDULE-PD
    TYPE             = FRACTION
-   DAY-SCHEDULES    = ( "HA14_vent", "HA14_vent", "HA14_vent", "HA14_vent", 
-         "HA14_vent", "HA14_vent", "HA14_vent" )
+   DAY-SCHEDULES    = ( "HA14_D-16h-Lab_vent", "HA14_D-16h-Lab_vent", 
+         "HA14_D-16h-Lab_vent", "HA14_D-16h-Lab_vent", "HA14_D-16h-Lab_vent", 
+         "HA14_D-16h-Sab_vent", "HA14_D-16h-Fest_vent" )
    ..
 "HA15_HS0" = WEEK-SCHEDULE-PD
    TYPE             = FRACTION
@@ -826,13 +748,15 @@ $ ---------------------------------------------------------
    ..
 "HA16_HS0" = WEEK-SCHEDULE-PD
    TYPE             = ON/OFF
-   DAY-SCHEDULES    = ( "HA16_eq", "HA16_eq", "HA16_eq", "HA16_eq", "HA16_eq", 
-         "HA16_eq", "HA16_eq" )
+   DAY-SCHEDULES    = ( "HA16_D-24h-Lab_eq", "HA16_D-24h-Lab_eq", 
+         "HA16_D-24h-Lab_eq", "HA16_D-24h-Lab_eq", "HA16_D-24h-Lab_eq", 
+         "HA16_D-24h-Sab_eq", "HA16_D-24h-Fest_eq" )
    ..
 "HA17_HS0" = WEEK-SCHEDULE-PD
    TYPE             = FRACTION
-   DAY-SCHEDULES    = ( "HA17_vent", "HA17_vent", "HA17_vent", "HA17_vent", 
-         "HA17_vent", "HA17_vent", "HA17_vent" )
+   DAY-SCHEDULES    = ( "HA17_D-24h-Lab_vent", "HA17_D-24h-Lab_vent", 
+         "HA17_D-24h-Lab_vent", "HA17_D-24h-Lab_vent", "HA17_D-24h-Lab_vent", 
+         "HA17_D-24h-Sab_vent", "HA17_D-24h-Fest_vent" )
    ..
 "HA18_HS0" = WEEK-SCHEDULE-PD
    TYPE             = FRACTION
@@ -846,6 +770,13 @@ $ ---------------------------------------------------------
    DAY-SCHEDULES    = ( "HA19_D-Resid-ilum-Lab", "HA19_D-Resid-ilum-Lab", 
          "HA19_D-Resid-ilum-Lab", "HA19_D-Resid-ilum-Lab", 
          "HA19_D-Resid-ilum-Lab", "HA19_D-Resid-ilum-Sab", 
+         "HA19_D-Resid-ilum-Fest" )
+   ..
+"HA19_HS1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "HA19_D-Resid-ilum-Fest", "HA19_D-Resid-ilum-Fest", 
+         "HA19_D-Resid-ilum-Fest", "HA19_D-Resid-ilum-Fest", 
+         "HA19_D-Resid-ilum-Fest", "HA19_D-Resid-ilum-Fest", 
          "HA19_D-Resid-ilum-Fest" )
    ..
 "HA20_HS0" = WEEK-SCHEDULE-PD
@@ -921,15 +852,15 @@ $ ---------------------------------------------------------
    ..
 "Horario-Refrigeracion-t" = SCHEDULE-PD
    TYPE             = TEMPERATURE
-   MONTH            = ( 12 )
-   DAY              = ( 31 )
-   WEEK-SCHEDULES   = ( "HA2_HS0" )
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 17, 16, 31 )
+   WEEK-SCHEDULES   = ( "HA2_HS0", "HA2_HS1", "HA2_HS0" )
    ..
 "Horario-Calefaccion-t" = SCHEDULE-PD
    TYPE             = TEMPERATURE
-   MONTH            = ( 12 )
-   DAY              = ( 31 )
-   WEEK-SCHEDULES   = ( "HA3_HS0" )
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 17, 16, 31 )
+   WEEK-SCHEDULES   = ( "HA3_HS0", "HA3_HS1", "HA3_HS0" )
    ..
 "Horario-Calefaccion-AP" = SCHEDULE-PD
    TYPE             = TEMPERATURE
@@ -945,9 +876,9 @@ $ ---------------------------------------------------------
    ..
 "UsoEspacio-8h" = SCHEDULE-PD
    TYPE             = FRACTION
-   MONTH            = ( 12 )
-   DAY              = ( 31 )
-   WEEK-SCHEDULES   = ( "HA6_HS0" )
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 17, 16, 31 )
+   WEEK-SCHEDULES   = ( "HA6_HS0", "HA6_HS1", "HA6_HS0" )
    ..
 "UsoEspacio-8h_eq" = SCHEDULE-PD
    TYPE             = ON/OFF
@@ -963,21 +894,21 @@ $ ---------------------------------------------------------
    ..
 "UsoEspacio-12h" = SCHEDULE-PD
    TYPE             = FRACTION
-   MONTH            = ( 12 )
-   DAY              = ( 31 )
-   WEEK-SCHEDULES   = ( "HA9_HS0" )
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 17, 16, 31 )
+   WEEK-SCHEDULES   = ( "HA9_HS0", "HA9_HS1", "HA9_HS0" )
    ..
 "UsoEspacio-12h_eq" = SCHEDULE-PD
    TYPE             = ON/OFF
-   MONTH            = ( 12 )
-   DAY              = ( 31 )
-   WEEK-SCHEDULES   = ( "HA10_HS0" )
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 17, 16, 31 )
+   WEEK-SCHEDULES   = ( "HA10_HS0", "HA10_HS1", "HA10_HS0" )
    ..
 "UsoEspacio-12h_vent" = SCHEDULE-PD
    TYPE             = FRACTION
-   MONTH            = ( 12 )
-   DAY              = ( 31 )
-   WEEK-SCHEDULES   = ( "HA11_HS0" )
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 17, 16, 31 )
+   WEEK-SCHEDULES   = ( "HA11_HS0", "HA11_HS1", "HA11_HS0" )
    ..
 "UsoEspacio-16h" = SCHEDULE-PD
    TYPE             = FRACTION
@@ -1023,9 +954,9 @@ $ ---------------------------------------------------------
    ..
 "Iluminacion-Residencia" = SCHEDULE-PD
    TYPE             = FRACTION
-   MONTH            = ( 12 )
-   DAY              = ( 31 )
-   WEEK-SCHEDULES   = ( "HA19_HS0" )
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 17, 16, 31 )
+   WEEK-SCHEDULES   = ( "HA19_HS0", "HA19_HS1", "HA19_HS0" )
    ..
 "Funcionam-Residencia" = SCHEDULE-PD
    TYPE             = ON/OFF
@@ -1069,65 +1000,48 @@ $ ---------------------------------------------------------
 $              Polygons
 $ ---------------------------------------------------------
 
-"P01_Poligono001" = POLYGON         
-   V1               = ( -4, -3 )
-   V2               = ( 4, -3 )
-   V3               = ( 4, 3 )
-   V4               = ( -4, 3 )
-   ..
-"P01_E01_Poligono002" = POLYGON         
-   V1               = ( -4, -3 )
-   V2               = ( 0, -3 )
-   V3               = ( -0.00782574, 0.00363148 )
-   V4               = ( -4, 0 )
-   ..
-"P01_E02_Poligono003" = POLYGON         
-   V1               = ( 0, -3 )
-   V2               = ( 4, -3 )
-   V3               = ( 4, 0 )
-   V4               = ( -0.00782574, 0.00363148 )
-   ..
-"P01_E03_Poligono004" = POLYGON         
-   V1               = ( -0.00782574, 0.00363148 )
-   V2               = ( 4, 0 )
-   V3               = ( 4, 3 )
-   V4               = ( 0, 3 )
-   ..
-"P01_E04_Poligono005" = POLYGON         
-   V1               = ( -4, 0 )
-   V2               = ( -0.00782574, 0.00363148 )
-   V3               = ( 0, 3 )
-   V4               = ( -4, 3 )
-   ..
-"P01_E01C001_Poligono001" = POLYGON         
+"P01_Poligono1" = POLYGON         
    V1               = ( 0, 0 )
-   V2               = ( 8, 0 )
-   V3               = ( 8, 6 )
-   V4               = ( 0, 6 )
+   V2               = ( 1, 0 )
+   V3               = ( 1, 1 )
+   V4               = ( 0, 1 )
    ..
-"P01_E01_Poligono002 - Mirror" = POLYGON         
-   V1               = ( -3, -4 )
-   V2               = ( 0, -4 )
-   V3               = ( 0.00363148, -0.00782574 )
-   V4               = ( -3, 0 )
+"P01_E01_Poligono2" = POLYGON         
+   V1               = ( 2.0818, 28.3593 )
+   V2               = ( 2.0818, 14.1081 )
+   V3               = ( 4.89603, 14.1081 )
+   V4               = ( 9.83608, 16.1605 )
+   V5               = ( 12.2319, 16.1605 )
+   V6               = ( 12.2319, 28.3593 )
    ..
-"P01_E02_Poligono003 - Mirror" = POLYGON         
-   V1               = ( -3, 0 )
-   V2               = ( 0.00363148, -0.00782574 )
-   V3               = ( 0, 4 )
-   V4               = ( -3, 4 )
+"P02_Poligono1" = POLYGON         
+   V1               = ( 12.2319, 28.3593 )
+   V2               = ( 12.2319, 16.1605 )
+   V3               = ( 12.2319, 10.1293 )
+   V4               = ( 39.9619, 10.1293 )
+   V5               = ( 39.9619, 28.3593 )
    ..
-"P01_E03_Poligono004 - Mirror" = POLYGON         
-   V1               = ( 0.00363148, -0.00782574 )
-   V2               = ( 3, 0 )
-   V3               = ( 3, 4 )
-   V4               = ( 0, 4 )
+"P02_E01_Pol2" = POLYGON         
+   V1               = ( 12.2319, 28.3593 )
+   V2               = ( 12.2319, 16.1605 )
+   V3               = ( 12.2319, 10.1293 )
+   V4               = ( 39.9619, 10.1293 )
+   V5               = ( 39.9619, 28.3593 )
    ..
-"P01_E04_Poligono005 - Mirror" = POLYGON         
-   V1               = ( 0, -4 )
-   V2               = ( 3, -4 )
-   V3               = ( 3, 0 )
-   V4               = ( 0.00363148, -0.00782574 )
+"P01_E01_Poligono2 - Mirror" = POLYGON         
+   V1               = ( 28.3593, 2.0818 )
+   V2               = ( 28.3593, 12.2319 )
+   V3               = ( 16.1605, 12.2319 )
+   V4               = ( 16.1605, 9.83608 )
+   V5               = ( 14.1081, 4.89603 )
+   V6               = ( 14.1081, 2.0818 )
+   ..
+"P02_E01_Pol2 - Mirror" = POLYGON         
+   V1               = ( 28.3593, 12.2319 )
+   V2               = ( 28.3593, 39.9619 )
+   V3               = ( 10.1293, 39.9619 )
+   V4               = ( 10.1293, 12.2319 )
+   V5               = ( 16.1605, 12.2319 )
    ..
 
 
@@ -1161,15 +1075,15 @@ $ *********************************************************
 "P01" = FLOOR           
    MULTIPLIER       = 1
    Z                = 0
-   POLYGON          = "P01_Poligono001"
-   FLOOR-HEIGHT     = 3
+   POLYGON          = "P01_Poligono1"
+   FLOOR-HEIGHT     = 4.9
    ..
 "P01_E01" = SPACE           
    X                = 0
    Y                = 0
    Z                = 0
    AZIMUTH          = 0
-   HEIGHT           = 2.48
+   HEIGHT           = 4.77
    MULTIPLIER       = 1
    FURN-FRACTION    = 0.5
    ZONE-TYPE        = CONDITIONED
@@ -1179,31 +1093,31 @@ $ *********************************************************
    EQUIP-SCHEDULE   = ( "UsoEspacio-8h" )
    INF-SCHEDULE     = "UsoEspacio-8h_vent"
    LIGHTING-TYPE    = ( SUS-FLUOR )
-   AIR-CHANGES/HR   = 2.4
+   AIR-CHANGES/HR   = 1.46939
    PEOPLE-HG-LAT    = 45.42
    PEOPLE-HG-SENS   = 72
    EQUIP-LATENT     = ( 0.1 )
    EQUIP-SENSIBLE   = ( 0.9 )
-   LIGHTING-W/AREA  = ( 1.5 )
-   EQUIPMENT-W/AREA = ( 1.5 )
+   LIGHTING-W/AREA  = ( 4.5 )
+   EQUIPMENT-W/AREA = ( 4.5 )
    FURN-WEIGHT      = 30
-   AREA/PERSON      = 36
-   POLYGON          = "P01_E01_Poligono002"
-   C-AREA           = 10
-   C-C-REND-LUM     = 7
+   AREA/PERSON      = 12
+   POLYGON          = "P01_E01_Poligono2"
+   C-AREA           = 4
+   C-C-REND-LUM     = 3
    ..
 "P01_E01_PE001" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Muro exterior0.60-C"
+   CONSTRUCTION     = "Fachada0.60-C"
    LOCATION         = SPACE-V1
    ..
 "P01_E01_PE001_V1" = WINDOW          
-   GLASS-TYPE       = "VER_DC_4-12-441a"
-   FRAME-WIDTH      = 0.0307568
-   X                = 1.28076
-   Y                = 1.03076
-   HEIGHT           = 0.938487
-   WIDTH            = 1.43849
-   SETBACK          = 0.1
+   GLASS-TYPE       = "Doble baja emisividad argon"
+   FRAME-WIDTH      = 0.0429211
+   X                = 3.04292
+   Y                = 1.04292
+   HEIGHT           = 1.11416
+   WIDTH            = 2.71416
+   SETBACK          = 0.25
    OVERHANG-A       = 0
    OVERHANG-B       = 0
    OVERHANG-W       = 0
@@ -1217,21 +1131,29 @@ $ *********************************************************
    RIGHT-FIN-B      = 0
    RIGHT-FIN-H      = 0
    RIGHT-FIN-D      = 0
-   FRAME-CONDUCT    = 4
-   C-FRAMEAREA      = 15
+   FRAME-CONDUCT    = 3.2
+   C-FRAMEAREA      = 27
    ..
 "P01_E01_PE002" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Muro exterior0.60-C"
+   CONSTRUCTION     = "Fachada0.60-C"
+   LOCATION         = SPACE-V2
+   ..
+"P01_E01_PE003" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
+   LOCATION         = SPACE-V3
+   ..
+"P01_E01_PE004" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
    LOCATION         = SPACE-V4
    ..
-"P01_E01_PE002_V1" = WINDOW          
-   GLASS-TYPE       = "VER_DC_4-12-441a"
-   FRAME-WIDTH      = 0.0307568
-   X                = 0.780757
-   Y                = 1.03076
-   HEIGHT           = 0.938487
-   WIDTH            = 1.43849
-   SETBACK          = 0.1
+"P01_E01_PE004_V1" = WINDOW          
+   GLASS-TYPE       = "Doble baja emisividad argon"
+   FRAME-WIDTH      = 0.0465781
+   X                = 0.546578
+   Y                = 0.146578
+   HEIGHT           = 2.00684
+   WIDTH            = 1.50684
+   SETBACK          = 0.25
    OVERHANG-A       = 0
    OVERHANG-B       = 0
    OVERHANG-W       = 0
@@ -1245,168 +1167,103 @@ $ *********************************************************
    RIGHT-FIN-B      = 0
    RIGHT-FIN-H      = 0
    RIGHT-FIN-D      = 0
-   FRAME-CONDUCT    = 4
-   C-FRAMEAREA      = 15
+   FRAME-CONDUCT    = 3.2
+   C-FRAMEAREA      = 27
    ..
-"P01_E01C001" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Cubierta plana0.60-C"
-   X                = -4
-   Y                = -3
-   Z                = 3
-   AZIMUTH          = 180
-   TILT             = 0
-   POLYGON          = "P01_E01C001_Poligono001"
+"P01_E01_PE005" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
+   LOCATION         = SPACE-V5
    ..
-"P01_E01_Med001" = INTERIOR-WALL   
-   NEXT-TO          = "P01_E02"
-   CONSTRUCTION     = "TABIQUE DE 15-C"
-   INT-WALL-TYPE    = STANDARD
-   LOCATION         = SPACE-V2
+"P01_E01_PE006" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
+   LOCATION         = SPACE-V6
    ..
-"P01_E01_Med002" = INTERIOR-WALL   
-   NEXT-TO          = "P01_E04"
-   CONSTRUCTION     = "TABIQUE DE 15-C"
-   INT-WALL-TYPE    = STANDARD
-   LOCATION         = SPACE-V3
+"P01_E01_PE006_V1" = WINDOW          
+   GLASS-TYPE       = "Doble baja emisividad argon"
+   FRAME-WIDTH      = 0.0429211
+   X                = 3.04292
+   Y                = 1.04292
+   HEIGHT           = 1.11416
+   WIDTH            = 2.71416
+   SETBACK          = 0.25
+   OVERHANG-A       = 0
+   OVERHANG-B       = 0
+   OVERHANG-W       = 0
+   OVERHANG-D       = 0
+   OVERHANG-ANGLE   = 0
+   LEFT-FIN-A       = 0
+   LEFT-FIN-B       = 0
+   LEFT-FIN-H       = 0
+   LEFT-FIN-D       = 0
+   RIGHT-FIN-A      = 0
+   RIGHT-FIN-B      = 0
+   RIGHT-FIN-H      = 0
+   RIGHT-FIN-D      = 0
+   FRAME-CONDUCT    = 3.2
+   C-FRAMEAREA      = 27
+   ..
+"P01_E01_FE007" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Cubierta0.60-C"
+   LOCATION         = TOP
    ..
 "P01_E01_FTER001" = UNDERGROUND-WALL
-   CONSTRUCTION     = "T_LOSA CIMENTACION-C"
+   CONSTRUCTION     = "T_Suelo-C"
    LOCATION         = BOTTOM
    ..
-"P01_E02" = SPACE           
+"P02" = FLOOR           
+   MULTIPLIER       = 1
+   Z                = 0
+   POLYGON          = "P02_Poligono1"
+   FLOOR-HEIGHT     = 6.9
+   ..
+"P02_E01" = SPACE           
    X                = 0
    Y                = 0
    Z                = 0
    AZIMUTH          = 0
-   HEIGHT           = 3
+   HEIGHT           = 6.77
    MULTIPLIER       = 1
    FURN-FRACTION    = 0.5
    ZONE-TYPE        = CONDITIONED
    TEMPERATURE      = ( 22.5 )
-   PEOPLE-SCHEDULE  = "UsoEspacio-8h"
-   LIGHTING-SCHEDUL = ( "UsoEspacio-8h" )
-   EQUIP-SCHEDULE   = ( "UsoEspacio-8h" )
-   INF-SCHEDULE     = "UsoEspacio-8h_vent"
+   PEOPLE-SCHEDULE  = "UsoEspacio-12h"
+   LIGHTING-SCHEDUL = ( "UsoEspacio-12h" )
+   EQUIP-SCHEDULE   = ( "UsoEspacio-12h" )
+   INF-SCHEDULE     = "UsoEspacio-12h_vent"
    LIGHTING-TYPE    = ( SUS-FLUOR )
-   AIR-CHANGES/HR   = 2.4
+   AIR-CHANGES/HR   = 1.04348
    PEOPLE-HG-LAT    = 45.42
    PEOPLE-HG-SENS   = 72
    EQUIP-LATENT     = ( 0.1 )
    EQUIP-SENSIBLE   = ( 0.9 )
-   LIGHTING-W/AREA  = ( 1.5 )
-   EQUIPMENT-W/AREA = ( 1.5 )
+   LIGHTING-W/AREA  = ( 4.5 )
+   EQUIPMENT-W/AREA = ( 4.5 )
    FURN-WEIGHT      = 30
-   AREA/PERSON      = 36
-   POLYGON          = "P01_E02_Poligono003"
-   C-AREA           = 10
-   C-C-REND-LUM     = 7
+   AREA/PERSON      = 12
+   POLYGON          = "P02_E01_Pol2"
+   C-AREA           = 4
+   C-C-REND-LUM     = 1.28
    ..
-"P01_E02_PE003" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Muro exterior0.60-C"
+"P02_E01_PE001" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
    LOCATION         = SPACE-V1
    ..
-"P01_E02_PE003_V1" = WINDOW          
-   GLASS-TYPE       = "VER_DC_4-12-441a"
-   FRAME-WIDTH      = 0.0307568
-   X                = 1.28076
-   Y                = 1.03076
-   HEIGHT           = 0.938487
-   WIDTH            = 1.43849
-   SETBACK          = 0.1
-   OVERHANG-A       = 0
-   OVERHANG-B       = 0
-   OVERHANG-W       = 0
-   OVERHANG-D       = 0
-   OVERHANG-ANGLE   = 0
-   LEFT-FIN-A       = 0
-   LEFT-FIN-B       = 0
-   LEFT-FIN-H       = 0
-   LEFT-FIN-D       = 0
-   RIGHT-FIN-A      = 0
-   RIGHT-FIN-B      = 0
-   RIGHT-FIN-H      = 0
-   RIGHT-FIN-D      = 0
-   FRAME-CONDUCT    = 4
-   C-FRAMEAREA      = 15
-   ..
-"P01_E02_PE004" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Muro exterior0.60-C"
+"P02_E01_PE002" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
    LOCATION         = SPACE-V2
    ..
-"P01_E02_PE004_V1" = WINDOW          
-   GLASS-TYPE       = "VER_DC_4-12-441a"
-   FRAME-WIDTH      = 0.0307568
-   X                = 0.780757
-   Y                = 1.03076
-   HEIGHT           = 0.938487
-   WIDTH            = 1.43849
-   SETBACK          = 0.1
-   OVERHANG-A       = 0
-   OVERHANG-B       = 0
-   OVERHANG-W       = 0
-   OVERHANG-D       = 0
-   OVERHANG-ANGLE   = 0
-   LEFT-FIN-A       = 0
-   LEFT-FIN-B       = 0
-   LEFT-FIN-H       = 0
-   LEFT-FIN-D       = 0
-   RIGHT-FIN-A      = 0
-   RIGHT-FIN-B      = 0
-   RIGHT-FIN-H      = 0
-   RIGHT-FIN-D      = 0
-   FRAME-CONDUCT    = 4
-   C-FRAMEAREA      = 15
-   ..
-"P01_E02_Med003" = INTERIOR-WALL   
-   NEXT-TO          = "P01_E03"
-   CONSTRUCTION     = "TABIQUE DE 15-C"
-   INT-WALL-TYPE    = STANDARD
+"P02_E01_PE003" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
    LOCATION         = SPACE-V3
    ..
-"P01_E02_FTER002" = UNDERGROUND-WALL
-   CONSTRUCTION     = "T_LOSA CIMENTACION-C"
-   LOCATION         = BOTTOM
-   ..
-"P01_E03" = SPACE           
-   X                = 0
-   Y                = 0
-   Z                = 0
-   AZIMUTH          = 0
-   HEIGHT           = 3
-   MULTIPLIER       = 1
-   FURN-FRACTION    = 0.5
-   ZONE-TYPE        = CONDITIONED
-   TEMPERATURE      = ( 22.5 )
-   PEOPLE-SCHEDULE  = "UsoEspacio-8h"
-   LIGHTING-SCHEDUL = ( "UsoEspacio-8h" )
-   EQUIP-SCHEDULE   = ( "UsoEspacio-8h" )
-   INF-SCHEDULE     = "UsoEspacio-8h_vent"
-   LIGHTING-TYPE    = ( SUS-FLUOR )
-   AIR-CHANGES/HR   = 2.4
-   PEOPLE-HG-LAT    = 45.42
-   PEOPLE-HG-SENS   = 72
-   EQUIP-LATENT     = ( 0.1 )
-   EQUIP-SENSIBLE   = ( 0.9 )
-   LIGHTING-W/AREA  = ( 1.5 )
-   EQUIPMENT-W/AREA = ( 1.5 )
-   FURN-WEIGHT      = 30
-   AREA/PERSON      = 36
-   POLYGON          = "P01_E03_Poligono004"
-   C-AREA           = 10
-   C-C-REND-LUM     = 7
-   ..
-"P01_E03_PE001" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Muro exterior0.60-C"
-   LOCATION         = SPACE-V2
-   ..
-"P01_E03_PE001_V1" = WINDOW          
-   GLASS-TYPE       = "VER_DC_4-12-441a"
-   FRAME-WIDTH      = 0.0307568
-   X                = 0.780757
-   Y                = 1.03076
-   HEIGHT           = 0.938487
-   WIDTH            = 1.43849
-   SETBACK          = 0.1
+"P02_E01_PE003_V1" = WINDOW          
+   GLASS-TYPE       = "Doble baja emisividad argon"
+   FRAME-WIDTH      = 0.081141
+   X                = 7.08114
+   Y                = 3.78114
+   HEIGHT           = 1.63772
+   WIDTH            = 14.8377
+   SETBACK          = 0.25
    OVERHANG-A       = 0
    OVERHANG-B       = 0
    OVERHANG-W       = 0
@@ -1420,87 +1277,25 @@ $ *********************************************************
    RIGHT-FIN-B      = 0
    RIGHT-FIN-H      = 0
    RIGHT-FIN-D      = 0
-   FRAME-CONDUCT    = 4
-   C-FRAMEAREA      = 15
+   FRAME-CONDUCT    = 3.2
+   C-FRAMEAREA      = 27
    ..
-"P01_E03_PE002" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Muro exterior0.60-C"
-   LOCATION         = SPACE-V3
-   ..
-"P01_E03_PE002_V1" = WINDOW          
-   GLASS-TYPE       = "VER_DC_4-12-441a"
-   FRAME-WIDTH      = 0.0307568
-   X                = 1.28076
-   Y                = 1.03076
-   HEIGHT           = 0.938487
-   WIDTH            = 1.43849
-   SETBACK          = 0.1
-   OVERHANG-A       = 0
-   OVERHANG-B       = 0
-   OVERHANG-W       = 0
-   OVERHANG-D       = 0
-   OVERHANG-ANGLE   = 0
-   LEFT-FIN-A       = 0
-   LEFT-FIN-B       = 0
-   LEFT-FIN-H       = 0
-   LEFT-FIN-D       = 0
-   RIGHT-FIN-A      = 0
-   RIGHT-FIN-B      = 0
-   RIGHT-FIN-H      = 0
-   RIGHT-FIN-D      = 0
-   FRAME-CONDUCT    = 4
-   C-FRAMEAREA      = 15
-   ..
-"P01_E03_Med002" = INTERIOR-WALL   
-   NEXT-TO          = "P01_E04"
-   CONSTRUCTION     = "TABIQUE DE 15-C"
-   INT-WALL-TYPE    = STANDARD
+"P02_E01_PE004" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
    LOCATION         = SPACE-V4
    ..
-"P01_E03_FTER003" = UNDERGROUND-WALL
-   CONSTRUCTION     = "T_LOSA CIMENTACION-C"
-   LOCATION         = BOTTOM
+"P02_E01_PE005" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Fachada0.60-C"
+   LOCATION         = SPACE-V5
    ..
-"P01_E04" = SPACE           
-   X                = 0
-   Y                = 0
-   Z                = 0
-   AZIMUTH          = 0
-   HEIGHT           = 3
-   MULTIPLIER       = 1
-   FURN-FRACTION    = 0.5
-   ZONE-TYPE        = CONDITIONED
-   TEMPERATURE      = ( 22.5 )
-   PEOPLE-SCHEDULE  = "UsoEspacio-8h"
-   LIGHTING-SCHEDUL = ( "UsoEspacio-8h" )
-   EQUIP-SCHEDULE   = ( "UsoEspacio-8h" )
-   INF-SCHEDULE     = "UsoEspacio-8h_vent"
-   LIGHTING-TYPE    = ( SUS-FLUOR )
-   AIR-CHANGES/HR   = 2.4
-   PEOPLE-HG-LAT    = 45.42
-   PEOPLE-HG-SENS   = 72
-   EQUIP-LATENT     = ( 0.1 )
-   EQUIP-SENSIBLE   = ( 0.9 )
-   LIGHTING-W/AREA  = ( 1.5 )
-   EQUIPMENT-W/AREA = ( 1.5 )
-   FURN-WEIGHT      = 30
-   AREA/PERSON      = 36
-   POLYGON          = "P01_E04_Poligono005"
-   C-AREA           = 10
-   C-C-REND-LUM     = 7
-   ..
-"P01_E04_PE001" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Muro exterior0.60-C"
-   LOCATION         = SPACE-V3
-   ..
-"P01_E04_PE001_V1" = WINDOW          
-   GLASS-TYPE       = "VER_DC_4-12-441a"
-   FRAME-WIDTH      = 0.0307568
-   X                = 1.28076
-   Y                = 1.03076
-   HEIGHT           = 0.938487
-   WIDTH            = 1.43849
-   SETBACK          = 0.1
+"P02_E01_PE005_V1" = WINDOW          
+   GLASS-TYPE       = "Doble baja emisividad argon"
+   FRAME-WIDTH      = 0.081141
+   X                = 7.08114
+   Y                = 3.78114
+   HEIGHT           = 1.63772
+   WIDTH            = 14.8377
+   SETBACK          = 0.25
    OVERHANG-A       = 0
    OVERHANG-B       = 0
    OVERHANG-W       = 0
@@ -1514,39 +1309,15 @@ $ *********************************************************
    RIGHT-FIN-B      = 0
    RIGHT-FIN-H      = 0
    RIGHT-FIN-D      = 0
-   FRAME-CONDUCT    = 4
-   C-FRAMEAREA      = 15
+   FRAME-CONDUCT    = 3.2
+   C-FRAMEAREA      = 27
    ..
-"P01_E04_PE002" = EXTERIOR-WALL   
-   CONSTRUCTION     = "Muro exterior0.60-C"
-   LOCATION         = SPACE-V4
+"P02_E01_FE006" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Cubierta0.60-C"
+   LOCATION         = TOP
    ..
-"P01_E04_PE002_V1" = WINDOW          
-   GLASS-TYPE       = "VER_DC_4-12-441a"
-   FRAME-WIDTH      = 0.0307568
-   X                = 0.780757
-   Y                = 1.03076
-   HEIGHT           = 0.938487
-   WIDTH            = 1.43849
-   SETBACK          = 0.1
-   OVERHANG-A       = 0
-   OVERHANG-B       = 0
-   OVERHANG-W       = 0
-   OVERHANG-D       = 0
-   OVERHANG-ANGLE   = 0
-   LEFT-FIN-A       = 0
-   LEFT-FIN-B       = 0
-   LEFT-FIN-H       = 0
-   LEFT-FIN-D       = 0
-   RIGHT-FIN-A      = 0
-   RIGHT-FIN-B      = 0
-   RIGHT-FIN-H      = 0
-   RIGHT-FIN-D      = 0
-   FRAME-CONDUCT    = 4
-   C-FRAMEAREA      = 15
-   ..
-"P01_E04_FTER004" = UNDERGROUND-WALL
-   CONSTRUCTION     = "T_LOSA CIMENTACION-C"
+"P02_E01_FTER001" = UNDERGROUND-WALL
+   CONSTRUCTION     = "T_Suelo-C"
    LOCATION         = BOTTOM
    ..
 
@@ -1608,16 +1379,6 @@ $ ---------------------------------------------------------
    C-C-COEF-CO2     = 7
    C-C-COSTE        = 0.06
    ..
-"Biomasa densificada" = FUEL-METER      
-   TYPE             = NATURAL-GAS
-   C-C-COEF-CO2     = 8
-   C-C-COSTE        = 0.06
-   ..
-"RED1" = FUEL-METER      
-   TYPE             = NATURAL-GAS
-   C-C-COEF-CO2     = 9
-   C-C-COSTE        = 0.06
-   ..
 
 
 $ ---------------------------------------------------------
@@ -1640,13 +1401,10 @@ $ ---------------------------------------------------------
 $              Pumps
 $ ---------------------------------------------------------
 
-"B_PRIM_ACS" = PUMP            
-   HEAD             = 10.5
-   C-C-FLOW         = 7998
-   ..
-"B_RECIR_ACS" = PUMP            
-   HEAD             = 8.4
-   C-C-FLOW         = 397
+"Bomba DT" = PUMP            
+   HEAD             = 1.7
+   CAP-CTRL         = VAR-SPEED-PUMP
+   C-C-FLOW         = 3900
    ..
 
 
@@ -1660,14 +1418,11 @@ $ ---------------------------------------------------------
 $              Circulation Loops
 $ ---------------------------------------------------------
 
-"CIR_ACS" = CIRCULATION-LOOP
-   TYPE             = DHW
-   LOOP-DESIGN-DT   = 40
-   HEAT-SETPT-T     = 60
-   LOOP-PUMP        = "B_RECIR_ACS"
-   DHW-INLET-T      = 14.895
-   C-C-LP-REC-FLOW1 = 397
-   C-C-PROCESS-FLOW = 3977
+"Circuito hidraúlico DT" = CIRCULATION-LOOP
+   TYPE             = PIPE2
+   SNAP-T           = 20
+   HEAT-SETPT-T     = 39
+   LOOP-PUMP        = "Bomba DT"
    ..
 
 
@@ -1675,6 +1430,15 @@ $ ---------------------------------------------------------
 $              Chillers
 $ ---------------------------------------------------------
 
+"Planta enfriadora 1" = CHILLER         
+   TYPE             = HEAT-PUMP
+   CHW-LOOP         = "Circuito hidraúlico DT"
+   CONDENSER-TYPE   = AIR-COOLED
+   C-NUM-OF-UNITS   = 3.98
+   C-COP            = 3.41
+   C-DESIGN-KW      = 81.64
+   C-C-CAPACITY     = 97.94
+   ..
 
 
 $ ---------------------------------------------------------
@@ -1687,16 +1451,6 @@ $ ---------------------------------------------------------
 $              Domestic Water Heaters
 $ ---------------------------------------------------------
 
-"bdc" = DW-HEATER       
-   TYPE             = HEAT-PUMP
-   TANK-VOLUME      = 2000
-   DHW-LOOP         = "CIR_ACS"
-   DHW-PUMP         = "B_PRIM_ACS"
-   HP-SUPP-CAPACITY = 3
-   C-CATEGORY       = 1
-   C-STBY-LOSS-FRAC = 3.6
-   C-C-CAPACITY     = 186
-   ..
 
 
 $ ---------------------------------------------------------
@@ -1759,38 +1513,44 @@ $ **               HVAC Systems / Zones                  **
 $ **                                                     **
 $ *********************************************************
 
-"AUTON" = SYSTEM          
-   TYPE             = PSZ
-   HEATING-SCHEDULE = "UsoEspacio-8h_eq"
-   COOLING-SCHEDULE = "UsoEspacio-8h_eq"
-   FAN-SCHEDULE     = "UsoEspacio-8h_eq"
-   CONTROL-ZONE     = "Z_P01_E01"
-   C-C-SUPPLY-KW    = 1
-   C-C-COOL-CAP     = 15
-   C-C-COOL-SH-CAP  = 12
-   C-C-HEAT-CAP     = 15
-   C-C-HEAT-SOURCE  = 4
-   C-C-SUPPLY-FLOW  = 2000
+"Subsistema secundario 1" = SYSTEM          
+   TYPE             = DDS
+   MAX-SUPPLY-T     = 30
+   HEAT-SET-T       = 30
+   HEATING-SCHEDULE = "Horario-Calefaccion-t"
+   MIN-SUPPLY-T     = 12
+   COOL-SET-T       = 12
+   COOLING-SCHEDULE = "Horario-Refrigeracion-t"
+   RETURN-FLOW      = 14714
+   RECOVER-EXHAUST  = YES
+   FAN-SCHEDULE     = "UsoEspacio-12h_eq"
+   HW-LOOP          = "Circuito hidraúlico DT"
+   CHW-LOOP         = "Circuito hidraúlico DT"
+   C-C-SUPPLY-KW    = 5.16
+   C-C-RETURN-KW    = 3.54
+   C-C-COOL-CAP     = 63.9
+   C-C-COOL-SH-CAP  = 56.2
+   C-C-HEAT-CAP     = 89.5
+   C-C-RETURN-FAN   = 1
+   C-C-OA-CONTROL   = 1
+   C-C-ENF-GRAT     = 1
+   C-C-HEAT-SOURCE  = 2
+   C-C-COOL-CONTROL = 2
+   C-C-SUPPLY-FLOW  = 16349
    ..
-"Z_P01_E01" = ZONE            
+"Zonas 1" = ZONE            
    TYPE             = CONDITIONED
+   HEAT-TEMP-SCH    = "Horario-Calefaccion-t"
+   COOL-TEMP-SCH    = "Horario-Refrigeracion-t"
    SPACE            = "P01_E01"
-   C-C-ASSIG-FLOW   = 500
+   C-C-ASSIG-FLOW   = 3960
    ..
-"Z_P01_E02" = ZONE            
+"Zonas 2" = ZONE            
    TYPE             = CONDITIONED
-   SPACE            = "P01_E02"
-   C-C-ASSIG-FLOW   = 500
-   ..
-"Z_P01_E03" = ZONE            
-   TYPE             = CONDITIONED
-   SPACE            = "P01_E03"
-   C-C-ASSIG-FLOW   = 500
-   ..
-"Z_P01_E04" = ZONE            
-   TYPE             = CONDITIONED
-   SPACE            = "P01_E04"
-   C-C-ASSIG-FLOW   = 500
+   HEAT-TEMP-SCH    = "Horario-Calefaccion-t"
+   COOL-TEMP-SCH    = "Horario-Refrigeracion-t"
+   SPACE            = "P02_E01"
+   C-C-ASSIG-FLOW   = 9390
    ..
 
 
@@ -1879,27 +1639,23 @@ $ ---------------------------------------------------------
 $              Hourly Reporting
 $ ---------------------------------------------------------
 
-"RB_B_PRIM_ACS" = REPORT-BLOCK    
-   VARIABLE-TYPE    = "B_PRIM_ACS"
+"RB_Bomba DT" = REPORT-BLOCK    
+   VARIABLE-TYPE    = "Bomba DT"
    VARIABLE-LIST    = ( 2 )
    ..
-"RB_B_RECIR_ACS" = REPORT-BLOCK    
-   VARIABLE-TYPE    = "B_RECIR_ACS"
-   VARIABLE-LIST    = ( 2 )
+"RB_Planta enfriadora 1" = REPORT-BLOCK    
+   VARIABLE-TYPE    = "Planta enfriadora 1"
+   VARIABLE-LIST    = ( 1, 12, 36, 18 )
    ..
-"RB_bdc" = REPORT-BLOCK    
-   VARIABLE-TYPE    = "bdc"
-   VARIABLE-LIST    = ( 1, 12, 18 )
-   ..
-"RB_AUTON" = REPORT-BLOCK    
-   VARIABLE-TYPE    = "AUTON"
+"RB_Subsistema secundario 1" = REPORT-BLOCK    
+   VARIABLE-TYPE    = "Subsistema secundario 1"
    VARIABLE-LIST    = ( 33, 46, 47, 45 )
    ..
 
 "HR_00" = HOURLY-REPORT   
    REPORT-SCHEDULE  = "HorarioExportacionDatos"
-   REPORT-BLOCK     = ( "RB_B_PRIM_ACS", "RB_B_RECIR_ACS", "RB_bdc", 
-         "RB_AUTON" )
+   REPORT-BLOCK     = ( "RB_Bomba DT", "RB_Planta enfriadora 1", 
+         "RB_Subsistema secundario 1" )
    ..
 
 

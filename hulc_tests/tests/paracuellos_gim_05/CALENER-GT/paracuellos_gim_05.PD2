@@ -1,9 +1,8 @@
-Proj   "cajazapatos_bombacaloracs"  
+Proj   "paracuellos_gim_05"  
    BDBaseVersion = 8
-   CreateDate = 1662989516
-   ModDate = 1662989540
+   CreateDate = 1619183546
+   ModDate = 1619183546
    LibraryFile = "UsrLibM.dat"
-   InputModule = 3
    ComplianceRules = "CALENER Beta, Marzo 2001 - Ver. 1.2 (CALENER_Beta_1_2.bin)"
    InterfaceMode = 1
    AllowWizard = 0
