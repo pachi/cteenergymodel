@@ -349,3 +349,41 @@ fn convert_shading_vertices() {
     assert_almost_eq!(model.shades[1].geometry.tilt, 45.0, 0.1);
     assert_almost_eq!(model.shades[1].geometry.azimuth, -90.0, 0.1);
 }
+
+#[test]
+fn test_casos_gt() {
+    bemodel::Model::try_from(
+        &ctehexml::parse_with_catalog_from_path("tests/cubo_gt_furnace/cubo_gt_furnace.ctehexml")
+            .unwrap(),
+    )
+    .unwrap();
+    bemodel::Model::try_from(
+        &ctehexml::parse_with_catalog_from_path(
+            "tests/cubo_gt_electrica/cubo_gt_electrica.ctehexml",
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    bemodel::Model::try_from(
+        &ctehexml::parse_with_catalog_from_path(
+            "tests/cubo_gt_caldera_radiadores/cubo_gt_caldera_radiadores.ctehexml",
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    bemodel::Model::try_from(
+        &ctehexml::parse_with_catalog_from_path(
+            "tests/ejemplo_gt_aerotermia/ejemplo_gt_aerotermia.ctehexml",
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    // XXX: Este modelo está mal - se ha definido una mezcla de bdc y dhw
+    bemodel::Model::try_from(
+        &ctehexml::parse_with_catalog_from_path(
+            "tests/cajazapatos_bombacaloracs/cajazapatos_bombacaloracs.ctehexml",
+        )
+        .unwrap(),
+    )
+    .unwrap();
+}

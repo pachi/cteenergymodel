@@ -43,6 +43,19 @@ impl std::str::FromStr for BdlBlock {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         // Separa encabezado del resto
         let stanza: Vec<_> = s.splitn(2, '\n').map(str::trim).collect();
+
+        // Algunos bloques pueden estar vacíos y no tener name, como
+        // "LOADS-REPORT", "SYSTEMS-REPORT", "PLANT-REPORT"
+        if stanza.len() == 1
+        {
+            return Ok(BdlBlock {
+                name: stanza[0].to_string(),
+                btype: stanza[0].to_string(),
+                parent: None,
+                attrs: AttrMap::new(),
+            });
+        }
+
         let [bheadline, bdata] = if let [bheadline, bdata] = stanza.as_slice() {
             [bheadline, bdata]
         } else {

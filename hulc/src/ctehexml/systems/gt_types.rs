@@ -780,6 +780,8 @@ pub enum GtHeatSourceKind {
     GasHeatPump { cop: f32 },
     /// Generador aire (con combustible)
     /// En GT solo en calentamiento principal (sistema)
+    /// eff: eficiencia del sistema
+    /// aux_kw: consumo auxiliar, kW
     Furnace { eff: f32, aux_kw: f32 },
 }
 

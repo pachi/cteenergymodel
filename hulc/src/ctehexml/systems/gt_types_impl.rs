@@ -647,9 +647,9 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<GtHeatSourceKi
         }
         // Generador de aire, Furnace
         "6" => {
-            //         // p. 393 FURNACE-HIR, FURNACE-AUX-KW
-            let eff = block.attrs.get_f32("C-C-FURNACE-HIR")?;
-            let aux_kw = block.attrs.get_f32("C-C-FURNACE-AUX-KW")?;
+            // p. 393 FURNACE-HIR, FURNACE-AUX
+            let eff = block.attrs.get_f32("C-C-FURNACE-HIR").unwrap_or_default();
+            let aux_kw = block.attrs.get_f32("C-C-FURNACE-AUX").unwrap_or_default();
             Ok(Furnace { eff, aux_kw })
         }
         _ => bail!("Fuente de calor desconocida!"),
