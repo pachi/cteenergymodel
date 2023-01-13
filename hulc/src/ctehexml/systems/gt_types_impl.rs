@@ -623,7 +623,8 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<GtHeatSourceKi
             let w_loop = block
                 .attrs
                 .get_str("ZONE-HW-LOOP")
-                .or_else(|_| block.attrs.get_str("HW-LOOP"))?;
+                .or_else(|_| block.attrs.get_str("HW-LOOP"))
+                .expect("No se encuentra circuito de agua en sistema");
             // let hw_coil_q = block.attrs.get_f32("C-C-HW-COIL-Q").ok();
             Ok(HotWaterLoop { w_loop })
         }
@@ -632,18 +633,25 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<GtHeatSourceKi
             let w_loop = block
                 .attrs
                 .get_str("DHW-LOOP")
-                .or_else(|_| block.attrs.get_str("HW-LOOP"))?;
+                .or_else(|_| block.attrs.get_str("HW-LOOP"))
+                .expect("No se encuentra circuito de acs en sistema");
             // let hw_coil_q = block.attrs.get_f32("C-C-HW-COIL-Q").ok();
             Ok(DhwLoop { w_loop })
         }
         // Bomba de calor eléctrica, HeatPump
         "4" => {
-            let cop = block.attrs.get_f32("C-C-COP")?;
+            let cop = block
+                .attrs
+                .get_f32("C-C-COP")
+                .expect("Rendimiento COP no localizado para bomba de calor");
             Ok(HeatPump { cop })
         }
         // Bomba de calor a gas, GasHeatPump
         "5" => {
-            let cop = block.attrs.get_f32("C-C-COP")?;
+            let cop = block
+                .attrs
+                .get_f32("C-C-COP")
+                .expect("Rendimiento COP no localizado para bomba de calor a gas");
             Ok(GasHeatPump { cop })
         }
         // Generador de aire, Furnace
