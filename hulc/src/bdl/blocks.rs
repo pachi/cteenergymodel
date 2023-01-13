@@ -18,6 +18,7 @@ pub struct BdlBlock {
     /// Tipo de bloque
     pub btype: String,
     /// Nombre del elemento o material
+    /// En BDL en teoría no puede tener más de 32 caracteres (DOE-2.2)
     pub name: String,
     // Elemento madre, referenciado por nombre
     pub parent: Option<String>,
