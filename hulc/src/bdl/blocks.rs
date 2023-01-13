@@ -16,7 +16,7 @@ use anyhow::{bail, Error};
 #[derive(Clone, Debug, Default)]
 pub struct BdlBlock {
     /// Tipo de bloque
-    pub btype: String,
+    pub btype: BdlBlockType,
     /// Nombre del elemento o material
     /// En BDL en teoría no puede tener más de 32 caracteres (DOE-2.2)
     pub name: String,
@@ -47,11 +47,10 @@ impl std::str::FromStr for BdlBlock {
 
         // Algunos bloques pueden estar vacíos y no tener name, como
         // "LOADS-REPORT", "SYSTEMS-REPORT", "PLANT-REPORT"
-        if stanza.len() == 1
-        {
+        if stanza.len() == 1 {
             return Ok(BdlBlock {
                 name: stanza[0].to_string(),
-                btype: stanza[0].to_string(),
+                btype: stanza[0].parse()?,
                 parent: None,
                 attrs: AttrMap::new(),
             });
@@ -85,9 +84,137 @@ impl std::str::FromStr for BdlBlock {
         // Construye el objeto
         Ok(BdlBlock {
             name,
-            btype: btype.to_string(),
+            btype: btype.parse()?,
             parent: None,
             attrs,
+        })
+    }
+}
+
+#[derive(Copy, Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
+pub enum BdlBlockType {
+    Floor,
+    Zone,
+    #[default]
+    Space,
+    UndergroundWall,
+    UndergroundFloor,
+    InteriorWall,
+    ExteriorWall,
+    Window,
+    Roof,
+    Door,
+    ThermalBridge,
+    Construction,
+    Material,
+    NameFrame,
+    GlassType,
+    Layers,
+    Gap,
+    BuildingShade,
+    Polygon,
+    RunPeriodPd,
+    BuildParameters,
+    DaySchedulePd,
+    WeekSchedulePd,
+    SchedulePd,
+    ScheduleDay,
+    ScheduleWeek,
+    // Schedule,
+    SystemConditions,
+    SpaceConditions,
+    Defectos,
+    GeneralData,
+    WorkSpace,
+    AuxLine,
+    ParteLider,
+    DescriptionCondiction,
+    Description,
+    //
+    System,
+    Pump,
+    CirculationLoop,
+    Chiller,
+    Boiler,
+    DwHeater,
+    HeatRejection,
+    ElecGenerator,
+    GroundLoopHx,
+    // No implementados
+    ElecMeter,
+    FuelMeter,
+    MasterMeters,
+    Plane,
+    LoadsReport,
+    SystemsReport,
+    PlantReport,
+    ReportBlock,
+    HourlyReport,
+}
+
+impl std::str::FromStr for BdlBlockType {
+    type Err = Error;
+    /// Convierte de cadena a bloque
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        use BdlBlockType::*;
+
+        Ok(match s {
+            "FLOOR" => Floor,
+            "ZONE" => Zone,
+            "SPACE" => Space,
+            "UNDERGROUND-WALL" => UndergroundWall,
+            "UNDERGROUND-FLOOR" => UndergroundFloor,
+            "INTERIOR-WALL" => InteriorWall,
+            "EXTERIOR-WALL" => ExteriorWall,
+            "WINDOW" => Window,
+            "ROOF" => Roof,
+            "DOOR" => Door,
+            "THERMAL-BRIDGE" => ThermalBridge,
+            "CONSTRUCTION" => Construction,
+            "MATERIAL" => Material,
+            "NAME-FRAME" => NameFrame,
+            "GLASS-TYPE" => GlassType,
+            "LAYERS" => Layers,
+            "GAP" => Gap,
+            "BUILDING-SHADE" => BuildingShade,
+            "POLYGON" => Polygon,
+            "RUN-PERIOD-PD" => RunPeriodPd,
+            "BUILD-PARAMETERS" => BuildParameters,
+            "DAY-SCHEDULE-PD" => DaySchedulePd,
+            "WEEK-SCHEDULE-PD" => WeekSchedulePd,
+            "SCHEDULE-PD" => SchedulePd,
+            "SCHEDULE-DAY" => ScheduleDay,
+            "SCHEDULE-WEEK" => ScheduleWeek,
+            // "SCHEDULE" => Schedule,
+            "SYSTEM-CONDITIONS" => SystemConditions,
+            "SPACE-CONDITIONS" => SpaceConditions,
+            "DEFECTOS" => Defectos,
+            "GENERAL-DATA" => GeneralData,
+            "WORK-SPACE" => WorkSpace,
+            "AUX-LINE" => AuxLine,
+            "PARTELIDER" => ParteLider,
+            "DESCRIPTION-CONDICTION" => DescriptionCondiction,
+            "DESCRIPTION" => Description,
+            "SYSTEM" => System,
+            "PUMP" => Pump,
+            "CIRCULATION-LOOP" => CirculationLoop,
+            "CHILLER" => Chiller,
+            "BOILER" => Boiler,
+            "DW-HEATER" => DwHeater,
+            "HEAT-REJECTION" => HeatRejection,
+            "ELEC-GENERATOR" => ElecGenerator,
+            "GROUND-LOOP-HX" => GroundLoopHx,
+            // No implementados
+            "ELEC-METER" => ElecMeter,
+            "FUEL-METER" => FuelMeter,
+            "MASTER-METERS" => MasterMeters,
+            "PLANE" => Plane,
+            "LOADS-REPORT" => LoadsReport,
+            "SYSTEMS-REPORT" => SystemsReport,
+            "PLANT-REPORT" => PlantReport,
+            "REPORT-BLOCK" => ReportBlock,
+            "HOURLY-REPORT" => HourlyReport,
+            _ => bail!("Tipo de bloque desconocido {}", s),
         })
     }
 }
@@ -143,6 +270,8 @@ fn sanitize_lider_data(input: &str) -> String {
 }
 
 pub fn build_blocks<T: AsRef<str>>(input: T) -> Result<Vec<BdlBlock>, Error> {
+    use BdlBlockType::*;
+
     let cleandata = sanitize_lider_data(input.as_ref());
 
     let blockstrs = cleandata
@@ -167,25 +296,24 @@ pub fn build_blocks<T: AsRef<str>>(input: T) -> Result<Vec<BdlBlock>, Error> {
         };
         let mut bdlblock: BdlBlock = block.parse()?;
         // Corrige el elemento madre
-        let parent = match bdlblock.btype.as_str() {
+        let parent = match bdlblock.btype {
             // Las plantas no cuelgan de ningún elemento
-            "FLOOR" => {
+            Floor => {
                 currentfloor = bdlblock.name.clone();
                 None
             }
             // Los espacios cuelgan de las plantas
-            "SPACE" => {
+            Space => {
                 currentspace = bdlblock.name.clone();
                 Some(currentfloor.clone())
             }
             // Los muros cuelgan de los espacios
-            "EXTERIOR-WALL" | "INTERIOR-WALL" | "ROOF" | "UNDERGROUND-WALL"
-            | "UNDERGROUND-FLOOR" => {
+            ExteriorWall | InteriorWall | Roof | UndergroundWall | UndergroundFloor => {
                 currentwall = bdlblock.name.clone();
                 Some(currentspace.clone())
             }
             // Las construcciones y ventanas cuelgan de los muros
-            "CONSTRUCTION" | "WINDOW" | "DOOR" => Some(currentwall.clone()),
+            Construction | Window | Door => Some(currentwall.clone()),
             _ => None,
         };
         bdlblock.parent = parent;

@@ -24,7 +24,7 @@ mod db;
 mod envelope;
 mod systems;
 
-pub use blocks::{build_blocks, BdlBlock};
+pub use blocks::{build_blocks, BdlBlock, BdlBlockType};
 pub use common::{extract_f32vec, extract_namesvec, extract_u32vec, AttrMap};
 pub use db::{Construction, Frame, Glass, Material, MaterialProperties, WallCons, WinCons, DB};
 pub use envelope::{
@@ -38,7 +38,7 @@ pub use systems::{DaySchedule, Schedule, WeekSchedule, YearSchedule};
 #[derive(Debug, Clone, Default)]
 pub struct Data {
     /// Metadatos: espacio de trabajo, parámetros de edificio, construcciones por defecto y datos generales
-    pub meta: BTreeMap<String, BdlBlock>,
+    pub meta: BTreeMap<BdlBlockType, BdlBlock>,
     /// Base de datos de materiales, productos y composiciones constructivas
     pub db: DB,
     /// Lista de espacios
@@ -67,6 +67,8 @@ impl Data {
 
     /// Nuevo modelo a partir de str
     pub fn new<T: AsRef<str>>(input: T) -> Result<Self, Error> {
+        use BdlBlockType::*;
+
         let blocks = build_blocks(input.as_ref())?;
 
         let mut db_blocks = Vec::new();
@@ -77,15 +79,15 @@ impl Data {
         let mut schedule_blocks = Vec::new();
 
         for block in blocks {
-            match block.btype.as_str() {
-                "CONSTRUCTION" | "MATERIAL" | "NAME-FRAME" | "GLASS-TYPE" | "LAYERS" | "GAP" => {
+            match block.btype {
+                Construction | Material | NameFrame | GlassType | Layers | Gap => {
                     db_blocks.push(block);
                 }
-                "POLYGON" => poly_blocks.push(block),
-                "FLOOR" => floor_blocks.push(block),
-                "SPACE" | "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL"
-                | "THERMAL-BRIDGE" | "WINDOW" | "BUILDING-SHADE" => env_blocks.push(block),
-                "WEEK-SCHEDULE-PD" | "DAY-SCHEDULE-PD" | "SCHEDULE-PD" | "RUN-PERIOD-PD" => {
+                Polygon => poly_blocks.push(block),
+                Floor => floor_blocks.push(block),
+                Space | ExteriorWall | Roof | InteriorWall | UndergroundWall | ThermalBridge
+                | Window | BuildingShade => env_blocks.push(block),
+                WeekSchedulePd | DaySchedulePd | SchedulePd | RunPeriodPd => {
                     schedule_blocks.push(block);
                 }
                 _ => other_blocks.push(block),
@@ -94,44 +96,44 @@ impl Data {
 
         // Materiales y construcciones ---------------------------------------------
 
-        let mut materials: BTreeMap<String, Material> = BTreeMap::new();
-        let mut glasses: BTreeMap<String, Glass> = BTreeMap::new();
-        let mut frames: BTreeMap<String, Frame> = BTreeMap::new();
-        let mut wallcons: BTreeMap<String, WallCons> = BTreeMap::new();
-        let mut wincons: BTreeMap<String, WinCons> = BTreeMap::new();
+        let mut materials: BTreeMap<String, db::Material> = BTreeMap::new();
+        let mut glasses: BTreeMap<String, db::Glass> = BTreeMap::new();
+        let mut frames: BTreeMap<String, db::Frame> = BTreeMap::new();
+        let mut wallcons: BTreeMap<String, db::WallCons> = BTreeMap::new();
+        let mut wincons: BTreeMap<String, db::WinCons> = BTreeMap::new();
 
-        let mut constructions: BTreeMap<String, Construction> = BTreeMap::new();
-        let mut layers: BTreeMap<String, WallCons> = BTreeMap::new();
+        let mut constructions: BTreeMap<String, db::Construction> = BTreeMap::new();
+        let mut layers: BTreeMap<String, db::WallCons> = BTreeMap::new();
         for block in db_blocks {
-            match block.btype.as_str() {
-                "CONSTRUCTION" => {
-                    constructions.insert(block.name.clone(), Construction::try_from(block)?);
+            match block.btype {
+                Construction => {
+                    constructions.insert(block.name.clone(), db::Construction::try_from(block)?);
                 }
-                "MATERIAL" => {
-                    let e = Material::try_from(block)?;
+                Material => {
+                    let e = db::Material::try_from(block)?;
                     materials.insert(e.name.clone(), e);
                 }
-                "NAME-FRAME" => {
-                    let e = Frame::try_from(block)?;
+                NameFrame => {
+                    let e = db::Frame::try_from(block)?;
                     frames.insert(e.name.clone(), e);
                 }
-                "GLASS-TYPE" => {
-                    let e = Glass::try_from(block)?;
+                GlassType => {
+                    let e = db::Glass::try_from(block)?;
                     glasses.insert(e.name.clone(), e);
                 }
-                "LAYERS" => {
-                    let e = WallCons::try_from(block)?;
+                Layers => {
+                    let e = db::WallCons::try_from(block)?;
                     layers.insert(e.name.clone(), e);
                 }
-                "GAP" => {
-                    let e = WinCons::try_from(block)?;
+                Gap => {
+                    let e = db::WinCons::try_from(block)?;
                     wincons.insert(e.name.clone(), e);
                 }
                 _ => unreachable!(),
             }
         }
         // Añadir, si no existe la composición e capas por defecto
-        layers.entry("Ninguno".to_string()).or_insert(WallCons {
+        layers.entry("Ninguno".to_string()).or_insert(db::WallCons {
             name: "Ninguno".into(),
             ..Default::default()
         });
@@ -179,34 +181,40 @@ impl Data {
 
         // Separa polígonos (POLYGON) -----------
         // luego los sustituiremos en los objetos de opacos y SPACE que los usan
-        let mut polygons: BTreeMap<String, Polygon> = BTreeMap::default();
+        let mut polygons: BTreeMap<String, envelope::Polygon> = BTreeMap::default();
         for block in poly_blocks {
-            polygons.insert(block.name.clone(), Polygon::try_from(block)?);
+            polygons.insert(block.name.clone(), envelope::Polygon::try_from(block)?);
         }
 
         // Separa plantas (FLOOR) --------------
         // Estos objetos los eliminamos finalmente del modelo, sumando sus X,Y,Z, Azimuth a los del espacio
         // luego los sustituiremos en los objetos SPACE que los usan
-        let mut floors: BTreeMap<String, Floor> = BTreeMap::default();
+        let mut floors: BTreeMap<String, envelope::Floor> = BTreeMap::default();
         for block in floor_blocks {
-            floors.insert(block.name.clone(), Floor::try_from(block)?);
+            floors.insert(block.name.clone(), envelope::Floor::try_from(block)?);
         }
 
         // Horarios --------------------------------------
-        let mut schedules: Vec<Schedule> = Vec::new();
+        let mut schedules: Vec<systems::Schedule> = Vec::new();
 
         for block in schedule_blocks {
-            match block.btype.as_str() {
-                "DAY-SCHEDULE-PD" => {
-                    schedules.push(Schedule::Day(DaySchedule::try_from(block)?));
+            match block.btype {
+                DaySchedulePd => {
+                    schedules.push(systems::Schedule::Day(systems::DaySchedule::try_from(
+                        block,
+                    )?));
                 }
-                "WEEK-SCHEDULE-PD" => {
-                    schedules.push(Schedule::Week(WeekSchedule::try_from(block)?));
+                WeekSchedulePd => {
+                    schedules.push(systems::Schedule::Week(systems::WeekSchedule::try_from(
+                        block,
+                    )?));
                 }
-                "SCHEDULE-PD" => {
-                    schedules.push(Schedule::Year(YearSchedule::try_from(block)?));
+                SchedulePd => {
+                    schedules.push(systems::Schedule::Year(systems::YearSchedule::try_from(
+                        block,
+                    )?));
                 }
-                "RUN-PERIOD-PD" => {
+                RunPeriodPd => {
                     info!("Ignorando bloque de periodo de cálculo: {}", block.name);
                 }
                 // Elemento desconocido -------------------------
@@ -217,17 +225,17 @@ impl Data {
         // Componentes de la envolvente ===============
         // Necesita tener los constructions, floors y polygons ya resueltos
         // También necesita resueltas las cargas (spaces_conditions) y consignas (system_conditions)
-        let mut spaces: Vec<Space> = Vec::new();
-        let mut walls: Vec<Wall> = Vec::new();
-        let mut windows: Vec<Window> = Vec::new();
-        let mut thermal_bridges: Vec<ThermalBridge> = Vec::new();
-        let mut shadings: Vec<Shading> = Vec::new();
+        let mut spaces: Vec<envelope::Space> = Vec::new();
+        let mut walls: Vec<envelope::Wall> = Vec::new();
+        let mut windows: Vec<envelope::Window> = Vec::new();
+        let mut thermal_bridges: Vec<envelope::ThermalBridge> = Vec::new();
+        let mut shadings: Vec<envelope::Shading> = Vec::new();
         for block in env_blocks {
-            match block.btype.as_str() {
+            match block.btype {
                 // Espacios -----------
-                "SPACE" => {
+                Space => {
                     let polygon_name = block.attrs.get_str("POLYGON")?;
-                    let mut space = Space::try_from(block)?;
+                    let mut space = envelope::Space::try_from(block)?;
                     // Insertamos el polígono -------
                     space.polygon = polygons
                         .get(&polygon_name)
@@ -260,9 +268,9 @@ impl Data {
                 }
 
                 // Cerramientos opacos de la envolvente -----------
-                "EXTERIOR-WALL" | "ROOF" | "INTERIOR-WALL" | "UNDERGROUND-WALL" => {
+                ExteriorWall | Roof | InteriorWall | UndergroundWall => {
                     let maybe_polygon_name = block.attrs.get_str("POLYGON").ok();
-                    let mut wall = Wall::try_from(block)?;
+                    let mut wall = envelope::Wall::try_from(block)?;
                     wall.polygon = if let Some(polygon_name) = maybe_polygon_name {
                         Some(polygons.remove(&polygon_name).ok_or_else(|| {
                             format_err!(
@@ -294,18 +302,18 @@ impl Data {
 
                 // Elementos transparentes de la envolvente -----
                 // Hueco
-                "WINDOW" => {
-                    windows.push(Window::try_from(block)?);
+                Window => {
+                    windows.push(envelope::Window::try_from(block)?);
                 }
 
                 // Puentes térmicos ----------
-                "THERMAL-BRIDGE" => {
-                    thermal_bridges.push(ThermalBridge::try_from(block)?);
+                ThermalBridge => {
+                    thermal_bridges.push(envelope::ThermalBridge::try_from(block)?);
                 }
 
                 // Sombras --------------------------------------
-                "BUILDING-SHADE" => {
-                    shadings.push(Shading::try_from(block)?);
+                BuildingShade => {
+                    shadings.push(envelope::Shading::try_from(block)?);
                 }
 
                 _ => unreachable!(),
@@ -315,33 +323,35 @@ impl Data {
         // Resto de bloques ------------------------------
 
         // Resto de elementos
-        let mut meta: BTreeMap<String, BdlBlock> = BTreeMap::new();
+        let mut meta: BTreeMap<BdlBlockType, BdlBlock> = BTreeMap::new();
         let mut space_conditions: BTreeMap<String, BdlBlock> = BTreeMap::new();
         let mut system_conditions: BTreeMap<String, BdlBlock> = BTreeMap::new();
 
         for block in other_blocks {
-            match block.btype.as_str() {
+            use BdlBlockType::*;
+
+            match block.btype {
                 // Elementos generales =========================
                 // Valores por defecto, Datos generales, espacio de trabajo y edificio
-                "DEFECTOS" | "GENERAL-DATA" | "WORK-SPACE" | "BUILD-PARAMETERS" => {
-                    meta.insert(block.btype.clone(), block);
+                Defectos | GeneralData | WorkSpace | BuildParameters => {
+                    meta.insert(block.btype, block);
                 }
                 // Condiciones de uso y ocupación ----------
-                "SPACE-CONDITIONS" => {
+                SpaceConditions => {
                     space_conditions.insert(block.name.clone(), block);
                 }
                 // Consignas y horarios de sistemas ----------
-                "SYSTEM-CONDITIONS" => {
+                SystemConditions => {
                     system_conditions.insert(block.name.clone(), block);
                 }
                 // Elementos no implementados -------------------
                 // Fakes: DESCRIPTION, PARTELIDER
-                "AUX-LINE" | "PARTELIDER" | "DESCRIPTION-CONDICTION" | "DESCRIPTION" => continue,
+                AuxLine | ParteLider | DescriptionCondiction | Description => continue,
 
                 // Elemento desconocido -------------------------
                 _ => {
                     warn!(
-                        "Tipo desconocido. bname: {}, btype: {}",
+                        "Tipo desconocido. bname: {}, btype: {:?}",
                         block.name, block.btype
                     );
                 }

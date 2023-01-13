@@ -16,7 +16,7 @@ use std::collections::BTreeMap;
 use anyhow::Error;
 use log::warn;
 
-pub use crate::bdl::{build_blocks, BdlBlock};
+pub use crate::bdl::{build_blocks, BdlBlock, BdlBlockType};
 pub use crate::bdl::{extract_f32vec, extract_namesvec, AttrMap};
 
 use super::gt_types::*;
@@ -62,52 +62,54 @@ impl GtSystems {
         let mut last_seen_system: Option<String> = None;
 
         for block in blocks {
-            match block.btype.as_str() {
+            use BdlBlockType::*;
+
+            match block.btype {
                 // Zonas
-                "ZONE" => {
+                Zone => {
                     let mut zone: GtZoneSystem = block.into();
                     zone.system = last_seen_system.clone();
                     zones.insert(zone.name.clone(), zone);
                 }
                 // Secundarios
-                "SYSTEM" => {
+                System => {
                     // systems.insert(block.name.clone(), GtSystem::try_from(block)?);
                     let system: GtSystem = block.into();
                     last_seen_system = Some(system.name.clone());
                     systems.insert(system.name.clone(), system);
                 }
                 // Equipos
-                "PUMP" => {
+                Pump => {
                     equipment.insert(block.name.clone(), TempEquipment::Pump(block.into()));
                 }
-                "CIRCULATION-LOOP" => {
+                CirculationLoop => {
                     equipment.insert(
                         block.name.clone(),
                         TempEquipment::CirculationLoop(block.into()),
                     );
                 }
-                "CHILLER" => {
+                Chiller => {
                     equipment.insert(block.name.clone(), TempEquipment::Chiller(block.into()));
                 }
-                "BOILER" => {
+                Boiler => {
                     equipment.insert(block.name.clone(), TempEquipment::Boiler(block.into()));
                 }
-                "DW-HEATER" => {
+                DwHeater => {
                     equipment.insert(block.name.clone(), TempEquipment::DwHeater(block.into()));
                 }
-                "HEAT-REJECTION" => {
+                HeatRejection => {
                     equipment.insert(
                         block.name.clone(),
                         TempEquipment::HeatRejection(block.into()),
                     );
                 }
-                "ELEC-GENERATOR" => {
+                ElecGenerator => {
                     equipment.insert(
                         block.name.clone(),
                         TempEquipment::ElectricGenerator(block.into()),
                     );
                 }
-                "GROUND-LOOP-HX" => {
+                GroundLoopHx => {
                     equipment.insert(
                         block.name.clone(),
                         TempEquipment::GroundLoopHx(block.into()),
@@ -117,7 +119,7 @@ impl GtSystems {
                 // THERMAL-STORAGE, PV-MODULE, CONDENSING-UNIT
                 _ => {
                     warn!(
-                        "Tipo desconocido. bname: {}, btype: {}",
+                        "Tipo desconocido. bname: {}, btype: {:?}",
                         block.name, block.btype
                     );
                 }

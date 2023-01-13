@@ -17,7 +17,7 @@ use std::convert::TryFrom;
 
 use anyhow::{bail, format_err, Error};
 
-use crate::bdl::{envelope::Polygon, BdlBlock};
+use crate::bdl::{envelope::Polygon, BdlBlock, BdlBlockType};
 
 // Cerramientos opacos (EXTERIOR-WALL, ROOF, INTERIOR-WALL, UNDERGROUND-WALL) ------------------
 
@@ -250,33 +250,33 @@ impl TryFrom<BdlBlock> for Wall {
         };
 
         // Tipos de cerramientos
-        let bounds = match btype.as_str() {
-            "INTERIOR-WALL" => {
+        let bounds = match btype {
+            BdlBlockType::InteriorWall => {
                 let int_wall = attrs.remove_str("INT-WALL-TYPE")?;
                 match int_wall.as_str() {
                     "STANDARD" => BoundaryType::INTERIOR,
                     "ADIABATIC" => BoundaryType::ADIABATIC,
                     // AIR, INTERNAL
                     _ => bail!(
-                        "Cerramiento interior {} con subtipo desconocido {} / {}",
+                        "Cerramiento interior {} con subtipo desconocido {:?} / {}",
                         name,
                         btype,
                         int_wall
                     ),
                 }
             }
-            "UNDERGROUND-WALL" => BoundaryType::GROUND,
-            "EXTERIOR-WALL" | "ROOF" => BoundaryType::EXTERIOR,
-            _ => bail!("Elemento {} con tipo desconocido {}", name, btype),
+            BdlBlockType::UndergroundWall => BoundaryType::GROUND,
+            BdlBlockType::ExteriorWall | BdlBlockType::Roof => BoundaryType::EXTERIOR,
+            _ => bail!("Elemento {} con tipo desconocido {:?}", name, btype),
         };
 
         // Si la inclinación es None (se define location)
         // Solamente se define explícitamente cuando se define el cerramiento por geometría
         let tilt = match attrs.remove_f32("TILT").ok() {
             Some(tilt) => tilt,
-            _ => match (btype.as_str(), location.as_deref()) {
+            _ => match (btype, location.as_deref()) {
                 // Cubiertas y cerramientos en location top (techos)
-                ("ROOF", _) | (_, Some("TOP")) => 0.0,
+                (BdlBlockType::Roof, _) | (_, Some("TOP")) => 0.0,
                 // cerramientos en location bottom (suelos y soleras)
                 (_, Some("BOTTOM")) => 180.0,
                 // Cerramientos verticales

@@ -15,7 +15,7 @@ use nalgebra::{point, Point3, Rotation2, Rotation3, Translation3, Vector3};
 
 use crate::utils::{fround2, normalize, uuid_from_obj};
 use hulc::{
-    bdl::{self, Data},
+    bdl::{self, BdlBlockType, Data},
     ctehexml,
 };
 
@@ -70,7 +70,7 @@ impl TryFrom<&ctehexml::CtehexmlData> for Model {
         // Desviación general respecto al Norte (criterio BDL)
         let mut d_perim_insulation = 0.0;
         let mut rn_perim_insulation = 0.0;
-        if let Some(buildparams) = bdl.meta.get("BUILD-PARAMETERS") {
+        if let Some(buildparams) = bdl.meta.get(&BdlBlockType::BuildParameters) {
             d_perim_insulation = buildparams
                 .attrs
                 .get_f32("D-AISLAMIENTO-PERIMETRAL")
@@ -289,7 +289,7 @@ fn walls_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Wall>, Error> {
 /// Sigue la misma referencia al Norte que el azimuth, pero un criterio de signos distinto: N=0, E = -90, O=90.
 fn global_deviation_from_north(bdl: &Data) -> f32 {
     bdl.meta
-        .get("BUILD-PARAMETERS")
+        .get(&BdlBlockType::BuildParameters)
         .map(|params| params.attrs.get_f32("AZIMUTH").unwrap_or_default())
         .unwrap_or_default()
 }
