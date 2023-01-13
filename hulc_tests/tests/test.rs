@@ -184,7 +184,7 @@ fn test_kyg() {
 fn test_test_spaces_caso_a() {
     let tbl = tbl::parse("tests/casoA/NewBDL_O.tbl").unwrap();
     let ctehexmlpath = ctehexml::find_ctehexml("tests/casoA").unwrap();
-    let xmldata = ctehexml::parse_from_path(&ctehexmlpath.unwrap()).unwrap();
+    let xmldata = ctehexml::parse_from_path(ctehexmlpath.unwrap()).unwrap();
     let bdl = xmldata.bdldata;
 
     for (name, space) in tbl.spaces {
