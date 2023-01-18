@@ -47,10 +47,10 @@ impl std::str::FromStr for BdlBlock {
 
         // Algunos bloques pueden estar vacíos y no tener name, como
         // "LOADS-REPORT", "SYSTEMS-REPORT", "PLANT-REPORT"
-        if stanza.len() == 1 {
+        if let [btype] = stanza.as_slice() {
             return Ok(BdlBlock {
-                name: stanza[0].to_string(),
-                btype: stanza[0].parse()?,
+                name: btype.to_string(),
+                btype: btype.parse()?,
                 parent: None,
                 attrs: AttrMap::new(),
             });

@@ -12,48 +12,48 @@
       "id": "54d88882-0399-4e3e-3a0b-a83baead38e1",
       "name": "P01_E01",
       "height": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
       "id": "cf78a197-8772-cbd2-2f73-23e124f9c4ec",
       "name": "P01_E02",
       "height": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
       "id": "f44945fc-0e12-49fe-dcfb-5161040fb9d7",
       "name": "P01_E03",
       "height": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
       "id": "3fa1108d-15a3-8438-5d43-60a4f3a90a21",
       "name": "P01_E04",
       "height": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
       "id": "66612f3d-c1ad-d5cc-24a1-98fc9001cdb4",
       "name": "P01_E05",
       "height": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
       "id": "37938ad0-14ff-85bb-1d5d-60794de9dd4e",
       "name": "P01_E06",
       "height": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -61,8 +61,8 @@
       "name": "P02_E01",
       "height": 3.0,
       "z": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -70,8 +70,8 @@
       "name": "P02_E02",
       "height": 3.0,
       "z": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -79,8 +79,8 @@
       "name": "P02_E03",
       "height": 3.0,
       "z": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -88,8 +88,8 @@
       "name": "P02_E04",
       "height": 3.0,
       "z": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -97,8 +97,8 @@
       "name": "P02_E05",
       "height": 3.0,
       "z": 3.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -106,8 +106,8 @@
       "name": "P03_E01",
       "height": 3.0,
       "z": 6.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -115,8 +115,8 @@
       "name": "P03_E02",
       "height": 3.0,
       "z": 6.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -124,8 +124,8 @@
       "name": "P03_E03",
       "height": 3.0,
       "z": 6.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -133,8 +133,8 @@
       "name": "P03_E04",
       "height": 3.0,
       "z": 6.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -142,8 +142,8 @@
       "name": "P03_E05",
       "height": 3.0,
       "z": 6.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -151,8 +151,8 @@
       "name": "P04_E01",
       "height": 3.0,
       "z": 9.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -160,8 +160,8 @@
       "name": "P04_E02",
       "height": 3.0,
       "z": 9.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -169,8 +169,8 @@
       "name": "P04_E03",
       "height": 3.0,
       "z": 9.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -178,8 +178,8 @@
       "name": "P04_E04",
       "height": 3.0,
       "z": 9.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -187,8 +187,8 @@
       "name": "P04_E05",
       "height": 3.0,
       "z": 9.5,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     }
   ],
@@ -9836,7 +9836,7 @@
   },
   "loads": [
     {
-      "id": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
+      "id": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
       "name": "Residencial",
       "area_per_person": 33.33,
       "people_schedule": "7319d4a9-7ca0-b029-ecc7-96228aa13b56",
@@ -9850,7 +9850,7 @@
   ],
   "thermostats": [
     {
-      "id": "b5141449-932c-fe65-b437-992b94d0658b",
+      "id": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "name": "Residencial",
       "temp_max": "3675a836-0996-50a6-7d78-cf271e542d82",
       "temp_min": "85f3131b-8336-1d44-ac46-34a24b75d3c0"

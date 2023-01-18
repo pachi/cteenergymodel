@@ -13,8 +13,8 @@
       "id": "d89b3e93-f38a-1bb9-e39c-6b8375f3c43b",
       "name": "P01_E01",
       "height": 3.0,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "4262f6a3-93ea-d0f2-c3d7-2a377831a2d6",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "ea752eba-8811-7f1b-5a89-3e6a5e43b4d4",
       "n_v": 1.0,
       "illuminance": 62.86
     }
@@ -3421,7 +3421,7 @@
   },
   "loads": [
     {
-      "id": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
+      "id": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
       "name": "Residencial",
       "area_per_person": 33.33,
       "people_schedule": "7319d4a9-7ca0-b029-ecc7-96228aa13b56",
@@ -3435,7 +3435,7 @@
   ],
   "thermostats": [
     {
-      "id": "4262f6a3-93ea-d0f2-c3d7-2a377831a2d6",
+      "id": "ea752eba-8811-7f1b-5a89-3e6a5e43b4d4",
       "name": "Residencial",
       "temp_max": "3675a836-0996-50a6-7d78-cf271e542d82",
       "temp_min": "85f3131b-8336-1d44-ac46-34a24b75d3c0"

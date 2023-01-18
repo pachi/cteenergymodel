@@ -14,32 +14,32 @@
       "id": "de71f6ac-ce95-d42c-898f-88c67f5fe773",
       "name": "P01_E01",
       "height": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
       "id": "ab044e36-f785-b890-47ef-f73efe7ded3e",
       "name": "P01_E02",
       "height": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
       "id": "6a4610e7-16bc-3c11-ec05-b51e7ca1daa4",
       "name": "P01_E03",
       "height": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
       "id": "ec49606c-4c8f-9cef-52b0-c1352420161e",
       "name": "P01_E04",
       "height": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -47,8 +47,8 @@
       "name": "P02_E01",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -56,8 +56,8 @@
       "name": "P02_E02",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -65,8 +65,8 @@
       "name": "P02_E03",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -74,8 +74,8 @@
       "name": "P02_E04",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -83,8 +83,8 @@
       "name": "P02_E05",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -92,8 +92,8 @@
       "name": "P02_E06",
       "height": 3.0,
       "z": 2.7,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     }
   ],
@@ -5688,7 +5688,7 @@
   },
   "loads": [
     {
-      "id": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
+      "id": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
       "name": "Residencial",
       "area_per_person": 33.33,
       "people_schedule": "7319d4a9-7ca0-b029-ecc7-96228aa13b56",
@@ -5702,7 +5702,7 @@
   ],
   "thermostats": [
     {
-      "id": "b5141449-932c-fe65-b437-992b94d0658b",
+      "id": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "name": "Residencial",
       "temp_max": "3675a836-0996-50a6-7d78-cf271e542d82",
       "temp_min": "85f3131b-8336-1d44-ac46-34a24b75d3c0"

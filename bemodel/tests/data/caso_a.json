@@ -15,8 +15,8 @@
       "id": "9b332c36-0a66-a94c-5e45-0566b796f0dc",
       "name": "P01_E01",
       "height": 3.0,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -25,8 +25,8 @@
       "kind": "UNINHABITED",
       "inside_tenv": false,
       "height": 3.0,
-      "loads": "a248b66f-701c-f7cf-52c5-5b71e0ec1c40",
-      "thermostat": "b04a78f5-ee4f-211d-f189-1e14c26da7f2",
+      "loads": "3f4cb0fe-47bb-4140-0add-0ab45a707599",
+      "thermostat": "68ab7755-b911-20b2-1fb0-a4dcd0b163e1",
       "n_v": 0.1,
       "illuminance": 62.86
     },
@@ -35,8 +35,8 @@
       "name": "P02_E01",
       "height": 3.0,
       "z": 3.0,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -44,8 +44,8 @@
       "name": "P03_E01",
       "height": 3.0,
       "z": 6.0,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -53,8 +53,8 @@
       "name": "P04_E01",
       "height": 3.0,
       "z": 9.0,
-      "loads": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
-      "thermostat": "b5141449-932c-fe65-b437-992b94d0658b",
+      "loads": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
+      "thermostat": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "illuminance": 62.86
     },
     {
@@ -64,8 +64,8 @@
       "inside_tenv": false,
       "height": 3.0,
       "z": 9.0,
-      "loads": "a248b66f-701c-f7cf-52c5-5b71e0ec1c40",
-      "thermostat": "b04a78f5-ee4f-211d-f189-1e14c26da7f2",
+      "loads": "3f4cb0fe-47bb-4140-0add-0ab45a707599",
+      "thermostat": "68ab7755-b911-20b2-1fb0-a4dcd0b163e1",
       "n_v": 0.1,
       "illuminance": 62.86
     }
@@ -4527,7 +4527,7 @@
   },
   "loads": [
     {
-      "id": "a248b66f-701c-f7cf-52c5-5b71e0ec1c40",
+      "id": "3f4cb0fe-47bb-4140-0add-0ab45a707599",
       "name": "NIVEL_ESTANQUEIDAD_1",
       "area_per_person": 0.0,
       "people_schedule": "38c5d18f-1dfd-ba91-09a1-e23aab8cb13d",
@@ -4539,7 +4539,7 @@
       "lighting_schedule": "38c5d18f-1dfd-ba91-09a1-e23aab8cb13d"
     },
     {
-      "id": "a79b6ce9-3620-19cf-ded4-5ce9d7fbc007",
+      "id": "64fa40f4-8875-8abe-b1f8-f181235bb0d4",
       "name": "Residencial",
       "area_per_person": 33.33,
       "people_schedule": "7319d4a9-7ca0-b029-ecc7-96228aa13b56",
@@ -4553,11 +4553,11 @@
   ],
   "thermostats": [
     {
-      "id": "b04a78f5-ee4f-211d-f189-1e14c26da7f2",
+      "id": "68ab7755-b911-20b2-1fb0-a4dcd0b163e1",
       "name": "NIVEL_ESTANQUEIDAD_1"
     },
     {
-      "id": "b5141449-932c-fe65-b437-992b94d0658b",
+      "id": "3c6e7537-0787-15f2-2f7d-017ea535feeb",
       "name": "Residencial",
       "temp_max": "3675a836-0996-50a6-7d78-cf271e542d82",
       "temp_min": "85f3131b-8336-1d44-ac46-34a24b75d3c0"

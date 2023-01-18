@@ -13,8 +13,8 @@
       "id": "e2618c50-5657-5759-3456-ffb13a18a598",
       "name": "P01_E01",
       "height": 3.5,
-      "loads": "143627d9-e91c-2b62-5a07-a6c3cd76f79b",
-      "thermostat": "9775b1cd-ffb5-7e6c-a1d5-a301150ed662",
+      "loads": "7283a0ae-ff39-450e-5c13-758913d16087",
+      "thermostat": "3c3b4a2c-1cc1-10cb-3ca6-a6393fc6e8dd",
       "n_v": 1.0,
       "illuminance": 50.0
     },
@@ -22,8 +22,8 @@
       "id": "7312c62c-383d-1f3e-6bcb-0cac705a5980",
       "name": "P01_E02",
       "height": 3.5,
-      "loads": "143627d9-e91c-2b62-5a07-a6c3cd76f79b",
-      "thermostat": "9775b1cd-ffb5-7e6c-a1d5-a301150ed662",
+      "loads": "7283a0ae-ff39-450e-5c13-758913d16087",
+      "thermostat": "3c3b4a2c-1cc1-10cb-3ca6-a6393fc6e8dd",
       "n_v": 1.0,
       "illuminance": 50.0
     },
@@ -31,8 +31,8 @@
       "id": "98d70800-ead8-0aa1-2126-9a139914ad8a",
       "name": "P01_E03",
       "height": 3.5,
-      "loads": "143627d9-e91c-2b62-5a07-a6c3cd76f79b",
-      "thermostat": "9775b1cd-ffb5-7e6c-a1d5-a301150ed662",
+      "loads": "7283a0ae-ff39-450e-5c13-758913d16087",
+      "thermostat": "3c3b4a2c-1cc1-10cb-3ca6-a6393fc6e8dd",
       "n_v": 1.0,
       "illuminance": 50.0
     },
@@ -40,8 +40,8 @@
       "id": "bec5a71d-7538-b83b-3219-cc564aef74bc",
       "name": "P01_E04",
       "height": 3.5,
-      "loads": "143627d9-e91c-2b62-5a07-a6c3cd76f79b",
-      "thermostat": "9775b1cd-ffb5-7e6c-a1d5-a301150ed662",
+      "loads": "7283a0ae-ff39-450e-5c13-758913d16087",
+      "thermostat": "3c3b4a2c-1cc1-10cb-3ca6-a6393fc6e8dd",
       "n_v": 1.0,
       "illuminance": 50.0
     },
@@ -49,8 +49,8 @@
       "id": "b55fa1ee-cf42-a94f-e539-cb81118460fa",
       "name": "P01_E05",
       "height": 3.5,
-      "loads": "143627d9-e91c-2b62-5a07-a6c3cd76f79b",
-      "thermostat": "9775b1cd-ffb5-7e6c-a1d5-a301150ed662",
+      "loads": "7283a0ae-ff39-450e-5c13-758913d16087",
+      "thermostat": "3c3b4a2c-1cc1-10cb-3ca6-a6393fc6e8dd",
       "n_v": 1.0,
       "illuminance": 50.0
     }
@@ -4423,7 +4423,7 @@
   },
   "loads": [
     {
-      "id": "143627d9-e91c-2b62-5a07-a6c3cd76f79b",
+      "id": "7283a0ae-ff39-450e-5c13-758913d16087",
       "name": "I_Baja-8h-Acondicionado",
       "area_per_person": 36.0,
       "people_schedule": "96fffae4-0d71-4b77-d362-2ab25a14cdb9",
@@ -4437,7 +4437,7 @@
   ],
   "thermostats": [
     {
-      "id": "9775b1cd-ffb5-7e6c-a1d5-a301150ed662",
+      "id": "3c3b4a2c-1cc1-10cb-3ca6-a6393fc6e8dd",
       "name": "I_Baja-8h-Acondicionado",
       "temp_max": "99c292f2-cd69-ecd9-3511-c1e3433199e4",
       "temp_min": "c5db4c75-17af-14bf-552c-e3023749b714"
