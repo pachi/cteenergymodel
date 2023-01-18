@@ -460,31 +460,45 @@ impl From<BdlBlock> for GtSystem {
         };
 
         // Calefacción y refrigeración
-        let cool_cap = block.attrs.get_f32("C-C-COOL-CAP").unwrap_or_default();
-        let cool_sh_cap = block
+
+        // Refrigeración
+        // Requerido en PSZ, PVAVS, PVVT, PTAC, HP, SZRH, VAVS, RHFS, DDS, FC, CBVAV
+        // No usado en PMZS (default = 0)?, UVT, UHT, EVAP-COOL, FPH
+        let cooling_cap = block.attrs.get_f32("C-C-COOL-CAP").unwrap_or_default();
+        let cooling_sh_cap = block
             .attrs
             .get_f32("C-C-COOL-SH-CAP")
-            .unwrap_or(cool_cap * 0.80);
-        let cooling_coil = if cool_cap.abs() > f32::EPSILON {
+            .unwrap_or(cooling_cap * 0.80);
+        let cooling = if cooling_cap.abs() > f32::EPSILON {
             // TODO: convertir a coil / loop / autónomos
-            Some(SysCoolingDetail {
+            Some(SysCooling {
+                // Baterías:
+                // Usado en todos: FPH, PSZ, PMZS (default=0)?, PVAVS, PVVT, PTAC, HP, SZRH, VAVS, RHFS, DDS, FC, UVT, UHT, EVAP-COOL, CBVAV
                 chw_loop: block.attrs.get_str("CHW-LOOP").ok(),
                 chw_coil_q: block.attrs.get_f32("C-C-CHW-COIL-Q").ok(),
                 // Autónomos, DX, BdC, Cond. por agua, enf. evap...
+                // Usado en PSZ, PVAVS, PVVT, PTAC, HP, 
+                // No usado en: FPH, PMZS, SZRH, VAVS, DDS, FC, UVT, UHT, EVAP-COOL, CBVAV
                 eer: block.attrs.get_f32("C-C-EER").ok(),
             })
         } else {
             None
         };
 
+        // Calefacción
+
         // Potencia de calefacción
-        let heat_cap = block.attrs.get_f32("C-C-HEAT-CAP").unwrap_or_default();
+        let heating_cap = block.attrs.get_f32("C-C-HEAT-CAP").unwrap_or_default();
 
         // Fuente de calor de las baterías principales a nivel de sistema
-        let heat_source = build_heat_source("C-C-HEAT-SOURCE", &block).ok();
+        // Usado en PSZ, PVAVS, PVVT, HP, SZRH, VAVS, RHFS, DDS, EVAP-COOL, CBVAV
+        // No usado en PMZS, FPH, PTAC, FC, UVT, UHT
+        let heating_source = build_heat_source("C-C-HEAT-SOURCE", &block).ok();
 
         // Fuente de calor a nivel de zona (en sistemas de aire centralizados)
-        let zone_heat_source = build_heat_source("C-C-ZONE-H-SOUR", &block).ok();
+        // Usado en FPH, PSZ, PVAVS, PVVT, PTAC, SZRH, VAVS, RHFS, FC, UVT, UHT, EVAP-COOL, CBVAV
+        // No usado en PMZS, HP, DDS
+        let zone_heating_source = build_heat_source("C-C-ZONE-H-SOUR", &block).ok();
 
         let pre_heating = if let Ok(source) = build_heat_source("C-C-PREHEAT-SOURCE", &block) {
             Some(SysPreHeating {
@@ -587,14 +601,14 @@ impl From<BdlBlock> for GtSystem {
             fans_schedule,
             supply_fan,
             return_fan,
-            cool_cap,
-            cool_sh_cap,
-            cool_detail: cooling_coil,
-            heat_cap,
-            heat_source,
-            zone_heat_source,
-            pre_heat: pre_heating,
-            aux_heat: aux_heating,
+            cooling_cap,
+            cooling_sh_cap,
+            cooling,
+            heating_cap,
+            heating_source,
+            zone_heating_source,
+            pre_heating,
+            aux_heating,
             control,
             recovery,
         }

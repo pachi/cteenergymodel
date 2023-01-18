@@ -12,6 +12,8 @@
 // Archivo BDLDialogsCALENER-GT_3_4.txt para referencias de variables por tipos de objeto
 // Ver Manual Técnico GT
 
+// TODO: THERMAL-STORAGE (Cold-water-tank, Hot-water-tank)
+
 /// Tipo de bomba hidráulica
 /// (CAP-CTRL)
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
@@ -28,6 +30,7 @@ pub enum PumpKind {
 /// Bomba de GT. En circuitos o equipos (como enfriadoras)
 /// (PUMP)
 /// Potencia de la bomba: P = rho ·  g · Q · H / n
+/// Eficiencia del motor (MOTOR-EFF) = 0.8
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct GtPump {
     /// Nombre / descripción
@@ -55,29 +58,31 @@ pub enum CirculationLoopKind {
     /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
     /// Temperatura de cambio estacional (SNAP-T) o Disponibilidad en función de horario ()
     /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 5ºC)
-    /// consigna para calor (defecto 80ºC)
+    /// consigna para calor (HEAT-SETPT-T) (defecto 80ºC)
     /// caudal máximo (C-C-PROCESS-FLOW)
-    /// consigna para frío (defecto 7ºC)
+    /// consigna para frío (COOL-SETPT-T) (defecto 7ºC)
     /// Control AF y AC
     #[default]
     Pipe2,
     /// ACS
     /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
     /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 35ºC)
-    /// consigna para calor (defecto 50ºC)
-    /// caudal máximo (C-C-PROCESS-FLOW)
-    /// temperatura de agua de red (DHW-INLET-T)
-    /// horario ACS (PROCESS-SCH)
+    /// consigna para calor (HEAT-SETPT-T) (defecto 50ºC)
+    /// caudal máximo, requerido (C-C-PROCESS-FLOW)
+    /// temperatura de agua de red, requerido (DHW-INLET-T)
+    /// horario demanda ACS (PROCESS-SCH)
     Dhw,
     /// Agua fría
     /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
     /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 5ºC)
-    /// consigna para frío (defecto 7ºC)
+    /// consigna para frío (COOL-SETPT-T) (defecto 7ºC)
+    ///
     Chw,
     /// Agua bruta (intercambio con el terreno)
     /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
     /// salto de temperatura (LOOP-DESIGN-DT) (defecto 5ºC)
-    /// consigna para frío (defecto 30ºC) y calor (defecto 20ºC)
+    /// consigna para frío (COOL-SETPT-T) (defecto 30ºC) y calor (HEAT-SETPT-T) (defecto 20ºC)
+    /// bomba del circuito, requerido (LOOP-PUMP)
     LakeWell,
     /// Agua caliente
     /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
@@ -87,11 +92,12 @@ pub enum CirculationLoopKind {
     /// Bomba de calor circuito cerrado
     /// usa caudal recirculado (C-C-LP-REC-FLOW1) (defecto 0 l/h)
     /// salto de temperatura (LOOP-DESIGN-DT) (defecto 5ºC)
-    /// consigna para frío (defecto 30ºC) y calor (defecto 20ºC)
+    /// consigna para frío (COOL-SETPT-T) (defecto 30ºC) y calor (HEAT-SETPT-T) (defecto 20ºC)
+    /// bomba del circuito, requerido (LOOP-PUMP)
     Whlp,
     /// Circuito de agua de condensación
     /// salto de temperatura de diseño (LOOP-DESIGN-DT) (defecto 5ºC)
-    /// consigna para frío (defecto 30ºC)
+    /// consigna para frío (COOL-SETPT-T) (defecto 30ºC)
     Cw,
 }
 
@@ -200,7 +206,7 @@ pub struct GtChiller {
     /// (C-NUM-OF-UNITS)
     pub eer: f32,
     /// Rendimiento térmico en refrigeración, EER, -
-    /// (C-IPLV)
+    /// (C-IPLV) // HIR = 1 / C-IPLV
     /// En equipos que consumen electricidad y otro combustible, como absorción con llama directa
     pub eer_th: Option<f32>,
     /// Capacidad nominal de calefacción en enfriadoras reversibles tipo BdC
@@ -282,7 +288,7 @@ pub struct GtBoiler {
     pub capacity: f32,
     /// Rendimiento, -
     /// En calderas de combustible, Rendimiento térmico, ratio
-    /// (C-THERM-EFF-MAX || 0.85)
+    /// (C-THERM-EFF-MAX || ( conv 0.85, bajatemp 0.90, condens 0.95, biomasa 0.75)
     /// En calderas eléctricas, Eficiencia eléctrica, nu
     /// (C-AFUE || 0.98)
     pub eff: f32,
@@ -330,8 +336,10 @@ pub struct GtHotWaterStorageTank {
     /// Nombre
     pub name: String,
     /// Volumen, m³
+    /// Por defecto, capacidad de la caldera * 65
     pub volume: f32,
     /// Coeficiente de pérdidas global del depósito, UA (W/ºC)
+    /// Por defecto, volumen * 0.042
     pub ua: f32,
 }
 
@@ -353,14 +361,14 @@ pub struct GtDwHeater {
     pub capacity: f32,
     /// Rendimiento
     /// Rendimiento eléctrico, COP
-    /// en BdC y calderas eléctricas
-    /// (C-STBY-LOSS-FRAC)
+    /// en BdC (2.7) y calderas eléctricas (1.0) -> (C-STBY-LOSS-FRAC)
     /// Eficiencia térmica, nu
     /// En calderas de combustible
+    /// gas 0.80,
     /// (C-ENERGY-FACTOR)
     pub eff: f32,
     /// Combustible
-    /// - GasNatural
+    /// - Gas Natural
     /// - Gasóleo
     /// - ...
     /// (FUEL-METER)
@@ -686,13 +694,13 @@ pub struct GtSystem {
     // -- Refrigeración
     /// Potencia total batería frío, kW
     /// (C-C-COOL-CAP)
-    pub cool_cap: f32,
+    pub cooling_cap: f32,
     /// Potencia sensible batería frío, kW
     /// Para la mayor parte de equipos prefabricados es 0.8 * cool_cap
     /// (C-C-COOL-SH-CAP)
-    pub cool_sh_cap: f32,
+    pub cooling_sh_cap: f32,
     // Parámetros para refrigeración (circuito baterías, enf. evaporativo, etc)
-    pub cool_detail: Option<SysCoolingDetail>,
+    pub cooling: Option<SysCooling>,
 
     // Fin refrigeración -------
 
@@ -711,7 +719,7 @@ pub struct GtSystem {
     /// Potencia total de calefacción (baterias zonales o del sistema), kW
     /// (C-C-HEAT-CAP)
     /// En unidades terminales se definen en la zona
-    pub heat_cap: f32,
+    pub heating_cap: f32,
 
     // Indica si el sistema puede suministrar calor
     /// Fuente de calor a nivel de sistema (baterías principales del sistema)
@@ -719,7 +727,7 @@ pub struct GtSystem {
     /// (C-C-HEAT-SOURCE)
     /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
     /// y en EVAP-COOL y CBVAV
-    pub heat_source: Option<GtHeatSourceKind>,
+    pub heating_source: Option<GtHeatSourceKind>,
 
     /// Fuente de calor para las baterías de zona (recalentamiento) en unidades terminales
     /// (C-C-ZONE-H-SOUR)
@@ -727,17 +735,17 @@ pub struct GtSystem {
     /// No existe en todo aire doble conducto (DDS), Climatizadora aire primario (CBVAV), y Solo ventilación (PMZS)
     /// La generación de aire solo está en sistemas autónomos (en zonales solo PTAC, no HP)
     /// La capacidad se define en la zona con (C-C-HEAT-CAP)
-    pub zone_heat_source: Option<GtHeatSourceKind>,
+    pub zone_heating_source: Option<GtHeatSourceKind>,
 
     // Precalentamiento ---
     // GT no exporta al XML la potencia del precalentamiento
     // Opcional en Sistemas todo aire (SZRH, VAVS, RHFS, DDS) y
     // autónomos caudal constante y variable (PSZ, PVAVS) (no en PVVT ni sistemas zonales)
-    pub pre_heat: Option<SysPreHeating>,
+    pub pre_heating: Option<SysPreHeating>,
 
     // Calefacción auxiliar ---
     // Opcional en sistemas Todo aire caudal variable (VAVS)
-    pub aux_heat: Option<SysAuxHeating>,
+    pub aux_heating: Option<SysAuxHeating>,
 
     // Fin calefacción -------
     /// Control
@@ -789,7 +797,7 @@ pub enum GtHeatSourceKind {
 /// No existen en sistemas de solo ventilación PMZS
 /// TODO: reorganizar como enumeración según tipo...
 #[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysCoolingDetail {
+pub struct SysCooling {
     // ## Chilled-Water Coils
     // Baterías  de agua fría ---
     /// Circuito de agua fría que alimenta el sistema
@@ -798,6 +806,7 @@ pub struct SysCoolingDetail {
     pub chw_loop: Option<String>,
     /// Caudal agua fría, l/h
     /// (C-C-CHW-COIL-Q)
+    /// default potencia * 0.86 / salto_térmico
     pub chw_coil_q: Option<f32>,
     // Salto térmico batería de agua fría (CHW-COIL-DT)
     // Tipo de válvula batería de agua fría (C-C-CHW-VALVE)
