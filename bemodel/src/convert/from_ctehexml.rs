@@ -290,7 +290,7 @@ fn walls_from_bdl(bdl: &Data, id_maps: &IdMaps) -> Result<Vec<Wall>, Error> {
 fn global_deviation_from_north(bdl: &Data) -> f32 {
     bdl.meta
         .get(&BdlBlockType::BuildParameters)
-        .map(|params| params.attrs.get_f32("AZIMUTH").unwrap_or_default())
+        .map(|params| params.attrs.get_f32_or_default("AZIMUTH"))
         .unwrap_or_default()
 }
 

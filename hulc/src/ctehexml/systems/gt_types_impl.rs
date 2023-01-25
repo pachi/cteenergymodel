@@ -41,12 +41,11 @@ impl From<BdlBlock> for GtPump {
             name: block.name.clone(),
             kind: block
                 .attrs
-                .get_str("CAP-CTRL")
-                .unwrap_or_default()
+                .get_str_or_default("CAP-CTRL")
                 .parse()
                 .unwrap_or_default(),
-            flow: block.attrs.get_f32("C-C-FLOW").unwrap_or_default(),
-            head: block.attrs.get_f32("HEAD").unwrap_or_default(),
+            flow: block.attrs.get_f32_or_default("C-C-FLOW"),
+            head: block.attrs.get_f32_or_default("HEAD"),
             eff,
         }
     }
@@ -75,8 +74,7 @@ impl From<BdlBlock> for GtCirculationLoop {
 
         let kind = block
             .attrs
-            .get_str("TYPE")
-            .unwrap_or_default()
+            .get_str_or_default("TYPE")
             .parse()
             .unwrap_or_default();
         let heat_setpoint_temp = block.attrs.get_f32("HEAT-SETPT-T").ok().or(match kind {
@@ -145,19 +143,17 @@ impl From<BdlBlock> for GtChiller {
     fn from(block: BdlBlock) -> Self {
         let kind = block
             .attrs
-            .get_str("TYPE")
-            .unwrap_or_default()
+            .get_str_or_default("TYPE")
             .parse()
             .unwrap_or_default();
         let condenser_kind = block
             .attrs
-            .get_str("CONDENSER-TYPE")
-            .unwrap_or_default()
+            .get_str_or_default("CONDENSER-TYPE")
             .parse()
             .unwrap_or_default();
         let fuel = match kind {
             ChillerKind::GasAbsor | ChillerKind::Engine => {
-                block.attrs.get_str("FUEL-METER").unwrap_or_default()
+                block.attrs.get_str_or_default("FUEL-METER")
             }
             _ => "Electricidad".into(),
         };
@@ -166,13 +162,13 @@ impl From<BdlBlock> for GtChiller {
             name: block.name.clone(),
             kind,
             condenser_kind,
-            cool_capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
-            eer: block.attrs.get_f32("C-NUM-OF-UNITS").unwrap_or_default(),
+            cool_capacity: block.attrs.get_f32_or_default("C-C-CAPACITY"),
+            eer: block.attrs.get_f32_or_default("C-NUM-OF-UNITS"),
             eer_th: block.attrs.get_f32("C-IPLV").ok(),
             heat_capacity: block.attrs.get_f32("C-DESIGN-KW").ok(),
             fuel,
             cop: block.attrs.get_f32("C-COP").ok(),
-            chw_loop: block.attrs.get_str("CHW-LOOP").unwrap_or_default(),
+            chw_loop: block.attrs.get_str_or_default("CHW-LOOP"),
             cw_loop: block.attrs.get_str("CW-LOOP").ok(),
             hw_loop: block.attrs.get_str("HW-LOOP").ok(),
             htrec_loop: block.attrs.get_str("HTREC-LOOP").ok(),
@@ -184,14 +180,9 @@ impl From<BdlBlock> for GtBoiler {
     fn from(block: BdlBlock) -> Self {
         use BoilerKind::*;
 
-        let kind = match block.attrs.get_str("TYPE").unwrap_or_default().as_str() {
+        let kind = match block.attrs.get_str_or_default("TYPE").as_str() {
             "ELEC-HW-BOILER" => Electric,
-            _ => match block
-                .attrs
-                .get_str("C-C-SUBTYPE")
-                .unwrap_or_default()
-                .as_str()
-            {
+            _ => match block.attrs.get_str_or_default("C-C-SUBTYPE").as_str() {
                 "2" => LowTemp,
                 "3" => Condensing,
                 "4" => Biomass,
@@ -216,10 +207,10 @@ impl From<BdlBlock> for GtBoiler {
         Self {
             name: block.name.clone(),
             kind,
-            capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
+            capacity: block.attrs.get_f32_or_default("C-C-CAPACITY"),
             eff,
             fuel,
-            hw_loop: block.attrs.get_str("HW-LOOP").unwrap_or_default(),
+            hw_loop: block.attrs.get_str_or_default("HW-LOOP"),
             hw_pump: block.attrs.get_str("HW-PUMP").ok(),
         }
     }
@@ -247,11 +238,10 @@ impl From<BdlBlock> for GtDwHeater {
         let name = block.name.clone();
         let kind = block
             .attrs
-            .get_str("TYPE")
-            .unwrap_or_default()
+            .get_str_or_default("TYPE")
             .parse()
             .unwrap_or_default();
-        let capacity = block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default();
+        let capacity = block.attrs.get_f32_or_default("C-C-CAPACITY");
 
         let fuel = block.attrs.get_str("FUEL-METER").unwrap_or(match kind {
             Electric | HeatPump => "Electricidad".into(),
@@ -264,7 +254,7 @@ impl From<BdlBlock> for GtDwHeater {
             Conventional => block.attrs.get_f32("C-ENERGY-FACTOR").unwrap_or(0.80),
         };
 
-        let has_tank = &block.attrs.get_str("C-CATEGORY").unwrap_or_default() == "1";
+        let has_tank = &block.attrs.get_str_or_default("C-CATEGORY") == "1";
         let dhw_tank = if has_tank {
             let volume = block
                 .attrs
@@ -285,7 +275,7 @@ impl From<BdlBlock> for GtDwHeater {
             capacity,
             eff,
             fuel,
-            dhw_loop: block.attrs.get_str("DHW-LOOP").unwrap_or_default(),
+            dhw_loop: block.attrs.get_str_or_default("DHW-LOOP"),
             dhw_pump: block.attrs.get_str("DHW-PUMP").ok(),
             dhw_tank,
         }
@@ -311,8 +301,7 @@ impl From<BdlBlock> for GtHeatRejection {
         let name = block.name.clone();
         let kind = block
             .attrs
-            .get_str("TYPE")
-            .unwrap_or_default()
+            .get_str_or_default("TYPE")
             .parse()
             .unwrap_or_default();
         let fuel = "Electricidad".into();
@@ -321,14 +310,14 @@ impl From<BdlBlock> for GtHeatRejection {
             name,
             kind,
             fuel,
-            capacity: block.attrs.get_f32("C-C-CAPACITY").unwrap_or_default(),
-            fan_kw: block.attrs.get_f32("FAN-KW/CELL").unwrap_or_default(),
+            capacity: block.attrs.get_f32_or_default("C-C-CAPACITY"),
+            fan_kw: block.attrs.get_f32_or_default("FAN-KW/CELL"),
             number_of_cells: block
                 .attrs
                 .get_f32("NUMBER-OF-CELLS")
                 .map(|v| v as u32)
                 .unwrap_or(1),
-            cw_loop: block.attrs.get_str("CW-LOOP").unwrap_or_default(),
+            cw_loop: block.attrs.get_str_or_default("CW-LOOP"),
             cw_pump: block.attrs.get_str("CW-PUMP").ok(),
             spray_kw_cell: block.attrs.get_f32("SPRAY-KW/CELL").ok(),
         }
@@ -346,7 +335,7 @@ impl From<BdlBlock> for GtElectricGenerator {
         Self {
             name,
             fuel,
-            capacity: block.attrs.get_f32("CAPACITY").unwrap_or_default(),
+            capacity: block.attrs.get_f32_or_default("CAPACITY"),
             eff: block.attrs.get_f32("C-C-HIR").unwrap_or(0.35),
             cw_loop: block.attrs.get_str("CW-LOOP").ok(),
             exh_loop: block.attrs.get_str("EXH-LOOP").ok(),
@@ -374,16 +363,15 @@ impl From<BdlBlock> for GtGroundLoopHx {
         let name = block.name.clone();
         let kind = block
             .attrs
-            .get_str("TYPE")
-            .unwrap_or_default()
+            .get_str_or_default("TYPE")
             .parse()
             .unwrap_or_default();
 
         Self {
             name,
             kind,
-            circ_loop: block.attrs.get_str("CIRCULATION-LOOP").unwrap_or_default(),
-            loop_temp_sch: block.attrs.get_str("LOOP-TEMP-SCH").unwrap_or_default(),
+            circ_loop: block.attrs.get_str_or_default("CIRCULATION-LOOP"),
+            loop_temp_sch: block.attrs.get_str_or_default("LOOP-TEMP-SCH"),
         }
     }
 }
@@ -425,17 +413,19 @@ impl GtSystemKind {
 
 impl From<BdlBlock> for GtSystem {
     fn from(block: BdlBlock) -> Self {
+        // # Identificación
         let name = block.name.clone();
+
+        // # Tipo
         let kind: GtSystemKind = block
             .attrs
-            .get_str("TYPE")
-            .unwrap_or_default()
+            .get_str_or_default("TYPE")
             .parse()
             .unwrap_or_default();
 
-        // Ventiladores
+        // # Ventiladores
 
-        let fans_schedule = block.attrs.get_str("FAN-SCHEDULE").ok();
+        let fan_schedule = block.attrs.get_str("FAN-SCHEDULE").ok();
         let supply_fan = if let Ok(supply_flow) = block.attrs.get_f32("C-C-SUPPLY-FLOW") {
             Some(Fan {
                 flow: supply_flow,
@@ -443,7 +433,7 @@ impl From<BdlBlock> for GtSystem {
                     // Los sistemas de zona se definen por factor de transporte y no potencia
                     block.attrs.get_f32("C-C-SUP-KW/FLOW").unwrap_or(0.1) * supply_flow
                 } else {
-                    block.attrs.get_f32("C-C-SUPPLY-KW").unwrap_or_default()
+                    block.attrs.get_f32_or_default("C-C-SUPPLY-KW")
                 },
             })
         } else {
@@ -453,22 +443,27 @@ impl From<BdlBlock> for GtSystem {
         let return_fan = if let Ok(return_flow) = block.attrs.get_f32("RETURN-FLOW") {
             Some(Fan {
                 flow: return_flow,
-                kw: block.attrs.get_f32("C-C-RETURN-KW").unwrap_or_default(),
+                kw: block.attrs.get_f32_or_default("C-C-RETURN-KW"),
             })
         } else {
             None
         };
 
-        // Calefacción y refrigeración
-
-        // Refrigeración
+        // # Calefacción y Refrigeración
+        //
+        // ## Potencias de calor y frío
+        // Potencia de refrigeración, total y sensible:
         // Requerido en PSZ, PVAVS, PVVT, PTAC, HP, SZRH, VAVS, RHFS, DDS, FC, CBVAV
         // No usado en PMZS (default = 0)?, UVT, UHT, EVAP-COOL, FPH
-        let cooling_cap = block.attrs.get_f32("C-C-COOL-CAP").unwrap_or_default();
+        let cooling_cap = block.attrs.get_f32_or_default("C-C-COOL-CAP");
         let cooling_sh_cap = block
             .attrs
             .get_f32("C-C-COOL-SH-CAP")
             .unwrap_or(cooling_cap * 0.80);
+        // Potencia de calefacción
+        let heating_cap = block.attrs.get_f32_or_default("C-C-HEAT-CAP");
+
+        // ## Refrigeración
         let cooling = if cooling_cap.abs() > f32::EPSILON {
             // TODO: convertir a coil / loop / autónomos
             Some(SysCooling {
@@ -477,33 +472,32 @@ impl From<BdlBlock> for GtSystem {
                 chw_loop: block.attrs.get_str("CHW-LOOP").ok(),
                 chw_coil_q: block.attrs.get_f32("C-C-CHW-COIL-Q").ok(),
                 // Autónomos, DX, BdC, Cond. por agua, enf. evap...
-                // Usado en PSZ, PVAVS, PVVT, PTAC, HP, 
+                // Usado en PSZ, PVAVS, PVVT, PTAC, HP,
                 // No usado en: FPH, PMZS, SZRH, VAVS, DDS, FC, UVT, UHT, EVAP-COOL, CBVAV
                 eer: block.attrs.get_f32("C-C-EER").ok(),
+                // TODO: Enfriamiento evaporativo y enfriadora de agua
             })
         } else {
             None
         };
 
-        // Calefacción
-
-        // Potencia de calefacción
-        let heating_cap = block.attrs.get_f32("C-C-HEAT-CAP").unwrap_or_default();
+        // ## Calefacción
 
         // Fuente de calor de las baterías principales a nivel de sistema
         // Usado en PSZ, PVAVS, PVVT, HP, SZRH, VAVS, RHFS, DDS, EVAP-COOL, CBVAV
         // No usado en PMZS, FPH, PTAC, FC, UVT, UHT
-        let heating_source = build_heat_source("C-C-HEAT-SOURCE", &block).ok();
+        let heating = build_heat_source("C-C-HEAT-SOURCE", &block).ok();
 
         // Fuente de calor a nivel de zona (en sistemas de aire centralizados)
         // Usado en FPH, PSZ, PVAVS, PVVT, PTAC, SZRH, VAVS, RHFS, FC, UVT, UHT, EVAP-COOL, CBVAV
         // No usado en PMZS, HP, DDS
-        let zone_heating_source = build_heat_source("C-C-ZONE-H-SOUR", &block).ok();
+        let zone_source = build_heat_source("C-C-ZONE-H-SOUR", &block).ok();
 
+        // ## Precalentamiento
         let pre_heating = if let Ok(source) = build_heat_source("C-C-PREHEAT-SOURCE", &block) {
             Some(SysPreHeating {
                 source,
-                capacity: block.attrs.get_f32("C-C-PREHEAT-CAP").unwrap_or_default(),
+                capacity: block.attrs.get_f32_or_default("C-C-PREHEAT-CAP"),
                 // Esto debería ir en el loop del source?
                 loop_name: block.attrs.get_str("PHW-LOOP").ok(),
             })
@@ -511,6 +505,7 @@ impl From<BdlBlock> for GtSystem {
             None
         };
 
+        // ## Calefacción auxiliar (radiadores?)
         let aux_heating = if let Ok(source) = build_heat_source("C-C-BBRD-SOUR", &block) {
             Some(SysAuxHeating {
                 source,
@@ -522,7 +517,7 @@ impl From<BdlBlock> for GtSystem {
             None
         };
 
-        // Control
+        // # Control
 
         let control = {
             // TODO: hay temperaturas por defecto según el tipo de secundario
@@ -547,70 +542,62 @@ impl From<BdlBlock> for GtSystem {
             }
         };
 
-        // Sistemas de recuperación
+        // # Ventilación
 
-        let recovery = {
-            // Free cooling
-            let free_cooling = if block
-                .attrs
-                .get_str("C-C-ENF-GRAT")
-                .map(|v| v.trim() == "1")
-                .unwrap_or_default()
-            {
-                if block
-                    .attrs
-                    .get_str("C-C-OA-CONTROL")
-                    .unwrap_or_default()
-                    .trim()
-                    == "1"
-                {
-                    Some("Por entalpía".to_string())
-                } else {
-                    Some("Por temperatura".to_string())
-                }
+        // ## Free cooling - Airside economizer
+        let airside_economizer = if block
+            .attrs
+            .get_str("C-C-ENF-GRAT")
+            .map(|v| v.trim() == "1")
+            .unwrap_or_default()
+        {
+            if block.attrs.get_str_or_default("C-C-OA-CONTROL").trim() == "1" {
+                Some(EconomizerControl::Enthalpy)
             } else {
-                None
-            };
-
-            // Exhaust recovery
-            let exhaust_recovery_eff = if block
-                .attrs
-                .get_str("RECOVER-EXHAUST")
-                .map(|v| v.trim() == "YES")
-                .unwrap_or_default()
-            {
-                Some(block.attrs.get_f32("ERV-SENSIBLE-EFF").unwrap_or(0.76))
-            } else {
-                None
-            };
-
-            if free_cooling.is_none() && exhaust_recovery_eff.is_none() {
-                None
-            } else {
-                Some(SysRecovery {
-                    free_cooling,
-                    exhaust_recovery_eff,
-                })
+                Some(EconomizerControl::Temperature)
             }
+        } else {
+            None
+        };
+
+        // ## Recuperación de calor del aire de expulsión - Energy recovery ventilators
+        let exhaust_recovery = if block
+            .attrs
+            .get_str("RECOVER-EXHAUST")
+            .map(|v| v.trim() == "YES")
+            .unwrap_or_default()
+        {
+            Some(block.attrs.get_f32("ERV-SENSIBLE-EFF").unwrap_or(0.76))
+        } else {
+            None
         };
 
         Self {
             name,
             kind,
             control_zone: block.attrs.get_str("CONTROL-ZONE").ok(),
-            fans_schedule,
+
+            // Air
+            fan_schedule,
             supply_fan,
             return_fan,
+
+            airside_economizer,
+            exhaust_recovery,
+
+            // Capacity
+            heating_cap,
             cooling_cap,
             cooling_sh_cap,
+
+            // Equipment
             cooling,
-            heating_cap,
-            heating_source,
-            zone_heating_source,
+            heating,
+            zone_source,
             pre_heating,
             aux_heating,
+
             control,
-            recovery,
         }
     }
 }
@@ -671,8 +658,8 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<GtHeatSourceKi
         // Generador de aire, Furnace
         "6" => {
             // p. 393 FURNACE-HIR, FURNACE-AUX
-            let eff = block.attrs.get_f32("C-C-FURNACE-HIR").unwrap_or_default();
-            let aux_kw = block.attrs.get_f32("C-C-FURNACE-AUX").unwrap_or_default();
+            let eff = block.attrs.get_f32_or_default("C-C-FURNACE-HIR");
+            let aux_kw = block.attrs.get_f32_or_default("C-C-FURNACE-AUX");
             Ok(Furnace { eff, aux_kw })
         }
         _ => bail!("Fuente de calor desconocida!"),
@@ -699,15 +686,14 @@ impl From<BdlBlock> for GtZoneSystem {
         let name = block.name.clone();
         let kind = block
             .attrs
-            .get_str("TYPE")
-            .unwrap_or_default()
+            .get_str_or_default("TYPE")
             .parse()
             .unwrap_or_default();
 
-        let exhaust_fan = if block.attrs.get_str("C-C-PROP-ZR-1").unwrap_or_default() == "1" {
+        let exhaust_fan = if block.attrs.get_str_or_default("C-C-PROP-ZR-1") == "1" {
             Some(Fan {
-                flow: block.attrs.get_f32("C-C-EXH-FLOW").unwrap_or_default(),
-                kw: block.attrs.get_f32("C-C-EXH-KW").unwrap_or_default(),
+                flow: block.attrs.get_f32_or_default("C-C-EXH-FLOW"),
+                kw: block.attrs.get_f32_or_default("C-C-EXH-KW"),
             })
         } else {
             None
@@ -715,8 +701,7 @@ impl From<BdlBlock> for GtZoneSystem {
 
         let oa_flow = match block
             .attrs
-            .get_str("C-C-OA-MET-DEF")
-            .unwrap_or_default()
+            .get_str_or_default("C-C-OA-MET-DEF")
             .as_str()
         {
             // Caudal total
@@ -736,7 +721,7 @@ impl From<BdlBlock> for GtZoneSystem {
         Self {
             name,
             kind,
-            space: block.attrs.get_str("SPACE").unwrap_or_default(),
+            space: block.attrs.get_str_or_default("SPACE"),
             // Sistema asignado a la zona
             // El sistema se asigna tras la construcción
             system: None,
