@@ -452,6 +452,7 @@ impl From<BdlBlock> for GtSystem {
         // # Calefacción y Refrigeración
         //
         // ## Potencias de calor y frío
+        // TODO: eliminar tras llevar todos estos datos a la parte de cooling y heating
         // Potencia de refrigeración, total y sensible:
         // Requerido en PSZ, PVAVS, PVVT, PTAC, HP, SZRH, VAVS, RHFS, DDS, FC, CBVAV
         // No usado en PMZS (default = 0)?, UVT, UHT, EVAP-COOL, FPH
@@ -464,8 +465,9 @@ impl From<BdlBlock> for GtSystem {
         let heating_cap = block.attrs.get_f32_or_default("C-C-HEAT-CAP");
 
         // ## Refrigeración
+        // TODO: convertir a coil / loop / autónomos
+        // TODO: Traer a cada tipo el cooling capacity y cooling-sh-capacity
         let cooling = if cooling_cap.abs() > f32::EPSILON {
-            // TODO: convertir a coil / loop / autónomos
             Some(SysCooling {
                 // Baterías:
                 // Usado en todos: FPH, PSZ, PMZS (default=0)?, PVAVS, PVVT, PTAC, HP, SZRH, VAVS, RHFS, DDS, FC, UVT, UHT, EVAP-COOL, CBVAV
