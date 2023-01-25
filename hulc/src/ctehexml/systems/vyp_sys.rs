@@ -13,7 +13,7 @@ use crate::utils::xml::{
     get_tag_as_f32, get_tag_as_f32_or_default, get_tag_as_str, get_tag_as_u32_or, get_tag_text,
 };
 
-use super::{
+use super::vyp_types::{
     CHPGenerator, CoolingParams, DhwDemand, EconomizerControl, EquipmentKind, GenerationEquipment,
     HeatingParams, HotWaterStorageTank, PhotovoltaicGenerator, SolarThermalGenerator,
     SystemOptions, ThermalGenerator, VypSystem, WindGenerator, ZoneEquipment,
