@@ -495,10 +495,12 @@ impl From<BdlBlock> for GtSystem {
 
         // ## Precalentamiento
         let pre_heating = if let Ok(source) = build_heat_source("C-C-PREHEAT-SOURCE", &block) {
+            // TODO: llevar a build_heat_source y eliminar tipo SysPreHeating
             Some(SysPreHeating {
                 source,
+                // Llevar al HeatSource
                 capacity: block.attrs.get_f32_or_default("C-C-PREHEAT-CAP"),
-                // Esto debería ir en el loop del source?
+                // Esto debería ir en el loop del HeatSource
                 loop_name: block.attrs.get_str("PHW-LOOP").ok(),
             })
         } else {
@@ -507,9 +509,11 @@ impl From<BdlBlock> for GtSystem {
 
         // ## Calefacción auxiliar (radiadores?)
         let aux_heating = if let Ok(source) = build_heat_source("C-C-BBRD-SOUR", &block) {
+            // TODO: llevar a build_heat_source y eliminar SysAuxHeating
             Some(SysAuxHeating {
                 source,
-                // TODO: llevar a build_heat_source y hacer condicional con source_id
+                // Los BBRD tienen su potencia de la zona
+                // Llevar al HeatSource
                 loop_name: block.attrs.get_str("BBRD-LOOP").ok(),
                 dt: block.attrs.get_f32("BBRD-COIL-DT").ok(),
             })
@@ -609,14 +613,35 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<HeatSource, Er
     // Son números y tenemos que volver a convertirlos a cadenas!
     let source = block.attrs.get_f32_or_default(source_id).to_string();
 
-    let heating_cap = || block.attrs.get_f32_or_default("C-C-HEAT-CAP");
-    let cooling_cap = || block.attrs.get_f32_or_default("C-C-COOL-CAP");
-    let cooling_sh_cap = || {
-        block
-            .attrs
-            .get_f32("C-C-COOL-SH-CAP")
-            .unwrap_or(cooling_cap() * 0.80)
+    let is_zone_source = source_id.contains("-ZONE-");
+    let is_preheat = source_id.contains("-PREHEAT-");
+    let is_baseboard = source_id.contains("-BBRD-"); // TODO: resolver aquí calef. aux.
+
+    let (heating_cap, cooling_cap, cooling_sh_cap) = if is_zone_source || is_baseboard {
+        // Los sistemas de zona y los radiadores toman la potencia de la zona
+        (None, None, None)
+    } else if is_preheat {
+        // Los sistemas de precalentamiento solo dan calor
+        (
+            Some(block.attrs.get_f32_or_default("C-C-PREHEAT-CAP")),
+            None,
+            None,
+        )
+    } else {
+        // El resto podría dar calor o frío
+        let cooling_cap = block.attrs.get_f32_or_default("C-C-COOL-CAP");
+        (
+            Some(block.attrs.get_f32_or_default("C-C-HEAT-CAP")),
+            Some(cooling_cap),
+            Some(
+                block
+                    .attrs
+                    .get_f32("C-C-COOL-SH-CAP")
+                    .unwrap_or(cooling_cap * 0.80),
+            ),
+        )
     };
+
     // Potencia de calefacción
 
     // 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica,
@@ -624,18 +649,29 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<HeatSource, Er
     match source.as_str() {
         // Efecto joule
         // Deberíamos añadir vector electricidad?
-        "1" => Ok(Electric {
-            heating_cap: heating_cap(),
-        }),
+        "1" => Ok(Electric { heating_cap }),
         // Circuito agua caliente, HwLoop
         "2" => {
-            let w_loop = block
-                .attrs
-                .get_str("ZONE-HW-LOOP")
-                .or_else(|_| block.attrs.get_str("HW-LOOP"))
-                .expect("No se encuentra circuito de agua en sistema");
+            let w_loop = if is_zone_source {
+                block
+                    .attrs
+                    .get_str("ZONE-HW-LOOP")
+                    .or_else(|_| block.attrs.get_str("HW-LOOP"))
+            } else if is_preheat {
+                // TODO: el preheat solamente se puede introducir con un circuito de agua caliente?
+                block
+                    .attrs
+                    .get_str("PHW-LOOP")
+                    .or_else(|_| block.attrs.get_str("HW-LOOP"))
+            } else {
+                block.attrs.get_str("HW-LOOP")
+            }
+            .expect("No se encuentra circuito de agua en sistema");
             // let hw_coil_q = block.attrs.get_f32("C-C-HW-COIL-Q").ok();
-            Ok(HotWaterLoop { w_loop })
+            Ok(HotWaterLoop {
+                heating_cap,
+                w_loop,
+            })
         }
         // Circuito agua caliente sanitaria, DhwLoop
         "3" => {
@@ -645,30 +681,49 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<HeatSource, Er
                 .or_else(|_| block.attrs.get_str("HW-LOOP"))
                 .expect("No se encuentra circuito de acs en sistema");
             // let hw_coil_q = block.attrs.get_f32("C-C-HW-COIL-Q").ok();
-            Ok(DhwLoop { w_loop })
+            Ok(DhwLoop {
+                heating_cap,
+                w_loop,
+            })
         }
         // Bomba de calor eléctrica, HeatPump
+        // ¿En GT solamente dan calor o deberíamos leer C-C-EER (comprobar)?
         "4" => {
             let cop = block
                 .attrs
                 .get_f32("C-C-COP")
                 .expect("Rendimiento COP no localizado para bomba de calor");
-            Ok(HeatPump { cop })
+            Ok(HeatPump {
+                heating_cap,
+                cooling_cap,
+                cooling_sh_cap,
+                cop,
+            })
         }
         // Bomba de calor a gas, GasHeatPump
+        // ¿En GT solamente dan calor o deberíamos leer C-C-EER (comprobar)?
         "5" => {
             let cop = block
                 .attrs
                 .get_f32("C-C-COP")
                 .expect("Rendimiento COP no localizado para bomba de calor a gas");
-            Ok(GasHeatPump { cop })
+            Ok(GasHeatPump {
+                heating_cap,
+                cooling_cap,
+                cooling_sh_cap,
+                cop,
+            })
         }
         // Generador de aire, Furnace
         "6" => {
             // p. 393 FURNACE-HIR, FURNACE-AUX
             let eff = block.attrs.get_f32_or_default("C-C-FURNACE-HIR");
             let aux_kw = block.attrs.get_f32_or_default("C-C-FURNACE-AUX");
-            Ok(Furnace { eff, aux_kw })
+            Ok(Furnace {
+                heating_cap,
+                eff,
+                aux_kw,
+            })
         }
         _ => bail!("Fuente de calor desconocida!"),
     }
@@ -707,11 +762,7 @@ impl From<BdlBlock> for GtZoneSystem {
             None
         };
 
-        let oa_flow = match block
-            .attrs
-            .get_str_or_default("C-C-OA-MET-DEF")
-            .as_str()
-        {
+        let oa_flow = match block.attrs.get_str_or_default("C-C-OA-MET-DEF").as_str() {
             // Caudal total
             "1" => block
                 .attrs

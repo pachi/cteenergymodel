@@ -800,28 +800,28 @@ pub struct Fan {
 #[derive(Debug, Clone, PartialEq)]
 pub enum HeatSource {
     /// Electricidad
-    Electric { heating_cap: f32 },
+    Electric { heating_cap: Option<f32> },
     /// Batería de circuito agua caliente
-    HotWaterLoop { w_loop: String },
+    HotWaterLoop {heating_cap: Option<f32>, w_loop: String },
     /// Batería de circuito de ACS
     /// En GT solo en calentamiento principal (sistema), y recalentamiento terminal (zona)
-    DhwLoop { w_loop: String },
+    DhwLoop { heating_cap: Option<f32>, w_loop: String },
     /// BdC eléctrica
     /// En GT solo en calentamiento principal (sistema)
-    HeatPump { cop: f32 },
+    HeatPump { heating_cap: Option<f32>, cooling_cap: Option<f32>, cooling_sh_cap: Option<f32>, cop: f32 },
     /// BdC gas
     /// En GT solo en calentamiento principal (sistema)
-    GasHeatPump { cop: f32 },
+    GasHeatPump { heating_cap: Option<f32>, cooling_cap: Option<f32>, cooling_sh_cap: Option<f32>, cop: f32 },
     /// Generador aire (con combustible)
     /// En GT solo en calentamiento principal (sistema)
     /// eff: eficiencia del sistema
     /// aux_kw: consumo auxiliar, kW
-    Furnace { eff: f32, aux_kw: f32 },
+    Furnace { heating_cap: Option<f32>, eff: f32, aux_kw: f32 },
 }
 
 impl Default for HeatSource {
     fn default() -> Self {
-        Self::Electric { heating_cap: 10.0 }
+        Self::Electric { heating_cap: Some(10.0) }
     }
 }
 
