@@ -617,12 +617,9 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<HeatSource, Er
     let is_preheat = source_id.contains("-PREHEAT-");
     let is_baseboard = source_id.contains("-BBRD-"); // TODO: resolver aquí calef. aux.
 
-    let (heating_cap, cooling_cap, cooling_sh_cap) = if is_zone_source || is_baseboard {
-        // Los sistemas de zona y los radiadores toman la potencia de la zona
-        // TODO: aunque también se podría indicar a nivel de sistema (ver caso de FURNACE)
-        (None, None, None)
-    } else if is_preheat {
+    let (heating_cap, cooling_cap, cooling_sh_cap) = if is_preheat || is_baseboard {
         // Los sistemas de precalentamiento solo dan calor
+        // Los sistemas de radiadores pueden definir la potencia a nivel de sistema o de cada zona
         (
             Some(block.attrs.get_f32_or_default("C-C-PREHEAT-CAP")),
             None,
@@ -630,6 +627,7 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<HeatSource, Er
         )
     } else {
         // El resto podría dar calor o frío
+        // Los sistemas de zona pueden tener definidas sus potencias en la zona y aquí no
         let cooling_cap = block.attrs.get_f32_or_default("C-C-COOL-CAP");
         (
             Some(block.attrs.get_f32_or_default("C-C-HEAT-CAP")),
