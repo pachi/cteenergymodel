@@ -638,9 +638,12 @@ pub struct GtSystem {
     /// - EVAP-COOL: Enfriamiento evaporativo (evaporative cooling)
     /// - CBVAV: Climatizadora de aire primario (ceiling bypass)
     ///
+    /// Tipo:
+    /// (KIND)
     /// Subtipo:
-    /// (C-C-SUBTYPE-E1) ¿y otros?
+    /// (C-C-SUBTYPE-E1) (C-C-SUBTYPE-E2)
     pub kind: GtSystemKind,
+
     // Parámetros generales ---
     /// Zona de control
     /// Solo en sistemas:
@@ -659,10 +662,11 @@ pub struct GtSystem {
     // Humedad máxima (C-C-HUM-MAX)
     // Humedad mínima (C-C-HUM-MIN)
 
+    // Aire ----------------
     // -- Ventiladores --
     /// Horario de funcionamiento de los ventiladores de impulsión
     /// (FAN-SCHEDULE)
-    pub fans_schedule: Option<String>,
+    pub fan_schedule: Option<String>,
     // Tipo de control
     // (C-C-FAN-CONTROL)
     // Posición del ventilador
@@ -689,8 +693,43 @@ pub struct GtSystem {
     // (C-C-MIN-FLOW-RAT)
     // pub min_flow_ratio: Option<f32>,
 
-    // Calefacción y Refrigeración
+    // -- Ventilación --
+    /// Ventilación: Técnicas de recuperación de un subsistema secundario de GT
+    /// No aplicable a sistemas de solo ventilación PMZS
+    /// Free cooling
+    // ¿Existe enfriamiento gratuito?
+    // (C-C-ENF-GRAT)
+    // Tipo de control de enfriamiento gratuito
+    // (C-C-OA-CONTROL)
+    // 0 (default): "Por temperatura"
+    // 1: "Por entalpía"
+    pub airside_economizer: Option<EconomizerControl>,
+    /// Recuperación de calor del aire de expulsión
+    /// Efectividad de la recuperación de calor (calor sensible)
+    /// Valor por defecto, si hay = 0.76
+    // ¿Existe recuperación de calor?
+    // (RECOVER-EXHAUST)
+    // YES
+    // NO
+    // Tipo de recuperación de calor (no usado en GT?)
+    // (ERV-RECOVER-TYPE)
+    // pub exhaust_recovery_type: Option<String>,
+    // Potencia recuperador de calor, kW
+    // (ERV-HX-KW)
+    // Efectividad de la recuperación de calor (calor sensible)
+    // (ERV-SENSIBLE-EFF)
+    // Si hay, valor por defecto = 0.76
+    pub exhaust_recovery: Option<f32>,
 
+    // Equipos ----------------
+    // -- Calefacción y Refrigeración --
+    //
+    // Potencias de calefacción y refrigeración a nivel de sistema
+    //
+    /// Potencia total de calefacción (baterias del sistema), kW
+    /// (C-C-HEAT-CAP)
+    /// En unidades terminales se definen en la zona
+    pub heating_cap: f32,
     // -- Refrigeración
     /// Potencia total batería frío, kW
     /// (C-C-COOL-CAP)
@@ -699,43 +738,35 @@ pub struct GtSystem {
     /// Para la mayor parte de equipos prefabricados es 0.8 * cool_cap
     /// (C-C-COOL-SH-CAP)
     pub cooling_sh_cap: f32,
+
+    // -- Fuentes de Calefacción y Refrigeración --
+    // - Fuente de refrigeración a nivel del sistema
+    // - Fuente de calefacción a nivel del sistema
+    // - Fuente de calor/frío zonal
+
     // Parámetros para refrigeración (circuito baterías, enf. evaporativo, etc)
     pub cooling: Option<SysCooling>,
 
-    // Fin refrigeración -------
-
-    // -- Calefacción --
-    // - Fuentes de  calor para el sistema
-    // - Fuente de calor para zonas
-
-    // Ver cómo según heat_source y zone_heat_source se usan distintas cosas en los heating_coil, que es el que recibe la información
+    // Fuentes de calor ---
     // https://doe2.com/Download/DOE-22/DOE22Vol2-Dictionary.pdf p.391
     // Ver fuentes de calor en Manual Técnico de Calener GT
-
-    // Fuentes de calor ---
     // Ver tablas de Manual Técnico de GT
-    // Fuentes de calor a nivel de sistema y/o zona de un subsistema secundario de GT
+    // Fuentes de calor a nivel de sistema de un subsistema secundario de GT
     // No existe en sistemas solo ventilación (PMZS)
-    /// Potencia total de calefacción (baterias zonales o del sistema), kW
-    /// (C-C-HEAT-CAP)
-    /// En unidades terminales se definen en la zona
-    pub heating_cap: f32,
-
-    // Indica si el sistema puede suministrar calor
     /// Fuente de calor a nivel de sistema (baterías principales del sistema)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
     /// (C-C-HEAT-SOURCE)
     /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
     /// y en EVAP-COOL y CBVAV
-    pub heating_source: Option<GtHeatSourceKind>,
+    pub heating: Option<HeatSource>,
 
-    /// Fuente de calor para las baterías de zona (recalentamiento) en unidades terminales
+    /// Fuente de calor (o frío) para las baterías de zona (recalentamiento) en unidades terminales
     /// (C-C-ZONE-H-SOUR)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
     /// No existe en todo aire doble conducto (DDS), Climatizadora aire primario (CBVAV), y Solo ventilación (PMZS)
     /// La generación de aire solo está en sistemas autónomos (en zonales solo PTAC, no HP)
     /// La capacidad se define en la zona con (C-C-HEAT-CAP)
-    pub zone_heating_source: Option<GtHeatSourceKind>,
+    pub zone_source: Option<HeatSource>,
 
     // Precalentamiento ---
     // GT no exporta al XML la potencia del precalentamiento
@@ -747,14 +778,10 @@ pub struct GtSystem {
     // Opcional en sistemas Todo aire caudal variable (VAVS)
     pub aux_heating: Option<SysAuxHeating>,
 
-    // Fin calefacción -------
+    // ...
     /// Control
     pub control: Option<SysControl>,
-
-    /// Técnicas de recuperación
-    pub recovery: Option<SysRecovery>,
     // -- Curvas de comportamiento
-    // ...
 }
 
 /// Ventiladores
@@ -770,14 +797,13 @@ pub struct Fan {
 /// (TYPE)
 /// Fuente de calor a nivel de sistema o zona
 /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
-#[derive(Debug, Default, Clone, PartialEq)]
-pub enum GtHeatSourceKind {
-    #[default]
+#[derive(Debug, Clone, PartialEq)]
+pub enum HeatSource {
     /// Electricidad
-    Electric,
-    /// Circuito agua caliente
+    Electric { heating_cap: f32 },
+    /// Batería de circuito agua caliente
     HotWaterLoop { w_loop: String },
-    /// Circuito ACS
+    /// Batería de circuito de ACS
     /// En GT solo en calentamiento principal (sistema), y recalentamiento terminal (zona)
     DhwLoop { w_loop: String },
     /// BdC eléctrica
@@ -791,6 +817,12 @@ pub enum GtHeatSourceKind {
     /// eff: eficiencia del sistema
     /// aux_kw: consumo auxiliar, kW
     Furnace { eff: f32, aux_kw: f32 },
+}
+
+impl Default for HeatSource {
+    fn default() -> Self {
+        Self::Electric { heating_cap: 10.0 }
+    }
 }
 
 /// Datos específicos de refrigeración de un subsistema secundario de GT
@@ -848,8 +880,19 @@ pub struct SysCooling {
     // Horario (EVAP-PCC-SCH)
     // Consumo W/W (EVAP-PCC-ELEC)
 
-    // TODO: Enfriamiento evaporativo
-    // TODO: ## Waterside economizers (Economizador de agua)
+    // TODO: Enfriamiento evaporativo (batería frío)---
+    // Tipo (C-C-PROP-SR-2)
+    // Consumo/Caudal (EVAP-CL-KW/FLOW)
+    // Fracción aire impulsión (EVAP-CL-AIR)
+    // Efectividad enfriamiento directo (DIRECT-EFF)
+    // Efectividad enfriamiento indirecto (INDIR-EFF)
+
+    // TODO: Economizador agua (batería frío) ---
+    // Existe? (WS-ECONO)
+    // Nombre circuito agua (WSE-LOOP)
+    // pub wse_loop: Option<String>,
+    // Salto térmico agua (WSE-COIL-DT)
+    // pub wse_coil_dt: Option<f32>,
 }
 
 /// Parámetros de sistemas de calefacción de un subsistema secundario de GT
@@ -930,7 +973,7 @@ pub struct SysPreHeating {
     /// Fuente de calor
     /// (C-C-PREHEAT-SOURCE)
     /// Solamente admite fuentes: eléctrica, agua caliente y circuito de ACS
-    pub source: GtHeatSourceKind,
+    pub source: HeatSource,
     /// Potencia batería, kW
     /// (C-C-PREHEAT-CAP)
     pub capacity: f32,
@@ -962,7 +1005,7 @@ pub struct SysAuxHeating {
     /// (C-C-BBRD-SOUR)
     /// Solo en sistemas todo aire caudal variable VAVS
     /// Se admiten como fuentes solo eléctrica y agua caliente
-    pub source: GtHeatSourceKind,
+    pub source: HeatSource,
     // Tipo de control de calefacción auxiliar
     // (C-C-BBRD-CONTROL)
     // pub aux_heat_control: Option<String>,
@@ -1008,47 +1051,20 @@ pub struct SysControl {
     // Ley de correspondencia (HEAT-RESET-SCH)
 }
 
-/// Técnicas de recuperación de un subsistema secundario de GT
-/// No aplicable a sistemas de solo ventilación PMZS
-#[derive(Debug, Default, Clone, PartialEq)]
-pub struct SysRecovery {
-    // TODO: Enfriamiento evaporativo (batería frío)---
-    // Tipo (C-C-PROP-SR-2)
-    // Consumo/Caudal (EVAP-CL-KW/FLOW)
-    // Fracción aire impulsión (EVAP-CL-AIR)
-    // Efectividad enfriamiento directo (DIRECT-EFF)
-    // Efectividad enfriamiento indirecto (INDIR-EFF)
-
-    // TODO: Economizador agua (batería frío) ---
-    // Existe? (WS-ECONO)
-    // Nombre circuito agua (WSE-LOOP)
-    // pub wse_loop: Option<String>,
-    // Salto térmico agua (WSE-COIL-DT)
-    // pub wse_coil_dt: Option<f32>,
-
-    // Enfriamiento gratuito ---
-    /// ¿Existe enfriamiento gratuito?
-    /// (C-C-ENF-GRAT)
-    /// Tipo de control de enfriamiento gratuito
-    /// (C-C-OA-CONTROL)
-    /// 0 (default): "Por temperatura"
-    /// 1: "Por entalpía"
-    pub free_cooling: Option<String>,
-
-    // Recuperación de calor ---
-    // ¿Existe recuperación de calor?
-    // (RECOVER-EXHAUST)
-    // YES
-    // NO
-    // Tipo de recuperación de calor (no usado en GT?)
-    // (ERV-RECOVER-TYPE)
-    // pub exhaust_recovery_type: Option<String>,
-    // Potencia recuperador de calor, kW
-    // (ERV-HX-KW)
-    /// Efectividad de la recuperación de calor (calor sensible)
-    /// (ERV-SENSIBLE-EFF)
-    /// Si hay, valor por defecto = 0.76
-    pub exhaust_recovery_eff: Option<f32>,
+/// Tipos de control para el enfriamiento gratuito por aire
+#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+pub enum EconomizerControl {
+    /// Temperatura
+    #[default]
+    Temperature,
+    /// Entalpía
+    Enthalpy,
+    /// Temperatura y entalpía
+    // No usado en GT
+    TemperatureEnthalpy,
+    /// Desconocido
+    // No usado en GT
+    Unknown,
 }
 
 /// Tipos de zonas

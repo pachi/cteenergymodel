@@ -603,22 +603,30 @@ impl From<BdlBlock> for GtSystem {
 }
 
 /// Convierte source a elementos concretos:
-fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<GtHeatSourceKind, Error> {
-    use GtHeatSourceKind::*;
+fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<HeatSource, Error> {
+    use HeatSource::*;
 
-    // Son números!
-    let source = block
-        .attrs
-        .get_f32(source_id)
-        .unwrap_or_default()
-        .to_string();
+    // Son números y tenemos que volver a convertirlos a cadenas!
+    let source = block.attrs.get_f32_or_default(source_id).to_string();
+
+    let heating_cap = || block.attrs.get_f32_or_default("C-C-HEAT-CAP");
+    let cooling_cap = || block.attrs.get_f32_or_default("C-C-COOL-CAP");
+    let cooling_sh_cap = || {
+        block
+            .attrs
+            .get_f32("C-C-COOL-SH-CAP")
+            .unwrap_or(cooling_cap() * 0.80)
+    };
+    // Potencia de calefacción
 
     // 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica,
     // 5=BdC gas, 6=generador aire, 7=ninguna
     match source.as_str() {
         // Efecto joule
         // Deberíamos añadir vector electricidad?
-        "1" => Ok(Electric),
+        "1" => Ok(Electric {
+            heating_cap: heating_cap(),
+        }),
         // Circuito agua caliente, HwLoop
         "2" => {
             let w_loop = block
