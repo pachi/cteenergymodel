@@ -619,6 +619,7 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<HeatSource, Er
 
     let (heating_cap, cooling_cap, cooling_sh_cap) = if is_zone_source || is_baseboard {
         // Los sistemas de zona y los radiadores toman la potencia de la zona
+        // TODO: aunque también se podría indicar a nivel de sistema (ver caso de FURNACE)
         (None, None, None)
     } else if is_preheat {
         // Los sistemas de precalentamiento solo dan calor
