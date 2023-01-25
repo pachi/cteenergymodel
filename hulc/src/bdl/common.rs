@@ -61,6 +61,11 @@ impl AttrMap {
             })
     }
 
+    /// Devuelve valor como número o valor por defecto (0.0)
+    pub fn get_f32_or_default(&self, attr: &str) -> f32 {
+        self.get_f32(attr).unwrap_or_default()
+    }
+
     /// Devuelve valor como String
     pub fn get_str(&self, attr: &str) -> Result<String, Error> {
         self.0
@@ -76,6 +81,11 @@ impl AttrMap {
                     self
                 )
             })
+    }
+
+    /// Devuelve valor como String o valor por defecto ("")
+    pub fn get_str_or_default(&self, attr: &str) -> String {
+        self.get_str(attr).unwrap_or_default()
     }
 
     /// Elimina un valor del diccionario y devuelve como BdlValue
