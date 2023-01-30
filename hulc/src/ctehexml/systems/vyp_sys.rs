@@ -162,7 +162,8 @@ fn build_system(node: roxmltree::Node) -> VypSystem {
             }
         }
         "SIS_ClimatizacionUnizona" => {
-            assert!(get_tag_as_f32_or_default(&node, "vVentilacion") == 0.0);
+            // He visto un ejemplo con climatización unizona y tiene vVentilacion
+            // assert!(get_tag_as_f32_or_default(&node, "vVentilacion") == 0.0);
             VypSystem::SingleZone {
                 name,
                 multiplier,
