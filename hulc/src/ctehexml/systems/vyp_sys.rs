@@ -688,6 +688,11 @@ fn build_doas(doc: &roxmltree::Document) -> Option<VypSystem> {
                 (10000.0 * data[2] / required_air_flow).round() / 10000.0
             };
 
+            // Si la capacidad y el SPF son cero no importamos el equipo
+            if capacity.abs() < f32::EPSILON && spf.abs() < f32::EPSILON {
+                return None;
+            }
+
             // sin recuperación = 0, con recuperación y bypass térmico = 10, con recuperación sin bypass térmico = 11
             let opts = data[21];
             let has_heat_recovery = opts > 9.0;
