@@ -722,22 +722,7 @@ pub struct GtSystem {
     pub exhaust_recovery: Option<f32>,
 
     // Equipos ----------------
-    // -- Calefacción y Refrigeración --
-    //
-    // Potencias de calefacción y refrigeración a nivel de sistema
-    //
-    /// Potencia total de calefacción (baterias del sistema), kW
-    /// (C-C-HEAT-CAP)
-    /// En unidades terminales se definen en la zona
-    pub heating_cap: f32,
     // -- Refrigeración
-    /// Potencia total batería frío, kW
-    /// (C-C-COOL-CAP)
-    pub cooling_cap: f32,
-    /// Potencia sensible batería frío, kW
-    /// Para la mayor parte de equipos prefabricados es 0.8 * cool_cap
-    /// (C-C-COOL-SH-CAP)
-    pub cooling_sh_cap: f32,
 
     // -- Fuentes de Calefacción y Refrigeración --
     // - Fuente de refrigeración a nivel del sistema
@@ -753,20 +738,26 @@ pub struct GtSystem {
     // Ver tablas de Manual Técnico de GT
     // Fuentes de calor a nivel de sistema de un subsistema secundario de GT
     // No existe en sistemas solo ventilación (PMZS)
+    /// Potencia total de calefacción (baterias del sistema), kW
+    /// (C-C-HEAT-CAP)
+    /// En unidades terminales se definen en la zona
     /// Fuente de calor a nivel de sistema (baterías principales del sistema)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=ninguna
     /// (C-C-HEAT-SOURCE)
     /// No existe en sistemas zonales FC, PTAC, HP, UVT, UHT, FPH
     /// y en EVAP-COOL y CBVAV
-    pub heating: Option<HeatSource>,
+    pub heating_sys: Option<HeatSource>,
 
     /// Fuente de calor (o frío) para las baterías de zona (recalentamiento) en unidades terminales
+    /// Potencia total de calefacción (baterias del sistema), kW
+    /// (C-C-HEAT-CAP)
+    /// En unidades terminales se definen en la zona
     /// (C-C-ZONE-H-SOUR)
     /// 0=n/a, 1=eléctrica, 2=circuito agua caliente, 3=circuito ACS, 4=BdC eléctrica, 5=BdC gas, 6=generador aire, 7=Ninguna
     /// No existe en todo aire doble conducto (DDS), Climatizadora aire primario (CBVAV), y Solo ventilación (PMZS)
     /// La generación de aire solo está en sistemas autónomos (en zonales solo PTAC, no HP)
     /// La capacidad se define en la zona con (C-C-HEAT-CAP)
-    pub zone_source: Option<HeatSource>,
+    pub heating_zone: Option<HeatSource>,
 
     // Precalentamiento ---
     // GT no exporta al XML la potencia del precalentamiento
@@ -830,6 +821,14 @@ impl Default for HeatSource {
 /// TODO: reorganizar como enumeración según tipo...
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct SysCooling {
+    /// Potencia total batería frío, kW
+    /// (C-C-COOL-CAP)
+    pub cooling_cap: f32,
+    /// Potencia sensible batería frío, kW
+    /// Para la mayor parte de equipos prefabricados es 0.8 * cool_cap
+    /// (C-C-COOL-SH-CAP)
+    pub cooling_sh_cap: f32,
+
     // ## Chilled-Water Coils
     // Baterías  de agua fría ---
     /// Circuito de agua fría que alimenta el sistema

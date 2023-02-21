@@ -451,24 +451,22 @@ impl From<BdlBlock> for GtSystem {
 
         // # Calefacción y Refrigeración
         //
-        // ## Potencias de calor y frío
-        // TODO: eliminar tras llevar todos estos datos a la parte de cooling y heating
-        // Potencia de refrigeración, total y sensible:
-        // Requerido en PSZ, PVAVS, PVVT, PTAC, HP, SZRH, VAVS, RHFS, DDS, FC, CBVAV
-        // No usado en PMZS (default = 0)?, UVT, UHT, EVAP-COOL, FPH
-        let cooling_cap = block.attrs.get_f32_or_default("C-C-COOL-CAP");
-        let cooling_sh_cap = block
-            .attrs
-            .get_f32("C-C-COOL-SH-CAP")
-            .unwrap_or(cooling_cap * 0.80);
-        // Potencia de calefacción
-        let heating_cap = block.attrs.get_f32_or_default("C-C-HEAT-CAP");
 
         // ## Refrigeración
         // TODO: convertir a coil / loop / autónomos
         // TODO: Traer a cada tipo el cooling capacity y cooling-sh-capacity
+        // Potencia de refrigeración, total y sensible:
+        // Requerido en PSZ, PVAVS, PVVT, PTAC, HP, SZRH, VAVS, RHFS, DDS, FC, CBVAV
+        // No usado en PMZS (default = 0)?, UVT, UHT, EVAP-COOL, FPH
+        let cooling_cap = block.attrs.get_f32_or_default("C-C-COOL-CAP");
         let cooling = if cooling_cap.abs() > f32::EPSILON {
+            let cooling_sh_cap = block
+                .attrs
+                .get_f32("C-C-COOL-SH-CAP")
+                .unwrap_or(cooling_cap * 0.80);
             Some(SysCooling {
+                cooling_cap,
+                cooling_sh_cap,
                 // Baterías:
                 // Usado en todos: FPH, PSZ, PMZS (default=0)?, PVAVS, PVVT, PTAC, HP, SZRH, VAVS, RHFS, DDS, FC, UVT, UHT, EVAP-COOL, CBVAV
                 chw_loop: block.attrs.get_str("CHW-LOOP").ok(),
@@ -485,15 +483,14 @@ impl From<BdlBlock> for GtSystem {
 
         // ## Calefacción
 
-        // Fuente de calor de las baterías principales a nivel de sistema
+        // Fuente de calor de las baterías principales a nivel de sistema:
         // Usado en PSZ, PVAVS, PVVT, HP, SZRH, VAVS, RHFS, DDS, EVAP-COOL, CBVAV
         // No usado en PMZS, FPH, PTAC, FC, UVT, UHT
         let heating = build_heat_source("C-C-HEAT-SOURCE", &block).ok();
-
-        // Fuente de calor a nivel de zona (en sistemas de aire centralizados)
+        // Fuente de calor a nivel de zona (en sistemas de aire centralizados):
         // Usado en FPH, PSZ, PVAVS, PVVT, PTAC, SZRH, VAVS, RHFS, FC, UVT, UHT, EVAP-COOL, CBVAV
         // No usado en PMZS, HP, DDS
-        let zone_source = build_heat_source("C-C-ZONE-H-SOUR", &block).ok();
+        let zone_heating = build_heat_source("C-C-ZONE-H-SOUR", &block).ok();
 
         // ## Precalentamiento
         let pre_heating = if let Ok(source) = build_heat_source("C-C-PREHEAT-SOURCE", &block) {
@@ -591,15 +588,10 @@ impl From<BdlBlock> for GtSystem {
             airside_economizer,
             exhaust_recovery,
 
-            // Capacity
-            heating_cap,
-            cooling_cap,
-            cooling_sh_cap,
-
             // Equipment
             cooling,
-            heating,
-            zone_source,
+            heating_sys: heating,
+            heating_zone: zone_heating,
             pre_heating,
             aux_heating,
 
@@ -630,17 +622,13 @@ fn build_heat_source(source_id: &str, block: &BdlBlock) -> Result<HeatSource, Er
     } else {
         // El resto podría dar calor o frío
         // Los sistemas de zona pueden tener definidas sus potencias en la zona y aquí no
+        let heating_cap = block.attrs.get_f32_or_default("C-C-HEAT-CAP");
         let cooling_cap = block.attrs.get_f32_or_default("C-C-COOL-CAP");
-        (
-            Some(block.attrs.get_f32_or_default("C-C-HEAT-CAP")),
-            Some(cooling_cap),
-            Some(
-                block
-                    .attrs
-                    .get_f32("C-C-COOL-SH-CAP")
-                    .unwrap_or(cooling_cap * 0.80),
-            ),
-        )
+        let cooling_sh_cap = block
+            .attrs
+            .get_f32("C-C-COOL-SH-CAP")
+            .unwrap_or(cooling_cap * 0.80);
+        (Some(heating_cap), Some(cooling_cap), Some(cooling_sh_cap))
     };
 
     // Potencia de calefacción
