@@ -116,7 +116,9 @@ pub fn nday_from_md(month: u32, day: u32) -> u32 {
 /// isodatestring: date string in iso format, e.g. "2016-12-23"
 /// year [0-xxx], month [1, 12], day [1, 31]
 pub fn nday_from_ymd(year: i32, month: u32, day: u32) -> u32 {
-    NaiveDate::from_ymd(year, month, day).ordinal()
+    NaiveDate::from_ymd_opt(year, month, day)
+        .expect("Se espera una fecha válida")
+        .ordinal()
 }
 
 pub fn nday_from_str(s: &str) -> u32 {
