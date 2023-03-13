@@ -411,7 +411,7 @@ fn do_convert() {
     append_to_edit(&format!("\nLocalizando archivos de datos en '{}'", dir_in));
     append_to_edit("- Se usarán los datos de los archivos KyGananciasSolares.txt y NewBDL_O.tbl");
 
-    let envolvente_data = match collect_hulc_data(dir_in, true, true) {
+    let model = match collect_hulc_data(dir_in, true, true) {
         Ok(data) => {
             append_to_edit("\nLeídos datos envolvente");
             info!("Cargados datos desde {:?}", &dir_in);
@@ -427,7 +427,7 @@ fn do_convert() {
 
     // Salida en JSON
 
-    let path = match serde_json::to_string_pretty(&envolvente_data) {
+    let path = match serde_json::to_string_pretty(&model) {
         Ok(json) => {
             // Generamos un hash sencillo del resultado
             let mut hasher = DefaultHasher::new();
@@ -455,17 +455,18 @@ fn do_convert() {
         }
     };
 
-    let climatezone = envolvente_data.meta.climate;
-    let totradjul = total_radiation_in_july_by_orientation(&climatezone);
-    let n50data = envolvente_data.n50();
+    let ind = model.energy_indicators();
+    // Información general
+    let climatezone = model.meta.climate;
+    let n50data = ind.n50_data;
     append_to_edit(
         &format!(
             "\n\nDatos generales:\n\nZC: {}, A_ref={:.2} m², V/A={:.2} m³/m²\n- K={:.2} W/m²a\n- q_sol;jul={:.2} kWh/m².mes\n- n50_ref={:.2} 1/h, C_o_ref={:.2} m³/h·m², n50={:.2} 1/h, C_o={:.2} m³/h·m²",
             climatezone,
-            envolvente_data.a_ref(),
-            envolvente_data.compactness(),
-            envolvente_data.K().K,
-            envolvente_data.q_soljul(&totradjul),
+            ind.area_ref,
+            ind.compactness,
+            ind.K_data.K,
+            ind.q_soljul_data.q_soljul,
             n50data.n50_ref,
             n50data.walls_c_ref,
             n50data.n50,
