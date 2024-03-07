@@ -479,10 +479,10 @@ pub struct GtElectricGenerator {
     /// Combustible usado
     /// (FUEL-METER) | "Gas Natural"
     pub fuel: String,
-    /// Potencia nominal, kW
+    /// Potencia nominal, kW (térmica o eléctrica)
     /// (CAPACITY)
     pub capacity: f32,
-    /// Rendimiento térmico nominal, ratio
+    /// Rendimiento eléctrico??? nominal, ratio
     /// Relación entre electricidad producida y el consumo de combustible en condiciones nominales
     /// Usa poder calorífico superior (las tablas suelen venir en PCI)
     /// (C-C-HIR) || 0.35
