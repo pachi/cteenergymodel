@@ -210,7 +210,7 @@ fn wall_geometry(wall: &hulc::bdl::Wall, bdl: &Data) -> WallGeom {
     let polygon = match (wall.location.as_deref(), &wall.polygon) {
         // 1. Elementos definidos por polígono
         // 2. Elementos TOP definidos por polígono
-        (None | Some("TOP"), Some(ref polygon)) => polygon.as_vec(),
+        (None | Some("TOP"), Some(polygon)) => polygon.as_vec(),
         // 3. Elementos TOP definidos por la geometría de su espacio
         (Some("TOP"), None) => {
             // Giramos el polígono según la desviación respecto al norte del opaco y el espacio

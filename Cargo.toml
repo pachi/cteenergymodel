@@ -7,7 +7,7 @@ members = [
 [workspace.package]
 version = "22.10.0"
 authors = ["Rafael Villar Burke <pachi@ietcc.csic.es>"]
-edition = "2021"
+edition = "2024"
 
 [workspace.dependencies]
 anyhow = "1.0.102"
