@@ -3,6 +3,7 @@
 ## Bugs
 
 - No se calcula bien el `vol_env_inh_net` (siempre es cero) y por eso siempre se obtiene `global_ventilation_rate` = 0
+- global_ventilation_rate se calcula en dos sitios
 
 ## Generales
 

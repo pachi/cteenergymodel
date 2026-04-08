@@ -26,6 +26,8 @@ impl Model {
     }
 
     /// Tasa global de ventilación del edificio (1/h)
+    /// XXX: esto también se calcula en los indicadores, como se indica más abajo. Igual deberíamos traer aquí los cálculos generales
+    /// como este o los de volumen, etc.
     pub fn global_ventilation_rate(&self) -> f32 {
         use crate::{utils::fround2, SpaceType};
 
