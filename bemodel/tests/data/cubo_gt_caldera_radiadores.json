@@ -547,7 +547,7 @@
         "conductivity": 0.05,
         "density": 125.0,
         "specific_heat": 1000.0,
-        "vapour_diff": 1e30
+        "vapour_diff": 1e+30
       },
       {
         "id": "2e514289-320f-3c53-24a3-ba81ecf1a0b7",
