@@ -314,7 +314,7 @@ impl From<&Model> for EnergyProps {
             spaces
                 .values()
                 .map(|s| {
-                    if !s.inside_tenv && s.kind != SpaceType::UNINHABITED {
+                    if s.inside_tenv && s.kind != SpaceType::UNINHABITED {
                         s.area * s.height_net * s.multiplier
                     } else {
                         0.0
