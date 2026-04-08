@@ -144,7 +144,7 @@ impl From<&EnergyProps> for KData {
             };
             let area = multiplier * wall.area_net;
             let area_u = area * wall_u;
-            let mut element_case = match (wall.bounds, wall.tilt) {
+            let element_case = match (wall.bounds, wall.tilt) {
                 (BoundaryType::GROUND, _) => &mut k.ground,
                 (_, Tilt::TOP) => &mut k.roofs,
                 (_, Tilt::BOTTOM) => &mut k.floors,
@@ -180,7 +180,7 @@ impl From<&EnergyProps> for KData {
                 continue;
             };
             let psil = tb.psi * l;
-            let mut tb_case = match tb.kind {
+            let tb_case = match tb.kind {
                 ROOF => &mut k.tbs.roof,
                 BALCONY => &mut k.tbs.balcony,
                 CORNER => &mut k.tbs.corner,

@@ -84,7 +84,7 @@ impl QSolJulData {
 
             let Q_soljul_orient = f_shobst * g_glshwi * (1.0 - f_f) * area * radjul;
             // Datos de detalle
-            let mut detail = q_soljul_data.detail.entry(orientation).or_default();
+            let detail = q_soljul_data.detail.entry(orientation).or_default();
             detail.a += area;
             detail.gains += Q_soljul_orient;
             detail.irradiance = radjul;

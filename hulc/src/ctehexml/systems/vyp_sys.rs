@@ -596,7 +596,7 @@ fn build_generation_equipment(node: roxmltree::Node) -> GenerationEquipment {
                 Some(CoolingParams {
                     fuel,
                     capacity: 1.0e11 - 0.01,
-                    /// Suponemos fracción sensible = 1.0 (¿sería mejor 0.7?)
+                    // Suponemos fracción sensible = 1.0 (¿sería mejor 0.7?)
                     shr: 1.0,
                     efficiency,
                 })

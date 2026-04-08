@@ -181,7 +181,7 @@ impl<T: Bounded> BVH<T> {
     /// Itera sobre los nodos con los que colisiona el rayo
     /// Devuelve tanto nodos intermedios (Node) como finales (Leaf) para los que hay colisión,
     /// bien con su AABB o sus elementos
-    pub fn iter_with_ray(&self, ray: &Ray) -> PreorderIter<T> {
+    pub fn iter_with_ray(&self, ray: &Ray) -> PreorderIter<'_, T> {
         PreorderIter::new(self.root.as_ref(), *ray)
     }
 

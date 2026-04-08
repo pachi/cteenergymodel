@@ -261,7 +261,7 @@ pub fn parse(data: &str) -> Result<KyGElements, Error> {
     }
 
     // Actualización de valores de fshobst disponibles en el KyGananciasSolares.txt
-    for (name, mut hueco) in &mut kyg.windows {
+    for (name, hueco) in &mut kyg.windows {
         if let Some((azimuth_n, fshobst)) = qsolvalues.get(name) {
             hueco.azimuth_n = *azimuth_n;
             hueco.fshobst = *fshobst;
